@@ -1,0 +1,20 @@
+h1{
+text-align:center;
+} 
+.configtable {
+width: 75%;
+border: 2px; 
+border-color:#DDF6FF;
+text-align:center;
+} 
+.linktable {
+text-align:center;
+}
+thead{ 
+font-weight: bold;
+text-align:center;
+}
+.error{
+color:red;
+font-weight:bold;
+}

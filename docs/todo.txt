@@ -1,0 +1,9 @@
+Todolist
+
+*Dokumentation
+
+*Adminsystem
+	*Einstellungen
+	*'full XHTML suport'
+
+Wenn was fertig gemacht ist, einfach '###' in an den Anfang der Zeile schreiben.

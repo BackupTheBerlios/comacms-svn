@@ -1,7 +1,7 @@
 <?
 	@include("config.php");
 
-	if(file_exists("./install/"))
+	if(file_exists("./install/") && !file_exists("./.svn/"))
 	{
 		if(defined("CMS_INSTALLED"))
 			die("Please remove the install-folder id would be better.");

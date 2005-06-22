@@ -1,0 +1,3 @@
+Feld bei Users eingefügt
+
+ALTER TABLE `cms_users` ADD `email` VARCHAR( 200 ) NOT NULL ;

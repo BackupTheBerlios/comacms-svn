@@ -1,6 +1,7 @@
 <?
 function contact_formular()
 {
+include("functions.php");
 global $_site, $contact_name, $contact_mail, $contact_icq, $contact_text, $contact_homepage, $REMOTE_ADDR, $d_pre, $input;
 $error = "";
 
@@ -77,13 +78,5 @@ $text = "<div class=\"gbook\"><div class=\"error\">$error</div>
 return $text;
 }
 
-function sendmail($to,$from,$title,$text)
-{
-$to = strtolower($to);
-$from = strtolower($from);
-$header="From:$from\n";
-$header .= "Content-Type: text/html"; 
-return mail($to, $title, $text, $header);  
 
-}
 ?>

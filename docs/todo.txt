@@ -5,5 +5,5 @@ Todolist
 *Adminsystem
 	*Einstellungen
 	*'full XHTML suport'
-
+	*Gallerie
 Wenn was fertig gemacht ist, einfach '###' in an den Anfang der Zeile schreiben.

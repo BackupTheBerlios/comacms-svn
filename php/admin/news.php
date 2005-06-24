@@ -1,3 +1,9 @@
+<?
+include("functions.php");
+include("../config.php");
+include("../functions.php");
+	if(isloggedin()) {
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
@@ -7,14 +13,8 @@
 	<body>
 
 <?
-include("functions.php");
-include("../config.php");
-include("../functions.php");
-	if(isloggedin())
-	{
 		_start();
-		if(isset($delete))
-		{
+		if(isset($delete)) {
 			$result = db_result("SELECT * FROM ".$d_pre."news WHERE id=".$delete);
 			$row = mysql_fetch_object($result);
 			echo "Den News Eintrag &quot;$row->title&quot; wirklich löschen?";
@@ -112,6 +112,16 @@ include("../functions.php");
 		}
 		else
 		{
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>News</title>
+		<link rel="stylesheet" type="text/css" href="style.css"/>
+	</head>
+	<body>
+
+<?
 			login();
 		}
 ?>

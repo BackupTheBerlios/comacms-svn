@@ -73,13 +73,13 @@ CREATE TABLE ".$db_prefix."news (
   text text NOT NULL,
   PRIMARY KEY  (id)
 );
-INSERT INTO cms_users (name, showname, password, registerdate, admin, icq)
+INSERT INTO ".$db_prefix."users (name, showname, password, registerdate, admin, icq)
 VALUES ('".$admin_name."', '".$admin_showname."', '".md5($admin_passsword)."', '".mktime()."', 'y', '');
 INSERT INTO ".$db_prefix."sitedata (name, title, text, lang, html)
 VALUES ('home', 'Hauptseite', 'das ist die Homeseite', 'de', 'das ist die Homeseite');
 INSERT INTO ".$db_prefix."vars (name, value) VALUES ('style', 'clear');
 INSERT INTO ".$db_prefix."vars (name, value) VALUES ('default_site', 'home');
-INSERT INTO cms_menue (link, text, new, orderid) VALUES ('l:home', 'Home', 'y', 0)";
+INSERT INTO ".$db_prefix."menue (link, text, new, orderid) VALUES ('l:home', 'Home', 'y', 0)";
 if($admin_name == "" || $admin_showname == "" || $admin_password == "")
 {
 die("Die Angaben zum Adminaccount sind unvollständig..");

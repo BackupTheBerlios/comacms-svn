@@ -68,27 +68,8 @@
 	{
 		$internal_style = "clear";
  	}
-	$menue = " ";
-	@include("./styles/".@$internal_style."/menue.php");
-	$menue_result = db_result("SELECT * FROM ".$d_pre."menue ORDER BY orderid ASC");
-	while($menue_data = mysql_fetch_object($menue_result))
-	{
-		$menue_str = $menue_link;
-		$menue_str = str_replace("[text]",$menue_data->text,$menue_str);
-		$link = $menue_data->link;
-		if(substr($link,0,2) == "l:")
-			$link = @$internal_page_root."?site=".substr($link,2);
 
-		$menue_str = str_replace("[link]",$link,$menue_str);
-		$new = $menue_data->new;
-		if($new == "yes")
-			$new = "target=\"_blank\" ";
-		else
-			$new = "";
-		$menue_str = str_replace("[new]",$new,$menue_str);
-		$menue .= $menue_str."\n";
-	}
-
+	$menue = generatemenue(@$internal_style,$_site);
 
 	//load style
 	$stylefile = "./styles/".$internal_style."/mainpage.php";

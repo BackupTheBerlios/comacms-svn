@@ -22,27 +22,38 @@
 		$$_N_ = $var_data->value;
 	}
 	//end
+	if(!isset($style))
+	{
+		$object = mysql_fetch_object(db_result("SELECT * FROM ".$d_pre."vars WHERE name='style'"));
+		$style = $object->value;
+	}
+	if(isset($speichern))
+	{
+		db_result("UPDATE ".$d_pre."vars SET value= '".$style."' WHERE name='style'");
+	}
 ?>
-		<form target="test" action="stylepreview.php">
+		<iframe src="stylepreview.php?style=<?php echo $style; ?>" name="test" class="stylepreview"></iframe>
+		<form action="style.php">
 			<label for="stylepreviewselect">Style:<select id="stylepreviewselect" name="style" size="1">
 <?
 	$verz = dir("../styles/");
 
 	while($entry = $verz->read()) 
 	{
-		if($entry != "." && $entry != ".." && file_exists("../styles/".$entry."/mainpage.php"))
-			echo "\t\t\t<option>".$entry."</option>\n\r";
+		if($entry != "." && $entry != ".." && file_exists("../styles/".$entry."/mainpage.php") && $entry == $style)
+			echo "\t\t\t<option selected=\"selected\">".$entry."</option>\n\r";
+		elseif($entry != "." && $entry != ".." && file_exists("../styles/".$entry."/mainpage.php"))
+			echo "\t\t\t<option>".$entry."</option>";
 	}
 	$verz->close();
 ?>
-</select></label>
+			</select></label>
 
 
-<input type="submit" />
-</form>
-<iframe src="stylepreview.php" name="test" class="stylepreview"></iframe>
-<?
-?>
+			<input type="submit" value="Test" name="test" />
+			<input type="submit" value="Speichern" name="speichern" />
+
+		</form>
 	</body>
 </html>
 <?

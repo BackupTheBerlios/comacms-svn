@@ -4,9 +4,8 @@
 }
 #menue li
 {
-background-image: none;
-padding-left: 5px;
-list-style-image: url("mini_helm.png");
+	background-image: none;
+	padding-left: 5px;
 }
 
 a {
@@ -61,7 +60,6 @@ html, body{
 font-family:Arial,Helvita;
 }
 html{
-background-image: url("stein.jpg");
 background-color:#FFFFFF;
 }
 div.news {

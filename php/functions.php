@@ -123,11 +123,11 @@ function replace_smilies($textdata)
 	$textdata = str_replace(":love:",	"<img src=\"".$smilies_path."/love.gif\" />",$textdata);
 	return $textdata;
 }
-function generatemenue($style = "clear", $selected = "")
+function generatemenue($style = "clear", $selected = "", $style_root = ".")
 {
 	global $internal_page_root, $d_pre;
 	$menue = " ";
-	@include("./styles/".$style."/menue.php");
+	include($style_root."/styles/".$style."/menue.php");
 	$menue_result = db_result("SELECT * FROM ".$d_pre."menue ORDER BY orderid ASC");
 	while($menue_data = mysql_fetch_object($menue_result))
 	{

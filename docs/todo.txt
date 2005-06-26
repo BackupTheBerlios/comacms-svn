@@ -4,6 +4,10 @@ Todolist
 
 *Adminsystem
 	*Einstellungen
+	*Stlyevorschau mit Speicherfunktion
+	*Usermanagement
+	*Gruppenmanagement (Rechte usw.)
+	*neues Verzeichnis User? für Userseiten wie Seitenebearbeiten und weiteres
 	*'full XHTML suport'
 	*Gallerie
 Wenn was fertig gemacht ist, einfach '###' in an den Anfang der Zeile schreiben.

@@ -4,7 +4,7 @@ Todolist
 
 *Adminsystem
 	*Einstellungen
-	*Stlyevorschau mit Speicherfunktion
+###	*Stlyevorschau mit Speicherfunktion
 	*Usermanagement
 	*Gruppenmanagement (Rechte usw.)
 	*neues Verzeichnis User? für Userseiten wie Seitenebearbeiten und weiteres

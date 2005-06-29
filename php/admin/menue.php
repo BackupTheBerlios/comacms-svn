@@ -8,7 +8,7 @@ if(isloggedin())
 <head><title>Menue</title></head>
 <body>
 <ul>
-<li>AdminControl</li>
+<li><a href="main.php" target="content">AdminControl</a></li>
 <li><a href="../index.php" target="content">Seitenvorschau</a></li>
 <li><a href="configuration.php" target="content">Einstellungen</a></li>
 <li><a href="menueeditor.php" target="content">Men&uuml;</a></li>

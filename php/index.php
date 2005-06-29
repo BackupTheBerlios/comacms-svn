@@ -60,14 +60,12 @@
 		$str = substr($text,$pos + 5,$pos2 - $pos - 5);
 		$str2 = "internal_".$str;
 		$text = str_replace("[var:".$str."]", @$$str2, $text);
-	
 	}
 
 	//end
 	if(@$internal_style == "")
-	{
 		$internal_style = "clear";
- 	}
+ 	
 
 	$menue = generatemenue(@$internal_style,$_site);
 
@@ -80,15 +78,15 @@
 	$page = str_replace("[text]", $text, $page);
 	$page = str_replace("[menue]", $menue, $page);
 	$page = str_replace("[news]", getNews(), $page);
+	$page = str_replace("[position]",position_to_root($site_data->id),$page);
 
 	if (strpos ($page, "[gbook-")) { 
-    $page = str_replace("[gbook-input]", gbook_input(), $page);
-	$page = str_replace("[gbook-pages]", gbook_pages(), $page);
-	$page = str_replace("[gbook-content]", gbook_content(), $page);
+		$page = str_replace("[gbook-input]", gbook_input(), $page);
+		$page = str_replace("[gbook-pages]", gbook_pages(), $page);
+		$page = str_replace("[gbook-content]", gbook_content(), $page);
 	}
-	if (strpos ($page, "[contact]")) { 
-	$page = str_replace("[contact]", contact_formular(), $page);
-	}					  
+	if (strpos ($page, "[contact]"))
+		$page = str_replace("[contact]", contact_formular(), $page);
 	//end
 	_end();
 	echo $page;

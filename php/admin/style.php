@@ -65,6 +65,6 @@
 	}
 	else
 	{	
-		_login();
+		login();
 	}
 ?>

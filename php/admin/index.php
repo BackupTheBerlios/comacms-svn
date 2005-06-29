@@ -10,7 +10,7 @@ if(isloggedin())
 
 <frameset  cols="15%,85%">
    <frame src="menue.php" id="menue"/>
-   <frame src="rechts.html" id="content" name="content"/>
+   <frame src="main.php" id="content" name="content"/>
 </frameset>
 </html>
 <?

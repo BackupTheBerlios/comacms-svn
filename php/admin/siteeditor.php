@@ -18,13 +18,13 @@
   <form method="post" action="">
   <select name="site" size="1">
 <? 
-		$site_result = db_result("SELECT * FROM ".$d_pre."sitedata");
+		$site_result = db_result("SELECT * FROM ".$d_pre."sitedata WHERE type='text'");
 		while($site_data = mysql_fetch_object($site_result))
 		{
 			if($site_data->name == @$site) 
-				echo "<option selected>".$site_data->name."</option>";
+				echo "<option selected=\"selected\" value=\"".$site_data->name."\">".$site_data->title." (".$site_data->name.")</option>";
 			else
-				echo "<option>".$site_data->name."</option>";
+				echo "<option value=\"".$site_data->name."\">".$site_data->title." (".$site_data->name.")</option>";
 		}
 ?>
 </select><input type="submit" value="Öffnen" ></form></td>
@@ -78,7 +78,7 @@
 				$html = convertToPreHtml($text);
 				if($site_data == null)
 				{
-					$result = db_result("INSERT INTO ".$d_pre."sitedata (name, title, text, lang, html) VALUES ('".$name."', '".$title."', '".$text."', '".$lang."', '".$html."')");
+					$result = db_result("INSERT INTO ".$d_pre."sitedata (name, type, title, text, lang, html) VALUES ('".$name."', 'text', '".$title."', '".$text."', '".$lang."', '".$html."')");
 				}
 				else
 				{

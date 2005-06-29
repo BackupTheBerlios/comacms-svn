@@ -6,7 +6,7 @@
 
 </head>
 <body>
-<div class="top">HomepageName<br /><br /></div>
+<div class="top">HomepageName<br /><br />[position]</div>
 <div class="menuepart">
 <ul id="menue">
 [menue]

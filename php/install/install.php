@@ -24,25 +24,28 @@ CREATE TABLE ".$db_prefix."menue (
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS ".$db_prefix."sitedata;
-CREATE TABLE ".$db_prefix."sitedata (
-  id int(10) NOT NULL auto_increment,
-  name varchar(20) NOT NULL default '',
-  title varchar(100) NOT NULL default '',
-  text text NOT NULL,
-  lang varchar(10) NOT NULL default '',
-  html text,
-  PRIMARY KEY  (id)
-);
+CREATE TABLE `".$db_prefix."sitedata` (
+  `id` int(10) NOT NULL auto_increment,
+  `parent_id` int(10) NOT NULL default '0',
+  `type` varchar(15) NOT NULL default '',
+  `name` varchar(20) NOT NULL default '',
+  `title` varchar(100) NOT NULL default '',
+  `text` text NOT NULL,
+  `lang` varchar(10) NOT NULL default '',
+  `html` text,
+  PRIMARY KEY  (`id`)
+) ;
 DROP TABLE IF EXISTS ".$db_prefix."users;
-CREATE TABLE ".$db_prefix."users (
-  id int(10) NOT NULL auto_increment,
-  name varchar(30) NOT NULL default '',
-  showname varchar(40) NOT NULL default '',
-  password varchar(60) NOT NULL default '',
-  registerdate varchar(20) default '0',
-  admin enum('y','n') default 'n',
-  icq varchar(12) default '0',
-  PRIMARY KEY  (id)
+CREATE TABLE `".$db_prefix."users` (
+  `id` int(10) NOT NULL auto_increment,
+  `name` varchar(30) NOT NULL default '',
+  `showname` varchar(40) NOT NULL default '',
+  `password` varchar(100) NOT NULL default '',
+  `registerdate` varchar(20) default '0',
+  `admin` enum('y','n') default 'n',
+  `icq` varchar(12) default '0',
+  `email` varchar(200) NOT NULL default '',
+  PRIMARY KEY  (`id`)
 );
 DROP TABLE IF EXISTS ".$db_prefix."online;
 CREATE TABLE ".$db_prefix."online (

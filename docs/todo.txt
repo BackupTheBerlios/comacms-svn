@@ -4,10 +4,14 @@ Todolist
 
 *Adminsystem
 	*Einstellungen
+	*AdminControl
 ###	*Stlyevorschau mit Speicherfunktion
 	*Usermanagement
 	*Gruppenmanagement (Rechte usw.)
 	*neues Verzeichnis User? für Userseiten wie Seitenebearbeiten und weiteres
 	*'full XHTML suport'
-	*Gallerie
+	*Gallerie(-editor)
+	*Useranmeldung
+*'Mauristyle'
+
 Wenn was fertig gemacht ist, einfach '###' in an den Anfang der Zeile schreiben.

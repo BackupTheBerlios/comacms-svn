@@ -116,7 +116,7 @@ function replace_smilies($textdata)
 	$textdata = str_replace(":-/",		"<img src=\"".$smilies_path."/neutral.gif\" />",$textdata);
 	$textdata = str_replace(":-D",		"<img src=\"".$smilies_path."/razz.gif\" />",$textdata);
 	$textdata = str_replace("??:-)",	"<img src=\"".$smilies_path."/neutral.gif\" />",$textdata);
-	$textdata = str_replace(":nö:",		"<img src=\"".$smilies_path."/noe.gif\" />",$textdata);
+	$textdata = str_replace(":nÃ¶:",		"<img src=\"".$smilies_path."/noe.gif\" />",$textdata);
 	$textdata = str_replace(":noe:",	"<img src=\"".$smilies_path."/noe.gif\" />",$textdata);
 	$textdata = str_replace(":-O",		"<img src=\"".$smilies_path."/oo.gif\" />",$textdata);
 	$textdata = str_replace(":devil:",	"<img src=\"".$smilies_path."/devil.gif\" />",$textdata);
@@ -150,6 +150,22 @@ function generatemenue($style = "clear", $selected = "", $style_root = ".")
 	}
 
 	return $menue;
+}
+function position_to_root($id, $between = " > ")
+{
+	global $d_pre;
+	$actual_result = db_result("SELECT * FROM ".$d_pre."sitedata WHERE id=".$id);
+	$actual = mysql_fetch_object($actual_result);
+	$parent_id = $actual->parent_id;
+	$way_to_root = "";	
+	while($parent_id != 0)
+	{
+		$parent_result = db_result("SELECT * FROM ".$d_pre."sitedata WHERE id=".$parent_id);
+		$parent = mysql_fetch_object($parent_result);
+		$parent_id = $parent->parent_id;
+		$way_to_root = $parent->title . $between . $way_to_root;
+	}
+	return $way_to_root . $actual->title;
 }
 
 ?>

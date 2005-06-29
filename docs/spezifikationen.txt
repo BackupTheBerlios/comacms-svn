@@ -1,0 +1,5 @@
+galley
+type=gallery
+textfeld=100x110	//größe
+bild1.jpg		//Pfad zu einem bild basisordner wird data/gallery, muss aber nicht
+.../bild woanders.png	//Pfad zu einem weiiteren bild

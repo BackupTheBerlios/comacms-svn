@@ -8,10 +8,11 @@
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
-<head>
- <title>SeitenEditor</title>
- <link rel="stylesheet" href="style.css" type="text/css"/>
-</head>
+	<head>
+		<title>SeitenEditor</title>
+		<link rel="stylesheet" href="style.css" type="text/css"/>
+		<script type="text/javascript" language="JavaScript" src="functions.js"></script>
+		</head>
 <body>
   <h1>SeitenEditor</h1>
 <table><tr><td>
@@ -110,7 +111,7 @@
 			$new_b = true;
 		}
 ?>
-<form name="save" method="post">
+<form name="save" method="post" id="editorform">
 <input type="hidden" name="save" value="true" />
 <table>
 <tr><td>Name:</td><td><input <? if(!$new_b) echo "readonly=\"true\"";?>" name="name" value="<? echo $s_name; ?>" ></td></tr>
@@ -119,7 +120,11 @@
 	<option value="de" <?if($s_lang == "de") echo "selected=\"selected\" ";?>>Deutsch</option>
 	<option value="en" <?if($s_lang == "en") echo "selected=\"selected\" ";?>>Englisch</option>
 </select></td></tr>
-<tr><td colspan="2"><textarea cols="85" rows="18" name="text"><? echo $s_text; ?></textarea></td></tr>
+<tr><td colspan="2">
+<script type="text/javascript" language="javascript">
+writeButton("Fett","Formatiert Text Fett"," ** "," ** "," Fetter Text","b");
+</script><br />
+<textarea cols="85" rows="18" name="text" id="editor"><? echo $s_text; ?></textarea></td></tr>
 <tr><td>
 <input type="reset" value="Zurücksetzen" ></td><td><input type="submit" value="Speichern" ></td></tr>
 </table>

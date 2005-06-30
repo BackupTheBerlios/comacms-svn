@@ -12,6 +12,7 @@ Todolist
 	*'full XHTML suport'
 	*Gallerie(-editor)
 	*Useranmeldung
+	*neues Formatierungssytem " ** "= FETT " __ "= Unterstrichen usw..
 *'Mauristyle'
 
 Wenn was fertig gemacht ist, einfach '###' in an den Anfang der Zeile schreiben.

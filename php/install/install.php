@@ -78,8 +78,8 @@ CREATE TABLE ".$db_prefix."news (
 );
 INSERT INTO ".$db_prefix."users (name, showname, password, registerdate, admin, icq)
 VALUES ('".$admin_name."', '".$admin_showname."', '".md5($admin_passsword)."', '".mktime()."', 'y', '');
-INSERT INTO ".$db_prefix."sitedata (name, title, text, lang, html)
-VALUES ('home', 'Hauptseite', 'das ist die Homeseite', 'de', 'das ist die Homeseite');
+INSERT INTO ".$db_prefix."sitedata (name, title, text, lang, html, type)
+VALUES ('home', 'Hauptseite', 'das ist die Homeseite', 'de', 'das ist die Homeseite', 'text');
 INSERT INTO ".$db_prefix."vars (name, value) VALUES ('style', 'clear');
 INSERT INTO ".$db_prefix."vars (name, value) VALUES ('default_site', 'home');
 INSERT INTO ".$db_prefix."menue (link, text, new, orderid) VALUES ('l:home', 'Home', 'y', 0)";

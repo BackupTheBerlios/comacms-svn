@@ -77,7 +77,7 @@ CREATE TABLE ".$db_prefix."news (
   PRIMARY KEY  (id)
 );
 INSERT INTO ".$db_prefix."users (name, showname, password, registerdate, admin, icq)
-VALUES ('".$admin_name."', '".$admin_showname."', '".md5($admin_passsword)."', '".mktime()."', 'y', '');
+VALUES ('".$admin_name."', '".$admin_showname."', '".md5($admin_password)."', '".mktime()."', 'y', '');
 INSERT INTO ".$db_prefix."sitedata (name, title, text, lang, html, type)
 VALUES ('home', 'Hauptseite', 'das ist die Homeseite', 'de', 'das ist die Homeseite', 'text');
 INSERT INTO ".$db_prefix."vars (name, value) VALUES ('style', 'clear');

@@ -24,7 +24,7 @@ function preview_style()
 	dframe.src = "stylepreview.php?style=" + data.value;
 }
 
-function writeButton(text, toolTip, tagOpen, tagClose, example, accessKey)
+function writeButton(image, toolTip, tagOpen, tagClose, example, accessKey)
 {
 	document.write("<a ");
 	
@@ -32,8 +32,9 @@ function writeButton(text, toolTip, tagOpen, tagClose, example, accessKey)
 		document.write("accesskey=\"" + accessKey + "\" ");
 	document.write("href=\"javascript:formatText('" + tagOpen + "', '" + tagClose + "', '" + example + "')\" ");
 	document.write("title=\"" + toolTip + "\" ");
-	document.write(">" + text);
-	document.write("</a>");
+	document.write(">");
+	document.write("<img src=\"" + image + "\" class=\"editbutton\" alt=\"" + toolTip + "\" title=\"" + toolTip + "\" width=\"25\" height=\"25\" />");
+	document.write("</a> ");
 }
 // aus mediawiki
 function formatText(tagOpen, tagClose, example)

@@ -18,7 +18,10 @@ text-align:center;
 color:red;
 font-weight:bold;
 }
-.stylepreview{
+.stylepreview {
 width:95%;
 height:410px;
+}
+.editbutton {
+border:0px;
 }

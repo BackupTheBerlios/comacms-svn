@@ -122,7 +122,10 @@
 </select></td></tr>
 <tr><td colspan="2">
 <script type="text/javascript" language="javascript">
-writeButton("Fett","Formatiert Text Fett"," ** "," ** "," Fetter Text","b");
+	writeButton("../img/button_fett.png","Formatiert Text Fett","**","**","Fetter Text","f");
+	writeButton("../img/button_kursiv.png","Formatiert Text kursiv","//","//","Kursiver Text","k");
+	writeButton("../img/button_unterstrichen.png","Unterstreicht den Text","__","__","Unterstrichener Text","u");
+	writeButton("../img/button_ueberschrift.png","Markiert den Text als Überschrift","=== "," ===","Überschrift","h");
 </script><br />
 <textarea cols="85" rows="18" name="text" id="editor"><? echo $s_text; ?></textarea></td></tr>
 <tr><td>

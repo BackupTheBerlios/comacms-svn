@@ -84,7 +84,7 @@
 		$text = preg_replace("/\/\/(.+?)\/\//s", "<em>$1</em>", $text);		//Italic
 
 		$text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $text);
-
+		//[[link|text]]
 		$text = preg_replace("/\[ul\](.+?)\[\/ul\]/s", "<ul>$1</ul>", $text); 
 		$text = preg_replace("/\[li\](.+?)\[\/li\]/s", "<li>$1</li>", $text); 
 		$text = preg_replace("/\[code\](.+?)\[\/code\]/s", "<pre class=\"code\">$1</pre>", $text); //underline

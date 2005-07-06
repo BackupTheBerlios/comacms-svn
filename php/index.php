@@ -43,9 +43,9 @@
 
 	$site_result = db_result("SELECT * FROM ".$d_pre."sitedata WHERE name='".$_site."'");
 	if(!$site_result)
-    	die("bad error:  no sitedata found");
-	$site_data = mysql_fetch_object($site_result);
-	
+		die("bad error:  no sitedata found");
+	if(!($site_data = mysql_fetch_object($site_result)))
+		die("bad error:  no sitedata found");
 	$title = $site_data->title;
 	$text = $site_data->html;
 	//end

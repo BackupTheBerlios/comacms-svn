@@ -15,7 +15,9 @@ if(isloggedin())
 <li><a href="siteeditor.php" target="content">SeitenEditor</a></li>
 <li><a href="news.php" target="content">News</a></li>
 <li><a href="style.php" target="content">Seitenstyle</a></li>
+<li><a href="users.php" target="content">Users</a></li>
 <li>Gallerien</li>
+
 <li>Logout</li>
 </ul>
 </body>

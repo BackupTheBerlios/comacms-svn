@@ -12,7 +12,7 @@ global $d_pre;
 		$return_str .= "<div class=\"news\">";
 		$return_str .= "<div class=\"news-title\">";
 		$return_str .= $row->title;
-		$return_str .= "<span class=\"news-title\">".date("d.m.Y H:i:s",$row->date)."</span>";
+		$return_str .= " <span class=\"news-title\">".date("d.m.Y H:i:s",$row->date)."</span";
 		$return_str .= "</div>";
 		$return_str .= nl2br($row->text)."";
 		$return_str .= "<span class=\"news-author\">&nbsp;".getUserByID($row->userid)."</span>";

@@ -5,6 +5,10 @@
 	if(isloggedin())
 	{
 		_start();
+		$sitedata_result = db_result("SELECT * FROM ".$d_pre."sitedata");
+		$page_count = mysql_num_rows($sitedata_result);
+		$users_result = db_result("SELECT * FROM ".$d_pre."users");
+		$users_count = mysql_num_rows($users_result);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -16,8 +20,8 @@
 	<h1>AdminControl</h1>
 	<table>
 		<tr><td>Aktiv Seit</td><td>#DATUM</td></tr>
-		<tr><td>Angemeldete Benutzer</td><td>#ANZ.USERS</td></tr>
-		<tr><td>Eingetragene Seiten</td><td>#ANZ.SITEDATA</td></tr>
+		<tr><td>Angemeldete Benutzer</td><td><? echo $users_count; ?></td></tr>
+		<tr><td>Erstellte Seiten</td><td><? echo $page_count; ?></td></tr>
 	</table>
 	
 	<h3>Aktuelle Besucher</h3>

@@ -85,7 +85,7 @@ function getUserIDByName($name)
 	return $row->id;
 }
 
-function getUserByID($id = "1")
+function getUserByID($id)
 {
 	global $d_pre;
 	$result = db_result("SELECT * FROM ".$d_pre."users WHERE id = '$id'");

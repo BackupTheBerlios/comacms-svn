@@ -10,17 +10,19 @@
 	{
 		db_result("DELETE FROM ".$d_pre."users WHERE id='".$id."'");
 	}
-	if(isset($update))
+	if(isset($update)&&$pw==$pwwdh)
 	{
 		if(isset($admin)){ $admin="admin= 'y', "; } else { $admin="admin= 'n', "; }
 		if($pw!="evtl. neues Password") { $pw=", password= '".md5($pw)."'"; } else { $pw = ""; }
 		db_result("UPDATE ".$d_pre."users SET showname= '".$showname."', name= '".$name."', email= '".$email."', ".$admin."icq= '".$icq."'".$pw." WHERE id=".$id);
+		$pw = $pwwdh;
 	}
-	if(isset($speichern))
+	if(isset($speichern)&&$pw==$pwwdh)
 	{
 		if(isset($admin)){ $admin="y"; } else { $admin="n"; }
 		$pw = md5($pw);
 		db_result("INSERT INTO ".$d_pre."users (name, showname, password, registerdate, admin, icq, email) VALUES ('".$showname."', '".$name."', '".$pw."', '".mktime()."', '".$admin."', '".$icq."', '".$email."')");
+		$pw = $pwwdh;
 	}
 	if(isset($delete))
 	{
@@ -44,7 +46,8 @@
 			<form action="<?php echo $PHP_SELF."?speichern=y"?>" method="post">
 				<tr><td>Name:</td><td><input type="text" name="showname" /></td></tr>
 				<tr><td>K&uuml;rzel:</td><td><input type="text" name="name" /></td></tr>
-				<tr><td>Pasword:</td><td><input type="text" name="pw" /></td></tr>
+				<tr><td>Password:</td><td><input type="password" name="pw" /></td></tr>
+				<tr><td>Password Wiederhohlung:</td><td><input type="password" name="pwwdh" /></td></tr>
 				<tr><td>E-Mail Adresse:</td><td><input type="text" name="email" /></td></tr>
 				<tr><td>ICQ Nummer:</td><td><input type="text" name="icq" /></td></tr>
 				<tr><td>Admin:</td><td><input type="checkbox" name="admin" /></td></tr>
@@ -76,7 +79,8 @@
 				<tr><td>Userid </td><td><?php echo $user->id; ?></td></tr>
 				<tr><td>Name:</td><td><input type="text" name="showname" value="<?php echo $user->showname; ?>" /></td></tr>
 				<tr><td>K&uuml;rzel:</td><td><input type="text" name="name" value="<?php echo $user->name; ?>" /></td></tr>
-				<tr><td>Pasword:</td><td><input type="text" name="pw" value="evtl. neues Password" /></td></tr>
+				<tr><td>Paswword: (nur zum Ver&auml;ndern eingeben!!)</td><td><input type="password" name="pw" value="evtl. neues Password" /></td></tr>
+				<tr><td>Password Wiederhohlung:</td><td><input type="password" name="pwwdh" value="evtl. neues Password" /></td></tr>
 				<tr><td>E-Mail Adresse:</td><td><input type="text" name="email" value="<?php echo $user->email; ?>" /></td></tr>
 				<tr><td>ICQ Nummer:</td><td><input type="text" name="icq" value="<?php echo $user->icq; ?>" /></td></tr>
 				<tr><td>Admin:</td><td><input type="checkbox" <?php if($user->admin=="y") { echo "checked"; } ?> name="admin" /></td></tr>
@@ -113,6 +117,7 @@
 ?>
 		<tr><td colspan="7"><a href="<?php echo $PHP_SELF."?newuser=y"; ?>" />Neuen User hinzuf&uuml;gen</a></td></tr>
 		</table>
+		<?php if(!isset($pw)) { $pw = "1"; } if(!isset($pwwdh)) { $pwwdh= "1"; } if($pw!=$pwwdh) { echo "<h3>Die Wiederhohlung des Passwortes ist fehlerhaft...<br>Aus diesem Grund wurde der Eintrag nicht gespeichert.</h3>"; } ?>
 	</body>
 </html>
 <?

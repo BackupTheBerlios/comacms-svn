@@ -57,7 +57,12 @@ include("../functions.php");
 					<td><textarea cols="60" rows="6" name="text"></textarea></td>
 				</tr>
 				<tr>
-					<td>Eingelogt als <? echo getUserByID(); ?> &nbsp;<input type="submit" value="Senden" /></td>
+<?
+					$data = explode("|",$_COOKIE["CMS_user_cookie"]);
+					$username = $data[0];
+					$userpassword = $data[1];
+?>
+					<td>Eingelogt als <? echo $username; ?> &nbsp;<input type="submit" value="Senden" /></td>
 				</tr>
 			</table>
 		</form>

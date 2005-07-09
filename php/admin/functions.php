@@ -31,7 +31,7 @@
 			return false;
 		if(strtolower(@$data->name) == strtolower(@$username))
 		{
-			setcookie ("CMS_user_cookie", $data->name."|".$data->password, time()+5600); 
+			setcookie ("CMS_user_cookie", $data->name."|".$data->password."|".$data->id, time()+5600); 
 			return true;
 		}
 		else

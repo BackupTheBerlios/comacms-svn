@@ -167,5 +167,73 @@ function position_to_root($id, $between = " > ")
 	}
 	return $way_to_root . $actual->title;
 }
+/* void set_usercookies()
+ * Saves something for the client in two cookies:
+ * 1.:
+ * - User-login-name(if it's abailable)
+ * - Userpassword-MD5-Hash(if it and the username are availble)
+ * 2.:
+ * - Userdefined language (is by default $internal_default_language) with a long lifetime (about three months)
+ *
+ * TODO: Combine with the countersystem
+ * TODO: Make a better languagedetection
+ */
+function set_usercookies()
+{
+	global $d_pre, $login_name, $login_password, $lang, $actual_user_is_admin, $actual_user_is_logged_in, $actual_user_id, $actual_user_name, $actual_user_passwd_md5, $actual_user_lang, $_COOKIE;
+	$actual_user_is_admin = false;
+	$actual_user_is_logged_in = false;
+	$actual_user_lang = "de"; //FIX ME: get this by default config or by HTTP headers of the client
+	$actual_user_name = "";
+	$actual_user_passwd_md5 = "";
+	$languages = array("de", "en", "jp");
+	
+	if(isset($lang)) // Check: has the user changed the language by hand?
+	{
+		if(in_array($lang, $languages))
+			$actual_user_lang = $lang;
+	}
+	elseif(isset($_COOKIE["CMS_user_lang"])) // Get the language from the cookie if it' s not changed
+	{
+		if(in_array($_COOKIE["CMS_user_lang"], $languages))
+			$actual_user_lang = $_COOKIE["CMS_user_lang"];
+	}
+	
+	setcookie("CMS_user_lang", $actual_user_lang, time() + 8035200); // Set the cookie (for the next 93 Days)
+	
+	if(isset($login_name) && isset($login_password)) // Tries somebody to log in?
+	{
+		$actual_user_name = $login_name;
+		$actual_user_passwd_md5 = md5($login_password);
+	}
+	elseif(isset($_COOKIE["CMS_user_cookie"])) // Tells the cookie: "the user is logged in!"?
+	{
+		$data = explode("|",$_COOKIE["CMS_user_cookie"]);
+		$actual_user_name = @$data[0];
+		$actual_user_passwd_md5 = @$data[1];
+	}
+	if($actual_user_name != "" && $actual_user_passwd_md5 != "") // Check: is the user really logged in?
+	{
+		$original_user_result = db_result("SELECT * FROM ".$d_pre."users WHERE name='".$actual_user_name."' AND password='".$actual_user_passwd_md5."'");
+		$original_user = mysql_fetch_object($original_user_result);
+		if(@$original_user->name == "")
+		{
+			$actual_user_is_admin = false;
+			$actual_user_is_logged_in = false;
+			$actual_user_name = "";
+			$actual_user_passwd_md5 = "";
+		}
+		else
+		{
+			$actual_user_is_logged_in = true;
+			if($original_user->admin = "y")
+				$actual_user_is_admin = true;
+		}
+	}
+	
+	setcookie("CMS_user_cookie",$actual_user_name."|".$actual_user_passwd_md5 , time() + 14400);
+//setcookie ("CMS_user_cookie", $data->name."|".$data->password."|".$data->id, time()+5600); 
+//CMS_user_cookie
+}
 
 ?>

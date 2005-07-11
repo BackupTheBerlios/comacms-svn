@@ -15,7 +15,7 @@
 	include("counter.php");
 	include("contact.php");
 	_start();
-
+	set_usercookies();
 	//load vars
 	$var_result = db_result("SELECT * FROM ".$d_pre."vars");
 	while($var_data = mysql_fetch_object($var_result))

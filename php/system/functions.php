@@ -50,8 +50,8 @@
 	<body>
 		<form method="post" action="<?echo $PHP_SELF;?>">
 			<table>
-				<tr><td>Loginname:</td><td><input type="text" name="name" /></td></tr>
-				<tr><td>Passwort:</td><td><input type="password" name="password" /></td></tr>
+				<tr><td>Loginname:</td><td><input type="text" name="login_name" /></td></tr>
+				<tr><td>Passwort:</td><td><input type="password" name="login_password" /></td></tr>
 				<tr><td colspan="2"><input type="submit" value="Login" /></td></tr>
 			</table>
 		</form>

@@ -5,7 +5,7 @@
 		<meta name="author" content="St. Mauritius Hildesheim" />
 	</head>
 	<body>
-<!--<br /><br />[position]</div>-->
+		<!--<br /><br />[position]</div>-->
 			
 		<div id="top">
 			<img id="logo" src="./styles/mauri/logo.jpg" alt="Ein Bild der St. Mauritius-Kirche von der Seite"/>
@@ -13,7 +13,7 @@
 			<li><a href="#">Kontakt</a></li>
 			<li><a href="#">Sitemap</a></li>
 			<li><a href="#">English</a></li>
-			<li><a href="#">St. Michael<a></a></li>
+			<li><a href="#">St. Michael</a></li>
 		</ul>	
 		</div>
 		<div id="menuepart">

@@ -1,7 +1,8 @@
 Todolist
 
 *Dokumentation
-
+*Multisitesystem(one installation with more then one different pages)
+*Rightsmanagement(per user, per group)
 *Adminsystem
 	*Einstellungen
 	*AdminControl

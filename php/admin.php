@@ -43,6 +43,11 @@
 			$title = $admin_lang['sitepreview'];
 			$text = page_sitepreview();
 		}
+		elseif($site == "menueeditor")
+		{
+			$title = $admin_lang['menueeditor'];
+			$text = page_menueeditor();
+		}
 		//end of the "functions"
 		if(@$internal_style == "")
 			$internal_style = "clear";

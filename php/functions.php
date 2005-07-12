@@ -128,7 +128,7 @@ function generatemenue($style = "clear", $selected = "", $style_root = ".")
 	global $internal_page_root, $d_pre;
 	$menue = " ";
 	include($style_root."/styles/".$style."/menue.php");
-	$menue_result = db_result("SELECT * FROM ".$d_pre."menue ORDER BY orderid ASC");
+	$menue_result = db_result("SELECT * FROM ".$d_pre."menue WHERE menue_id='1' ORDER BY orderid ASC");
 	while($menue_data = mysql_fetch_object($menue_result))
 	{
 		$menue_str = $menue_link;

@@ -13,5 +13,4 @@ $admin_lang['users'] = "Users";
 $admin_lang['gallery'] = "Gallery";
 $admin_lang['logout'] = "Logout";
 $admin_lang['registered users'] = "Registered Users";
-$admin_lang['preferences'], "admin.php?site=preferences");
 ?>

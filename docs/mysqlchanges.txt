@@ -1,14 +1,14 @@
-Feld bei Users eingefügt
+Feld bei Users eingefgt
 
 ALTER TABLE `cms_users` ADD `email` VARCHAR( 200 ) NOT NULL ;
 
-Felder bei Sitedata eingefügt
+Felder bei Sitedata eingefgt
 
-parent_id für unterseiten
+parent_id fr unterseiten
 ALTER TABLE `cms_sitedata` ADD `parent_id` INT( 10 ) DEFAULT '0' NOT NULL AFTER `id` ; 
 
-type für gallery oder seite, nur wichtig für den editor, da die Gallery vorher erstellt wird(per Galleryeditor)
+type fr gallery oder seite, nur wichtig fr den editor, da die Gallery vorher erstellt wird(per Galleryeditor)
 ALTER TABLE `cms_sitedata` ADD `type` VARCHAR( 15 ) NOT NULL AFTER `parent_id` ;
 
 the menueid make it possible that we can manage more than one menue in the menue table
-ALTER TABLE `cms_menue` ADD `menue_id` INT( 10 ) DEFAAULT '1' NOT NULL ;
+ALTER TABLE `cms_menue` ADD `menue_id` INT( 10 ) DEFAULT '1' NOT NULL ;

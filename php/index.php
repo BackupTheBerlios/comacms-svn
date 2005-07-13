@@ -65,9 +65,6 @@
 	//end
 	if(@$internal_style == "")
 		$internal_style = "clear";
- 	
-
-	$menue = generatemenue(@$internal_style,$_site);
 
 	//load style
 	$stylefile = "./styles/".$internal_style."/mainpage.php";
@@ -76,7 +73,11 @@
 	
 	$page = str_replace("[title]", $title, $page);
 	$page = str_replace("[text]", $text, $page);
-	$page = str_replace("[menue]", $menue, $page);
+	$page = str_replace("[menue]", generatemenue(@$internal_style,1,$_site), $page);
+	$page = str_replace("[menue2]", generatemenue(@$internal_style,2,$_site), $page);
+	//$menue = generatemenue(@$internal_style,1,$_site);
+	//$menue2 = generatemenue(@$internal_style,2,$_site);
+	
 	$page = str_replace("[news]", getNews(), $page);
 	$page = str_replace("[position]",position_to_root($site_data->id),$page);
 

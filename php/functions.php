@@ -123,22 +123,27 @@ function replace_smilies($textdata)
 	$textdata = str_replace(":love:",	"<img src=\"".$smilies_path."/love.gif\" />",$textdata);
 	return $textdata;
 }
-function generatemenue($style = "clear", $selected = "", $style_root = ".")
+function generatemenue($style = "clear", $menue_id = 1, $selected = "", $style_root = ".")
 {
 	global $internal_page_root, $d_pre;
 	$menue = " ";
 	include($style_root."/styles/".$style."/menue.php");
-	$menue_result = db_result("SELECT * FROM ".$d_pre."menue WHERE menue_id='1' ORDER BY orderid ASC");
+	$menue_result = db_result("SELECT * FROM ".$d_pre."menue WHERE menue_id=".$menue_id." ORDER BY orderid ASC");
 	while($menue_data = mysql_fetch_object($menue_result))
 	{
-		$menue_str = $menue_link;
+		if($menue_id == 1)
+			$menue_str = $menue_link;
+		else
+			$menue_str = $menue_link2;
 		$menue_str = str_replace("[text]",$menue_data->text,$menue_str);
 		$link = $menue_data->link;
 		if(substr($link,0,2) == "l:")
 			$link = @$internal_page_root."index.php?site=".substr($link,2);
 		if(substr($link,0,2) == "g:")
 			$link = @$internal_page_root."gallery.php?site=".substr($link,2);
-
+		if(substr($link,0,2) == "a:")
+			$link = @$internal_page_root."admin.php?site=".substr($link,2);
+			
 		$menue_str = str_replace("[link]",$link,$menue_str);
 		$new = $menue_data->new;
 		if($new == "yes")

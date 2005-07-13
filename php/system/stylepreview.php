@@ -8,7 +8,7 @@
 		$style = "clear";
 	}
 	_start();	
-	$menue = generatemenue(@$style,"","..");
+	$menue = generatemenue(@$style,1,"","..");
 	$stylefile = "../styles/".$style."/mainpage.php";
 	$_file = fopen($stylefile, "r");
 	$page = fread($_file, filesize($stylefile));

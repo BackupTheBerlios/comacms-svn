@@ -72,6 +72,7 @@
 		$page = fread($_file, filesize($stylefile));
 		$page = str_replace("[menue]", $menue, $page);
 		$page = str_replace("[title]", $title, $page);
+		$page = str_replace("[menue2]","",$page);
 		$page = str_replace("[text]", $text, $page);
 		echo $page;
 	}

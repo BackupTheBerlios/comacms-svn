@@ -10,11 +10,12 @@
 		<div id="top">
 			<img id="logo" src="./styles/mauri/logo.jpg" alt="Ein Bild der St. Mauritius-Kirche von der Seite"/>
 			<ul id="secondmenue">
-			<li><a href="#">Kontakt</a></li>
+[menue2]
+			<!--<li><a href="#">Kontakt</a></li>
 			<li><a href="#">Sitemap</a></li>
 			<li><a href="#">English</a></li>
-			<li><a href="#">St. Michael</a></li>
-		</ul>	
+			<li><a href="#">St. Michael</a></li>-->
+			</ul>	
 		</div>
 		<div id="menuepart">
 			

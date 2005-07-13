@@ -48,6 +48,11 @@
 			$title = $admin_lang['menueeditor'];
 			$text = page_menueeditor();
 		}
+		elseif($site == "sitestyle")
+		{
+			$title = $admin_lang['sitestyle'];
+			$text = page_sitestyle();
+		}
 		//end of the "functions"
 		if(@$internal_style == "")
 			$internal_style = "clear";

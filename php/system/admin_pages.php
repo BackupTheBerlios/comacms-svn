@@ -271,4 +271,56 @@ function page_menueeditor()
 	
 
 }
+
+function page_sitestyle()
+{
+	global $_GET, $_POST, $d_pre;
+	$out = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"./system/functions.js\"></script>";
+	
+	if(!isset($_GET["style"]) && !isset($_POST["style"]))
+	{
+		$object = mysql_fetch_object(db_result("SELECT * FROM ".$d_pre."vars WHERE name='style'"));
+		$style = $object->value;
+	}
+	else
+	{
+		if(isset($_GET["style"]))
+			$style = $_GET["style"];
+		else
+			$style = $_POST["style"];
+	}
+	
+	if(isset($_GET["save"]) || isset($_POST["save"]))
+	{
+		if(file_exists("./styles/".$style."/mainpage.php"))
+			db_result("UPDATE ".$d_pre."vars SET value= '".$style."' WHERE name='style'");
+	}
+	
+	$out .= "<iframe id=\"previewiframe\" src=\"./system/stylepreview.php?style=".$style."\" class=\"stylepreview\"></iframe>
+		<form action=\"admin.php\" method=\"get\">
+			<input type=\"hidden\" name=\"site\" value=\"sitestyle\" />
+			<label for=\"stylepreviewselect\">Style:
+				<select id=\"stylepreviewselect\" name=\"style\" size=\"1\">";
+	
+	$verz = dir("./styles/");
+
+	while($entry = $verz->read()) 
+	{
+		if($entry != "." && $entry != ".." && file_exists("./styles/".$entry."/mainpage.php") && $entry == $style)
+			$out .= "\t\t\t\t\t<option value=\"".$entry."\" selected=\"selected\">".$entry."</option>\r\n";
+		elseif($entry != "." && $entry != ".." && file_exists("./styles/".$entry."/mainpage.php"))
+			$out .= "\t\t\t\t\t<option value=\"".$entry."\">".$entry."</option>\r\n";
+	}
+	$verz->close();
+	
+	$out .= "</select>
+			</label>
+
+			<input type=\"submit\" value=\"Vorschau\" onclick=\"preview_style();return false;\" name=\"preview\" />
+			<input type=\"submit\" value=\"Speichern\" name=\"save\" />
+
+		</form>";
+		
+	return $out;
+}
 ?>

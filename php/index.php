@@ -66,6 +66,8 @@
 	if(@$internal_style == "")
 		$internal_style = "clear";
 
+	if(isset($_GET['style']) && $actual_user_is_admin)
+		$internal_style = $_GET['style'];
 	//load style
 	$stylefile = "./styles/".$internal_style."/mainpage.php";
 	$_file = fopen($stylefile, "r");

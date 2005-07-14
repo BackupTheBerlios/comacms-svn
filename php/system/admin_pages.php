@@ -1,35 +1,46 @@
 <?
+/* adminpages.php
+ * This file contains 'all' subsites in the admin-interface
+ */
+
+/* string page_adminconrol()
+ * returns the AdminControl-page with a list of useful details about the page
+ * and a list of all visitors
+ */
 function page_admincontrol()
 {
 	global $d_pre,$admin_lang;
+	//get the coutnt of all pages
 	$sitedata_result = db_result("SELECT * FROM ".$d_pre."sitedata");
 	$page_count = mysql_num_rows($sitedata_result);
+	//get the count of all registered users
 	$users_result = db_result("SELECT * FROM ".$d_pre."users");
 	$users_count = mysql_num_rows($users_result);
+	
 	$out = "<h3>AdminControl</h3><hr />
 	<table>
-		<tr><td>Aktiv Seit</td><td>#DATUM</td></tr>
+		<tr><td>".$admin_lang['online since']."</td><td>#DATUM</td></tr>
 		<tr><td>".$admin_lang['registered users']."</td><td>".$users_count."</td></tr>
-		<tr><td>Erstellte Seiten</td><td>".$page_count."</td></tr>
+		<tr><td>".$admin_lang['created pages']."</td><td>".$page_count."</td></tr>
 	</table>
 	
 	<h3>Aktuelle Besucher</h3><hr />
 	<table>
 		<tr>
-			<td>Name</td>
-			<td>Seite</td>
-			<td>Letzte Aktion</td>
-			<td>Sprache</td>
-			<td>IP</td>
+			<td>".$admin_lang['name']."</td>
+			<td>".$admin_lang['page']."</td>
+			<td>".$admin_lang['last action']."</td>
+			<td>".$admin_lang['language']."</td>
+			<td>".$admin_lang['ip']."</td>
 		</tr>";
-
+		//output all visitors surfing on the site
 		$users_online_result = db_result("SELECT * FROM ".$d_pre."online");
 		while($users_online = mysql_fetch_object($users_online_result))
 		{
 			$out .= "\t\t\t<tr>
-			<td>*Nicht angemeldet*</td>
+			<td>*".$admin_lang['not registered']."*</td>
 			<td><a href=\"index.php?site=".$users_online->page."\">".$users_online->page."</a></td>
-			<td>".$users_online->lastaction."</td>
+			<td>".date("d.m.Y H:i:s", $users_online->lastaction)."</td>
 			<td>*de*".$users_online->lang."</td>
 			<td>".$users_online->ip."</td>
 		</tr>\r\n";
@@ -39,33 +50,45 @@ function page_admincontrol()
 	
 	return $out;
 }
-
+/* string page_sitepreview()
+ * returns the Sitepreview-page where you can see the 'real' site in a iframe
+ */
 function page_sitepreview()
 {
 	global $admin_lang;
 	$out = "<h3>".$admin_lang['sitepreview']."</h3><hr /><iframe src=\"index.php\" class=\"sitepreview\"></iframe>";
 	return $out;
 }
-
+/* string page_menueeditor()
+ * returns the Menueeditor-page whith the followong functionalitys:
+ * -$action=up -> changes the place in the menue order with the item before the selected
+ * -$action=down -> changes the place in the menue order with the item after the selected
+ * -$action=delete -> removes the item from the menue but it asks if it's sure that the item should be deleted
+ * -$action=add -> adds a new item at the end of the menue
+ *
+ * it is possible to choose between two menues by $menue_id
+ */
 function page_menueeditor()
 {
-	global $_GET,$_POST, $admin_language, $d_pre, $menue_id;
+	global $_GET,$_POST, $admin_language, $d_pre;
+	$menue_id = 0;
 	$out = "\t\t\t<h3>Menueeditor</h3><hr />	
 			<ul>\r\n";
 	
-	if(@$_GET['menue_id'] != "" || @$_POST['menue_id'] != "")
+	if(isset($_GET['menue_id']) || isset($_POST['menue_id']))
 	{
 		if(isset($_GET['menue_id']))
 			$menue_id = $_GET['menue_id'];
 		else
 			$menue_id = $_POST['menue_id'];
 	}
+	//write the 'coose menue'  to make it able to switch betwen both possible menues
 	if($menue_id == "2")
 		$out .= "\t\t\t\t<li><a href=\"admin.php?site=menueeditor&amp;menue_id=1\">Menü 1</a></li>
-				<li><b>Menü 2</b></li>\r\n";
+				<li><u>Menü 2</u></li>\r\n";
 	else
 	{
-		$out .= "\t\t\t\t<li><b>Menü 1</b></li>
+		$out .= "\t\t\t\t<li><u>Menü 1</u></li>
 				<li><a href=\"admin.php?site=menueeditor&amp;menue_id=2\">Menü 2</a></li>\r\n";
 		$menue_id = 1;
 	}
@@ -84,7 +107,7 @@ function page_menueeditor()
 			$id = $_POST['id'];
 		else
 			$id = 0;
-			
+		//put the item one position higher	
 		if($action == "up")
 		{
 			$_result = db_result("SELECT * FROM ".$d_pre."menue WHERE id=".$id."");
@@ -103,6 +126,7 @@ function page_menueeditor()
 				db_result("UPDATE ".$d_pre."menue SET orderid= ".$orderid1." WHERE id=".$id2);
 			}
 		}
+		//put the item one position lower
 		elseif($action == "down")
 		{
 			$_result = db_result("SELECT * FROM ".$d_pre."menue WHERE id=".$id."");
@@ -121,6 +145,7 @@ function page_menueeditor()
 				db_result("UPDATE ".$d_pre."menue SET orderid= ".$orderid1." WHERE id=".$id2);
 			}
 		}
+		//remove the selected item
 		elseif($action == "delete")
 		{
 			
@@ -142,6 +167,7 @@ function page_menueeditor()
 				return $out;
 			}
 		}
+		//add a new item
 		elseif($action == "add")
 		{
 			if(isset($_GET['intern_link']))
@@ -182,39 +208,10 @@ function page_menueeditor()
 					$ordid = 0;
 				
 				db_result("INSERT INTO ".$d_pre."menue (text, link, new, orderid,menue_id) VALUES ('".$caption."', '".$link."', '".$new."', ".$ordid.",$menue_id)");
-			}	
-		/*
-		if($intern_link == "")
-				$link_str = $link;
-			else
-				$link_str = "l:".$intern_link;
-			$menue_result = db_result("SELECT * FROM ".$d_pre."menue WHERE link='".$link_str."'");
-			$menue_data = mysql_fetch_object($menue_result);
-			if($menue_data != null)
-				$error = "Für diese Seite existiert bereits ein Link.";
-			if($link_str == "")
-				$error = "Es wurde kein Link angegeben.";
-			if($error == "")
-			{
-				if(@$newwindow == "on")
-					$neww = "yes";
-				else
-					$neww = "no";
-
-				$menue1_result = db_result("SELECT orderid FROM ".$d_pre."menue ORDER BY orderid DESC");
-				$menue1_data = mysql_fetch_object($menue1_result);
-				if($menue1_data != null)
-					$ordid = $menue1_data->orderid + 1;
-				else
-					$ordid = 0;
-				
-				db_result("INSERT INTO ".$d_pre."menue (text, link, new, orderid) VALUES ('".$text."', '".$link_str."', '".$neww."', ".$ordid.")");
 			}
-		*/
 		}
 		
 	}
-	
 	
 	$out .= "\t\t\t<table class=\"linktable\">
 				<thead>
@@ -225,7 +222,7 @@ function page_menueeditor()
 					</tr>
 				</thead>
 				<tbody>\r\n";
-				
+	//add the menueedit part where you can select
 	$out .= menue_edit_view($menue_id);
 	$out .= "\t\t\t\t</tbody>
 			</table><br />\r\n";
@@ -243,7 +240,7 @@ function page_menueeditor()
 						<td>
 							<select name=\"intern_link\">
 								<option value=\"\">externer Link</option>\r\n";
-
+	//list all available pages 
 	$site_result = db_result("SELECT * FROM ".$d_pre."sitedata ORDER BY name ASC");
 	while($site_data = mysql_fetch_object($site_result))
 	{
@@ -271,7 +268,9 @@ function page_menueeditor()
 	
 
 }
-
+/* string page_sitesytle()
+ * returns the sitestyle(changer)-page with a preview-iframe and a form which make it able o change the style
+ */
 function page_sitestyle()
 {
 	global $_GET, $_POST, $d_pre;
@@ -296,20 +295,25 @@ function page_sitestyle()
 			db_result("UPDATE ".$d_pre."vars SET value= '".$style."' WHERE name='style'");
 	}
 	
-	$out .= "<iframe id=\"previewiframe\" src=\"./system/stylepreview.php?style=".$style."\" class=\"stylepreview\"></iframe>
+	$out .= "<iframe id=\"previewiframe\" src=\"./index.php?style=".$style."\" class=\"stylepreview\"></iframe>
 		<form action=\"admin.php\" method=\"get\">
 			<input type=\"hidden\" name=\"site\" value=\"sitestyle\" />
 			<label for=\"stylepreviewselect\">Style:
 				<select id=\"stylepreviewselect\" name=\"style\" size=\"1\">";
 	
 	$verz = dir("./styles/");
-
+	//read the available styles
 	while($entry = $verz->read()) 
 	{
-		if($entry != "." && $entry != ".." && file_exists("./styles/".$entry."/mainpage.php") && $entry == $style)
-			$out .= "\t\t\t\t\t<option value=\"".$entry."\" selected=\"selected\">".$entry."</option>\r\n";
-		elseif($entry != "." && $entry != ".." && file_exists("./styles/".$entry."/mainpage.php"))
-			$out .= "\t\t\t\t\t<option value=\"".$entry."\">".$entry."</option>\r\n";
+		//check if the style really exists	
+		if($entry != "." && $entry != ".." && file_exists("./styles/".$entry."/mainpage.php"))
+		{
+			//mark the selected style as selected in the list
+			if($entry == $style)
+				$out .= "\t\t\t\t\t<option value=\"".$entry."\" selected=\"selected\">".$entry."</option>\r\n";	
+			else
+				$out .= "\t\t\t\t\t<option value=\"".$entry."\">".$entry."</option>\r\n";
+		}
 	}
 	$verz->close();
 	
@@ -324,6 +328,11 @@ function page_sitestyle()
 	return $out;
 }
 
+/* string page_news()
+ * returns the news-admin-page where you can write,change and delete news-entries
+ *
+ */
+ 
 function page_news()
 {
 	global $_GET, $_POST, $d_pre, $actual_user_showname,$actual_user_id;
@@ -332,7 +341,7 @@ function page_news()
 	$id = 0;
 	$text = "";
 	$title = "";
-	//$actual_user_showname == "hallo";
+
 	if(isset($_GET['action']) || isset($_POST['action']))
 	{
 		if(isset($_GET['action']))
@@ -361,7 +370,7 @@ function page_news()
 				else
 				$title = $_POST['title'];
 		}
-
+		//delete the selected new-entrie
 		if($action == "delete")
 		{
 			if(isset($_GET['sure']) || isset($_POST['sure']))
@@ -385,23 +394,20 @@ function page_news()
 				return $out;
 			}
 		}
+		//add a new entrie
 		elseif($action == "new")
 		{	
 			if($text != "" && $title != "")		
 				db_result("INSERT INTO ".$d_pre."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$actual_user_id')");
 		}
+		//update the selected entrie
 		elseif($action == "update")
 		{
 			if($text != "" && $title != "" && $id != 0)
 				db_result("UPDATE ".$d_pre."news SET title= '".$title."', text= '".$text."' WHERE id=".$id);
 		}
 	}
-	
-	/*$data = explode("|",$_COOKIE["CMS_user_cookie"]);
-	$username = $data[0];
-	$userpassword = $data[1];*/
-	
-	
+	//don't show the add new form if it is sure that the user wants to edit a news entrie
 	if($action != "edit")
 	{
 		$out .= "\t\t<form method=\"post\" action=\"admin.php\">
@@ -418,19 +424,11 @@ function page_news()
 			<input type=\"hidden\" name=\"site\" value=\"news\" />
 			<input type=\"hidden\" name=\"action\" value=\"update\" />
 			<table>\r\n";
-	
-		
-	/*if(isset($_GET['edit']) || isset($_POST['edit']))
-	{
-		if(isset($_GET['edit']))
-			$edit = $_GET['edit'];
-		else
-			$edit = $_POST['edit'];
-	}*/
-	
+	//write all news entries
 	$result = db_result("SELECT * FROM ".$d_pre."news ORDER BY date DESC");
 	while($row = mysql_fetch_object($result))
-	{
+	{	
+		//show an editform for the selected entrie
 		if($id == $row->id && $action == "edit")
 		{
 			$out .= "\t\t\t\t<tr>
@@ -460,6 +458,7 @@ function page_news()
 					</td>
 				</tr>";
 		}
+		//show only the entrie
 		else
 		{
 			$out .= "\t\t\t\t<tr>

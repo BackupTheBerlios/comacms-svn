@@ -21,7 +21,7 @@ function preview_style()
 	//den <iframe> auswählen
 	dframe = document.getElementById('previewiframe');
 	//das ausgewählte in den <iframe> übertragen
-	dframe.src = "system/stylepreview.php?style=" + data.value;
+	dframe.src = "index.php?style=" + data.value;
 }
 
 function writeButton(image, toolTip, tagOpen, tagClose, example, accessKey)

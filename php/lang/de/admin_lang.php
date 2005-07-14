@@ -13,4 +13,12 @@ $admin_lang['gallery'] = "Gallerie";
 $admin_lang['logout'] = "Logout";
 $admin_lang['sitepreview'] = "Seitenvorschau";
 $admin_lang['registered users'] = "Angemeldete Benutzer";
+$admin_lang['online since'] = "Aktiv seit";
+$admin_lang['created pages'] = "Erstellte Seiten";
+$admin_lang['name'] = "Name";
+$admin_lang['language'] = "Sprache";
+$admin_lang['page'] = "Seite";
+$admin_lang['last action'] = "Letzte Aktion";
+$admin_lang['not registered'] = "nicht registriert";
+$admin_lang['ip'] = "IP-Adresse";
 ?>

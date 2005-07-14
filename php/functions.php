@@ -151,7 +151,7 @@ function generatemenue($style = "clear", $menue_id = 1, $selected = "", $style_r
 		else
 			$new = "";
 		$menue_str = str_replace("[new]",$new,$menue_str);
-		$menue .= $menue_str."\n";
+		$menue .= $menue_str."\r\n";
 	}
 
 	return $menue;
@@ -185,11 +185,13 @@ function position_to_root($id, $between = " > ")
  */
 function set_usercookies()
 {
-	global $d_pre, $login_name, $login_password, $lang, $actual_user_is_admin, $actual_user_is_logged_in, $actual_user_id, $actual_user_name, $actual_user_passwd_md5, $actual_user_lang, $_COOKIE;
+	global $d_pre, $login_name, $login_password, $lang, $actual_user_is_admin, $actual_user_is_logged_in, $actual_user_id, $actual_user_name, $actual_user_showname, $actual_user_passwd_md5, $actual_user_lang, $_COOKIE;
 	$actual_user_is_admin = false;
 	$actual_user_is_logged_in = false;
+	$actual_user_id = 0;
 	$actual_user_lang = "de"; //FIX ME: get this by default config or by HTTP headers of the client
 	$actual_user_name = "";
+	$actual_user_showname = "";
 	$actual_user_passwd_md5 = "";
 	$languages = array("de", "en", "jp");
 	
@@ -231,6 +233,8 @@ function set_usercookies()
 		else
 		{
 			$actual_user_is_logged_in = true;
+			$actual_user_showname = $original_user->showname;
+			$actual_user_id = $original_user->id;
 			if($original_user->admin = "y")
 				$actual_user_is_admin = true;
 		}

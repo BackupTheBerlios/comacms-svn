@@ -55,8 +55,8 @@
 		}
 		elseif($site == "news")
 		{
-			$title = $admin_lang['sitestyle'];
-			$text = page_newseditor();
+			$title = $admin_lang['news'];
+			$text = page_news();
 		}
 		//end of the "functions"
 		if(@$internal_style == "")
@@ -69,7 +69,7 @@
 			$menue_str = str_replace("[text]",$part[0],$menue_str);
 			$menue_str = str_replace("[link]",$part[1],$menue_str);
 			$menue_str = str_replace("[new]","",$menue_str);
-			$menue .= $menue_str;
+			$menue .= $menue_str."\r\n";
 		}
 		
 		$stylefile = "./styles/".$internal_style."/mainpage.php";

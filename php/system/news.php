@@ -79,7 +79,10 @@ include("../functions.php");
 				{
 ?>
 				<tr>
-					<td colspan="2"><a id="Newsnummer&nbsp;<?php echo $row->id; ?>" ></a><input type="hidden" name="id" value="<?php echo $row->id; ?>" /><input type="submit" value="Speichern" />&nbsp;<a href="news.php?delete=<?php echo $row->id; ?>" title="Löschen">Löschen</a></td></tr><tr><td><input type="text" name="title" value="<?php echo $row->title; ?>" /></td><td><?php echo date("d.m.Y H:i:s",$row->date); ?></td>
+					<td colspan="2"><a id="Newsnummer&nbsp;<?php echo $row->id; ?>" ></a><input type="hidden" name="id" value="<?php echo $row->id; ?>" /><input type="submit" value="Speichern" />&nbsp;<a href="news.php?delete=<?php echo $row->id; ?>" title="Löschen">Löschen</a></td>
+					</tr>
+				<tr>
+					<td><input type="text" name="title" value="<?php echo $row->title; ?>" /></td><td><?php echo date("d.m.Y H:i:s",$row->date); ?></td>
 				</tr>
 				<tr>
 					<td colspan="2"><textarea name="text" cols="60" rows="6"><?php echo $row->text; ?></textarea></td>

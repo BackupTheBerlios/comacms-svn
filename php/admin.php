@@ -53,6 +53,11 @@
 			$title = $admin_lang['sitestyle'];
 			$text = page_sitestyle();
 		}
+		elseif($site == "news")
+		{
+			$title = $admin_lang['sitestyle'];
+			$text = page_newseditor();
+		}
 		//end of the "functions"
 		if(@$internal_style == "")
 			$internal_style = "clear";

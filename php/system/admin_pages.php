@@ -71,7 +71,7 @@ function page_menueeditor()
 	}
  			$out .= "\t\t\t</ul>\r\n";
 	
-	if(@$_GET['action'] != "" || @$_POST['action'] != "")
+	if(isset($_GET['action']) || isset($_POST['action']))
 	{
 		if(isset($_GET['action']))
 			$action = $_GET['action'];
@@ -321,6 +321,181 @@ function page_sitestyle()
 
 		</form>";
 		
+	return $out;
+}
+
+function page_newseditor()
+{
+	global $_GET, $_POST, $d_pre;
+	$out = "";
+	
+	if(isset($_GET['action']) || isset($_POST['action']))
+	{
+		if(isset($_GET['action']))
+			$action = $_GET['action'];
+		else
+			$action = $_POST['action'];
+		
+		if(isset($_GET['id']))
+			$id = $_GET['id'];
+		elseif(isset($_POST['id']))
+			$id = $_POST['id'];
+		else
+			$id = 0;
+		
+		if($action=="delete")
+		{
+			if(isset($_GET['sure']) || isset($_POST['sure']))
+			{
+				if(isset($_GET['sure']))
+					$sure = $_GET['sure'];
+				else
+					$sure = $_POST['sure'];
+					
+				if($sure == 1)
+					db_result("DELETE FROM ".$d_pre."news WHERE id=".$id);
+			}
+			else
+			{
+				$result = db_result("SELECT * FROM ".$d_pre."news WHERE id=".$id);
+				$row = mysql_fetch_object($result);
+				$out .= "Den News Eintrag &quot;$row->title&quot; wirklich löschen?<br>";
+				$out .= "<a href=\"admin.php?site=news&amp;action=delete&amp;id=".$id."&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;";
+				$out .= "<a href=\"admin.php?site=news\" title=\"Nicht Löschen\">nein</a>";
+				
+				return $out;
+			}
+		}
+		elseif($action=="neu")
+		{
+			if(isset($_GET['text']) || isset($_POST['text']))
+			{
+				if(isset($_GET['text']))
+					$text = $_GET['text'];
+				else
+					$text = $_POST['text'];
+				
+				if(isset($_GET['title']) || isset($_POST['title']))
+				{
+					if(isset($_GET['title']))
+						$title = $_GET['title'];
+					else
+						$title = $_POST['title'];
+						
+					$data = explode("|",$_COOKIE["CMS_user_cookie"]);
+					$username = $data[0];
+					$userpassword = $data[1];
+					$userid = getUserIDByName($username);
+					
+					db_result("INSERT INTO ".$d_pre."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$userid')");
+				}
+			}
+
+		}
+		elseif($action=="update") 
+		{
+			if(isset($_GET['text']) || isset($_POST['text']))
+			{
+				if(isset($_GET['text']))
+					$text = $_GET['text'];
+				else
+					$text = $_POST['text'];
+				
+				if(isset($_GET['title']) || isset($_POST['title']))
+				{
+					if(isset($_GET['title']))
+						$title = $_GET['title'];
+					else
+						$title = $_POST['title'];
+						
+					if(isset($_GET['id']) || isset($_POST['id']))
+					{
+						if(isset($_GET['id']))
+							$id = $_GET['id'];
+						else
+							$id = $_POST['id'];
+						
+						db_result("UPDATE ".$d_pre."news SET title= '".$title."', text= '".$text."' WHERE id=".$id);
+					}
+				}
+			}
+		}
+	}
+	
+	$data = explode("|",$_COOKIE["CMS_user_cookie"]);
+	$username = $data[0];
+	$userpassword = $data[1];
+	
+	if(!isset($_GET['edit']) && !isset($_POST['edit']))
+	{
+		$out .= "		<form method=\"post\" action=\"admin.php\">
+			<input type=\"hidden\" name=\"site\" value=\"news\" />
+			<input type=\"hidden\" name=\"action\" value=\"neu\" />
+			<table>
+				<tr>
+					<td>Titel: <input type=\"text\" name=\"title\" maxlength=\"60\" value=\"\" /></td>
+				</tr>
+				<tr>
+					<td><textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea></td>
+				</tr>
+				<tr>
+					<td>Eingelogt als ".$username." &nbsp;<input type=\"submit\" value=\"Senden\" /></td>
+				</tr>
+			</table>
+		</form>";
+	}
+	
+	$out .= "		<form method=\"post\" action=\"admin.php\">
+			<input type=\"hidden\" name=\"site\" value=\"news\" />
+			<input type=\"hidden\" name=\"action\" value=\"update\" />
+			<table>";
+	if(isset($_GET['edit']) || isset($_POST['edit']))
+	{
+		if(isset($_GET['edit']))
+			$edit = $_GET['edit'];
+		else
+			$edit = $_POST['edit'];
+	}
+	
+	$result = db_result("SELECT * FROM ".$d_pre."news ORDER BY date DESC");
+	while($row = mysql_fetch_object($result))
+	{
+		if(@$edit == $row->id)
+		{
+			$out .= "				<tr>
+					<td colspan=\"2\"><a id=\"Newsnummer&nbsp;".$row->id."\" ></a><input type=\"hidden\" name=\"id\" value=\"".$row->id."\" /><input type=\"submit\" value=\"Speichern\" />&nbsp;<a href=\"admin.php?site=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\">Löschen</a></td>
+					</tr>
+				<tr>
+					<td><input type=\"text\" name=\"title\" value=\"".$row->title."\" /></td><td>".date("d.m.Y H:i:s",$row->date)."</td>
+				</tr>
+				<tr>
+					<td colspan=\"2\"><textarea name=\"text\" cols=\"60\" rows=\"6\">".$row->text."</textarea></td>
+				</tr>
+				<tr>
+					<td colspan=\"2\">".getUserByID($row->userid)."</td>
+				</tr>";
+		}
+		else
+		{
+			$out .= "				<tr>
+					<td colspan=\"2\"><a id=\"Newsnummer&nbsp;".$row->id."\" ></a><a href=\"admin.php?site=news&amp;edit=".$row->id."#Newsnummer&nbsp;".$row->id."\" title=\"Bearbeiten\">Bearbeiten</a>&nbsp;<a href=\"admin.php?site=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\">Löschen</a></td>
+				</tr>
+				<tr>
+					<td><b>".$row->title."</b></td><td>".date("d.m.Y H:i:s", $row->date)."</td>
+				</tr>
+				<tr>
+					<td colspan=\"2\">".nl2br($row->text)."</td>
+				</tr>
+				<tr>
+					<td colspan=\"2\">".getUserByID($row->userid)."</td>
+				</tr>";
+		}
+	}
+	$out .= "			</table>
+		</form>
+	</body>
+</html>";
+
 	return $out;
 }
 ?>

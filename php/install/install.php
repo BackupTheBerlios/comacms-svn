@@ -37,23 +37,26 @@ CREATE TABLE `".$db_prefix."sitedata` (
   PRIMARY KEY  (`id`)
 ) ;
 DROP TABLE IF EXISTS ".$db_prefix."users;
-CREATE TABLE `".$db_prefix."users` (
-  `id` int(10) NOT NULL auto_increment,
-  `name` varchar(30) NOT NULL default '',
-  `showname` varchar(40) NOT NULL default '',
-  `password` varchar(100) NOT NULL default '',
-  `registerdate` varchar(20) default '0',
-  `admin` enum('y','n') default 'n',
-  `icq` varchar(12) default '0',
-  `email` varchar(200) NOT NULL default '',
-  PRIMARY KEY  (`id`)
+CREATE TABLE ".$db_prefix."users (
+  id int(10) NOT NULL auto_increment,
+  name varchar(30) NOT NULL default '',
+  showname varchar(40) NOT NULL default '',
+  password varchar(100) NOT NULL default '',
+  registerdate varchar(20) default '0',
+  admin enum('y','n') default 'n',
+  icq varchar(12) default '0',
+  email varchar(200) NOT NULL default '',
+  PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS ".$db_prefix."online;
-CREATE TABLE ".$db_prefix."online (
+REATE TABLE ".$db_prefix."online (
+  online_id varchar(50) NOT NULL default '',
   ip varchar(16) default '0.0.0.0',
   lastaction varchar(20) default '0',
   page varchar(30) default NULL,
-  lang varchar(5) default NULL
+  lang varchar(5) default NULL,
+  userid int(10) NOT NULL default '0',
+  PRIMARY KEY  (online_id)
 );
 DROP TABLE IF EXISTS ".$db_prefix."guestbook;
 CREATE TABLE ".$db_prefix."guestbook (
@@ -85,23 +88,20 @@ INSERT INTO ".$db_prefix."vars (name, value) VALUES ('style', 'clear');
 INSERT INTO ".$db_prefix."vars (name, value) VALUES ('default_site', 'home');
 INSERT INTO ".$db_prefix."menue (link, text, new, orderid) VALUES ('l:home', 'Home', 'no', 0)";
 if($admin_name == "" || $admin_showname == "" || $admin_password == "")
-{
-die("Die Angaben zum Adminaccount sind unvollständig..");
-}
+	die("Die Angaben zum Adminaccount sind unvollständig..");
+
 if($admin_password != $admin_password2)
 	die("Das passwort wurde nicht korrekt wiederholt");
 
 $connection = mysql_connect($db_server, $db_user, $db_password) or die(mysql_error());
-     	mysql_select_db($db_database, $connection) or die(mysql_error());
- $queries = explode(";",$create);
- foreach($queries as $query){
- if($query != ""){
-  mysql_query($query, $connection) or die(mysql_error());
-
-  }
-  }
+mysql_select_db($db_database, $connection) or die(mysql_error());
+$queries = explode(";",$create);
+foreach($queries as $query){
+	if($query != ""){
+		mysql_query($query, $connection) or die(mysql_error());
+	}
+}
 mysql_close($connection);
-//define('PHPBB_INSTALLED', true);
 $config_data = "<?php\n";
 $config_data .= "\$d_server = \"".$db_server."\";\n";
 $config_data .= "\$d_user   = \"".$db_user."\";\n";
@@ -111,14 +111,9 @@ $config_data .= "\$d_pre    = \"".$db_prefix."\";\n";
 $config_data .= "\n\ndefine(\"CMS_INSTALLED\", true);\n";
 $config_data .= "?".">";
 
-if (!($fp = @fopen("../config.php", 'w')))
-{
-}
+$fp = @fopen("../config.php", 'w');
 $result = @fputs($fp, $config_data, strlen($config_data));
 @fclose($fp);
-
 ?>
-
-
 </body>
 </html>

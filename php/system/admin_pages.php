@@ -37,11 +37,15 @@ function page_admincontrol()
 		$users_online_result = db_result("SELECT * FROM ".$d_pre."online");
 		while($users_online = mysql_fetch_object($users_online_result))
 		{
+			if($users_online->userid == 0)
+				$username  = $admin_lang['not registered'];
+			else
+				$username = getUserById($users_online->userid);
 			$out .= "\t\t\t<tr>
-			<td>*".$admin_lang['not registered']."*</td>
+			<td>".$username."</td>
 			<td><a href=\"index.php?site=".$users_online->page."\">".$users_online->page."</a></td>
 			<td>".date("d.m.Y H:i:s", $users_online->lastaction)."</td>
-			<td>*de*".$users_online->lang."</td>
+			<td>".$users_online->lang."</td>
 			<td>".$users_online->ip."</td>
 		</tr>\r\n";
 		}
@@ -342,8 +346,7 @@ function page_news()
 	$text = "";
 	$title = "";
 
-	if(isset($_GET['action']) || isset($_POST['action']))
-	{
+	if(isset($_GET['action']) || isset($_POST['action'])) {
 		if(isset($_GET['action']))
 			$action = $_GET['action'];
 		else
@@ -355,82 +358,67 @@ function page_news()
 			$id = $_POST['id'];
 		
 	
-		if(isset($_GET['text']) || isset($_POST['text']))
-		{
+		if(isset($_GET['text']) || isset($_POST['text'])) {
 			if(isset($_GET['text']))
 				$text = $_GET['text'];
 			else
 				$text = $_POST['text'];
 		}
 
-		if(isset($_GET['title']) || isset($_POST['title']))
-		{
+		if(isset($_GET['title']) || isset($_POST['title'])) {
 			if(isset($_GET['title']))
 				$title = $_GET['title'];
 				else
 				$title = $_POST['title'];
 		}
-		//delete the selected new-entrie
-		if($action == "delete")
-		{
-			if(isset($_GET['sure']) || isset($_POST['sure']))
-			{
+		// delete the selected new-entrie
+		if($action == "delete") {
+			if(isset($_GET['sure']) || isset($_POST['sure'])) {
 				if(isset($_GET['sure']))
 					$sure = $_GET['sure'];
 				else
 					$sure = $_POST['sure'];
 				
 				if($sure == 1)
-					db_result("DELETE FROM ".$d_pre."news WHERE id=".$id);
+					db_result("DELETE FROM " . $d_pre . "news WHERE id=" . $id);
 			}
-			else
-			{
-				$result = db_result("SELECT * FROM ".$d_pre."news WHERE id=".$id);
+			else {
+				$result = db_result("SELECT * FROM " . $d_pre . "news WHERE id=" . $id);
 				$row = mysql_fetch_object($result);
-				$out .= "Den News Eintrag &quot;".$row->title."&quot; wirklich löschen?<br />
-				<a href=\"admin.php?site=news&amp;action=delete&amp;id=".$id."&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
+				$out .= "Den News Eintrag &quot;" . $row->title . "&quot; wirklich löschen?<br />
+				<a href=\"admin.php?site=news&amp;action=delete&amp;id=" . $id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
 				<a href=\"admin.php?site=news\" title=\"Nicht Löschen\">nein</a>";
 				
 				return $out;
 			}
 		}
-		//add a new entrie
-		elseif($action == "new")
-		{	
+		elseif($action == "new") { // add a new entrie
 			if($text != "" && $title != "")		
 				db_result("INSERT INTO ".$d_pre."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$actual_user_id')");
 		}
-		//update the selected entrie
-		elseif($action == "update")
-		{
+		elseif($action == "update") { // update the selected entrie
 			if($text != "" && $title != "" && $id != 0)
 				db_result("UPDATE ".$d_pre."news SET title= '".$title."', text= '".$text."' WHERE id=".$id);
 		}
 	}
-	//don't show the add new form if it is sure that the user wants to edit a news entrie
-	if($action != "edit")
-	{
+	if($action != "edit") { // don't show the add new form if it is sure that the user wants to edit a news entrie
 		$out .= "\t\t<form method=\"post\" action=\"admin.php\">
 			<input type=\"hidden\" name=\"site\" value=\"news\" />
 			<input type=\"hidden\" name=\"action\" value=\"new\" />
 			Titel: <input type=\"text\" name=\"title\" maxlength=\"60\" value=\"\" /><br />
 			<textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea><br />
-			Eingelogt als ".$actual_user_showname." &nbsp;<input type=\"submit\" value=\"Senden\" /><br />
+			Eingelogt als " . $actual_user_showname . " &nbsp;<input type=\"submit\" value=\"Senden\" /><br />
 		</form>";
 	}
-	
-	
 		$out .= "\t\t<form method=\"post\" action=\"admin.php\">
 			<input type=\"hidden\" name=\"site\" value=\"news\" />
 			<input type=\"hidden\" name=\"action\" value=\"update\" />
 			<table>\r\n";
-	//write all news entries
+	// write all news entries
 	$result = db_result("SELECT * FROM ".$d_pre."news ORDER BY date DESC");
-	while($row = mysql_fetch_object($result))
-	{	
-		//show an editform for the selected entrie
-		if($id == $row->id && $action == "edit")
-		{
+	while($row = mysql_fetch_object($result)) {
+		
+		if($id == $row->id && $action == "edit") {// show an editform for the selected entrie
 			$out .= "\t\t\t\t<tr>
 					<td colspan=\"2\">
 						<a id=\"newsid".$row->id."\" ></a>
@@ -458,9 +446,7 @@ function page_news()
 					</td>
 				</tr>";
 		}
-		//show only the entrie
-		else
-		{
+		else { // show only the entrie
 			$out .= "\t\t\t\t<tr>
 					<td colspan=\"2\">
 						<a id=\"newsid".$row->id."\" ></a>

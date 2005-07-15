@@ -1,26 +1,22 @@
 <?
-function _start()
-{
+function _start() {
 	global $db_con,$d_user,$d_base,$d_pw,$pin,$session,$d_server;
 	$db_con = connect_to_db($d_user,$d_pw,$d_base,$d_server);
 }
 
-function _end()
-{
+function _end() {
 	global $db_con;
 	mysql_close($db_con);
 }
 
-function connect_to_db($username, $userpw, $database, $server = "localhost")
-{
+function connect_to_db($username, $userpw, $database, $server = "localhost") {
 	error_reporting( E_ALL );
 	$db = mysql_connect($server, $username, $userpw) or die(mysql_error());
 		mysql_select_db($database, $db) or die(mysql_error());
 	return $db;
 }
 
-function db_result($command)
-{
+function db_result($command) {
 	global $db_con;
 		$result = mysql_query ($command, $db_con);
 	if (!$result)
@@ -28,35 +24,29 @@ function db_result($command)
 	return $result;
 }
 
-function generate_password($length)
-{
+function generate_password($length) {
 	$abc = array("1","2","3","4","5","6","7","8","9","0","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","r","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","R","T","U","V","W","X","Y","Z","1","2","3","4","5","6","7","8","9","0");
 	$out = "";
-	for($i = 0;$i < $length;$i++)
-	{
-	$out .=  $abc[rand(0,count($abc)-1)];
+	for($i = 0;$i < $length;$i++) {
+		$out .=  $abc[rand(0,count($abc)-1)];
 	}
 	return $out;
 }
 
-function check_user($name,$pw)
-{
+function check_user($name,$pw) {
 	if($name == "")
 		return false;
-	
 	$result = db_result("SELECT * FROM users WHERE name = '$name'");
 	
 	$row = mysql_fetch_object ($result);
-		if($row->pw == $pw)
-			$ret = true;
-		else
-			$ret = false;
-	
+	if($row->pw == $pw)
+		$ret = true;
+	else
+		$ret = false;
 	return $ret;
 }
  
-function sendmail($to,$from,$title,$text)
-{
+function sendmail($to,$from,$title,$text) {
 	$to = strtolower($to);
 	$from = strtolower($from);
 	$header="From:$from\n";
@@ -64,39 +54,33 @@ function sendmail($to,$from,$title,$text)
 	return mail($to, $title, $text, $header);  
 }
 
-function getmicrotime($mic_time)
-{
+function getmicrotime($mic_time) {
 	list($usec, $sec) = explode(" ",$mic_time);
 	return ((float)$usec + (float)$sec);
 }
 
-function writelog($text)
-{
+function writelog($text) {
 	$handle = fopen ("log.log", "a");
 	fwrite($handle,$text."\n");
 	fclose ($handle);
 }
 
-function getUserIDByName($name)
-{
+function getUserIDByName($name) {
 	global $d_pre;
 	$result = db_result("SELECT * FROM ".$d_pre."users WHERE name='$name'");
 	$row = mysql_fetch_object($result);
 	return $row->id;
 }
 
-function getUserByID($id)
-{
+function getUserByID($id) {
 	global $d_pre;
 	$result = db_result("SELECT * FROM ".$d_pre."users WHERE id = '$id'");
 	$row = mysql_fetch_object($result);
 	return $row->showname;
 }
 
-function replace_smilies($textdata)
-{
+function replace_smilies($textdata) {
 	$smilies_path = "data/smilies";
-
 	$textdata = str_replace("??:-)",	"<img src=\"".$smilies_path."/uneasy.gif\" />",$textdata);
 	$textdata = str_replace(":-)",		"<img src=\"".$smilies_path."/icon_smile.gif\" />",$textdata);
 	$textdata = str_replace(";-)",		"<img src=\"".$smilies_path."/icon_wink.gif\" />",$textdata);
@@ -123,14 +107,13 @@ function replace_smilies($textdata)
 	$textdata = str_replace(":love:",	"<img src=\"".$smilies_path."/love.gif\" />",$textdata);
 	return $textdata;
 }
-function generatemenue($style = "clear", $menue_id = 1, $selected = "", $style_root = ".")
-{
+
+function generatemenue($style = "clear", $menue_id = 1, $selected = "", $style_root = ".") {
 	global $internal_page_root, $d_pre;
 	$menue = " ";
 	include($style_root."/styles/".$style."/menue.php");
 	$menue_result = db_result("SELECT * FROM ".$d_pre."menue WHERE menue_id=".$menue_id." ORDER BY orderid ASC");
-	while($menue_data = mysql_fetch_object($menue_result))
-	{
+	while($menue_data = mysql_fetch_object($menue_result)) {
 		if($menue_id == 1)
 			$menue_str = $menue_link;
 		else
@@ -156,15 +139,14 @@ function generatemenue($style = "clear", $menue_id = 1, $selected = "", $style_r
 
 	return $menue;
 }
-function position_to_root($id, $between = " > ")
-{
+
+function position_to_root($id, $between = " > ") {
 	global $d_pre;
 	$actual_result = db_result("SELECT * FROM ".$d_pre."sitedata WHERE id=".$id);
 	$actual = mysql_fetch_object($actual_result);
 	$parent_id = $actual->parent_id;
 	$way_to_root = "";	
-	while($parent_id != 0)
-	{
+	while($parent_id != 0) {
 		$parent_result = db_result("SELECT * FROM ".$d_pre."sitedata WHERE id=".$parent_id);
 		$parent = mysql_fetch_object($parent_result);
 		$parent_id = $parent->parent_id;
@@ -172,66 +154,69 @@ function position_to_root($id, $between = " > ")
 	}
 	return $way_to_root . $actual->title;
 }
+
 /* void set_usercookies()
  * Saves something for the client in two cookies:
  * 1.:
+ * - Online-id (to differ betwen clients with a same ip)
  * - User-login-name(if it's abailable)
  * - Userpassword-MD5-Hash(if it and the username are availble)
  * 2.:
  * - Userdefined language (is by default $internal_default_language) with a long lifetime (about three months)
  *
- * TODO: Combine with the countersystem
  * TODO: Make a better languagedetection
  */
-function set_usercookies()
-{
-	global $d_pre, $login_name, $login_password, $lang, $actual_user_is_admin, $actual_user_is_logged_in, $actual_user_id, $actual_user_name, $actual_user_showname, $actual_user_passwd_md5, $actual_user_lang, $_COOKIE;
+function set_usercookies() {
+	global $d_pre, $login_name, $login_password, $lang, $actual_user_is_admin,
+	$actual_user_is_logged_in, $actual_user_id, $actual_user_name,
+	$actual_user_showname, $actual_user_passwd_md5, $actual_user_lang,
+	$actual_user_online_id, $_COOKIE;
+		
+	$actual_user_online_id = "";
 	$actual_user_is_admin = false;
 	$actual_user_is_logged_in = false;
 	$actual_user_id = 0;
-	$actual_user_lang = "de"; //FIX ME: get this by default config or by HTTP headers of the client
+	$actual_user_lang = "de"; // FIX ME: get this by default config or by HTTP headers of the client
 	$actual_user_name = "";
 	$actual_user_showname = "";
 	$actual_user_passwd_md5 = "";
-	$languages = array("de", "en", "jp");
+	$languages = array("de", "en");
 	
-	if(isset($lang)) // Check: has the user changed the language by hand?
-	{
+	if(isset($lang)) { // Check: has the user changed the language by hand?
 		if(in_array($lang, $languages))
 			$actual_user_lang = $lang;
 	}
-	elseif(isset($_COOKIE["CMS_user_lang"])) // Get the language from the cookie if it' s not changed
-	{
+	elseif(isset($_COOKIE["CMS_user_lang"])) { // Get the language from the cookie if it' s not changed
 		if(in_array($_COOKIE["CMS_user_lang"], $languages))
 			$actual_user_lang = $_COOKIE["CMS_user_lang"];
 	}
 	
 	setcookie("CMS_user_lang", $actual_user_lang, time() + 8035200); // Set the cookie (for the next 93 Days)
 	
-	if(isset($login_name) && isset($login_password)) // Tries somebody to log in?
-	{
+	if(isset($_COOKIE["CMS_user_cookie"])) { // Tells the cookie: "the user is logged in!"?
+		$data = explode("|", $_COOKIE["CMS_user_cookie"]);
+		$actual_user_online_id = @$data[0];
+		$actual_user_name = @$data[1];
+		$actual_user_passwd_md5 = @$data[2];
+	}
+	if(isset($login_name) && isset($login_password)) { // Tries somebody to log in?
 		$actual_user_name = $login_name;
 		$actual_user_passwd_md5 = md5($login_password);
 	}
-	elseif(isset($_COOKIE["CMS_user_cookie"])) // Tells the cookie: "the user is logged in!"?
-	{
-		$data = explode("|",$_COOKIE["CMS_user_cookie"]);
-		$actual_user_name = @$data[0];
-		$actual_user_passwd_md5 = @$data[1];
-	}
-	if($actual_user_name != "" && $actual_user_passwd_md5 != "") // Check: is the user really logged in?
-	{
+	
+	if($actual_user_online_id == "")
+		$actual_user_online_id =  md5(uniqid(rand()));
+		
+	if($actual_user_name != "" && $actual_user_passwd_md5 != "") { // Check: is the user really logged in?
 		$original_user_result = db_result("SELECT * FROM ".$d_pre."users WHERE name='".$actual_user_name."' AND password='".$actual_user_passwd_md5."'");
 		$original_user = mysql_fetch_object($original_user_result);
-		if(@$original_user->name == "")
-		{
+		if(@$original_user->name == "") {
 			$actual_user_is_admin = false;
 			$actual_user_is_logged_in = false;
 			$actual_user_name = "";
 			$actual_user_passwd_md5 = "";
 		}
-		else
-		{
+		else {
 			$actual_user_is_logged_in = true;
 			$actual_user_showname = $original_user->showname;
 			$actual_user_id = $original_user->id;
@@ -240,9 +225,7 @@ function set_usercookies()
 		}
 	}
 	
-	setcookie("CMS_user_cookie",$actual_user_name."|".$actual_user_passwd_md5 , time() + 14400);
-//setcookie ("CMS_user_cookie", $data->name."|".$data->password."|".$data->id, time()+5600); 
-//CMS_user_cookie
+	setcookie("CMS_user_cookie",$actual_user_online_id."|".$actual_user_name."|".$actual_user_passwd_md5 , time() + 14400);
 }
 
 ?>

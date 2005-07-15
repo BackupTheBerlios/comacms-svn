@@ -1,14 +1,21 @@
-Feld bei Users eingefgt
+Feld bei Users eingefügt
 
 ALTER TABLE `cms_users` ADD `email` VARCHAR( 200 ) NOT NULL ;
 
-Felder bei Sitedata eingefgt
+Felder bei Sitedata eingefügt
 
 parent_id fr unterseiten
 ALTER TABLE `cms_sitedata` ADD `parent_id` INT( 10 ) DEFAULT '0' NOT NULL AFTER `id` ; 
 
-type fr gallery oder seite, nur wichtig fr den editor, da die Gallery vorher erstellt wird(per Galleryeditor)
+type für gallery oder seite, nur wichtig für den editor, da die Gallery vorher erstellt wird(per Galleryeditor)
 ALTER TABLE `cms_sitedata` ADD `type` VARCHAR( 15 ) NOT NULL AFTER `parent_id` ;
 
 the menueid make it possible that we can manage more than one menue in the menue table
 ALTER TABLE `cms_menue` ADD `menue_id` INT( 10 ) DEFAULT '1' NOT NULL ;
+
+with these primary key field we can differ between clients comming from one network with one ip or through a proxy
+ALTER TABLE `cms_online` ADD `online_id` VARCHAR( 100 ) NOT NULL FIRST ;
+ALTER TABLE `cms_online` ADD PRIMARY KEY ( `online_id` ) ;
+
+save the userid in the online-list, too
+ALTER TABLE `cms_online` ADD `userid` INT( 10 ) NOT NULL AFTER `lang` ;

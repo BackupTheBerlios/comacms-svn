@@ -1,8 +1,7 @@
 <?
 	@include("config.php");
 
-	if(file_exists("./install/") && !file_exists("./.svn/"))
-	{
+	if(file_exists("./install/") && !file_exists("./.svn/")) {
 		if(defined("CMS_INSTALLED"))
 			die("Please remove the install-folder id would be better.");
 		else
@@ -15,29 +14,24 @@
 	include("counter.php");
 	include("contact.php");
 	_start();
-	set_usercookies();
 	//load vars
 	$var_result = db_result("SELECT * FROM ".$d_pre."vars");
-	while($var_data = mysql_fetch_object($var_result))
-	{
+	while($var_data = mysql_fetch_object($var_result)) {
 		$_N_ = "internal_".$var_data->name;
 		$$_N_ = $var_data->value;
 	}
+	set_usercookies();
 	//end
-	if(@$_GET['site'])
-	{
+	if(@$_GET['site']) {
 		$_site = $_GET['site'];
 	}
-	else
-	{
+	else {
 		$_site = @$_POST['site'];
 	}
-	if($_site == "")
-	{
+	if($_site == "") {
 		$_site=@$internal_default_site;
  	}
-	if($_site == "")
-	{
+	if($_site == "") {
 		$_site = "home";
  	}
 
@@ -51,10 +45,9 @@
 	//end
 	//textcompile
 
-	counter_set();
+	counter_set("l:",$_site);
 	actual_online();
-	while(eregi("\[var:", $text))
-	{
+	while(eregi("\[var:", $text)) {
 		$pos = strpos ($text, "[var:");
 		$pos2 = strpos ($text, "]",$pos);
 		$str = substr($text,$pos + 5,$pos2 - $pos - 5);
@@ -83,7 +76,7 @@
 	$page = str_replace("[news]", getNews(), $page);
 	$page = str_replace("[position]",position_to_root($site_data->id),$page);
 
-	if (strpos ($page, "[gbook-")) { 
+	if (strpos ($page, "[gbook-")) {
 		$page = str_replace("[gbook-input]", gbook_input(), $page);
 		$page = str_replace("[gbook-pages]", gbook_pages(), $page);
 		$page = str_replace("[gbook-content]", gbook_content(), $page);

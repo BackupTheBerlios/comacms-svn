@@ -55,6 +55,11 @@
 			$title = $admin_lang['news'];
 			$text = page_news();
 		}
+		elseif($site == "siteeditor") {
+			$title = $admin_lang['siteeditor'];
+			include("./system/user_pages.php");
+			$text = page_siteeditor();
+		}
 		//end of the "functions"
 		if(@$internal_style == "")
 			$internal_style = "clear";

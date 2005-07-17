@@ -34,7 +34,7 @@ CREATE TABLE `".$db_prefix."sitedata` (
   `text` text NOT NULL,
   `lang` varchar(10) NOT NULL default '',
   `html` text,
-  PRIMARY KEY  (`id`)
+  ADD PRIMARY KEY (`id`)
 ) ;
 DROP TABLE IF EXISTS ".$db_prefix."users;
 CREATE TABLE ".$db_prefix."users (

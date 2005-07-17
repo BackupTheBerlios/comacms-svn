@@ -13,7 +13,7 @@ ALTER TABLE `cms_sitedata` ADD `type` VARCHAR( 15 ) NOT NULL AFTER `parent_id` ;
 the menueid make it possible that we can manage more than one menue in the menue table
 ALTER TABLE `cms_menue` ADD `menue_id` INT( 10 ) DEFAULT '1' NOT NULL ;
 
-with these primary key field we can differ between clients comming from one network with one ip or through a proxy
+with these primary key field we can distinguish between clients comming from one network with one ip or through a proxy
 ALTER TABLE `cms_online` ADD `online_id` VARCHAR( 100 ) NOT NULL FIRST ;
 ALTER TABLE `cms_online` ADD PRIMARY KEY ( `online_id` ) ;
 

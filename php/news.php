@@ -9,14 +9,14 @@ global $d_pre;
 	$return_str = "";
 	while($row = mysql_fetch_object($result))
 	{
-		$return_str .= "<div class=\"news\">";
-		$return_str .= "<div class=\"news-title\">";
-		$return_str .= $row->title;
-		$return_str .= " <span class=\"news-title\">".date("d.m.Y H:i:s",$row->date)."</span";
-		$return_str .= "</div>";
-		$return_str .= nl2br($row->text)."";
-		$return_str .= "<span class=\"news-author\">&nbsp;".getUserByID($row->userid)."</span>";
-		$return_str .= "</div>";	
+		$return_str .= "\t\t\t<div class=\"news\">
+				<div class=\"news-title\">
+					" . $row->title . "
+					<span class=\"news-title\">".date("d.m.Y H:i:s",$row->date)."</span>
+				</div>
+				" . nl2br($row->text) . "
+				<span class=\"news-author\">&nbsp;" . getUserByID($row->userid) . "</span>
+				</div>\r\n";	
 	}
 	
 	return $return_str;

@@ -16,12 +16,20 @@ function page_admincontrol()
 	//get the count of all registered users
 	$users_result = db_result("SELECT * FROM ".$d_pre."users");
 	$users_count = mysql_num_rows($users_result);
+	//get the size of all tables with the prefix $d_pre
+	$table_infos_result = db_result("SHOW TABLE STATUS");
+	$data_size = 0;
+	while($table_infos = mysql_fetch_object($table_infos_result)) {
+		if(substr($table_infos->Name, 0, strlen($d_pre)) == $d_pre)
+			$data_size += $table_infos->Data_length + $table_infos->Index_length;
+	}
 	
 	$out = "<h3>AdminControl</h3><hr />
 	<table>
 		<tr><td>".$admin_lang['online since']."</td><td>#DATUM</td></tr>
 		<tr><td>".$admin_lang['registered users']."</td><td>".$users_count."</td></tr>
 		<tr><td>".$admin_lang['created pages']."</td><td>".$page_count."</td></tr>
+		<tr><td>".$admin_lang['database size']."</td><td>".kbormb($data_size)."</td></tr>
 	</table>
 	
 	<h3>Aktuelle Besucher</h3><hr />

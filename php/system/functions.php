@@ -138,5 +138,17 @@
 		}
 		return $out;
 	}
-	
+	/* string kbormb(int $bytes)
+	 * this function convertes a size given in bytes to kilobytes or to megabytes
+	 * if its possible
+	 */
+	function kbormb($bytes)
+	{
+		if($bytes < 1024)
+			return $bytes . " B";
+		elseif($bytes < 1048576)
+			return round($bytes/1024, 1) . "KB";
+		else
+			return round($bytes/1048576, 1) . "MB";
+	}
 ?>

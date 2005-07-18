@@ -19,6 +19,7 @@ $admin_lang['name'] = "Name";
 $admin_lang['language'] = "Language";
 $admin_lang['page'] = "Page";
 $admin_lang['last action'] = "Last action";
-$admin_lang['not registered'] = "not registered";
+$admin_lang['not registered'] = "Not registered";
 $admin_lang['ip'] = "IP-Address";
+$admin_lang['database size'] = "Database size";
 ?>

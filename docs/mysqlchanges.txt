@@ -1,21 +1,38 @@
-Feld bei Users eingefügt
+#Feld bei Users eingefügt
 
 ALTER TABLE `cms_users` ADD `email` VARCHAR( 200 ) NOT NULL ;
 
-Felder bei Sitedata eingefügt
-
-parent_id fr unterseiten
+#Felder bei Sitedata eingefügt
+#parent_id für unterseiten
 ALTER TABLE `cms_sitedata` ADD `parent_id` INT( 10 ) DEFAULT '0' NOT NULL AFTER `id` ; 
 
-type für gallery oder seite, nur wichtig für den editor, da die Gallery vorher erstellt wird(per Galleryeditor)
+#type für gallery oder seite, nur wichtig für den editor, da die Gallery vorher erstellt wird(per Galleryeditor)
 ALTER TABLE `cms_sitedata` ADD `type` VARCHAR( 15 ) NOT NULL AFTER `parent_id` ;
 
-the menueid make it possible that we can manage more than one menue in the menue table
+#the menueid make it possible that we can manage more than one menue in the menue table
 ALTER TABLE `cms_menue` ADD `menue_id` INT( 10 ) DEFAULT '1' NOT NULL ;
 
-with these primary key field we can distinguish between clients comming from one network with one ip or through a proxy
+#with these primary key field we can distinguish between clients comming from one network with one ip or through a proxy
 ALTER TABLE `cms_online` ADD `online_id` VARCHAR( 100 ) NOT NULL FIRST ;
 ALTER TABLE `cms_online` ADD PRIMARY KEY ( `online_id` ) ;
 
-save the userid in the online-list, too
+#save the userid in the online-list, too
 ALTER TABLE `cms_online` ADD `userid` INT( 10 ) NOT NULL AFTER `lang` ;
+
+#to know who wrote or changed a site we save his userid
+ALTER TABLE `cms_sitedata` ADD `creator` INT( 10 ) NOT NULL ;
+
+#no a site can be hidden from all visitors or only for special groups(private)
+ALTER TABLE `cms_sitedata` ADD `visible` ENUM( 'public', 'private', 'hidden', 'deleted' ) DEFAULT `public` NOT NULL AFTER `type` 
+
+#the hisory with old sites to make us able to recover them if its needed
+CREATE TABLE cms_sitedata_history (
+id INT( 10 ) NOT NULL AUTO_INCREMENT ,
+type VARCHAR( 15 ) NOT NULL ,
+name VARCHAR( 20 ) NOT NULL ,
+title VARCHAR( 100 ) NOT NULL ,
+text TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+lang VARCHAR( 5 ) NOT NULL ,
+creator INT( 10 ) NOT NULL ,
+PRIMARY KEY ( id )
+);

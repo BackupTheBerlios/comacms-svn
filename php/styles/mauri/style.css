@@ -129,6 +129,7 @@ html,body
 	margin:0;
 	margin-left:160px;
 	padding-top:135px;
+	text-align:justify;
 }
 .sitepreview, #previewiframe{
 	border:1px dashed black;
@@ -150,4 +151,17 @@ textarea.edit {
 }
 img{
 border:0;
+}
+h3{
+	padding-left:2em;
+	margin-bottom:0px;
+	padding-bottom:0px;
+	font-size:17pt;
+}
+
+hr{
+	background-color: #000000;
+	border: 0px solid #000000;
+	height: 1px;
+	margin-top:0px;	
 }

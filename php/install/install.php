@@ -80,6 +80,16 @@ CREATE TABLE ".$db_prefix."news (
   text text NOT NULL,
   PRIMARY KEY  (id)
 );
+CREATE TABLE ".$db_prefix."sitedata_history (
+id INT( 10 ) NOT NULL AUTO_INCREMENT ,
+type VARCHAR( 15 ) NOT NULL ,
+name VARCHAR( 20 ) NOT NULL ,
+title VARCHAR( 100 ) NOT NULL ,
+text TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+lang VARCHAR( 5 ) NOT NULL ,
+creator INT( 10 ) NOT NULL ,
+PRIMARY KEY ( id )
+);
 INSERT INTO ".$db_prefix."users (name, showname, password, registerdate, admin, icq)
 VALUES ('".$admin_name."', '".$admin_showname."', '".md5($admin_password)."', '".mktime()."', 'y', '');
 INSERT INTO ".$db_prefix."sitedata (name, title, text, lang, html, type)

@@ -1,4 +1,4 @@
-<?
+<?/*
 	function isloggedin()
 	{
 		global $name,$password,$_COOKIE;
@@ -37,7 +37,7 @@
 		else
 			return false;
 	}
-	
+	*/
 	function login()
 	{
 		global $PHP_SELF;
@@ -142,13 +142,28 @@
 	 * this function convertes a size given in bytes to kilobytes or to megabytes
 	 * if its possible
 	 */
-	function kbormb($bytes)
-	{
+	function kbormb($bytes) {
 		if($bytes < 1024)
 			return $bytes . " B";
 		elseif($bytes < 1048576)
 			return round($bytes/1024, 1) . "KB";
 		else
 			return round($bytes/1048576, 1) . "MB";
+	}
+	
+	function generatesitestree($parentid, $tabs = "") {
+		global $d_pre, $PHP_SELF;
+		$out = "";
+		$sites_result = db_result("SELECT parent_id,name,id,title FROM " . $d_pre . "sitedata  WHERE parent_id=".$parentid." ORDER BY id ASC");
+		if(mysql_num_rows($sites_result) != 0) {
+			$out .= "\r\n" . $tabs . "<ol>\r\n";
+			while($site_info = mysql_fetch_object($sites_result)) {
+				$out .= $tabs."\t<li><a href=\"".$PHP_SELF."?site=siteeditor&amp;action=info&amp;site_name=".$site_info->name."\">".$site_info->title."</a> <em>[".$site_info->name."]</em>".generatesitestree($site_info->id, $tabs."\t\t")."</li>\r\n";
+				
+			}
+			$out .= $tabs . "</ol>\r\n";
+			$out .= substr($tabs,0,-1);
+		}
+		return $out;
 	}
 ?>

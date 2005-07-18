@@ -60,6 +60,11 @@
 			include("./system/user_pages.php");
 			$text = page_siteeditor();
 		}
+		elseif($site == "logout") {
+			include("./system/user_pages.php");
+			page_logout();
+		}
+		
 		//end of the "functions"
 		if(@$internal_style == "")
 			$internal_style = "clear";

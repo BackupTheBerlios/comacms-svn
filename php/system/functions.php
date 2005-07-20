@@ -146,19 +146,44 @@
 		if($bytes < 1024)
 			return $bytes . " B";
 		elseif($bytes < 1048576)
-			return round($bytes/1024, 1) . "KB";
+			return round($bytes/1024, 1) . " KB";
 		else
-			return round($bytes/1048576, 1) . "MB";
+			return round($bytes/1048576, 1) . " MB";
 	}
 	
-	function generatesitestree($parentid, $tabs = "") {
-		global $d_pre, $PHP_SELF;
+	function generatesitestree($parentid, $tabs = "", $lang = "", $show_deleted = false, $show_hidden = false) {
+		global $d_pre, $PHP_SELF, $admin_lang;;
 		$out = "";
-		$sites_result = db_result("SELECT parent_id,name,id,title FROM " . $d_pre . "sitedata  WHERE parent_id=".$parentid." ORDER BY id ASC");
+		$q_lang = "";
+		$q_visible = "";
+		if($lang != "")
+			$q_lang = "AND lang='" . $lang . "' ";
+		if($show_deleted == false)
+			$q_visible = "AND visible!='deleted' ";
+		if($show_hidden == false)
+			$q_visible .= "AND visible!='hidden' ";	
+		$sites_result = db_result("SELECT parent_id,name,id,title,visible FROM " . $d_pre . "sitedata  WHERE parent_id=".$parentid." ".$q_lang.$q_visible."ORDER BY id ASC");
 		if(mysql_num_rows($sites_result) != 0) {
 			$out .= "\r\n" . $tabs . "<ol>\r\n";
 			while($site_info = mysql_fetch_object($sites_result)) {
-				$out .= $tabs."\t<li><a href=\"".$PHP_SELF."?site=siteeditor&amp;action=info&amp;site_name=".$site_info->name."\">".$site_info->title."</a> <em>[".$site_info->name."]</em>".generatesitestree($site_info->id, $tabs."\t\t")."</li>\r\n";
+				$out .= $tabs . "\t<li>";
+				if($site_info->visible == "deleted")
+					$out .= "<strike>";
+				$out .= "<a href=\"" . $PHP_SELF .
+				"?site=siteeditor&amp;action=info&amp;site_name=" . $site_info->name . "\">" .
+				$site_info->title."</a> <em>[" . $site_info->name . "]</em> <a href=\"" .
+				$PHP_SELF . "?site=siteeditor&amp;action=info&amp;site_name=" .
+				$site_info->name . "\">[" . $admin_lang['info'] . "]</a>";
+				if($site_info->visible == "deleted")
+					$out .= "</strike>";
+				else
+					$out .= " <a href=\"" . $PHP_SELF .
+				"?site=siteeditor&amp;action=edit&amp;site_name=" . $site_info->name .
+				"\">[" . $admin_lang['edit'] . "]</a> <a href=\"" . $PHP_SELF .
+				"?site=siteeditor&amp;action=delete&amp;site_name=" . $site_info->name .
+				"\">[" . $admin_lang['delete'] . "]</a>";
+				
+				$out .= generatesitestree($site_info->id, $tabs . "\t\t", $lang, $show_deleted, $show_hidden) . "</li>\r\n";
 				
 			}
 			$out .= $tabs . "</ol>\r\n";

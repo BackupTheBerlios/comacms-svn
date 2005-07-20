@@ -23,7 +23,7 @@ ALTER TABLE `cms_online` ADD `userid` INT( 10 ) NOT NULL AFTER `lang` ;
 ALTER TABLE `cms_sitedata` ADD `creator` INT( 10 ) NOT NULL ;
 
 #no a site can be hidden from all visitors or only for special groups(private)
-ALTER TABLE `cms_sitedata` ADD `visible` ENUM( 'public', 'private', 'hidden', 'deleted' ) DEFAULT `public` NOT NULL AFTER `type` 
+ALTER TABLE `cms_sitedata` ADD `visible` ENUM( 'public', 'private', 'hidden', 'deleted' ) DEFAULT 'public' NOT NULL AFTER `type` ;
 
 #the hisory with old sites to make us able to recover them if its needed
 CREATE TABLE cms_sitedata_history (
@@ -36,3 +36,7 @@ lang VARCHAR( 5 ) NOT NULL ,
 creator INT( 10 ) NOT NULL ,
 PRIMARY KEY ( id )
 );
+
+#add a date field to the sitedata tables
+ALTER TABLE `cms_sitedata` ADD `date` VARCHAR( 20 ) DEFAULT '0' NOT NULL ;
+ALTER TABLE `cms_sitedata_history` ADD `date` VARCHAR( 20 ) DEFAULT '0' NOT NULL ;

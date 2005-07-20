@@ -2,6 +2,7 @@
 $admin_lang = array();
 $admin_lang['yes'] = "Yes";
 $admin_lang['no'] = "No";
+$admin_lang['ok'] = "OK";
 $admin_lang['admincontrol'] = "AdminControl";
 $admin_lang['sitepreview'] = "Sitepreview";
 $admin_lang['preferences'] = "Preferences";
@@ -22,4 +23,12 @@ $admin_lang['last action'] = "Last action";
 $admin_lang['not registered'] = "Not registered";
 $admin_lang['ip'] = "IP-Address";
 $admin_lang['database size'] = "Database size";
+$admin_lang['de'] = "German";
+$admin_lang['en'] = "English";
+$admin_lang['info'] = "info";
+$admin_lang['edit'] = "edit";
+$admin_lang['delete'] = "delete";
+$admin_lang['show deleted'] = "Show deleted";
+$admin_lang['show hidden'] = "Show hidden";
+$admin_lang['show'] = "Show";
 ?>

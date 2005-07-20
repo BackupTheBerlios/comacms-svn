@@ -253,7 +253,7 @@ function page_menueeditor()
 							<select name=\"intern_link\">
 								<option value=\"\">externer Link</option>\r\n";
 	//list all available pages 
-	$site_result = db_result("SELECT * FROM ".$d_pre."sitedata ORDER BY name ASC");
+	$site_result = db_result("SELECT * FROM ".$d_pre."sitedata WHERE visible!='deleted' ORDER BY name ASC");
 	while($site_data = mysql_fetch_object($site_result))
 	{
 		$out.= "\t\t\t\t\t\t\t\t<option value=\"".$site_data->name."\">".$site_data->title."(".$site_data->name.")</option>\r\n";

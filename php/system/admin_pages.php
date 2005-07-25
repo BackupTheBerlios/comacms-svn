@@ -283,8 +283,7 @@ function page_menueeditor()
 /* string page_sitesytle()
  * returns the sitestyle(changer)-page with a preview-iframe and a form which make it able o change the style
  */
-function page_sitestyle()
-{
+function page_sitestyle() {
 	global $_GET, $_POST, $d_pre;
 	$out = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"./system/functions.js\"></script>";
 	
@@ -340,13 +339,13 @@ function page_sitestyle()
 	return $out;
 }
 
-/* string page_news()
+/* 
+ * string page_news()
  * returns the news-admin-page where you can write,change and delete news-entries
  *
  */
  
-function page_news()
-{
+function page_news() {
 	global $_GET, $_POST, $d_pre, $actual_user_showname,$actual_user_id;
 	$out = "";
 	$action = "";
@@ -484,6 +483,265 @@ function page_news()
 	}
 	$out .= "\t\t\t</table>
 		</form>\r\n";
+	
+	return $out;
+}
+
+function page_users() {
+	global $d_pre, $_GET, $_POST, $PHP_SELF, $admin_lang, $actual_user_id;
+	
+	$out  ="";
+	
+	if(isset($_GET['action']) || isset($_POST['action'])) {
+		if(isset($_GET['action']))
+			$action = $_GET['action'];
+		else
+			$action = $_POST['action'];
+		$user_id = "0";
+		$user_name = "";
+		$user_showname = "";
+		$user_email = "";
+		$user_icq = "";
+		$user_admin = "";
+		$user_password = "";
+		$user_password_confirm = "";
+		
+		if(isset($_GET['user_id']))
+			$user_id = $_GET['user_id'];
+		elseif(isset($_POST['user_id']))
+			$user_id = $_POST['user_id'];
+		
+		if(isset($_GET['user_name']))
+			$user_name = $_GET['user_name'];
+		elseif(isset($_POST['user_name']))
+			$user_name = $_POST['user_name'];
+		
+		if(isset($_GET['user_showname']))
+			$user_showname = $_GET['user_showname'];
+		elseif(isset($_POST['user_showname']))
+			$user_showname = $_POST['user_showname'];
+		
+		if(isset($_GET['user_email']))
+			$user_email = $_GET['user_email'];
+		elseif(isset($_POST['user_email']))
+			$user_email = $_POST['user_email'];
+		
+		if(isset($_GET['user_icq']))
+			$user_icq = $_GET['user_icq'];
+		elseif(isset($_POST['user_icq']))
+			$user_icq = $_POST['user_icq'];
+		
+		if(isset($_GET['user_admin']))
+			$user_admin = $_GET['user_admin'];
+		elseif(isset($_POST['user_admin']))
+			$user_admin = $_POST['user_admin'];
+			
+		if(isset($_GET['user_password']))
+			$user_password = $_GET['user_password'];
+		elseif(isset($_POST['user_password']))
+			$user_password = $_POST['user_password'];
+		
+		if(isset($_GET['user_password_confirm']))
+			$user_password_confirm = $_GET['user_password_confirm'];
+		elseif(isset($_POST['user_password_confirm']))
+			$user_password_confirm = $_POST['user_password_confirm'];
+			
+		if($action == "add") {
+			if($user_name == "" || $user_showname == "" || $user_password == "" || $user_password != $user_password_confirm) {
+				$out .= "irgendwas fehlt einmal zurückgehen bitte";
+			}
+			else {
+				if($user_admin == "on")
+					$user_admin = "y";
+				else
+					$user_admin = "n";
+				$user_password = md5($user_password);
+				db_result("INSERT INTO ".$d_pre."users (showname, name, password, registerdate, admin, icq, email)
+				 VALUES ('".$user_showname."', '".$user_name."', '".$user_password."', '".mktime()."', '".$user_admin."', '".$user_icq."', '".$user_email."')");
+			}
+		}
+		elseif($action == "save") {
+			if($user_name == "" || $user_showname == "" || $user_password != $user_password_confirm) {
+				if($user_name == "")
+					$out .= "irgendwas fehlt einmal zurückgehen bitte!";
+			}
+			else {
+				if($user_password != "")
+					$user_password = ", password= '".md5($user_password)."'";
+				if($user_admin == "on")
+					$user_admin = "admin= 'y', ";
+				else
+					$user_admin = "admin= 'n', ";
+				
+				db_result("UPDATE ".$d_pre."users SET showname= '".$user_showname."', name= '".$user_name."', email= '".$user_email."', ".$user_admin."icq= '".$user_icq."'".$user_password." WHERE id=".$user_id);
+			}
+			
+		
+		}
+		elseif($action == "delete") {
+			if(isset($_GET['sure']) || isset($_POST['sure'])) {
+				if(isset($_GET['sure']))
+					$sure = $_GET['sure'];
+				else
+					$sure = $_POST['sure'];
+				
+				if($sure == 1 && $user_id != $actual_user_id)
+					db_result("DELETE FROM " . $d_pre . "users WHERE id=" . $user_id);
+			}
+			else {
+				$result = db_result("SELECT * FROM " . $d_pre . "users WHERE id=" . $user_id);
+				$user = mysql_fetch_object($result);
+				$out .= "Den Benutzer &quot;" . $user->showname . "&quot; wirklich löschen?<br />
+				<a href=\"admin.php?site=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich Löschen\">" . $admin_lang['yes'] . "</a> &nbsp;&nbsp;&nbsp;&nbsp;
+				<a href=\"admin.php?site=users\" title=\"Nicht Löschen\">" . $admin_lang['no'] . "</a>";
+				
+				return $out;
+			}
+		}
+		if($action == "edit" || $action == "new") {
+			if($user_id != "0" || $action = "new") {
+				$user_result = db_result("SELECT * FROM ".$d_pre."users WHERE id=".$user_id."");
+				if(($user = mysql_fetch_object($user_result)) || $action == "new") {
+					if($user != null) {
+						$user_showname = $user->showname;
+						$user_name = $user->name;
+						$user_email = $user->email;
+						$user_icq = $user->icq;
+						$user_admin = $user->admin;
+					}
+					$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"post\">
+				<input type=\"hidden\" name=\"site\" value=\"users\"/>\r\n";
+					if($action == "new")
+						$out .= "\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"add\"/>\r\n";
+					else
+						$out .= "\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"save\"/>
+				<input type=\"hidden\" name=\"user_id\" value=\"".$user_id."\"/>\r\n";
+					$out.= "\t\t\t\t<table>
+					<tr>
+						<td>
+							Name:
+							<span class=\"info\">Der Name wird immer angezeigt, wenn der Benutzer z.B. einen News-Eintrag geschrieben hat.</span>
+						</td>
+						<td>
+							<input type=\"text\" name=\"user_showname\" value=\"".$user_showname."\" maxlength=\"20\" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Kürzel:
+							<span class=\"info\">Mit dem Kürzel kann sich der Benutzer einloggen, so muss er nicht seinen unter Umständen komplizierten Namen,der angezeigt wird, eingeben muss.</span>
+						</td>
+						<td>
+							<input type=\"text\" name=\"user_name\" value=\"".$user_name."\" maxlength=\"20\" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							E-Mail:
+							<span class=\"info\">Über die E-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
+						</td>
+						<td>
+							<input type=\"text\" name=\"user_email\" value=\"".$user_email."\" maxlength=\"20\" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							ICQ:
+							<span class=\"info\">Die ICQ Nummer kann angegben werden, ist aber nicht dirngend notwendig.</span>
+						</td>
+						<td>
+							<input type=\"text\" name=\"user_icq\" value=\"".$user_icq."\" maxlength=\"20\" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Passwort:
+							<span class=\"info\">.</span>
+						</td>
+						<td>
+							<input type=\"text\" name=\"user_password\" value=\""."\" maxlength=\"20\" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Passwort wiederholen:
+							<span class=\"info\">.</span>
+						</td>
+						<td>
+							<input type=\"text\" name=\"user_password_confirm\" value=\""."\" maxlength=\"20\" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Administrator:
+							<span class=\"info\">Ist ein Benutzer Administrator so hat er keinerlei Einschränkungen in seinem Handeln.<strong>Nur auswählen wenn es wirklich Notwendig ist.</strong></span>
+						</td>
+						<td>
+							<input type=\"checkbox\" name=\"user_admin\"";
+					if($user_admin == "y")
+						$out .= " checked=\"true\"";
+					$out .= "/>
+						</td>
+					</tr>
+					<tr>
+						<td colspan=\"2\">
+							<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />&nbsp;
+							<input type=\"submit\" class=\"button\" value=\"";
+							if($action == "new")
+								$out .= $admin_lang['create'];
+							else
+								$out .= $admin_lang['save'];
+					$out .= "\" />
+						</td>
+					</tr>
+				</table>
+			</form>";
+				return $out;
+			}
+		}
+		}
+		
+		
+	}
+	
+	$out .= "\t\t\t<table>
+				<tr>
+					<td>#id</td>
+					<td>" . $admin_lang['name'] . "</td>
+					<td>Kürzel</td>
+					<td>email</td>
+					<td>Admin</td>
+					<td colspan=\"2\">Aktionen</td>
+				</tr>\r\n";
+
+		$users_result = db_result("SELECT * FROM ".$d_pre."users");
+		while($user = mysql_fetch_object($users_result))
+		{
+			$out .= "\t\t\t\t<tr>
+					<td>#".$user->id."</td>
+					<td>$user->showname</td>
+					<td>$user->name</td>
+					<td>$user->email</td>
+					<td>";
+				if($user->admin == "y")
+					$out .= $admin_lang['yes'];
+				else
+					$out .= $admin_lang['no'];
+				$out .= "</td>
+					<td><a href=\"".$PHP_SELF."?site=users&amp;action=edit&amp;user_id=".$user->id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a></td>
+					<td>";
+					
+				if($actual_user_id == $user->id)
+					$out .= "&nbsp;";
+				else
+					$out .= "<a href=\"".$PHP_SELF."?site=users&amp;action=delete&amp;user_id=".$user->id."\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
+				$out .= "</td>
+				</tr>\r\n";
+		}
+		//<tr><td colspan="7"><a href="<?php echo $PHP_SELF."?newuser=y"; " />Neuen User hinzuf&uuml;gen</a></td></tr>
+		$out .= "\t\t\t</table>
+			<a href=\"" . $PHP_SELF . "?site=users&amp;action=new\" title=\"Einen neuen Benutzer erstellen\">Neuen Benutzer erstellen</a>";
+		//( if(!isset($pw)) { $pw = "1"; } if(!isset($pwwdh)) { $pwwdh= "1"; } if($pw!=$pwwdh) { echo "<h3>Die Wiederhohlung des Passwortes ist fehlerhaft...<br>Aus diesem Grund wurde der Eintrag nicht gespeichert.</h3>"; } 
 	
 	return $out;
 }

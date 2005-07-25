@@ -31,4 +31,8 @@ $admin_lang['delete'] = "löschen";
 $admin_lang['show deleted'] = "Gelöschte anzeigen";
 $admin_lang['show hidden'] = "Versteckte anzeigen";
 $admin_lang['show'] = "Anzeigen";
+$admin_lang['create'] = "Erstellen";
+$admin_lang['reset'] = "Zurücksetzen";
+$admin_lang['save'] = "Speichern";
+
 ?>

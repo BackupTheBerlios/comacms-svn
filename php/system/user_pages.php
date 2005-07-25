@@ -160,8 +160,8 @@ function page_siteeditor() {
 					</tr>
 					<tr>
 						<td colspan=\"2\">
-							<input type=\"reset\" value=\"Zurücksetzen\" />&nbsp;
-							<input type=\"submit\" value=\"Erstellen\" />
+							<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" />&nbsp;
+							<input type=\"submit\" class=\"button\" value=\"Erstellen\" />
 						</td>
 					</tr>
 				</table>
@@ -223,7 +223,7 @@ function page_siteeditor() {
 				</select><br />
 				<input type=\"checkbox\" name=\"site_show_hidden\"";if($show_hidden) $out .= " checked=\"true\""; $out .= "/>" . $admin_lang['show hidden'] ."<br />
 				<input type=\"checkbox\" name=\"site_show_deleted\"";if($show_deleted) $out .= " checked=\"true\""; $out .= "/>" . $admin_lang['show deleted'] ."<br />
-				<input type=\"submit\" value=\"" . $admin_lang['show'] . "\" />
+				<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['show'] . "\" />
 			</form>";
 		$out .= generatesitestree(0, "\t\t\t", $site_lang, $show_deleted, $show_hidden);
 	}
@@ -273,7 +273,7 @@ function page_siteeditor() {
 		while($siteinfo = mysql_fetch_object($sites))
 			$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->name."\">".$siteinfo->title."(".$siteinfo->name.")</option>\r\n";
 		$out .= "\t\t\t\t\t\t\t</select>
-		<input type=\"submit\" value=\"Öffnen\" /> 
+		<input type=\"submit\" class=\"button\" value=\"Öffnen\" /> 
 		</form>";
 	}
 	return $out;

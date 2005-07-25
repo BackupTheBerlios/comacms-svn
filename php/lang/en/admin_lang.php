@@ -31,4 +31,7 @@ $admin_lang['delete'] = "delete";
 $admin_lang['show deleted'] = "Show deleted";
 $admin_lang['show hidden'] = "Show hidden";
 $admin_lang['show'] = "Show";
+$admin_lang['create'] = "Create";
+$admin_lang['reset'] = "Reset";
+$admin_lang['save'] = "Save";
 ?>

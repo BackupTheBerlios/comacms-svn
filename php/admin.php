@@ -60,6 +60,10 @@
 			include("./system/user_pages.php");
 			$text = page_siteeditor();
 		}
+		elseif($site == "users") {
+			$title = $admin_lang['users'];
+			$text = page_users();
+		}
 		elseif($site == "logout") {
 			include("./system/user_pages.php");
 			page_logout();

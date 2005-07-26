@@ -488,7 +488,7 @@ function page_news() {
 }
 
 function page_users() {
-	global $d_pre, $_GET, $_POST, $PHP_SELF, $admin_lang, $actual_user_id;
+	global $d_pre, $_GET, $_POST, $PHP_SELF, $admin_lang, $actual_user_id, $actual_user_passwd_md5,$actual_user_online_id, $actual_user_online_id;
 	
 	$out  ="";
 	
@@ -547,24 +547,20 @@ function page_users() {
 			$user_password_confirm = $_POST['user_password_confirm'];
 			
 		if($action == "add") {
-			if($user_name == "" || $user_showname == "" || $user_password == "" || $user_password != $user_password_confirm) {
-				$out .= "irgendwas fehlt einmal zurückgehen bitte";
-			}
+			if($user_name == "" || $user_showname == "" || $user_password == "" || $user_password != $user_password_confirm)
+				$action = "add-error";
 			else {
 				if($user_admin == "on")
 					$user_admin = "y";
 				else
 					$user_admin = "n";
 				$user_password = md5($user_password);
-				db_result("INSERT INTO ".$d_pre."users (showname, name, password, registerdate, admin, icq, email)
-				 VALUES ('".$user_showname."', '".$user_name."', '".$user_password."', '".mktime()."', '".$user_admin."', '".$user_icq."', '".$user_email."')");
+				db_result("INSERT INTO ".$d_pre."users (showname, name, password, registerdate, admin, icq, email) VALUES ('".$user_showname."', '".$user_name."', '".$user_password."', '".mktime()."', '".$user_admin."', '".$user_icq."', '".$user_email."')");
 			}
 		}
 		elseif($action == "save") {
-			if($user_name == "" || $user_showname == "" || $user_password != $user_password_confirm) {
-				if($user_name == "")
-					$out .= "irgendwas fehlt einmal zurückgehen bitte!";
-			}
+			if($user_name == "" || $user_showname == "" || $user_password != $user_password_confirm)
+							$action = "save-error";
 			else {
 				if($user_password != "")
 					$user_password = ", password= '".md5($user_password)."'";
@@ -572,8 +568,13 @@ function page_users() {
 					$user_admin = "admin= 'y', ";
 				else
 					$user_admin = "admin= 'n', ";
-				
-				db_result("UPDATE ".$d_pre."users SET showname= '".$user_showname."', name= '".$user_name."', email= '".$user_email."', ".$user_admin."icq= '".$user_icq."'".$user_password." WHERE id=".$user_id);
+				if($user_id == $actual_user_id) {
+					if($user_password_confirm != "")
+						$actual_user_passwd_md5 = md5($user_password_confirm);
+					$actual_user_name = $user_name;
+					setcookie("CMS_user_cookie",$actual_user_online_id."|".$actual_user_name."|".$actual_user_passwd_md5 , time() + 14400);
+				}
+				db_result("UPDATE " . $d_pre . "users SET showname= '" . $user_showname . "', name= '" . $user_name . "', email= '" . $user_email . "', " . $user_admin . "icq= '" . $user_icq . "'" . $user_password . " WHERE id=" . $user_id);
 			}
 			
 		
@@ -585,24 +586,28 @@ function page_users() {
 				else
 					$sure = $_POST['sure'];
 				
-				if($sure == 1 && $user_id != $actual_user_id)
+				if($sure == 1 && $user_id != $actual_user_id) {
+					$result = db_result("SELECT * FROM " . $d_pre . "users WHERE id=" . $user_id);
+				$user = mysql_fetch_object($result);
 					db_result("DELETE FROM " . $d_pre . "users WHERE id=" . $user_id);
+					$out .= "Der Benutzer &quot;" . $user->showname . "&quot; ist nun unwiederuflich gelöscht worden!<br />";
+				}
 			}
 			else {
 				$result = db_result("SELECT * FROM " . $d_pre . "users WHERE id=" . $user_id);
 				$user = mysql_fetch_object($result);
-				$out .= "Den Benutzer &quot;" . $user->showname . "&quot; wirklich löschen?<br />
+				$out .= "Den Benutzer &quot;" . $user->showname . "&quot; unwiederruflich löschen?<br />
 				<a href=\"admin.php?site=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich Löschen\">" . $admin_lang['yes'] . "</a> &nbsp;&nbsp;&nbsp;&nbsp;
 				<a href=\"admin.php?site=users\" title=\"Nicht Löschen\">" . $admin_lang['no'] . "</a>";
 				
 				return $out;
 			}
 		}
-		if($action == "edit" || $action == "new") {
-			if($user_id != "0" || $action = "new") {
+		if($action == "edit" || $action == "new" || $action == "add-error" || $action == "save-error") {
+			if($user_id != "0" || $action = "new" || $action == "add-error" || $action == "save-error") {
 				$user_result = db_result("SELECT * FROM ".$d_pre."users WHERE id=".$user_id."");
 				if(($user = mysql_fetch_object($user_result)) || $action == "new") {
-					if($user != null) {
+					if($user != null && $action != "save-error") {
 						$user_showname = $user->showname;
 						$user_name = $user->name;
 						$user_email = $user->email;
@@ -611,7 +616,7 @@ function page_users() {
 					}
 					$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"post\">
 				<input type=\"hidden\" name=\"site\" value=\"users\"/>\r\n";
-					if($action == "new")
+					if($action == "new" || $action == "add-error")
 						$out .= "\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"add\"/>\r\n";
 					else
 						$out .= "\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"save\"/>
@@ -659,7 +664,7 @@ function page_users() {
 							<span class=\"info\">.</span>
 						</td>
 						<td>
-							<input type=\"text\" name=\"user_password\" value=\""."\" maxlength=\"20\" />
+							<input type=\"password\" name=\"user_password\" value=\""."\" maxlength=\"20\" />
 						</td>
 					</tr>
 					<tr>
@@ -668,7 +673,7 @@ function page_users() {
 							<span class=\"info\">.</span>
 						</td>
 						<td>
-							<input type=\"text\" name=\"user_password_confirm\" value=\""."\" maxlength=\"20\" />
+							<input type=\"password\" name=\"user_password_confirm\" value=\""."\" maxlength=\"20\" />
 						</td>
 					</tr>
 					<tr>

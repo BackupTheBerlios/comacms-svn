@@ -549,18 +549,27 @@ function page_users() {
 		if($action == "add") {
 			if($user_name == "" || $user_showname == "" || $user_password == "" || $user_password != $user_password_confirm)
 				$action = "add-error";
+			elseif($user_email != "" && !isEMailAddress($user_email)) 
+				$action = "add-error";
+			elseif($user_icq != "" && !isIcqNumber($user_icq)) 
+				$action = "add-error";
 			else {
 				if($user_admin == "on")
 					$user_admin = "y";
 				else
 					$user_admin = "n";
+				$user_icq = str_replace("-", "", $user_icq);
 				$user_password = md5($user_password);
 				db_result("INSERT INTO ".$d_pre."users (showname, name, password, registerdate, admin, icq, email) VALUES ('".$user_showname."', '".$user_name."', '".$user_password."', '".mktime()."', '".$user_admin."', '".$user_icq."', '".$user_email."')");
 			}
 		}
 		elseif($action == "save") {
 			if($user_name == "" || $user_showname == "" || $user_password != $user_password_confirm)
-							$action = "save-error";
+				$action = "save-error";
+			elseif($user_email != "" && !isEMailAddress($user_email))
+				$action = "save-error";
+			elseif($user_icq != "" && !isIcqNumber($user_icq))
+				$action = "save-error";
 			else {
 				if($user_password != "")
 					$user_password = ", password= '".md5($user_password)."'";
@@ -568,6 +577,7 @@ function page_users() {
 					$user_admin = "admin= 'y', ";
 				else
 					$user_admin = "admin= 'n', ";
+				$user_icq = str_replace("-", "", $user_icq);
 				if($user_id == $actual_user_id) {
 					if($user_password_confirm != "")
 						$actual_user_passwd_md5 = md5($user_password_confirm);
@@ -576,8 +586,6 @@ function page_users() {
 				}
 				db_result("UPDATE " . $d_pre . "users SET showname= '" . $user_showname . "', name= '" . $user_name . "', email= '" . $user_email . "', " . $user_admin . "icq= '" . $user_icq . "'" . $user_password . " WHERE id=" . $user_id);
 			}
-			
-		
 		}
 		elseif($action == "delete") {
 			if(isset($_GET['sure']) || isset($_POST['sure'])) {
@@ -624,56 +632,73 @@ function page_users() {
 					$out.= "\t\t\t\t<table>
 					<tr>
 						<td>
-							Name:
-							<span class=\"info\">Der Name wird immer angezeigt, wenn der Benutzer z.B. einen News-Eintrag geschrieben hat.</span>
+							Anzeigename:\r\n";
+					if($action == "add-error" || $action = "save-error" && $user_showname == "")
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Anzeigename darf nicht leer sein.</span>\r\n";
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Der Name wird immer angezeigt, wenn der Benutzer z.B. einen News-Eintrag geschrieben hat.(Notwendig)</span>
 						</td>
 						<td>
-							<input type=\"text\" name=\"user_showname\" value=\"".$user_showname."\" maxlength=\"20\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Kürzel:
-							<span class=\"info\">Mit dem Kürzel kann sich der Benutzer einloggen, so muss er nicht seinen unter Umständen komplizierten Namen,der angezeigt wird, eingeben muss.</span>
-						</td>
-						<td>
-							<input type=\"text\" name=\"user_name\" value=\"".$user_name."\" maxlength=\"20\" />
+							<input type=\"text\" name=\"user_showname\" value=\"".$user_showname."\" />
 						</td>
 					</tr>
 					<tr>
 						<td>
-							E-Mail:
-							<span class=\"info\">Über die E-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
+							Nick:\r\n";
+					if($action == "add-error" || $action = "save-error" && $user_name == "")
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Nick muss angegeben werden.</span>\r\n";		
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umständen komplizierten Namen,der angezeigt wird, eingeben muss.(Notwendig)</span>
 						</td>
 						<td>
-							<input type=\"text\" name=\"user_email\" value=\"".$user_email."\" maxlength=\"20\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							ICQ:
-							<span class=\"info\">Die ICQ Nummer kann angegben werden, ist aber nicht dirngend notwendig.</span>
-						</td>
-						<td>
-							<input type=\"text\" name=\"user_icq\" value=\"".$user_icq."\" maxlength=\"20\" />
+							<input type=\"text\" name=\"user_name\" value=\"".$user_name."\" />
 						</td>
 					</tr>
 					<tr>
 						<td>
-							Passwort:
-							<span class=\"info\">.</span>
+							E-Mail:\r\n";
+					if($action == "add-error" || $action = "save-error" && $user_email != "" && !isEMailAddress($user_email))
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene E-Mail-Adresse ist ungültig.</span>\r\n";		
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Über die E-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
 						</td>
 						<td>
-							<input type=\"password\" name=\"user_password\" value=\""."\" maxlength=\"20\" />
+							<input type=\"text\" name=\"user_email\" value=\"".$user_email."\" />
 						</td>
 					</tr>
 					<tr>
 						<td>
-							Passwort wiederholen:
-							<span class=\"info\">.</span>
+							ICQ:\r\n";
+					if($action == "add-error" || $action = "save-error" && $user_icq != "" && !isIcqNumber($user_icq))
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene ICQ-Nummer ist ungültig.</span>\r\n";		
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Die ICQ Nummer kann angegben werden, ist aber nicht dirngend notwendig.</span>
 						</td>
 						<td>
-							<input type=\"password\" name=\"user_password_confirm\" value=\""."\" maxlength=\"20\" />
+							<input type=\"text\" name=\"user_icq\" value=\"".$user_icq."\" maxlength=\"12\" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Passwort:\r\n";
+					if($action == "add-error" && $user_password == "") {
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort fehlt.</span>\r\n";
+						$user_password_confirm = "";
+					}
+					if($action == "add-error" && $user_password_confirm == "" && $user_password != "")
+						$user_password = "";
+					
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">.(Notwendig)</span>
+						</td>
+						<td>
+							<input type=\"password\" name=\"user_password\" value=\""."\" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Passwort wiederholen:\r\n";
+					if($action == "add-error" && $user_password_confirm == "")
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Wiederholung des passwortes fehlt.</span>\r\n";		
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">.(Notwendig)</span>
+						</td>
+						<td>
+							<input type=\"password\" name=\"user_password_confirm\" value=\""."\" />
 						</td>
 					</tr>
 					<tr>
@@ -683,7 +708,7 @@ function page_users() {
 						</td>
 						<td>
 							<input type=\"checkbox\" name=\"user_admin\"";
-					if($user_admin == "y")
+					if($user_admin == "y" || $user_admin == "on")
 						$out .= " checked=\"true\"";
 					$out .= "/>
 						</td>

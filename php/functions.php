@@ -220,12 +220,20 @@ function set_usercookies() {
 			$actual_user_is_logged_in = true;
 			$actual_user_showname = $original_user->showname;
 			$actual_user_id = $original_user->id;
-			if($original_user->admin = "y")
+			if($original_user->admin == "y")
 				$actual_user_is_admin = true;
 		}
 	}
 	
 	setcookie("CMS_user_cookie",$actual_user_online_id."|".$actual_user_name."|".$actual_user_passwd_md5 , time() + 14400);
+}
+
+function isEMailAddress($email){
+	return eregi("^[a-z0-9\._-]+@+[a-z0-9\._-]+\.+[a-z]{2,4}$", $email);	
+}
+
+function isIcqNumber($icq) {
+	return eregi("^[0-9]{3}(\-)?[0-9]{3}(\-)?[0-9]{3}$", $icq);
 }
 
 ?>

@@ -167,7 +167,7 @@ hr {
  margin-top:0px; 
 }
 
-.info {
+span.info, span.error{
  font-size: 0.75em;
  width: 20em;
  display: block;
@@ -176,7 +176,7 @@ hr {
  text-indent:1em;
  text-align:justify;
  margin-left:1.5em;
- border:1px dotted gray;
+ border:1px dashed gray;
  padding: 0.3em;
 }
 
@@ -185,3 +185,11 @@ input.button {
  border: 1px solid black;
  font-weight: bold;
 }
+
+span.error {
+ color: red;
+ font-style:none;
+ border:1px dashed red;
+ font-weight: bold;
+ margin-bottom:0.4em;
+ }

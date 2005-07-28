@@ -1,0 +1,31 @@
+			CMS-ROADMAP
+
+	1.0 RC		First relese	30.08.2005
+	
+	-full user-management
+	-user+gropurights
+		+write-rights
+		+read-rights
+		+delete-/add-rights
+		+format-rights
+		+pages(+subpages)
+	-gallery
+	-settings
+		-mainname
+		-mailsettings
+	-article-system(with comments?)
+	-"in-page-menue"
+	-"only not on mainpage-parameter"
+	-registerform by "hidden" page with an unique id
+	-find a licence
+	-user friendly installation
+	
+	1.1				Q4 2005
+	
+	-rich-text Editor
+	-guestbook
+	-search
+	-caching system
+	-submenues
+	-spellcheck
+	

@@ -20,7 +20,13 @@ Todolist
 		*Spellchek
 	*'Mauristyle'
 ###	*Loginbug(you can log into the admimcontrol without admin-rights)
-	
+	*Search
+	*integrate the guestbook
+	*submenue
+	*caching system
+	*find a licence
+	*article system
+	*translationeditor
 	
 Wenn was fertig gemacht ist, einfach '###' in an den Anfang der Zeile schreiben.
 Angefangene mit einem %%% kenzeichnen

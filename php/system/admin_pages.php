@@ -611,10 +611,10 @@ function page_users() {
 				return $out;
 			}
 		}
-		if($action == "edit" || $action == "new" || $action == "add-error" || $action == "save-error") {
-			if($user_id != "0" || $action = "new" || $action == "add-error" || $action == "save-error") {
+		if($action == "edit" || $action == "add" || $action == "add-error" || $action == "save-error") {
+			if($user_id != "0" || $action == "add" || $action == "add-error" || $action == "save-error") {
 				$user_result = db_result("SELECT * FROM ".$d_pre."users WHERE id=".$user_id."");
-				if(($user = mysql_fetch_object($user_result)) || $action == "new") {
+				if(($user = mysql_fetch_object($user_result)) || $action == "add") {
 					if($user != null && $action != "save-error") {
 						$user_showname = $user->showname;
 						$user_name = $user->name;
@@ -633,7 +633,7 @@ function page_users() {
 					<tr>
 						<td>
 							Anzeigename:\r\n";
-					if($action == "add-error" || $action = "save-error" && $user_showname == "")
+					if($action == "add-error" || $action == "save-error" && $user_showname == "")
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Anzeigename darf nicht leer sein.</span>\r\n";
 					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Der Name wird immer angezeigt, wenn der Benutzer z.B. einen News-Eintrag geschrieben hat.(Notwendig)</span>
 						</td>
@@ -644,7 +644,7 @@ function page_users() {
 					<tr>
 						<td>
 							Nick:\r\n";
-					if($action == "add-error" || $action = "save-error" && $user_name == "")
+					if($action == "add-error" || $action == "save-error" && $user_name == "")
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Nick muss angegeben werden.</span>\r\n";		
 					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umständen komplizierten Namen,der angezeigt wird, eingeben muss.(Notwendig)</span>
 						</td>
@@ -655,7 +655,7 @@ function page_users() {
 					<tr>
 						<td>
 							E-Mail:\r\n";
-					if($action == "add-error" || $action = "save-error" && $user_email != "" && !isEMailAddress($user_email))
+					if($action == "add-error" || $action == "save-error" && $user_email != "" && !isEMailAddress($user_email))
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene E-Mail-Adresse ist ungültig.</span>\r\n";		
 					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Über die E-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
 						</td>
@@ -666,7 +666,7 @@ function page_users() {
 					<tr>
 						<td>
 							ICQ:\r\n";
-					if($action == "add-error" || $action = "save-error" && $user_icq != "" && !isIcqNumber($user_icq))
+					if(($action == "add-error" || $action == "save-error") && ($user_icq != "" && !isIcqNumber($user_icq)))
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene ICQ-Nummer ist ungültig.</span>\r\n";		
 					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Die ICQ Nummer kann angegben werden, ist aber nicht dirngend notwendig.</span>
 						</td>
@@ -677,14 +677,27 @@ function page_users() {
 					<tr>
 						<td>
 							Passwort:\r\n";
-					if($action == "add-error" && $user_password == "") {
+					if(($action == "add-error" || $action == "save-error") && $user_password != "" && $user_password_confirm != "" && $user_password != $user_password_confirm) {
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort und seine Wiederholung sind ungleich</span>\r\n";
+						$user_password = "";
+						$user_password_confirm = "rep-wrong";
+					}
+					elseif($action == "add-error" && $user_password == "") {
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort fehlt.</span>\r\n";
+						$user_password_confirm = "";
+					}
+					elseif($action == "save-error" && $user_password_confirm != "" && $user_password == "") {
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort fehlt obwohl die Wiederholung angegeben war.</span>\r\n";
 						$user_password_confirm = "";
 					}
 					if($action == "add-error" && $user_password_confirm == "" && $user_password != "")
 						$user_password = "";
-					
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">.(Notwendig)</span>
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit diesem Passwort kann sich der Benutzer in die geschützten Bereiche einloggen. (";
+					if($action == "save-error" || $action == "edit")
+						$out .= "Wenn beide Felder für das Passwort leer gelassen werden, wird das Passwort nicht verändert.";
+					elseif($action == "add-error" || $action == "add")
+						$out .= "Notwendig";
+					$out .= ")</span>
 						</td>
 						<td>
 							<input type=\"password\" name=\"user_password\" value=\""."\" />
@@ -693,9 +706,19 @@ function page_users() {
 					<tr>
 						<td>
 							Passwort wiederholen:\r\n";
-					if($action == "add-error" && $user_password_confirm == "")
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Wiederholung des passwortes fehlt.</span>\r\n";		
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">.(Notwendig)</span>
+					if (($action == "add-error" || $action == "save-error") && $user_password == "" && $user_password_confirm == "rep-wrong") {
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort und seine Wiederholung sind ungleich</span>\r\n";
+						$user_password = "";
+						$user_password_confirm = "";
+					}
+					elseif($action == "add-error" && $user_password_confirm == "")
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Wiederholung des Passwortes fehlt.</span>\r\n";
+					elseif($action == "save-error" && $user_password != "" && $user_password_confirm == "")
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Wiederholung des Passwortes fehlt.</span>\r\n";
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Durch eine Wiederholung wird sichergestellt, dass man sich bei der Eingabe nicht vertippt hat.";
+					if($action == "add-error" || $action == "add")
+						$out .= "(Notwendig)";
+					$out .= "</span>
 						</td>
 						<td>
 							<input type=\"password\" name=\"user_password_confirm\" value=\""."\" />

@@ -9,7 +9,7 @@ Todolist
 		*Einstellungen
 		*AdminControl
 ###		*Stlyevorschau mit Speicherfunktion
-%%%		*Usermanagement
+###		*Usermanagement
 		*Gruppenmanagement (Rechte usw.)
 ###		*neues Verzeichnis User? für Userseiten wie Seitenebearbeiten und weiteres
 		*'full XHTML suport'
@@ -27,6 +27,7 @@ Todolist
 	*find a licence
 	*article system
 	*translationeditor
-	
+	*timezone bug(show the time in the timezone of the client not in the timezone of the server)
+	*registerform
 Wenn was fertig gemacht ist, einfach '###' in an den Anfang der Zeile schreiben.
 Angefangene mit einem %%% kenzeichnen

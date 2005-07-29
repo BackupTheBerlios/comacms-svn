@@ -2,6 +2,7 @@
 
 	1.0 RC		First relese	30.08.2005
 	
+	-mauri-style
 	-full user-management
 	-user+gropurights
 		+write-rights

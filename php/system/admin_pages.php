@@ -798,4 +798,37 @@ function page_users() {
 	
 	return $out;
 }
+function page_preferences() {
+	global $d_pre, $setting, $PHP_SELF;
+	
+	include("./system/settings.php");
+	$out = "";
+	$action = getSubmitVar("action");
+	if($action == "save") {
+	}
+	else {
+		$out .= "\t\t\t<form action=\"" . $PHP_SELF . "\" method=\"post\">
+				<table>\r\n";
+		foreach($setting as $value) {
+			$__intern = "internal_".$value[0];
+			global $$__intern;
+			//$out .= $value[0] . "=" . $value[2]."-" . $$__n . "<br />";
+			$_value = $$__intern;
+			if($_value == "")
+				$_value = $value[3];
+			$out .= "\t\t\t\t\t<tr>
+						<td>
+							" . $value[1] . ":
+							<span class=\"info\" >" . $value[2] . "</span>
+						</td>
+						<td>
+							<input name=\"setting_" . $value[0] . "\" value=\"" . $_value . "\" />
+						</td>
+					</tr>\r\n";
+		}
+		$out .= "\t\t\t\t</table>
+			</form>\r\n";
+	}
+	return $out;
+}
 ?>

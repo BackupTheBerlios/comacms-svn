@@ -3,8 +3,12 @@ html,body {
  adding:0px;
  font-family:arial, verdana, helvetica, sans-serif;
 }
-input,select {
+
+input,select,textarea, fieldset {
  border: 1px solid black;
+}
+legend {
+ font-size: 1.2em;
 }
 #menuepart {
  border-left:1px solid black;

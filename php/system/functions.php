@@ -1,45 +1,5 @@
-<?/*
-	function isloggedin()
-	{
-		global $name,$password,$_COOKIE;
-		@include("../config.php");
-		$username = "";
-		$userpassword = "";
-		if(isset($name) && isset($password))
-		{
-			$username = $name;
-			$userpassword = md5($password);
-		}
-		elseif(isset($_COOKIE["CMS_user_cookie"]))
-		{
-			$data = explode("|",$_COOKIE["CMS_user_cookie"]);
-			$username = $data[0];
-			//print_r($data);
-			//echo "<br>";
-			$userpassword = $data[1];
-		}
-		//print_r($_COOKIE);
-		$connection = mysql_connect($d_server, $d_user, $d_pw) or die(mysql_error());
-		mysql_select_db($d_base, $connection) or die(mysql_error());
- 		$query = "SELECT * FROM ".$d_pre."users WHERE name='".$username."' AND password='".$userpassword."' AND admin='y'";
-		//echo "<br>";
-		//echo $query;
-  		$result = mysql_query($query, $connection) or die(mysql_error());
-		$data = mysql_fetch_object($result);
-		mysql_close($connection);
-		if(@$data->name == "")
-			return false;
-		if(strtolower(@$data->name) == strtolower(@$username))
-		{
-			setcookie ("CMS_user_cookie", $data->name."|".$data->password."|".$data->id, time()+5600); 
-			return true;
-		}
-		else
-			return false;
-	}
-	*/
-	function login()
-	{
+<?
+	function login() {
 		global $PHP_SELF;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -60,23 +20,19 @@
 <?
 	}
 
-	function alt($link)
-	{
-		$text = preg_replace("/(.+?)\|(.+$)/s","$1\" alt=\"\\2",$link);
-		echo $link."<br>".$text."<br>";
+	function alt($link) {
+		$text = preg_replace("/(.+?)\|(.+$)/s","$1\" alt=\"\\2", $link);
+		echo $link."<br \>".$text."<br \>";
 		return $text;
 	}
 
-	function convertToPreHtml($text)
-	{
-		//include_once("../gbook.php");
+	function convertToPreHtml($text) {
 		$text = htmlspecialchars($text);
 		preg_match_all("/\[code\](.+?)\[\/code\]/s", $text, $matches);
 		$codes = array();
-		foreach ($matches[1] as $key => $match) 
-		{
+		foreach ($matches[1] as $key => $match)  {
 			$codes[$key] = $matches[1][$key];
-			$text = str_replace($matches[1][$key],"%".$key."%",$text);
+			$text = str_replace($matches[1][$key], "%".$key."%", $text);
 		}
 
 		$text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $text);	//Bold
@@ -98,39 +54,30 @@
 		$text = preg_replace("/\"([A-Za-z]{1,})\.(.+?)\.([a-zA-Z.]{2,6}(|\/.+?))\"/s","\"http://$1.$2.$3\"", $text);//"repai" urls
 		$text = preg_replace("/<a href=\"(.+?)\|(.+?)\" >/s", "<a href=\"$1\" title=\"$2\">", $text);
 		$text = nl2br($text);
-		foreach($codes as $key => $match)
-		{
-			$text = str_replace("%".$key."%",$match,$text);
+		foreach($codes as $key => $match) {
+			$text = str_replace("%".$key."%", $match, $text);
 		}
-		
 		return $text;
 	}
-
-	function special_convert($name,$before,$after,$end)
-	{
-
-
-	}	
+	
 // TODO: language-compatibilty
-	function menue_edit_view($menue_id = 1)
-	{
+	function menue_edit_view($menue_id = 1) {
 		global $d_pre;
 		$out = "";
-		$menue_result = db_result("SELECT * FROM ".$d_pre."menue WHERE menue_id='".$menue_id."' ORDER BY orderid ASC");
+		$menue_result = db_result("SELECT * FROM " . $d_pre . "menue WHERE menue_id='" . $menue_id . "' ORDER BY orderid ASC");
 	
-		while($menue_data = mysql_fetch_object($menue_result))
-		{
+		while($menue_data = mysql_fetch_object($menue_result)) {
 			$out .= "\t\t\t\t\t<tr>
-						<td>".$menue_data->text."</td>
-						<td>".$menue_data->link."</td>
+						<td>" . $menue_data->text . "</td>
+						<td>" . $menue_data->link . "</td>
 						<td>
-							<a href=\"admin.php?site=menueeditor&amp;menue_id=".$menue_id."&amp;action=delete&amp;id=".$menue_data->id."\" title=\"Löschen\">
+							<a href=\"admin.php?site=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=delete&amp;id=" . $menue_data->id . "\" title=\"Löschen\">
 								<img src=\"./img/del.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"Löschen\" />
 							</a>
-							<a href=\"admin.php?site=menueeditor&amp;menue_id=".$menue_id."&amp;action=up&amp;id=".$menue_data->id."\" title=\"Nach Oben\">
+							<a href=\"admin.php?site=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=up&amp;id=" . $menue_data->id . "\" title=\"Nach Oben\">
 								<img src=\"./img/up.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"Nach Oben\"/>
 							</a>
-							<a href=\"admin.php?site=menueeditor&amp;menue_id=".$menue_id."&amp;action=down&amp;id=".$menue_data->id."\" title=\"Nach Unten\">
+							<a href=\"admin.php?site=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=down&amp;id=" . $menue_data->id . "\" title=\"Nach Unten\">
 								<img src=\"./img/down.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"Nach Unten\"/>
 							</a>
 						</td>
@@ -190,5 +137,19 @@
 			$out .= substr($tabs,0,-1);
 		}
 		return $out;
+	}
+
+	function setSetting($name, $display, $description, $default = "") {
+		global $setting;
+		$setting[] = array($name, $display, $description, $default);
+	}
+	
+	function getSubmitVar($name, $default = "") {
+		global $_GET, $_POST;
+		if(in_array($name, $_GET))
+			return $_GET[$name];
+		elseif(in_array($name, $_POST))
+			return $_POST[$name];
+		return $default;
 	}
 ?>

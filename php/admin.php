@@ -68,7 +68,10 @@
 			include("./system/user_pages.php");
 			page_logout();
 		}
-		
+		elseif($site == "preferences") {
+			$title = $admin_lang['preferences'];
+			$text = page_preferences();
+		}
 		//end of the "functions"
 		if(@$internal_style == "")
 			$internal_style = "clear";

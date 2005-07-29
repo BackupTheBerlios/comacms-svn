@@ -89,6 +89,8 @@ function page_siteeditor() {
 	elseif($action == "new") {
 		
 		$out .= "\t\t\t<form method=\"post\" action=\"".$PHP_SELF."\">
+				<fieldset>
+				<legend>Neue Seite</legend>
 				<input type=\"hidden\" name=\"site\" value=\"siteeditor\" />
 				<input type=\"hidden\" name=\"action\" value=\"add_new\" />
 				<table>
@@ -165,6 +167,7 @@ function page_siteeditor() {
 						</td>
 					</tr>
 				</table>
+			</fieldset>
 			</form>";
 	
 	}

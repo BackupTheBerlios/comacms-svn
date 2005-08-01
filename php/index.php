@@ -65,6 +65,10 @@
 	$stylefile = "./styles/".$internal_style."/mainpage.php";
 	$_file = fopen($stylefile, "r");
 	$page = fread($_file, filesize($stylefile));
+	if($_site == $internal_default_site)
+		$page = preg_replace("/\[notathome\](.+?)\[\/notathome\]/s", "", $page); 
+	else
+		$page = preg_replace("/\[notathome\](.+?)\[\/notathome\]/s", "$1", $page); 
 	
 	$page = str_replace("[title]", $title, $page);
 	$page = str_replace("[text]", $text, $page);

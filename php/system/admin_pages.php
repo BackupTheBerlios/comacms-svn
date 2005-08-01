@@ -799,34 +799,82 @@ function page_users() {
 	return $out;
 }
 function page_preferences() {
-	global $d_pre, $setting, $PHP_SELF;
+	global $d_pre, $setting, $PHP_SELF, $admin_lang, $_GET, $_POST;
 	
 	include("./system/settings.php");
 	$out = "";
 	$action = getSubmitVar("action");
 	if($action == "save") {
+		$tosave = array();
+		foreach($_GET as $key => $value) {
+			//$out .= $key."<br />";
+			if(substr($key, 0, 8) == "setting_"){
+				$name = substr($key, 8);
+				$_n = "internal_".$name;
+				global $$_n;
+				if($$_n != $_GET[$key])
+					$tosave[$name] = $value;
+			}
+			
+		}
+		foreach($_POST as $key => $value) {
+			//$out .= $key."<br />";
+			if(substr($key, 0, 8) == "setting_"){
+				$name = substr($key, 8);
+				$_n = "internal_".$name;
+				global $$_n;
+				if($$_n != $_POST[$key])
+					$tosave[$name] = $value;
+			}
+		}
+		foreach($tosave as $key => $value) {
+			$_n = "internal_".$key;
+			
+			if($$_n == "") {
+				$out .= "new: $key<br />";
+				$exists_result = db_result("SELECT * FROM " . $d_pre . "vars WHERE name='" . $key . "' ");
+				if($exists = mysql_fetch_object($exists_result))
+					db_result("UPDATE " . $d_pre . "vars SET `value` = '" . $value . "' WHERE name = '" . $key . "' LIMIT 1");
+				else
+					db_result("INSERT INTO " . $d_pre . "vars ( name , value ) VALUES ( '" . $key . "', '" . $value . "')");
+			}
+			else{
+				$out .= "update: $key<br />";
+				
+				db_result("UPDATE " . $d_pre . "vars SET `value` = '" . $value . "' WHERE name = '" . $key . "' LIMIT 1");
+
+			}
+		}
 	}
 	else {
 		$out .= "\t\t\t<form action=\"" . $PHP_SELF . "\" method=\"post\">
+				<input type=\"hidden\" name=\"site\" value=\"preferences\" />
+				<input type=\"hidden\" name=\"action\" value=\"save\" />
 				<table>\r\n";
-		foreach($setting as $value) {
-			$__intern = "internal_".$value[0];
+		foreach($setting as $key => $value) {
+			$__intern = "internal_".$key;
 			global $$__intern;
 			//$out .= $value[0] . "=" . $value[2]."-" . $$__n . "<br />";
 			$_value = $$__intern;
 			if($_value == "")
-				$_value = $value[3];
+				$_value = $value[2];
 			$out .= "\t\t\t\t\t<tr>
 						<td>
-							" . $value[1] . ":
-							<span class=\"info\" >" . $value[2] . "</span>
+							" . $value[0] . ":
+							<span class=\"info\" >" . $value[1] . "</span>
 						</td>
 						<td>
-							<input name=\"setting_" . $value[0] . "\" value=\"" . $_value . "\" />
+							<input name=\"setting_" . $key . "\" value=\"" . $_value . "\" />
 						</td>
 					</tr>\r\n";
 		}
-		$out .= "\t\t\t\t</table>
+		$out .= "\t\t\t\t\t<tr>
+						<td colspan=\"2\">
+						<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />
+						<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" />
+						</td>
+					</tr>
+				</table>
 			</form>\r\n";
 	}
 	return $out;

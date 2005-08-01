@@ -6,7 +6,7 @@ Todolist
 	*Userfriendly Installation
 %%%	*Translations
 	*Adminsystem
-		*Einstellungen
+#%%		*Einstellungen
 		*AdminControl
 ###		*Stlyevorschau mit Speicherfunktion
 ###		*Usermanagement
@@ -29,5 +29,6 @@ Todolist
 	*translationeditor
 	*timezone bug(show the time in the timezone of the client not in the timezone of the server)
 	*registerform
+	*databasesizereducer
 Wenn was fertig gemacht ist, einfach '###' in an den Anfang der Zeile schreiben.
 Angefangene mit einem %%% kenzeichnen

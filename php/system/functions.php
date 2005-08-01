@@ -141,14 +141,15 @@
 
 	function setSetting($name, $display, $description, $default = "") {
 		global $setting;
-		$setting[] = array($name, $display, $description, $default);
+		$setting[$name] = array($display, $description, $default);
 	}
 	
 	function getSubmitVar($name, $default = "") {
 		global $_GET, $_POST;
-		if(in_array($name, $_GET))
+		
+		if(isset($_GET[$name]))
 			return $_GET[$name];
-		elseif(in_array($name, $_POST))
+		elseif(isset($_POST[$name]))
 			return $_POST[$name];
 		return $default;
 	}

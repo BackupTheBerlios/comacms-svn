@@ -1,0 +1,18 @@
+<?php
+/***************************************************************************
+ *
+ *  If you have something what could be interesting for everyone here, you
+ *  can write it here.
+ *
+ ***************************************************************************/
+ //
+ // I think this could help us to manage vars more easier
+ //
+
+ // This will import GET(g) and POST(P) vars
+ // with an "rvar_" prefix and overwrites all
+ // GET vars which also exist as POST vars
+import_request_variables("gP", "rvar_");
+
+echo $rvar_foo;
+?>

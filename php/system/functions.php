@@ -1,4 +1,21 @@
-<?
+<?php
+/*****************************************************************************
+ *
+ *  file		: functions.php
+ *  created		: 2005-06-18
+ *  copyright		: (C) 2005 The Comasy-Team
+ *  email		: comasy@williblau.de
+ *
+ *****************************************************************************/
+
+/*****************************************************************************
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *****************************************************************************/
 	function login() {
 		global $PHP_SELF;
 ?>
@@ -8,7 +25,7 @@
 		<title>Admin-Login</title>
 	</head>
 	<body>
-		<form method="post" action="<?echo $PHP_SELF;?>">
+		<form method="post" action="<?php echo $PHP_SELF; ?>">
 			<table>
 				<tr><td>Loginname:</td><td><input type="text" name="login_name" /></td></tr>
 				<tr><td>Passwort:</td><td><input type="password" name="login_password" /></td></tr>
@@ -22,7 +39,7 @@
 
 	function alt($link) {
 		$text = preg_replace("/(.+?)\|(.+$)/s","$1\" alt=\"\\2", $link);
-		echo $link."<br \>".$text."<br \>";
+		echo $link.'<br \>' . $text . '<br \>';
 		return $text;
 	}
 
@@ -32,35 +49,84 @@
 		$codes = array();
 		foreach ($matches[1] as $key => $match)  {
 			$codes[$key] = $matches[1][$key];
-			$text = str_replace($matches[1][$key], "%".$key."%", $text);
+			$text = str_replace($matches[1][$key], '%' . $key . '%', $text);
 		}
-
-		$text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $text);	//Bold
-
-		$text = preg_replace("/\/\/(.+?)\/\//s", "<em>$1</em>", $text);		//Italic
-
+		//
+		// convert all **text** to <strong>text</strong> => Bold
+		//
+		$text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $text);
+		//
+		// convert all //text// to <em>text</em> => Italic
+		//
+		$text = preg_replace("/\/\/(.+?)\/\//s", "<em>$1</em>", $text);
+		//
+		// convert all __text__ to <u>text</u> => Underline
+		//
 		$text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $text);
-		//[[link|text]]
+		//
+		// todo: [[link|text]]
+		//
+		// covert [ul]text[/ul] to <ul>text</ul>
+		//
 		$text = preg_replace("/\[ul\](.+?)\[\/ul\]/s", "<ul>$1</ul>", $text); 
-		$text = preg_replace("/\[li\](.+?)\[\/li\]/s", "<li>$1</li>", $text); 
-		$text = preg_replace("/\[code\](.+?)\[\/code\]/s", "<pre class=\"code\">$1</pre>", $text); //underline
-		$text = preg_replace("/===\ (.+?)\ ===/s", "<h3>$1</h3><hr />", $text); //header
-		$text = preg_replace("/\[img:(.+?)\]/s", "<img src=\"\\1\" />", $text);    	
-		$text = preg_replace("/<img src=\"(.+?)\|(.+?)\" \/>/s", "<img src=\"$1\" title=\"$2\" alt=\"$2\"/>", $text);    	
+		//
+		// covert [li]text[/li] to <li>text</li>
+		//
+		$text = preg_replace("/\[li\](.+?)\[\/li\]/s", "<li>$1</li>", $text);
+		//
+		// convert [code]-tags
+		//
+		$text = preg_replace("/\[code\](.+?)\[\/code\]/s", "<pre class=\"code\">$1</pre>", $text);
+		//
+		// convert === text === to a header
+		//
+		$text = preg_replace("/===\ (.+?)\ ===/s", "<h3>$1</h3><hr />", $text);
+		//
+		// insert images
+		//
+		$text = preg_replace("/\[img:(.+?)\]/s", "<img src=\"\\1\" />", $text);
+		//
+		// if there are images formated like image.png|text move the text into the title and alt tags
+		//
+		$text = preg_replace("/<img src=\"(.+?)\|(.+?)\" \/>/s", "<img src=\"$1\" title=\"$2\" alt=\"$2\"/>", $text);
+		//
+		// special style attributes with css-formatting by the user
+		//
 		$text = preg_replace("/\[style:(.+?)\](.+?)\[\/style\]/s", "<p style=\"$1\">$2</p>", $text);
+		//
+		// TODO: make a better link handling - it is to complicated
+		//
+		// convert links
+		//
 		$text = preg_replace("/\[link:(.+?)\](.+?)\[\/link\]/s", "<a href=\"$1\" >$2</a>", $text);
+		//
+		// convert extern links
+		//
 		$text = preg_replace("/\[linkex:(.+?)\](.+?)\[\/linkex\]/s", "<a href=\"$1\" target=\"_blank\">$2</a>", $text);
+		//
+		// convert local hrefs
+		//
 		$text = preg_replace("/\"l:(.+?)\"/s","\"index.php?site=$1\"", $text);
+		//
+		// covert extern hrefs
+		//
 		$text = preg_replace("/\"([A-Za-z]{1,})\.(.+?)\.([a-zA-Z.]{2,6}(|\/.+?))\"/s","\"http://$1.$2.$3\"", $text);//"repai" urls
+		//
+		// if there are links formated like http://www.williblau.de|text move the text into the title attribut
+		//
 		$text = preg_replace("/<a href=\"(.+?)\|(.+?)\" >/s", "<a href=\"$1\" title=\"$2\">", $text);
+		//
+		// convert "/n" to "<br />" (more or less ;-))
+		//
 		$text = nl2br($text);
-		foreach($codes as $key => $match) {
-			$text = str_replace("%".$key."%", $match, $text);
-		}
+		foreach($codes as $key => $match)
+			$text = str_replace('%' . $key . '%', $match, $text);
+			
 		return $text;
 	}
-	
-// TODO: language-compatibilty
+	//
+	// TODO: language-compatibilty
+	//
 	function menue_edit_view($menue_id = 1) {
 		global $d_pre;
 		$out = "";
@@ -99,7 +165,7 @@
 	}
 	
 	function generatesitestree($parentid, $tabs = "", $lang = "", $show_deleted = false, $show_hidden = false) {
-		global $d_pre, $PHP_SELF, $admin_lang;;
+		global $PHP_SELF, $admin_lang;;
 		$out = "";
 		$q_lang = "";
 		$q_visible = "";
@@ -109,26 +175,22 @@
 			$q_visible = "AND visible!='deleted' ";
 		if($show_hidden == false)
 			$q_visible .= "AND visible!='hidden' ";	
-		$sites_result = db_result("SELECT parent_id,name,id,title,visible FROM " . $d_pre . "sitedata  WHERE parent_id=".$parentid." ".$q_lang.$q_visible."ORDER BY id ASC");
+		$sql = "SELECT parent_id, name, id, title, visible
+			FROM " . DB_PREFIX . "sitedata
+			WHERE parent_id=$parentid ".$q_lang.$q_visible."
+			ORDER BY id ASC";
+		$sites_result = db_result($sql);
 		if(mysql_num_rows($sites_result) != 0) {
 			$out .= "\r\n" . $tabs . "<ol>\r\n";
 			while($site_info = mysql_fetch_object($sites_result)) {
 				$out .= $tabs . "\t<li>";
-				if($site_info->visible == "deleted")
-					$out .= "<strike>";
-				$out .= "<a href=\"" . $PHP_SELF .
-				"?site=siteeditor&amp;action=info&amp;site_name=" . $site_info->name . "\">" .
-				$site_info->title."</a> <em>[" . $site_info->name . "]</em> <a href=\"" .
-				$PHP_SELF . "?site=siteeditor&amp;action=info&amp;site_name=" .
-				$site_info->name . "\">[" . $admin_lang['info'] . "]</a>";
-				if($site_info->visible == "deleted")
-					$out .= "</strike>";
+				if($site_info->visible == 'deleted')
+					$out .= '<strike>';
+				$out .= '<a href="' . $PHP_SELF . '?site=siteeditor&amp;action=info&amp;site_name=' . $site_info->name . '">' . $site_info->title . '</a> <em>[' . $site_info->name . ']</em> <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=info&amp;site_name=' . $site_info->name . '">[' . $admin_lang['info'] . ']</a>';
+				if($site_info->visible == 'deleted')
+					$out .= '</strike>';
 				else
-					$out .= " <a href=\"" . $PHP_SELF .
-				"?site=siteeditor&amp;action=edit&amp;site_name=" . $site_info->name .
-				"\">[" . $admin_lang['edit'] . "]</a> <a href=\"" . $PHP_SELF .
-				"?site=siteeditor&amp;action=delete&amp;site_name=" . $site_info->name .
-				"\">[" . $admin_lang['delete'] . "]</a>";
+					$out .= ' <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=edit&amp;site_name=' . $site_info->name . '">[' . $admin_lang['edit'] . ']</a> <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=delete&amp;site_name=' . $site_info->name . '">[' . $admin_lang['delete'] . ']</a>';
 				
 				$out .= generatesitestree($site_info->id, $tabs . "\t\t", $lang, $show_deleted, $show_hidden) . "</li>\r\n";
 				
@@ -139,7 +201,7 @@
 		return $out;
 	}
 
-	function setSetting($name, $display, $description, $default = "") {
+	function setSetting($name, $display, $description, $default = '') {
 		global $setting;
 		$setting[$name] = array($display, $description, $default);
 	}

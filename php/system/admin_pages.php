@@ -1,30 +1,59 @@
-<?
-/* adminpages.php
- * This file contains 'all' subsites in the admin-interface
- */
+<?php
+/*****************************************************************************
+ *
+ *  file		: admin_pages.php
+ *  created		: 2005-07-12
+ *  copyright		: (C) 2005 The Comasy-Team
+ *  email		: comasy@williblau.de
+ *
+ *****************************************************************************/
 
-/* string page_adminconrol()
- * returns the AdminControl-page with a list of useful details about the page
- * and a list of all visitors
- */
-function page_admincontrol()
-{
-	global $d_pre,$admin_lang;
-	//get the coutnt of all pages
-	$sitedata_result = db_result("SELECT * FROM ".$d_pre."sitedata");
-	$page_count = mysql_num_rows($sitedata_result);
-	//get the count of all registered users
-	$users_result = db_result("SELECT * FROM ".$d_pre."users");
-	$users_count = mysql_num_rows($users_result);
-	//get the size of all tables with the prefix $d_pre
-	$table_infos_result = db_result("SHOW TABLE STATUS");
-	$data_size = 0;
-	while($table_infos = mysql_fetch_object($table_infos_result)) {
-		if(substr($table_infos->Name, 0, strlen($d_pre)) == $d_pre)
-			$data_size += $table_infos->Data_length + $table_infos->Index_length;
-	}
+/*****************************************************************************
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *****************************************************************************/
+
+/*****************************************************************************
+ *
+ *  This file contains (nearly) all subsites in the admin-interface
+ *
+ *****************************************************************************/
+
+/*****************************************************************************
+ *
+ *  page_adminconrol()
+ *  returns the AdminControl-page with a list of useful details about the page
+ *  and a list of all visitors
+ *
+ *****************************************************************************/
+
+	function page_admincontrol() {
+		global $admin_lang;
+		//
+		// get the coutnt of all pages
+		//
+		$sitedata_result = db_result("SELECT * FROM " . DB_PREFIX . "sitedata");
+		$page_count = mysql_num_rows($sitedata_result);
+		//
+		// get the count of all registered users
+		//
+		$users_result = db_result("SELECT * FROM ".DB_PREFIX."users");
+		$users_count = mysql_num_rows($users_result);
+		//
+		// get the size of all tables with the prefix DB_PREFIX
+		//
+		$table_infos_result = db_result("SHOW TABLE STATUS");
+		$data_size = 0;
+		while($table_infos = mysql_fetch_object($table_infos_result)) {
+			if(substr($table_infos->Name, 0, strlen(DB_PREFIX)) == DB_PREFIX)
+				$data_size += $table_infos->Data_length + $table_infos->Index_length;
+		}
 	
-	$out = "<h3>AdminControl</h3><hr />
+		$out = "<h3>AdminControl</h3><hr />
 	<table>
 		<tr><td>".$admin_lang['online since']."</td><td>#DATUM</td></tr>
 		<tr><td>".$admin_lang['registered users']."</td><td>".$users_count."</td></tr>
@@ -41,37 +70,43 @@ function page_admincontrol()
 			<td>".$admin_lang['language']."</td>
 			<td>".$admin_lang['ip']."</td>
 		</tr>";
-		//output all visitors surfing on the site
-		$users_online_result = db_result("SELECT * FROM ".$d_pre."online");
-		while($users_online = mysql_fetch_object($users_online_result))
-		{
-			if($users_online->userid == 0)
-				$username  = $admin_lang['not registered'];
-			else
-				$username = getUserById($users_online->userid);
-			$out .= "\t\t\t<tr>
+			//output all visitors surfing on the site
+			$users_online_result = db_result("SELECT * FROM ".DB_PREFIX."online");
+			while($users_online = mysql_fetch_object($users_online_result)) {
+				if($users_online->userid == 0)
+					$username  = $admin_lang['not registered'];
+				else
+					$username = getUserById($users_online->userid);
+				$out .= "\t\t\t<tr>
 			<td>".$username."</td>
 			<td><a href=\"index.php?site=".$users_online->page."\">".$users_online->page."</a></td>
 			<td>".date("d.m.Y H:i:s", $users_online->lastaction)."</td>
 			<td>".$users_online->lang."</td>
 			<td>".$users_online->ip."</td>
 		</tr>\r\n";
-		}
+			}
 
-	$out .= "</table>";
+		$out .= "</table>";
 	
-	return $out;
-}
-/* string page_sitepreview()
- * returns the Sitepreview-page where you can see the 'real' site in a iframe
- */
-function page_sitepreview()
-{
-	global $admin_lang;
-	$out = "<h3>".$admin_lang['sitepreview']."</h3><hr /><iframe src=\"index.php\" class=\"sitepreview\"></iframe>";
-	return $out;
-}
-/* string page_menueeditor()
+		return $out;
+	}
+
+/*****************************************************************************
+ *
+ *  string page_sitepreview()
+ *  returns the Sitepreview-page where you can see the 'real' site in a iframe
+ *
+ *****************************************************************************/
+
+	function page_sitepreview() {
+		global $admin_lang;
+		
+		$out = '<h3>' . $admin_lang['sitepreview'].'</h3><hr /><iframe src="index.php" class="sitepreview"></iframe>';
+		return $out;
+	}
+/*****************************************************************************
+ *
+ * string page_menueeditor()
  * returns the Menueeditor-page whith the followong functionalitys:
  * -$action=up -> changes the place in the menue order with the item before the selected
  * -$action=down -> changes the place in the menue order with the item after the selected
@@ -79,153 +114,158 @@ function page_sitepreview()
  * -$action=add -> adds a new item at the end of the menue
  *
  * it is possible to choose between two menues by $menue_id
- */
-function page_menueeditor()
-{
-	global $_GET,$_POST, $admin_language, $d_pre;
-	$menue_id = 0;
-	$out = "\t\t\t<h3>Menueeditor</h3><hr />	
+ *
+ *****************************************************************************/
+
+	function page_menueeditor() {
+		global $_GET,$_POST, $admin_language;
+	
+		$menue_id = 0;
+		$out = "\t\t\t<h3>Menueeditor</h3><hr />	
 			<ul>\r\n";
 	
-	if(isset($_GET['menue_id']) || isset($_POST['menue_id']))
-	{
-		if(isset($_GET['menue_id']))
-			$menue_id = $_GET['menue_id'];
-		else
-			$menue_id = $_POST['menue_id'];
-	}
-	//write the 'coose menue'  to make it able to switch betwen both possible menues
-	if($menue_id == "2")
-		$out .= "\t\t\t\t<li><a href=\"admin.php?site=menueeditor&amp;menue_id=1\">Menü 1</a></li>
+		if(isset($_GET['menue_id']) || isset($_POST['menue_id'])) {
+			if(isset($_GET['menue_id']))
+				$menue_id = $_GET['menue_id'];
+			else
+				$menue_id = $_POST['menue_id'];
+		}
+		//
+		// write the 'coose menue'  to make it able to switch betwen both possible menues
+		//
+		if($menue_id == "2")
+			$out .= "\t\t\t\t<li><a href=\"admin.php?site=menueeditor&amp;menue_id=1\">Menü 1</a></li>
 				<li><u>Menü 2</u></li>\r\n";
-	else
-	{
-		$out .= "\t\t\t\t<li><u>Menü 1</u></li>
+		else {
+			$out .= "\t\t\t\t<li><u>Menü 1</u></li>
 				<li><a href=\"admin.php?site=menueeditor&amp;menue_id=2\">Menü 2</a></li>\r\n";
-		$menue_id = 1;
-	}
- 			$out .= "\t\t\t</ul>\r\n";
+			$menue_id = 1;
+		}
+		$out .= "\t\t\t</ul>\r\n";
 	
-	if(isset($_GET['action']) || isset($_POST['action']))
-	{
-		if(isset($_GET['action']))
-			$action = $_GET['action'];
-		else
-			$action = $_POST['action'];
-		
-		if(isset($_GET['id']))
-			$id = $_GET['id'];
-		elseif(isset($_POST['id']))
-			$id = $_POST['id'];
-		else
-			$id = 0;
-		//put the item one position higher	
-		if($action == "up")
-		{
-			$_result = db_result("SELECT * FROM ".$d_pre."menue WHERE id=".$id."");
-			$_data = mysql_fetch_object($_result);
-			$id1 = $_data->id;
-			$orderid1 = $_data->orderid; //get the orderid to find the follownig menue item
-			
-			$_result2 = db_result("SELECT * FROM ".$d_pre."menue WHERE orderid <".$orderid1." AND menue_id=".$menue_id." ORDER BY orderid DESC");
-			$_data2 = mysql_fetch_object($_result2);
-			
-			if($_data2 != null) //switch the orderids to cange the order of this two menue items
-			{
-				$id2 = $_data2->id;
-				$orderid2 = $_data2->orderid;
-				db_result("UPDATE ".$d_pre."menue SET orderid= ".$orderid2." WHERE id=".$id1);
-				db_result("UPDATE ".$d_pre."menue SET orderid= ".$orderid1." WHERE id=".$id2);
-			}
-		}
-		//put the item one position lower
-		elseif($action == "down")
-		{
-			$_result = db_result("SELECT * FROM ".$d_pre."menue WHERE id=".$id."");
-			$_data = mysql_fetch_object($_result);
-			$id1 = $_data->id;
-			$orderid1 = $_data->orderid;
-			
-			$_result2 = db_result("SELECT * FROM ".$d_pre."menue WHERE orderid >".$orderid1." AND menue_id=".$menue_id." ORDER BY orderid ASC");
-			$_data2 = mysql_fetch_object($_result2);
-			
-			if($_data2 != null)
-			{
-				$id2 = $_data2->id;
-				$orderid2 = $_data2->orderid;
-				db_result("UPDATE ".$d_pre."menue SET orderid= ".$orderid2." WHERE id=".$id1);
-				db_result("UPDATE ".$d_pre."menue SET orderid= ".$orderid1." WHERE id=".$id2);
-			}
-		}
-		//remove the selected item
-		elseif($action == "delete")
-		{
-			
-			if(isset($_GET['sure']) || isset($_POST['sure']))
-			{
-				if(isset($_GET['sure']))
-					$sure = $_GET['sure'];
-				else
-					$sure = $_POST['sure'];
-				if($sure == 1)
-					db_result("DELETE FROM ".$d_pre."menue WHERE id=".$id."");
-			}
+		if(isset($_GET['action']) || isset($_POST['action'])) {
+			if(isset($_GET['action']))
+				$action = $_GET['action'];
 			else
-			{
-				$_result = db_result("SELECT * FROM ".$d_pre."menue WHERE id=".$id."");
+				$action = $_POST['action'];
+		
+			if(isset($_GET['id']))
+				$id = $_GET['id'];
+			elseif(isset($_POST['id']))
+				$id = $_POST['id'];
+			else
+				$id = 0;
+			//
+			// put the item one position higher
+			//
+			if($action == "up") {
+				$_result = db_result("SELECT * FROM ".DB_PREFIX."menue WHERE id=".$id."");
 				$_data = mysql_fetch_object($_result);
-				$out .= "\t\t\t<div class=\"error\">Soll der Link ".$_data->text."(".$_data->link.") wirklich gelöscht werden?<br />
+				$id1 = $_data->id;
+				//
+				// get the orderid to find the follownig menue item
+				//
+				$orderid1 = $_data->orderid;
+			
+				$_result2 = db_result("SELECT * FROM ".DB_PREFIX."menue WHERE orderid <".$orderid1." AND menue_id=".$menue_id." ORDER BY orderid DESC");
+				$_data2 = mysql_fetch_object($_result2);
+				
+				//
+				// switch the orderids to cange the order of this two menue items
+				//
+				if($_data2 != null) {
+					$id2 = $_data2->id;
+					$orderid2 = $_data2->orderid;
+					db_result("UPDATE ".DB_PREFIX."menue SET orderid= ".$orderid2." WHERE id=".$id1);
+					db_result("UPDATE ".DB_PREFIX."menue SET orderid= ".$orderid1." WHERE id=".$id2);
+				}
+			}
+			//
+			// put the item one position lower
+			//
+			elseif($action == "down") {
+				$_result = db_result("SELECT * FROM ".DB_PREFIX."menue WHERE id=".$id."");
+				$_data = mysql_fetch_object($_result);
+				$id1 = $_data->id;
+				$orderid1 = $_data->orderid;
+			
+				$_result2 = db_result("SELECT * FROM ".DB_PREFIX."menue WHERE orderid >".$orderid1." AND menue_id=".$menue_id." ORDER BY orderid ASC");
+				$_data2 = mysql_fetch_object($_result2);
+			
+				if($_data2 != null) {
+					$id2 = $_data2->id;
+					$orderid2 = $_data2->orderid;
+					db_result("UPDATE ".DB_PREFIX."menue SET orderid= ".$orderid2." WHERE id=".$id1);
+					db_result("UPDATE ".DB_PREFIX."menue SET orderid= ".$orderid1." WHERE id=".$id2);
+				}
+			}
+			//
+			// remove the selected item
+			//
+			elseif($action == "delete") {
+				if(isset($_GET['sure']) || isset($_POST['sure'])) {
+					if(isset($_GET['sure']))
+						$sure = $_GET['sure'];
+					else
+						$sure = $_POST['sure'];
+					if($sure == 1)
+						db_result("DELETE FROM ".DB_PREFIX."menue WHERE id=".$id."");
+				}
+				else {
+					$_result = db_result("SELECT * FROM ".DB_PREFIX."menue WHERE id=".$id."");
+					$_data = mysql_fetch_object($_result);
+					$out .= "\t\t\t<div class=\"error\">Soll der Link ".$_data->text."(".$_data->link.") wirklich gelöscht werden?<br />
 			<a href=\"admin.php?site=menueeditor&amp;action=delete&amp;menue_id=".$menue_id."&amp;id=".$id."&amp;sure=1\" title=\"Wirklich Löschen?\">Ja</a> &nbsp;&nbsp;&nbsp; <a href=\"admin.php?site=menueeditor&amp;menue_id=".$menue_id."\" title=\"Nein! nicht löschen\">Nein</a></div>";
-				return $out;
+					
+					return $out;
+				}
+			}
+			//
+			// add a new item
+			//
+			elseif($action == "add") {
+				if(isset($_GET['intern_link']))
+					$intern_link = $_GET['intern_link'];
+				else
+					$intern_link = $_POST['intern_link'];
+			
+				if(isset($_GET['extern_link']))
+					$extern_link = $_GET['extern_link'];
+				else
+					$extern_link = $_POST['extern_link'];
+			
+				if(isset($_GET['caption']))
+					$caption = $_GET['caption'];
+				else
+					$caption = $_POST['caption'];
+				$new_window = "";
+				if(isset($_GET['new_window']))
+					$new_window = $_GET['new_window'];
+				elseif(isset($_POST['new_winow']))
+					$new_window = $_POST['new_window'];	
+				
+				if($intern_link == "")
+					$link = $extern_link;
+				else
+					$link = "l:".$intern_link;
+				if($link != "" && $caption != "") {
+					if($new_window == "on")
+						$new = "yes";
+					else
+						$new = "no";
+					$menue_result = db_result("SELECT orderid FROM ".DB_PREFIX."menue WHERE menue_id = ".$menue_id." ORDER BY orderid DESC");
+					$menue_data = mysql_fetch_object($menue_result);
+					if($menue_data != null)
+						$ordid = $menue_data->orderid + 1;
+					else
+						$ordid = 0;
+				
+					db_result("INSERT INTO ".DB_PREFIX."menue (text, link, new, orderid,menue_id) VALUES ('".$caption."', '".$link."', '".$new."', ".$ordid.",$menue_id)");
+				}
 			}
 		}
-		//add a new item
-		elseif($action == "add")
-		{
-			if(isset($_GET['intern_link']))
-				$intern_link = $_GET['intern_link'];
-			else
-				$intern_link = $_POST['intern_link'];
-			
-			if(isset($_GET['extern_link']))
-				$extern_link = $_GET['extern_link'];
-			else
-				$extern_link = $_POST['extern_link'];
-			
-			if(isset($_GET['caption']))
-				$caption = $_GET['caption'];
-			else
-				$caption = $_POST['caption'];
-			$new_window = "";
-			if(isset($_GET['new_window']))
-				$new_window = $_GET['new_window'];
-			elseif(isset($_POST['new_winow']))
-				$new_window = $_POST['new_window'];	
-				
-			if($intern_link == "")
-				$link = $extern_link;
-			else
-				$link = "l:".$intern_link;
-			if($link != "" && $caption != "")
-			{
-				if($new_window == "on")
-					$new = "yes";
-				else
-					$new = "no";
-				$menue_result = db_result("SELECT orderid FROM ".$d_pre."menue WHERE menue_id = ".$menue_id." ORDER BY orderid DESC");
-				$menue_data = mysql_fetch_object($menue_result);
-				if($menue_data != null)
-					$ordid = $menue_data->orderid + 1;
-				else
-					$ordid = 0;
-				
-				db_result("INSERT INTO ".$d_pre."menue (text, link, new, orderid,menue_id) VALUES ('".$caption."', '".$link."', '".$new."', ".$ordid.",$menue_id)");
-			}
-		}
-		
-	}
 	
-	$out .= "\t\t\t<table class=\"linktable\">
+		$out .= "\t\t\t<table class=\"linktable\">
 				<thead>
 					<tr>
 						<td>Text</td>
@@ -234,11 +274,13 @@ function page_menueeditor()
 					</tr>
 				</thead>
 				<tbody>\r\n";
-	//add the menueedit part where you can select
-	$out .= menue_edit_view($menue_id);
-	$out .= "\t\t\t\t</tbody>
+		//
+		// add the menueedit part where you can select
+		//
+		$out .= menue_edit_view($menue_id);
+		$out .= "\t\t\t\t</tbody>
 			</table><br />\r\n";
-	$out .= "\t\t\t<form method=\"get\" action=\"admin.php\">
+		$out .= "\t\t\t<form method=\"get\" action=\"admin.php\">
 				<input type=\"hidden\" name=\"site\" value=\"menueeditor\" />
 				<input type=\"hidden\" name=\"action\" value=\"add\" />
 				<input type=\"hidden\" name=\"menue_id\" value=\"".$menue_id."\" />
@@ -252,13 +294,14 @@ function page_menueeditor()
 						<td>
 							<select name=\"intern_link\">
 								<option value=\"\">externer Link</option>\r\n";
-	//list all available pages 
-	$site_result = db_result("SELECT * FROM ".$d_pre."sitedata WHERE visible!='deleted' ORDER BY name ASC");
-	while($site_data = mysql_fetch_object($site_result))
-	{
-		$out.= "\t\t\t\t\t\t\t\t<option value=\"".$site_data->name."\">".$site_data->title."(".$site_data->name.")</option>\r\n";
-	}	
-	$out .="\t\t\t\t\t\t\t</select>
+		//
+		// list all available pages 
+		//
+		$site_result = db_result("SELECT * FROM ".DB_PREFIX."sitedata WHERE visible!='deleted' ORDER BY name ASC");
+		while($site_data = mysql_fetch_object($site_result))
+			$out.= "\t\t\t\t\t\t\t\t<option value=\"".$site_data->name."\">".$site_data->title."(".$site_data->name.")</option>\r\n";
+			
+		$out .="\t\t\t\t\t\t\t</select>
 						</td>
 					</tr>
 					<tr>
@@ -275,60 +318,62 @@ function page_menueeditor()
 				</table>
 			</form>";
 	
-	return $out;
-	
-	
-
-}
-/* string page_sitesytle()
+		return $out;
+	}
+/*****************************************************************************
+ *
+ * string page_sitesytle()
  * returns the sitestyle(changer)-page with a preview-iframe and a form which make it able o change the style
- */
-function page_sitestyle() {
-	global $_GET, $_POST, $d_pre;
-	$out = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"./system/functions.js\"></script>";
+ *
+ *****************************************************************************/
+	function page_sitestyle() {
+		global $_GET, $_POST;
+		
+		$out = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"./system/functions.js\"></script>";
 	
-	if(!isset($_GET["style"]) && !isset($_POST["style"]))
-	{
-		$object = mysql_fetch_object(db_result("SELECT * FROM ".$d_pre."vars WHERE name='style'"));
-		$style = $object->value;
-	}
-	else
-	{
-		if(isset($_GET["style"]))
-			$style = $_GET["style"];
-		else
-			$style = $_POST["style"];
-	}
+		if(!isset($_GET["style"]) && !isset($_POST["style"])) {
+			$object = mysql_fetch_object(db_result("SELECT * FROM ".DB_PREFIX."vars WHERE name='style'"));
+			$style = $object->value;
+		}
+		else {
+			if(isset($_GET["style"]))
+				$style = $_GET["style"];
+			else
+				$style = $_POST["style"];
+		}
 	
-	if(isset($_GET["save"]) || isset($_POST["save"]))
-	{
-		if(file_exists("./styles/".$style."/mainpage.php"))
-			db_result("UPDATE ".$d_pre."vars SET value= '".$style."' WHERE name='style'");
-	}
+		if(isset($_GET["save"]) || isset($_POST["save"])) {
+			if(file_exists("./styles/".$style."/mainpage.php"))
+				db_result("UPDATE ".DB_PREFIX."vars SET value= '".$style."' WHERE name='style'");
+		}
 	
-	$out .= "<iframe id=\"previewiframe\" src=\"./index.php?style=".$style."\" class=\"stylepreview\"></iframe>
+		$out .= "<iframe id=\"previewiframe\" src=\"./index.php?style=".$style."\" class=\"stylepreview\"></iframe>
 		<form action=\"admin.php\" method=\"get\">
 			<input type=\"hidden\" name=\"site\" value=\"sitestyle\" />
 			<label for=\"stylepreviewselect\">Style:
 				<select id=\"stylepreviewselect\" name=\"style\" size=\"1\">";
 	
-	$verz = dir("./styles/");
-	//read the available styles
-	while($entry = $verz->read()) 
-	{
-		//check if the style really exists	
-		if($entry != "." && $entry != ".." && file_exists("./styles/".$entry."/mainpage.php"))
-		{
-			//mark the selected style as selected in the list
-			if($entry == $style)
-				$out .= "\t\t\t\t\t<option value=\"".$entry."\" selected=\"selected\">".$entry."</option>\r\n";	
-			else
-				$out .= "\t\t\t\t\t<option value=\"".$entry."\">".$entry."</option>\r\n";
+		$verz = dir("./styles/");
+		//
+		// read the available styles
+		//
+		while($entry = $verz->read()) {
+			//
+			// check if the style really exists
+			//
+			if($entry != "." && $entry != ".." && file_exists("./styles/".$entry."/mainpage.php")) {
+				//
+				// mark the selected style as selected in the list
+				//
+				if($entry == $style)
+					$out .= "\t\t\t\t\t<option value=\"".$entry."\" selected=\"selected\">".$entry."</option>\r\n";	
+				else
+					$out .= "\t\t\t\t\t<option value=\"".$entry."\">".$entry."</option>\r\n";
+			}
 		}
-	}
-	$verz->close();
+		$verz->close();
 	
-	$out .= "</select>
+		$out .= "</select>
 			</label>
 
 			<input type=\"submit\" value=\"Vorschau\" onclick=\"preview_style();return false;\" name=\"preview\" />
@@ -336,97 +381,108 @@ function page_sitestyle() {
 
 		</form>";
 		
-	return $out;
-}
+		return $out;
+	}
 
-/* 
+/*****************************************************************************
+ *
  * string page_news()
  * returns the news-admin-page where you can write,change and delete news-entries
  *
- */
+ *****************************************************************************/
  
-function page_news() {
-	global $_GET, $_POST, $d_pre, $actual_user_showname,$actual_user_id;
-	$out = "";
-	$action = "";
-	$id = 0;
-	$text = "";
-	$title = "";
-
-	if(isset($_GET['action']) || isset($_POST['action'])) {
-		if(isset($_GET['action']))
-			$action = $_GET['action'];
-		else
-			$action = $_POST['action'];
+	function page_news() {
+		global $_GET, $_POST, $actual_user_showname, $actual_user_id;
 		
-		if(isset($_GET['id']))
-			$id = $_GET['id'];
-		elseif(isset($_POST['id']))
-			$id = $_POST['id'];
+		$out = "";
+		$action = "";
+		$id = 0;
+		$text = "";
+		$title = "";
+
+		if(isset($_GET['action']) || isset($_POST['action'])) {
+			if(isset($_GET['action']))
+				$action = $_GET['action'];
+			else
+				$action = $_POST['action'];
+		
+			if(isset($_GET['id']))
+				$id = $_GET['id'];
+			elseif(isset($_POST['id']))
+				$id = $_POST['id'];
 		
 	
-		if(isset($_GET['text']) || isset($_POST['text'])) {
-			if(isset($_GET['text']))
-				$text = $_GET['text'];
-			else
-				$text = $_POST['text'];
-		}
-
-		if(isset($_GET['title']) || isset($_POST['title'])) {
-			if(isset($_GET['title']))
-				$title = $_GET['title'];
+			if(isset($_GET['text']) || isset($_POST['text'])) {
+				if(isset($_GET['text']))
+					$text = $_GET['text'];
 				else
-				$title = $_POST['title'];
-		}
-		// delete the selected new-entrie
-		if($action == "delete") {
-			if(isset($_GET['sure']) || isset($_POST['sure'])) {
-				if(isset($_GET['sure']))
-					$sure = $_GET['sure'];
-				else
-					$sure = $_POST['sure'];
-				
-				if($sure == 1)
-					db_result("DELETE FROM " . $d_pre . "news WHERE id=" . $id);
+					$text = $_POST['text'];
 			}
-			else {
-				$result = db_result("SELECT * FROM " . $d_pre . "news WHERE id=" . $id);
-				$row = mysql_fetch_object($result);
-				$out .= "Den News Eintrag &quot;" . $row->title . "&quot; wirklich löschen?<br />
+
+			if(isset($_GET['title']) || isset($_POST['title'])) {
+				if(isset($_GET['title']))
+					$title = $_GET['title'];
+					else
+					$title = $_POST['title'];
+			}
+			//
+			// delete the selected new-entrie
+			//
+			if($action == "delete") {
+				if(isset($_GET['sure']) || isset($_POST['sure'])) {
+					if(isset($_GET['sure']))
+						$sure = $_GET['sure'];
+					else
+						$sure = $_POST['sure'];
+				
+					if($sure == 1)
+						db_result("DELETE FROM " . DB_PREFIX . "news WHERE id=" . $id);
+				}
+				else {
+					$result = db_result("SELECT * FROM " . DB_PREFIX . "news WHERE id=" . $id);
+					$row = mysql_fetch_object($result);
+					$out .= "Den News Eintrag &quot;" . $row->title . "&quot; wirklich löschen?<br />
 				<a href=\"admin.php?site=news&amp;action=delete&amp;id=" . $id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
 				<a href=\"admin.php?site=news\" title=\"Nicht Löschen\">nein</a>";
 				
-				return $out;
+					return $out;
+				}
+			}
+			//
+			// add a new entrie
+			//
+			elseif($action == "new") {
+				if($text != "" && $title != "")
+					db_result("INSERT INTO ".DB_PREFIX."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$actual_user_id')");
+			}
+			elseif($action == "update") { // update the selected entrie
+				if($text != "" && $title != "" && $id != 0)
+					db_result("UPDATE ".DB_PREFIX."news SET title= '".$title."', text= '".$text."' WHERE id=".$id);
 			}
 		}
-		elseif($action == "new") { // add a new entrie
-			if($text != "" && $title != "")		
-				db_result("INSERT INTO ".$d_pre."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$actual_user_id')");
-		}
-		elseif($action == "update") { // update the selected entrie
-			if($text != "" && $title != "" && $id != 0)
-				db_result("UPDATE ".$d_pre."news SET title= '".$title."', text= '".$text."' WHERE id=".$id);
-		}
-	}
-	if($action != "edit") { // don't show the add new form if it is sure that the user wants to edit a news entrie
-		$out .= "\t\t<form method=\"post\" action=\"admin.php\">
+		if($action != "edit") { // don't show the add new form if it is sure that the user wants to edit a news entrie
+			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
 			<input type=\"hidden\" name=\"site\" value=\"news\" />
 			<input type=\"hidden\" name=\"action\" value=\"new\" />
 			Titel: <input type=\"text\" name=\"title\" maxlength=\"60\" value=\"\" /><br />
 			<textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea><br />
 			Eingelogt als " . $actual_user_showname . " &nbsp;<input type=\"submit\" value=\"Senden\" /><br />
 		</form>";
-	}
-		$out .= "\t\t<form method=\"post\" action=\"admin.php\">
+		}
+			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
 			<input type=\"hidden\" name=\"site\" value=\"news\" />
 			<input type=\"hidden\" name=\"action\" value=\"update\" />
 			<table>\r\n";
-	// write all news entries
-	$result = db_result("SELECT * FROM ".$d_pre."news ORDER BY date DESC");
-	while($row = mysql_fetch_object($result)) {
-		
-		if($id == $row->id && $action == "edit") {// show an editform for the selected entrie
-			$out .= "\t\t\t\t<tr>
+		//
+		// write all news entries
+		//
+		$result = db_result("SELECT * FROM ".DB_PREFIX."news ORDER BY date DESC");
+		while($row = mysql_fetch_object($result)) {
+			//
+			// show an editform for the selected entrie
+			//
+			if($id == $row->id && $action == "edit") {
+				$out .= "\t\t\t\t<tr>
 					<td colspan=\"2\">
 						<a id=\"newsid".$row->id."\" ></a>
 						<input type=\"hidden\" name=\"id\" value=\"".$row->id."\" />
@@ -452,9 +508,12 @@ function page_news() {
 						".getUserByID($row->userid)."
 					</td>
 				</tr>";
-		}
-		else { // show only the entrie
-			$out .= "\t\t\t\t<tr>
+			}
+			//
+			// show only the entrie
+			//
+			else {
+				$out .= "\t\t\t\t<tr>
 					<td colspan=\"2\">
 						<a id=\"newsid".$row->id."\" ></a>
 						<a href=\"admin.php?site=news&amp;action=edit&amp;id=".$row->id."#newsid".$row->id."\" title=\"Bearbeiten\">Bearbeiten</a>
@@ -479,163 +538,163 @@ function page_news() {
 						".getUserByID($row->userid)."
 					</td>
 				</tr>";
+			}
 		}
-	}
-	$out .= "\t\t\t</table>
+		$out .= "\t\t\t</table>
 		</form>\r\n";
 	
-	return $out;
-}
+		return $out;
+	}
 
-function page_users() {
-	global $d_pre, $_GET, $_POST, $PHP_SELF, $admin_lang, $actual_user_id, $actual_user_passwd_md5,$actual_user_online_id, $actual_user_online_id;
+	function page_users() {
+		global $_GET, $_POST, $PHP_SELF, $admin_lang, $actual_user_id, $actual_user_passwd_md5,$actual_user_online_id, $actual_user_online_id;
 	
-	$out  ="";
+		$out  ="";
 	
-	if(isset($_GET['action']) || isset($_POST['action'])) {
-		if(isset($_GET['action']))
-			$action = $_GET['action'];
-		else
-			$action = $_POST['action'];
-		$user_id = "0";
-		$user_name = "";
-		$user_showname = "";
-		$user_email = "";
-		$user_icq = "";
-		$user_admin = "";
-		$user_password = "";
-		$user_password_confirm = "";
-		
-		if(isset($_GET['user_id']))
-			$user_id = $_GET['user_id'];
-		elseif(isset($_POST['user_id']))
-			$user_id = $_POST['user_id'];
-		
-		if(isset($_GET['user_name']))
-			$user_name = $_GET['user_name'];
-		elseif(isset($_POST['user_name']))
-			$user_name = $_POST['user_name'];
-		
-		if(isset($_GET['user_showname']))
-			$user_showname = $_GET['user_showname'];
-		elseif(isset($_POST['user_showname']))
-			$user_showname = $_POST['user_showname'];
-		
-		if(isset($_GET['user_email']))
-			$user_email = $_GET['user_email'];
-		elseif(isset($_POST['user_email']))
-			$user_email = $_POST['user_email'];
-		
-		if(isset($_GET['user_icq']))
-			$user_icq = $_GET['user_icq'];
-		elseif(isset($_POST['user_icq']))
-			$user_icq = $_POST['user_icq'];
-		
-		if(isset($_GET['user_admin']))
-			$user_admin = $_GET['user_admin'];
-		elseif(isset($_POST['user_admin']))
-			$user_admin = $_POST['user_admin'];
+		if(isset($_GET['action']) || isset($_POST['action'])) {
+			if(isset($_GET['action']))
+				$action = $_GET['action'];
+			else
+				$action = $_POST['action'];
+			$user_id = "0";
+			$user_name = "";
+			$user_showname = "";
+			$user_email = "";
+			$user_icq = "";
+			$user_admin = "";
+			$user_password = "";
+			$user_password_confirm = "";
 			
-		if(isset($_GET['user_password']))
-			$user_password = $_GET['user_password'];
-		elseif(isset($_POST['user_password']))
-			$user_password = $_POST['user_password'];
-		
-		if(isset($_GET['user_password_confirm']))
-			$user_password_confirm = $_GET['user_password_confirm'];
-		elseif(isset($_POST['user_password_confirm']))
-			$user_password_confirm = $_POST['user_password_confirm'];
+			if(isset($_GET['user_id']))
+				$user_id = $_GET['user_id'];
+			elseif(isset($_POST['user_id']))
+				$user_id = $_POST['user_id'];
 			
-		if($action == "add") {
-			if($user_name == "" || $user_showname == "" || $user_password == "" || $user_password != $user_password_confirm)
-				$action = "add-error";
-			elseif($user_email != "" && !isEMailAddress($user_email)) 
-				$action = "add-error";
-			elseif($user_icq != "" && !isIcqNumber($user_icq)) 
-				$action = "add-error";
-			else {
-				if($user_admin == "on")
-					$user_admin = "y";
-				else
-					$user_admin = "n";
-				$user_icq = str_replace("-", "", $user_icq);
-				$user_password = md5($user_password);
-				db_result("INSERT INTO ".$d_pre."users (showname, name, password, registerdate, admin, icq, email) VALUES ('".$user_showname."', '".$user_name."', '".$user_password."', '".mktime()."', '".$user_admin."', '".$user_icq."', '".$user_email."')");
-			}
-		}
-		elseif($action == "save") {
-			if($user_name == "" || $user_showname == "" || $user_password != $user_password_confirm)
-				$action = "save-error";
-			elseif($user_email != "" && !isEMailAddress($user_email))
-				$action = "save-error";
-			elseif($user_icq != "" && !isIcqNumber($user_icq))
-				$action = "save-error";
-			else {
-				if($user_password != "")
-					$user_password = ", password= '".md5($user_password)."'";
-				if($user_admin == "on")
-					$user_admin = "admin= 'y', ";
-				else
-					$user_admin = "admin= 'n', ";
-				$user_icq = str_replace("-", "", $user_icq);
-				if($user_id == $actual_user_id) {
-					if($user_password_confirm != "")
-						$actual_user_passwd_md5 = md5($user_password_confirm);
-					$actual_user_name = $user_name;
-					setcookie("CMS_user_cookie",$actual_user_online_id."|".$actual_user_name."|".$actual_user_passwd_md5 , time() + 14400);
-				}
-				db_result("UPDATE " . $d_pre . "users SET showname= '" . $user_showname . "', name= '" . $user_name . "', email= '" . $user_email . "', " . $user_admin . "icq= '" . $user_icq . "'" . $user_password . " WHERE id=" . $user_id);
-			}
-		}
-		elseif($action == "delete") {
-			if(isset($_GET['sure']) || isset($_POST['sure'])) {
-				if(isset($_GET['sure']))
-					$sure = $_GET['sure'];
-				else
-					$sure = $_POST['sure'];
+			if(isset($_GET['user_name']))
+				$user_name = $_GET['user_name'];
+			elseif(isset($_POST['user_name']))
+				$user_name = $_POST['user_name'];
+			
+			if(isset($_GET['user_showname']))
+				$user_showname = $_GET['user_showname'];
+			elseif(isset($_POST['user_showname']))
+				$user_showname = $_POST['user_showname'];
+			
+			if(isset($_GET['user_email']))
+				$user_email = $_GET['user_email'];
+			elseif(isset($_POST['user_email']))
+				$user_email = $_POST['user_email'];
+			
+			if(isset($_GET['user_icq']))
+				$user_icq = $_GET['user_icq'];
+			elseif(isset($_POST['user_icq']))
+				$user_icq = $_POST['user_icq'];
+			
+			if(isset($_GET['user_admin']))
+				$user_admin = $_GET['user_admin'];
+			elseif(isset($_POST['user_admin']))
+				$user_admin = $_POST['user_admin'];
 				
-				if($sure == 1 && $user_id != $actual_user_id) {
-					$result = db_result("SELECT * FROM " . $d_pre . "users WHERE id=" . $user_id);
-				$user = mysql_fetch_object($result);
-					db_result("DELETE FROM " . $d_pre . "users WHERE id=" . $user_id);
-					$out .= "Der Benutzer &quot;" . $user->showname . "&quot; ist nun unwiederuflich gelöscht worden!<br />";
+			if(isset($_GET['user_password']))
+				$user_password = $_GET['user_password'];
+			elseif(isset($_POST['user_password']))
+				$user_password = $_POST['user_password'];
+			
+			if(isset($_GET['user_password_confirm']))
+				$user_password_confirm = $_GET['user_password_confirm'];
+			elseif(isset($_POST['user_password_confirm']))
+				$user_password_confirm = $_POST['user_password_confirm'];
+				
+			if($action == "add") {
+				if($user_name == "" || $user_showname == "" || $user_password == "" || $user_password != $user_password_confirm)
+					$action = "add-error";
+				elseif($user_email != "" && !isEMailAddress($user_email)) 
+					$action = "add-error";
+				elseif($user_icq != "" && !isIcqNumber($user_icq)) 
+					$action = "add-error";
+				else {
+					if($user_admin == "on")
+						$user_admin = "y";
+					else
+						$user_admin = "n";
+					$user_icq = str_replace("-", "", $user_icq);
+					$user_password = md5($user_password);
+					db_result("INSERT INTO ".DB_PREFIX."users (showname, name, password, registerdate, admin, icq, email) VALUES ('".$user_showname."', '".$user_name."', '".$user_password."', '".mktime()."', '".$user_admin."', '".$user_icq."', '".$user_email."')");
 				}
 			}
-			else {
-				$result = db_result("SELECT * FROM " . $d_pre . "users WHERE id=" . $user_id);
-				$user = mysql_fetch_object($result);
-				$out .= "Den Benutzer &quot;" . $user->showname . "&quot; unwiederruflich löschen?<br />
+			elseif($action == "save") {
+				if($user_name == "" || $user_showname == "" || $user_password != $user_password_confirm)
+					$action = "save-error";
+				elseif($user_email != "" && !isEMailAddress($user_email))
+					$action = "save-error";
+				elseif($user_icq != "" && !isIcqNumber($user_icq))
+					$action = "save-error";
+				else {
+					if($user_password != "")
+						$user_password = ", password= '".md5($user_password)."'";
+					if($user_admin == "on")
+						$user_admin = "admin= 'y', ";
+					else
+						$user_admin = "admin= 'n', ";
+					$user_icq = str_replace("-", "", $user_icq);
+					if($user_id == $actual_user_id) {
+						if($user_password_confirm != "")
+							$actual_user_passwd_md5 = md5($user_password_confirm);
+						$actual_user_name = $user_name;
+						setcookie("CMS_user_cookie",$actual_user_online_id."|".$actual_user_name."|".$actual_user_passwd_md5 , time() + 14400);
+					}
+					db_result("UPDATE " . DB_PREFIX . "users SET showname= '" . $user_showname . "', name= '" . $user_name . "', email= '" . $user_email . "', " . $user_admin . "icq= '" . $user_icq . "'" . $user_password . " WHERE id=" . $user_id);
+				}
+			}
+			elseif($action == "delete") {
+				if(isset($_GET['sure']) || isset($_POST['sure'])) {
+					if(isset($_GET['sure']))
+						$sure = $_GET['sure'];
+					else
+						$sure = $_POST['sure'];
+					
+					if($sure == 1 && $user_id != $actual_user_id) {
+						$result = db_result("SELECT * FROM " . DB_PREFIX . "users WHERE id=" . $user_id);
+					$user = mysql_fetch_object($result);
+						db_result("DELETE FROM " . DB_PREFIX . "users WHERE id=" . $user_id);
+						$out .= "Der Benutzer &quot;" . $user->showname . "&quot; ist nun unwiederuflich gelöscht worden!<br />";
+					}
+				}
+				else {
+					$result = db_result("SELECT * FROM " . DB_PREFIX . "users WHERE id=" . $user_id);
+					$user = mysql_fetch_object($result);
+					$out .= "Den Benutzer &quot;" . $user->showname . "&quot; unwiederruflich löschen?<br />
 				<a href=\"admin.php?site=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich Löschen\">" . $admin_lang['yes'] . "</a> &nbsp;&nbsp;&nbsp;&nbsp;
 				<a href=\"admin.php?site=users\" title=\"Nicht Löschen\">" . $admin_lang['no'] . "</a>";
-				
-				return $out;
+					
+					return $out;
+				}
 			}
-		}
-		if($action == "edit" || $action == "add" || $action == "add-error" || $action == "save-error") {
-			if($user_id != "0" || $action == "add" || $action == "add-error" || $action == "save-error") {
-				$user_result = db_result("SELECT * FROM ".$d_pre."users WHERE id=".$user_id."");
-				if(($user = mysql_fetch_object($user_result)) || $action == "add") {
-					if($user != null && $action != "save-error") {
-						$user_showname = $user->showname;
-						$user_name = $user->name;
-						$user_email = $user->email;
-						$user_icq = $user->icq;
-						$user_admin = $user->admin;
-					}
-					$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"post\">
+			if($action == "edit" || $action == "add" || $action == "add-error" || $action == "save-error") {
+				if($user_id != "0" || $action == "add" || $action == "add-error" || $action == "save-error") {
+					$user_result = db_result("SELECT * FROM ".DB_PREFIX."users WHERE id=".$user_id."");
+					if(($user = mysql_fetch_object($user_result)) || $action == "add") {
+						if($user != null && $action != "save-error") {
+							$user_showname = $user->showname;
+							$user_name = $user->name;
+							$user_email = $user->email;
+							$user_icq = $user->icq;
+							$user_admin = $user->admin;
+						}
+						$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"post\">
 				<input type=\"hidden\" name=\"site\" value=\"users\"/>\r\n";
-					if($action == "new" || $action == "add-error")
-						$out .= "\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"add\"/>\r\n";
-					else
-						$out .= "\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"save\"/>
+						if($action == "new" || $action == "add-error")
+							$out .= "\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"add\"/>\r\n";
+						else
+							$out .= "\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"save\"/>
 				<input type=\"hidden\" name=\"user_id\" value=\"".$user_id."\"/>\r\n";
-					$out.= "\t\t\t\t<table>
+						$out.= "\t\t\t\t<table>
 					<tr>
 						<td>
 							Anzeigename:\r\n";
-					if($action == "add-error" || $action == "save-error" && $user_showname == "")
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Anzeigename darf nicht leer sein.</span>\r\n";
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Der Name wird immer angezeigt, wenn der Benutzer z.B. einen News-Eintrag geschrieben hat.(Notwendig)</span>
+						if($action == "add-error" || $action == "save-error" && $user_showname == "")
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Anzeigename darf nicht leer sein.</span>\r\n";
+						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Der Name wird immer angezeigt, wenn der Benutzer z.B. einen News-Eintrag geschrieben hat.(Notwendig)</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"user_showname\" value=\"".$user_showname."\" />
@@ -644,9 +703,9 @@ function page_users() {
 					<tr>
 						<td>
 							Nick:\r\n";
-					if($action == "add-error" || $action == "save-error" && $user_name == "")
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Nick muss angegeben werden.</span>\r\n";		
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umständen komplizierten Namen,der angezeigt wird, eingeben muss.(Notwendig)</span>
+						if($action == "add-error" || $action == "save-error" && $user_name == "")
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Nick muss angegeben werden.</span>\r\n";		
+						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umständen komplizierten Namen,der angezeigt wird, eingeben muss.(Notwendig)</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"user_name\" value=\"".$user_name."\" />
@@ -655,9 +714,9 @@ function page_users() {
 					<tr>
 						<td>
 							E-Mail:\r\n";
-					if($action == "add-error" || $action == "save-error" && $user_email != "" && !isEMailAddress($user_email))
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene E-Mail-Adresse ist ungültig.</span>\r\n";		
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Über die E-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
+						if($action == "add-error" || $action == "save-error" && $user_email != "" && !isEMailAddress($user_email))
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene E-Mail-Adresse ist ungültig.</span>\r\n";		
+						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Über die E-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"user_email\" value=\"".$user_email."\" />
@@ -666,9 +725,9 @@ function page_users() {
 					<tr>
 						<td>
 							ICQ:\r\n";
-					if(($action == "add-error" || $action == "save-error") && ($user_icq != "" && !isIcqNumber($user_icq)))
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene ICQ-Nummer ist ungültig.</span>\r\n";		
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Die ICQ Nummer kann angegben werden, ist aber nicht dirngend notwendig.</span>
+						if(($action == "add-error" || $action == "save-error") && ($user_icq != "" && !isIcqNumber($user_icq)))
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene ICQ-Nummer ist ungültig.</span>\r\n";		
+						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Die ICQ Nummer kann angegben werden, ist aber nicht dirngend notwendig.</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"user_icq\" value=\"".$user_icq."\" maxlength=\"12\" />
@@ -677,27 +736,27 @@ function page_users() {
 					<tr>
 						<td>
 							Passwort:\r\n";
-					if(($action == "add-error" || $action == "save-error") && $user_password != "" && $user_password_confirm != "" && $user_password != $user_password_confirm) {
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort und seine Wiederholung sind ungleich</span>\r\n";
-						$user_password = "";
-						$user_password_confirm = "rep-wrong";
-					}
-					elseif($action == "add-error" && $user_password == "") {
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort fehlt.</span>\r\n";
-						$user_password_confirm = "";
-					}
-					elseif($action == "save-error" && $user_password_confirm != "" && $user_password == "") {
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort fehlt obwohl die Wiederholung angegeben war.</span>\r\n";
-						$user_password_confirm = "";
-					}
-					if($action == "add-error" && $user_password_confirm == "" && $user_password != "")
-						$user_password = "";
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit diesem Passwort kann sich der Benutzer in die geschützten Bereiche einloggen. (";
-					if($action == "save-error" || $action == "edit")
-						$out .= "Wenn beide Felder für das Passwort leer gelassen werden, wird das Passwort nicht verändert.";
-					elseif($action == "add-error" || $action == "add")
-						$out .= "Notwendig";
-					$out .= ")</span>
+						if(($action == "add-error" || $action == "save-error") && $user_password != "" && $user_password_confirm != "" && $user_password != $user_password_confirm) {
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort und seine Wiederholung sind ungleich</span>\r\n";
+							$user_password = "";
+							$user_password_confirm = "rep-wrong";
+						}
+						elseif($action == "add-error" && $user_password == "") {
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort fehlt.</span>\r\n";
+							$user_password_confirm = "";
+						}
+						elseif($action == "save-error" && $user_password_confirm != "" && $user_password == "") {
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort fehlt obwohl die Wiederholung angegeben war.</span>\r\n";
+							$user_password_confirm = "";
+						}
+						if($action == "add-error" && $user_password_confirm == "" && $user_password != "")
+							$user_password = "";
+						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit diesem Passwort kann sich der Benutzer in die geschützten Bereiche einloggen. (";
+						if($action == "save-error" || $action == "edit")
+							$out .= "Wenn beide Felder für das Passwort leer gelassen werden, wird das Passwort nicht verändert.";
+						elseif($action == "add-error" || $action == "add")
+							$out .= "Notwendig";
+						$out .= ")</span>
 						</td>
 						<td>
 							<input type=\"password\" name=\"user_password\" value=\""."\" />
@@ -706,19 +765,19 @@ function page_users() {
 					<tr>
 						<td>
 							Passwort wiederholen:\r\n";
-					if (($action == "add-error" || $action == "save-error") && $user_password == "" && $user_password_confirm == "rep-wrong") {
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort und seine Wiederholung sind ungleich</span>\r\n";
-						$user_password = "";
-						$user_password_confirm = "";
-					}
-					elseif($action == "add-error" && $user_password_confirm == "")
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Wiederholung des Passwortes fehlt.</span>\r\n";
-					elseif($action == "save-error" && $user_password != "" && $user_password_confirm == "")
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Wiederholung des Passwortes fehlt.</span>\r\n";
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Durch eine Wiederholung wird sichergestellt, dass man sich bei der Eingabe nicht vertippt hat.";
-					if($action == "add-error" || $action == "add")
-						$out .= "(Notwendig)";
-					$out .= "</span>
+						if (($action == "add-error" || $action == "save-error") && $user_password == "" && $user_password_confirm == "rep-wrong") {
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort und seine Wiederholung sind ungleich</span>\r\n";
+							$user_password = "";
+							$user_password_confirm = "";
+						}
+						elseif($action == "add-error" && $user_password_confirm == "")
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Wiederholung des Passwortes fehlt.</span>\r\n";
+						elseif($action == "save-error" && $user_password != "" && $user_password_confirm == "")
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Wiederholung des Passwortes fehlt.</span>\r\n";
+						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Durch eine Wiederholung wird sichergestellt, dass man sich bei der Eingabe nicht vertippt hat.";
+						if($action == "add-error" || $action == "add")
+							$out .= "(Notwendig)";
+						$out .= "</span>
 						</td>
 						<td>
 							<input type=\"password\" name=\"user_password_confirm\" value=\""."\" />
@@ -731,33 +790,30 @@ function page_users() {
 						</td>
 						<td>
 							<input type=\"checkbox\" name=\"user_admin\"";
-					if($user_admin == "y" || $user_admin == "on")
-						$out .= " checked=\"true\"";
-					$out .= "/>
+						if($user_admin == "y" || $user_admin == "on")
+							$out .= " checked=\"true\"";
+						$out .= "/>
 						</td>
 					</tr>
 					<tr>
 						<td colspan=\"2\">
 							<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />&nbsp;
 							<input type=\"submit\" class=\"button\" value=\"";
-							if($action == "new")
-								$out .= $admin_lang['create'];
-							else
-								$out .= $admin_lang['save'];
-					$out .= "\" />
+								if($action == "new")
+									$out .= $admin_lang['create'];
+								else
+									$out .= $admin_lang['save'];
+							$out .= "\" />
 						</td>
 					</tr>
 				</table>
 			</form>";
-				return $out;
+							return $out;
+						}
+					}
+				}
 			}
-		}
-		}
-		
-		
-	}
-	
-	$out .= "\t\t\t<table>
+			$out .= "\t\t\t<table>
 				<tr>
 					<td>#id</td>
 					<td>" . $admin_lang['name'] . "</td>
@@ -767,98 +823,99 @@ function page_users() {
 					<td colspan=\"2\">Aktionen</td>
 				</tr>\r\n";
 
-		$users_result = db_result("SELECT * FROM ".$d_pre."users");
-		while($user = mysql_fetch_object($users_result))
-		{
-			$out .= "\t\t\t\t<tr>
+			$users_result = db_result("SELECT * FROM ".DB_PREFIX."users");
+			while($user = mysql_fetch_object($users_result))
+			{
+				$out .= "\t\t\t\t<tr>
 					<td>#".$user->id."</td>
 					<td>$user->showname</td>
 					<td>$user->name</td>
 					<td>$user->email</td>
 					<td>";
-				if($user->admin == "y")
-					$out .= $admin_lang['yes'];
-				else
-					$out .= $admin_lang['no'];
-				$out .= "</td>
+					if($user->admin == "y")
+						$out .= $admin_lang['yes'];
+					else
+						$out .= $admin_lang['no'];
+					$out .= "</td>
 					<td><a href=\"".$PHP_SELF."?site=users&amp;action=edit&amp;user_id=".$user->id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a></td>
 					<td>";
 					
-				if($actual_user_id == $user->id)
-					$out .= "&nbsp;";
-				else
-					$out .= "<a href=\"".$PHP_SELF."?site=users&amp;action=delete&amp;user_id=".$user->id."\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
-				$out .= "</td>
+					if($actual_user_id == $user->id)
+						$out .= "&nbsp;";
+					else
+						$out .= "<a href=\"".$PHP_SELF."?site=users&amp;action=delete&amp;user_id=".$user->id."\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
+					$out .= "</td>
 				</tr>\r\n";
-		}
-		//<tr><td colspan="7"><a href="<?php echo $PHP_SELF."?newuser=y"; " />Neuen User hinzuf&uuml;gen</a></td></tr>
-		$out .= "\t\t\t</table>
+			}
+			//<tr><td colspan="7"><a href="<?php echo $PHP_SELF."?newuser=y"; " />Neuen User hinzuf&uuml;gen</a></td></tr>
+			$out .= "\t\t\t</table>
 			<a href=\"" . $PHP_SELF . "?site=users&amp;action=new\" title=\"Einen neuen Benutzer erstellen\">Neuen Benutzer erstellen</a>";
-		//( if(!isset($pw)) { $pw = "1"; } if(!isset($pwwdh)) { $pwwdh= "1"; } if($pw!=$pwwdh) { echo "<h3>Die Wiederhohlung des Passwortes ist fehlerhaft...<br>Aus diesem Grund wurde der Eintrag nicht gespeichert.</h3>"; } 
+			//( if(!isset($pw)) { $pw = "1"; } if(!isset($pwwdh)) { $pwwdh= "1"; } if($pw!=$pwwdh) { echo "<h3>Die Wiederhohlung des Passwortes ist fehlerhaft...<br>Aus diesem Grund wurde der Eintrag nicht gespeichert.</h3>"; } 
 	
-	return $out;
-}
-function page_preferences() {
-	global $d_pre, $setting, $PHP_SELF, $admin_lang, $_GET, $_POST;
-	
-	include("./system/settings.php");
-	$out = "";
-	$action = getSubmitVar("action");
-	if($action == "save") {
-		$tosave = array();
-		foreach($_GET as $key => $value) {
-			//$out .= $key."<br />";
-			if(substr($key, 0, 8) == "setting_"){
-				$name = substr($key, 8);
-				$_n = "internal_".$name;
-				global $$_n;
-				if($$_n != $_GET[$key])
-					$tosave[$name] = $value;
-			}
-			
-		}
-		foreach($_POST as $key => $value) {
-			//$out .= $key."<br />";
-			if(substr($key, 0, 8) == "setting_"){
-				$name = substr($key, 8);
-				$_n = "internal_".$name;
-				global $$_n;
-				if($$_n != $_POST[$key])
-					$tosave[$name] = $value;
-			}
-		}
-		foreach($tosave as $key => $value) {
-			$_n = "internal_".$key;
-			
-			if($$_n == "") {
-				$out .= "new: $key<br />";
-				$exists_result = db_result("SELECT * FROM " . $d_pre . "vars WHERE name='" . $key . "' ");
-				if($exists = mysql_fetch_object($exists_result))
-					db_result("UPDATE " . $d_pre . "vars SET `value` = '" . $value . "' WHERE name = '" . $key . "' LIMIT 1");
-				else
-					db_result("INSERT INTO " . $d_pre . "vars ( name , value ) VALUES ( '" . $key . "', '" . $value . "')");
-			}
-			else{
-				$out .= "update: $key<br />";
-				
-				db_result("UPDATE " . $d_pre . "vars SET `value` = '" . $value . "' WHERE name = '" . $key . "' LIMIT 1");
-
-			}
-		}
+		return $out;
 	}
-	else {
-		$out .= "\t\t\t<form action=\"" . $PHP_SELF . "\" method=\"post\">
+	
+	function page_preferences() {
+		global $setting, $PHP_SELF, $admin_lang, $_GET, $_POST;
+		
+		include("./system/settings.php");
+		$out = "";
+		$action = getSubmitVar("action");
+		if($action == "save") {
+			$tosave = array();
+			foreach($_GET as $key => $value) {
+				//$out .= $key."<br />";
+				if(substr($key, 0, 8) == "setting_"){
+					$name = substr($key, 8);
+					$_n = "internal_".$name;
+					global $$_n;
+					if($$_n != $_GET[$key])
+						$tosave[$name] = $value;
+				}
+			
+			}
+			foreach($_POST as $key => $value) {
+				//$out .= $key."<br />";
+				if(substr($key, 0, 8) == "setting_"){
+					$name = substr($key, 8);
+					$_n = "internal_".$name;
+					global $$_n;
+					if($$_n != $_POST[$key])
+						$tosave[$name] = $value;
+				}
+			}
+			foreach($tosave as $key => $value) {
+				$_n = "internal_".$key;
+				
+				if($$_n == "") {
+					$out .= "new: $key<br />";
+					$exists_result = db_result("SELECT * FROM " . DB_PREFIX . "vars WHERE name='" . $key . "' ");
+					if($exists = mysql_fetch_object($exists_result))
+						db_result("UPDATE " . DB_PREFIX . "vars SET `value` = '" . $value . "' WHERE name = '" . $key . "' LIMIT 1");
+					else
+						db_result("INSERT INTO " . DB_PREFIX . "vars ( name , value ) VALUES ( '" . $key . "', '" . $value . "')");
+				}
+				else {
+					$out .= "update: $key<br />";
+				
+					db_result("UPDATE " . DB_PREFIX . "vars SET `value` = '" . $value . "' WHERE name = '" . $key . "' LIMIT 1");
+
+				}
+			}
+		}
+		else {
+			$out .= "\t\t\t<form action=\"" . $PHP_SELF . "\" method=\"post\">
 				<input type=\"hidden\" name=\"site\" value=\"preferences\" />
 				<input type=\"hidden\" name=\"action\" value=\"save\" />
 				<table>\r\n";
-		foreach($setting as $key => $value) {
-			$__intern = "internal_".$key;
-			global $$__intern;
-			//$out .= $value[0] . "=" . $value[2]."-" . $$__n . "<br />";
-			$_value = $$__intern;
-			if($_value == "")
-				$_value = $value[2];
-			$out .= "\t\t\t\t\t<tr>
+			foreach($setting as $key => $value) {
+				$__intern = "internal_".$key;
+				global $$__intern;
+				//$out .= $value[0] . "=" . $value[2]."-" . $$__n . "<br />";
+				$_value = $$__intern;
+				if($_value == "")
+					$_value = $value[2];
+				$out .= "\t\t\t\t\t<tr>
 						<td>
 							" . $value[0] . ":
 							<span class=\"info\" >" . $value[1] . "</span>
@@ -867,8 +924,8 @@ function page_preferences() {
 							<input name=\"setting_" . $key . "\" value=\"" . $_value . "\" />
 						</td>
 					</tr>\r\n";
-		}
-		$out .= "\t\t\t\t\t<tr>
+			}
+			$out .= "\t\t\t\t\t<tr>
 						<td colspan=\"2\">
 						<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />
 						<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" />
@@ -876,7 +933,8 @@ function page_preferences() {
 					</tr>
 				</table>
 			</form>\r\n";
+		}
+		
+		return $out;
 	}
-	return $out;
-}
 ?>

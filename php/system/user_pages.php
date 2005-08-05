@@ -1,94 +1,108 @@
-<?
-function page_siteeditor() {
+<?php
+/*****************************************************************************
+ *
+ *  file		: user_pages.php
+ *  created		: 2005-07-16
+ *  copyright		: (C) 2005 The Comasy-Team
+ *  email		: comasy@williblau.de
+ *
+ *****************************************************************************/
+
+/*****************************************************************************
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *****************************************************************************/
+	function page_siteeditor() {
+		global $admin_lang, $_GET, $_POST, $actual_user_lang, $PHP_SELF, $actual_user_id;
 	
-	global $admin_lang, $_GET, $_POST, $d_pre, $actual_user_lang, $PHP_SELF,
-	$actual_user_id;
+		$action = "";
+		$out = "\t\t\t<h3>".$admin_lang['siteeditor']."</h3><hr />\r\n";
 	
-	$action = "";
-	$out = "\t\t\t<h3>".$admin_lang['siteeditor']."</h3><hr />\r\n";
+		$site_name = "";	
+		$site_title = "";
+		$site_lang = "";
+		$site_parentid = "";
 	
-	$site_name = "";	
-	$site_title = "";
-	$site_lang = "";
-	$site_parentid = "";
-	
-	if(isset($_GET['site_name']))
-		$site_name = $_GET['site_name'];
-	elseif(isset($_POST['site_name']))
-		$site_name = $_POST['site_name'];
-	
-	if(isset($_POST['site_title']))
-		$site_title = $_POST['site_title'];
-	elseif(isset($_GET['site_title']))
-		$site_title = $_GET['site_title'];
-	
-	if(isset($_POST['site_lang']))
-		$site_lang = $_POST['site_lang'];
-	elseif(isset($_GET['site_lang']))
-		$site_lang = $_GET['site_lang'];
-	
-	if(isset($_POST['site_parentid']))
-		$site_parentid = $_POST['site_parentid'];
-	elseif(isset($_GET['site_parentid']))
-		$site_parentid = $_GET['site_parentid'];
+		if(isset($_GET['site_name']))
+			$site_name = $_GET['site_name'];
+		elseif(isset($_POST['site_name']))
+			$site_name = $_POST['site_name'];
 		
-	if(isset($_GET['action']))
-		$action = $_GET['action'];
-	elseif(isset($_POST['action']))
-		$action = $_POST['action'];
-	if($action == "add_new") {
+		if(isset($_POST['site_title']))
+			$site_title = $_POST['site_title'];
+		elseif(isset($_GET['site_title']))
+			$site_title = $_GET['site_title'];
+	
+		if(isset($_POST['site_lang']))
+			$site_lang = $_POST['site_lang'];
+		elseif(isset($_GET['site_lang']))
+			$site_lang = $_GET['site_lang'];
 		
-		$site_edit = "";
-		
-		if(isset($_POST['site_edit']))
-			$site_edit = $_POST['site_edit'];
-		elseif(isset($_GET['site_edit']))
-			$site_edit = $_GET['site_edit'];
-		
-		if(isset($_POST['site_visible']))
-			$site_visible = $_POST['site_visible'];
-		elseif(isset($_GET['site_visible']))
-			$site_visible = $_GET['site_visible'];
-		
-		if($site_name != "" && $site_title != "" && $site_lang != "") {
+		if(isset($_POST['site_parentid']))
+			$site_parentid = $_POST['site_parentid'];
+		elseif(isset($_GET['site_parentid']))
+			$site_parentid = $_GET['site_parentid'];
 			
-			$a_visible = array("public","private","hidden");
-			$visible = $site_visible;
-			if(!in_array($site_visible, $a_visible))
-				$visible = $a_visible;
-			$site_name = strtolower($site_name);
-			$site_name = str_replace(" ", "_", $site_name);
-			$site_result = db_result("SELECT name FROM ".$d_pre."sitedata WHERE name='".$site_name."'");
-			if(!$site_data = mysql_fetch_object($site_result))
-				db_result("INSERT INTO ".$d_pre."sitedata (name, type, title, text, lang, html, parent_id, creator, date, visible) VALUES ('".$site_name."', 'text', '".$site_title."', '', '".$site_lang."', '', '".$site_parentid."', '".$actual_user_id."', '" . mktime() . "','" . $visible . "')");
-			if($site_edit == "on")
-				header("Location: ".$PHP_SELF."?site=siteeditor&action=edit&site_name=".$site_name);
-			else
-				header("Location: ".$PHP_SELF."?site=siteeditor");
+		if(isset($_GET['action']))
+			$action = $_GET['action'];
+		elseif(isset($_POST['action']))
+			$action = $_POST['action'];
+		if($action == "add_new") {
+			
+			$site_edit = "";
+			
+			if(isset($_POST['site_edit']))
+				$site_edit = $_POST['site_edit'];
+			elseif(isset($_GET['site_edit']))
+				$site_edit = $_GET['site_edit'];
+			
+			if(isset($_POST['site_visible']))
+				$site_visible = $_POST['site_visible'];
+			elseif(isset($_GET['site_visible']))
+				$site_visible = $_GET['site_visible'];
+			
+			if($site_name != "" && $site_title != "" && $site_lang != "") {	
+				$a_visible = array("public","private","hidden");
+				$visible = $site_visible;
+				if(!in_array($site_visible, $a_visible))
+					$visible = $a_visible;
+				$site_name = strtolower($site_name);
+				$site_name = str_replace(" ", "_", $site_name);
+				$site_result = db_result("SELECT name FROM ".DB_PREFIX."sitedata WHERE name='".$site_name."'");
+				if(!$site_data = mysql_fetch_object($site_result))
+					db_result("INSERT INTO ".DB_PREFIX."sitedata (name, type, title, text, lang, html, parent_id, creator, date, visible) VALUES ('".$site_name."', 'text', '".$site_title."', '', '".$site_lang."', '', '".$site_parentid."', '".$actual_user_id."', '" . mktime() . "','" . $visible . "')");
+				if($site_edit == "on")
+					header("Location: ".$PHP_SELF."?site=siteeditor&action=edit&site_name=".$site_name);
+				else
+					header("Location: ".$PHP_SELF."?site=siteeditor");
+			}
 		}
-	}
-	elseif($action == "update") {
-		$site_text = "";
-		if(isset($_GET['site_text']))
-			$site_text = $_GET['site_text'];
-		elseif(isset($_POST['site_text']))
-			$site_text = $_POST['site_text'];
-		if($site_name != "" && $site_title != "" && $site_text != "") {
-			$html = convertToPreHtml($site_text);
-			$old_result = db_result("SELECT * FROM " . $d_pre . "sitedata WHERE name='".$site_name."'");
-			if($old = mysql_fetch_object($old_result)) {
-				if(($old->text != $site_text) || ($old->title != $site_title)) {
-					if($old->text != "")
-						db_result("INSERT INTO " . $d_pre . "sitedata_history (name, title, text, lang, type, creator, date) VALUES ('".$site_name."', '".$old->title."', '".$old->text."', '".$old->lang."', 'text',".$old->creator.", '" . $old->date . "')");
-					db_result("UPDATE ".$d_pre."sitedata SET title= '".$site_title."', text='".$site_text."', html='".$html."', creator='".$actual_user_id."', date='" . mktime() . "' WHERE name='".$site_name."'");
-					$out = "Der Eintrag sollte gespeichert sein";
+		elseif($action == "update") {
+			$site_text = "";
+			if(isset($_GET['site_text']))
+				$site_text = $_GET['site_text'];
+			elseif(isset($_POST['site_text']))
+				$site_text = $_POST['site_text'];
+			if($site_name != "" && $site_title != "" && $site_text != "") {
+				$html = convertToPreHtml($site_text);
+				$old_result = db_result("SELECT * FROM " . DB_PREFIX . "sitedata WHERE name='".$site_name."'");
+				if($old = mysql_fetch_object($old_result)) {
+					if(($old->text != $site_text) || ($old->title != $site_title)) {
+						if($old->text != "")
+							db_result("INSERT INTO " . DB_PREFIX . "sitedata_history (name, title, text, lang, type, creator, date) VALUES ('".$site_name."', '".$old->title."', '".$old->text."', '".$old->lang."', 'text',".$old->creator.", '" . $old->date . "')");
+						db_result("UPDATE ".DB_PREFIX."sitedata SET title= '".$site_title."', text='".$site_text."', html='".$html."', creator='".$actual_user_id."', date='" . mktime() . "' WHERE name='".$site_name."'");
+						$out = "Der Eintrag sollte gespeichert sein";
+					}
 				}
 			}
 		}
-	}
-	elseif($action == "new") {
-		
-		$out .= "\t\t\t<form method=\"post\" action=\"".$PHP_SELF."\">
+		elseif($action == "new") {
+			
+			$out .= "\t\t\t<form method=\"post\" action=\"".$PHP_SELF."\">
 				<fieldset>
 				<legend>Neue Seite</legend>
 				<input type=\"hidden\" name=\"site\" value=\"siteeditor\" />
@@ -147,10 +161,10 @@ function page_siteeditor() {
 							<select name=\"site_parentid\">
 								<option value=\"0\">Keiner</option>\r\n";
 								
-		$sites = db_result("SELECT name, title,id FROM " . $d_pre . "sitedata WHERE visible!='deleted' ORDER BY name ASC");
-		while($siteinfo = mysql_fetch_object($sites))
-			$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->id."\">".$siteinfo->title."(".$siteinfo->name.")</option>\r\n";
-		$out .= "\t\t\t\t\t\t\t</select>
+			$sites = db_result("SELECT name, title,id FROM " . DB_PREFIX . "sitedata WHERE visible!='deleted' ORDER BY name ASC");
+			while($siteinfo = mysql_fetch_object($sites))
+				$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->id."\">".$siteinfo->title."(".$siteinfo->name.")</option>\r\n";
+			$out .= "\t\t\t\t\t\t\t</select>
 						</td>
 					</tr>
 					<tr>
@@ -170,54 +184,54 @@ function page_siteeditor() {
 			</fieldset>
 			</form>";
 	
-	}
-	elseif($action == "delete") {
-		$sure = "";
-		if(isset($_GET['sure']))
-			$sure = $_GET['sure'];
-		elseif(isset($_POST['sure']))
-			$sure = $_POST['sure'];
-		$exists_result = db_result("SELECT * FROM " . $d_pre . "sitedata WHERE name='" . $site_name . "'");
-		$exists = null;
-		if(!$exists = mysql_fetch_object($exists_result)) {
-			$out .= "\t\t\tDer Eintag existiert garnicht, das löschen kann man sich also sparen<br />
+		}
+		elseif($action == "delete") {
+			$sure = "";
+			if(isset($_GET['sure']))
+				$sure = $_GET['sure'];
+			elseif(isset($_POST['sure']))
+				$sure = $_POST['sure'];
+			$exists_result = db_result("SELECT * FROM " . DB_PREFIX . "sitedata WHERE name='" . $site_name . "'");
+			$exists = null;
+			if(!$exists = mysql_fetch_object($exists_result)) {
+				$out .= "\t\t\tDer Eintag existiert garnicht, das löschen kann man sich also sparen<br />
 			<a href=\"" . $PHP_SELF . "?site=siteeditor\">".$admin_lang['ok']."</a>";
-			return $out;
-		}
-		if($sure == 1) {
-			db_result("INSERT INTO " . $d_pre . "sitedata_history (name, title, text, lang, type, creator, date) VALUES ('".$site_name."', '".$exists->title."', '".$exists->text."', '".$exists->lang."', 'text',".$exists->creator.", '" . $exists->date . "')");
-			db_result("UPDATE ".$d_pre."sitedata SET  visible='deleted', text='', html='', creator='".$actual_user_id."', date='" . mktime() . "' WHERE name='".$site_name."'");
-			//TODO Backup old data and set as deleted
-		}
-		else {
-			$out .= "\t\t\tMöchten sie die Seite &quot;" . $exists->title . " (" . $exists->name . ")&quot; wirklich löschen?<br />
-			<a href=\"" . $PHP_SELF . "?site=siteeditor&amp;action=delete&amp;sure=1&amp;site_name=" . $site_name . "\">".$admin_lang['yes']."</a> <a href=\"" . $PHP_SELF . "?site=siteeditor\">".$admin_lang['no']."</a>";
-		}
-		
-	}
-	elseif($action == "tree") {
-		$site_show_hidden = "";
-		$site_show_deleted = "";
-		$show_deleted = false;
-		$show_hidden = false;
-		
-		if(isset($_GET['site_show_hidden']))
-			$site_show_hidden = $_GET['site_show_hidden'];
-		elseif(isset($_POST['site_show_hidden']))
-			$site_show_hidden = $_POST['site_show_hidden'];
+				return $out;
+			}
+			if($sure == 1) {
+				db_result("INSERT INTO " . DB_PREFIX . "sitedata_history (name, title, text, lang, type, creator, date) VALUES ('".$site_name."', '".$exists->title."', '".$exists->text."', '".$exists->lang."', 'text',".$exists->creator.", '" . $exists->date . "')");
+				db_result("UPDATE ".DB_PREFIX."sitedata SET  visible='deleted', text='', html='', creator='".$actual_user_id."', date='" . mktime() . "' WHERE name='".$site_name."'");
+				//TODO Backup old data and set as deleted
+			}
+			else {
+				$out .= "\t\t\tMöchten sie die Seite &quot;" . $exists->title . " (" . $exists->name . ")&quot; wirklich löschen?<br />
+				<a href=\"" . $PHP_SELF . "?site=siteeditor&amp;action=delete&amp;sure=1&amp;site_name=" . $site_name . "\">".$admin_lang['yes']."</a> <a href=\"" . $PHP_SELF . "?site=siteeditor\">".$admin_lang['no']."</a>";
+			}
 			
-		if(isset($_GET['site_show_deleted']))
-			$site_show_deleted = $_GET['site_show_deleted'];
-		elseif(isset($_POST['site_show_deleted']))
-			$site_show_deleted = $_POST['site_show_deleted'];
-		if($site_show_hidden == "on")
-			$show_hidden = true;
-		if($site_show_deleted == "on")
-			$show_deleted = true;
+		}
+		elseif($action == "tree") {
+			$site_show_hidden = "";
+			$site_show_deleted = "";
+			$show_deleted = false;
+			$show_hidden = false;
 			
-		if($site_lang == "")
-			$site_lang = $actual_user_lang;
-		$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"get\">
+			if(isset($_GET['site_show_hidden']))
+				$site_show_hidden = $_GET['site_show_hidden'];
+			elseif(isset($_POST['site_show_hidden']))
+				$site_show_hidden = $_POST['site_show_hidden'];
+				
+			if(isset($_GET['site_show_deleted']))
+				$site_show_deleted = $_GET['site_show_deleted'];
+			elseif(isset($_POST['site_show_deleted']))
+				$site_show_deleted = $_POST['site_show_deleted'];
+			if($site_show_hidden == "on")
+				$show_hidden = true;
+			if($site_show_deleted == "on")
+				$show_deleted = true;
+				
+			if($site_lang == "")
+				$site_lang = $actual_user_lang;
+			$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"get\">
 				<input type=\"hidden\" name=\"site\" value=\"siteeditor\" />
 				<input type=\"hidden\" name=\"action\" value=\"tree\" />
 				<select name=\"site_lang\">
@@ -228,12 +242,12 @@ function page_siteeditor() {
 				<input type=\"checkbox\" name=\"site_show_deleted\"";if($show_deleted) $out .= " checked=\"true\""; $out .= "/>" . $admin_lang['show deleted'] ."<br />
 				<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['show'] . "\" />
 			</form>";
-		$out .= generatesitestree(0, "\t\t\t", $site_lang, $show_deleted, $show_hidden);
-	}
-	elseif($action == "edit") {
-		$site_result = db_result("SELECT * FROM ".$d_pre."sitedata WHERE name='".$site_name."'");
-		if($site_data = mysql_fetch_object($site_result)){
-			$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"post\">
+			$out .= generatesitestree(0, "\t\t\t", $site_lang, $show_deleted, $show_hidden);
+		}
+		elseif($action == "edit") {
+			$site_result = db_result("SELECT * FROM ".DB_PREFIX."sitedata WHERE name='".$site_name."'");
+			if($site_data = mysql_fetch_object($site_result)){
+				$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"post\">
 				<input type=\"hidden\" name=\"site\" value=\"siteeditor\" />
 				<input type=\"hidden\" name=\"action\" value=\"update\" />
 				<input type=\"hidden\" name=\"site_name\" value=\"".$site_data->name."\" />
@@ -249,42 +263,42 @@ function page_siteeditor() {
 				<input type=\"reset\" value=\"Zurücksetzten\" />
 				<input type=\"submit\" value=\"Speichern\" />
 			</form>";
+			}
+			else
+				header("Location: ".$PHP_SELF."?site=siteeditor&action=new&site_name=".$site_name);
 		}
-		else
-			header("Location: ".$PHP_SELF."?site=siteeditor&action=new&site_name=".$site_name);
-	}
-	elseif($action == "info") {
-		if($site_name == "")
-			header("Location: " . $PHP_SELF . "?site=siteeditor");
-		$actual_result = db_result("SELECT * FROM " . $d_pre . "sitedata WHERE name='" . $site_name . "'");
-		$olds_result = db_result("SELECT * FROM " . $d_pre . "sitedata_history WHERE name='" . $site_name . "' ORDER BY id DESC");
-		$actual = mysql_fetch_object($actual_result);
-		$out .= "\t\t\tName: " . $actual->name . "<br />
+		elseif($action == "info") {
+			if($site_name == "")
+				header("Location: " . $PHP_SELF . "?site=siteeditor");
+			$actual_result = db_result("SELECT * FROM " . DB_PREFIX . "sitedata WHERE name='" . $site_name . "'");
+			$olds_result = db_result("SELECT * FROM " . DB_PREFIX . "sitedata_history WHERE name='" . $site_name . "' ORDER BY id DESC");
+			$actual = mysql_fetch_object($actual_result);
+			$out .= "\t\t\tName: " . $actual->name . "<br />
 			Titel: " . $actual->title . "<br />
 			<fieldset><legend>Text</legend>".$actual->html."</fieldset>
 			Letzte Veränderung von: ".getUserById($actual->creator)."<br />
 			insgesamt " . mysql_num_rows($olds_result) . " Veränderungen<br />";
-	}
-	else { // home site etc.
-		$out .= "<a href=\"".$PHP_SELF."?site=siteeditor&amp;action=new\">Neue Seite</a><br />\r\n";
-		$out .= "<a href=\"".$PHP_SELF."?site=siteeditor&amp;action=tree\">Übersicht</a><br />\r\n";
-		$out .= "<form action=\"" . $PHP_SELF . "\" method=\"get\">
+		}
+		else { // home site etc.
+			$out .= "<a href=\"".$PHP_SELF."?site=siteeditor&amp;action=new\">Neue Seite</a><br />\r\n";
+			$out .= "<a href=\"".$PHP_SELF."?site=siteeditor&amp;action=tree\">Übersicht</a><br />\r\n";
+			$out .= "<form action=\"" . $PHP_SELF . "\" method=\"get\">
 		<input type=\"hidden\" name=\"site\" value=\"siteeditor\" />
 		<input type=\"hidden\" name=\"action\" value=\"edit\" />
 		<select name=\"site_name\">";
-		$sites = db_result("SELECT name, title,id,visible FROM " . $d_pre . "sitedata WHERE visible!='deleted' ORDER BY name ASC");
-		while($siteinfo = mysql_fetch_object($sites))
-			$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->name."\">".$siteinfo->title."(".$siteinfo->name.")</option>\r\n";
-		$out .= "\t\t\t\t\t\t\t</select>
+			$sites = db_result("SELECT name, title,id,visible FROM " . DB_PREFIX . "sitedata WHERE visible!='deleted' ORDER BY name ASC");
+			while($siteinfo = mysql_fetch_object($sites))
+				$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->name."\">".$siteinfo->title."(".$siteinfo->name.")</option>\r\n";
+			$out .= "\t\t\t\t\t\t\t</select>
 		<input type=\"submit\" class=\"button\" value=\"Öffnen\" /> 
 		</form>";
+		}
+		return $out;
 	}
-	return $out;
-}
 
-function page_logout() {
-	global $actual_user_online_id;
-	setcookie("CMS_user_cookie",$actual_user_online_id."||", time() + 14400);
-	header("Location: index.php");
-}
+	function page_logout() {
+		global $actual_user_online_id;
+		setcookie('CMS_user_cookie', $actual_user_online_id . '||', time() + 14400);
+		header('Location: index.php');
+	}
 ?>

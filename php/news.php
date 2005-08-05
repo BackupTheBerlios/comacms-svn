@@ -1,24 +1,41 @@
 <?
-include_once("functions.php");
+/*****************************************************************************
+ *
+ *  file		: news.php
+ *  created		: 2005-06-18
+ *  copyright		: (C) 2005 The Comasy-Team
+ *  email		: comasy@williblau.de
+ *
+ *****************************************************************************/
 
-function getNews($last = 6)
-{
-global $d_pre;
-	$sql_str = "SELECT * FROM ".$d_pre."news ORDER BY date DESC LIMIT 0, ".$last."";
-	$result = db_result($sql_str);
-	$return_str = "";
-	while($row = mysql_fetch_object($result))
-	{
-		$return_str .= "\t\t\t<div class=\"news\">
+/*****************************************************************************
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *****************************************************************************/
+
+
+	function getNews($last = 6) {
+		include_once("functions.php");
+		$sql = "SELECT *
+			FROM " . DB_PREFIX . "news
+			ORDER BY date DESC LIMIT 0, $last";
+		$result = db_result($sql);
+		$return_str = '';
+		while($row = mysql_fetch_object($result)) {
+			$return_str .= "\t\t\t<div class=\"news\">
 				<div class=\"news-title\">
 					" . $row->title . "
-					<span class=\"news-title\">".date("d.m.Y H:i:s",$row->date)."</span>
+					<span class=\"news-title\">" . date('d.m.Y H:i:s', $row->date) . "</span>
 				</div>
 				" . nl2br($row->text) . "
 				<span class=\"news-author\">&nbsp;" . getUserByID($row->userid) . "</span>
 				</div>\r\n";	
-	}
+		}
 	
-	return $return_str;
-}
+		return $return_str;
+	}
 ?>

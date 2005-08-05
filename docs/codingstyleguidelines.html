@@ -2,8 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
   <head>
-    <title>CMS Coding-Style-Guidlines</title>
-    <meta name="AUTHOR" content="" />
+    <title>Comasy Coding-Style-Guidlines</title>
+    <meta name="AUTHOR" content="The Comasy-Team" />
+    
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
     /* <![CDATA[ */
@@ -27,14 +28,14 @@
       .code {
         border:1px dashed gray;
         margin-left: 2em;
-        width:48em;
+        width:49em;
         display: block;
       }
     /* ]]> */
     </style>
   </head>
   <body>
-    <h1>CMS Coding-Style-Guidlines</h1>
+    <h1>Comasy Coding-Style-Guidlines</h1>
     <div class="menue">
       <h2>Overview</h2>
       <ol>
@@ -49,12 +50,12 @@
     </div>
     <div class="infoblock" id="file_header">
       <h3>File Header</h3>
-      To make it easier to find something in a sourcefile every php-file(no html-files!) <b>must</b> have a header with the licence and a short summary about the file! This is the template of the header. You can find this template also in php-template.txt<br />
+      This is the template of the header. You can find this template also in <a href="./php-template.txt">php-template.txt</a><br />
       <pre class="code">
 /*****************************************************************************
  *
  *  file		: filename.php
- *  created		: 2005/08/02
+ *  created		: 2005-08-02
  *  copyright		: (C) 2005 The Comasy-Team
  *  email		: comasy@williblau.de
  *
@@ -67,22 +68,6 @@
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- *****************************************************************************/
-
-/*****************************************************************************
- *
- *  This is a short summary for this file....
- *  Bla Bla Bla :)
- *
  *****************************************************************************/</pre>
     </div>
     <div class="infoblock" id="comments">
@@ -91,9 +76,9 @@
       <br />
       If you give a comment, which explain what the code does you should write it so:
       <pre class="code">
- //
- //  This is a comment
- //
+	//
+	// This is a comment
+	//
 	echo 'hi im  the code, wich is explained';</pre>
       <br />
       If you describing a function it is good to comment the function like this
@@ -111,7 +96,7 @@
  
 	function testfunction($text, $integer) {
 		//
-		//  code
+		// code
 		//
 	}</pre>
     </div>
@@ -142,6 +127,17 @@
     </div>
     <div class="infoblock" id="strings">
       <h3>Strings</h3>
+      In PHP we have two different ways to declare strings either with single quotes or with double quotes. If your declaring a string with single quotes the compiler generates only a string. But if you declare a string with double quotes the compiler searches for variables and inserts their values into the string. Because we want a fast programm try to use single quotes so much as possible.
+      <pre class="code">
+	//
+	// bad
+	//
+	$string = "A string with no variable and dosen't need to handled like one";
+	
+	//
+	// good
+	//
+	$string = 'A string with no variable and is handled like one';</pre>
     </div>
     <div class="infoblock" id="xhtml">
       <h3>XHTML &#038; CSS</h3>

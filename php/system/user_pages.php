@@ -72,9 +72,9 @@
 					$visible = $a_visible;
 				$site_name = strtolower($site_name);
 				$site_name = str_replace(" ", "_", $site_name);
-				$site_result = db_result("SELECT name FROM ".DB_PREFIX."sitedata WHERE name='".$site_name."'");
+				$site_result = db_result("SELECT page_name FROM ".DB_PREFIX."pages_content WHERE page_name='".$site_name."'");
 				if(!$site_data = mysql_fetch_object($site_result))
-					db_result("INSERT INTO ".DB_PREFIX."sitedata (name, type, title, text, lang, html, parent_id, creator, date, visible) VALUES ('".$site_name."', 'text', '".$site_title."', '', '".$site_lang."', '', '".$site_parentid."', '".$actual_user_id."', '" . mktime() . "','" . $visible . "')");
+					db_result("INSERT INTO ".DB_PREFIX."pages_content (page_name, page_type, page_title, page_text, page_lang, page_html, page_parent_id, page_creator, page_created, page_visible) VALUES ('".$site_name."', 'text', '".$site_title."', '', '".$site_lang."', '', '".$site_parentid."', '".$actual_user_id."', '" . mktime() . "','" . $visible . "')");
 				if($site_edit == "on")
 					header("Location: ".$PHP_SELF."?site=siteeditor&action=edit&site_name=".$site_name);
 				else
@@ -89,12 +89,12 @@
 				$site_text = $_POST['site_text'];
 			if($site_name != "" && $site_title != "" && $site_text != "") {
 				$html = convertToPreHtml($site_text);
-				$old_result = db_result("SELECT * FROM " . DB_PREFIX . "sitedata WHERE name='".$site_name."'");
+				$old_result = db_result("SELECT * FROM " . DB_PREFIX . "pages_content WHERE page_name='".$site_name."'");
 				if($old = mysql_fetch_object($old_result)) {
-					if(($old->text != $site_text) || ($old->title != $site_title)) {
-						if($old->text != "")
+					if(($old->page_text != $site_text) || ($old->page_title != $site_title)) {
+						if($old->page_text != "")
 							db_result("INSERT INTO " . DB_PREFIX . "sitedata_history (name, title, text, lang, type, creator, date) VALUES ('".$site_name."', '".$old->title."', '".$old->text."', '".$old->lang."', 'text',".$old->creator.", '" . $old->date . "')");
-						db_result("UPDATE ".DB_PREFIX."sitedata SET title= '".$site_title."', text='".$site_text."', html='".$html."', creator='".$actual_user_id."', date='" . mktime() . "' WHERE name='".$site_name."'");
+						db_result("UPDATE ".DB_PREFIX."pages_content SET page_title= '".$site_title."', page_text='".$site_text."', page_html='".$html."', page_creator='".$actual_user_id."', page_created='" . mktime() . "' WHERE page_name='".$site_name."'");
 						$out = "Der Eintrag sollte gespeichert sein";
 					}
 				}
@@ -161,9 +161,9 @@
 							<select name=\"site_parentid\">
 								<option value=\"0\">Keiner</option>\r\n";
 								
-			$sites = db_result("SELECT name, title,id FROM " . DB_PREFIX . "sitedata WHERE visible!='deleted' ORDER BY name ASC");
+			$sites = db_result("SELECT page_name, page_title, page_id FROM " . DB_PREFIX . "pages_content WHERE page_visible!='deleted' ORDER BY page_name ASC");
 			while($siteinfo = mysql_fetch_object($sites))
-				$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->id."\">".$siteinfo->title."(".$siteinfo->name.")</option>\r\n";
+				$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->page_id."\">".$siteinfo->page_title."(".$siteinfo->page_name.")</option>\r\n";
 			$out .= "\t\t\t\t\t\t\t</select>
 						</td>
 					</tr>
@@ -191,7 +191,7 @@
 				$sure = $_GET['sure'];
 			elseif(isset($_POST['sure']))
 				$sure = $_POST['sure'];
-			$exists_result = db_result("SELECT * FROM " . DB_PREFIX . "sitedata WHERE name='" . $site_name . "'");
+			$exists_result = db_result("SELECT * FROM " . DB_PREFIX . "pages_content WHERE page_name='" . $site_name . "'");
 			$exists = null;
 			if(!$exists = mysql_fetch_object($exists_result)) {
 				$out .= "\t\t\tDer Eintag existiert garnicht, das löschen kann man sich also sparen<br />
@@ -200,11 +200,10 @@
 			}
 			if($sure == 1) {
 				db_result("INSERT INTO " . DB_PREFIX . "sitedata_history (name, title, text, lang, type, creator, date) VALUES ('".$site_name."', '".$exists->title."', '".$exists->text."', '".$exists->lang."', 'text',".$exists->creator.", '" . $exists->date . "')");
-				db_result("UPDATE ".DB_PREFIX."sitedata SET  visible='deleted', text='', html='', creator='".$actual_user_id."', date='" . mktime() . "' WHERE name='".$site_name."'");
-				//TODO Backup old data and set as deleted
+				db_result("UPDATE ".DB_PREFIX."pages_content SET  page_visible='deleted', page_text='', page_html='', page_creator='".$actual_user_id."', page_created='" . mktime() . "' WHERE page_name='".$site_name."'");
 			}
 			else {
-				$out .= "\t\t\tMöchten sie die Seite &quot;" . $exists->title . " (" . $exists->name . ")&quot; wirklich löschen?<br />
+				$out .= "\t\t\tMöchten sie die Seite &quot;" . $exists->page_title . " (" . $exists->page_name . ")&quot; wirklich löschen?<br />
 				<a href=\"" . $PHP_SELF . "?site=siteeditor&amp;action=delete&amp;sure=1&amp;site_name=" . $site_name . "\">".$admin_lang['yes']."</a> <a href=\"" . $PHP_SELF . "?site=siteeditor\">".$admin_lang['no']."</a>";
 			}
 			
@@ -245,13 +244,13 @@
 			$out .= generatesitestree(0, "\t\t\t", $site_lang, $show_deleted, $show_hidden);
 		}
 		elseif($action == "edit") {
-			$site_result = db_result("SELECT * FROM ".DB_PREFIX."sitedata WHERE name='".$site_name."'");
+			$site_result = db_result("SELECT * FROM ".DB_PREFIX."pages_content WHERE page_name='".$site_name."'");
 			if($site_data = mysql_fetch_object($site_result)){
 				$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"post\">
 				<input type=\"hidden\" name=\"site\" value=\"siteeditor\" />
 				<input type=\"hidden\" name=\"action\" value=\"update\" />
-				<input type=\"hidden\" name=\"site_name\" value=\"".$site_data->name."\" />
-				<input type=\"text\" name=\"site_title\" value=\"".$site_data->title."\" /><br />
+				<input type=\"hidden\" name=\"site_name\" value=\"".$site_data->page_name."\" />
+				<input type=\"text\" name=\"site_title\" value=\"".$site_data->page_title."\" /><br />
 				<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
 				<script type=\"text/javascript\" language=\"javascript\">
 					writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
@@ -259,7 +258,7 @@
 					writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
 					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
 				</script><br />
-				<textarea id=\"editor\" class=\"edit\" name=\"site_text\">".$site_data->text."</textarea>
+				<textarea id=\"editor\" class=\"edit\" name=\"site_text\">".$site_data->page_text."</textarea>
 				<input type=\"reset\" value=\"Zurücksetzten\" />
 				<input type=\"submit\" value=\"Speichern\" />
 			</form>";
@@ -270,13 +269,13 @@
 		elseif($action == "info") {
 			if($site_name == "")
 				header("Location: " . $PHP_SELF . "?site=siteeditor");
-			$actual_result = db_result("SELECT * FROM " . DB_PREFIX . "sitedata WHERE name='" . $site_name . "'");
+			$actual_result = db_result("SELECT * FROM " . DB_PREFIX . "pages_content WHERE page_name='" . $site_name . "'");
 			$olds_result = db_result("SELECT * FROM " . DB_PREFIX . "sitedata_history WHERE name='" . $site_name . "' ORDER BY id DESC");
 			$actual = mysql_fetch_object($actual_result);
-			$out .= "\t\t\tName: " . $actual->name . "<br />
-			Titel: " . $actual->title . "<br />
-			<fieldset><legend>Text</legend>".$actual->html."</fieldset>
-			Letzte Veränderung von: ".getUserById($actual->creator)."<br />
+			$out .= "\t\t\tName: " . $actual->page_name . "<br />
+			Titel: " . $actual->page_title . "<br />
+			<fieldset><legend>Text</legend>".$actual->page_html."</fieldset>
+			Letzte Veränderung von: ".getUserById($actual->page_creator)."<br />
 			insgesamt " . mysql_num_rows($olds_result) . " Veränderungen<br />";
 		}
 		else { // home site etc.
@@ -286,9 +285,9 @@
 		<input type=\"hidden\" name=\"site\" value=\"siteeditor\" />
 		<input type=\"hidden\" name=\"action\" value=\"edit\" />
 		<select name=\"site_name\">";
-			$sites = db_result("SELECT name, title,id,visible FROM " . DB_PREFIX . "sitedata WHERE visible!='deleted' ORDER BY name ASC");
+			$sites = db_result("SELECT page_name, page_title, page_id, page_visible FROM " . DB_PREFIX . "pages_content WHERE page_visible!='deleted' ORDER BY page_name ASC");
 			while($siteinfo = mysql_fetch_object($sites))
-				$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->name."\">".$siteinfo->title."(".$siteinfo->name.")</option>\r\n";
+				$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->page_name."\">".$siteinfo->page_title."(".$siteinfo->page_name.")</option>\r\n";
 			$out .= "\t\t\t\t\t\t\t</select>
 		<input type=\"submit\" class=\"button\" value=\"Öffnen\" /> 
 		</form>";

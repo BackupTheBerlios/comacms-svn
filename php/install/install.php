@@ -95,7 +95,7 @@ VALUES ('".$admin_name."', '".$admin_showname."', '".md5($admin_password)."', '"
 INSERT INTO ".$db_prefix."sitedata (name, title, text, lang, html, type)
 VALUES ('home', 'Hauptseite', 'das ist die Homeseite', 'de', 'Das ist die Homeseite', 'text');
 INSERT INTO ".$db_prefix."vars (name, value) VALUES ('style', 'clear');
-INSERT INTO ".$db_prefix."vars (name, value) VALUES ('default_site', 'home');
+INSERT INTO ".$db_prefix."vars (name, value) VALUES ('default_page', 'home');
 INSERT INTO ".$db_prefix."menue (link, text, new, orderid) VALUES ('l:home', 'Home', 'no', 0)";
 if($admin_name == "" || $admin_showname == "" || $admin_password == "")
 	die("Die Angaben zum Adminaccount sind unvollständig..");
@@ -113,13 +113,13 @@ foreach($queries as $query){
 }
 mysql_close($connection);
 $config_data = "<?php\n";
-$config_data .= "\$d_server = \"".$db_server."\";\n";
-$config_data .= "\$d_user   = \"".$db_user."\";\n";
-$config_data .= "\$d_pw     = \"".$db_password."\";\n";
-$config_data .= "\$d_base   = \"".$db_database."\";\n";
-$config_data .= "\$d_pre    = \"".$db_prefix."\";\n";
-$config_data .= "\n\ndefine(\"CMS_INSTALLED\", true);\n";
-$config_data .= "?".">";
+$config_data .= '$d_server = \'' . $db_server.'\';' . "\n";
+$config_data .= '$d_user   = \'' . $db_user . '\';' . "\n";
+$config_data .= '$d_pw     = \'' . $db_password . '\';' . "\n";
+$config_data .= '$d_base   = \'' . $db_database . '\';' . "\n";
+$config_data .= '$d_pre = \'' . $de_prefix . '\';' . "\n\n";
+$config_data .= 'define(\'COMASY_INSTALLED\', true);' . "\n";
+$config_data .= '?>';
 
 $fp = @fopen("../config.php", 'w');
 $result = @fputs($fp, $config_data, strlen($config_data));

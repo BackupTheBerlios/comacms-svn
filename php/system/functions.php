@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  *  file		: functions.php
- *  created		: 2005-06-18
+ *  created		: 2005-06-17
  *  copyright		: (C) 2005 The Comasy-Team
  *  email		: comasy@williblau.de
  *
@@ -170,33 +170,33 @@
 		$q_lang = "";
 		$q_visible = "";
 		if($lang != "")
-			$q_lang = "AND lang='" . $lang . "' ";
+			$q_lang = "AND page_lang='" . $lang . "' ";
 		if($show_deleted == false)
-			$q_visible = "AND visible!='deleted' ";
+			$q_visible = "AND page_visible!='deleted' ";
 		if($show_hidden == false)
-			$q_visible .= "AND visible!='hidden' ";	
-		$sql = "SELECT parent_id, name, id, title, visible
-			FROM " . DB_PREFIX . "sitedata
-			WHERE parent_id=$parentid ".$q_lang.$q_visible."
-			ORDER BY id ASC";
+			$q_visible .= "AND page_visible!='hidden' ";	
+		$sql = "SELECT page_parent_id, page_name, page_id, page_title, page_visible
+			FROM " . DB_PREFIX . "pages_content
+			WHERE page_parent_id=$parentid ".$q_lang.$q_visible."
+			ORDER BY page_id ASC";
 		$sites_result = db_result($sql);
 		if(mysql_num_rows($sites_result) != 0) {
 			$out .= "\r\n" . $tabs . "<ol>\r\n";
 			while($site_info = mysql_fetch_object($sites_result)) {
 				$out .= $tabs . "\t<li>";
-				if($site_info->visible == 'deleted')
+				if($site_info->page_visible == 'deleted')
 					$out .= '<strike>';
-				$out .= '<a href="' . $PHP_SELF . '?site=siteeditor&amp;action=info&amp;site_name=' . $site_info->name . '">' . $site_info->title . '</a> <em>[' . $site_info->name . ']</em> <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=info&amp;site_name=' . $site_info->name . '">[' . $admin_lang['info'] . ']</a>';
-				if($site_info->visible == 'deleted')
+				$out .= '<a href="' . $PHP_SELF . '?site=siteeditor&amp;action=info&amp;site_name=' . $site_info->page_name . '">' . $site_info->page_title . '</a> <em>[' . $site_info->page_name . ']</em> <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=info&amp;site_name=' . $site_info->page_name . '">[' . $admin_lang['info'] . ']</a>';
+				if($site_info->page_visible == 'deleted')
 					$out .= '</strike>';
 				else
-					$out .= ' <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=edit&amp;site_name=' . $site_info->name . '">[' . $admin_lang['edit'] . ']</a> <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=delete&amp;site_name=' . $site_info->name . '">[' . $admin_lang['delete'] . ']</a>';
+					$out .= ' <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=edit&amp;site_name=' . $site_info->page_name . '">[' . $admin_lang['edit'] . ']</a> <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=delete&amp;site_name=' . $site_info->page_name . '">[' . $admin_lang['delete'] . ']</a>';
 				
-				$out .= generatesitestree($site_info->id, $tabs . "\t\t", $lang, $show_deleted, $show_hidden) . "</li>\r\n";
+				$out .= generatesitestree($site_info->page_id, $tabs . "\t\t", $lang, $show_deleted, $show_hidden) . "</li>\r\n";
 				
 			}
 			$out .= $tabs . "</ol>\r\n";
-			$out .= substr($tabs,0,-1);
+			$out .= substr($tabs, 0, -1);
 		}
 		return $out;
 	}

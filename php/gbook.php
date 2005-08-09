@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  *  file		: gbook.php
- *  created		: 2005-06-18
+ *  created		: 2005-06-17
  *  copyright		: (C) 2005 The Comasy-Team
  *  email		: comasy@williblau.de
  *

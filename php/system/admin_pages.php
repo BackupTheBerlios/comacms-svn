@@ -36,7 +36,7 @@
 		//
 		// get the coutnt of all pages
 		//
-		$sitedata_result = db_result("SELECT * FROM " . DB_PREFIX . "sitedata");
+		$sitedata_result = db_result("SELECT * FROM " . DB_PREFIX . "pages_content");
 		$page_count = mysql_num_rows($sitedata_result);
 		//
 		// get the count of all registered users
@@ -69,6 +69,7 @@
 			<td>".$admin_lang['last action']."</td>
 			<td>".$admin_lang['language']."</td>
 			<td>".$admin_lang['ip']."</td>
+			<td>".$admin_lang['host']."</td>
 		</tr>";
 			//output all visitors surfing on the site
 			$users_online_result = db_result("SELECT * FROM ".DB_PREFIX."online");
@@ -80,9 +81,10 @@
 				$out .= "\t\t\t<tr>
 			<td>".$username."</td>
 			<td><a href=\"index.php?site=".$users_online->page."\">".$users_online->page."</a></td>
-			<td>".date("d.m.Y H:i:s", $users_online->lastaction)."</td>
-			<td>".$users_online->lang."</td>
-			<td>".$users_online->ip."</td>
+			<td>" . date("d.m.Y H:i:s", $users_online->lastaction)."</td>
+			<td>" . $users_online->lang . "</td>
+			<td>" . $users_online->ip . "</td>
+			<td>" . gethostbyaddr($users_online->ip) . "</td>
 		</tr>\r\n";
 			}
 
@@ -297,9 +299,9 @@
 		//
 		// list all available pages 
 		//
-		$site_result = db_result("SELECT * FROM ".DB_PREFIX."sitedata WHERE visible!='deleted' ORDER BY name ASC");
+		$site_result = db_result("SELECT * FROM ".DB_PREFIX."pages_content WHERE page_visible!='deleted' ORDER BY page_name ASC");
 		while($site_data = mysql_fetch_object($site_result))
-			$out.= "\t\t\t\t\t\t\t\t<option value=\"".$site_data->name."\">".$site_data->title."(".$site_data->name.")</option>\r\n";
+			$out.= "\t\t\t\t\t\t\t\t<option value=\"".$site_data->page_name."\">".$site_data->page_title."(".$site_data->page_name.")</option>\r\n";
 			
 		$out .="\t\t\t\t\t\t\t</select>
 						</td>
@@ -460,7 +462,10 @@
 					db_result("UPDATE ".DB_PREFIX."news SET title= '".$title."', text= '".$text."' WHERE id=".$id);
 			}
 		}
-		if($action != "edit") { // don't show the add new form if it is sure that the user wants to edit a news entrie
+		//
+		// don't show the add new form if it is sure that the user wants to edit a news entrie
+		//
+		if($action != "edit") {
 			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
 			<input type=\"hidden\" name=\"site\" value=\"news\" />
 			<input type=\"hidden\" name=\"action\" value=\"new\" />
@@ -619,7 +624,10 @@
 						$user_admin = "n";
 					$user_icq = str_replace("-", "", $user_icq);
 					$user_password = md5($user_password);
-					db_result("INSERT INTO ".DB_PREFIX."users (showname, name, password, registerdate, admin, icq, email) VALUES ('".$user_showname."', '".$user_name."', '".$user_password."', '".mktime()."', '".$user_admin."', '".$user_icq."', '".$user_email."')");
+					$sql = "INSERT INTO " . DB_PREFIX . "users
+						(user_showname, user_name, user_password, user_registerdate, user_admin, user_icq, user_email)
+						VALUES ('$user_showname', '$user_name', '$user_password', '" . mktime() . "', '$user_admin', '$user_icq', '$user_email')";
+					db_result($sql);
 				}
 			}
 			elseif($action == "save") {
@@ -631,11 +639,11 @@
 					$action = "save-error";
 				else {
 					if($user_password != "")
-						$user_password = ", password= '".md5($user_password)."'";
+						$user_password = ", user_password= '".md5($user_password)."'";
 					if($user_admin == "on")
-						$user_admin = "admin= 'y', ";
+						$user_admin = "user_admin= 'y', ";
 					else
-						$user_admin = "admin= 'n', ";
+						$user_admin = "user_admin= 'n', ";
 					$user_icq = str_replace("-", "", $user_icq);
 					if($user_id == $actual_user_id) {
 						if($user_password_confirm != "")
@@ -643,7 +651,10 @@
 						$actual_user_name = $user_name;
 						setcookie("CMS_user_cookie",$actual_user_online_id."|".$actual_user_name."|".$actual_user_passwd_md5 , time() + 14400);
 					}
-					db_result("UPDATE " . DB_PREFIX . "users SET showname= '" . $user_showname . "', name= '" . $user_name . "', email= '" . $user_email . "', " . $user_admin . "icq= '" . $user_icq . "'" . $user_password . " WHERE id=" . $user_id);
+					$sql = "UPDATE " . DB_PREFIX . "users
+					SET user_showname='$user_showname', user_name='$user_name', user_email='$user_email', $user_admin user_icq='$user_icq'$user_password
+					WHERE user_id=$user_id";
+					db_result($sql);
 				}
 			}
 			elseif($action == "delete") {
@@ -654,32 +665,43 @@
 						$sure = $_POST['sure'];
 					
 					if($sure == 1 && $user_id != $actual_user_id) {
-						$result = db_result("SELECT * FROM " . DB_PREFIX . "users WHERE id=" . $user_id);
-					$user = mysql_fetch_object($result);
-						db_result("DELETE FROM " . DB_PREFIX . "users WHERE id=" . $user_id);
-						$out .= "Der Benutzer &quot;" . $user->showname . "&quot; ist nun unwiederuflich gelöscht worden!<br />";
+						$sql = "SELECT *
+							FROM " . DB_PREFIX . "users
+							WHERE user_id=$user_id";
+						$result = db_result($sql);
+						$user = mysql_fetch_object($result);
+						$sql = "DELETE FROM " . DB_PREFIX . "users
+							WHERE user_id=$user_id";
+						db_result($sql);
+						$out .= "Der Benutzer &quot;" . $user->user_showname . "&quot; ist nun unwiederuflich gelöscht worden!<br />";
 					}
 				}
 				else {
-					$result = db_result("SELECT * FROM " . DB_PREFIX . "users WHERE id=" . $user_id);
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "users
+						WHERE user_id=$user_id";
+					$result = db_result($sql);
 					$user = mysql_fetch_object($result);
-					$out .= "Den Benutzer &quot;" . $user->showname . "&quot; unwiederruflich löschen?<br />
+					$out .= "Den Benutzer &quot;" . $user->user_showname . "&quot; unwiederruflich löschen?<br />
 				<a href=\"admin.php?site=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich Löschen\">" . $admin_lang['yes'] . "</a> &nbsp;&nbsp;&nbsp;&nbsp;
 				<a href=\"admin.php?site=users\" title=\"Nicht Löschen\">" . $admin_lang['no'] . "</a>";
 					
 					return $out;
 				}
 			}
-			if($action == "edit" || $action == "add" || $action == "add-error" || $action == "save-error") {
-				if($user_id != "0" || $action == "add" || $action == "add-error" || $action == "save-error") {
-					$user_result = db_result("SELECT * FROM ".DB_PREFIX."users WHERE id=".$user_id."");
-					if(($user = mysql_fetch_object($user_result)) || $action == "add") {
+			if($action == "edit" || $action == "new" || $action == "add-error" || $action == "save-error") {
+				if($user_id != "0" || $action == "new" || $action == "add-error" || $action == "save-error") {
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "users
+						WHERE user_id=$user_id";
+					$user_result = db_result($sql);
+					if(($user = mysql_fetch_object($user_result)) || $action == "new") {
 						if($user != null && $action != "save-error") {
-							$user_showname = $user->showname;
-							$user_name = $user->name;
-							$user_email = $user->email;
-							$user_icq = $user->icq;
-							$user_admin = $user->admin;
+							$user_showname = $user->user_showname;
+							$user_name = $user->user_name;
+							$user_email = $user->user_email;
+							$user_icq = $user->user_icq;
+							$user_admin = $user->user_admin;
 						}
 						$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"post\">
 				<input type=\"hidden\" name=\"site\" value=\"users\"/>\r\n";
@@ -823,27 +845,27 @@
 					<td colspan=\"2\">Aktionen</td>
 				</tr>\r\n";
 
-			$users_result = db_result("SELECT * FROM ".DB_PREFIX."users");
+			$users_result = db_result("SELECT * FROM " . DB_PREFIX . "users");
 			while($user = mysql_fetch_object($users_result))
 			{
 				$out .= "\t\t\t\t<tr>
-					<td>#".$user->id."</td>
-					<td>$user->showname</td>
-					<td>$user->name</td>
-					<td>$user->email</td>
+					<td>#".$user->user_id."</td>
+					<td>$user->user_showname</td>
+					<td>$user->user_name</td>
+					<td>$user->user_email</td>
 					<td>";
-					if($user->admin == "y")
+					if($user->user_admin == 'y')
 						$out .= $admin_lang['yes'];
 					else
 						$out .= $admin_lang['no'];
 					$out .= "</td>
-					<td><a href=\"".$PHP_SELF."?site=users&amp;action=edit&amp;user_id=".$user->id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a></td>
+					<td><a href=\"".$PHP_SELF."?site=users&amp;action=edit&amp;user_id=".$user->user_id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a></td>
 					<td>";
 					
-					if($actual_user_id == $user->id)
+					if($actual_user_id == $user->user_id)
 						$out .= "&nbsp;";
 					else
-						$out .= "<a href=\"".$PHP_SELF."?site=users&amp;action=delete&amp;user_id=".$user->id."\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
+						$out .= "<a href=\"".$PHP_SELF."?site=users&amp;action=delete&amp;user_id=".$user->user_id."\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
 					$out .= "</td>
 				</tr>\r\n";
 			}

@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  *  file		: counter.php
- *  created		: 2005-06-18
+ *  created		: 2005-06-17
  *  copyright		: (C) 2005 The Comasy-Team
  *  email		: comasy@williblau.de
  *
@@ -24,7 +24,7 @@
 	$internal_counter_online = 0;
 	$internal_counter_online_text = ":-)";
 
-	function counter_set($index_prefix, $site) {
+	function counter_set($site) {
 		global $internal_counter_all, $internal_counter_start_date, $actual_user_online_id, $actual_user_id,$actual_user_lang, $REMOTE_ADDR;
 		
 		//
@@ -45,13 +45,13 @@
 		$result_new = db_result("SELECT * FROM ".DB_PREFIX."online WHERE online_id='".$actual_user_online_id."'");
 		if($row3 = mysql_fetch_object($result_new)) {
 			$sql = "UPDATE " . DB_PREFIX . "online
-				SET lastaction='" . mktime() . "', userid=$actual_user_id, lang='$actual_user_lang', page='" . $index_prefix . $site . "'
+				SET lastaction='" . mktime() . "', userid=$actual_user_id, lang='$actual_user_lang', page='$site'
 				WHERE online_id='$actual_user_online_id'";
 			db_result($sql);
 		}
 		else {
 			$sql = "INSERT INTO " . DB_PREFIX . "online (online_id, ip, lastaction, page, userid, lang)
-			VALUES ('$actual_user_online_id', '$REMOTE_ADDR', '" . mktime() . "', '" . $index_prefix . $site . "', $actual_user_id, '$actual_user_lang')";
+			VALUES ('$actual_user_online_id', '$REMOTE_ADDR', '" . mktime() . "', '$site', $actual_user_id, '$actual_user_lang')";
 			db_result($sql);
 			$internal_counter_all++;
 		}

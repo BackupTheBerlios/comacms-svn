@@ -39,6 +39,7 @@
 	$admin_lang['last action'] = 'Letzte Aktion';
 	$admin_lang['not registered'] = 'nicht registriert';
 	$admin_lang['ip'] = 'IP-Adresse';
+	$admin_lang['host'] = 'Host';
 	$admin_lang['database size'] = 'Datenbankgröße';
 	$admin_lang['de'] = 'Deutsch';
 	$admin_lang['en'] = 'Englisch';

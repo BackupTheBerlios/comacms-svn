@@ -2,7 +2,7 @@
 /*****************************************************************************
  *
  *  file		: functions.php
- *  created		: 2005-06-18
+ *  created		: 2005-06-17
  *  copyright		: (C) 2005 The Comasy-Team
  *  email		: comasy@williblau.de
  *
@@ -82,23 +82,23 @@
 	}
 
 	function getUserIDByName($name) {
-		$sql = "SELECT name, id
+		$sql = "SELECT user_id
 			FROM " . DB_PREFIX . "users
-			WHERE name='$name'";
+			WHERE user_name='$name'";
 		$result = db_result($sql);
 		$row = mysql_fetch_object($result);
 		
-		return $row->id;
+		return $row->user_id;
 }
 
 	function getUserByID($id) {
-		$sql = "SELECT id, showname
+		$sql = "SELECT user_showname
 			FROM " . DB_PREFIX . "users
-			WHERE id = '$id'";
+			WHERE user_id = '$id'";
 		$result = db_result($sql);
 		$row = mysql_fetch_object($result);
 		
-		return $row->showname;
+		return $row->user_showname;
 	}
 
 	function replace_smilies($textdata) {
@@ -149,11 +149,11 @@
 			$menue_str = str_replace('[text]', $menue_data->text, $menue_str);
 			$link = $menue_data->link;
 			if(substr($link, 0, 2) == 'l:')
-				$link = @$internal_page_root . 'index.php?site=' . substr($link, 2);
+				$link = @$internal_page_root . 'index.php?page=' . substr($link, 2);
 			if(substr($link, 0, 2) == 'g:')
-				$link = @$internal_page_root . 'gallery.php?site=' . substr($link, 2);
+				$link = @$internal_page_root . 'gallery.php?page=' . substr($link, 2);
 			if(substr($link, 0, 2) == 'a:')
-				$link = @$internal_page_root . 'admin.php?site=' . substr($link, 2);
+				$link = @$internal_page_root . 'admin.php?page=' . substr($link, 2);
 				
 			$menue_str = str_replace('[link]', $link, $menue_str);
 			$new = $menue_data->new;
@@ -170,23 +170,23 @@
 
 	function position_to_root($id, $between = " > ") {
 		$sql = "SELECT *
-			FROM " . DB_PREFIX . "sitedata
-			WHERE id=$id";
+			FROM " . DB_PREFIX . "pages_content
+			WHERE page_id=$id";
 		$actual_result = db_result($sql);
 		$actual = mysql_fetch_object($actual_result);
-		$parent_id = $actual->parent_id;
+		$parent_id = $actual->page_parent_id;
 		$way_to_root = '';	
 		while($parent_id != 0) {
 			$sql = "SELECT *
-				FROM " . DB_PREFIX . "sitedata
-				WHERE id=$parent_id";
+				FROM " . DB_PREFIX . "pages_content
+				WHERE page_id=$parent_id";
 			$parent_result = db_result($sql);
 			$parent = mysql_fetch_object($parent_result);
-			$parent_id = $parent->parent_id;
-			$way_to_root = $parent->title . $between . $way_to_root;
+			$parent_id = $parent->page_parent_id;
+			$way_to_root = $parent->page_title . $between . $way_to_root;
 		}
 		
-		return $way_to_root . $actual->title;
+		return $way_to_root . $actual->page_title;
 	}
 /*****************************************************************************
  *
@@ -261,10 +261,10 @@
 		if($actual_user_name != "" && $actual_user_passwd_md5 != "") {
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "users
-				WHERE name='$actual_user_name' AND password='$actual_user_passwd_md5'";
+				WHERE user_name='$actual_user_name' AND user_password='$actual_user_passwd_md5'";
 			$original_user_result = db_result($sql);
 			$original_user = mysql_fetch_object($original_user_result);
-			if(@$original_user->name == '') {
+			if(@$original_user->user_name == '') {
 				$actual_user_is_admin = false;
 				$actual_user_is_logged_in = false;
 				$actual_user_name = '';
@@ -272,9 +272,9 @@
 			}
 			else {
 				$actual_user_is_logged_in = true;
-				$actual_user_showname = $original_user->showname;
-				$actual_user_id = $original_user->id;
-				if($original_user->admin == 'y')
+				$actual_user_showname = $original_user->user_showname;
+				$actual_user_id = $original_user->user_id;
+				if($original_user->user_admin == 'y')
 					$actual_user_is_admin = true;
 			}
 		}
@@ -288,5 +288,12 @@
 	
 	function isIcqNumber($icq) {
 		return eregi("^[0-9]{3}(\-)?[0-9]{3}(\-)?[0-9]{3}$", $icq);
+	}
+	
+	function endsWith($string, $search) {
+		return $search == substr($string, 0 - (strlen($search)));
+	}
+	function startsWith($string, $search) {
+		return 0 === strpos($string, $search);
 	}
 ?>

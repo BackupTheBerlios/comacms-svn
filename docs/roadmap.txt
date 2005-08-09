@@ -31,3 +31,4 @@
 	-spellcheck
 	-"more than one site"
 	-databasesizereducer
+	-newsletter

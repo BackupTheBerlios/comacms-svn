@@ -3,8 +3,8 @@
  *
  *  file		: user_pages.php
  *  created		: 2005-07-16
- *  copyright		: (C) 2005 The Comasy-Team
- *  email		: comasy@williblau.de
+ *  copyright		: (C) 2005 The ComaCMS-Team
+ *  email		: comacms@williblau.de
  *
  *****************************************************************************/
 
@@ -16,96 +16,93 @@
  *  (at your option) any later version.
  *
  *****************************************************************************/
-	function page_siteeditor() {
-		global $admin_lang, $_GET, $_POST, $actual_user_lang, $PHP_SELF, $actual_user_id;
-	
-		$action = "";
-		$out = "\t\t\t<h3>".$admin_lang['siteeditor']."</h3><hr />\r\n";
-	
-		$site_name = "";	
-		$site_title = "";
-		$site_lang = "";
-		$site_parentid = "";
-	
-		if(isset($_GET['site_name']))
-			$site_name = $_GET['site_name'];
-		elseif(isset($_POST['site_name']))
-			$site_name = $_POST['site_name'];
+	function page_pageeditor() {
+		global $admin_lang, $actual_user_lang, $_SERVER, $actual_user_id, $extern_action, $extern_page_name, $extern_page_title, $extern_page_lang, $extern_page_parentid, $extern_page_edit, $extern_page_text, $extern_page_visible, $extern_show_hidden_pages, $extern_show_deleted_pages, $extern_sure;
 		
-		if(isset($_POST['site_title']))
-			$site_title = $_POST['site_title'];
-		elseif(isset($_GET['site_title']))
-			$site_title = $_GET['site_title'];
-	
-		if(isset($_POST['site_lang']))
-			$site_lang = $_POST['site_lang'];
-		elseif(isset($_GET['site_lang']))
-			$site_lang = $_GET['site_lang'];
 		
-		if(isset($_POST['site_parentid']))
-			$site_parentid = $_POST['site_parentid'];
-		elseif(isset($_GET['site_parentid']))
-			$site_parentid = $_GET['site_parentid'];
+		$out = "\t\t\t<h3>" . $admin_lang['pageeditor'] . "</h3><hr />\r\n";
+				
+		//$page_name = $extern_page_name;	
+		//$page_title = $extern_page_title;
+		//$page_lang = $extern_page_lang;
+		//$page_parentid = '';
+		
+		if(!isset($extern_page_name))
+			$extern_page_name = '';
 			
-		if(isset($_GET['action']))
-			$action = $_GET['action'];
-		elseif(isset($_POST['action']))
-			$action = $_POST['action'];
-		if($action == "add_new") {
+		if(!isset($extern_page_title))
+			$extern_page_title = '';
+		
+		if(!isset($extern_page_lang))
+			$extern_page_lang = '';
 			
-			$site_edit = "";
+		if(!isset($extern_page_parentid))
+			$extern_page_parentid = '';
+		
+		if(!isset($extern_action))
+			$extern_action = '';
 			
-			if(isset($_POST['site_edit']))
-				$site_edit = $_POST['site_edit'];
-			elseif(isset($_GET['site_edit']))
-				$site_edit = $_GET['site_edit'];
+		
+		if($extern_action == 'add_new') {
 			
-			if(isset($_POST['site_visible']))
-				$site_visible = $_POST['site_visible'];
-			elseif(isset($_GET['site_visible']))
-				$site_visible = $_GET['site_visible'];
-			
-			if($site_name != "" && $site_title != "" && $site_lang != "") {	
-				$a_visible = array("public","private","hidden");
-				$visible = $site_visible;
-				if(!in_array($site_visible, $a_visible))
-					$visible = $a_visible;
-				$site_name = strtolower($site_name);
-				$site_name = str_replace(" ", "_", $site_name);
-				$site_result = db_result("SELECT page_name FROM ".DB_PREFIX."pages_content WHERE page_name='".$site_name."'");
-				if(!$site_data = mysql_fetch_object($site_result))
-					db_result("INSERT INTO ".DB_PREFIX."pages_content (page_name, page_type, page_title, page_text, page_lang, page_html, page_parent_id, page_creator, page_created, page_visible) VALUES ('".$site_name."', 'text', '".$site_title."', '', '".$site_lang."', '', '".$site_parentid."', '".$actual_user_id."', '" . mktime() . "','" . $visible . "')");
-				if($site_edit == "on")
-					header("Location: ".$PHP_SELF."?site=siteeditor&action=edit&site_name=".$site_name);
+			if(!isset($extern_page_edit))
+				$extern_page_edit = '';
+			if(!isset($extern_page_visible))
+				$extern_page_visible = '';
+						
+			if($extern_page_name != '' && $extern_page_title != '' && $extern_page_lang != '') {
+				$a_visible = array('public', 'private', 'hidden');
+				if(!in_array($extern_page_visible, $a_visible))
+					$extern_page_visible = $a_visible[0];
+				$extern_page_name = strtolower($extern_page_name);
+				$extern_page_name = str_replace(' ', '_', $extern_page_name);
+				$sql = "SELECT page_name
+					FROM " . DB_PREFIX . "pages_content
+					WHERE page_name='$extern_page_name'";
+				$page_result = db_result($sql);
+				if(!$page_data = mysql_fetch_object($page_result)) {
+					$sql = "INSERT INTO " . DB_PREFIX . "pages_content (page_name, page_type, page_title, page_text, page_lang, page_html, page_parent_id, page_creator, page_created, page_visible)
+					VALUES ('$extern_page_name', 'text', '$extern_page_title', '', '$extern_page_lang', '', '$extern_page_parentid', '$actual_user_id', '" . mktime() . "','$extern_page_visible')";
+					db_result($sql);
+				}
+				if($extern_page_edit == 'on')
+					header('Location: ' . $_SERVER['PHP_SELF'] . '?page=pageeditor&action=edit&page_name=' . $extern_page_name);
 				else
-					header("Location: ".$PHP_SELF."?site=siteeditor");
+					header('Location: ' . $_SERVER['PHP_SELF'] . '?page=pageeditor');
 			}
 		}
-		elseif($action == "update") {
-			$site_text = "";
-			if(isset($_GET['site_text']))
-				$site_text = $_GET['site_text'];
-			elseif(isset($_POST['site_text']))
-				$site_text = $_POST['site_text'];
-			if($site_name != "" && $site_title != "" && $site_text != "") {
-				$html = convertToPreHtml($site_text);
-				$old_result = db_result("SELECT * FROM " . DB_PREFIX . "pages_content WHERE page_name='".$site_name."'");
+		elseif($extern_action == 'update') {
+			if(!isset($extern_page_text))
+				$extern_page_text = '';
+			
+			if($extern_page_name != '' && $extern_page_title != '' && $extern_page_text != '') {
+				$html = convertToPreHtml($extern_page_text);
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "pages_content
+					WHERE page_name='$extern_page_name'";
+				$old_result = db_result($sql);
 				if($old = mysql_fetch_object($old_result)) {
-					if(($old->page_text != $site_text) || ($old->page_title != $site_title)) {
-						if($old->page_text != "")
-							db_result("INSERT INTO " . DB_PREFIX . "sitedata_history (name, title, text, lang, type, creator, date) VALUES ('".$site_name."', '".$old->title."', '".$old->text."', '".$old->lang."', 'text',".$old->creator.", '" . $old->date . "')");
-						db_result("UPDATE ".DB_PREFIX."pages_content SET page_title= '".$site_title."', page_text='".$site_text."', page_html='".$html."', page_creator='".$actual_user_id."', page_created='" . mktime() . "' WHERE page_name='".$site_name."'");
-						$out = "Der Eintrag sollte gespeichert sein";
+					if(($old->page_text != $extern_page_text) || ($old->page_title != $extern_page_title)) {
+						if($old->page_text != '') {
+							$sql = "INSERT INTO " . DB_PREFIX . "sitedata_history (name, title, text, lang, type, creator, date)
+							VALUES ('$extern_page_name', '$old->page_title', '$old->page_text', '$old->page_lang', 'text',$old->page_creator, '$old->page_created')";
+							db_result($sql);
+						}
+						$sql = "UPDATE " . DB_PREFIX . "pages_content
+							SET page_title= '$extern_page_title', page_text='$extern_page_text', page_html='$html', page_creator='$actual_user_id', page_created='" . mktime() . "'
+							WHERE page_name='$extern_page_name'";
+						db_result($sql);
+						$out = 'Der Eintrag sollte gespeichert sein';
 					}
 				}
 			}
 		}
-		elseif($action == "new") {
+		elseif($extern_action == 'new') {
 			
-			$out .= "\t\t\t<form method=\"post\" action=\"".$PHP_SELF."\">
+			$out .= "\t\t\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">
 				<fieldset>
 				<legend>Neue Seite</legend>
-				<input type=\"hidden\" name=\"site\" value=\"siteeditor\" />
+				<input type=\"hidden\" name=\"page\" value=\"pageeditor\" />
 				<input type=\"hidden\" name=\"action\" value=\"add_new\" />
 				<table>
 					<tr>
@@ -114,7 +111,7 @@
 							<span class=\"info\">Mit diesem Kürzel wird auf die Seite zugegriffen und dient es zur eindeutigen Identifizierung der Seite.</span>
 						</td>
 						<td>
-							<input type=\"text\" name=\"site_name\" value=\"".$site_name."\" maxlength=\"20\" />
+							<input type=\"text\" name=\"page_name\" value=\"" . $extern_page_name . "\" maxlength=\"20\" />
 						</td>
 					</tr>
 					<tr>
@@ -123,7 +120,7 @@
 							<span class=\"info\">Der Titel wird später in der Titelleiste des Browsers angezeigt.</span>
 						</td>
 						<td>
-							<input type=\"text\" name=\"site_title\" maxlength=\"100\" />
+							<input type=\"text\" name=\"page_title\" maxlength=\"100\" />
 						</td>
 					</tr>
 					<tr>
@@ -132,7 +129,7 @@
 							<span class=\"info\">Der Text soll in der gewählten Sprache geschrieben werden.</span>
 						</td>
 						<td>
-							<select name=\"site_lang\">
+							<select name=\"page_lang\">
 								<option value=\"de\">Deutsch</option>
 								<option value=\"en\">Englisch</option>
 							</select>
@@ -145,7 +142,7 @@
 							Jeder (öffentlich), nur ausgewählte Benutzer (privat) oder soll die Seite nur erstellt werden um sie später zu veröffentlichen (versteckt)?</span>
 						</td>
 						<td>
-							<select name=\"site_visible\">
+							<select name=\"page_visible\">
 								<option value=\"public\">Öffentlich</option>
 								<option value=\"private\">Privat</option>
 								<option value=\"hidden\">Versteckt</option>
@@ -158,12 +155,14 @@
 							<span class=\"info\">TODO</span>	
 						</td>
 						<td>
-							<select name=\"site_parentid\">
+							<select name=\"page_parentid\">
 								<option value=\"0\">Keiner</option>\r\n";
-								
-			$sites = db_result("SELECT page_name, page_title, page_id FROM " . DB_PREFIX . "pages_content WHERE page_visible!='deleted' ORDER BY page_name ASC");
-			while($siteinfo = mysql_fetch_object($sites))
-				$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->page_id."\">".$siteinfo->page_title."(".$siteinfo->page_name.")</option>\r\n";
+			$sql = "SELECT page_name, page_title, page_id
+				FROM " . DB_PREFIX . "pages_content WHERE page_visible!='deleted'
+				ORDER BY page_name ASC";
+			$pages = db_result($sql);
+			while($pageinfo = mysql_fetch_object($pages))
+				$out .= "\t\t\t\t\t\t<option value=\"" . $pageinfo->page_id . "\">" . $pageinfo->page_title . "(" . $pageinfo->page_name . ")</option>\r\n";
 			$out .= "\t\t\t\t\t\t\t</select>
 						</td>
 					</tr>
@@ -172,7 +171,7 @@
 							Bearbeiten?
 							<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die Übersichtseite zurückgekehrt werden?</span>
 						</td>
-						<td><input type=\"checkbox\" name=\"site_edit\" checked=\"true\"/></td>
+						<td><input type=\"checkbox\" name=\"page_edit\" checked=\"true\"/></td>
 					</tr>
 					<tr>
 						<td colspan=\"2\">
@@ -185,72 +184,70 @@
 			</form>";
 	
 		}
-		elseif($action == "delete") {
-			$sure = "";
-			if(isset($_GET['sure']))
-				$sure = $_GET['sure'];
-			elseif(isset($_POST['sure']))
-				$sure = $_POST['sure'];
-			$exists_result = db_result("SELECT * FROM " . DB_PREFIX . "pages_content WHERE page_name='" . $site_name . "'");
+		elseif($extern_action == 'delete') {
+			
+			if(!isset($extern_sure))
+				$extern_sure = '';
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "pages_content
+				WHERE page_name='$extern_page_name'";
+			$exists_result = db_result($sql);
 			$exists = null;
 			if(!$exists = mysql_fetch_object($exists_result)) {
 				$out .= "\t\t\tDer Eintag existiert garnicht, das löschen kann man sich also sparen<br />
-			<a href=\"" . $PHP_SELF . "?site=siteeditor\">".$admin_lang['ok']."</a>";
+			<a href=\"" . $PHP_SELF . "?page=pageeditor\">".$admin_lang['ok']."</a>";
 				return $out;
 			}
-			if($sure == 1) {
-				db_result("INSERT INTO " . DB_PREFIX . "sitedata_history (name, title, text, lang, type, creator, date) VALUES ('".$site_name."', '".$exists->title."', '".$exists->text."', '".$exists->lang."', 'text',".$exists->creator.", '" . $exists->date . "')");
-				db_result("UPDATE ".DB_PREFIX."pages_content SET  page_visible='deleted', page_text='', page_html='', page_creator='".$actual_user_id."', page_created='" . mktime() . "' WHERE page_name='".$site_name."'");
+			if($extern_sure == 1) {
+				$sql = "INSERT INTO " . DB_PREFIX . "sitedata_history (name, title, text, lang, type, creator, date)
+					VALUES ('$extern_page_name', '$exists->page_title', '$exists->page_text', '$exists->page_lang', 'text', $exists->page_creator, '$exists->page_created')";
+				db_result($sql);
+				$sql = "UPDATE " . DB_PREFIX . "pages_content
+					SET  page_visible='deleted', page_text='', page_html='', page_creator='$actual_user_id', page_created='" . mktime() . "'
+					WHERE page_name='$extern_page_name'";
+				db_result($sql);
 			}
 			else {
 				$out .= "\t\t\tMöchten sie die Seite &quot;" . $exists->page_title . " (" . $exists->page_name . ")&quot; wirklich löschen?<br />
-				<a href=\"" . $PHP_SELF . "?site=siteeditor&amp;action=delete&amp;sure=1&amp;site_name=" . $site_name . "\">".$admin_lang['yes']."</a> <a href=\"" . $PHP_SELF . "?site=siteeditor\">".$admin_lang['no']."</a>";
+				<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pageeditor&amp;action=delete&amp;sure=1&amp;page_name=" . $extern_page_name . "\">" . $admin_lang['yes'] . "</a> <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pageeditor\">" . $admin_lang['no'] . "</a>";
 			}
 			
 		}
-		elseif($action == "tree") {
-			$site_show_hidden = "";
-			$site_show_deleted = "";
+		elseif($extern_action == 'tree') {
 			$show_deleted = false;
 			$show_hidden = false;
 			
-			if(isset($_GET['site_show_hidden']))
-				$site_show_hidden = $_GET['site_show_hidden'];
-			elseif(isset($_POST['site_show_hidden']))
-				$site_show_hidden = $_POST['site_show_hidden'];
+			if(isset($extern_show_hidden_pages))
+				$show_hidden = $extern_show_hidden_pages == 'on';
+			if(isset($extern_show_deleted_pages))
+				$show_deleted = $extern_show_deleted_pages == 'on';
 				
-			if(isset($_GET['site_show_deleted']))
-				$site_show_deleted = $_GET['site_show_deleted'];
-			elseif(isset($_POST['site_show_deleted']))
-				$site_show_deleted = $_POST['site_show_deleted'];
-			if($site_show_hidden == "on")
-				$show_hidden = true;
-			if($site_show_deleted == "on")
-				$show_deleted = true;
-				
-			if($site_lang == "")
-				$site_lang = $actual_user_lang;
-			$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"get\">
-				<input type=\"hidden\" name=\"site\" value=\"siteeditor\" />
+			if($extern_page_lang == '')
+				$extern_page_lang = $actual_user_lang;
+			$out .= "\t\t\t<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"get\">
+				<input type=\"hidden\" name=\"page\" value=\"pageeditor\" />
 				<input type=\"hidden\" name=\"action\" value=\"tree\" />
-				<select name=\"site_lang\">
-					<option value=\"de\"";if($site_lang == "de") $out .= " selected=\"selected\""; $out .=">".$admin_lang['de']."</option>
-					<option value=\"en\"";if($site_lang == "en") $out .= " selected=\"selected\""; $out .=">".$admin_lang['en']."</option>
+				<select name=\"page_lang\">
+					<option value=\"de\"";if($extern_page_lang == "de") $out .= " selected=\"selected\""; $out .=">".$admin_lang['de']."</option>
+					<option value=\"en\"";if($extern_page_lang == "en") $out .= " selected=\"selected\""; $out .=">".$admin_lang['en']."</option>
 				</select><br />
-				<input type=\"checkbox\" name=\"site_show_hidden\"";if($show_hidden) $out .= " checked=\"true\""; $out .= "/>" . $admin_lang['show hidden'] ."<br />
-				<input type=\"checkbox\" name=\"site_show_deleted\"";if($show_deleted) $out .= " checked=\"true\""; $out .= "/>" . $admin_lang['show deleted'] ."<br />
+				<input type=\"checkbox\" name=\"show_hidden_pages\"";if($show_hidden) $out .= " checked=\"true\""; $out .= "/>" . $admin_lang['show hidden'] ."<br />
+				<input type=\"checkbox\" name=\"show_deleted_pages\"";if($show_deleted) $out .= " checked=\"true\""; $out .= "/>" . $admin_lang['show deleted'] ."<br />
 				<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['show'] . "\" />
 			</form>";
-			$out .= generatesitestree(0, "\t\t\t", $site_lang, $show_deleted, $show_hidden);
+			$out .= generatesitestree(0, "\t\t\t", $extern_page_lang, $show_deleted, $show_hidden);
 		}
-		elseif($action == "edit") {
-			$site_result = db_result("SELECT * FROM ".DB_PREFIX."pages_content WHERE page_name='".$site_name."'");
-			if($site_data = mysql_fetch_object($site_result)){
-				$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"post\">
-				<input type=\"hidden\" name=\"site\" value=\"siteeditor\" />
+		elseif($extern_action == 'edit') {
+			$sql = "SELECT *
+			FROM " . DB_PREFIX . "pages_content
+			WHERE page_name='$extern_page_name'";
+			$page_result = db_result($sql);
+			if($page_data = mysql_fetch_object($page_result)){
+				$out .= "\t\t\t<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
+				<input type=\"hidden\" name=\"page\" value=\"pageeditor\" />
 				<input type=\"hidden\" name=\"action\" value=\"update\" />
-				<input type=\"hidden\" name=\"site_name\" value=\"".$site_data->page_name."\" />
-				<input type=\"text\" name=\"site_title\" value=\"".$site_data->page_title."\" /><br />
+				<input type=\"hidden\" name=\"page_name\" value=\"" . $page_data->page_name . "\" />
+				<input type=\"text\" name=\"page_title\" value=\"" . $page_data->page_title . "\" /><br />
 				<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
 				<script type=\"text/javascript\" language=\"javascript\">
 					writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
@@ -258,19 +255,26 @@
 					writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
 					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
 				</script><br />
-				<textarea id=\"editor\" class=\"edit\" name=\"site_text\">".$site_data->page_text."</textarea>
+				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">".$page_data->page_text."</textarea>
 				<input type=\"reset\" value=\"Zurücksetzten\" />
 				<input type=\"submit\" value=\"Speichern\" />
 			</form>";
 			}
 			else
-				header("Location: ".$PHP_SELF."?site=siteeditor&action=new&site_name=".$site_name);
+				header("Location: " . $_SERVER['PHP_SELF'] . "?page=pageeditor&action=new&page_name=".$extern_page_name);
 		}
-		elseif($action == "info") {
-			if($site_name == "")
-				header("Location: " . $PHP_SELF . "?site=siteeditor");
-			$actual_result = db_result("SELECT * FROM " . DB_PREFIX . "pages_content WHERE page_name='" . $site_name . "'");
-			$olds_result = db_result("SELECT * FROM " . DB_PREFIX . "sitedata_history WHERE name='" . $site_name . "' ORDER BY id DESC");
+		elseif($extern_action == 'info') {
+			if($extern_page_name == '')
+				header("Location: " . $_SERVER['PHP_SELF'] . "?page=pageeditor");
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "pages_content
+				WHERE page_name='$extern_page_name'";
+			$actual_result = db_result($sql);
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "sitedata_history
+				WHERE name='$extern_page_name'
+				ORDER BY id DESC";
+			$olds_result = db_result($sql);
 			$actual = mysql_fetch_object($actual_result);
 			$out .= "\t\t\tName: " . $actual->page_name . "<br />
 			Titel: " . $actual->page_title . "<br />
@@ -279,15 +283,19 @@
 			insgesamt " . mysql_num_rows($olds_result) . " Veränderungen<br />";
 		}
 		else { // home site etc.
-			$out .= "<a href=\"".$PHP_SELF."?site=siteeditor&amp;action=new\">Neue Seite</a><br />\r\n";
-			$out .= "<a href=\"".$PHP_SELF."?site=siteeditor&amp;action=tree\">Übersicht</a><br />\r\n";
-			$out .= "<form action=\"" . $PHP_SELF . "\" method=\"get\">
-		<input type=\"hidden\" name=\"site\" value=\"siteeditor\" />
+			$out .= "<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pageeditor&amp;action=new\">Neue Seite</a><br />\r\n";
+			$out .= "<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pageeditor&amp;action=tree\">Übersicht</a><br />\r\n";
+			$out .= "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"get\">
+		<input type=\"hidden\" name=\"page\" value=\"pageeditor\" />
 		<input type=\"hidden\" name=\"action\" value=\"edit\" />
-		<select name=\"site_name\">";
-			$sites = db_result("SELECT page_name, page_title, page_id, page_visible FROM " . DB_PREFIX . "pages_content WHERE page_visible!='deleted' ORDER BY page_name ASC");
+		<select name=\"page_name\">";
+			$sql = "SELECT page_name, page_title, page_id
+				FROM " . DB_PREFIX . "pages_content
+				WHERE page_visible!='deleted'
+				ORDER BY page_name ASC";
+			$sites = db_result($sql);
 			while($siteinfo = mysql_fetch_object($sites))
-				$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->page_name."\">".$siteinfo->page_title."(".$siteinfo->page_name.")</option>\r\n";
+				$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->page_name."\">" . $siteinfo->page_title . "(".$siteinfo->page_name.")</option>\r\n";
 			$out .= "\t\t\t\t\t\t\t</select>
 		<input type=\"submit\" class=\"button\" value=\"Öffnen\" /> 
 		</form>";

@@ -8,10 +8,10 @@
 <body>
 <?
 
-$create = "DROP TABLE IF EXISTS ".$db_prefix."vars;
-CREATE TABLE ".$db_prefix."vars (
-  name varchar(255) NOT NULL default '',
-  value varchar(255) NOT NULL default '',
+$create = "DROP TABLE IF EXISTS " . $db_prefix. "config;
+CREATE TABLE " . $db_prefix . "vars (
+  config_name varchar(255) NOT NULL default '',
+  config_value varchar(255) NOT NULL default '',
   PRIMARY KEY  (name)
 );
 DROP TABLE IF EXISTS ".$db_prefix."menue;
@@ -24,29 +24,33 @@ CREATE TABLE ".$db_prefix."menue (
   menue_id int(10) NOT NULL default '1',
   PRIMARY KEY  (id)
 );
-DROP TABLE IF EXISTS ".$db_prefix."sitedata;
-CREATE TABLE `".$db_prefix."sitedata` (
-  `id` int(10) NOT NULL auto_increment,
-  `parent_id` int(10) NOT NULL default '0',
-  `type` varchar(15) NOT NULL default '',
-  `name` varchar(20) NOT NULL default '',
-  `title` varchar(100) NOT NULL default '',
-  `text` text NOT NULL,
-  `lang` varchar(10) NOT NULL default '',
-  `html` text,
-  ADD PRIMARY KEY (`id`)
-) ;
+
+DROP TABLE IF EXISTS " . $db_prefix . "pages_content;
+CREATE TABLE `" . $db_prefix . "pages_content` (
+  `page_id` int(10) NOT NULL auto_increment,
+  `page_parent_id` int(10) NOT NULL default '0',
+  `page_type` varchar(15) NOT NULL default '',
+  `page_visible` enum('public','private','hidden','deleted') NOT NULL default 'public',
+  `page_name` varchar(20) NOT NULL default '',
+  `page_title` varchar(100) NOT NULL default '',
+  `page_text` text NOT NULL,
+  `page_lang` varchar(10) NOT NULL default '',
+  `page_html` text,
+  `page_creator` int(10) NOT NULL default '0',
+  `page_created` varchar(20) NOT NULL default '0',
+  PRIMARY KEY  (`page_id`)
+);
 DROP TABLE IF EXISTS ".$db_prefix."users;
-CREATE TABLE ".$db_prefix."users (
-  id int(10) NOT NULL auto_increment,
-  name varchar(30) NOT NULL default '',
-  showname varchar(40) NOT NULL default '',
-  password varchar(100) NOT NULL default '',
-  registerdate varchar(20) default '0',
-  admin enum('y','n') default 'n',
-  icq varchar(12) default '0',
-  email varchar(200) NOT NULL default '',
-  PRIMARY KEY  (id)
+CREATE TABLE `" . $db_prefix . "users` (
+  `user_id` int(10) NOT NULL auto_increment,
+  `user_name` varchar(30) NOT NULL default '',
+  `user_showname` varchar(40) NOT NULL default '',
+  `user_password` varchar(100) NOT NULL default '',
+  `user_registerdate` varchar(20) default '0',
+  `user_admin` enum('y','n') default 'n',
+  `user_icq` varchar(12) default '0',
+  `user_email` varchar(200) NOT NULL default '',
+  PRIMARY KEY  (`user_id`)
 );
 DROP TABLE IF EXISTS ".$db_prefix."online;
 REATE TABLE ".$db_prefix."online (
@@ -118,7 +122,7 @@ $config_data .= '$d_user   = \'' . $db_user . '\';' . "\n";
 $config_data .= '$d_pw     = \'' . $db_password . '\';' . "\n";
 $config_data .= '$d_base   = \'' . $db_database . '\';' . "\n";
 $config_data .= '$d_pre = \'' . $de_prefix . '\';' . "\n\n";
-$config_data .= 'define(\'COMASY_INSTALLED\', true);' . "\n";
+$config_data .= 'define(\'COMACMS_INSTALLED\', true);' . "\n";
 $config_data .= '?>';
 
 $fp = @fopen("../config.php", 'w');

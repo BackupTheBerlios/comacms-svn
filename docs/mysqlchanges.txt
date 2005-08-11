@@ -43,7 +43,15 @@ ALTER TABLE `cms_sitedata_history` ADD `date` VARCHAR( 20 ) DEFAULT '0' NOT NULL
 
 #renamed cms_sitedata to cms_pages_content
 ALTER TABLE `cms_sitedata` RENAME `cms_pages_content` ;
+
 #renamed all fields in cms_pages_content: every field begins now with "page_"
 ALTER TABLE `cms_pages_content` CHANGE `id` `page_id` INT(10) NOT NULL AUTO_INCREMENT, CHANGE `parent_id` `page_parent_id` INT(10) NOT NULL DEFAULT '0', CHANGE `type` `page_type` VARCHAR(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL, CHANGE `visible` `page_visible` ENUM('public','private','hidden','deleted') NOT NULL DEFAULT 'public', CHANGE `name` `page_name` VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL, CHANGE `title` `page_title` VARCHAR(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL, CHANGE `text` `page_text` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL, CHANGE `lang` `page_lang` VARCHAR(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL, CHANGE `html` `page_html` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `creator` `page_creator` INT(10) NOT NULL DEFAULT '0', CHANGE `date` `page_created` VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '0';
+
 #renamed all fields in cms_users: every field begins now with "user_"
 ALTER TABLE `cms_users` CHANGE `id` `user_id` INT( 10 ) NOT NULL AUTO_INCREMENT , CHANGE `name` `user_name` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL , CHANGE `showname` `user_showname` VARCHAR( 40 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL , CHANGE `password` `user_password` VARCHAR( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL , CHANGE `registerdate` `user_registerdate` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '0', CHANGE `admin` `user_admin` ENUM( 'y', 'n' ) NULL DEFAULT 'n', CHANGE `icq` `user_icq` VARCHAR( 12 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '0', CHANGE `email` `user_email` VARCHAR( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+
+#renamed all fields in cms_vars: every field begins now with "config"
+ALTER TABLE `cms_vars` CHANGE `name` `config_name` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL , CHANGE `value` `config_value` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+
+#renamed cms_vars in cms_config
+ALTER TABLE `cms_vars` RENAME `cms_config` ;

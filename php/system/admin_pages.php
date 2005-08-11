@@ -3,8 +3,8 @@
  *
  *  file		: admin_pages.php
  *  created		: 2005-07-12
- *  copyright		: (C) 2005 The Comasy-Team
- *  email		: comasy@williblau.de
+ *  copyright		: (C) 2005 The [findaname]-Team
+ *  email		: [findaname]@williblau.de
  *
  *****************************************************************************/
 
@@ -82,7 +82,7 @@
 			<td>".$username."</td>
 			<td><a href=\"index.php?site=".$users_online->page."\">".$users_online->page."</a></td>
 			<td>" . date("d.m.Y H:i:s", $users_online->lastaction)."</td>
-			<td>" . $users_online->lang . "</td>
+			<td>" . $admin_lang[$users_online->lang] . "</td>
 			<td>" . $users_online->ip . "</td>
 			<td>" . gethostbyaddr($users_online->ip) . "</td>
 		</tr>\r\n";
@@ -329,29 +329,25 @@
  *
  *****************************************************************************/
 	function page_sitestyle() {
-		global $_GET, $_POST;
+		global $internal_style, $extern_save, $extern_style;
 		
 		$out = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"./system/functions.js\"></script>";
 	
-		if(!isset($_GET["style"]) && !isset($_POST["style"])) {
-			$object = mysql_fetch_object(db_result("SELECT * FROM ".DB_PREFIX."vars WHERE name='style'"));
-			$style = $object->value;
-		}
-		else {
-			if(isset($_GET["style"]))
-				$style = $_GET["style"];
-			else
-				$style = $_POST["style"];
+		if(!isset($extern_save))
+			$extern_style = $internal_style;
+	
+		if(isset($extern_save)) {
+			if(file_exists("./styles/$extern_style/mainpage.php")) {
+				$sql = "UPDATE " . DB_PREFIX . "config
+					SET config_value= '$extern_style'
+					WHERE config_name='style'";
+				db_result($sql);
+			}
 		}
 	
-		if(isset($_GET["save"]) || isset($_POST["save"])) {
-			if(file_exists("./styles/".$style."/mainpage.php"))
-				db_result("UPDATE ".DB_PREFIX."vars SET value= '".$style."' WHERE name='style'");
-		}
-	
-		$out .= "<iframe id=\"previewiframe\" src=\"./index.php?style=".$style."\" class=\"stylepreview\"></iframe>
+		$out .= "<iframe id=\"previewiframe\" src=\"./index.php?style=".$extern_style."\" class=\"stylepreview\"></iframe>
 		<form action=\"admin.php\" method=\"get\">
-			<input type=\"hidden\" name=\"site\" value=\"sitestyle\" />
+			<input type=\"hidden\" name=\"page\" value=\"sitestyle\" />
 			<label for=\"stylepreviewselect\">Style:
 				<select id=\"stylepreviewselect\" name=\"style\" size=\"1\">";
 	
@@ -367,7 +363,7 @@
 				//
 				// mark the selected style as selected in the list
 				//
-				if($entry == $style)
+				if($entry == $extern_style)
 					$out .= "\t\t\t\t\t<option value=\"".$entry."\" selected=\"selected\">".$entry."</option>\r\n";	
 				else
 					$out .= "\t\t\t\t\t<option value=\"".$entry."\">".$entry."</option>\r\n";
@@ -552,7 +548,7 @@
 	}
 
 	function page_users() {
-		global $_GET, $_POST, $PHP_SELF, $admin_lang, $actual_user_id, $actual_user_passwd_md5,$actual_user_online_id, $actual_user_online_id;
+		global $_GET, $_POST, $PHP_SELF, $admin_lang, $actual_user_id, $actual_user_passwd_md5,$actual_user_online_id, $actual_user_online_id, $_SERVER;
 	
 		$out  ="";
 	
@@ -683,8 +679,8 @@
 					$result = db_result($sql);
 					$user = mysql_fetch_object($result);
 					$out .= "Den Benutzer &quot;" . $user->user_showname . "&quot; unwiederruflich löschen?<br />
-				<a href=\"admin.php?site=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich Löschen\">" . $admin_lang['yes'] . "</a> &nbsp;&nbsp;&nbsp;&nbsp;
-				<a href=\"admin.php?site=users\" title=\"Nicht Löschen\">" . $admin_lang['no'] . "</a>";
+				<a href=\"admin.php?page=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich Löschen\">" . $admin_lang['yes'] . "</a> &nbsp;&nbsp;&nbsp;&nbsp;
+				<a href=\"admin.php?page=users\" title=\"Nicht Löschen\">" . $admin_lang['no'] . "</a>";
 					
 					return $out;
 				}
@@ -703,8 +699,8 @@
 							$user_icq = $user->user_icq;
 							$user_admin = $user->user_admin;
 						}
-						$out .= "\t\t\t<form action=\"".$PHP_SELF."\" method=\"post\">
-				<input type=\"hidden\" name=\"site\" value=\"users\"/>\r\n";
+						$out .= "\t\t\t<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
+				<input type=\"hidden\" name=\"page\" value=\"users\"/>\r\n";
 						if($action == "new" || $action == "add-error")
 							$out .= "\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"add\"/>\r\n";
 						else
@@ -859,37 +855,38 @@
 					else
 						$out .= $admin_lang['no'];
 					$out .= "</td>
-					<td><a href=\"".$PHP_SELF."?site=users&amp;action=edit&amp;user_id=".$user->user_id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a></td>
+					<td><a href=\"".$PHP_SELF."?page=users&amp;action=edit&amp;user_id=".$user->user_id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a></td>
 					<td>";
 					
 					if($actual_user_id == $user->user_id)
 						$out .= "&nbsp;";
 					else
-						$out .= "<a href=\"".$PHP_SELF."?site=users&amp;action=delete&amp;user_id=".$user->user_id."\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
+						$out .= "<a href=\"".$PHP_SELF."?page=users&amp;action=delete&amp;user_id=".$user->user_id."\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
 					$out .= "</td>
 				</tr>\r\n";
 			}
 			//<tr><td colspan="7"><a href="<?php echo $PHP_SELF."?newuser=y"; " />Neuen User hinzuf&uuml;gen</a></td></tr>
 			$out .= "\t\t\t</table>
-			<a href=\"" . $PHP_SELF . "?site=users&amp;action=new\" title=\"Einen neuen Benutzer erstellen\">Neuen Benutzer erstellen</a>";
+			<a href=\"" . $PHP_SELF . "?page=users&amp;action=new\" title=\"Einen neuen Benutzer erstellen\">Neuen Benutzer erstellen</a>";
 			//( if(!isset($pw)) { $pw = "1"; } if(!isset($pwwdh)) { $pwwdh= "1"; } if($pw!=$pwwdh) { echo "<h3>Die Wiederhohlung des Passwortes ist fehlerhaft...<br>Aus diesem Grund wurde der Eintrag nicht gespeichert.</h3>"; } 
 	
 		return $out;
 	}
 	
 	function page_preferences() {
-		global $setting, $PHP_SELF, $admin_lang, $_GET, $_POST;
+		global $setting, $_SERVER, $admin_lang, $extern_action, $_GET, $_POST;
 		
-		include("./system/settings.php");
-		$out = "";
-		$action = getSubmitVar("action");
-		if($action == "save") {
+		include('./system/settings.php');
+		$out = '';
+		if(!isset($extern_action))
+			$extern_action = '';
+		if($extern_action == 'save') {
 			$tosave = array();
 			foreach($_GET as $key => $value) {
 				//$out .= $key."<br />";
-				if(substr($key, 0, 8) == "setting_"){
+				if(substr($key, 0, 8) == 'setting_'){
 					$name = substr($key, 8);
-					$_n = "internal_".$name;
+					$_n = 'internal_' . $name;
 					global $$_n;
 					if($$_n != $_GET[$key])
 						$tosave[$name] = $value;
@@ -898,44 +895,56 @@
 			}
 			foreach($_POST as $key => $value) {
 				//$out .= $key."<br />";
-				if(substr($key, 0, 8) == "setting_"){
+				if(substr($key, 0, 8) == 'setting_'){
 					$name = substr($key, 8);
-					$_n = "internal_".$name;
+					$_n = 'internal_' . $name;
 					global $$_n;
 					if($$_n != $_POST[$key])
 						$tosave[$name] = $value;
 				}
 			}
 			foreach($tosave as $key => $value) {
-				$_n = "internal_".$key;
+				$_n = 'internal_' . $key;
 				
-				if($$_n == "") {
+				if($$_n == '') {
 					$out .= "new: $key<br />";
-					$exists_result = db_result("SELECT * FROM " . DB_PREFIX . "vars WHERE name='" . $key . "' ");
-					if($exists = mysql_fetch_object($exists_result))
-						db_result("UPDATE " . DB_PREFIX . "vars SET `value` = '" . $value . "' WHERE name = '" . $key . "' LIMIT 1");
-					else
-						db_result("INSERT INTO " . DB_PREFIX . "vars ( name , value ) VALUES ( '" . $key . "', '" . $value . "')");
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "config
+						WHERE config_name='$key'";
+					$exists_result = db_result($sql);
+					if($exists = mysql_fetch_object($exists_result)) {
+						$sql = "UPDATE " . DB_PREFIX . "config
+							SET config_value = '$value'
+							WHERE config_name = '$key'
+							LIMIT 1";
+						db_result($sql);
+					}
+					else {
+						$sql = "INSERT INTO " . DB_PREFIX . "config (config_name , config_value )
+							VALUES ( '$key', '$value')";
+						db_result($sql);
+					}
 				}
 				else {
 					$out .= "update: $key<br />";
-				
-					db_result("UPDATE " . DB_PREFIX . "vars SET `value` = '" . $value . "' WHERE name = '" . $key . "' LIMIT 1");
-
+					$sql = "UPDATE " . DB_PREFIX . "config
+						SET config_value = '$value'
+						WHERE config_name = '$key' LIMIT 1";
+					db_result($sql);
 				}
 			}
 		}
 		else {
-			$out .= "\t\t\t<form action=\"" . $PHP_SELF . "\" method=\"post\">
-				<input type=\"hidden\" name=\"site\" value=\"preferences\" />
+			$out .= "\t\t\t<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
+				<input type=\"hidden\" name=\"page\" value=\"preferences\" />
 				<input type=\"hidden\" name=\"action\" value=\"save\" />
 				<table>\r\n";
 			foreach($setting as $key => $value) {
-				$__intern = "internal_".$key;
+				$__intern = 'internal_'.$key;
 				global $$__intern;
 				//$out .= $value[0] . "=" . $value[2]."-" . $$__n . "<br />";
 				$_value = $$__intern;
-				if($_value == "")
+				if($_value == '')
 					$_value = $value[2];
 				$out .= "\t\t\t\t\t<tr>
 						<td>

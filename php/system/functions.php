@@ -3,8 +3,8 @@
  *
  *  file		: functions.php
  *  created		: 2005-06-17
- *  copyright		: (C) 2005 The Comasy-Team
- *  email		: comasy@williblau.de
+ *  copyright		: (C) 2005 The ComaCMS-Team
+ *  email		: comacms@williblau.de
  *
  *****************************************************************************/
 
@@ -16,27 +16,7 @@
  *  (at your option) any later version.
  *
  *****************************************************************************/
-	function login() {
-		global $PHP_SELF;
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-	<head>
-		<title>Admin-Login</title>
-	</head>
-	<body>
-		<form method="post" action="<?php echo $PHP_SELF; ?>">
-			<table>
-				<tr><td>Loginname:</td><td><input type="text" name="login_name" /></td></tr>
-				<tr><td>Passwort:</td><td><input type="password" name="login_password" /></td></tr>
-				<tr><td colspan="2"><input type="submit" value="Login" /></td></tr>
-			</table>
-		</form>
-	</body>
-</html>
-<?
-	}
-
+	
 	function alt($link) {
 		$text = preg_replace("/(.+?)\|(.+$)/s","$1\" alt=\"\\2", $link);
 		echo $link.'<br \>' . $text . '<br \>';
@@ -165,7 +145,7 @@
 	}
 	
 	function generatesitestree($parentid, $tabs = "", $lang = "", $show_deleted = false, $show_hidden = false) {
-		global $PHP_SELF, $admin_lang;;
+		global $_SERVER, $admin_lang;;
 		$out = "";
 		$q_lang = "";
 		$q_visible = "";
@@ -186,11 +166,11 @@
 				$out .= $tabs . "\t<li>";
 				if($site_info->page_visible == 'deleted')
 					$out .= '<strike>';
-				$out .= '<a href="' . $PHP_SELF . '?site=siteeditor&amp;action=info&amp;site_name=' . $site_info->page_name . '">' . $site_info->page_title . '</a> <em>[' . $site_info->page_name . ']</em> <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=info&amp;site_name=' . $site_info->page_name . '">[' . $admin_lang['info'] . ']</a>';
+				$out .= '<a href="' . $_SERVER['PHP_SELF'] . '?page=pageeditor&amp;action=info&amp;page_name=' . $site_info->page_name . '">' . $site_info->page_title . '</a> <em>[' . $site_info->page_name . ']</em> <a href="' . $_SERVER['PHP_SELF'] . '?page=pageeditor&amp;action=info&amp;page_name=' . $site_info->page_name . '">[' . $admin_lang['info'] . ']</a>';
 				if($site_info->page_visible == 'deleted')
 					$out .= '</strike>';
 				else
-					$out .= ' <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=edit&amp;site_name=' . $site_info->page_name . '">[' . $admin_lang['edit'] . ']</a> <a href="' . $PHP_SELF . '?site=siteeditor&amp;action=delete&amp;site_name=' . $site_info->page_name . '">[' . $admin_lang['delete'] . ']</a>';
+					$out .= ' <a href="' . $_SERVER['PHP_SELF'] . '?page=pageeditor&amp;action=edit&amp;page_name=' . $site_info->page_name . '">[' . $admin_lang['edit'] . ']</a> <a href="' . $_SERVER['PHP_SELF'] . '?page=pageeditor&amp;action=delete&amp;page_name=' . $site_info->page_name . '">[' . $admin_lang['delete'] . ']</a>';
 				
 				$out .= generatesitestree($site_info->page_id, $tabs . "\t\t", $lang, $show_deleted, $show_hidden) . "</li>\r\n";
 				

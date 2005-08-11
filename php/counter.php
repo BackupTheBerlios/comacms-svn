@@ -32,17 +32,17 @@
 		//
 		if($internal_counter_start_date == "") {
 			$internal_counter_start_date = mktime();
-			db_result("INSERT INTO ".DB_PREFIX."vars (name, value) VALUES ('counter_start_date', '".$internal_counter_start_date."')");
+			db_result("INSERT INTO ".DB_PREFIX."config (config_name, config_value) VALUES ('counter_start_date', '".$internal_counter_start_date."')");
 		}
 	
 		if($internal_counter_all == "") {
 			$internal_counter_all = 0;
-			db_result("INSERT INTO ".DB_PREFIX."vars (name, value) VALUES ('counter_all', '1')");
+			db_result("INSERT INTO ".DB_PREFIX."config (config_name, config_value) VALUES ('counter_all', '1')");
 		}
 		//
 		// check if the user is new on the page
 		//
-		$result_new = db_result("SELECT * FROM ".DB_PREFIX."online WHERE online_id='".$actual_user_online_id."'");
+		$result_new = db_result("SELECT * FROM " . DB_PREFIX . "online WHERE online_id='$actual_user_online_id'");
 		if($row3 = mysql_fetch_object($result_new)) {
 			$sql = "UPDATE " . DB_PREFIX . "online
 				SET lastaction='" . mktime() . "', userid=$actual_user_id, lang='$actual_user_lang', page='$site'
@@ -59,9 +59,9 @@
 		// set the new counterstatus with the count of all users who visted the site since countig
 		//
 		if($internal_counter_all != 1) {
-			$sql = "UPDATE " . DB_PREFIX . "vars
-			SET value='$internal_counter_all'
-			WHERE name='counter_all'";
+			$sql = "UPDATE " . DB_PREFIX . "config
+			SET config_value='$internal_counter_all'
+			WHERE config_name='counter_all'";
 			db_result($sql);
 		}
 	

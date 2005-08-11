@@ -24,7 +24,7 @@
 	$admin_lang['sitepreview'] = 'Sitepreview';
 	$admin_lang['preferences'] = 'Preferences';
 	$admin_lang['menueeditor'] = 'MenueEditor';
-	$admin_lang['siteeditor'] = 'SiteEditor';
+	$admin_lang['pageeditor'] = 'PageEditor';
 	$admin_lang['news'] = 'News';
 	$admin_lang['sitestyle'] = 'Sitestyle';
 	$admin_lang['users'] = 'Users';

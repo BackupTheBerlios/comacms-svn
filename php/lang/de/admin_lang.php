@@ -23,7 +23,7 @@
 	$admin_lang['admincontrol'] = 'AdminControl';
 	$admin_lang['preferences'] = 'Einstellungen';
 	$admin_lang['menueeditor'] = 'MenüEditor';
-	$admin_lang['siteeditor'] = 'SeitenEditor';
+	$admin_lang['pageeditor'] = 'SeitenEditor';
 	$admin_lang['news'] = 'News';
 	$admin_lang['sitestyle'] = 'Seitenstyle';
 	$admin_lang['users'] = 'Benutzer';

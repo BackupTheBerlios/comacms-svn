@@ -3,8 +3,8 @@
  *
  *  file		: index.php
  *  created		: 2005-06-17
- *  copyright		: (C) 2005 The Comasy-Team
- *  email		: comasy@williblau.de
+ *  copyright		: (C) 2005 The ComaCMS-Team
+ *  email		: comacms@williblau.de
  *
  *****************************************************************************/
 
@@ -26,7 +26,7 @@
  *
  *****************************************************************************/
 	
-	define("COMASY_RUN", true);
+	define("COMACMS_RUN", true);
 	
 	include("common.php");
 	//@include_once("config.php");
@@ -72,15 +72,6 @@
 	//
 	// load style
 	//
-	$stylefile = "./styles/".$internal_style."/mainpage.php";
-	$_file = fopen($stylefile, 'r');
-	$page = fread($_file, filesize($stylefile));
-	if(!isset($internal_default_page))
-		$internal_default_page = '';
-	if($extern_page == $internal_default_page)
-		$page = preg_replace("/\[notathome\](.+?)\[\/notathome\]/s", "", $page); 
-	else
-		$page = preg_replace("/\[notathome\](.+?)\[\/notathome\]/s", "$1", $page); 
 	
 	$page = str_replace("[title]", $title, $page);
 	$page = str_replace("[text]", $text, $page);

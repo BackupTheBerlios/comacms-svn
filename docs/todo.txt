@@ -30,5 +30,6 @@ Todolist
 	*timezone bug(show the time in the timezone of the client not in the timezone of the server)
 	*registerform
 	*databasesizereducer
+	*deleted pages with not deleted subpages are only visible if the deleted are shown at the overview page
 Wenn was fertig gemacht ist, einfach '###' in an den Anfang der Zeile schreiben.
 Angefangene mit einem %%% kenzeichnen

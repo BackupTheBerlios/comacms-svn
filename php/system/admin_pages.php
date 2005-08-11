@@ -136,11 +136,11 @@
 		// write the 'coose menue'  to make it able to switch betwen both possible menues
 		//
 		if($menue_id == "2")
-			$out .= "\t\t\t\t<li><a href=\"admin.php?site=menueeditor&amp;menue_id=1\">Menü 1</a></li>
+			$out .= "\t\t\t\t<li><a href=\"admin.php?page=menueeditor&amp;menue_id=1\">Menü 1</a></li>
 				<li><u>Menü 2</u></li>\r\n";
 		else {
 			$out .= "\t\t\t\t<li><u>Menü 1</u></li>
-				<li><a href=\"admin.php?site=menueeditor&amp;menue_id=2\">Menü 2</a></li>\r\n";
+				<li><a href=\"admin.php?page=menueeditor&amp;menue_id=2\">Menü 2</a></li>\r\n";
 			$menue_id = 1;
 		}
 		$out .= "\t\t\t</ul>\r\n";
@@ -217,7 +217,7 @@
 					$_result = db_result("SELECT * FROM ".DB_PREFIX."menue WHERE id=".$id."");
 					$_data = mysql_fetch_object($_result);
 					$out .= "\t\t\t<div class=\"error\">Soll der Link ".$_data->text."(".$_data->link.") wirklich gelöscht werden?<br />
-			<a href=\"admin.php?site=menueeditor&amp;action=delete&amp;menue_id=".$menue_id."&amp;id=".$id."&amp;sure=1\" title=\"Wirklich Löschen?\">Ja</a> &nbsp;&nbsp;&nbsp; <a href=\"admin.php?site=menueeditor&amp;menue_id=".$menue_id."\" title=\"Nein! nicht löschen\">Nein</a></div>";
+			<a href=\"admin.php?page=menueeditor&amp;action=delete&amp;menue_id=".$menue_id."&amp;id=".$id."&amp;sure=1\" title=\"Wirklich Löschen?\">Ja</a> &nbsp;&nbsp;&nbsp; <a href=\"admin.php?page=menueeditor&amp;menue_id=".$menue_id."\" title=\"Nein! nicht löschen\">Nein</a></div>";
 					
 					return $out;
 				}
@@ -283,7 +283,7 @@
 		$out .= "\t\t\t\t</tbody>
 			</table><br />\r\n";
 		$out .= "\t\t\t<form method=\"get\" action=\"admin.php\">
-				<input type=\"hidden\" name=\"site\" value=\"menueeditor\" />
+				<input type=\"hidden\" name=\"page\" value=\"menueeditor\" />
 				<input type=\"hidden\" name=\"action\" value=\"add\" />
 				<input type=\"hidden\" name=\"menue_id\" value=\"".$menue_id."\" />
 				<table>
@@ -440,8 +440,8 @@
 					$result = db_result("SELECT * FROM " . DB_PREFIX . "news WHERE id=" . $id);
 					$row = mysql_fetch_object($result);
 					$out .= "Den News Eintrag &quot;" . $row->title . "&quot; wirklich löschen?<br />
-				<a href=\"admin.php?site=news&amp;action=delete&amp;id=" . $id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
-				<a href=\"admin.php?site=news\" title=\"Nicht Löschen\">nein</a>";
+				<a href=\"admin.php?page=news&amp;action=delete&amp;id=" . $id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
+				<a href=\"admin.php?page=news\" title=\"Nicht Löschen\">nein</a>";
 				
 					return $out;
 				}
@@ -463,7 +463,7 @@
 		//
 		if($action != "edit") {
 			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
-			<input type=\"hidden\" name=\"site\" value=\"news\" />
+			<input type=\"hidden\" name=\"page\" value=\"news\" />
 			<input type=\"hidden\" name=\"action\" value=\"new\" />
 			Titel: <input type=\"text\" name=\"title\" maxlength=\"60\" value=\"\" /><br />
 			<textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea><br />
@@ -471,7 +471,7 @@
 		</form>";
 		}
 			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
-			<input type=\"hidden\" name=\"site\" value=\"news\" />
+			<input type=\"hidden\" name=\"page\" value=\"news\" />
 			<input type=\"hidden\" name=\"action\" value=\"update\" />
 			<table>\r\n";
 		//
@@ -484,11 +484,10 @@
 			//
 			if($id == $row->id && $action == "edit") {
 				$out .= "\t\t\t\t<tr>
-					<td colspan=\"2\">
-						<a id=\"newsid".$row->id."\" ></a>
+					<td colspan=\"2\" id=\"newsid" . $row->id . "\">
 						<input type=\"hidden\" name=\"id\" value=\"".$row->id."\" />
 						<input type=\"submit\" value=\"Speichern\" />
-						&nbsp;<a href=\"admin.php?site=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\">Löschen</a>
+						&nbsp;<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\">Löschen</a>
 					</td>
 				</tr>
 				<tr>
@@ -506,7 +505,7 @@
 				</tr>
 				<tr>
 					<td colspan=\"2\">
-						".getUserByID($row->userid)."
+						" . getUserByID($row->userid) . "
 					</td>
 				</tr>";
 			}
@@ -517,8 +516,8 @@
 				$out .= "\t\t\t\t<tr>
 					<td colspan=\"2\">
 						<a id=\"newsid".$row->id."\" ></a>
-						<a href=\"admin.php?site=news&amp;action=edit&amp;id=".$row->id."#newsid".$row->id."\" title=\"Bearbeiten\">Bearbeiten</a>
-						&nbsp;<a href=\"admin.php?site=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\">Löschen</a>
+						<a href=\"admin.php?page=news&amp;action=edit&amp;id=".$row->id."#newsid".$row->id."\" title=\"Bearbeiten\">Bearbeiten</a>
+						&nbsp;<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\">Löschen</a>
 					</td>
 				</tr>
 				<tr>

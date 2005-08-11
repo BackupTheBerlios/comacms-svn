@@ -54,8 +54,10 @@
 	
 	if(startsWith($extern_page, 'a:'))
  		header('Location: admin.php?page='.substr($extern_page, 2));
- 	if(startsWith($extern_page, 's:'))
+ 	elseif(startsWith($extern_page, 's:'))
  		header('Location: special.php?page='.substr($extern_page, 2));
+ 	elseif(startsWith($extern_page, 'l:'))
+ 		header('Location: index.php?page='.substr($extern_page, 2));
 	
 	set_usercookies();
 	//

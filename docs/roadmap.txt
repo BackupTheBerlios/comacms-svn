@@ -16,10 +16,13 @@
 		-mailsettings
 	-article-system(with comments?)
 	-"in-page-menue"
-	-"only not on mainpage-parameter"
+	-"not on mainpage-parameter"
+	-"not in adminsyste-parameter"
 	-registerform by "hidden" page with an unique id
 	-find a licence
 	-user friendly installation
+	-calendar
+	-connect-news with ('special-')articles
 	
 	1.1				Q4 2005
 	
@@ -32,3 +35,9 @@
 	-"more than one site"
 	-databasesizereducer
 	-newsletter
+	-administration can dedect elements which are configurable in the style
+	-sitemap
+	-timezones
+	
+	2.0 RC
+	-GUI-Generator

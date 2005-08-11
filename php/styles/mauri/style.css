@@ -196,4 +196,10 @@ span.error {
  border:1px dashed red;
  font-weight: bold;
  margin-bottom:0.4em;
- }
+}
+
+#footerimage {
+ margin-left: 16px;
+ width: 106px;
+ height: 120px;
+}

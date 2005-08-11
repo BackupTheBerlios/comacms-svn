@@ -16,6 +16,9 @@
 			
 			<ul id="menue">
 [menue]			</ul>
+			<a href="http://www.wjt2005.de" target="_blank" title="Homepage des Weltjugendtages 2005">
+				<img id="footerimage" alt="Das ist das Logo des Weltjugendtages 2005" src="./styles/mauri/wjt2005_logo_deu.gif"/>
+			</a>
 		</div>
 		<div id="text">
 [text]

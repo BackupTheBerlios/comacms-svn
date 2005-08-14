@@ -58,6 +58,8 @@
  		header('Location: special.php?page='.substr($extern_page, 2));
  	elseif(startsWith($extern_page, 'l:'))
  		header('Location: index.php?page='.substr($extern_page, 2));
+ 	elseif(startsWith($extern_page, 'g:'))
+ 		header('Location: gallery.php?page='.substr($extern_page, 2));
 	
 	set_usercookies();
 	//
@@ -89,8 +91,11 @@
 	if(!isset($internal_default_page))
 		$internal_default_page = '';
 	if($extern_page == $internal_default_page)
-		$page = preg_replace("/\[notathome\](.+?)\[\/notathome\]/s", "", $page); 
+		$page = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", "", $page);
 	else
-		$page = preg_replace("/\[notathome\](.+?)\[\/notathome\]/s", "$1", $page); 
-	
+		$page = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", "$1", $page);
+	if($pagePrefix == 'a:')
+		$page = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", "", $page);
+	else
+		$page = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", "$1", $page);
 ?>

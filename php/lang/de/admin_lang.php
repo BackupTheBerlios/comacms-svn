@@ -28,6 +28,7 @@
 	$admin_lang['sitestyle'] = 'Seitenstyle';
 	$admin_lang['users'] = 'Benutzer';
 	$admin_lang['gallery'] = 'Gallerie';
+	$admin_lang['gallery editor'] = 'GallerieEditor';
 	$admin_lang['logout'] = 'Logout';
 	$admin_lang['sitepreview'] = 'Seitenvorschau';
 	$admin_lang['registered users'] = 'Angemeldete Benutzer';
@@ -52,4 +53,5 @@
 	$admin_lang['create'] = 'Erstellen';
 	$admin_lang['reset'] = 'Zurücksetzen';
 	$admin_lang['save'] = 'Speichern';
+	$admin_lang['files'] = 'Dateien';
 ?>

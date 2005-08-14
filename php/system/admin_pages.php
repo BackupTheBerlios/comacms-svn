@@ -55,10 +55,10 @@
 	
 		$out = "<h3>AdminControl</h3><hr />
 	<table>
-		<tr><td>".$admin_lang['online since']."</td><td>#DATUM</td></tr>
-		<tr><td>".$admin_lang['registered users']."</td><td>".$users_count."</td></tr>
-		<tr><td>".$admin_lang['created pages']."</td><td>".$page_count."</td></tr>
-		<tr><td>".$admin_lang['database size']."</td><td>".kbormb($data_size)."</td></tr>
+		<tr><td>" . $admin_lang['online since'] . "</td><td>#DATUM</td></tr>
+		<tr><td>" . $admin_lang['registered users'] . "</td><td>" . $users_count . "</td></tr>
+		<tr><td>" . $admin_lang['created pages'] . "</td><td>" . $page_count . "</td></tr>
+		<tr><td>" . $admin_lang['database size'] . "</td><td>" . kbormb($data_size) . "</td></tr>
 	</table>
 	
 	<h3>Aktuelle Besucher</h3><hr />
@@ -832,7 +832,7 @@
 			}
 			$out .= "\t\t\t<table>
 				<tr>
-					<td>#id</td>
+					<td>id</td>
 					<td>" . $admin_lang['name'] . "</td>
 					<td>Kürzel</td>
 					<td>email</td>
@@ -974,6 +974,28 @@
 					</tr>
 				</table>
 			</form>\r\n";
+		}
+		
+		return $out;
+	}
+	function page_gallery_editor() {
+		global $admin_lang, $extern_action;
+		
+		if(!isset($extern_action))
+			$extern_action = '';	
+		$out = "<h3>" . $admin_lang['gallery editor'] . "</h3><hr />\r\n";
+		if($extern_action == 'anything') {}
+		else {
+			$out .= "Bilder Verwalten<br />
+				&nbsp;-Hinzufügen/Hochladen
+				&nbsp;-Bearbeiten
+				&nbsp;-Löschen
+			Neue Gallerie<br />
+			Übersicht<br />
+				&nbsp;-Infos<br />
+				&nbsp;-Bearbeiten<br />
+				&nbsp;-Löschen";
+			
 		}
 		
 		return $out;

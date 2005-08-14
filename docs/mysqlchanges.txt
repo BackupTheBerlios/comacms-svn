@@ -55,3 +55,15 @@ ALTER TABLE `cms_vars` CHANGE `name` `config_name` VARCHAR( 255 ) CHARACTER SET 
 
 #renamed cms_vars in cms_config
 ALTER TABLE `cms_vars` RENAME `cms_config` ;
+
+#created new table cms_files
+CREATE TABLE `cms_files` (
+`file_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+`file_name` VARCHAR( 255 ) NOT NULL ,
+`file_path` VARCHAR( 255 ) NOT NULL ,
+`file_downloads` INT( 10 ) DEFAULT '0' NOT NULL ,
+`file_size` INT( 20 ) DEFAULT '0' NOT NULL ,
+`file_md5` VARCHAR( 150 ) NOT NULL ,
+`file_type` VARCHAR( 100 ) NOT NULL ,
+PRIMARY KEY ( `file_id` )
+) ;

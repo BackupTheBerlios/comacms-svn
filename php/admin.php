@@ -20,14 +20,8 @@
 	define("COMACMS_RUN", true);
 	
 	include("common.php");
-	//include('./config.php');
-	//include('./functions.php');
 	include('./system/functions.php');
-	//include('./counter.php');
-	//_start();
-	//set_usercookies();
 	
-	//if($actual_user_is_logged_in && $actual_user_is_admin) {
 	$text = '';
 	$title = '';
 	include('./lang/' . $actual_user_lang . '/admin_lang.php');
@@ -41,7 +35,8 @@
 	$menue_array[] = array($admin_lang['news'],'admin.php?page=news');
 	$menue_array[] = array($admin_lang['sitestyle'], 'admin.php?page=sitestyle');
 	$menue_array[] = array($admin_lang['users'], 'admin.php?page=users');
-	$menue_array[] = array($admin_lang['gallery'], 'admin.php?page=gallery');
+	$menue_array[] = array($admin_lang['gallery editor'], 'admin.php?page=gallery_editor');
+	$menue_array[] = array($admin_lang['files'], 'admin.php?page=files');
 	$menue_array[] = array($admin_lang['logout'], 'admin.php?page=logout');
 	//
 	// insert the 'functions' here
@@ -85,6 +80,16 @@
 		$title = $admin_lang['preferences'];
 		$text = page_preferences();
 	}
+	elseif($extern_page == 'gallery_editor'){
+		$title = $admin_lang['gallery editor'];
+		$text = page_gallery_editor();
+	}
+	elseif($extern_page == 'files') {
+		include('system/user_pages.php');
+		$title = $admin_lang['files'];
+		$text = page_files();
+	}
+	
 	//
 	// end of the 'functions'
 	//
@@ -105,7 +110,4 @@
 	$page = str_replace('[menue2]', '', $page);
 	$page = str_replace('[text]', $text, $page);
 	echo $page;
-	
-	_end();
-
 ?>

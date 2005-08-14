@@ -29,6 +29,7 @@
 	$admin_lang['sitestyle'] = 'Sitestyle';
 	$admin_lang['users'] = 'Users';
 	$admin_lang['gallery'] = 'Gallery';
+	$admin_lang['gallery editor'] = 'Gallery-Editor';
 	$admin_lang['logout'] = 'Logout';
 	$admin_lang['registered users'] = 'Registered Users';
 	$admin_lang['online since'] = 'Active since';
@@ -52,4 +53,5 @@
 	$admin_lang['create'] = 'Create';
 	$admin_lang['reset'] = 'Reset';
 	$admin_lang['save'] = 'Save';
+	$admin_lang['files'] = 'Dateien';
 ?>

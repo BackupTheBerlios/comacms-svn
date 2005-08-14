@@ -38,6 +38,8 @@
 	-administration can dedect elements which are configurable in the style
 	-sitemap
 	-timezones
+	-downloads
+	-speciallogger
 	
 	2.0 RC
 	-GUI-Generator

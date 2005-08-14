@@ -24,15 +24,9 @@
 		define('DB_PREFIX', $d_pre);
 }
 
-	function _end() {
-		global $db_con;
-		
-		mysql_close($db_con);
-	}
-
 	function connect_to_db($username, $userpw, $database, $server = 'localhost') {
 		error_reporting(E_ALL);
-		$db = mysql_connect($server, $username, $userpw)
+		$db = mysql_pconnect($server, $username, $userpw)
 		or die('Mysql-error:' . mysql_error());
 		mysql_select_db($database, $db)
 		or die('Mysql-error:' . mysql_error());

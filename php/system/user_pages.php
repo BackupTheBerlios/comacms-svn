@@ -300,6 +300,7 @@
 		<input type=\"submit\" class=\"button\" value=\"Öffnen\" /> 
 		</form>";
 		}
+		
 		return $out;
 	}
 
@@ -307,5 +308,62 @@
 		global $actual_user_online_id;
 		setcookie('CMS_user_cookie', $actual_user_online_id . '||', time() + 14400);
 		header('Location: index.php');
+	}
+	
+	function page_files() {
+		global $_SERVER,$_FILES,$extern_action;
+	
+		$out = "Files<br />";
+		$out .= "<form enctype=\"multipart/form-data\" action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
+			<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"30000\" />
+			<input type=\"hidden\" name=\"page\" value=\"files\" />
+			<input type=\"hidden\" name=\"action\" value=\"upload\" />
+			<input name=\"uploadfile0\" type=\"file\" />
+			<input type=\"submit\" value=\"Hochladen\"/>
+		</form>";
+		$upload_path = './data/upload/';
+		if($extern_action == 'upload') {
+			foreach($_FILES as $name => $file) {
+				if(startsWith($name, 'uploadfile')) {
+					$nr = substr($name, -1);
+					if($nr < 5) {
+						$save_path = $upload_path . $file['name'];
+						if(file_exists($save_path))
+							$save_path = $upload_path . uniqid() . $file['name'];
+						if($file['error'] == 0) {
+							//
+							// TODO:dont allow an upload if a file with the same md5 exists
+							//
+							move_uploaded_file($file['tmp_name'], $save_path);
+						
+							$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5)
+								VALUES('" . $file['name'] . "', '" . $file['type'] . "', '$save_path', '" . filesize($save_path) . "', '" . md5_file($save_path) . "')";
+							db_result($sql);
+						}
+						else {
+							$out .= "Die Datei konnte nicht hochgeladen werden";
+						}
+					}
+				}
+			}
+			//if (move_uploaded_file($_FILES['uploadfile']['tmp_name'], "./data/upload/" . $_FILES['uploadfile']['name'])) {
+			//	$out .= print_r($_FILES);
+			//}
+			
+		}
+		
+		$out .= "
+		[Aktualisieren]
+		<table>
+		<tr><td>id</td><td>Name</td><td>Größe</td><td>Typ</td><td>Aktionen</td></tr>";
+		$sql = "SELECT *
+			FROM " . DB_PREFIX . "files";
+		$files_result = db_result($sql);
+		while($file = mysql_fetch_object($files_result)) {
+			$out .= "<tr><td>#$file->file_id</td><td>$file->file_name</td><td>" . kbormb($file->file_size) . "</td><td>$file->file_type</td><td>[Löschen]</td></tr>\r\n";
+			//$out .= "$file->file_name<br />";
+		}
+		$out .= "</table>";
+		return $out;
 	}
 ?>

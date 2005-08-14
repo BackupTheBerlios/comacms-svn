@@ -29,20 +29,10 @@
 	define("COMACMS_RUN", true);
 	
 	include("common.php");
-	//@include_once("config.php");
 	
-	//include('news.php');
-	//include('gbook.php');
-	//include('counter.php');
-	//include('contact.php');
-	//_start();
-	
-
- 	
- 	
 	$sql = "SELECT *
 		FROM " . DB_PREFIX . "pages_content
-		WHERE page_name='$extern_page'";
+		WHERE page_name='$extern_page' AND page_type='text'";
 	$page_result = db_result($sql);
 	if(!$page_result)
 		die("bad error:  no pagedata found");
@@ -95,6 +85,5 @@
 	//
 	// end
 	//
-	_end();
 	echo $page;
 ?>

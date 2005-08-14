@@ -84,6 +84,7 @@ CREATE TABLE ".$db_prefix."news (
   text text NOT NULL,
   PRIMARY KEY  (id)
 );
+DROP TABLE IF EXISTS ".$db_prefix."sitedata_history;
 CREATE TABLE ".$db_prefix."sitedata_history (
 id INT( 10 ) NOT NULL AUTO_INCREMENT ,
 type VARCHAR( 15 ) NOT NULL ,
@@ -93,6 +94,17 @@ text TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 lang VARCHAR( 5 ) NOT NULL ,
 creator INT( 10 ) NOT NULL ,
 PRIMARY KEY ( id )
+);
+DROP TABLE IF EXISTS ".$db_prefix."files;
+CREATE TABLE " . $db_prefix . "files (
+file_id INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+file_name VARCHAR( 255 ) NOT NULL ,
+file_path VARCHAR( 255 ) NOT NULL ,
+file_downloads INT( 10 ) DEFAULT '0' NOT NULL ,
+file_size INT( 20 ) DEFAULT '0' NOT NULL ,
+file_md5 VARCHAR( 150 ) NOT NULL ,
+file_type VARCHAR( 100 ) NOT NULL ,
+PRIMARY KEY ( file_id )
 );
 INSERT INTO ".$db_prefix."users (name, showname, password, registerdate, admin, icq)
 VALUES ('".$admin_name."', '".$admin_showname."', '".md5($admin_password)."', '".mktime()."', 'y', '');

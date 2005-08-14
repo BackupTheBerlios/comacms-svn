@@ -48,6 +48,5 @@
 	$page = str_replace('[menue]', generatemenue(@$internal_style, 1, $extern_page), $page);
 	$page = str_replace('[menue2]', generatemenue(@$internal_style, 2, $extern_page), $page);
 	echo $page;
-	_end();
 
 ?>

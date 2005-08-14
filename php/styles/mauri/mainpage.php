@@ -10,15 +10,15 @@
 			<ul id="secondmenue">
 [menue2]
 			</ul>
-			[notathome]<span id="hallo">[position]</span>[/notathome]
+			<notathome><span id="hallo">[position]</span></notathome>
 		</div>
 		<div id="menuepart">
 			
 			<ul id="menue">
-[menue]			</ul>
+[menue]			</ul><notinadmin>
 			<a href="http://www.wjt2005.de" target="_blank" title="Homepage des Weltjugendtages 2005">
 				<img id="footerimage" alt="Das ist das Logo des Weltjugendtages 2005" src="./styles/mauri/wjt2005_logo_deu.gif"/>
-			</a>
+			</a></notinadmin>
 		</div>
 		<div id="text">
 [text]

@@ -979,18 +979,43 @@
 		return $out;
 	}
 	function page_gallery_editor() {
-		global $admin_lang, $extern_action;
+		global $admin_lang, $extern_action, $_SERVER;
 		
 		if(!isset($extern_action))
 			$extern_action = '';	
 		$out = "<h3>" . $admin_lang['gallery editor'] . "</h3><hr />\r\n";
-		if($extern_action == 'anything') {}
+		if($extern_action == 'new') {
+			$out .= "<form action=\"post\">
+				Name:<input type=\"text\" name=\"gallery_name\" /><br />
+				Bilder:";
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "files
+					WHERE file_type LIKE 'image/%'
+					ORDER BY file_name ASC";
+				$images_result = db_result($sql);
+				while($image = mysql_fetch_object($images_result)) {
+					$thumb = str_replace('/upload/', '/thumbnails/', $image->file_path);
+					preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
+					//echo $thumb."<br />";
+					if(strtolower($ext[2]) == 'gif')
+						$thumb .= '.png';
+					
+					$succes = true;
+					if(!file_exists($thumb))
+						$succes = generateThumb($image->file_path, 150);
+					if(file_exists($thumb) || $succes)
+						$out .= "<a href=\"$image->file_path\"><img src=\"$thumb\" alt=\"$thumb\" /></a>";
+				}
+			$out .= "
+				
+				</form>";
+		}
 		else {
 			$out .= "Bilder Verwalten<br />
-				&nbsp;-Hinzufügen/Hochladen
-				&nbsp;-Bearbeiten
-				&nbsp;-Löschen
-			Neue Gallerie<br />
+				&nbsp;-Hinzufügen/Hochladen<br />
+				&nbsp;-Bearbeiten<br />
+				&nbsp;-Löschen<br />
+			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=new\">Neue Gallerie</a><br />
 			Übersicht<br />
 				&nbsp;-Infos<br />
 				&nbsp;-Bearbeiten<br />

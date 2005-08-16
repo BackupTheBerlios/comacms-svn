@@ -15,4 +15,30 @@
 import_request_variables("gP", "rvar_");
 
 echo $rvar_foo;
+
+
+ //
+ // a smal imageresizer
+ // but: be careful with handling big images some webspaces have a too small memory_limit
+ //
+if($file['type'] == 'image/jpeg') {
+ //
+ // the images should not be longer/higher than 800px
+ //
+	$maxsize = 700;
+	list($width, $height) = getimagesize($save_path);
+	//
+	// is the image to big??
+	//
+	if($width > $maxsize || $height > $maxsize) {
+		$newwidth = ($width > $height) ? $maxsize : $width / ($height / $maxsize);
+		$newheight = ($height > $width) ? $maxsize : $height / ($width / $maxsize);
+
+		$newimage = ImageCreateTrueColor($newwidth, $newheight);
+		$source = imagecreatefromjpeg($save_path);
+		imagecopyresized($newimage, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+		imagejpeg($newimage, $save_path . "__.jpg" ,100);
+	}
+}
+*/
 ?>

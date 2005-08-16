@@ -104,6 +104,7 @@ file_downloads INT( 10 ) DEFAULT '0' NOT NULL ,
 file_size INT( 20 ) DEFAULT '0' NOT NULL ,
 file_md5 VARCHAR( 150 ) NOT NULL ,
 file_type VARCHAR( 100 ) NOT NULL ,
+file_date INT( 25 ) DEFAULT '0' NOT NULL,
 PRIMARY KEY ( file_id )
 );
 INSERT INTO ".$db_prefix."users (name, showname, password, registerdate, admin, icq)

@@ -195,4 +195,60 @@
 			return $_POST[$name];
 		return $default;
 	}
+	
+	function generateThumb($file, $maxsize = 100) {
+	
+		list($width, $height) = getimagesize($file);
+		$newfile = str_replace('/upload/', '/thumbnails/', $file);
+		preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $file, $ext);
+		//$newfile = './data/thumbnails/' . $ext[1] . '.' . $ext[2];
+		
+		if($width > $maxsize || $height > $maxsize) {
+			$newwidth = ($width > $height) ? $maxsize : $width / ($height / $maxsize);
+			$newheight = ($height > $width) ? $maxsize : $height / ($width / $maxsize);
+			
+			$memory_limit = ini_get("memory_limit");
+			if(substr($memory_limit, -1) == 'M')
+				$memory_limit = substr($memory_limit, 0, 1) * 1048576;
+			$free_memory = $memory_limit - memory_get_usage();
+			$needspace = ($width * $height + $newwidth * $newheight) * 5;
+			//
+			// FIXME: here is a bug
+			// echo "Need: " . kbormb($needspace) . "<br />Have: " . kbormb($free_memory) . "<br />";;
+			//
+			if($needspace > $free_memory && $free_memory > 0)
+				return false;
+			
+			
+			
+			$newimage = ImageCreateTrueColor($newwidth, $newheight);
+			
+			switch (strtolower($ext[2])) {
+				case 'jpg' :
+				case 'jpeg': $source  = imagecreatefromjpeg($file);
+					break;
+				case 'gif' : $source  = imagecreatefromgif($file);
+					break;
+				case 'png' : $source  = imagecreatefrompng($file);
+					break;
+				default    : return false;
+			}
+			imagecopyresized($newimage, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+			switch (strtolower($ext[2])) {
+				case 'jpg' :
+				case 'jpeg': imagejpeg($newimage, $newfile ,100);
+					break;
+				case 'gif' : imagepng($newimage, $newfile . '.png');
+					break;
+				case 'png' : imagepng($newimage, $newfile);
+					break;
+			}
+			imagejpeg($newimage, $newfile ,100);
+			
+			return true;
+		}
+		else
+			return copy($file, $newfile);
+		
+	}
 ?>

@@ -315,7 +315,7 @@
 	
 		$out = "Files<br />";
 		$out .= "<form enctype=\"multipart/form-data\" action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
-			<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"30000\" />
+			<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1600000\" />
 			<input type=\"hidden\" name=\"page\" value=\"files\" />
 			<input type=\"hidden\" name=\"action\" value=\"upload\" />
 			<input name=\"uploadfile0\" type=\"file\" />
@@ -334,11 +334,21 @@
 							//
 							// TODO:dont allow an upload if a file with the same md5 exists
 							//
-							move_uploaded_file($file['tmp_name'], $save_path);
-						
-							$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5)
-								VALUES('" . $file['name'] . "', '" . $file['type'] . "', '$save_path', '" . filesize($save_path) . "', '" . md5_file($save_path) . "')";
-							db_result($sql);
+							$file_md5 = md5_file($file['tmp_name']);
+							
+							$sql = "SELECT file_name
+								FROM " . DB_PREFIX . "files
+								WHERE file_md5='$file_md5'";
+							$md5exists_result = db_result($sql);
+							if($md5exists = mysql_fetch_object($md5exists_result))
+								$out .= "Die Datei <strong>&quot;" . $file['name'] . "&quot;</strong> ist bereits hochgeladen worden (&quot;$md5exists->file_name&quot;)";
+							else {
+								move_uploaded_file($file['tmp_name'], $save_path);
+								
+								$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date)
+									VALUES('" . $file['name'] . "', '" . $file['type'] . "', '$save_path', '" . filesize($save_path) . "', '" . md5_file($save_path) . "', " . mktime() . ")";
+								db_result($sql);
+							}
 						}
 						else {
 							$out .= "Die Datei konnte nicht hochgeladen werden";
@@ -346,21 +356,25 @@
 					}
 				}
 			}
-			//if (move_uploaded_file($_FILES['uploadfile']['tmp_name'], "./data/upload/" . $_FILES['uploadfile']['name'])) {
-			//	$out .= print_r($_FILES);
-			//}
-			
 		}
 		
 		$out .= "
-		[Aktualisieren]
+		[Auf Veränderungen überprüfen]
 		<table>
-		<tr><td>id</td><td>Name</td><td>Größe</td><td>Typ</td><td>Aktionen</td></tr>";
+		<tr><td>id</td><td>Name</td><td>Größe</td><td>Hochgeladen am</td><td>Typ</td><td>Aktionen</td></tr>";
 		$sql = "SELECT *
-			FROM " . DB_PREFIX . "files";
+			FROM " . DB_PREFIX . "files
+			ORDER BY file_date DESC";
 		$files_result = db_result($sql);
 		while($file = mysql_fetch_object($files_result)) {
-			$out .= "<tr><td>#$file->file_id</td><td>$file->file_name</td><td>" . kbormb($file->file_size) . "</td><td>$file->file_type</td><td>[Löschen]</td></tr>\r\n";
+			$out .= "<tr>
+				<td>#$file->file_id</td>
+				<td>$file->file_name</td>
+				<td>" . kbormb($file->file_size) . "</td>
+				<td>" . date('d.m.Y H:i:s',$file->file_date) . "</td>
+				<td>$file->file_type</td>
+				<td>[Löschen]</td>
+			</tr>\r\n";
 			//$out .= "$file->file_name<br />";
 		}
 		$out .= "</table>";

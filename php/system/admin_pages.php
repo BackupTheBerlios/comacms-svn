@@ -979,15 +979,32 @@
 		return $out;
 	}
 	function page_gallery_editor() {
-		global $admin_lang, $extern_action, $_SERVER;
+		global $admin_lang, $extern_action, $_SERVER, $extern_images, $extern_gallery_name, $extern_gallery_title, $actual_user_id;
 		
 		if(!isset($extern_action))
-			$extern_action = '';	
+			$extern_action = '';
+		if(!isset($extern_gallery_name))
+			$extern_gallery_name = '';
+		if(!isset($extern_gallery_title))
+			$extern_gallery_title = '';
+		if($extern_images === null)
+			$extern_images = array();
+			
 		$out = "<h3>" . $admin_lang['gallery editor'] . "</h3><hr />\r\n";
-		if($extern_action == 'new') {
-			$out .= "<form action=\"post\">
-				Name:<input type=\"text\" name=\"gallery_name\" /><br />
-				Bilder:";
+		if($extern_action == 'select') {
+		
+			$out .= "Bilder auswählen
+				<form  action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
+					<input type=\"hidden\" name=\"page\" value=\"gallery_editor\"/>
+					<input type=\"hidden\" name=\"action\" value=\"new\" />
+					<table>
+						<tr>
+							<td>
+								Bilder:
+								<span class=\"info\">TODO</span>
+							</td>
+						<td>
+					";
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "files
 					WHERE file_type LIKE 'image/%'
@@ -1001,21 +1018,127 @@
 						$thumb .= '.png';
 					
 					$succes = true;
+					$imgmax = 100;
 					if(!file_exists($thumb))
-						$succes = generateThumb($image->file_path, 150);
-					if(file_exists($thumb) || $succes)
-						$out .= "<a href=\"$image->file_path\"><img src=\"$thumb\" alt=\"$thumb\" /></a>";
+						$succes = generateThumb($image->file_path, $imgmax);
+					if(file_exists($thumb) || $succes) {
+						$sizes = getimagesize($thumb);
+						$margin_top = round(($imgmax - $sizes[1]) / 2);
+						$margin_bottom = $imgmax - $sizes[1] - $margin_top;
+						$out .= "<div class=\"imageblock\">
+						<a href=\"" . generateUrl($image->file_path) . "\">
+						<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($thumb) . "\" alt=\"$thumb\" /></a><br />
+						<input type=\"checkbox\" name=\"images[]\" value=\"$image->file_id\"/>Auswählen</div>";
+					}
 				}
-			$out .= "
+			$out .= "</td>
+				</tr>
+				<tr>
+					<td colspan=\"2\">
+						<input class=\"button\" type=\"reset\" value=\"Auswahl rückgängig machen\" />&nbsp;
+						<input class=\"button\" type=\"Submit\" value=\"Als Gallerie Zusammenfassen\"/>
+					</td>
+				</tr>
+			</table>
+		</form>";
+		}
+		elseif($extern_action == 'add') {
+			//
+			// TODO: chekc for correct inputs
+			//
+			$page_text = implode(',', $extern_images);
+			
+			foreach($extern_images as $id) {
+				$sql = "SELECT file_path
+					FROM " . DB_PREFIX . "files
+					WHERE file_id=$id";
+				$image_result = db_result($sql);
+				$image = mysql_fetch_object($image_result);
+				$page_text .=  "\r\n" . $image->file_path;
+			}
+			//$out .= $page_text;
+			$sql = "INSERT INTO " . DB_PREFIX . "pages_content (page_name, page_type, page_title, page_text, page_lang, page_html, page_parent_id, page_creator, page_created, page_visible)
+					VALUES ('$extern_gallery_name', 'gallery', '$extern_gallery_title', '$page_text', '', '', '0', '$actual_user_id', '" . mktime() . "','public')";
+			db_result($sql);
+			
+		}
+		if($extern_action == 'new') {
+			//$images = array();
+			
+			
+			$out .= "<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">
+			<input type=\"hidden\" name=\"page\" value=\"gallery_editor\" />
+			<input type=\"hidden\" name=\"action\" value=\"add\" />
+			<table>
+			<tr>
+				<td>
+					Titel:
+					<span class=\"info\">TODO</span>
+				</td>
+				<td>
+					<input type=\"text\" name=\"gallery_title\"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Name:
+					<span class=\"info\">TODO</span>
+				</td>
+				<td>
+					<input type=\"text\" name=\"gallery_name\"/>
+				</td>
+			</tr>
+			<tr>
+				<td class=\"topdesc\">
+					Bilder:
+					<span class=\"info\">TODO</span>
+				</td>
+				<td>";
+			foreach($extern_images as $id) {
+				$sql = "SELECT file_path
+					FROM " . DB_PREFIX . "files
+					WHERE file_id=$id";
+				$image_result = db_result($sql);
+				$image = mysql_fetch_object($image_result);
+				$thumb = str_replace('/upload/', '/thumbnails/', $image->file_path);
+				preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
+				//echo $thumb."<br />";
+				if(strtolower($ext[2]) == 'gif')
+					$thumb .= '.png';
 				
-				</form>";
+				$succes = true;
+				$imgmax = 100;
+				if(!file_exists($thumb))
+					$succes = generateThumb($image->file_path, $imgmax);
+				if(file_exists($thumb) || $succes) {
+					$sizes = getimagesize($thumb);
+					$margin_top = round(($imgmax - $sizes[1]) / 2);
+					$margin_bottom = $imgmax - $sizes[1] - $margin_top;
+					$out .= "<div class=\"imageblock\">
+							<a href=\"" . generateUrl($image->file_path) . "\">
+								<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($thumb) . "\" alt=\"$thumb\" />
+							</a>
+							<br />
+							<input type=\"checkbox\" name=\"images[]\" value=\"$id\" checked=\"checked\"/>Auswählen
+						</div>";
+				}
+			}
+			$out .= "</td>
+			</tr>
+			<tr>
+				<td colspan=\"2\">
+					<a class=\"button\" href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=select\">Zurück</a><input class=\"button\" type=\"submit\" value=\"Erstellen\"/>
+				</td>
+			</tr>
+		</table>
+		</form>";
 		}
 		else {
 			$out .= "Bilder Verwalten<br />
 				&nbsp;-Hinzufügen/Hochladen<br />
 				&nbsp;-Bearbeiten<br />
 				&nbsp;-Löschen<br />
-			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=new\">Neue Gallerie</a><br />
+			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=select\">Neue Gallerie</a><br />
 			Übersicht<br />
 				&nbsp;-Infos<br />
 				&nbsp;-Bearbeiten<br />

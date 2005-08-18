@@ -366,6 +366,7 @@
 			FROM " . DB_PREFIX . "files
 			ORDER BY file_date DESC";
 		$files_result = db_result($sql);
+		$completesize = 0;
 		while($file = mysql_fetch_object($files_result)) {
 			$out .= "<tr>
 				<td>#$file->file_id</td>
@@ -375,9 +376,10 @@
 				<td>$file->file_type</td>
 				<td>[Löschen]</td>
 			</tr>\r\n";
-			//$out .= "$file->file_name<br />";
+			$completesize += $file->file_size;
 		}
 		$out .= "</table>";
+		$out .= "Insgesammt " . kbormb($completesize) . ".";
 		return $out;
 	}
 ?>

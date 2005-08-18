@@ -209,12 +209,11 @@
 			
 			$memory_limit = ini_get("memory_limit");
 			if(substr($memory_limit, -1) == 'M')
-				$memory_limit = substr($memory_limit, 0, 1) * 1048576;
+				$memory_limit = substr($memory_limit, 0, -1) * 1048576;
 			$free_memory = $memory_limit - memory_get_usage();
 			$needspace = ($width * $height + $newwidth * $newheight) * 5;
 			//
-			// FIXME: here is a bug
-			// echo "Need: " . kbormb($needspace) . "<br />Have: " . kbormb($free_memory) . "<br />";;
+			// check for enough available memory to resize the image
 			//
 			if($needspace > $free_memory && $free_memory > 0)
 				return false;
@@ -250,5 +249,10 @@
 		else
 			return copy($file, $newfile);
 		
+	}
+	
+	function generateUrl($string)
+	{
+		return str_replace(" ", "%20", $string);
 	}
 ?>

@@ -1,10 +1,11 @@
 galley
-type=gallery
-textfeld=100x110	//größe
-bild1.jpg		//Pfad zu einem bild basisordner wird data/gallery, muss aber nicht
-.../bild woanders.png	//Pfad zu einem weiiteren bild
+page_type = "gallery";
+page_text= "1,5		// File ids
+image1.jpg		// Pfad zu einem bild basisordner wird data/gallery, muss aber nicht
+.../bild woanders.png";	// Pfad zu einem weiiteren bild
+page_html = "";
 
-action definitions
+access definitions
 0 = none
 1 = read
 2 = write/change

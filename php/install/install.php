@@ -9,10 +9,10 @@
 <?
 
 $create = "DROP TABLE IF EXISTS " . $db_prefix. "config;
-CREATE TABLE " . $db_prefix . "vars (
+CREATE TABLE " . $db_prefix . "config (
   config_name varchar(255) NOT NULL default '',
   config_value varchar(255) NOT NULL default '',
-  PRIMARY KEY  (name)
+  PRIMARY KEY  (config_name)
 );
 DROP TABLE IF EXISTS ".$db_prefix."menue;
 CREATE TABLE ".$db_prefix."menue (
@@ -53,7 +53,7 @@ CREATE TABLE `" . $db_prefix . "users` (
   PRIMARY KEY  (`user_id`)
 );
 DROP TABLE IF EXISTS ".$db_prefix."online;
-REATE TABLE ".$db_prefix."online (
+CREATE TABLE ".$db_prefix."online (
   online_id varchar(50) NOT NULL default '',
   ip varchar(16) default '0.0.0.0',
   lastaction varchar(20) default '0',
@@ -90,7 +90,7 @@ id INT( 10 ) NOT NULL AUTO_INCREMENT ,
 type VARCHAR( 15 ) NOT NULL ,
 name VARCHAR( 20 ) NOT NULL ,
 title VARCHAR( 100 ) NOT NULL ,
-text TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+text TEXT NOT NULL ,
 lang VARCHAR( 5 ) NOT NULL ,
 creator INT( 10 ) NOT NULL ,
 PRIMARY KEY ( id )
@@ -107,13 +107,13 @@ file_type VARCHAR( 100 ) NOT NULL ,
 file_date INT( 25 ) DEFAULT '0' NOT NULL,
 PRIMARY KEY ( file_id )
 );
-INSERT INTO ".$db_prefix."users (name, showname, password, registerdate, admin, icq)
+INSERT INTO ".$db_prefix."users (user_name, user_showname, user_password, user_registerdate, user_admin, user_icq)
 VALUES ('".$admin_name."', '".$admin_showname."', '".md5($admin_password)."', '".mktime()."', 'y', '');
-INSERT INTO ".$db_prefix."sitedata (name, title, text, lang, html, type)
+INSERT INTO ".$db_prefix."pages_content (page_name, page_title, page_text, page_lang, page_html, page_type)
 VALUES ('home', 'Hauptseite', 'das ist die Homeseite', 'de', 'Das ist die Homeseite', 'text');
-INSERT INTO ".$db_prefix."vars (name, value) VALUES ('style', 'clear');
-INSERT INTO ".$db_prefix."vars (name, value) VALUES ('default_page', 'home');
-INSERT INTO ".$db_prefix."menue (link, text, new, orderid) VALUES ('l:home', 'Home', 'no', 0)";
+INSERT INTO ".$db_prefix."config (config_name, config_value) VALUES ('style', 'clear');
+INSERT INTO ".$db_prefix."config (config_name, config_value) VALUES ('default_page', 'home');
+INSERT INTO ".$db_prefix."menue (link, text, new, orderid, menue_id) VALUES ('l:home', 'Home', 'no', 0, 1)";
 if($admin_name == "" || $admin_showname == "" || $admin_password == "")
 	die("Die Angaben zum Adminaccount sind unvollständig..");
 
@@ -134,7 +134,7 @@ $config_data .= '$d_server = \'' . $db_server.'\';' . "\n";
 $config_data .= '$d_user   = \'' . $db_user . '\';' . "\n";
 $config_data .= '$d_pw     = \'' . $db_password . '\';' . "\n";
 $config_data .= '$d_base   = \'' . $db_database . '\';' . "\n";
-$config_data .= '$d_pre = \'' . $de_prefix . '\';' . "\n\n";
+$config_data .= '$d_pre = \'' . $db_prefix . '\';' . "\n\n";
 $config_data .= 'define(\'COMACMS_INSTALLED\', true);' . "\n";
 $config_data .= '?>';
 

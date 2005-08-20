@@ -235,7 +235,7 @@
 				<input type=\"checkbox\" name=\"show_deleted_pages\"";if($show_deleted) $out .= " checked=\"true\""; $out .= "/>" . $admin_lang['show deleted'] ."<br />
 				<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['show'] . "\" />
 			</form>";
-			$out .= generatesitestree(0, "\t\t\t", $extern_page_lang, $show_deleted, $show_hidden);
+			$out .= generatePagesTree(0, "\t\t\t", $extern_page_lang, $show_deleted, $show_hidden);
 		}
 		elseif($extern_action == 'edit') {
 			$sql = "SELECT *

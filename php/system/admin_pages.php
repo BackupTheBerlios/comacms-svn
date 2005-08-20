@@ -1041,6 +1041,7 @@
 				</tr>
 			</table>
 		</form>";
+			return $out;
 		}
 		elseif($extern_action == 'add') {
 			//
@@ -1062,7 +1063,10 @@
 			db_result($sql);
 			
 		}
-		if($extern_action == 'new') {
+		elseif($extern_action == 'overview') {
+			$out .= generatePagesTree(0, "\t\t\t", '', true, true,'gallery');
+		}
+		elseif($extern_action == 'new') {
 			//$images = array();
 			
 			
@@ -1139,7 +1143,7 @@
 				&nbsp;-Bearbeiten<br />
 				&nbsp;-Löschen<br />
 			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=select\">Neue Gallerie</a><br />
-			Übersicht<br />
+			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=overview\">Übersicht</a><br />
 				&nbsp;-Infos<br />
 				&nbsp;-Bearbeiten<br />
 				&nbsp;-Löschen";

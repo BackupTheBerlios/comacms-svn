@@ -28,7 +28,18 @@
 	if(!($page_data = mysql_fetch_object($page_result)))
 		header("Location: special.php?page=404&notfound=g:$extern_page");
 	$title = $page_data->page_title;
-	$text = $page_data->page_html;
+	$text = $page_data->page_text;
+	$images = explode("\r\n", $page_data->page_text);
+	$image_count = count($images);
+	$text = '';
+	for($i = 1;$i < $image_count; $i++) {
+		$thumb = str_replace('/upload/', '/thumbnails/', $images[$i]);
+				preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
+				//echo $thumb."<br />";
+				if(strtolower($ext[2]) == 'gif')
+					$thumb .= '.png';
+		$text .= "<img src=\"".$thumb."\"/>\r\n";
+	}
 	//
 	// insert data into style
 	//

@@ -291,7 +291,7 @@
 		<select name=\"page_name\">";
 			$sql = "SELECT page_name, page_title, page_id
 				FROM " . DB_PREFIX . "pages_content
-				WHERE page_visible!='deleted'
+				WHERE page_visible!='deleted' AND page_type='text'
 				ORDER BY page_name ASC";
 			$sites = db_result($sql);
 			while($siteinfo = mysql_fetch_object($sites))

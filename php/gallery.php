@@ -35,21 +35,20 @@
 	for($i = 1;$i < $image_count; $i++) {
 		$thumb = str_replace('/upload/', '/thumbnails/', $images[$i]);
 				preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
-				//echo $thumb."<br />";
 				if(strtolower($ext[2]) == 'gif')
 					$thumb .= '.png';
-		$text .= "<img src=\"".$thumb."\"/>\r\n";
+		$text .= "<div class=\"gallery_image\"><img  style=\"margin-top:0px;\" src=\"".$thumb."\"/></div>\r\n";
 	}
+	
 	//
 	// insert data into style
 	//
-	
 	$page = str_replace("[title]", $title, $page);
 	$page = str_replace("[text]", $text, $page);
 	$page = str_replace("[menue]", generatemenue(@$internal_style, 1, $extern_page), $page);
 	$page = str_replace("[menue2]", generatemenue(@$internal_style, 2, $extern_page), $page);
+	$page = str_replace("[position]", position_to_root($page_data->page_id), $page);
 	
-	$page = str_replace("[position]",position_to_root($page_data->page_id), $page);
 	//
 	// end
 	//

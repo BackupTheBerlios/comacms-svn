@@ -61,7 +61,7 @@
 		$header .= 'Content-Type: text/html';
 		
 		return mail($to, $title, $text, $header);
-}
+	}
 
 	function getmicrotime($mic_time) {
 		list($usec, $sec) = explode(' ', $mic_time);
@@ -83,7 +83,7 @@
 		$row = mysql_fetch_object($result);
 		
 		return $row->user_id;
-}
+	}
 
 	function getUserByID($id) {
 		$sql = "SELECT user_showname

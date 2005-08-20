@@ -211,7 +211,16 @@
 			$memory_limit = ini_get("memory_limit");
 			if(substr($memory_limit, -1) == 'M')
 				$memory_limit = substr($memory_limit, 0, -1) * 1048576;
-			$free_memory = $memory_limit - memory_get_usage();
+			//
+			// mostly all php-binarys for windows are not compiled with --enable-memory-limit
+			// and don't suport memory_get_usage() and are able to handle bigger data
+			// (it is not bad for us) 
+			//
+			if(function_exists('memory_get_usage'))
+				$free_memory = $memory_limit - memory_get_usage();
+			else
+				$free_memory = 0;
+
 			$needspace = ($width * $height + $newwidth * $newheight) * 5;
 			//
 			// check for enough available memory to resize the image

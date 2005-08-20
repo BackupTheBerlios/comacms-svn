@@ -311,16 +311,9 @@
 	}
 	
 	function page_files() {
-		global $_SERVER,$_FILES,$extern_action;
-	
+		global $_SERVER,$_FILES, $extern_action, $admin_lang, $extern_file_id, $extern_sure;
+		
 		$out = "Files<br />";
-		$out .= "<form enctype=\"multipart/form-data\" action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
-			<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1600000\" />
-			<input type=\"hidden\" name=\"page\" value=\"files\" />
-			<input type=\"hidden\" name=\"action\" value=\"upload\" />
-			<input name=\"uploadfile0\" type=\"file\" />
-			<input type=\"submit\" value=\"Hochladen\"/>
-		</form>";
 		$upload_path = './data/upload/';
 		if($extern_action == 'upload') {
 			foreach($_FILES as $name => $file) {
@@ -357,7 +350,38 @@
 				}
 			}
 		}
-		
+		elseif($extern_action == 'delete') {
+			if($extern_file_id != '') {
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "files
+					WHERE file_id = $extern_file_id";
+				$file_result = db_result($sql);
+				$file = mysql_fetch_object($file_result);
+				if($extern_sure) {
+					$sql = "DELETE FROM " . DB_PREFIX . "files
+					WHERE file_id = $extern_file_id";
+					db_result($sql);
+					unlink($file->file_path);
+					//delete
+					//unlink()
+				}
+				else {
+					$out .= "Sind sie sicher, dass sie die Datei &quot;$file->file_name&quot; unwiederruflich löschen wollen?<br />
+					Die Datei wurde am " . date('d.m.Y', $file->file_date) . " um " . date('H:i:s', $file->file_date) ." hochgeladen.<br />
+					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&amp;action=delete&amp;file_id=" . $extern_file_id . "&amp;sure=1\" title=\"Wirklich Löschen\">" . $admin_lang['yes'] . "</a> &nbsp;&nbsp;&nbsp;&nbsp;
+					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files\" title=\"Nicht Löschen\">" . $admin_lang['no'] . "</a>";
+					return $out;
+				}
+
+			}
+		}
+		$out .= "<form enctype=\"multipart/form-data\" action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
+			<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1600000\" />
+			<input type=\"hidden\" name=\"page\" value=\"files\" />
+			<input type=\"hidden\" name=\"action\" value=\"upload\" />
+			<input name=\"uploadfile0\" type=\"file\" />
+			<input type=\"submit\" value=\"Hochladen\"/>
+		</form>";
 		$out .= "
 		[Auf Veränderungen überprüfen]
 		<table>
@@ -372,9 +396,9 @@
 				<td>#$file->file_id</td>
 				<td>$file->file_name</td>
 				<td>" . kbormb($file->file_size) . "</td>
-				<td>" . date('d.m.Y H:i:s',$file->file_date) . "</td>
+				<td>" . date('d.m.Y H:i:s', $file->file_date) . "</td>
 				<td>$file->file_type</td>
-				<td>[Löschen]</td>
+				<td><a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&amp;action=delete&amp;file_id=$file->file_id\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
 			</tr>\r\n";
 			$completesize += $file->file_size;
 		}

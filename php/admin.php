@@ -32,7 +32,8 @@
 	$menue_array[] = array($admin_lang['preferences'], 'admin.php?page=preferences');
 	$menue_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
 	$menue_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
-	$menue_array[] = array($admin_lang['news'],'admin.php?page=news');
+	$menue_array[] = array($admin_lang['news'], 'admin.php?page=news');
+	$menue_array[] = array($admin_lang['dates'], 'admin.php?page=dates');
 	$menue_array[] = array($admin_lang['sitestyle'], 'admin.php?page=sitestyle');
 	$menue_array[] = array($admin_lang['users'], 'admin.php?page=users');
 	$menue_array[] = array($admin_lang['gallery editor'], 'admin.php?page=gallery_editor');
@@ -62,6 +63,10 @@
 	elseif($extern_page == 'news') {
 		$title = $admin_lang['news'];
 		$text = page_news();
+	}
+	elseif($extern_page == 'dates') {
+		$title = $admin_lang['dates'];
+		$text = page_dates();
 	}
 	elseif($extern_page == 'pageeditor') {
 		$title = $admin_lang['pageeditor'];

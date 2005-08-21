@@ -427,7 +427,7 @@
 					$title = $_POST['title'];
 			}
 			//
-			// delete the selected new-entrie
+			// delete the selected entrie
 			//
 			if($action == "delete") {
 				if(isset($_GET['sure']) || isset($_POST['sure'])) {
@@ -456,7 +456,10 @@
 				if($text != "" && $title != "")
 					db_result("INSERT INTO ".DB_PREFIX."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$actual_user_id')");
 			}
-			elseif($action == "update") { // update the selected entrie
+			//
+			// update the selected entrie
+			//
+			elseif($action == "update") { 
 				if($text != "" && $title != "" && $id != 0)
 					db_result("UPDATE ".DB_PREFIX."news SET title= '".$title."', text= '".$text."' WHERE id=".$id);
 			}
@@ -1155,4 +1158,141 @@
 		
 		return $out;
 	}
+/*****************************************************************************
+ *
+ *  string page_dates()
+ *  returns the date-admin-page where you can write,change and delete topic-entries
+ *
+ *****************************************************************************/
+ 	function page_dates() {
+ 		global $admin_lang, $extern_action, $extern_sure, $extern_topic, $extern_date, $extern_place, $extern_id, $_SERVER, $actual_user_id, $actual_user_showname;
+		
+		if(!isset($extern_action))
+			$extern_action = '';
+		
+		$out = "<h3>" . $admin_lang['dates'] . "</h3><hr />\r\n";
+		
+		//
+		// delete the selected entrie
+		//
+		if($extern_action == "delete") {
+			if(isset($extern_sure)) {
+							
+				if($extern_sure == 1)
+					db_result("DELETE FROM " . DB_PREFIX . "dates WHERE date_id=" . $extern_id);
+			}
+			else {
+				$result = db_result("SELECT * FROM " . DB_PREFIX . "dates WHERE date_id=" . $extern_id);
+				$row = mysql_fetch_object($result);
+				$out .= "Den News Eintrag &quot;" . $row->date_topic . "&quot; wirklich löschen?<br />
+			<a href=\"admin.php?page=dates&amp;action=delete&amp;id=" . $extern_id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
+			<a href=\"admin.php?page=dates\" title=\"Nicht Löschen\">nein</a>";
+			
+				return $out;
+			}
+		}
+		//
+		// add a new entrie
+		//
+		elseif($extern_action == "new") {
+			if($extern_topic != "" && $extern_place != "" && $extern_date != "") {
+				$date = explode(".", $extern_date);
+				db_result("INSERT INTO ".DB_PREFIX."dates (date_topic, date_place, date_date, date_creator) VALUES ('".$extern_topic."', '".$extern_place."', '".mktime(0, 0, 0, $date[1], $date[0], $date[2])."', '$actual_user_id')");
+			}	
+		}
+		//
+		// update the selected entrie
+		//
+		elseif($extern_action == "update") { 
+			if($extern_topic != "" && $extern_place != "" && $extern_date != "" && $extern_id != 0) {
+				$date = explode(".", $extern_date);
+				db_result("UPDATE ".DB_PREFIX."news SET date_topic= '".$extern_topic."', date_place= '".$extern_place."', date_date'".mktime(0, 0, 0, $date[1], $date[0], $date[2])."' WHERE id=".$extern_id);
+			}
+		}
+		
+		if($extern_action != "edit") {
+			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
+			<input type=\"hidden\" name=\"page\" value=\"dates\" />
+			<input type=\"hidden\" name=\"action\" value=\"new\" />
+			" . $admin_lang['location'] . ": <span class=\"info\">Gemeint ist hier der Ort an welchem die Veranstaltung stattfindet.</span> <input type=\"text\" name=\"place\" maxlength=\"60\" value=\"\" /><br /><br />
+			" . $admin_lang['date'] . ": <span class=\"info\">Dies ist das Datum, an dem die Veranstaltung stattfindet (Format: TT.MM.YYY, Beispiel: 05.11.2005)</span> <input type=\"text\" name=\"date\" maxlength=\"60\" value=\"\" /><br /><br />
+			" . $admin_lang['topic'] . ": <span class=\"info\">Dies ist die Beschreibung des Termins</span><textarea cols=\"60\" rows=\"6\" name=\"topic\"></textarea><br /><br />
+			Eingelogt als " . $actual_user_showname . " &nbsp;<input type=\"submit\" value=\"Senden\" /><br />
+		</form>";
+		}
+			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
+			<input type=\"hidden\" name=\"page\" value=\"dates\" />
+			<input type=\"hidden\" name=\"action\" value=\"update\" />
+			<table>\r\n";
+		//
+		// write all news entries
+		//
+		$result = db_result("SELECT * FROM ".DB_PREFIX."dates ORDER BY date_date DESC");
+		while($row = mysql_fetch_object($result)) {
+			//
+			// show an editform for the selected entrie
+			//
+			if($extern_id == $row->date_id && $extern_action == "edit") {
+				$out .= "\t\t\t\t<tr>
+					<td colspan=\"2\" id=\"dateid" . $row->date_id . "\">
+						<input type=\"hidden\" name=\"id\" value=\"".$row->date_id."\" />
+						<input type=\"submit\" value=\"Speichern\" />
+						&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"Löschen\">Löschen</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						" . $admin_lang['location'] . ": <span class=\"info\">Gemeint ist hier der Ort an welchem die Veranstaltung stattfindet.</span> <input type=\"text\" name=\"place\" maxlength=\"60\" value=\"" . $row->date_place . "\" />
+					</td>
+					<td>
+						" . $admin_lang['date'] . ": <span class=\"info\">Dies ist das Datum, an dem die Veranstaltung stattfindet (Format: TT.MM.YYY, Beispiel: 05.11.2005)</span> <input type=\"text\" name=\"date\" maxlength=\"60\" value=\"" . date("d.m.Y", $row->date_date) . "\" /><br />
+					</td>
+				</tr>
+				<tr>
+					<td colspan=\"2\">
+						" . $admin_lang['topic'] . ": <textarea cols=\"60\" rows=\"6\" name=\"topic\">" . $row->date_topic . "</textarea><br />
+					</td>
+				</tr>
+				<tr>
+					<td colspan=\"2\">
+						" . getUserByID($row->date_creator) . "
+					</td>
+				</tr>";
+			}
+			//
+			// show only the entrie
+			//
+			else {
+				$out .= "\t\t\t\t<tr>
+					<td colspan=\"2\">
+						<a id=\"dateid".$row->date_id."\" ></a>
+						<a href=\"admin.php?page=dates&amp;action=edit&amp;id=".$row->date_id."#dateid".$row->date_id."\" title=\"Bearbeiten\">Bearbeiten</a>
+						&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"Löschen\">Löschen</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<b>".$row->date_place."</b>
+					</td>
+					<td>
+						".date("d.m.Y", $row->date_date)."
+					</td>
+				</tr>
+				<tr>
+					<td colspan=\"2\">
+						".nl2br($row->date_topic)."
+					</td>
+				</tr>
+				<tr>
+					<td colspan=\"2\">
+						".getUserByID($row->date_creator)."
+					</td>
+				</tr>";
+			}
+		}
+		$out .= "\t\t\t</table>
+		</form>\r\n";
+	
+		return $out;
+ 	}
 ?>

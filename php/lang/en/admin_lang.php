@@ -26,6 +26,7 @@
 	$admin_lang['menueeditor'] = 'MenueEditor';
 	$admin_lang['pageeditor'] = 'PageEditor';
 	$admin_lang['news'] = 'News';
+	$admin_lang['dates'] = 'Dates';
 	$admin_lang['sitestyle'] = 'Sitestyle';
 	$admin_lang['users'] = 'Users';
 	$admin_lang['gallery'] = 'Gallery';
@@ -53,5 +54,8 @@
 	$admin_lang['create'] = 'Create';
 	$admin_lang['reset'] = 'Reset';
 	$admin_lang['save'] = 'Save';
-	$admin_lang['files'] = 'Dateien';
+	$admin_lang['files'] = 'Files';
+	$admin_lang['location'] = 'Location';
+	$admin_lang['date'] = 'Date';
+	$admin_lang['topic'] = 'Topic';
 ?>

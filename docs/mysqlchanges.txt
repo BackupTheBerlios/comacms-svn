@@ -70,3 +70,14 @@ PRIMARY KEY ( `file_id` )
 
 #add a field to cms_files which conains the upload date
 ALTER TABLE `cms_files` ADD `file_date` INT( 25 ) DEFAULT '0' NOT NULL ;
+
+#r77
+#dates table created
+CREATE TABLE `cms_dates` (
+`date_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+`date_date` INT( 20 ) UNSIGNED,
+`date_topic` VARCHAR( 150 ) NOT NULL ,
+`date_place` VARCHAR( 60 ) NOT NULL ,
+`date_creator` INT( 10 ) UNSIGNED,
+PRIMARY KEY ( `date_id` )
+);

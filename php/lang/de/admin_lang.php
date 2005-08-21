@@ -25,6 +25,7 @@
 	$admin_lang['menueeditor'] = 'MenüEditor';
 	$admin_lang['pageeditor'] = 'SeitenEditor';
 	$admin_lang['news'] = 'News';
+	$admin_lang['dates'] = 'Termine';
 	$admin_lang['sitestyle'] = 'Seitenstyle';
 	$admin_lang['users'] = 'Benutzer';
 	$admin_lang['gallery'] = 'Gallerie';
@@ -54,4 +55,7 @@
 	$admin_lang['reset'] = 'Zurücksetzen';
 	$admin_lang['save'] = 'Speichern';
 	$admin_lang['files'] = 'Dateien';
+	$admin_lang['location'] = 'Veranstaltungsort';
+	$admin_lang['date'] = 'Datum';
+	$admin_lang['topic'] = 'Termin'
 ?>

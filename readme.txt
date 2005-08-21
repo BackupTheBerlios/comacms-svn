@@ -1,4 +1,4 @@
-The Comasy-Team(Authors):
+The ComaCMS-Team(Authors):
 Sebastian Willenborg	swillenborg@gmx.de
 Stefan Winkler		wstefan@arcor.de
 

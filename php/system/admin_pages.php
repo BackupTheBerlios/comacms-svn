@@ -3,8 +3,8 @@
  *
  *  file		: admin_pages.php
  *  created		: 2005-07-12
- *  copyright		: (C) 2005 The [findaname]-Team
- *  email		: [findaname]@williblau.de
+ *  copyright		: (C) 2005 The ComaCMS-Team
+ *  email		: comacms@williblau.de
  *
  *****************************************************************************/
 

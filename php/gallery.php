@@ -3,8 +3,8 @@
  *
  *  file		: gallery.php
  *  created		: 2005-06-24
- *  copyright		: (C) 2005 The Comasy-Team
- *  email		: comasy@williblau.de
+ *  copyright		: (C) 2005 The ComaCMS-Team
+ *  email		: comacms@williblau.de
  *
  *****************************************************************************/
 

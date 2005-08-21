@@ -1,0 +1,7 @@
+#title {
+ margin-bottom: 0;
+}
+
+.sitepreview, #previewiframe { /*FIXME: make only one classss*/
+ width: 700px;
+}

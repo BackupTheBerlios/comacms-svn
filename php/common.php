@@ -3,7 +3,7 @@
  *
  *  file		: common.php
  *  created		: 2005-08-05
- *  copyright		: (C) 2005 The ComaCMS-Team
+ *  copyright   : (C) 2005 The ComaCMS-Team
  *  email		: comacms@williblau.de
  *
  *****************************************************************************/
@@ -90,6 +90,7 @@
 	$page = fread($_file, filesize($stylefile));
 	if(!isset($internal_default_page))
 		$internal_default_page = '';
+
 	if($extern_page == $internal_default_page)
 		$page = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", "", $page);
 	else

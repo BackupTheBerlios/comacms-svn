@@ -36,12 +36,12 @@
 		//
 		// get the coutnt of all pages
 		//
-		$sitedata_result = db_result("SELECT * FROM " . DB_PREFIX . "pages_content");
+		$sitedata_result = db_result("SELECT page_id FROM " . DB_PREFIX . "pages_content");
 		$page_count = mysql_num_rows($sitedata_result);
 		//
 		// get the count of all registered users
 		//
-		$users_result = db_result("SELECT * FROM ".DB_PREFIX."users");
+		$users_result = db_result("SELECT user_id FROM " . DB_PREFIX . "users");
 		$users_count = mysql_num_rows($users_result);
 		//
 		// get the size of all tables with the prefix DB_PREFIX
@@ -72,15 +72,18 @@
 			<td>".$admin_lang['host']."</td>
 		</tr>";
 			//output all visitors surfing on the site
-			$users_online_result = db_result("SELECT * FROM ".DB_PREFIX."online");
+			$users_online_result = db_result("SELECT userid, page, lastaction, lang, ip FROM " . DB_PREFIX . "online");
 			while($users_online = mysql_fetch_object($users_online_result)) {
 				if($users_online->userid == 0)
 					$username  = $admin_lang['not registered'];
 				else
 					$username = getUserById($users_online->userid);
+				//
+				// FIXME: gethostbyaddr needes to much time if there are many users online
+				//
 				$out .= "\t\t\t<tr>
 			<td>".$username."</td>
-			<td><a href=\"index.php?site=".$users_online->page."\">".$users_online->page."</a></td>
+			<td><a href=\"index.php?page=".$users_online->page."\">".$users_online->page."</a></td>
 			<td>" . date("d.m.Y H:i:s", $users_online->lastaction)."</td>
 			<td>" . $admin_lang[$users_online->lang] . "</td>
 			<td>" . $users_online->ip . "</td>

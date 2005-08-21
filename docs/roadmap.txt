@@ -1,45 +1,45 @@
-			CMS-ROADMAP
+			ComaCMS-ROADMAP
 
-	1.0 RC		First relese	30.08.2005
+	0.1 RC		First relese	30.08.2005
 	
-	-mauri-style
-	-full user-management
-	-user+gropurights
-		+write-rights
-		+read-rights
-		+delete-/add-rights
-		+format-rights
-		+pages(+subpages)
-	-gallery
-	-settings
-		-mainname
-		-mailsettings
-	-article-system(with comments?)
-	-"in-page-menue"
-	-"not on mainpage-parameter"
-	-"not in adminsyste-parameter"
-	-registerform by "hidden" page with an unique id
-	-find a licence
-	-user friendly installation
-	-calendar
-	-connect-news with ('special-')articles
+	[_]-mauri-style
+	[X]-full user-management
+	[_]-gallery
+	[_]-settings
+		[X]-mainname
+		[ ]-mailsettings
+	[ ]-article-system(with comments?)
+	[ ]-"in-page-menue"
+	[X]-"not on mainpage-parameter"
+	[X]-"not in adminsyste-parameter"
+	[X]-find a licence
+	[ ]-calendar/tasklist
+	[ ]-connect-news with ('special-')articles
+	[ ]-user friendly installation
 	
-	1.1				Q4 2005
+	0.2				Q4 2005
+
+	[ ]-user+gropurights
+		[ ]-write-rights
+		[ ]-read-rights
+		[ ]-delete-/add-rights
+		[ ]-format-rights
+		[ ]-pages(+subpages)
+	[ ]-registerform by "hidden" page with an unique id
+	[ ]-rich-text Editor
+	[_]-guestbook
+	[ ]-search
+	[ ]-caching system
+	[ ]-submenues
+	[ ]-spellcheck
+	[ ]-"more than one site"
+	[ ]-databasesizereducer
+	[ ]-newsletter
+	[ ]-administration can dedect elements which are configurable in the style
+	[ ]-sitemap
+	[ ]-timezones
+	[ ]-downloads
+	[ ]-speciallogger
 	
-	-rich-text Editor
-	-guestbook
-	-search
-	-caching system
-	-submenues
-	-spellcheck
-	-"more than one site"
-	-databasesizereducer
-	-newsletter
-	-administration can dedect elements which are configurable in the style
-	-sitemap
-	-timezones
-	-downloads
-	-speciallogger
-	
-	2.0 RC
-	-GUI-Generator
+	0.2 RC
+	[ ]-GUI-Generator

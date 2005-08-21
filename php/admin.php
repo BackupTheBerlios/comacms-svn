@@ -104,7 +104,8 @@
 		$menue_str = str_replace('[new]', '', $menue_str);
 		$menue .= $menue_str . "\r\n";
 	}
-		
+	
+	$page = str_replace("[position]", "Admin->$title", $page);
 	$page = str_replace('[menue]', $menue, $page);
 	$page = str_replace('[title]', $title, $page);
 	$page = str_replace('[menue2]', '', $page);

@@ -13,7 +13,7 @@
 	[X]-"not on mainpage-parameter"
 	[X]-"not in adminsyste-parameter"
 	[X]-find a licence
-	[ ]-calendar/tasklist
+	[_]-calendar/tasklist
 	[ ]-connect-news with ('special-')articles
 	[ ]-user friendly installation
 	
@@ -41,5 +41,5 @@
 	[ ]-downloads
 	[ ]-speciallogger
 	
-	0.2 RC
+	0.3
 	[ ]-GUI-Generator

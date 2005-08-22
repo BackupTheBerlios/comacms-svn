@@ -109,8 +109,10 @@
 		$menue_str = str_replace('[new]', '', $menue_str);
 		$menue .= $menue_str . "\r\n";
 	}
-	
-	$page = str_replace("[position]", "Admin->$title", $page);
+	$path = '';
+	if($extern_page != 'admincontrol')
+		$path = " -> <a href=\"admin.php?page=$extern_page\">$title</a>";
+	$page = str_replace("[position]", "<a href=\"admin.php?page=admincontrol\">Admin</a>$path", $page);
 	$page = str_replace('[menu]', $menue, $page);
 	$page = str_replace('[title]', $title, $page);
 	$page = str_replace('[menu2]', '', $page);

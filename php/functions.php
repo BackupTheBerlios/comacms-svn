@@ -162,7 +162,7 @@
 		return $menue;
 	}
 
-	function position_to_root($id, $between = " > ") {
+	function position_to_root($id, $between = " > ", $link = true) {
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "pages_content
 			WHERE page_id=$id";
@@ -177,10 +177,14 @@
 			$parent_result = db_result($sql);
 			$parent = mysql_fetch_object($parent_result);
 			$parent_id = $parent->page_parent_id;
-			$way_to_root = $parent->page_title . $between . $way_to_root;
+			$page_title = $parent->page_title;
+			if($link)
+				$page_title = '<a href="' . ( ($parent->page_type == 'gallery') ? 'gallery' : 'index') . '.php?page=' . $parent->page_name . '">' . $page_title . '</a>';
+			$way_to_root = $page_title . $between . $way_to_root;
 		}
-		
-		return $way_to_root . $actual->page_title;
+		if($link)
+			$actual_page_title = '<a href="' . ( ($actual->page_type == 'gallery') ? 'gallery' : 'index') . '.php?page=' . $actual->page_name . '">' . $actual->page_title . '</a>';
+		return $way_to_root . $actual_page_title;
 	}
 /*****************************************************************************
  *

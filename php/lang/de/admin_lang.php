@@ -57,5 +57,7 @@
 	$admin_lang['files'] = 'Dateien';
 	$admin_lang['location'] = 'Veranstaltungsort';
 	$admin_lang['date'] = 'Datum';
-	$admin_lang['topic'] = 'Termin'
+	$admin_lang['topic'] = 'Termin';
+	$admin_lang['actions'] = 'Aktionen';
+	$admin_lang['creator'] = 'Autor';
 ?>

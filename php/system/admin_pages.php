@@ -1170,7 +1170,7 @@
 		if(!isset($extern_action))
 			$extern_action = '';
 		
-		$out = "<h3>" . $admin_lang['dates'] . "</h3><hr />\r\n";
+		$out = "\t\t\t<h3>" . $admin_lang['dates'] . "</h3><hr />\r\n";
 		
 		//
 		// delete the selected entrie
@@ -1211,19 +1211,40 @@
 		}
 		
 		if($extern_action != "edit") {
-			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
-			<input type=\"hidden\" name=\"page\" value=\"dates\" />
-			<input type=\"hidden\" name=\"action\" value=\"new\" />
-			" . $admin_lang['location'] . ": <span class=\"info\">Gemeint ist hier der Ort an welchem die Veranstaltung stattfindet.</span> <input type=\"text\" name=\"place\" maxlength=\"60\" value=\"\" /><br /><br />
-			" . $admin_lang['date'] . ": <span class=\"info\">Dies ist das Datum, an dem die Veranstaltung stattfindet (Format: TT.MM.YYY, Beispiel: 05.11.2005)</span> <input type=\"text\" name=\"date\" maxlength=\"60\" value=\"\" /><br /><br />
-			" . $admin_lang['topic'] . ": <span class=\"info\">Dies ist die Beschreibung des Termins</span><textarea cols=\"60\" rows=\"6\" name=\"topic\"></textarea><br /><br />
-			Eingelogt als " . $actual_user_showname . " &nbsp;<input type=\"submit\" value=\"Senden\" /><br />
-		</form>";
+			$out .= "\t\t\t<form method=\"post\" action=\"admin.php\">
+				<input type=\"hidden\" name=\"page\" value=\"dates\" />
+				<input type=\"hidden\" name=\"action\" value=\"new\" />
+				<table>
+					<tr>
+						<td>" . $admin_lang['date'] . ": <span class=\"info\">Dies ist das Datum, an dem die Veranstaltung stattfindet (Format: TT.MM.YYY, Beispiel: 05.11.2005)</span></td>
+						<td><input type=\"text\" name=\"date\" maxlength=\"10\" value=\"\" /></td>
+					</tr>
+					<tr>
+						<td>" . $admin_lang['location'] . ": <span class=\"info\">Gemeint ist hier der Ort an welchem die Veranstaltung stattfindet.</span></td>
+						<td><input type=\"text\" name=\"place\" maxlength=\"60\" value=\"\" /></td>
+					</tr>
+					<tr>
+						<td>" . $admin_lang['topic'] . ": <span class=\"info\">Dies ist die Beschreibung des Termins</span></td>
+						<td><input type=\"text\" name=\"topic\" maxlength=\"150\" /></td>
+					</tr>
+					<tr>
+						<td>Eingelogt als " . $actual_user_showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Senden\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
+					</tr>
+				</table>
+				<br />
+			</form>\r\n";
 		}
-			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
-			<input type=\"hidden\" name=\"page\" value=\"dates\" />
-			<input type=\"hidden\" name=\"action\" value=\"update\" />
-			<table>\r\n";
+			$out .= "\t\t\t<form method=\"post\" action=\"admin.php\">
+				<input type=\"hidden\" name=\"page\" value=\"dates\" />
+				<input type=\"hidden\" name=\"action\" value=\"update\" />
+				<table>
+					<tr>
+						<td>" . $admin_lang['date'] . ":</td>
+						<td>" . $admin_lang['location'] . ":</td>
+						<td>" . $admin_lang['topic'] . ":</td>
+						<td>" . $admin_lang['creator'] . ":</td>
+						<td>" . $admin_lang['actions'] . ":</td>
+					</tr>\r\n";
 		//
 		// write all news entries
 		//
@@ -1233,65 +1254,52 @@
 			// show an editform for the selected entrie
 			//
 			if($extern_id == $row->date_id && $extern_action == "edit") {
-				$out .= "\t\t\t\t<tr>
-					<td colspan=\"2\" id=\"dateid" . $row->date_id . "\">
-						<input type=\"hidden\" name=\"id\" value=\"".$row->date_id."\" />
-						<input type=\"submit\" value=\"Speichern\" />
-						&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"Löschen\">Löschen</a>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						" . $admin_lang['location'] . ": <span class=\"info\">Gemeint ist hier der Ort an welchem die Veranstaltung stattfindet.</span> <input type=\"text\" name=\"place\" maxlength=\"60\" value=\"" . $row->date_place . "\" />
-					</td>
-					<td>
-						" . $admin_lang['date'] . ": <span class=\"info\">Dies ist das Datum, an dem die Veranstaltung stattfindet (Format: TT.MM.YYY, Beispiel: 05.11.2005)</span> <input type=\"text\" name=\"date\" maxlength=\"60\" value=\"" . date("d.m.Y", $row->date_date) . "\" /><br />
-					</td>
-				</tr>
-				<tr>
-					<td colspan=\"2\">
-						" . $admin_lang['topic'] . ": <textarea cols=\"60\" rows=\"6\" name=\"topic\">" . $row->date_topic . "</textarea><br />
-					</td>
-				</tr>
-				<tr>
-					<td colspan=\"2\">
-						" . getUserByID($row->date_creator) . "
-					</td>
-				</tr>";
+				$out .= "\t\t\t\t\t<tr id=\"dateid" . $row->date_id . "\">
+						<td>
+							<input type=\"hidden\" name=\"id\" value=\"".$row->date_id."\" />
+							<input type=\"text\" name=\"date\" maxlength=\"10\" value=\"" . date("d.m.Y", $row->date_date) . "\" />
+						</td>
+						<td>
+							<input type=\"text\" name=\"place\" maxlength=\"60\" value=\"" . $row->date_place . "\" />
+						</td>
+						<td>
+							<input type=\"text\" name=\"topic\" value=\"" . $row->date_topic . "\" maxlength=\"150\" />
+						</td>
+						<td>
+							" . getUserByID($row->date_creator) . "
+						</td>
+						<td>
+							<input type=\"submit\" value=\"Speichern\" class=\"button\" />
+							&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"Löschen\">Löschen</a>
+						</td>
+					</tr>";
 			}
 			//
 			// show only the entrie
 			//
 			else {
-				$out .= "\t\t\t\t<tr>
-					<td colspan=\"2\">
-						<a id=\"dateid".$row->date_id."\" ></a>
-						<a href=\"admin.php?page=dates&amp;action=edit&amp;id=".$row->date_id."#dateid".$row->date_id."\" title=\"Bearbeiten\">Bearbeiten</a>
-						&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"Löschen\">Löschen</a>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<b>".$row->date_place."</b>
-					</td>
-					<td>
-						".date("d.m.Y", $row->date_date)."
-					</td>
-				</tr>
-				<tr>
-					<td colspan=\"2\">
-						".nl2br($row->date_topic)."
-					</td>
-				</tr>
-				<tr>
-					<td colspan=\"2\">
-						".getUserByID($row->date_creator)."
-					</td>
-				</tr>";
+				$out .= "\t\t\t\t\t<tr ID=\"dateid" . $row->date_id . "\">
+						<td>
+							" . date("d.m.Y", $row->date_date) . "
+						</td>
+						<td>
+							" . $row->date_place . "
+						</td>
+						<td>
+							" . nl2br($row->date_topic) . "
+						</td>
+						<td>
+							" . getUserByID($row->date_creator) . "
+						</td>
+						<td colspan=\"2\">
+							<a href=\"admin.php?page=dates&amp;action=edit&amp;id=".$row->date_id."#dateid".$row->date_id."\" title=\"Bearbeiten\">Bearbeiten</a>
+							&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"Löschen\">Löschen</a>
+						</td>
+					</tr>\r\n";
 			}
 		}
-		$out .= "\t\t\t</table>
-		</form>\r\n";
+		$out .= "\t\t\t\t</table>
+			</form>";
 	
 		return $out;
  	}

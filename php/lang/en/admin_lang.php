@@ -58,4 +58,6 @@
 	$admin_lang['location'] = 'Location';
 	$admin_lang['date'] = 'Date';
 	$admin_lang['topic'] = 'Topic';
+	$admin_lang['actions'] = 'Actions';
+	$admin_lang['creator'] = 'Creator';
 ?>

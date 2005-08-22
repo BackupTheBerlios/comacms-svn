@@ -16,5 +16,6 @@
  *  (at your option) any later version.
  *
  *****************************************************************************/
-	setSetting("default_page","Standart Startseite","Auf diese Seite wird jeder besucher geleitet, der keine Seite angegeben hat.","default");
+	setSetting("default_page", "Standart Startseite", "Auf diese Seite wird jeder besucher geleitet, der keine Seite angegeben hat.", "home");
+	setSetting("pagename", "Seitenname", "Hier wird der Name der Seite definiert.", "ComaCMS");
 ?>

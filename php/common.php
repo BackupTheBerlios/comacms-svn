@@ -99,4 +99,7 @@
 		$page = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", "", $page);
 	else
 		$page = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", "$1", $page);
+	if(!isset($internal_pagename))
+		$internal_pagename = '';
+	$page = str_replace("[pagename]", $internal_pagename, $page);
 ?>

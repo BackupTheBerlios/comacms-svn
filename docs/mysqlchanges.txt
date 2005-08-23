@@ -81,3 +81,32 @@ CREATE TABLE `cms_dates` (
 `date_creator` INT( 10 ) UNSIGNED,
 PRIMARY KEY ( `date_id` )
 );
+
+#r83
+#added host field in cms_online#
+ALTER TABLE `cms_online` ADD `host` VARCHAR( 110 ) NOT NULL ;
+
+#83
+#created cms_inlinemenu
+CREATE TABLE `cms_inlinemenu` (
+`inlinemenu_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+`inlinemenu_image` VARCHAR( 150 ) NOT NULL ,
+`inlinemenu_html` TEXT NOT NULL ,
+`inlinemenu_creator` INT( 10 ) DEFAULT '0' NOT NULL ,
+PRIMARY KEY ( `inlinemenu_id` )
+) TYPE = MYISAM ;
+
+#r83
+#created cms_inlinemenu_entries
+CREATE TABLE `cms_inlinemenu_entries` (
+`inlineentrie_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+`inlineentrie_menu_id` INT( 10 ) NOT NULL ,
+`inlinieentrie_type` ENUM( 'link', 'donwload', 'text' ) NOT NULL ,
+`inlineentrie_text` TEXT NOT NULL ,
+PRIMARY KEY ( `inlineentrie_id` )
+) TYPE = MYISAM ;
+
+#r83
+#added page_inlinemenu-field to cms_pages_content
+ALTER TABLE `cms_pages_content` ADD `page_inlinemenu` INT( 19 ) DEFAULT '-1' NOT NULL ;
+

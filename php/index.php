@@ -33,6 +33,10 @@
 	$sql = "SELECT *
 		FROM " . DB_PREFIX . "pages_content
 		WHERE page_name='$extern_page' AND page_type='text'";
+	$sql = "SELECT cont.*, inline.*
+		FROM ( " . DB_PREFIX. "pages_content cont
+		LEFT JOIN " . DB_PREFIX . "inlinemenu inline ON inline.inlinemenu_id = cont.page_inlinemenu )
+		WHERE cont.page_name='$extern_page' AND cont.page_type='text'";
 	$page_result = db_result($sql);
 	if(!$page_result)
 		die("bad error:  no pagedata found");
@@ -82,6 +86,18 @@
 		include("contact.php");
 		$page = str_replace("[contact]", contact_formular(), $page);
 	}
+	$inlinemenu = '';
+	if($page_data->page_inlinemenu != -1) {
+		include('./styles/' . $internal_style . '/menue.php');
+		$inlinemenu = $menu_inline;
+		$inlinemenu = str_replace("[text]", $page_data->inlinemenu_html, $inlinemenu);
+		$inlinemenu = str_replace("[image]", "src=\"$page_data->inlinemenu_image\"", $inlinemenu);
+		$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "$1", $page);
+	}
+	else {
+		$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);
+	}
+	$page = str_replace("[inlinemenu]", $inlinemenu, $page);
 	//
 	// end
 	//

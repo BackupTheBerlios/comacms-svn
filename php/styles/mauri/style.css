@@ -45,6 +45,7 @@ legend {
  background-color: #0000FF;
  min-height: 140px;
  height: 140px;
+ border-bottom: 1px solid #000000;
 }
 
 #menupart {
@@ -53,6 +54,7 @@ legend {
  border-left: 1px solid #000000;
  border-right: 1px solid #000000;
  border-bottom: 1px solid #000000;
+ margin-top: -1px;
 }
 
 #text {
@@ -65,6 +67,7 @@ legend {
  float: left;
  border-left: 1px solid #000000;
  border-right: 1px solid #000000;
+ width:140px;
 }
 
 #secondmenu {
@@ -95,6 +98,7 @@ legend {
  border-left: none;
  border-top: 1px solid #EBEBEB;
  border-bottom: 1px solid #EBEBEB;
+
  float: left;
  background-color: #000000;
  padding: 1px;
@@ -137,9 +141,21 @@ legend {
  display: block;
  background-color: #FFFFFF;
  padding: 0;
+ padding-left: 150px;
  margin: 0;
+ margin-top:-1px;
  border-top: 1px solid #000000;
  border-bottom: 1px solid #000000;
+}
+
+#inlinemenu {
+ float: left;
+ width: 200px;
+}
+
+#inlinemenuimage {
+ width: 200px;
+ margin-bottom: 6px;
 }
 
 span.info, span.error{
@@ -189,7 +205,7 @@ textarea.edit {
 
 .imagesblock {
  overflow: auto;
- display:table-cell;
+ display: table-cell;
 }
 
 .topdesc {

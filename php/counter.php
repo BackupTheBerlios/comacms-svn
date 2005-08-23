@@ -50,8 +50,8 @@
 			db_result($sql);
 		}
 		else {
-			$sql = "INSERT INTO " . DB_PREFIX . "online (online_id, ip, lastaction, page, userid, lang)
-			VALUES ('$actual_user_online_id', '$REMOTE_ADDR', '" . mktime() . "', '$site', $actual_user_id, '$actual_user_lang')";
+			$sql = "INSERT INTO " . DB_PREFIX . "online (online_id, ip, lastaction, page, userid, lang, host)
+			VALUES ('$actual_user_online_id', '$REMOTE_ADDR', '" . mktime() . "', '$site', $actual_user_id, '$actual_user_lang', '" . gethostbyaddr($REMOTE_ADDR). "')";
 			db_result($sql);
 			$internal_counter_all++;
 		}

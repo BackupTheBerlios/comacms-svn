@@ -137,9 +137,9 @@
 		$menue_result = db_result($sql);
 		while($menue_data = mysql_fetch_object($menue_result)) {
 			if($menue_id == 1)
-				$menue_str = $menue_link;
+				$menue_str = $menu_link;
 			else
-				$menue_str = $menue_link2;
+				$menue_str = $menu_link2;
 			$menue_str = str_replace('[text]', $menue_data->text, $menue_str);
 			$link = $menue_data->link;
 			if(substr($link, 0, 2) == 'l:')

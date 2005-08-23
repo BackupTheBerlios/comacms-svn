@@ -72,7 +72,7 @@
 			<td>".$admin_lang['host']."</td>
 		</tr>";
 			//output all visitors surfing on the site
-			$users_online_result = db_result("SELECT userid, page, lastaction, lang, ip FROM " . DB_PREFIX . "online");
+			$users_online_result = db_result("SELECT userid, page, lastaction, lang, ip, host FROM " . DB_PREFIX . "online");
 			while($users_online = mysql_fetch_object($users_online_result)) {
 				if($users_online->userid == 0)
 					$username  = $admin_lang['not registered'];
@@ -87,7 +87,7 @@
 			<td>" . date("d.m.Y H:i:s", $users_online->lastaction)."</td>
 			<td>" . $admin_lang[$users_online->lang] . "</td>
 			<td>" . $users_online->ip . "</td>
-			<td>" . gethostbyaddr($users_online->ip) . "</td>
+			<td>" . $users_online->host . "</td>
 		</tr>\r\n";
 			}
 

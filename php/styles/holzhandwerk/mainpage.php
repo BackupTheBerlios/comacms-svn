@@ -8,7 +8,7 @@
 <body>
 <div class="top"><img src="./styles/holzhandwerk/schicho.png" /></div>
 <div class="menuepart">
-<ul id="menue">
+<ul id="menu">
 [menue]
 </ul>
 </div>

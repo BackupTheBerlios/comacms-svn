@@ -110,3 +110,19 @@ PRIMARY KEY ( `inlineentrie_id` )
 #added page_inlinemenu-field to cms_pages_content
 ALTER TABLE `cms_pages_content` ADD `page_inlinemenu` INT( 19 ) DEFAULT '-1' NOT NULL ;
 
+#r84
+#article table created
+CREATE TABLE `cms_articles` (
+`articles_id` INT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+`articles_title` VARCHAR( 100 ) NOT NULL ,
+`articles_description` VARCHAR( 200 ) NOT NULL ,
+`articles_image` VARCHAR( 200 ) NOT NULL ,
+`articles_text` TEXT NOT NULL ,
+`articles_html` TEXT DEFAULT NULL ,
+`articles_creator` INT( 10 ) NOT NULL ,
+PRIMARY KEY ( `articles_id` )
+);
+
+#r84
+#articles_date added to articles table
+ALTER TABLE `cms_articles` ADD `articles_date` INT( 20 ) UNSIGNED;

@@ -26,19 +26,20 @@
 	$title = '';
 	include('./lang/' . $actual_user_lang . '/admin_lang.php');
 	include('./system/admin_pages.php');
-	$menue_array = array();
-	$menue_array[] = array($admin_lang['admincontrol'], 'admin.php?page=admincontrol');
-	$menue_array[] = array($admin_lang['sitepreview'], 'admin.php?page=sitepreview');
-	$menue_array[] = array($admin_lang['preferences'], 'admin.php?page=preferences');
-	$menue_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
-	$menue_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
-	$menue_array[] = array($admin_lang['news'], 'admin.php?page=news');
-	$menue_array[] = array($admin_lang['dates'], 'admin.php?page=dates');
-	$menue_array[] = array($admin_lang['sitestyle'], 'admin.php?page=sitestyle');
-	$menue_array[] = array($admin_lang['users'], 'admin.php?page=users');
-	$menue_array[] = array($admin_lang['gallery editor'], 'admin.php?page=gallery_editor');
-	$menue_array[] = array($admin_lang['files'], 'admin.php?page=files');
-	$menue_array[] = array($admin_lang['logout'], 'admin.php?page=logout');
+	$menu_array = array();
+	$menu_array[] = array($admin_lang['admincontrol'], 'admin.php?page=admincontrol');
+	$menu_array[] = array($admin_lang['sitepreview'], 'admin.php?page=sitepreview');
+	$menu_array[] = array($admin_lang['preferences'], 'admin.php?page=preferences');
+	$menu_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
+	$menu_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
+	$menu_array[] = array($admin_lang['news'], 'admin.php?page=news');
+	$menu_array[] = array($admin_lang['dates'], 'admin.php?page=dates');
+	$menu_array[] = array($admin_lang['articles'], 'admin.php?page=articles');
+	$menu_array[] = array($admin_lang['sitestyle'], 'admin.php?page=sitestyle');
+	$menu_array[] = array($admin_lang['users'], 'admin.php?page=users');
+	$menu_array[] = array($admin_lang['gallery editor'], 'admin.php?page=gallery_editor');
+	$menu_array[] = array($admin_lang['files'], 'admin.php?page=files');
+	$menu_array[] = array($admin_lang['logout'], 'admin.php?page=logout');
 	//
 	// insert the 'functions' here
 	//
@@ -67,6 +68,10 @@
 	elseif($extern_page == 'dates') {
 		$title = $admin_lang['dates'];
 		$text = page_dates();
+	}
+	elseif($extern_page == 'articles') {
+		$title = $admin_lang['articles'];
+		$text = page_articles();
 	}
 	elseif($extern_page == 'pageeditor') {
 		$title = $admin_lang['pageeditor'];
@@ -101,19 +106,19 @@
 	if(@$internal_style == '')
 		$internal_style = 'clear';
 	include('./styles/' . $internal_style . '/menue.php');
-	$menue = '';
-	foreach($menue_array as $part) {
-		$menue_str = $menue_link;
-		$menue_str = str_replace('[text]', $part[0], $menue_str);
-		$menue_str = str_replace('[link]', $part[1], $menue_str);
-		$menue_str = str_replace('[new]', '', $menue_str);
-		$menue .= $menue_str . "\r\n";
+	$menu = '';
+	foreach($menu_array as $part) {
+		$menu_str = $menu_link;
+		$menu_str = str_replace('[text]', $part[0], $menu_str);
+		$menu_str = str_replace('[link]', $part[1], $menu_str);
+		$menu_str = str_replace('[new]', '', $menu_str);
+		$menu .= $menu_str . "\r\n";
 	}
 	$path = '';
 	if($extern_page != 'admincontrol')
 		$path = " -> <a href=\"admin.php?page=$extern_page\">$title</a>";
 	$page = str_replace("[position]", "<a href=\"admin.php?page=admincontrol\">Admin</a>$path", $page);
-	$page = str_replace('[menu]', $menue, $page);
+	$page = str_replace('[menu]', $menu, $page);
 	$page = str_replace('[title]', $title, $page);
 	$page = str_replace('[menu2]', '', $page);
 	$page = str_replace('[text]', $text, $page);

@@ -4,7 +4,7 @@
 		<title>[pagename] -> [title]</title>
 		<link rel="stylesheet" href="./styles/mauri/style.css" type="text/css" />
 		<!--[if lte IE 7]><link rel="stylesheet" href="./styles/mauri/iefix.css" type="text/css" /><notathome>
-		<style type="text/css">#title {margin-bottom: 20px;} #position{border-bottom:none;}</style></notathome><![endif]-->
+		<style type="text/css">#title {margin-bottom: 19px;} #position{border-bottom:none;}</style></notathome><![endif]-->
 		<forinlinemenu><style type="text/css">#text{margin-left: 345px;}</style></forinlinemenu>
 		<meta name="author" content="St. Mauritius Hildesheim" />
 	</head>

@@ -126,3 +126,7 @@ PRIMARY KEY ( `articles_id` )
 #r84
 #articles_date added to articles table
 ALTER TABLE `cms_articles` ADD `articles_date` INT( 20 ) UNSIGNED;
+
+#r85
+#removed field inlinemenu_creator in cms_oinlinemenu
+ALTER TABLE `cms_inlinemenu` DROP `inlinemenu_creator` 

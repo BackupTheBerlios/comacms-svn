@@ -32,6 +32,7 @@
 	$menu_array[] = array($admin_lang['preferences'], 'admin.php?page=preferences');
 	$menu_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
 	$menu_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
+	$menu_array[] = array($admin_lang['inlinemenu'], 'admin.php?page=inlinemenu');
 	$menu_array[] = array($admin_lang['news'], 'admin.php?page=news');
 	$menu_array[] = array($admin_lang['dates'], 'admin.php?page=dates');
 	$menu_array[] = array($admin_lang['articles'], 'admin.php?page=articles');
@@ -40,6 +41,7 @@
 	$menu_array[] = array($admin_lang['gallery editor'], 'admin.php?page=gallery_editor');
 	$menu_array[] = array($admin_lang['files'], 'admin.php?page=files');
 	$menu_array[] = array($admin_lang['logout'], 'admin.php?page=logout');
+	
 	//
 	// insert the 'functions' here
 	//
@@ -90,7 +92,7 @@
 		$title = $admin_lang['preferences'];
 		$text = page_preferences();
 	}
-	elseif($extern_page == 'gallery_editor'){
+	elseif($extern_page == 'gallery_editor') {
 		$title = $admin_lang['gallery editor'];
 		$text = page_gallery_editor();
 	}
@@ -98,6 +100,10 @@
 		include('system/user_pages.php');
 		$title = $admin_lang['files'];
 		$text = page_files();
+	}
+	elseif($extern_page == 'inlinemenu') {
+		$title = $admin_lang['inlinemenu'];
+		$text = page_inlinemenu();
 	}
 	
 	//
@@ -122,5 +128,7 @@
 	$page = str_replace('[title]', $title, $page);
 	$page = str_replace('[menu2]', '', $page);
 	$page = str_replace('[text]', $text, $page);
+	$page = str_replace("[inlinemenu]", '', $page);
+	$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);
 	echo $page;
 ?>

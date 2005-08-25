@@ -125,7 +125,7 @@
 		return $textdata;
 	}
 
-	function generatemenue($style = 'clear', $menue_id = 1, $selected = '', $style_root = '.') {
+	function generatemenu($style = 'clear', $menue_id = 1, $selected = '', $style_root = '.') {
 		global $internal_page_root;
 		
 		$menue = " ";

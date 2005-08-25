@@ -1468,4 +1468,90 @@
 	
 		return $out;
  	}
+ 	
+ 	function page_inlinemenu() {
+ 		global $extern_action, $_SERVER, $admin_lang, $extern_page_id, $extern_sure;
+		$out = '<h3>' . $admin_lang['inlinemenu'] . '</h3><hr />';
+ 		if($extern_action == 'new') {
+ 			$sql = "SELECT *
+				FROM " . DB_PREFIX . "pages_content
+				WHERE page_id=$extern_page_id";
+			$page_result = db_result($sql);
+			$page = mysql_fetch_object($page_result);
+			$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu (inlinemenu_image)
+				VALUES('')";
+			$res = db_result($sql);
+			//$rr = mysql_fetch_object($r);
+			$lastid =  mysql_insert_id();
+			$sql = "UPDATE " . DB_PREFIX . "pages_content
+				SET page_inlinemenu=$lastid
+				WHERE page_id='$extern_page_id'";
+			db_result($sql);
+			
+ 		}
+ 		elseif($extern_action == 'edit') {
+ 			$out .= "<h4>Neues Zusatzmenü für die Seite &quot;<a href=\"index.php?page=$page->page_name\">$page->page_title</a>&quot; erstellen</h4>
+			<form action=\"" . $_SERVER['PHP_SELF'] . "\">
+			
+			<table>
+				<tr>
+					<td>Bild:<span class=\"info\"></span></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+				</tr>
+			</table>
+		</form>";
+ 		}
+ 		elseif($extern_action == 'delete') {
+ 			$sql = "SELECT *
+				FROM " . DB_PREFIX . "pages_content
+				WHERE page_id=$extern_page_id";
+			$page_result = db_result($sql);
+			$page = mysql_fetch_object($page_result);
+			if($extern_sure == 1) {
+				//
+				// Remove all inlinemenu_entries of the inlinemenu which is to delete
+				//
+				$sql = "DELETE FROM " . DB_PREFIX . "inlinemenu_entries
+					WHERE inlineentrie_id=$page->page_inlinemenu";
+				db_result($sql);
+				//
+				// Remove the inlinemenu
+				//
+				$sql = "DELETE FROM " . DB_PREFIX . "inlinemenu
+					WHERE inlinemenu_id=$page->page_inlinemenu";
+				db_result($sql);
+				//
+				// Remove the inlinemenu_id from the page
+				//
+				$sql = "UPDATE " . DB_PREFIX . "pages_content
+					SET page_inlinemenu=-1
+					WHERE page_id=$extern_page_id";
+				db_result($sql);
+			}
+			else {
+				$out .= "Sind sie sicher, dass sie das Zusatzmenü für die Seite &quot;$page->page_title&quot; unwiederruflich entfernen wollen.<br />
+				<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete&amp;page_id=$page->page_id&amp;sure=1\">" . $admin_lang['yes'] . "</a>&nbsp;<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu\">" . $admin_lang['no'] . "</a>";	
+			}
+			
+			 
+ 		}
+ 		else {
+			$sql = "SELECT cont.*, inline.*
+				FROM ( " . DB_PREFIX. "pages_content cont
+				LEFT JOIN " . DB_PREFIX . "inlinemenu inline ON inline.inlinemenu_id = cont.page_inlinemenu )
+				WHERE cont.page_visible!='deleted'
+				ORDER BY cont.page_id";
+			$pages_result = db_result($sql);
+			while($page = mysql_fetch_object($pages_result)) {
+				if($page->page_inlinemenu == -1)
+					$out .= "$page->page_title <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=new&amp;page_id=$page->page_id\">[Erstellen]</a><br />";
+				else
+					$out .= "$page->page_title [Bearbeiten]  <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete&amp;page_id=$page->page_id\">[Entfernen]</a><br />";
+			}	
+		}
+ 		return $out;
+ 	}
 ?>

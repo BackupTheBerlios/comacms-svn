@@ -265,4 +265,23 @@
 	{
 		return str_replace(" ", "%20", $string);
 	}
+	
+	function generateinlinemenu($menuid) {
+		$sql = "SELECT *
+			FROM " . DB_PREFIX . "inlinemenu_entries
+			WHERE inlineentrie_menu_id=$menuid
+			ORDER BY inlineentrie_sortid ASC";
+		$entries = db_result($sql);
+		$text = '';
+		while($entrie = mysql_fetch_object($entries)) {
+			if($entrie->inlinieentrie_type == 'text')
+				$text .= "<div>$entrie->inlineentrie_text</div>";
+			elseif($entrie->inlinieentrie_type == 'link')
+				$text .= "<div><a href=\"$entrie->inlineentrie_link\">$entrie->inlineentrie_text</a></div>";
+		}
+		$sql = "UPDATE " . DB_PREFIX . "inlinemenu
+			SET inlinemenu_html='$text'
+			WHERE inlinemenu_id='$menuid'";
+		db_result($sql);	
+	}
 ?>

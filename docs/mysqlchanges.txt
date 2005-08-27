@@ -130,3 +130,11 @@ ALTER TABLE `cms_articles` ADD `articles_date` INT( 20 ) UNSIGNED;
 #r85
 #removed field inlinemenu_creator in cms_oinlinemenu
 ALTER TABLE `cms_inlinemenu` DROP `inlinemenu_creator` 
+
+#r86
+#added a sortid to the table cms_inlinemenu_entries
+ALTER TABLE `cms_inlinemenu_entries` ADD `inlineentrie_sortid` INT( 10 ) NOT NULL AFTER `inlineentrie_id` ;
+
+#r86
+#added a link-filed to the table cms_inlinemenu_entries
+ALTER TABLE `cms_inlinemenu_entries` ADD `inlineentrie_link` VARCHAR( 255 ) NOT NULL ;

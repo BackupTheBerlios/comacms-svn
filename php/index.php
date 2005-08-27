@@ -28,11 +28,7 @@
 	
 	define("COMACMS_RUN", true);
 	
-	include("common.php");
-	
-	$sql = "SELECT *
-		FROM " . DB_PREFIX . "pages_content
-		WHERE page_name='$extern_page' AND page_type='text'";
+	include("common.php");	
 	$sql = "SELECT cont.*, inline.*
 		FROM ( " . DB_PREFIX. "pages_content cont
 		LEFT JOIN " . DB_PREFIX . "inlinemenu inline ON inline.inlinemenu_id = cont.page_inlinemenu )

@@ -1470,7 +1470,7 @@
  	}
  	
  	function page_inlinemenu() {
- 		global $extern_action, $_SERVER, $admin_lang, $extern_page_id, $extern_sure;
+ 		global $extern_action, $_SERVER, $admin_lang, $extern_page_id, $extern_sure, $extern_inlinemenu_id, $extern_image_path, $extern_entrie_type, $extern_entrie_text, $extern_entrie_link;
 		$out = '<h3>' . $admin_lang['inlinemenu'] . '</h3><hr />';
  		if($extern_action == 'new') {
  			$sql = "SELECT *
@@ -1487,22 +1487,100 @@
 				SET page_inlinemenu=$lastid
 				WHERE page_id='$extern_page_id'";
 			db_result($sql);
+			header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu");
 			
  		}
  		elseif($extern_action == 'edit') {
- 			$out .= "<h4>Neues Zusatzmenü für die Seite &quot;<a href=\"index.php?page=$page->page_name\">$page->page_title</a>&quot; erstellen</h4>
+ 			$sql = "SELECT cont.*, inline.*
+				FROM ( " . DB_PREFIX. "pages_content cont
+				LEFT JOIN " . DB_PREFIX . "inlinemenu inline ON inline.inlinemenu_id = cont.page_inlinemenu )
+				WHERE inline.inlinemenu_id=$extern_inlinemenu_id";
+ 			$imenu_result = db_result($sql);
+ 			$imenu = mysql_fetch_object($imenu_result);
+			if($extern_image_path == "")
+				$image_path = $imenu->inlinemenu_image;
+			else
+				$image_path = $extern_image_path;
+ 			$out .= "<h4>Neues Zusatzmenü für die Seite &quot;<a href=\"index.php?page=$imenu->page_name\">$imenu->page_title</a>&quot; erstellen</h4>
 			<form action=\"" . $_SERVER['PHP_SELF'] . "\">
-			
+			<input type=\"hidden\" name=\"page\" value=\"inlinemenu\"/>
+			<input type=\"hidden\" name=\"action\" value=\"save_image\"/>
+			<input type=\"hidden\" name=\"inlinemenu_id\" value=\"$imenu->inlinemenu_id\"/>
 			<table>
 				<tr>
-					<td>Bild:<span class=\"info\"></span></td>
-					<td></td>
+					<td>Pfad zum Bild:<span class=\"info\">TODO/ wenn bild extern wird es heruntergeladen und gespeichert</span></td>
+					<td><input type=\"text\" name=\"image_path\" value=\"$image_path\"/><a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=select_image&amp;inlinemenu_id=$imenu->inlinemenu_id\">[Bild auswählen]</a></td>
 				</tr>
 				<tr>
-					<td></td>
+					<td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\"/></td>
+				</tr>
+			</table>
+		</form><table>
+		<tr><td>Text</td></tr>";
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "inlinemenu_entries
+				WHERE inlineentrie_menu_id=$imenu->inlinemenu_id
+				ORDER BY inlineentrie_sortid ASC";
+			$entries_result = db_result($sql);
+			while($entrie = mysql_fetch_object($entries_result)) {
+				$out .= "<tr><td>$entrie->inlineentrie_text</td></tr>";
+			}
+			$out .= "
+		</table>
+		<form action=\"" . $_SERVER['PHP_SELF'] . "\">
+			<input type=\"hidden\" name=\"page\" value=\"inlinemenu\"/>
+			<input type=\"hidden\" name=\"action\" value=\"add_entrie\"/>
+			<input type=\"hidden\" name=\"inlinemenu_id\" value=\"$imenu->inlinemenu_id\"/>
+			<table>
+			<tr>
+			<td>Typ:<span class=\"info\">TODO</span></td>
+			<td><select name=\"entrie_type\">
+				<option value=\"link\">Link</option>
+				<option value=\"text\">Text</option>
+				<!--<option value=\"download\">Download</option>-->
+			</select></td>
+			</tr>
+			<tr><td>Text:<span class=\"info\">TODO</span></td><td><input type=\"text\" name=\"entrie_text\"/></td></tr>
+			<tr><td>Link:<span class=\"info\">TODO</span></td><td><input type=\"text\" name=\"entrie_link\"/></td></tr>
+				<tr>
+					<td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"Hinzufügen\"/></td>
 				</tr>
 			</table>
 		</form>";
+		
+ 		}
+ 		elseif($extern_action == 'add_entrie') {
+ 			$sql = "SELECT inlineentrie_sortid
+			 	FROM " . DB_PREFIX . "inlinemenu_entries
+			 	WHERE inlineentrie_menu_id = $extern_inlinemenu_id
+			 	ORDER BY inlineentrie_id DESC";
+			$lastsort_result = db_result($sql);
+			$sortid = 1;
+			if($lastsort = mysql_fetch_object($lastsort_result)){
+				$sortid = $lastsort->inlineentrie_sortid;
+				$sortid++;
+			}
+			
+			$sql = '';
+			if($extern_entrie_type == 'text') {
+ 				$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_menu_id, inlinieentrie_type, inlineentrie_text)
+					VALUES ($sortid, $extern_inlinemenu_id, 'text', '$extern_entrie_text');";
+ 			}
+ 			elseif($extern_entrie_type == 'link') {
+					$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_menu_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
+					VALUES ($sortid, $extern_inlinemenu_id, 'link', '$extern_entrie_text','$extern_entrie_link');";
+ 			}
+ 			if($sql != '')
+ 				db_result($sql);
+ 			generateinlinemenu($extern_inlinemenu_id);
+ 			header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu&action=edit&inlinemenu_id=$extern_inlinemenu_id");
+ 		}
+ 		elseif($extern_action == 'select_image') {
+ 		 // TODO: List all available images and send the selected back like:
+ 		 // admin.php?page=inlinemenu&action=edit&inlinemenu_id={extern_inlinemenu_id}&image_path={image_path}
+ 		}
+ 		elseif($extern_action == 'save_image') {
+ 		
  		}
  		elseif($extern_action == 'delete') {
  			$sql = "SELECT *
@@ -1530,6 +1608,7 @@
 					SET page_inlinemenu=-1
 					WHERE page_id=$extern_page_id";
 				db_result($sql);
+				header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu");
 			}
 			else {
 				$out .= "Sind sie sicher, dass sie das Zusatzmenü für die Seite &quot;$page->page_title&quot; unwiederruflich entfernen wollen.<br />
@@ -1549,7 +1628,7 @@
 				if($page->page_inlinemenu == -1)
 					$out .= "$page->page_title <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=new&amp;page_id=$page->page_id\">[Erstellen]</a><br />";
 				else
-					$out .= "$page->page_title [Bearbeiten]  <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete&amp;page_id=$page->page_id\">[Entfernen]</a><br />";
+					$out .= "$page->page_title <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=edit&amp;inlinemenu_id=$page->page_inlinemenu\">[Bearbeiten]</a>  <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete&amp;page_id=$page->page_id\">[Entfernen]</a><br />";
 			}	
 		}
  		return $out;

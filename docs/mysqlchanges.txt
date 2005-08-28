@@ -129,7 +129,7 @@ ALTER TABLE `cms_articles` ADD `articles_date` INT( 20 ) UNSIGNED;
 
 #r85
 #removed field inlinemenu_creator in cms_oinlinemenu
-ALTER TABLE `cms_inlinemenu` DROP `inlinemenu_creator` 
+ALTER TABLE `cms_inlinemenu` DROP `inlinemenu_creator` ;
 
 #r86
 #added a sortid to the table cms_inlinemenu_entries

@@ -6,6 +6,7 @@
 		<!--[if lte IE 7]><link rel="stylesheet" href="./styles/mauri/iefix.css" type="text/css" /><notathome>
 		<style type="text/css">#title {margin-bottom: 19px;} #position{border-bottom:none;}</style></notathome><![endif]-->
 		<forinlinemenu><style type="text/css">#text{margin-left: 345px;}</style></forinlinemenu>
+		<link rel="stylesheet" href="./styles/mauri/print.css" type="text/css" media="print" />
 		<meta name="author" content="St. Mauritius Hildesheim" />
 	</head>
 	<body>	

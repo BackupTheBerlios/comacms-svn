@@ -1,0 +1,20 @@
+#title {
+color:#000000;
+}
+#menupart, #secondmenu ,#logo {
+display:none;
+}
+#top {
+background:none;
+}
+#position {
+margin-left:0;
+padding-left:0;
+border:none;
+}
+#text{
+margin-left:0;
+}
+#inlinemenuimage {
+width:200px;
+}

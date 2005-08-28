@@ -194,6 +194,7 @@ input.button {
 textarea.edit {
  width: 100%;
  height: 17em;
+ font-family: arial, verdana, helvetica, sans-serif;
 }
 
 .imageblock, .gallery_image {

@@ -94,6 +94,7 @@
 		$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);
 	}
 	$page = str_replace("[inlinemenu]", $inlinemenu, $page);
+	$page = str_replace("[dates]", nextDates(5), $page);
 	//
 	// end
 	//

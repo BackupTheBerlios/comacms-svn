@@ -46,7 +46,12 @@
 	// insert the 'functions' here
 	//
 	if(!isset($extern_page))
-		counter_set('a:', $extern_page);
+		$extern_page = 'admincontrol';
+	if($extern_page == '')
+		$extern_page = 'admincontrol';
+
+	counter_set('a:', $extern_page);
+	
 	if($extern_page == 'admincontrol') {
 		$title = $admin_lang['admincontrol'];
 		$text = page_admincontrol();

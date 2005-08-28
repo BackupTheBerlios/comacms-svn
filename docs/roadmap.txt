@@ -8,8 +8,8 @@
 	[_]-settings
 		[X]-mainname
 		[ ]-mailsettings
-	[ ]-article-system(with comments?)
-	[ ]-"in-page-menue"
+	[_]-article-system(with comments?)
+	[_]-"in-page-menue"
 	[X]-"not on mainpage-parameter"
 	[X]-"not in adminsyste-parameter"
 	[X]-find a licence

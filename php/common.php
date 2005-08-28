@@ -47,10 +47,12 @@
 	//
 	// if there is no sitename to load get the defaultssite
 	//
-	if(!isset($extern_page) && isset($internal_default_page))
+	if(!isset($extern_page) && isset($internal_default_page)&& endsWith($_SERVER['PHP_SELF'], "index.php"))
 		$extern_page = $internal_default_page;
-	elseif(!isset($extern_page))
+	elseif(!isset($extern_page) && endsWith($_SERVER['PHP_SELF'], "index.php"))
 		$extern_page = 'home';
+	elseif(!isset($extern_page))
+		$extern_page = '';
 	
 	if(startsWith($extern_page, 'a:'))
  		header('Location: admin.php?page='.substr($extern_page, 2));

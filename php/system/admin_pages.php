@@ -1216,7 +1216,7 @@
 				<input type=\"hidden\" name=\"action\" value=\"new\" />
 				<table>
 					<tr>
-						<td>" . $admin_lang['date'] . ": <span class=\"info\">Dies ist das Datum, an dem die Veranstaltung stattfindet (Format: TT.MM.YYY, Beispiel: 05.11.2005)</span></td>
+						<td>" . $admin_lang['date'] . ": <span class=\"info\">Dies ist das Datum, an dem die Veranstaltung stattfindet (Format: TT.MM.YYYY, Beispiel: 05.11.2005)</span></td>
 						<td><input type=\"text\" name=\"date\" maxlength=\"10\" value=\"\" /></td>
 					</tr>
 					<tr>

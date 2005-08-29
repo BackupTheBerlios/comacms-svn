@@ -27,12 +27,14 @@
 		$return_str = '';
 		while($row = mysql_fetch_object($result)) {
 			$return_str .= "\t\t\t<div class=\"news\">
-				<div class=\"news-title\">
+				<span class=\"news-title\">
 					" . $row->title . "
-					<span class=\"news-title\">" . date('d.m.Y H:i:s', $row->date) . "</span>
-				</div>
+					<span class=\"news-date\">" . date('d.m.Y H:i:s', $row->date) . "</span>
+				</span>
+				<div class=\"news-text\">
 				" . nl2br($row->text) . "
-				<span class=\"news-author\">&nbsp;" . getUserByID($row->userid) . "</span>
+				</div>
+				<span class=\"news-author\">" . getUserByID($row->userid) . "</span>
 				</div>\r\n";	
 		}
 	

@@ -213,3 +213,28 @@ textarea.edit {
 .topdesc {
  vertical-align: top;
 }
+.article, .news {
+ width: 90%;
+ border: 1px dashed #C0C0C0;
+ margin: 5px;
+ padding: 5px;
+}
+.article-date, .news-date {
+font-weight: normal;
+position: absolute;
+right: 0%;
+font-size:0.8em;
+}
+.article-title, .news-title {
+font-weight: bold;
+border-bottom: 1px dashed #C0C0C0;
+margin-left: -5px;
+padding-left: 8px;
+}
+.news-author, .article-author {
+bottom: 1px;
+font-size: 8.5pt;
+font-weight: normal;
+position: absolute;
+right: 1px;
+}

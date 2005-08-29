@@ -1325,12 +1325,12 @@
 			if(isset($extern_sure)) {
 							
 				if($extern_sure == 1)
-					db_result("DELETE FROM " . DB_PREFIX . "articles WHERE articles_id=" . $extern_id);
+					db_result("DELETE FROM " . DB_PREFIX . "articles WHERE article_id=" . $extern_id);
 			}
 			else {
-				$result = db_result("SELECT * FROM " . DB_PREFIX . "articles WHERE articles_id=" . $extern_id);
+				$result = db_result("SELECT * FROM " . DB_PREFIX . "articles WHERE article_id=" . $extern_id);
 				$row = mysql_fetch_object($result);
-				$out .= "Den News Eintrag &quot;" . $row->articles_title . "&quot; wirklich löschen?<br />
+				$out .= "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich löschen?<br />
 			<a href=\"admin.php?page=articles&amp;action=delete&amp;id=" . $extern_id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;
 			<a href=\"admin.php?page=articles\" title=\"Nicht Löschen\">nein</a>";
 			
@@ -1343,7 +1343,7 @@
 		elseif($extern_action == "new") {
 			if($extern_title != "" && $extern_description != "" && $extern_text) {
 				$sql = "INSERT INTO ".DB_PREFIX."articles
-					(articles_title, articles_description, articles_text, articles_html, articles_creator, articles_date)
+					(article_title, article_description, article_text, article_html, article_creator, article_date)
 					VALUES ('$extern_title', '$extern_description', '$extern_text', '" . convertToPreHtml($extern_text) . "', '$actual_user_id', '" . mktime() . "')";
 				db_result($sql);
 			}	
@@ -1354,12 +1354,12 @@
 		elseif($extern_action == "update") { 
 			if($extern_title != "" && $extern_description != "" && $extern_text != "" && $extern_id != 0) {
 				$sql = "UPDATE ".DB_PREFIX."articles SET 
-					articles_title= '$extern_title', 
-					articles_description= '$extern_description', 
-					articles_text= '$extern_text',
-					articles_html= '" . convertToPreHtml($extern_text) . "',
-					articles_date= '" . mktime() . "' 
-					WHERE id=".$extern_id;
+					article_title= '$extern_title', 
+					article_description= '$extern_description', 
+					article_text= '$extern_text',
+					article_html= '" . convertToPreHtml($extern_text) . "',
+					article_date= '" . mktime() . "' 
+					WHERE article_id=".$extern_id;
 				db_result();
 			}
 		}
@@ -1390,7 +1390,7 @@
 		}
 		
 		if(isset($extern_id) && $extern_action == "edit") {
-			$sql = "SELECT * FROM " . DB_PREFIX . "articles WHERE articles_id=$extern_id";
+			$sql = "SELECT * FROM " . DB_PREFIX . "articles WHERE article_id=$extern_id";
 			$result = db_result($sql);
 			$row = mysql_fetch_object($result);
 			$out .= "\t\t\t<form method=\"post\" action=\"admin.php\">
@@ -1399,15 +1399,15 @@
 				<table>
 					<tr>
 						<td>Titel: <span class=\"info\">Hier den Titel des Artikels eingeben</span></td>
-						<td><input type=\"text\" name=\"title\" maxlength=\"10\" value=\"" . $row->articles_title . "\" /></td>
+						<td><input type=\"text\" name=\"title\" maxlength=\"10\" value=\"" . $row->article_title . "\" /></td>
 					</tr>
 					<tr>
 						<td>Beschreibung: <span class=\"info\">Hier eine Zusammenfassung in einem Satz eingeben.</span></td>
-						<td><input type=\"text\" name=\"description\" maxlength=\"60\" value=\"" . $row->articles_description . "\" /></td>
+						<td><input type=\"text\" name=\"description\" maxlength=\"60\" value=\"" . $row->article_description . "\" /></td>
 					</tr>
 					<tr>
 						<td>Text: <span class=\"info\">Hier den gesammten Text des Artikels eingeben.</span></td>
-						<td><textarea cols=\"60\" rows=\"6\" name=\"text\">" . $row->articles_text . "</textarea></td>
+						<td><textarea cols=\"60\" rows=\"6\" name=\"text\">" . $row->article_text . "</textarea></td>
 					</tr>
 					<tr>
 						<td>Eingelogt als " . $actual_user_showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
@@ -1435,30 +1435,30 @@
 		//
 		$result = db_result("SELECT * FROM " . DB_PREFIX . "articles");
 		while($row = mysql_fetch_object($result)) {
-			if($extern_id == $row->articles_id && $extern_action == "edit") {	}
+			if($extern_id == $row->article_id && $extern_action == "edit") {	}
 			//
 			// show only the entrie
 			//
 			else {
-				$out .= "\t\t\t\t\t<tr ID=\"dateid" . $row->articles_id . "\">
+				$out .= "\t\t\t\t\t<tr ID=\"dateid" . $row->article_id . "\">
 						<td>
-							" . $row->articles_title . "
+							" . $row->article_title . "
 						</td>
 						<td>
-							" . $row->articles_description . "
+							" . $row->article_description . "
 						</td>
 						<td>
-							" . $row->articles_html . "
+							" . $row->article_html . "
 						</td>
 						<td>
-							" . date("d.m.Y", $row->articles_date) . "
+							" . date("d.m.Y", $row->article_date) . "
 						</td>
 						<td>
-							" . getUserByID($row->articles_creator) . "
+							" . getUserByID($row->article_creator) . "
 						</td>
 						<td colspan=\"2\">
-							<a href=\"admin.php?page=articles&amp;action=edit&amp;id=" . $row->articles_id . "#dateid" . $row->articles_id . "\" title=\"Bearbeiten\">Bearbeiten</a>
-							&nbsp;<a href=\"admin.php?page=articles&amp;action=delete&amp;id=" . $row->articles_id . "\" title=\"Löschen\">Löschen</a>
+							<a href=\"admin.php?page=articles&amp;action=edit&amp;id=" . $row->article_id . "#dateid" . $row->article_id . "\" title=\"Bearbeiten\">Bearbeiten</a>
+							&nbsp;<a href=\"admin.php?page=articles&amp;action=delete&amp;id=" . $row->article_id . "\" title=\"Löschen\">Löschen</a>
 						</td>
 					</tr>\r\n";
 			}
@@ -1471,6 +1471,7 @@
  	
  	function page_inlinemenu() {
  		global $extern_action, $_SERVER, $admin_lang, $extern_page_id, $extern_sure, $extern_inlinemenu_id, $extern_image_path, $extern_entrie_type, $extern_entrie_text, $extern_entrie_link;
+ 		
 		$out = '<h3>' . $admin_lang['inlinemenu'] . '</h3><hr />';
  		if($extern_action == 'new') {
  			$sql = "SELECT *

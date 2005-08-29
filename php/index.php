@@ -95,6 +95,7 @@
 	}
 	$page = str_replace("[inlinemenu]", $inlinemenu, $page);
 	$page = str_replace("[dates]", nextDates(5), $page);
+	$page = str_replace("[articles-preview]", articlesPreview(5), $page);
 	//
 	// end
 	//

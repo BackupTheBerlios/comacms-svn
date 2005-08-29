@@ -278,6 +278,8 @@
 				$text .= "<div>$entrie->inlineentrie_text</div>";
 			elseif($entrie->inlinieentrie_type == 'link')
 				$text .= "<div><a href=\"$entrie->inlineentrie_link\">$entrie->inlineentrie_text</a></div>";
+			elseif($entrie->inlinieentrie_type == 'intern')
+				$text .= "<div><a href=\"$entrie->inlineentrie_link\">$entrie->inlineentrie_text</a></div>";
 		}
 		$sql = "UPDATE " . DB_PREFIX . "inlinemenu
 			SET inlinemenu_html='$text'

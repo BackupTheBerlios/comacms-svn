@@ -299,6 +299,7 @@
 	function nextDates($count = 5) {
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "dates
+			WHERE date_date >= " . mktime() . "
 			ORDER BY date_date ASC
 			LIMIT 0, $count";
 		$result = db_result($sql);
@@ -317,7 +318,7 @@
 			ORDER BY article_date ASC
 			LIMIT 0, $count";
 		$result = db_result($sql);
-		$out = '';
+		$out = '<div class="articles-block">';
 		while($data = mysql_fetch_object($result)) {
 			$out .= "\t\t\t<div class=\"article\">
 				<span class=\"article-title\">" . $data->article_title . "
@@ -327,6 +328,7 @@
 				<span class=\"article-author\">" . getUserByID($data->article_creator) . "</span>
 			</div>\r\n";	
 		}
+		$out .= '</div>';
 		return $out;
 	}
 ?>

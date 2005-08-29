@@ -24,7 +24,7 @@
 			FROM " . DB_PREFIX . "news
 			ORDER BY date DESC LIMIT 0, $last";
 		$result = db_result($sql);
-		$return_str = '';
+		$return_str = '<div class="news-block">';
 		while($row = mysql_fetch_object($result)) {
 			$return_str .= "\t\t\t<div class=\"news\">
 				<span class=\"news-title\">
@@ -35,7 +35,7 @@
 				<span class=\"news-author\">" . getUserByID($row->userid) . "</span>
 				</div>\r\n";	
 		}
-	
+		$return_str .= "</div>";
 		return $return_str;
 	}
 ?>

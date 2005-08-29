@@ -149,3 +149,7 @@ CHANGE `articles_text` `article_text` TEXT CHARACTER SET latin1 COLLATE latin1_g
 CHANGE `articles_html` `article_html` TEXT CHARACTER SET latin1 COLLATE latin1_general_ci NULL DEFAULT NULL ,
 CHANGE `articles_creator` `article_creator` INT( 10 ) NOT NULL DEFAULT '0',
 CHANGE `articles_date` `article_date` INT( 20 ) UNSIGNED NULL DEFAULT NULL ;
+
+#r93
+#addded the type intern to the enum of inlineenetrie_type
+ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlinieentrie_type` `inlinieentrie_type` ENUM( 'link', 'donwload', 'text', 'intern' ) NOT NULL DEFAULT 'link';

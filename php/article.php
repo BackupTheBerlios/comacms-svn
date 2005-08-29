@@ -46,20 +46,18 @@
 		$text = "\t\t\t<h3>Artikelliste</h3><hr /><br />\r\n";
 		$text .= "\t\t\t<table>\r\n";
 		$text .= "\t\t\t\t<tr>
-					<td>Titel:</td>
-					<td>Datum:</td>
-					<td>Beschreibung:</td>
-					<td>Autor:</td>
-					<td></td>
+					<td>Titel</td>
+					<td>Datum</td>
+					<td>Beschreibung</td>
+					<td>Autor</td>
 				</tr>\r\n";
 		
 		while($articles_data = mysql_fetch_object($article_result))	{
 			$text .= "\t\t\t\t<tr>
-					<td>" . $articles_data->article_title . "</td>
+					<td><a href=\"article.php?page_id=$articles_data->article_id\">" . $articles_data->article_title . "</a></td>
 					<td>" . date('d.m.Y H:i:s', $articles_data->article_date) . "</td>
 					<td>" . nl2br($articles_data->article_description) . "</td>
 					<td>" . getUserByID($articles_data->article_creator) . "</td>
-					<td><a href=\"article.php?page_id=$articles_data->article_id\">mehr...</a></td>
 				</tr>\r\n";
 		}
 		

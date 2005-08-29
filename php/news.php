@@ -31,9 +31,7 @@
 					" . $row->title . "
 					<span class=\"news-date\">" . date('d.m.Y H:i:s', $row->date) . "</span>
 				</span>
-				<div class=\"news-text\">
 				" . nl2br($row->text) . "
-				</div>
 				<span class=\"news-author\">" . getUserByID($row->userid) . "</span>
 				</div>\r\n";	
 		}

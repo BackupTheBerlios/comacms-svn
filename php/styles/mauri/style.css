@@ -214,10 +214,11 @@ textarea.edit {
  vertical-align: top;
 }
 .article, .news {
- width: 90%;
+ width: 95%;
  border: 1px dashed #C0C0C0;
  margin: 5px;
  padding: 5px;
+ position: relative;
 }
 .article-date, .news-date {
 font-weight: normal;
@@ -226,6 +227,7 @@ right: 0%;
 font-size:0.8em;
 }
 .article-title, .news-title {
+display: block;
 font-weight: bold;
 border-bottom: 1px dashed #C0C0C0;
 margin-left: -5px;

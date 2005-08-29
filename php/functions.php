@@ -323,7 +323,7 @@
 				<span class=\"article-title\">" . $data->article_title . "
 					<span class=\"article-date\">" . date('d.m.Y H:i:s', $data->article_date) . "</span>
 				</span>
-				" . nl2br($data->article_text) . " <a href=\"article.php?page_id=$data->article_id\">mehr...</a>
+				" . nl2br($data->article_description) . " <a href=\"article.php?page_id=$data->article_id\">mehr...</a>
 				<span class=\"article-author\">" . getUserByID($data->article_creator) . "</span>
 			</div>\r\n";	
 		}

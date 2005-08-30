@@ -1206,7 +1206,7 @@
 		elseif($extern_action == "update") { 
 			if($extern_topic != "" && $extern_place != "" && $extern_date != "" && $extern_id != 0) {
 				$date = explode(".", $extern_date);
-				db_result("UPDATE ".DB_PREFIX."dates SET date_topic= '".$extern_topic."', date_place= '".$extern_place."', date_date'".mktime(0, 0, 0, $date[1], $date[0], $date[2])."' WHERE id=".$extern_id);
+				db_result("UPDATE ".DB_PREFIX."dates SET date_topic= '".$extern_topic."', date_place= '".$extern_place."', date_date='".mktime(0, 0, 0, $date[1], $date[0], $date[2])."' WHERE date_id=".$extern_id);
 			}
 		}
 		
@@ -1248,7 +1248,7 @@
 		//
 		// write all news entries
 		//
-		$result = db_result("SELECT * FROM ".DB_PREFIX."dates ORDER BY date_date DESC");
+		$result = db_result("SELECT * FROM " . DB_PREFIX . "dates ORDER BY date_date ASC");
 		while($row = mysql_fetch_object($result)) {
 			//
 			// show an editform for the selected entrie
@@ -1602,7 +1602,7 @@
  		elseif($extern_action == 'entrie_down') {
  			
  			$sql = "SELECT *
-				FROM " . DB_PREFIX . "inlinemenu_entries
+			 	FROM " . DB_PREFIX . "inlinemenu_entries
 				WHERE inlineentrie_id=$extern_entrie_id";
 			$self_result = db_result($sql);
 			$self_data = mysql_fetch_object($self_result);

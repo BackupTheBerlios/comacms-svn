@@ -36,9 +36,10 @@ legend {
 }
 
 #title {
- padding: 1em;
+ padding: 25px;
+ height: 35px;
  color: #FFFFFF;
- margin-bottom: 18px;
+ margin-bottom: 35px;
 }
 
 #top {

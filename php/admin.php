@@ -50,7 +50,7 @@
 	if($extern_page == '')
 		$extern_page = 'admincontrol';
 
-	counter_set('a:', $extern_page);
+	counter_set("a:$extern_page");
 	
 	if($extern_page == 'admincontrol') {
 		$title = $admin_lang['admincontrol'];

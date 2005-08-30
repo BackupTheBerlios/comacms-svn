@@ -37,6 +37,8 @@ legend {
 
 #title {
  padding: 25px;
+ padding-top: 42px;
+ padding-bottom: 8px;
  height: 35px;
  color: #FFFFFF;
  margin-bottom: 35px;
@@ -153,11 +155,13 @@ legend {
 #inlinemenu {
  float: left;
  width: 200px;
+ padding-left: 12px;
 }
 
 #inlinemenuimage {
  width: 200px;
  margin-bottom: 6px;
+ margin-left: -12px;
 }
 
 span.info, span.error{
@@ -214,6 +218,7 @@ textarea.edit {
 .topdesc {
  vertical-align: top;
 }
+
 .article, .news {
  width: 99%;
  border: 1px dashed #C0C0C0;
@@ -221,21 +226,25 @@ textarea.edit {
  padding: 5px;
  position: relative;
 }
+
 .articles-block {
  float: right;
  width: 47%;
   margin-right: 20px;
 }
+
 .news-block {
  float: left;
  width: 47%;
 }
+
 .article-date, .news-date {
  font-weight: normal;
  position: absolute;
  right: 0%;
  font-size:0.8em;
 }
+
 .article-title, .news-title {
  display: block;
  font-weight: bold;
@@ -243,10 +252,14 @@ textarea.edit {
  margin-left: -5px;
  padding-left: 8px;
 }
+
 .news-author, .article-author {
- bottom: 1px;
+ display:block;
  font-size: 0.7em;
  font-weight: normal;
- position: absolute;
- right: 1px;
+ text-align: right;
+}
+
+.dates {
+ width: 100%;
 }

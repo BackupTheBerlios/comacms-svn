@@ -206,11 +206,13 @@
 					SET  page_visible='deleted', page_text='', page_html='', page_creator='$actual_user_id', page_created='" . mktime() . "'
 					WHERE page_name='$extern_page_name'";
 				db_result($sql);
+				header("Location: " .$_SERVER['PHP_SELF'] . "?page=pageeditor&action=tree");
 			}
 			else {
 				$out .= "\t\t\tMöchten sie die Seite &quot;" . $exists->page_title . " (" . $exists->page_name . ")&quot; wirklich löschen?<br />
 				<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pageeditor&amp;action=delete&amp;sure=1&amp;page_name=" . $extern_page_name . "\">" . $admin_lang['yes'] . "</a> <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pageeditor\">" . $admin_lang['no'] . "</a>";
 			}
+			
 			
 		}
 		elseif($extern_action == 'tree') {

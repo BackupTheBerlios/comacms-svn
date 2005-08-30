@@ -86,7 +86,8 @@
 		//
 		// convert local hrefs
 		//
-		$text = preg_replace("/\"l:(.+?)\"/s","\"index.php?site=$1\"", $text);
+		$text = preg_replace("/\"l:(.+?)\"/s","\"index.php?page=$1\"", $text);
+		$text = preg_replace("/\"g:(.+?)\"/s","\"gallery.php?page=$1\"", $text);
 		//
 		// covert extern hrefs
 		//

@@ -303,7 +303,8 @@
 			ORDER BY date_date ASC
 			LIMIT 0, $count";
 		$result = db_result($sql);
-		$out = "<table><tr><td>Datum</td><td>Ort</td><td>Veranstaltung</td></tr>";
+		$out = "<table class=\"dates\">
+			<tr><td>Datum</td><td>Ort</td><td>Veranstaltung</td></tr>";
 		while($date = mysql_fetch_object($result)) {
 			$out .= "<tr><td>" . date("d.m.Y",$date->date_date) . "</td><td>$date->date_place</td><td>$date->date_topic</td></tr>";
 		}
@@ -315,7 +316,7 @@
 	function articlesPreview($count = 5) {
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "articles
-			ORDER BY article_date ASC
+			ORDER BY article_date DESC
 			LIMIT 0, $count";
 		$result = db_result($sql);
 		$out = '<div class="articles-block">';

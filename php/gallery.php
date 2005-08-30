@@ -45,8 +45,8 @@
 	//
 	$page = str_replace("[title]", $title, $page);
 	$page = str_replace("[text]", $text, $page);
-	$page = str_replace("[menu]", generatemenue(@$internal_style, 1, $extern_page), $page);
-	$page = str_replace("[menu2]", generatemenue(@$internal_style, 2, $extern_page), $page);
+	$page = str_replace("[menu]", generatemenu(@$internal_style, 1, $extern_page), $page);
+	$page = str_replace("[menu2]", generatemenu(@$internal_style, 2, $extern_page), $page);
 	$page = str_replace("[position]", position_to_root($page_data->page_id), $page);
 	$page = str_replace("[inlinemenu]", '', $page);
 	$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);

@@ -77,7 +77,7 @@
 	if(isset($position))
 		$page = str_replace("[position]", "<a href=\"article.php\">Artikel</a>-><a href=\"article.php?page_id=$article_data->article_id\">$position</a>", $page);
 	else
-		$page = str_replace("[position]", "<a href=\"article.php\">Artikel</a>->Alle", $page);
+		$page = str_replace("[position]", "<a href=\"article.php\">Artikel</a>", $page);
 	$page = str_replace("[inlinemenu]", '', $page);
 	$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);
 	//

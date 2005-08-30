@@ -1371,11 +1371,11 @@
 				<table>
 					<tr>
 						<td>Titel: <span class=\"info\">Hier den Titel des Artikels eingeben</span></td>
-						<td><input type=\"text\" name=\"title\" maxlength=\"10\" value=\"\" /></td>
+						<td><input type=\"text\" name=\"title\" maxlength=\"100\" value=\"\" /></td>
 					</tr>
 					<tr>
 						<td>Beschreibung: <span class=\"info\">Hier eine Zusammenfassung in einem Satz eingeben.</span></td>
-						<td><input type=\"text\" name=\"description\" maxlength=\"60\" value=\"\" /></td>
+						<td><input type=\"text\" name=\"description\" maxlength=\"200\" value=\"\" /></td>
 					</tr>
 					<tr>
 						<td>Text: <span class=\"info\">Hier den gesammten Text des Artikels eingeben.</span></td>
@@ -1600,8 +1600,9 @@
 			header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu&action=edit&inlinemenu_id=$self_data->inlineentrie_menu_id");
  		}
  		elseif($extern_action == 'entrie_down') {
+ 			
  			$sql = "SELECT *
-			 	FROM " . DB_PREFIX . "inlinemenu_entries
+				FROM " . DB_PREFIX . "inlinemenu_entries
 				WHERE inlineentrie_id=$extern_entrie_id";
 			$self_result = db_result($sql);
 			$self_data = mysql_fetch_object($self_result);
@@ -1612,7 +1613,7 @@
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "inlinemenu_entries
 				WHERE inlineentrie_sortid > $sortid1 AND inlineentrie_menu_id=$self_data->inlineentrie_menu_id
-				ORDER BY inlineentrie_sortid DESC";
+				ORDER BY inlineentrie_sortid ASC";
 			$pre_result = db_result($sql);
 			$pre_data = mysql_fetch_object($pre_result);
 		

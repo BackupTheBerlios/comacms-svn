@@ -1,0 +1,21 @@
+#title {
+ margin-bottom: 0;
+}
+
+#position {
+ margin-left: 140px;
+ padding-left: 10px;
+ margin-top: -1px;
+}
+
+.sitepreview, #previewiframe { /*FIXME: make only one classss*/
+ width: 700px;
+}
+
+.articles-block{
+ margin-right: 0;
+}
+
+.dates {
+ width: 700px;
+}

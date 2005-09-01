@@ -1,0 +1,36 @@
+		Todolist
+
+	*Dokumentation
+	*Multisitesystem(one installation with more then one different pages)
+	*Rightsmanagement(per user, per group)
+	*Userfriendly Installation
+%%%	*Translations
+	*Adminsystem
+#%%		*Einstellungen
+#%%		*AdminControl
+###		*Stlyevorschau mit Speicherfunktion
+###		*Usermanagement
+		*Gruppenmanagement (Rechte usw.)
+###		*neues Verzeichnis User? für Userseiten wie Seitenebearbeiten und weiteres
+%%%		*'full XHTML suport'
+#%%		*Gallerie(-editor)
+##%		*Useranmeldung
+###		*neues Formatierungssytem " ** "= FETT " __ "= Unterstrichen usw..
+		*WYSIWG Editor (look at www.blogger.com for more infos we must write it totaly on our own!!!it must run on every browser but only if it has activated java-script)
+		*Spellchek
+%%%	*'Mauristyle'
+###	*Loginbug(you can log into the admimcontrol without admin-rights)
+	*search
+	*integrate the guestbook
+	*submenue
+	*caching system
+###	*find a licence
+	*article system
+	*translationeditor
+	*timezone bug(show the time in the timezone of the client not in the timezone of the server)
+	*registerform
+	*databasesizereducer
+	*deleted pages with not deleted subpages are only visible if the deleted are shown at the overview page
+
+Wenn was fertig gemacht ist, einfach '###' in an den Anfang der Zeile schreiben.
+Angefangene mit einem %%% kenzeichnen

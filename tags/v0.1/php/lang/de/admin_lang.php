@@ -28,8 +28,8 @@
 	$admin_lang['dates'] = 'Termine';
 	$admin_lang['sitestyle'] = 'Seitenstyle';
 	$admin_lang['users'] = 'Benutzer';
-	$admin_lang['gallery'] = 'Gallerie';
-	$admin_lang['gallery editor'] = 'GallerieEditor';
+	$admin_lang['gallery'] = 'Galerie';
+	$admin_lang['gallery editor'] = 'GalerieEditor';
 	$admin_lang['logout'] = 'Logout';
 	$admin_lang['sitepreview'] = 'Seitenvorschau';
 	$admin_lang['registered users'] = 'Angemeldete Benutzer';

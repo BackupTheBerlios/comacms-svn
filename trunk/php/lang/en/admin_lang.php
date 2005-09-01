@@ -60,6 +60,6 @@
 	$admin_lang['topic'] = 'Topic';
 	$admin_lang['actions'] = 'Actions';
 	$admin_lang['creator'] = 'Creator';
-	$admin_lang['articles'] = 'Articles'
+	$admin_lang['articles'] = 'Articles';
 	$admin_lang['inlinemenu'] = 'Inlinemenu';
 ?>

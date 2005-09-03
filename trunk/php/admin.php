@@ -20,11 +20,17 @@
 	define("COMACMS_RUN", true);
 	
 	include("common.php");
-	include('./system/functions.php');
+	
+	if(!$user->IsLoggedIn)
+		header('Location: special.php?page=login');
+	if(!$user->IsAdmin && $user->IsLoggedIn)
+		header('Location: index.php');
+	include_once('./system/functions.php');
 	
 	$text = '';
 	$title = '';
-	include('./lang/' . $actual_user_lang . '/admin_lang.php');
+
+	include('./lang/' . $user->Language . '/admin_lang.php');
 	include('./system/admin_pages.php');
 	$menu_array = array();
 	$menu_array[] = array($admin_lang['admincontrol'], 'admin.php?page=admincontrol');
@@ -50,7 +56,7 @@
 	if($extern_page == '')
 		$extern_page = 'admincontrol';
 
-	counter_set("a:$extern_page");
+//	counter_set("a:$extern_page");
 	
 	if($extern_page == 'admincontrol') {
 		$title = $admin_lang['admincontrol'];
@@ -116,7 +122,7 @@
 	//
 	if(@$internal_style == '')
 		$internal_style = 'clear';
-	include('./styles/' . $internal_style . '/menue.php');
+	include('./styles/' . $internal_style . '/menu.php');
 	$menu = '';
 	foreach($menu_array as $part) {
 		$menu_str = $menu_link;
@@ -128,12 +134,14 @@
 	$path = '';
 	if($extern_page != 'admincontrol')
 		$path = " -> <a href=\"admin.php?page=$extern_page\">$title</a>";
-	$page = str_replace("[position]", "<a href=\"admin.php?page=admincontrol\">Admin</a>$path", $page);
-	$page = str_replace('[menu]', $menu, $page);
-	$page = str_replace('[title]', $title, $page);
-	$page = str_replace('[menu2]', '', $page);
-	$page = str_replace('[text]', $text, $page);
-	$page = str_replace("[inlinemenu]", '', $page);
-	$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);
-	echo $page;
+	$page->_template = str_replace("[position]", "<a href=\"admin.php?page=admincontrol\">Admin</a>$path", $page->_template);
+	$page->_template = str_replace('[menu]', $menu, $page->_template);
+	$page->_title = $title;
+	$page->_template = str_replace('[menu2]', '', $page->_template);
+	//$page = str_replace('[text]', $text, $page);
+	$page->_text = $text;
+	
+	$page->_template = str_replace("[inlinemenu]", '', $page->_template);
+	$page->_template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->_template);
+	echo $page->OutputHTML();
 ?>

@@ -16,22 +16,23 @@
  *  (at your option) any later version.
  *
  *****************************************************************************/
-	function _start() {
+/*	function _start() {
 		global $db_con, $d_user, $d_pw, $d_base, $d_server, $d_pre;
 		
 		include_once('config.php');
 		$db_con = connect_to_db($d_user, $d_pw, $d_base, $d_server);
 		define('DB_PREFIX', $d_pre);
-}
+}*/
 
 	function connect_to_db($username, $userpw, $database, $server = 'localhost') {
+		global $db_con;
 		error_reporting(E_ALL);
-		$db = mysql_pconnect($server, $username, $userpw)
+		$db_con = mysql_pconnect($server, $username, $userpw)
 		or die('Mysql-error:' . mysql_error());
-		mysql_select_db($database, $db)
+		mysql_select_db($database, $db_con)
 		or die('Mysql-error:' . mysql_error());
 		
-		return $db;
+		//return $db_con;
 	}
 
 	function db_result($command) {

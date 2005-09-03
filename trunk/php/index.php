@@ -27,19 +27,24 @@
  *****************************************************************************/
 	
 	define("COMACMS_RUN", true);
+	include('common.php');
 	
-	include("common.php");	
-	$sql = "SELECT cont.*, inline.*
+
+	
+	if(!isset($extern_page))
+		$extern_page = $config->Get('default_page', 'home');
+	$page->LoadPage($extern_page);
+/*	$sql = "SELECT cont.*, inline.*
 		FROM ( " . DB_PREFIX. "pages_content cont
 		LEFT JOIN " . DB_PREFIX . "inlinemenu inline ON inline.inlinemenu_id = cont.page_inlinemenu )
 		WHERE cont.page_name='$extern_page' AND cont.page_type='text'";
-	$page_result = db_result($sql);
-	if(!$page_result)
-		die("bad error:  no pagedata found");
-	if(!($page_data = mysql_fetch_object($page_result)))
-		die("bad error:  no sitedata found");
-	$title = $page_data->page_title;
-	$text = $page_data->page_html;
+*///	$page_result = db_result($sql);
+//	if(!$page_result)
+//		die("bad error:  no pagedata found");
+//	if(!($page_data = mysql_fetch_object($page_result)))
+//		die("bad error:  no sitedata found");
+//	$title = $page_data->page_title;
+//	$text = $page_data->page_html;
 	//
 	// end
 	//
@@ -63,16 +68,16 @@
 	// load style
 	//
 	
-	$page = str_replace("[title]", $title, $page);
-	$page = str_replace("[text]", $text, $page);
-	$page = str_replace("[menu]", generatemenu(@$internal_style, 1, $extern_page), $page);
-	$page = str_replace("[menu2]", generatemenu(@$internal_style, 2, $extern_page), $page);
+//	$page = str_replace("[title]", $title, $page);
+//	$page = str_replace("[text]", $text, $page);
+//	$page = str_replace("[menu]", generatemenu(@$internal_style, 1, $extern_page), $page);
+//	$page = str_replace("[menu2]", generatemenu(@$internal_style, 2, $extern_page), $page);
 	
-	include("news.php");
-	$page = str_replace("[news]", getNews(), $page);
-	$page = str_replace("[position]",position_to_root($page_data->page_id), $page);
+//	include("news.php");
+//	$page = str_replace("[news]", getNews(), $page);
+//	$page = str_replace("[position]",position_to_root($page_data->page_id), $page);
 	
-	if (strpos ($page, "[gbook-")) {
+/*	if (strpos ($page, "[gbook-")) {
 		include("gbook.php");
 		$page = str_replace("[gbook-input]", gbook_input(), $page);
 		$page = str_replace("[gbook-pages]", gbook_pages(), $page);
@@ -81,23 +86,26 @@
 	if (strpos ($page, "[contact]")) {
 		include("contact.php");
 		$page = str_replace("[contact]", contact_formular(), $page);
-	}
-	$inlinemenu = '';
-	if($page_data->inlinemenu_html != null) {
-		include('./styles/' . $internal_style . '/menue.php');
-		$inlinemenu = $menu_inline;
-		$inlinemenu = str_replace("[text]", $page_data->inlinemenu_html, $inlinemenu);
-		$inlinemenu = str_replace("[image]", "src=\"$page_data->inlinemenu_image\"", $inlinemenu);
-		$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "$1", $page);
-	}
-	else {
-		$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);
-	}
-	$page = str_replace("[inlinemenu]", $inlinemenu, $page);
-	$page = str_replace("[dates]", nextDates(10), $page);
-	$page = str_replace("[articles-preview]", articlesPreview(5), $page);
+	}*/
+//	$inlinemenu = '';
+//	if($page_data->inlinemenu_html != null) {
+//		include('./styles/' . $internal_style . '/menue.php');
+//		$inlinemenu = $menu_inline;
+//		$inlinemenu = str_replace("[text]", $page_data->inlinemenu_html, $inlinemenu);
+//		$inlinemenu = str_replace("[image]", "src=\"$page_data->inlinemenu_image\"", $inlinemenu);
+//		$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "$1", $page);
+//	}
+//	else {
+//		$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);
+//	}
+//	$page = str_replace("[inlinemenu]", $inlinemenu, $page);
+//	$page = str_replace("[dates]", nextDates(10), $page);
+//	$page = str_replace("[articles-preview]", articlesPreview(5), $page);
 	//
 	// end
 	//
-	echo $page;
+//	$page->setText($text);
+//	$page->setTitle($title);
+	echo $page->OutputHTML();
+// echo $page;
 ?>

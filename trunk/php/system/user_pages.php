@@ -308,7 +308,7 @@
 
 	function page_logout() {
 		global $actual_user_online_id;
-		setcookie('CMS_user_cookie', $actual_user_online_id . '||', time() + 14400);
+		setcookie('ComaCMS_user', $actual_user_online_id . '||', time() + 14400);
 		header('Location: index.php');
 	}
 	

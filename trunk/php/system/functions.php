@@ -17,11 +17,11 @@
  *
  *****************************************************************************/
 	
-	function alt($link) {
+	/*function alt($link) {
 		$text = preg_replace("/(.+?)\|(.+$)/s","$1\" alt=\"\\2", $link);
 		echo $link.'<br \>' . $text . '<br \>';
 		return $text;
-	}
+	}*/
 
 	function convertToPreHtml($text) {
 		$text = htmlspecialchars($text);

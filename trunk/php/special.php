@@ -20,7 +20,8 @@
 	define("COMACMS_RUN", true);
  
 	include('common.php');
-	include('./lang/' . $actual_user_lang . '/admin_lang.php');
+	
+	include('./lang/' . $user->Language  . '/admin_lang.php');
 	if(!isset($extern_page))
 		header('Locaction: index.php');
 	$text = '';
@@ -43,13 +44,13 @@
 	}
 	if($text == '')
 		header('Locaction: index.php');
-	$page = str_replace('[title]', $title, $page);
-	$page = str_replace('[text]', $text, $page);
-	$page = str_replace('[menu]', generatemenu(@$internal_style, 1, $extern_page), $page);
-	$page = str_replace('[menu2]', generatemenu(@$internal_style, 2, $extern_page), $page);
-	$page = str_replace("[inlinemenu]", '', $page);
-	$page = str_replace("[position]", "<a href=\"special.php?page=$extern_page\">$title</a>", $page);
-	$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);
-	echo $page;
+	$page->_title = $title;
+	$page->SetText($text);
+	//$page = str_replace('[menu]', generatemenu(@$internal_style, 1, $extern_page), $page);
+	//$page = str_replace('[menu2]', generatemenu(@$internal_style, 2, $extern_page), $page);
+	$page->_template = str_replace("[inlinemenu]", '', $page->_template);
+	$page->_template = str_replace("[position]", "<a href=\"special.php?page=$extern_page\">$title</a>", $page->_template);
+	$page->_template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->_template);
+	echo $page->OutputHTML();
 
 ?>

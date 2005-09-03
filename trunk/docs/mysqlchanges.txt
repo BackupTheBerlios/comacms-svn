@@ -153,3 +153,41 @@ CHANGE `articles_date` `article_date` INT( 20 ) UNSIGNED NULL DEFAULT NULL ;
 #r93
 #addded the type intern to the enum of inlineenetrie_type
 ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlinieentrie_type` `inlinieentrie_type` ENUM( 'link', 'donwload', 'text', 'intern' ) NOT NULL DEFAULT 'link';
+
+#r101
+#created table for structure
+CREATE TABLE `cms_pages` (
+`page_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+`page_name` VARCHAR( 50 ) NOT NULL ,
+`page_type` ENUM( 'text', 'gallery', 'article' ) NOT NULL ,
+`page_title` VARCHAR( 120 ) NOT NULL ,
+`page_parent_id` INT( 10 ) NOT NULL ,
+`page_creator` INT( 15 ) NOT NULL ,
+`page_date` INT( 20 ) NOT NULL ,
+PRIMARY KEY ( `page_id` )
+) TYPE = MYISAM ;
+
+#r101
+#added access field
+ALTER TABLE `cms_pages` ADD `page_access` ENUM( 'public', 'private', 'hidden', 'deleted' ) NOT NULL ;
+
+#r101
+#added data-link field
+ALTER TABLE `cms_pages` ADD `page_data_id` INT( 10 ) NOT NULL ;
+
+#r101
+#added data-language field
+ALTER TABLE `cms_pages` ADD `page_lang` VARCHAR( 5 ) NOT NULL ;
+
+#r101
+#renamed fields in cms_menue
+ALTER TABLE `cms_menue` CHANGE `id` `menu_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+CHANGE `link` `menu_link` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
+CHANGE `text` `menu_text` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
+CHANGE `new` `menu_new` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no',
+CHANGE `orderid` `menu_orderid` INT( 10 ) UNSIGNED NULL DEFAULT NULL ,
+CHANGE `menue_id` `menu_menuid` INT( 10 ) NOT NULL DEFAULT '1';
+
+#r101
+#renamed cms_menue to cms_menu
+ALTER TABLE `cms_menue` RENAME `cms_menu` ;

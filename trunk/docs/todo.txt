@@ -16,7 +16,7 @@
 #%%		*Gallerie(-editor)
 ##%		*Useranmeldung
 ###		*neues Formatierungssytem " ** "= FETT " __ "= Unterstrichen usw..
-		*WYSIWG Editor (look at www.blogger.com for more infos we must write it totaly on our own!!!it must run on every browser but only if it has activated java-script)
+		*WYSIWG Editor (should we use TinyMCE from http://tinymce.moxiecode.com/? or use it as an reference and write our own.. |look at www.blogger.com for more infos we must write it totally on our own!!!it must run on every browser but only if it has activated java-script)
 		*Spellchek
 %%%	*'Mauristyle'
 ###	*Loginbug(you can log into the admimcontrol without admin-rights)

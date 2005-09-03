@@ -38,7 +38,21 @@
 		}
 		 	
 		function Save($name, $value) {
-		
+			$sql = "SELECT config_name
+				FROM " . DB_PREFIX . "config
+				WHERE config_name='$name'";
+			$exists_result = db_result($sql);
+			if($exists = mysql_fetch_object($exists_result)) {
+				$sql = "UPDATE " . DB_PREFIX . "config
+					SET config_value = '$value'
+					WHERE config_name = '$name'";
+				db_result($sql);
+			}
+			else {
+				$sql = "INSERT INTO " . DB_PREFIX . "config (config_name , config_value )
+					VALUES ( '$name', '$value')";
+				db_result($sql);
+			}
 		}
 	}
 ?>

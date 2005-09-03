@@ -18,7 +18,7 @@
  *****************************************************************************/
 
  require_once('./system/functions.php');
-
+ require_once('./classes/textpage.php');
 	class Page {
 	
 		var $_text;
@@ -133,6 +133,11 @@
 			$this->_title = $page_data->page_title;
 			$this->PositionOfPage($page_data->page_id);
 			$this->_page_id = $page_data->page_id;
+			if($page_data->page_type == 'text') {
+				$textpage = new TextPage($page_data->page_data_id);
+				$this->_text = $textpage->HTML;
+				//$this->SetText($textpage->Text, false);
+			}
 		}
 		
 		function LoadTemplate($templatefolder) {

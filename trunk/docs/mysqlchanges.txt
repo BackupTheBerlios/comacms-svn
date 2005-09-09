@@ -191,3 +191,32 @@ CHANGE `menue_id` `menu_menuid` INT( 10 ) NOT NULL DEFAULT '1';
 #r101
 #renamed cms_menue to cms_menu
 ALTER TABLE `cms_menue` RENAME `cms_menu` ;
+
+#r103
+ALTER TABLE `cms_pages_content` RENAME `cms_pages_text` ;
+
+#r103
+#removed unused fields
+ALTER TABLE `cms_pages_text` DROP `page_parent_id` ,
+DROP `page_type` ,
+DROP `page_visible` ,
+DROP `page_name` ,
+DROP `page_title` ,
+DROP `page_lang` ,
+DROP `page_creator` ,
+DROP `page_created` ;
+
+#r103
+#renamed old fields because of the logical context
+ALTER TABLE `cms_pages_text` CHANGE `text_page_id` `page_id` INT( 10 ) NOT NULL,
+CHANGE `page_text` `text_page_text` TEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL ,
+CHANGE `page_html` `text_page_html` TEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL ,
+CHANGE `page_inlinemenu` `text_page_inlinemenu` INT( 19 ) NOT NULL DEFAULT '-1';
+
+#r103
+#articles are no pages
+ALTER TABLE `cms_pages` CHANGE `page_type` `page_type` ENUM( 'text', 'gallery' ) NOT NULL DEFAULT 'text';
+
+#r103
+#removed page_data_id, it isn't loger needed
+ALTER TABLE `cms_pages` DROP `page_data_id` ;

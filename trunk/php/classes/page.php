@@ -134,7 +134,7 @@
 			$this->PositionOfPage($page_data->page_id);
 			$this->_page_id = $page_data->page_id;
 			if($page_data->page_type == 'text') {
-				$textpage = new TextPage($page_data->page_data_id);
+				$textpage = new TextPage($page_data->page_id);
 				$this->_text = $textpage->HTML;
 				//$this->SetText($textpage->Text, false);
 			}

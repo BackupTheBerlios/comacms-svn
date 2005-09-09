@@ -62,4 +62,5 @@
 	$admin_lang['creator'] = 'Creator';
 	$admin_lang['articles'] = 'Articles';
 	$admin_lang['inlinemenu'] = 'Inlinemenu';
+	$admin_lang['pagestructure'] = 'PageStructure';
 ?>

@@ -17,10 +17,10 @@
  *
  *****************************************************************************/
 
-	define("COMACMS_RUN", true);
+	define('COMACMS_RUN', true);
 	
-	include("common.php");
-	
+	include('common.php');
+
 	if(!$user->IsLoggedIn)
 		header('Location: special.php?page=login');
 	if(!$user->IsAdmin && $user->IsLoggedIn)
@@ -36,15 +36,16 @@
 	$menu_array[] = array($admin_lang['admincontrol'], 'admin.php?page=admincontrol');
 	$menu_array[] = array($admin_lang['sitepreview'], 'admin.php?page=sitepreview');
 	$menu_array[] = array($admin_lang['preferences'], 'admin.php?page=preferences');
-	$menu_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
-	$menu_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
-	$menu_array[] = array($admin_lang['inlinemenu'], 'admin.php?page=inlinemenu');
+	$menu_array[] = array($admin_lang['pagestructure'], 'admin.php?page=pagestructure');
+//	$menu_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
+//	$menu_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
+//	$menu_array[] = array($admin_lang['inlinemenu'], 'admin.php?page=inlinemenu');
 	$menu_array[] = array($admin_lang['news'], 'admin.php?page=news');
 	$menu_array[] = array($admin_lang['dates'], 'admin.php?page=dates');
 	$menu_array[] = array($admin_lang['articles'], 'admin.php?page=articles');
 	$menu_array[] = array($admin_lang['sitestyle'], 'admin.php?page=sitestyle');
 	$menu_array[] = array($admin_lang['users'], 'admin.php?page=users');
-	$menu_array[] = array($admin_lang['gallery editor'], 'admin.php?page=gallery_editor');
+//	$menu_array[] = array($admin_lang['gallery editor'], 'admin.php?page=gallery_editor');
 	$menu_array[] = array($admin_lang['files'], 'admin.php?page=files');
 	$menu_array[] = array($admin_lang['logout'], 'admin.php?page=logout');
 	
@@ -55,7 +56,8 @@
 		$extern_page = 'admincontrol';
 	if($extern_page == '')
 		$extern_page = 'admincontrol';
-
+	if(!isset($extern_action))
+		$extern_action = '';
 //	counter_set("a:$extern_page");
 	
 	if($extern_page == 'admincontrol') {
@@ -66,10 +68,10 @@
 		$title = $admin_lang['sitepreview'];
 		$text = page_sitepreview();
 	}
-	elseif($extern_page == 'menueeditor') {
+/*	elseif($extern_page == 'menueeditor') {
 		$title = $admin_lang['menueeditor'];
 		$text = page_menueeditor();
-	}
+	}*/
 	elseif($extern_page == 'sitestyle') {
 		$title = $admin_lang['sitestyle'];
 		$text = page_sitestyle();
@@ -86,11 +88,11 @@
 		$title = $admin_lang['articles'];
 		$text = page_articles();
 	}
-	elseif($extern_page == 'pageeditor') {
+/*	elseif($extern_page == 'pageeditor') {
 		$title = $admin_lang['pageeditor'];
 		include('./system/user_pages.php');
 		$text = page_pageeditor();
-	}
+	}*/
 	elseif($extern_page == 'users') {
 		$title = $admin_lang['users'];
 		$text = page_users();
@@ -103,20 +105,25 @@
 		$title = $admin_lang['preferences'];
 		$text = page_preferences();
 	}
-	elseif($extern_page == 'gallery_editor') {
+/*	elseif($extern_page == 'gallery_editor') {
 		$title = $admin_lang['gallery editor'];
 		$text = page_gallery_editor();
-	}
+	}*/
 	elseif($extern_page == 'files') {
 		include('system/user_pages.php');
 		$title = $admin_lang['files'];
 		$text = page_files();
 	}
-	elseif($extern_page == 'inlinemenu') {
+/*	elseif($extern_page == 'inlinemenu') {
 		$title = $admin_lang['inlinemenu'];
 		$text = page_inlinemenu();
+	}*/
+	elseif($extern_page == 'pagestructure') {
+		$title = $admin_lang['pagestructure'];
+		include('classes/admin_pagestructure.php');
+		$admin_page = new Admin_PageStructure();
+		$text = $admin_page->GetPage($extern_action);
 	}
-	
 	//
 	// end of the 'functions'
 	//

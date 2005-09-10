@@ -2,7 +2,7 @@
 <html lang="de">
 
 	<head>
-		<title>LatForAll Latein Für Alle -> [title]</title>
+		<title>[pagename] -> [title]</title>
 		<link rel="stylesheet" href="./styles/clear/style.css" type="text/css" />
 		<meta name="author" content="Sebastian Willenborg" />
 	</head>

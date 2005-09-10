@@ -44,13 +44,13 @@
 	}
 	if($text == '')
 		header('Locaction: index.php');
-	$page->_title = $title;
+	$page->Title = $title;
 	$page->SetText($text);
 	//$page = str_replace('[menu]', generatemenu(@$internal_style, 1, $extern_page), $page);
 	//$page = str_replace('[menu2]', generatemenu(@$internal_style, 2, $extern_page), $page);
-	$page->_template = str_replace("[inlinemenu]", '', $page->_template);
-	$page->_template = str_replace("[position]", "<a href=\"special.php?page=$extern_page\">$title</a>", $page->_template);
-	$page->_template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->_template);
+	$page->Template = str_replace("[inlinemenu]", '', $page->Template);
+	$page->Template = str_replace("[position]", "<a href=\"special.php?page=$extern_page\">$title</a>", $page->Template);
+	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	echo $page->OutputHTML();
 
 ?>

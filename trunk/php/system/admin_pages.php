@@ -71,17 +71,14 @@
 			<td>".$admin_lang['ip']."</td>
 			<td>".$admin_lang['host']."</td>
 		</tr>";
-			//output all visitors surfing on the site
-			$users_online_result = db_result("SELECT userid, page, lastaction, lang, ip, host FROM " . DB_PREFIX . "online");
-			while($users_online = mysql_fetch_object($users_online_result)) {
-				if($users_online->userid == 0)
-					$username  = $admin_lang['not registered'];
-				else
-					$username = getUserById($users_online->userid);
-				//
-				// FIXME: gethostbyaddr needes to much time if there are many users online
-				//
-				$out .= "\t\t\t<tr>
+		//output all visitors surfing on the site
+		$users_online_result = db_result("SELECT userid, page, lastaction, lang, ip, host FROM " . DB_PREFIX . "online");
+		while($users_online = mysql_fetch_object($users_online_result)) {
+			if($users_online->userid == 0)
+				$username  = $admin_lang['not registered'];
+			else
+				$username = getUserById($users_online->userid);
+			$out .= "\t\t\t<tr>
 			<td>".$username."</td>
 			<td><a href=\"index.php?page=".$users_online->page."\">".$users_online->page."</a></td>
 			<td>" . date("d.m.Y H:i:s", $users_online->lastaction)."</td>
@@ -89,7 +86,7 @@
 			<td>" . $users_online->ip . "</td>
 			<td>" . $users_online->host . "</td>
 		</tr>\r\n";
-			}
+		}
 
 		$out .= "</table>";
 	
@@ -1051,7 +1048,7 @@
 		}
 		elseif($extern_action == 'add') {
 			//
-			// TODO: chekc for correct inputs
+			// TODO: check for correct inputs
 			//
 			$page_text = implode(',', $extern_images);
 			

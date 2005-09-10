@@ -33,7 +33,9 @@
 	include('classes/page.php');
 	include('classes/config.php');
 	include('classes/user.php');
+	include('classes/inlinemenu.php');
 	include('functions.php');
+	
 	
 	define('DB_PREFIX', $d_pre);
 	connect_to_db($d_user, $d_pw, $d_base, $d_server);

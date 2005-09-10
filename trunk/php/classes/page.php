@@ -17,21 +17,41 @@
  *
  *****************************************************************************/
 
- require_once('./system/functions.php');
- require_once('./classes/textpage.php');
+ 	require_once('./system/functions.php');
+ 	require_once('./classes/textpage.php');
+ 	 	
 	class Page {
-	
-		var $_text;
 		
-		var $_template;
+		/**
+		 * @access public
+		 * @var string
+		 */
+		var $Text;
 		
-		var $_templatefolder;
+		/**
+		 * @access public
+		 * @var string
+		 */
+		var $Template;
 		
-		var $_title;
+		/**
+		 * @access public
+		 * @var string
+		 */
+		var $Templatefolder;
 		
+		/**
+		 * @access public
+		 * @var string This value will replace the template tag [text]
+		 */
+		var $Title;
+		
+		/**
+		 * @access private 
+		 */
 		var $_position;
 		
-		var $_page_id;
+		var $PageID;
 		
 		function SetText($text, $compiled = true) {
 			if(empty($text)) {
@@ -39,11 +59,20 @@
 				$compiled = true;
 			}
 			if($compiled)
-				$this->_text = $text;
+				$this->Text = $text;
 			else
-				$this->_text = convertToPreHtml($text);	
+				$this->Text = convertToPreHtml($text);	
 		}
-	
+		
+		function ReplaceTagInTemplate($tag, $replace) {
+			$this->Template = str_replace("[$tag]", $replace, $this->Template);
+		}
+		
+		function ReplaceTagInText($tag, $replace) {
+			$this->Text = str_replace("[$tag]", $replace, $this->Text);
+		}
+		
+			
 		function PositionOfPage($page_id , $between = ' > ', $link=true) {
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages
@@ -72,7 +101,7 @@
 		}
 	
 		function GenerateMenu($menuid = 1) {
-			include($this->_templatefolder . '/menu.php');
+			include($this->Templatefolder . '/menu.php');
 			$menu_out = '';
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "menu
@@ -105,12 +134,18 @@
 			return $menu_out;
 		}
 		
+		/**
+		 * @return bool
+		 */
 		function FindTag($tag) {
-			if(strpos($this->_template, $tag) === false) // Important: there must be three '='
+			if(strpos($this->Template, '[' . $tag . ']') === false) // Important: there must be three '='
 				return false;
 			return true;
 		}
 		
+		/**
+		 * @return void
+		 */
 		function LoadPage($pagename) {
 			global $user;
 			$sql = "SELECT *
@@ -132,10 +167,10 @@
 					die("Page not found");
 			$this->_title = $page_data->page_title;
 			$this->PositionOfPage($page_data->page_id);
-			$this->_page_id = $page_data->page_id;
+			$this->PageID = $page_data->page_id;
 			if($page_data->page_type == 'text') {
 				$textpage = new TextPage($page_data->page_id);
-				$this->_text = $textpage->HTML;
+				$this->Text = $textpage->HTML;
 				//$this->SetText($textpage->Text, false);
 			}
 		}
@@ -143,30 +178,30 @@
 		function LoadTemplate($templatefolder) {
 			if(empty($templatefolder))
 				$templatefolder = './styles/clear';
-			$this->_templatefolder = $templatefolder;
+			$this->Templatefolder = $templatefolder;
 			$template_file = fopen($templatefolder . '/mainpage.php', 'r');
-			$this->_template = fread($template_file, filesize($templatefolder . '/mainpage.php'));
+			$this->Template = fread($template_file, filesize($templatefolder . '/mainpage.php'));
 			fclose($template_file);
 		}
 		
 		function OutputHTML() {
 			global $config;
-			if($this->_page_id == $config->Get('default_page', '0'))
-				$this->_template = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", '', $this->_template);
+			if($this->PageID == $config->Get('default_page', '0'))
+				$this->Template = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", '', $this->Template);
 			else
-				$this->_template = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", "$1", $this->_template);
+				$this->Template = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", "$1", $this->Template);
 			// TODO: get the info when the adminpage calls this function
-			$this->_template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '', $this->_template);
+			$this->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '', $this->Template);
 
-			$this->_template = str_replace("[pagename]", $config->Get('pagename', ''), $this->_template);
-			$this->_template = str_replace('[text]', $this->_text, $this->_template);
-			$this->_template = str_replace('[title]', $this->_title, $this->_template);
-			$this->_template = str_replace('[position]', $this->_position, $this->_template);
-			if($this->FindTag('[menu]'))
-				$this->_template = str_replace('[menu]', $this->GenerateMenu(1), $this->_template);;
-			if($this->FindTag('[menu2]'))
-				$this->_template = str_replace('[menu2]', $this->GenerateMenu(2), $this->_template);;
-			return $this->_template;
+			$this->Template = str_replace("[pagename]", $config->Get('pagename', ''), $this->Template);
+			$this->Template = str_replace('[text]', $this->Text, $this->Template);
+			$this->Template = str_replace('[title]', $this->Title, $this->Template);
+			$this->Template = str_replace('[position]', $this->_position, $this->Template);
+			if($this->FindTag('menu'))
+				$this->Template = str_replace('[menu]', $this->GenerateMenu(1), $this->Template);;
+			if($this->FindTag('menu2'))
+				$this->Template = str_replace('[menu2]', $this->GenerateMenu(2), $this->Template);;
+			return $this->Template;
 		}
 	}
 ?>

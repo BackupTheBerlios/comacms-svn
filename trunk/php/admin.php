@@ -141,14 +141,14 @@
 	$path = '';
 	if($extern_page != 'admincontrol')
 		$path = " -> <a href=\"admin.php?page=$extern_page\">$title</a>";
-	$page->_template = str_replace("[position]", "<a href=\"admin.php?page=admincontrol\">Admin</a>$path", $page->_template);
-	$page->_template = str_replace('[menu]', $menu, $page->_template);
-	$page->_title = $title;
-	$page->_template = str_replace('[menu2]', '', $page->_template);
+	$page->Template = str_replace("[position]", "<a href=\"admin.php?page=admincontrol\">Admin</a>$path", $page->Template);
+	$page->Template = str_replace('[menu]', $menu, $page->Template);
+	$page->Title = $title;
+	$page->Template = str_replace('[menu2]', '', $page->Template);
 	//$page = str_replace('[text]', $text, $page);
-	$page->_text = $text;
+	$page->Text = $text;
 	
-	$page->_template = str_replace("[inlinemenu]", '', $page->_template);
-	$page->_template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->_template);
+	$page->Template = str_replace("[inlinemenu]", '', $page->Template);
+	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	echo $page->OutputHTML();
 ?>

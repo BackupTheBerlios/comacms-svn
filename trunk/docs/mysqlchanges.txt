@@ -220,3 +220,11 @@ ALTER TABLE `cms_pages` CHANGE `page_type` `page_type` ENUM( 'text', 'gallery' )
 #r103
 #removed page_data_id, it isn't loger needed
 ALTER TABLE `cms_pages` DROP `page_data_id` ;
+
+#105
+#renamed inlinemenu_id to page_id
+ALTER TABLE `cms_inlinemenu` CHANGE `inlinemenu_id` `page_id` INT( 10 ) UNSIGNED NOT NULL ;
+
+#r105
+#removed the field text_page_inlinemenu
+ALTER TABLE `cms_pages_text` DROP `text_page_inlinemenu` ;

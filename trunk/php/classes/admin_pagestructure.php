@@ -179,7 +179,7 @@
 		 		$out .= "\r\n<ol>\r\n";
 		 		while($page = mysql_fetch_object($pages_result)) {
 		 			$out .= "<li class=\"page_type_$page->page_type\">";
-		 			$out .= "<strong>$page->page_title</strong> ($page->page_title)";
+		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
 		 			$out .= "[$page->page_lang]";
 		 			$out .= " <a href=\"index.php?page=$page->page_name\">[Anschauen]</a>"; //an eye as picture
 		 			$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\">[Infos]</a>";	//a paper-page as picture

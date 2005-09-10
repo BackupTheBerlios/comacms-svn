@@ -28,12 +28,25 @@
 	
 	define("COMACMS_RUN", true);
 	include('common.php');
-	
 
-	
 	if(!isset($extern_page))
 		$extern_page = $config->Get('default_page', 'home');
 	$page->LoadPage($extern_page);
+	if($page->FindTag('inlinemenu')) {
+		$inlinemenu = new InlineMenu($page);
+		$inlinemenu_html = $inlinemenu->LoadInlineMenu();
+		$page->ReplaceTagInTemplate('inlinemenu', $inlinemenu_html);
+		if($inlinemenu_html != '')
+			$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "$1", $page->Template);
+		else
+			$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
+	}
+	
+	$page->ReplaceTagInText("articles-preview", articlesPreview(5));
+	include("news.php");
+	$page->ReplaceTagInText("news", getNews());
+	//else
+	//	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 /*	$sql = "SELECT cont.*, inline.*
 		FROM ( " . DB_PREFIX. "pages_content cont
 		LEFT JOIN " . DB_PREFIX . "inlinemenu inline ON inline.inlinemenu_id = cont.page_inlinemenu )

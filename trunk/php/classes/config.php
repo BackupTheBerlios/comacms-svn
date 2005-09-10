@@ -3,7 +3,7 @@
  *
  *  file		: config.php
  *  created		: 2005-09-03
- *  copyright		: (C) 2005 The ComaCMS-Team
+ *  copyright	: (C) 2005 The ComaCMS-Team
  *  email		: comacms@williblau.de
  *
  *****************************************************************************/

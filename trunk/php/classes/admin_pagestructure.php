@@ -41,8 +41,41 @@
 			return $out;
 		 }
 		 
+		 function _deletePage() {
+		 	global $extern_sure, $extern_page_id, $admin_lang, $user;
+		 	
+		 	$sql = "SELECT *
+		 		FROM " . DB_PREFIX . "pages
+		 		WHERE page_id=$extern_page_id";
+		 	$page_result = db_result ($sql);
+		 	if($page = mysql_fetch_object($page_result)) {
+		 		$out = '';
+		 		$sql = "SELECT *
+		 			FROM " . DB_PREFIX . "pages
+		 			WHERE page_parent_id=$page->page_id";
+		 		$subpages_result = db_result($sql);
+		 		if($subpage = mysql_fetch_object($subpages_result))
+		 			$out .= "Das löschen von Seiten mit Unterseiten ist zur Zeit nicht möglich!<br /><strong>Tip:</strong> Löschen sie erst alle Unterseiten<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\">Zurück</a>";
+		 		elseif($extern_sure == 1) {
+		 			$out .= "Löschen...";
+		 			$sql = "UPDATE " . DB_PREFIX . "pages
+						SET  page_access='deleted', page_creator='$user->ID', page_date='" . mktime() . "'
+						WHERE page_id='$extern_page_id'";
+					db_result($sql);
+		 		}
+		 		else
+		 			$out .= "Wollen sie die Seite &quot;$page->page_title&quot; wirklich (vorerst) unwiederruflich löschen?<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$extern_page_id&amp;sure=1\">" . $admin_lang['yes'] . "</a>&nbsp;<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\">" . $admin_lang['no'] . "</a>";
+		 	
+			 	return $out;
+		 	}
+		 	else {
+		 		header('Location: ' . $_SERVER['PHP_SELF'] . '?page=pagestructure');
+		 	}
+		 	
+		 }
+		 
 		 function _homePage() {
-		 	global $admin_lang, $_SERVER;
+		 	global $admin_lang;
 			$out = "<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=new\">neue Seite</a>";;
 		 	$out .= $this->_showStructure(0);
 
@@ -179,12 +212,19 @@
 		 		$out .= "\r\n<ol>\r\n";
 		 		while($page = mysql_fetch_object($pages_result)) {
 		 			$out .= "<li class=\"page_type_$page->page_type\">";
+		 			if($page->page_access == 'deleted')
+		 				$out .= '<strike>';
 		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
 		 			$out .= "[$page->page_lang]";
-		 			$out .= " <a href=\"index.php?page=$page->page_name\">[Anschauen]</a>"; //an eye as picture
+		 			if($page->page_access != 'deleted')
+		 				$out .= " <a href=\"index.php?page=$page->page_name\">[Anschauen]</a>"; //an eye as picture
 		 			$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\">[Infos]</a>";	//a paper-page as picture
-		 			$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
-		 			$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$page->page_id\"><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
+		 			if($page->page_access != 'deleted')
+		 				$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
+		 			if($page->page_access != 'deleted')
+		 				$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$page->page_id\"><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
+		 			if($page->page_access == 'deleted')
+		 				$out .= '</strike>';
 					$out .= $this->_showStructure($page->page_id);
 		 			$out .= "</li>\r\n";
 				}
@@ -249,6 +289,9 @@
 				case 'text':		include('classes/edit_text_page.php');
 							$edit = new Edit_Text_Page();
 							break;
+				case 'gallery':		include('classes/edit_gallery_page.php');
+							$edit = new Edit_Text_Page();
+							break;
 				default:		$out .= "Der Seitentyp <strong>$extern_page_type</strong> lässt sich noch nicht bearbeiten.";
 							break;
 			}
@@ -259,7 +302,7 @@
 				$extern_page_name = strtolower($extern_page_name);
 				$extern_page_name = str_replace(' ', '_', $extern_page_name);
 				$sql = "INSERT INTO " . DB_PREFIX . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date)
-					VALUES('$extern_page_lang', '$extern_page_access', '$extern_page_name', '$extern_page_title', $extern_page_parent_id, $user->Id, '$extern_page_type', " . mktime() . ")";
+					VALUES('$extern_page_lang', '$extern_page_access', '$extern_page_name', '$extern_page_title', $extern_page_parent_id, $user->ID, '$extern_page_type', " . mktime() . ")";
 				db_result($sql);
 				$lastid =  mysql_insert_id();
 				$edit->NewPage($lastid);

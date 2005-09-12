@@ -28,7 +28,7 @@
 	
 	define("COMACMS_RUN", true);
 	include('common.php');
-
+	
 	$page->LoadPage($extern_page);
 	if($page->FindTag('inlinemenu')) {
 		$inlinemenu = new InlineMenu($page);

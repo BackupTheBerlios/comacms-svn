@@ -65,7 +65,7 @@
 			pageid int(10) unsigned NOT NULL,
 			inlinemenu_image varchar(150) NOT NULL default '',
 			inlinemenu_html text NOT NULL,
-			PRIMARY KEY  (inlinemenu_id)
+			PRIMARY KEY  (page_id)
 		);
 		DROP TABLE IF EXISTS " . $db_prefix . "inlinemenu_entries;
 		CREATE TABLE " . $db_prefix . "inlinemenu_entries (

@@ -165,12 +165,13 @@
 			if($page_data->page_access == 'hidden')
 				if(!$user->IsLoggedIn)	
 					die("Page not found");
-			$this->_title = $page_data->page_title;
+			$this->Title = $page_data->page_title;
 			$this->PositionOfPage($page_data->page_id);
 			$this->PageID = $page_data->page_id;
 			if($page_data->page_type == 'text') {
 				$textpage = new TextPage($page_data->page_id);
 				$this->Text = $textpage->HTML;
+				
 				//$this->SetText($textpage->Text, false);
 			}
 		}

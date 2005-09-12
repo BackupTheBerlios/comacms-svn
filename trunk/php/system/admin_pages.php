@@ -32,7 +32,7 @@
  *****************************************************************************/
 
 	function page_admincontrol() {
-		global $admin_lang;
+		global $admin_lang, $config;
 		//
 		// get the coutnt of all pages
 		//
@@ -52,12 +52,17 @@
 			if(substr($table_infos->Name, 0, strlen(DB_PREFIX)) == DB_PREFIX)
 				$data_size += $table_infos->Data_length + $table_infos->Index_length;
 		}
-	
+		$installdate = $config->Get('install_date');
+		if($installdate == '') {
+			$config->Save('install_date', mktime());
+			$installdate = mktime();
+		}
+		
 		$out = "<h3>AdminControl</h3><hr />
 	<table>
-		<tr><td>" . $admin_lang['online since'] . "</td><td>#DATUM</td></tr>
-		<tr><td>" . $admin_lang['registered users'] . "</td><td>" . $users_count . "</td></tr>
-		<tr><td>" . $admin_lang['created pages'] . "</td><td>" . $page_count . "</td></tr>
+		<tr><td>" . $admin_lang['online since'] . "</td><td>". date("d.m.Y",$installdate) . "</td></tr>
+		<tr><td>" . $admin_lang['registered users'] . "</td><td>$users_count</td></tr>
+		<tr><td>" . $admin_lang['created pages'] . "</td><td>$page_count</td></tr>
 		<tr><td>" . $admin_lang['database size'] . "</td><td>" . kbormb($data_size) . "</td></tr>
 	</table>
 	

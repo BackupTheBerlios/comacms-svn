@@ -53,6 +53,7 @@
 					VALUES ( '$name', '$value')";
 				db_result($sql);
 			}
+			$this->Elements[$name] = $value;
 		}
 	}
 ?>

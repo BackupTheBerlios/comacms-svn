@@ -28,15 +28,13 @@
 			header('location: install/install.html');
 	}
 	import_request_variables("gP", "extern_");
-	
-	
+		
 	include('classes/page.php');
 	include('classes/config.php');
 	include('classes/user.php');
 	include('classes/inlinemenu.php');
 	include('functions.php');
-	
-	
+		
 	define('DB_PREFIX', $d_pre);
 	connect_to_db($d_user, $d_pw, $d_base, $d_server);
 	$config = new Config();
@@ -45,8 +43,12 @@
 	$user = new User();
 	$style_name = $config->Get('style', 'clear');
 	$page->LoadTemplate('./styles/' . $style_name);
+	if(!isset($extern_page) && endsWith($_SERVER['PHP_SELF'], 'index.php'))
+		$extern_page = $config->Get('default_page', 'home');
+	elseif(!isset($extern_page))
+		$extern_page = '';
 //	include_once("functions.php");
-//	include_once("counter.php");
+	//include_once("counter.php");
 	//_start();
 	//
 	// load vars
@@ -72,15 +74,20 @@
 //	elseif(!isset($extern_page))
 //		$extern_page = '';
 	
-/*	if(startsWith($extern_page, 'a:'))
+	if(startsWith($extern_page, 'a:'))
  		header('Location: admin.php?page='.substr($extern_page, 2));
  	elseif(startsWith($extern_page, 's:'))
  		header('Location: special.php?page='.substr($extern_page, 2));
  	elseif(startsWith($extern_page, 'l:'))
  		header('Location: index.php?page='.substr($extern_page, 2));
- 	elseif(startsWith($extern_page, 'g:'))
- 		header('Location: gallery.php?page='.substr($extern_page, 2));
-*/	
+ 	
+ 	$pagePrefix = 'l:';
+	if(endsWith($_SERVER['PHP_SELF'], 'admin.php'))
+		$pagePrefix = 'a:';
+	elseif(endsWith($_SERVER['PHP_SELF'], 'special.php'))
+		$pagePrefix = 's:';
+	
+	$user->SetPage($pagePrefix . $extern_page, $config);
 //	set_usercookies();
 	//
 	// TOOD : GET AUTHORISATION

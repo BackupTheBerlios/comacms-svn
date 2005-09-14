@@ -1,27 +1,32 @@
 <?php
-/*****************************************************************************
- *
- *  file		: special.php
- *  created		: 2005-08-10
- *  copyright		: (C) 2005 The ComaCMS-Team
- *  email		: comacms@williblau.de
- *
- *****************************************************************************/
-
-/*****************************************************************************
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *****************************************************************************/
-
+/**
+ * @package ComaCMS
+ * @copyright (C) 2005 The ComaCMS-Team
+ */
+ #----------------------------------------------------------------------#
+ # file			: special.php					#
+ # created		: 2005-08-10					#
+ # copyright		: (C) 2005 The ComaCMS-Team			#
+ # email		: comacms@williblau.de				#
+ #----------------------------------------------------------------------#
+ # This program is free software; you can redistribute it and/or modify	#
+ # it under the terms of the GNU General Public License as published by	#
+ # the Free Software Foundation; either version 2 of the License, or	#
+ # (at your option) any later version.					#
+ #----------------------------------------------------------------------#
+	
+	/**
+	 * @ignore
+	 */
 	define("COMACMS_RUN", true);
  
 	include('common.php');
 	
+	/**
+	 * @ignore
+	 */
 	include('./lang/' . $user->Language  . '/admin_lang.php');
+	
 	if(!isset($extern_page))
 		header('Locaction: index.php');
 	$text = '';

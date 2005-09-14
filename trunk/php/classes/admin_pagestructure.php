@@ -1,24 +1,29 @@
 <?php
-/*****************************************************************************
- *
- *  file		: admin_pagestructure.php
- *  created		: 2005-09-04
- *  copyright		: (C) 2005 The ComaCMS-Team
- *  email		: comacms@williblau.de
- *
- *****************************************************************************/
-
-/*****************************************************************************
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *****************************************************************************/
- 
+/**
+ * @package ComaCMS
+ * @copyright (C) 2005 The ComaCMS-Team
+ */
+ #----------------------------------------------------------------------#
+ # file			: admin_pagestructure.php					#
+ # created		: 2005-09-04					#
+ # copyright		: (C) 2005 The ComaCMS-Team			#
+ # email		: comacms@williblau.de				#
+ #----------------------------------------------------------------------#
+ # This program is free software; you can redistribute it and/or modify	#
+ # it under the terms of the GNU General Public License as published by	#
+ # the Free Software Foundation; either version 2 of the License, or	#
+ # (at your option) any later version.					#
+ #----------------------------------------------------------------------#
+	
+	/**
+	 * @package ComaCMS 
+	 */
  	class Admin_PageStructure {
  		
+ 		/**
+ 		 * @return string
+ 		 * @param action string
+ 		 */
 		 function GetPage($action = '') {
 		 	global $admin_lang;
 			$out = "<h3>" . $admin_lang['pagestructure'] . "</h3><hr />\r\n";
@@ -41,6 +46,9 @@
 			return $out;
 		 }
 		 
+		 /**
+		  * @return string
+		  */
 		 function _deletePage() {
 		 	global $extern_sure, $extern_page_id, $admin_lang, $user;
 		 	

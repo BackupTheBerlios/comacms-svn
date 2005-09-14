@@ -1,21 +1,23 @@
 <?php
-/*****************************************************************************
- *
- *  file		: user_pages.php
- *  created		: 2005-07-16
- *  copyright		: (C) 2005 The ComaCMS-Team
- *  email		: comacms@williblau.de
- *
- *****************************************************************************/
+/**
+ * @package ComaCMS
+ * @copyright (C) 2005 The ComaCMS-Team
+ */
+ #----------------------------------------------------------------------#
+ # file			: user_pages.php				#
+ # created		: 2005-07-16					#
+ # copyright		: (C) 2005 The ComaCMS-Team			#
+ # email		: comacms@williblau.de				#
+ #----------------------------------------------------------------------#
+ # This program is free software; you can redistribute it and/or modify	#
+ # it under the terms of the GNU General Public License as published by	#
+ # the Free Software Foundation; either version 2 of the License, or	#
+ # (at your option) any later version.					#
+ #----------------------------------------------------------------------#
 
-/*****************************************************************************
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *****************************************************************************/
+	/**
+	 * @return string
+	 */
 	function page_pageeditor() {
 		global $admin_lang, $actual_user_lang, $_SERVER, $actual_user_id, $extern_action, $extern_page_name, $extern_page_title, $extern_page_lang, $extern_page_parentid, $extern_page_edit, $extern_page_text, $extern_page_visible, $extern_show_hidden_pages, $extern_show_deleted_pages, $extern_sure;
 		

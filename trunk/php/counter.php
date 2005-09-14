@@ -1,29 +1,28 @@
 <?php
-/*****************************************************************************
- *
- *  file		: counter.php
- *  created		: 2005-06-17
- *  copyright		: (C) 2005 The ComaCMS-Team
- *  email		: comacms@williblau.de
- *
- *****************************************************************************/
+/**
+ * @package ComaCMS
+ * @copyright (C) 2005 The ComaCMS-Team
+ */
+ #----------------------------------------------------------------------#
+ # file			: counter.php					#
+ # created		: 2005-06-17					#
+ # copyright		: (C) 2005 The ComaCMS-Team			#
+ # email		: comacms@williblau.de				#
+ #----------------------------------------------------------------------#
+ # This program is free software; you can redistribute it and/or modify	#
+ # it under the terms of the GNU General Public License as published by	#
+ # the Free Software Foundation; either version 2 of the License, or	#
+ # (at your option) any later version.					#
+ #----------------------------------------------------------------------#
 
-/*****************************************************************************
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *****************************************************************************/
-
+/*
 	$en = array('is', 'are');
 	$en_count = array('no', 'one');
 	$de = array('ist', 'sind');
 	$de_count = array('kein', 'ein', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'zehn');
 	$internal_counter_online = 0;
 	$internal_counter_online_text = ":-)";
-
+	
 	function counter_set($site) {
 		global $internal_counter_all, $internal_counter_start_date, $actual_user_online_id, $actual_user_id,$actual_user_lang, $REMOTE_ADDR;
 		
@@ -97,5 +96,5 @@
 			$internal_counter_online_text = $plural_array[1] . ' ' . $text;
 		else
 	 		$internal_counter_online_text = $plural_array[0] . ' ' . $text;
-	}
+	}*/
 ?>

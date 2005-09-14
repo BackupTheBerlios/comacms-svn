@@ -1,25 +1,29 @@
 <?php
-/*****************************************************************************
- *
- *  file		: page.php
- *  created		: 2005-09-01
- *  copyright		: (C) 2005 The ComaCMS-Team
- *  email		: comacms@williblau.de
- *
- *****************************************************************************/
+/**
+ * @package ComaCMS
+ * @copyright (C) 2005 The ComaCMS-Team
+ */
+ #----------------------------------------------------------------------#
+ # file			: page.php					#
+ # created		: 2005-09-01					#
+ # copyright		: (C) 2005 The ComaCMS-Team			#
+ # email		: comacms@williblau.de				#
+ #----------------------------------------------------------------------#
+ # This program is free software; you can redistribute it and/or modify	#
+ # it under the terms of the GNU General Public License as published by	#
+ # the Free Software Foundation; either version 2 of the License, or	#
+ # (at your option) any later version.					#
+ #----------------------------------------------------------------------#
 
-/*****************************************************************************
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *****************************************************************************/
-
+	/**
+	 * 
+	 */
  	require_once('./system/functions.php');
  	require_once('./classes/textpage.php');
- 	 	
+ 	 
+ 	/**
+ 	 * @package ComaCMS
+ 	 */
 	class Page {
 		
 		/**
@@ -51,8 +55,15 @@
 		 */
 		var $_position;
 		
+		/**
+		 * @access public
+		 * @var integer
+		 */
 		var $PageID;
 		
+		/**
+		 * @return void
+		 */
 		function SetText($text, $compiled = true) {
 			if(empty($text)) {
 				$text = '';
@@ -64,15 +75,23 @@
 				$this->Text = convertToPreHtml($text);	
 		}
 		
+		/**
+		 * @return void
+		 */
 		function ReplaceTagInTemplate($tag, $replace) {
 			$this->Template = str_replace("[$tag]", $replace, $this->Template);
 		}
 		
+		/**
+		 * @return void
+		 */
 		function ReplaceTagInText($tag, $replace) {
 			$this->Text = str_replace("[$tag]", $replace, $this->Text);
 		}
 		
-			
+		/**
+		 * @return void
+		 */	
 		function PositionOfPage($page_id , $between = ' > ', $link=true) {
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages
@@ -99,7 +118,10 @@
 				$actual_page_title = '<a href="index.php?page=' . $actual->page_name . '">' . $actual->page_title . '</a>';
 			$this->_position = $way_to_root . $actual_page_title;
 		}
-	
+		
+		/**
+		 * @return string
+		 */
 		function GenerateMenu($menuid = 1) {
 			include($this->Templatefolder . '/menu.php');
 			$menu_out = '';
@@ -176,6 +198,9 @@
 			}
 		}
 		
+		/**
+		 * @return void
+		 */
 		function LoadTemplate($templatefolder) {
 			if(empty($templatefolder))
 				$templatefolder = './styles/clear';
@@ -185,6 +210,9 @@
 			fclose($template_file);
 		}
 		
+		/**
+		 * @return string
+		 */
 		function OutputHTML() {
 			global $config;
 			if($this->PageID == $config->Get('default_page', '0'))

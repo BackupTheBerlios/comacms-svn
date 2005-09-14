@@ -1,24 +1,29 @@
 <?php
-/*****************************************************************************
- *
- *  file		: edit_text_page.php
- *  created		: 2005-09-08
- *  copyright		: (C) 2005 The ComaCMS-Team
- *  email		: comacms@williblau.de
- *
- *****************************************************************************/
+/**
+ * @package ComaCMS
+ * @copyright (C) 2005 The ComaCMS-Team
+ */
+ #----------------------------------------------------------------------#
+ # file			: edit_text_page.php				#
+ # created		: 2005-09-08					#
+ # copyright		: (C) 2005 The ComaCMS-Team			#
+ # email		: comacms@williblau.de				#
+ #----------------------------------------------------------------------#
+ # This program is free software; you can redistribute it and/or modify	#
+ # it under the terms of the GNU General Public License as published by	#
+ # the Free Software Foundation; either version 2 of the License, or	#
+ # (at your option) any later version.					#
+ #----------------------------------------------------------------------#
 
-/*****************************************************************************
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *****************************************************************************/
- 
+	/**
+	 * @package ComaCMS
+	 */
 	class Edit_Text_Page {
-		
+		/**
+		 * @access public
+		 * @return void
+		 * @param page_id integer
+		 */
 		function NewPage($page_id) {
 			$sql = "INSERT INTO " . DB_PREFIX . "pages_text (page_id, text_page_text,text_page_html)
 				VALUES ($page_id, '', '')";

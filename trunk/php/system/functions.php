@@ -1,28 +1,31 @@
 <?php
-/*****************************************************************************
- *
- *  file		: functions.php
- *  created		: 2005-06-17
- *  copyright		: (C) 2005 The ComaCMS-Team
- *  email		: comacms@williblau.de
- *
- *****************************************************************************/
+/**
+ * @package ComaCMS
+ * @copyright (C) 2005 The ComaCMS-Team
+ */
+ #----------------------------------------------------------------------#
+ # file			: functions.php					#
+ # created		: 2005-06-17					#
+ # copyright		: (C) 2005 The ComaCMS-Team			#
+ # email		: comacms@williblau.de				#
+ #----------------------------------------------------------------------#
+ # This program is free software; you can redistribute it and/or modify	#
+ # it under the terms of the GNU General Public License as published by	#
+ # the Free Software Foundation; either version 2 of the License, or	#
+ # (at your option) any later version.					#
+ #----------------------------------------------------------------------#
 
-/*****************************************************************************
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *****************************************************************************/
 	
 	/*function alt($link) {
 		$text = preg_replace("/(.+?)\|(.+$)/s","$1\" alt=\"\\2", $link);
 		echo $link.'<br \>' . $text . '<br \>';
 		return $text;
 	}*/
-
+	
+	/**
+	 * @return string
+	 * @param text string
+	 */ 
 	function convertToPreHtml($text) {
 		$text = htmlspecialchars($text);
 		preg_match_all("/\[code\](.+?)\[\/code\]/s", $text, $matches);

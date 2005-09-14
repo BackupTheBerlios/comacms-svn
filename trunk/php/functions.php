@@ -1,21 +1,20 @@
 <?php
-/*****************************************************************************
- *
- *  file		: functions.php
- *  created		: 2005-06-17
- *  copyright		: (C) 2005 The ComaCMS-Team
- *  email		: comacms@williblau.de
- *
- *****************************************************************************/
+/**
+ * @package ComaCMS
+ * @copyright (C) 2005 The ComaCMS-Team
+ */
+ #----------------------------------------------------------------------#
+ # file			: functions.php					#
+ # created		: 2005-06-17					#
+ # copyright		: (C) 2005 The ComaCMS-Team			#
+ # email		: comacms@williblau.de				#
+ #----------------------------------------------------------------------#
+ # This program is free software; you can redistribute it and/or modify	#
+ # it under the terms of the GNU General Public License as published by	#
+ # the Free Software Foundation; either version 2 of the License, or	#
+ # (at your option) any later version.					#
+ #----------------------------------------------------------------------#
 
-/*****************************************************************************
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *****************************************************************************/
 /*	function _start() {
 		global $db_con, $d_user, $d_pw, $d_base, $d_server, $d_pre;
 		
@@ -23,7 +22,14 @@
 		$db_con = connect_to_db($d_user, $d_pw, $d_base, $d_server);
 		define('DB_PREFIX', $d_pre);
 }*/
-
+	
+	/**
+	 * @return void
+	 * @param username string
+	 * @param userpw string
+	 * @param database string
+	 * @param server string
+	 */	
 	function connect_to_db($username, $userpw, $database, $server = 'localhost') {
 		global $db_con;
 		error_reporting(E_ALL);

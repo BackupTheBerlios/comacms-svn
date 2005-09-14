@@ -1,35 +1,28 @@
 <?php
-/*****************************************************************************
- *
- *  file		: admin_pages.php
- *  created		: 2005-07-12
- *  copyright		: (C) 2005 The ComaCMS-Team
- *  email		: comacms@williblau.de
- *
- *****************************************************************************/
+/**
+ * @package ComaCMS
+ * @copyright (C) 2005 The ComaCMS-Team
+ */
+ #----------------------------------------------------------------------#
+ # file			: admin_pages.php				#
+ # created		: 2005-07-12					#
+ # copyright		: (C) 2005 The ComaCMS-Team			#
+ # email		: comacms@williblau.de				#
+ #----------------------------------------------------------------------#
+ # This program is free software; you can redistribute it and/or modify	#
+ # it under the terms of the GNU General Public License as published by	#
+ # the Free Software Foundation; either version 2 of the License, or	#
+ # (at your option) any later version.					#
+ #----------------------------------------------------------------------#
 
-/*****************************************************************************
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *****************************************************************************/
-
-/*****************************************************************************
- *
- *  This file contains (nearly) all subsites in the admin-interface
- *
- *****************************************************************************/
-
-/*****************************************************************************
- *
- *  page_adminconrol()
- *  returns the AdminControl-page with a list of useful details about the page
- *  and a list of all visitors
- *
- *****************************************************************************/
+	/**
+	 * This file contains (nearly) all subsites in the admin-interface
+	 */
+	
+	/**
+	 * returns the AdminControl-page with a list of useful details about the page
+	 * and a list of all visitors
+	 */
 
 	function page_admincontrol() {
 		global $admin_lang, $config;

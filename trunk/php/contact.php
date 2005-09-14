@@ -1,21 +1,22 @@
 <?php
-/*****************************************************************************
- *
- *  file		: contact.php
- *  created		: 2005-06-17
- *  copyright		: (C) 2005 The ComaCMS-Team
- *  email		: comacms@williblau.de
- *
- *****************************************************************************/
-
-/*****************************************************************************
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *****************************************************************************/
+/**
+ * @package ComaCMS
+ * @copyright (C) 2005 The ComaCMS-Team
+ */
+ #----------------------------------------------------------------------#
+ # file			: contact.php					#
+ # created		: 2005-06-17					#
+ # copyright		: (C) 2005 The ComaCMS-Team			#
+ # email		: comacms@williblau.de				#
+ #----------------------------------------------------------------------#
+ # This program is free software; you can redistribute it and/or modify	#
+ # it under the terms of the GNU General Public License as published by	#
+ # the Free Software Foundation; either version 2 of the License, or	#
+ # (at your option) any later version.					#
+ #----------------------------------------------------------------------#
+	/**
+	 * @returns string
+	 */
 	function contact_formular() {
 		include("functions.php");
 		global $_site, $contact_name, $contact_mail, $contact_icq, $contact_text, $contact_homepage, $REMOTE_ADDR, $input;
@@ -90,7 +91,7 @@
 			$contact_text = "";
 		}
 		if($contact_homepage == "")
-			$contact_homepage ="http://";
+			$contact_homepage = "http://";
 		if($error != "")
 			$error = "Folgende Fehler sind aufgetreten:\n<ul>".$error."</ul>";
 		$text = "<div class=\"gbook\">

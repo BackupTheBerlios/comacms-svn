@@ -20,12 +20,9 @@
 	class Edit_Text_Page {
 		
 		function NewPage($page_id) {
-			global $extern_page_text;
-			if($extern_page_text != '') {
-				$sql = "INSERT INTO " . DB_PREFIX . "pages_text (page_id, text_page_text,text_page_html)
-					VALUES ($page_id, '', '')";
-				db_result($sql);
-			}
+			$sql = "INSERT INTO " . DB_PREFIX . "pages_text (page_id, text_page_text,text_page_html)
+				VALUES ($page_id, '', '')";
+			db_result($sql);
 		}
 	
 		function Save($page_id) {
@@ -48,7 +45,7 @@
 							WHERE page_id='$old->page_id'";
 						db_result($sql);
 						$sql = "UPDATE " . DB_PREFIX . "pages
-							SET page_creator=$user->Id, page_date=" . mktime() . ", page_title='$extern_page_title'
+							SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$extern_page_title'
 							WHERE page_id=$page_id";
 						db_result($sql);
 						return "Die Seite sollte gespeichert sein!";

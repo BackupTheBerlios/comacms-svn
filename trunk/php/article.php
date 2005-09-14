@@ -64,12 +64,16 @@
 		$text .= "\t\t\t</table>";
 	}
 	
-	
+	if($page->FindTag('inlinemenu')) {
+		$page->ReplaceTagInTemplate('inlinemenu', '');
+		$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
+	}
+	$page->SetText($text);
 	
 	//
 	// insert data into style
 	//
-	
+	/*
 	$page = str_replace("[title]", $title, $page);
 	$page = str_replace("[text]", $text, $page);
 	$page = str_replace("[menu]", generatemenu(@$internal_style, 1, $extern_page), $page);
@@ -79,9 +83,9 @@
 	else
 		$page = str_replace("[position]", "<a href=\"article.php\">Artikel</a>", $page);
 	$page = str_replace("[inlinemenu]", '', $page);
-	$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);
+	$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);*/
 	//
 	// end
 	//
-	echo $page;
+	echo $page->OutputHTML();
 ?>

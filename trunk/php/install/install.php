@@ -62,7 +62,7 @@
 		);
 		DROP TABLE IF EXISTS " . $db_prefix . "inlinemenu;
 		CREATE TABLE " . $db_prefix . "inlinemenu (
-			pageid int(10) unsigned NOT NULL,
+			page_id int(10) unsigned NOT NULL,
 			inlinemenu_image varchar(150) NOT NULL default '',
 			inlinemenu_html text NOT NULL,
 			PRIMARY KEY  (page_id)

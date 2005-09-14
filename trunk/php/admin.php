@@ -131,8 +131,9 @@
 	//
 	// end of the 'functions'
 	//
-	//if(@$internal_style == '')
-	//	$internal_style = 'clear';
+	/**
+	 * @ignore
+	 */
 	include($page->Templatefolder . '/menu.php');
 	$menu = '';
 	foreach($menu_array as $part) {

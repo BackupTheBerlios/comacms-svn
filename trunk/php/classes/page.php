@@ -51,9 +51,10 @@
 		var $Title;
 		
 		/**
-		 * @access private 
+		 * @access public
+		 * @var string 
 		 */
-		var $_position;
+		var $Position;
 		
 		/**
 		 * @access public
@@ -116,7 +117,7 @@
 			
 			if($link)
 				$actual_page_title = '<a href="index.php?page=' . $actual->page_name . '">' . $actual->page_title . '</a>';
-			$this->_position = $way_to_root . $actual_page_title;
+			$this->Position = $way_to_root . $actual_page_title;
 		}
 		
 		/**
@@ -168,8 +169,7 @@
 		/**
 		 * @return void
 		 */
-		function LoadPage($pagename) {
-			global $user;
+		function LoadPage($pagename, $user) {
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages
 				WHERE page_name='$pagename'";
@@ -180,7 +180,7 @@
 					WHERE page_id='$pagename'";	
 				$page_result = db_result($sql);
 				if(!($page_data =  mysql_fetch_object($page_result)))
-					die("Page not found");
+					header("Location: special.php?page=404");
 			}
 			if($page_data->page_access == 'deleted')
 				die('deleted');
@@ -193,8 +193,6 @@
 			if($page_data->page_type == 'text') {
 				$textpage = new TextPage($page_data->page_id);
 				$this->Text = $textpage->HTML;
-				
-				//$this->SetText($textpage->Text, false);
 			}
 		}
 		
@@ -219,13 +217,11 @@
 				$this->Template = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", '', $this->Template);
 			else
 				$this->Template = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", "$1", $this->Template);
-			// TODO: get the info when the adminpage calls this function
-			$this->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '', $this->Template);
 
 			$this->Template = str_replace("[pagename]", $config->Get('pagename', ''), $this->Template);
 			$this->Template = str_replace('[text]', $this->Text, $this->Template);
 			$this->Template = str_replace('[title]', $this->Title, $this->Template);
-			$this->Template = str_replace('[position]', $this->_position, $this->Template);
+			$this->Template = str_replace('[position]', $this->Position, $this->Template);
 			if($this->FindTag('menu'))
 				$this->Template = str_replace('[menu]', $this->GenerateMenu(1), $this->Template);;
 			if($this->FindTag('menu2'))

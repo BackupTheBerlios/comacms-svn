@@ -155,5 +155,7 @@
 	
 	$page->Template = str_replace("[inlinemenu]", '', $page->Template);
 	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
+	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '', $page->Template);
+	
 	echo $page->OutputHTML();
 ?>

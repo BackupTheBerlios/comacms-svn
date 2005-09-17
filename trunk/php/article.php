@@ -71,7 +71,7 @@
 		$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	}
 	$page->SetText($text);
-	
+	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
 	//
 	// insert data into style
 	//
@@ -79,12 +79,12 @@
 	$page = str_replace("[title]", $title, $page);
 	$page = str_replace("[text]", $text, $page);
 	$page = str_replace("[menu]", generatemenu(@$internal_style, 1, $extern_page), $page);
-	$page = str_replace("[menu2]", generatemenu(@$internal_style, 2, $extern_page), $page);
+	$page = str_replace("[menu2]", generatemenu(@$internal_style, 2, $extern_page), $page);*/
 	if(isset($position))
-		$page = str_replace("[position]", "<a href=\"article.php\">Artikel</a>-><a href=\"article.php?page_id=$article_data->article_id\">$position</a>", $page);
+		$page->Position = "<a href=\"article.php\">Artikel</a>-><a href=\"article.php?page_id=$article_data->article_id\">$position</a>";
 	else
-		$page = str_replace("[position]", "<a href=\"article.php\">Artikel</a>", $page);
-	$page = str_replace("[inlinemenu]", '', $page);
+		$page->Position = "<a href=\"article.php\">Artikel</a>";
+	/*$page = str_replace("[inlinemenu]", '', $page);
 	$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);*/
 	//
 	// end

@@ -145,6 +145,26 @@
 			text_page_html text NOT NULL,
 			PRIMARY KEY  (page_id)
 		);
+		DROP TABLE IF EXISTS " . $db_prefix . "pages_history;
+		CREATE TABLE " . $db_prefix . "pages_history (
+  			id int(10) NOT NULL auto_increment,
+  			page_id int(10) NOT NULL default '0',
+			page_type longtext NOT NULL,
+			page_name varchar(20) NOT NULL default '',
+			page_title varchar(100) NOT NULL default '',
+			page_parent_id int(10) NOT NULL default '0',
+			page_lang varchar(5) NOT NULL default '',
+			page_creator int(10) NOT NULL default '0',
+			page_date int(20) NOT NULL default '0',
+			PRIMARY KEY  (id)
+		);
+		DROP TABLE IF EXISTS " . $db_prefix . "pages_text_history;
+		CREATE TABLE " . $db_prefix . "pages_text_history (
+			id int(10) NOT NULL auto_increment,
+			page_id int(10) NOT NULL default '0',
+			page_text text NOT NULL,
+			PRIMARY KEY  (id)
+		);
 		DROP TABLE IF EXISTS " . $db_prefix . "sitedata_history;
 		CREATE TABLE " . $db_prefix . "sitedata_history (
 			id int(10) NOT NULL auto_increment,
@@ -174,14 +194,14 @@
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)
 		VALUES ('style', 'clear');
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)
-		VALUES ('default_page', 'home');
+		VALUES ('default_page', '0');
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)
 		VALUES ('install_date', '" . mktime() . "');
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)
 		VALUES ('pagename', 'ComaCMS');
 		INSERT INTO " . $db_prefix . "menu (menu_link, menu_text, menu_new, menu_orderid, menu_menuid)
 		VALUES ('l:home', 'Home', 'no', 0, 1);";
-
+		//TODO: make sure that the id of the default page is everytime the right one 
 
 	if($admin_name == "" || $admin_showname == "" || $admin_password == "")
 		die("Die Angaben zum Adminaccount sind unvollständig..");

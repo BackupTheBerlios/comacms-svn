@@ -45,7 +45,7 @@
 	elseif($extern_page == '404')
 	{
 		$title = 'Seite nicht gefunden.';
-		$text = 'Die seite wurde leider nicht gefunden';
+		$text = 'Die Seite wurde leider nicht gefunden';
 	}
 	if($text == '')
 		header('Locaction: index.php');
@@ -56,6 +56,7 @@
 	$page->Template = str_replace("[inlinemenu]", '', $page->Template);
 	$page->Template = str_replace("[position]", "<a href=\"special.php?page=$extern_page\">$title</a>", $page->Template);
 	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
+	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
 	echo $page->OutputHTML();
 
 ?>

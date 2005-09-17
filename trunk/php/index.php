@@ -32,7 +32,7 @@
 	define("COMACMS_RUN", true);
 	include('common.php');
 	
-	$page->LoadPage($extern_page);
+	$page->LoadPage($extern_page, $user);
 	if($page->FindTag('inlinemenu')) {
 		$inlinemenu = new InlineMenu($page);
 		$inlinemenu_html = $inlinemenu->LoadInlineMenu();
@@ -46,6 +46,7 @@
 	$page->ReplaceTagInText("articles-preview", articlesPreview(5));
 	include("news.php");
 	$page->ReplaceTagInText("news", getNews());
+	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
 	//else
 	//	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 /*	$sql = "SELECT cont.*, inline.*
@@ -75,22 +76,6 @@
 	//
 	// end
 	//
-	
-
-	
-	//
-	// load style
-	//
-	
-//	$page = str_replace("[title]", $title, $page);
-//	$page = str_replace("[text]", $text, $page);
-//	$page = str_replace("[menu]", generatemenu(@$internal_style, 1, $extern_page), $page);
-//	$page = str_replace("[menu2]", generatemenu(@$internal_style, 2, $extern_page), $page);
-	
-//	include("news.php");
-//	$page = str_replace("[news]", getNews(), $page);
-//	$page = str_replace("[position]",position_to_root($page_data->page_id), $page);
-	
 /*	if (strpos ($page, "[gbook-")) {
 		include("gbook.php");
 		$page = str_replace("[gbook-input]", gbook_input(), $page);
@@ -101,25 +86,12 @@
 		include("contact.php");
 		$page = str_replace("[contact]", contact_formular(), $page);
 	}*/
-//	$inlinemenu = '';
-//	if($page_data->inlinemenu_html != null) {
-//		include('./styles/' . $internal_style . '/menue.php');
-//		$inlinemenu = $menu_inline;
-//		$inlinemenu = str_replace("[text]", $page_data->inlinemenu_html, $inlinemenu);
-//		$inlinemenu = str_replace("[image]", "src=\"$page_data->inlinemenu_image\"", $inlinemenu);
-//		$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "$1", $page);
-//	}
-//	else {
-//		$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);
-//	}
-//	$page = str_replace("[inlinemenu]", $inlinemenu, $page);
+
 //	$page = str_replace("[dates]", nextDates(10), $page);
-//	$page = str_replace("[articles-preview]", articlesPreview(5), $page);
 	//
 	// end
 	//
-//	$page->setText($text);
-//	$page->setTitle($title);
+
 	echo $page->OutputHTML();
-// echo $page;
+
 ?>

@@ -878,7 +878,9 @@
 	
 	function page_preferences() {
 		global $setting, $_SERVER, $admin_lang, $extern_action, $_GET, $_POST;
-		
+		/**
+		 * Load the template file for the preferences
+		 */
 		include('./system/settings.php');
 		$out = '';
 		if(!isset($extern_action))
@@ -957,12 +959,12 @@
 						<td>\r\n";
 				if($key == 'default_page') {
 					$out .= "\t\t\t\t\t\t<select name=\"setting_" . $key . "\">\r\n";
-					$sql = "SELECT page_name, page_title
+					$sql = "SELECT page_name, page_title, page_id
 						FROM " . DB_PREFIX . "pages
 						WHERE page_access='public'";
 					$pages_result = db_result($sql);
 					while($page_names = mysql_fetch_object($pages_result))
-						$out .= "\t\t\t\t\t\t\t<option value=\"" . $page_names->page_name . "\" " . (($_value == $page_names->page_name) ? " selected=\"selected\"" : "") . ">" . $page_names->page_title . " (" . $page_names->page_name . ")</option>\r\n";
+						$out .= "\t\t\t\t\t\t\t<option value=\"" . $page_names->page_id . "\" " . (($_value == $page_names->page_id) ? " selected=\"selected\"" : "") . ">" . $page_names->page_title . " (" . $page_names->page_name . ")</option>\r\n";
 					$out .= "\t\t\t\t\t\t</select>\r\n";
 				}
 				else

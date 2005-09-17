@@ -228,3 +228,38 @@ ALTER TABLE `cms_inlinemenu` CHANGE `inlinemenu_id` `page_id` INT( 10 ) UNSIGNED
 #r105
 #removed the field text_page_inlinemenu
 ALTER TABLE `cms_pages_text` DROP `text_page_inlinemenu` ;
+
+#r114
+#renamed cms_sitedata_history to cms_pages_history
+ALTER TABLE `cms_sitedata_history` RENAME `cms_pages_history` ;
+
+#r114
+#added page_id field
+ALTER TABLE `cms_pages_history` ADD `page_id` INT NOT NULL AFTER `id` ;
+
+#r114
+#renamed fields
+ALTER TABLE `cms_pages_history` CHANGE `id` `id` INT( 10 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `page_id` `page_id` INT( 10 ) NOT NULL DEFAULT '0',
+CHANGE `type` `page_type` LONGTEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+CHANGE `name` `page_name` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+CHANGE `title` `page_title` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+CHANGE `text` `page_text` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+CHANGE `lang` `page_lang` VARCHAR( 5 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+CHANGE `creator` `page_creator` INT( 10 ) NOT NULL DEFAULT '0',
+CHANGE `date` `page_date` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '0';
+
+#r114
+#changed some field formats
+ALTER TABLE `cms_pages_history` CHANGE `page_text` `page_parent_id` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
+ALTER TABLE `cms_pages_history` CHANGE `page_parent_id` `page_parent_id` INT( 10 ) NOT NULL ;
+ALTER TABLE `cms_pages_history` CHANGE `page_date` `page_date` INT( 20 ) NOT NULL DEFAULT '0'
+
+#r114
+#added cms_pages_text_history table
+CREATE TABLE `cms_pages_text_history` (
+`id` INT( 10 ) NOT NULL AUTO_INCREMENT ,
+`page_id` INT( 10 ) NOT NULL ,
+`page_text` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
+PRIMARY KEY ( `id` )
+) TYPE = MYISAM ;

@@ -371,6 +371,21 @@
 				<td>Bearbeitet am:</td><td>" . date("d.m.Y H:i:s",$page->page_date) . "</td>
 				</tr>
 				</table>";
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "pages_history
+					WHERE page_id = $extern_page_id
+					ORDER BY page_date DESC";
+				$result = db_result($sql);
+				if($change = mysql_fetch_object($result)) {
+					$out .="<h4>Veränderungen</h4>
+						<table>";
+					$out .= "<tr><td>Datum</td><td>Veränderer</td><td>Titel</td></tr>";
+					$out .= "<tr><td>" . date("d.m.Y H:i:s",$change->page_date) . "</td><td>".getUserById($change->page_creator) . "</td><td>$change->page_title</td></tr>";
+					while($change = mysql_fetch_object($result)) {
+						$out .= "<tr><td>" . date("d.m.Y H:i:s",$change->page_date) . "</td><td>".getUserById($change->page_creator) . "</td><td>$change->page_title</td></tr>";
+					}
+					$out .="</table>";
+				}
 				
 			}
 			

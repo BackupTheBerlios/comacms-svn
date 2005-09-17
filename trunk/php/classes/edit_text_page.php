@@ -35,15 +35,22 @@
 			
 			if($extern_page_title != '' && $page_id != '' && $extern_page_text != '')
 			{
-				$sql = "SELECT struct.page_id, struct.page_title, text.text_page_text
+				$sql = "SELECT struct.*, text.text_page_text
 				FROM ( " . DB_PREFIX. "pages struct
 				LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
 				WHERE struct.page_id='$page_id' AND struct.page_type='text'";
 				$old_result = db_result($sql);
 				if($old = mysql_fetch_object($old_result)) { // exists the page?
 					if($old->page_title != $extern_page_title || $old->text_page_text != $extern_page_text) {
-						//TODO: backup the old into cms_pages_text_history
-						
+												
+						$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date)
+							VALUES($old->page_id, '$old->page_type', '$old->page_name', '$old->page_title', $old->page_parent_id, '$old->page_lang', $old->page_creator,	$old->page_date)";
+						db_result($sql);
+						$lastid =  mysql_insert_id();
+						$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, page_text)
+							VALUES ($lastid, '$old->text_page_text')";
+						db_result($sql);
+						//die();
 						$html = convertToPreHtml($extern_page_text);
 						$sql = "UPDATE " . DB_PREFIX . "pages_text
 							SET text_page_text='$extern_page_text', text_page_html='$html'

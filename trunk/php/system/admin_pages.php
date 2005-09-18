@@ -550,6 +550,12 @@
 		return $out;
 	}
 
+/*****************************************************************************
+ *
+ * string page_users()
+ * returns the user-admin-page where you can add, change and delete users
+ *
+ *****************************************************************************/
 	function page_users() {
 		global $_GET, $_POST, $PHP_SELF, $admin_lang, $actual_user_id, $actual_user_passwd_md5,$actual_user_online_id, $actual_user_online_id, $_SERVER, $user;
 	
@@ -845,26 +851,26 @@
 				</tr>\r\n";
 
 			$users_result = db_result("SELECT * FROM " . DB_PREFIX . "users");
-			while($user = mysql_fetch_object($users_result))
+			while($user_db = mysql_fetch_object($users_result))
 			{
 				$out .= "\t\t\t\t<tr>
-					<td>#".$user->user_id."</td>
-					<td>$user->user_showname</td>
-					<td>$user->user_name</td>
-					<td>$user->user_email</td>
+					<td>#".$user_db->user_id."</td>
+					<td>$user_db->user_showname</td>
+					<td>$user_db->user_name</td>
+					<td>$user_db->user_email</td>
 					<td>";
-					if($user->user_admin == 'y')
+					if($user_db->user_admin == 'y')
 						$out .= $admin_lang['yes'];
 					else
 						$out .= $admin_lang['no'];
 					$out .= "</td>
-					<td><a href=\"".$PHP_SELF."?page=users&amp;action=edit&amp;user_id=".$user->user_id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a></td>
+					<td><a href=\"".$PHP_SELF."?page=users&amp;action=edit&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a></td>
 					<td>";
 					
-					if($user->ID == $user->user_id)
+					if($user->ID == $user_db->user_id)
 						$out .= "&nbsp;";
 					else
-						$out .= "<a href=\"".$PHP_SELF."?page=users&amp;action=delete&amp;user_id=".$user->user_id."\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
+						$out .= "<a href=\"".$PHP_SELF."?page=users&amp;action=delete&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
 					$out .= "</td>
 				</tr>\r\n";
 			}
@@ -876,6 +882,12 @@
 		return $out;
 	}
 	
+/*****************************************************************************
+ *
+ * string page_preferences()
+ * returns the preferences-admin-page where you can change or add some entries
+ *
+ *****************************************************************************/
 	function page_preferences() {
 		global $setting, $_SERVER, $admin_lang, $extern_action, $_GET, $_POST;
 		/**
@@ -984,6 +996,13 @@
 		
 		return $out;
 	}
+
+/*****************************************************************************
+ *
+ * string page_gallery_editor()
+ * returns the gallery-admin-page where you can add, change and delete gallerys
+ *
+ *****************************************************************************/
 	function page_gallery_editor() {
 		global $admin_lang, $extern_action, $_SERVER, $extern_images, $extern_gallery_name, $extern_gallery_title, $actual_user_id;
 		
@@ -1469,6 +1488,12 @@
 		return $out;
  	}
  	
+ /*****************************************************************************
+ *
+ * string page_inlinemenu()
+ * returns the inlinemenu-admin-page where you can add,change and delete inlinemenus
+ *
+ *****************************************************************************/
  	function page_inlinemenu() {
  		global $extern_action, $_SERVER, $admin_lang, $extern_page_id, $extern_sure, $extern_inlinemenu_id, $extern_image_path, $extern_entrie_type, $extern_entrie_text, $extern_entrie_link, $extern_image_path, $extern_entrie_id;
  		

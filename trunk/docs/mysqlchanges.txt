@@ -253,7 +253,7 @@ CHANGE `date` `page_date` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_unicode_
 #changed some field formats
 ALTER TABLE `cms_pages_history` CHANGE `page_text` `page_parent_id` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
 ALTER TABLE `cms_pages_history` CHANGE `page_parent_id` `page_parent_id` INT( 10 ) NOT NULL ;
-ALTER TABLE `cms_pages_history` CHANGE `page_date` `page_date` INT( 20 ) NOT NULL DEFAULT '0'
+ALTER TABLE `cms_pages_history` CHANGE `page_date` `page_date` INT( 20 ) NOT NULL DEFAULT '0';
 
 #r114
 #added cms_pages_text_history table
@@ -262,4 +262,22 @@ CREATE TABLE `cms_pages_text_history` (
 `page_id` INT( 10 ) NOT NULL ,
 `page_text` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ,
 PRIMARY KEY ( `id` )
+) TYPE = MYISAM ;
+
+#r117
+#added cms_pages_gallery table
+CREATE TABLE `cms_pages_gallery` (
+`page_id` INT( 10 ) NOT NULL ,
+`gallery_id` INT( 10 ) NOT NULL AUTO_INCREMENT ,
+PRIMARY KEY ( `gallery_id` ) ,
+INDEX ( `page_id` )
+) TYPE = MYISAM ;
+
+#r117
+#added cms_gallery table (for the images)
+CREATE TABLE `cms_gallery` (
+`gallery_id` INT( 10 ) NOT NULL ,
+`gallery_file_id` MEDIUMINT( 10 ) NOT NULL ,
+`gallery_image_thumbnail` VARCHAR( 255 ) NOT NULL ,
+`gallery_image` VARCHAR( 255 ) NOT NULL
 ) TYPE = MYISAM ;

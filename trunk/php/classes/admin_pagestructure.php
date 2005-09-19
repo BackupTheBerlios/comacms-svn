@@ -4,7 +4,7 @@
  * @copyright (C) 2005 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
- # file			: admin_pagestructure.php					#
+ # file			: admin_pagestructure.php			#
  # created		: 2005-09-04					#
  # copyright		: (C) 2005 The ComaCMS-Team			#
  # email		: comacms@williblau.de				#
@@ -254,6 +254,9 @@
 				switch($page->page_type) {
 					case 'text':		include('classes/edit_text_page.php');
 								$edit = new Edit_Text_Page();
+								break;
+					case 'gallery':		include('classes/edit_gallery_page.php');
+								$edit = new Edit_Gallery_Page();
 								break;				
 					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> lässt sich noch nicht bearbeiten.";
 								break;
@@ -277,6 +280,9 @@
 				switch($page->page_type) {
 					case 'text':		include('classes/edit_text_page.php');
 								$edit = new Edit_Text_Page();
+								break;
+					case 'gallery':		include('classes/edit_gallery_page.php');
+								$edit = new Edit_Gallery_Page();
 								break;				
 					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> lässt sich noch nicht bearbeiten.";
 								break;
@@ -288,7 +294,7 @@
 		}
 		
 		function _addPage() {
-			global $extern_page_type, $user, $extern_page_access, $extern_page_name, $extern_page_title, $extern_page_parent_id, $extern_page_lang;
+			global $extern_page_type, $user, $extern_page_access, $extern_page_name, $extern_page_title, $extern_page_parent_id, $extern_page_lang, $extern_page_edit;
 
 			$edit = null;
 			$id = -1;
@@ -298,7 +304,7 @@
 							$edit = new Edit_Text_Page();
 							break;
 				case 'gallery':		include('classes/edit_gallery_page.php');
-							$edit = new Edit_Text_Page();
+							$edit = new Edit_Gallery_Page();
 							break;
 				default:		$out .= "Der Seitentyp <strong>$extern_page_type</strong> lässt sich noch nicht bearbeiten.";
 							break;
@@ -315,7 +321,8 @@
 				$lastid =  mysql_insert_id();
 				$edit->NewPage($lastid);
 			}
-
+			if($extern_page_edit != '')
+				header("Location: " . $_SERVER['PHP_SELF'] . "?page=pagestructure&action=edit&page_id=$lastid");
 
 			
 				

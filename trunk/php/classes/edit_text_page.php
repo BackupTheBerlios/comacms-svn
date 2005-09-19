@@ -81,7 +81,8 @@
 		}
 		
 		function Edit($page_id) {
-			global $_SEERVER;
+			global $_SERVER;
+			
 			$sql = "SELECT struct.page_id, struct.page_title, text.text_page_text
 				FROM ( " . DB_PREFIX. "pages struct
 				LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )

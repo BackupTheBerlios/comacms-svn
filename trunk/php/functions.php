@@ -339,4 +339,20 @@
 		$out .= '</div>';
 		return $out;
 	}
+	
+	/**
+	 * This function make it easier to catch a variable which is send by GET or POST
+	 * if the variable dosen't exist this function returns null
+	 * @return mixed
+	 * @var Name $Name is the name of the variable wthich value is to return
+	 */
+	function GetPostOrGet($Name) {
+		global $_POST, $_GET;
+		
+		if(isset($_POST[$Name])) // exists an POST-value?
+			return $_POST[$Name];
+		else if(isset($_GET[$Name])) // exists an GET-value?
+			return $_GET[$Name];
+		return null; // no GET- or POST-variable available 
+	}
 ?>

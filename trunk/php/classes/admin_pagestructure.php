@@ -85,8 +85,10 @@
 		 function _homePage() {
 		 	global $admin_lang;
 			$out = "<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=new\">neue Seite</a>";;
+			$out .= "<form method=\"post\" action=\"$_SERVER['PHP_SELF']\" />";
 		 	$out .= $this->_showStructure(0);
-
+			$out .= "</form>";
+			
 			return $out;
 		 }
 		 
@@ -175,7 +177,7 @@
 							Bearbeiten?
 							<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die Übersichtseite zurückgekehrt werden?</span>
 						</td>
-						<td><input type=\"checkbox\" name=\"page_edit\" checked=\"true\"/></td>
+						<td><input type=\"checkbox\" name=\"page_edit\" value=\"edit\" checked=\"true\"/></td>
 					</tr>
 					<tr>
 						<td colspan=\"2\">
@@ -219,7 +221,7 @@
 		 	if(mysql_num_rows($pages_result) != 0) {
 		 		$out .= "\r\n<ol>\r\n";
 		 		while($page = mysql_fetch_object($pages_result)) {
-		 			$out .= "<li class=\"page_type_$page->page_type\">";
+		 			$out .= "<li class=\"page_type_$page->page_type\"><input type=\"checkbox\" name=\"$page->page_id\" value=\"add\">";
 		 			if($page->page_access == 'deleted')
 		 				$out .= '<strike>';
 		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
@@ -236,8 +238,21 @@
 					$out .= $this->_showStructure($page->page_id);
 		 			$out .= "</li>\r\n";
 				}
-				$out .= "\r\n</ol>\r\n";
+				
+				if($topnode == 0) {
+					$out .= "<input type=\"submit\" name=\"senden\" value=\"erstelle Hauptmenü\">\r\n</ol>\r\n";
+				}
+				else {
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "pages
+						WHERE page_id=$topnode";
+					$page_result = db_result($sql);
+					$page = mysql_fetch_object($page_result);
+					
+					$out .= "<input type=\"submit\" name=\"senden\" value=\"erstelle Untermenü zu: $page->page_title\">\r\n</ol>\r\n";
+				}
 			}
+			
 			return $out;
 		}
 		

@@ -189,12 +189,26 @@
 			user_email varchar(200) NOT NULL default '',
 			PRIMARY KEY  (user_id)
 		);
+		DROP TABLE IF EXISTS " . $db_prefix . "pages_gallery;
+		CREATE TABLE " . $db_prefix . "pages_gallery (
+			page_id INT( 10 ) NOT NULL ,
+			gallery_id INT( 10 ) NOT NULL AUTO_INCREMENT ,
+			PRIMARY KEY ( gallery_id ) ,
+			INDEX ( page_id )
+		);
+		DROP TABLE IF EXISTS " . $db_prefix . "gallery;
+		CREATE TABLE " . $db_prefix . "gallery (
+			gallery_id INT( 10 ) NOT NULL ,
+			gallery_file_id MEDIUMINT( 10 ) NOT NULL ,
+			gallery_image_thumbnail VARCHAR( 255 ) NOT NULL ,
+			gallery_image VARCHAR( 255 ) NOT NULL
+		);
 		INSERT INTO " . $db_prefix . "users (user_name, user_showname, user_password, user_registerdate, user_admin, user_icq)
 		VALUES ('$admin_name', '$admin_showname', '" . md5($admin_password) . "', '" . mktime() . "', 'y', '');
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)
 		VALUES ('style', 'clear');
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)
-		VALUES ('default_page', '0');
+		VALUES ('default_page', '1');
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)
 		VALUES ('install_date', '" . mktime() . "');
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)

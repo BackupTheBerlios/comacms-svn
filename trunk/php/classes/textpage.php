@@ -30,9 +30,9 @@
 				FROM " . DB_PREFIX . "pages_text
 				WHERE page_id = $page_id";
 			if($page_result = db_result($sql)) {
-			$page = mysql_fetch_object($page_result);
-			$this->Text = $page->text_page_text;
-			$this->HTML = $page->text_page_html;
+				$page = mysql_fetch_object($page_result);
+				$this->Text = $page->text_page_text;
+				$this->HTML = $page->text_page_html;
 			}
 		}
 	}

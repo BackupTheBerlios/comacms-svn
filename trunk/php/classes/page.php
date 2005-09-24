@@ -19,7 +19,6 @@
 	 * 
 	 */
  	require_once('./system/functions.php');
- 	require_once('./classes/textpage.php');
  	 
  	/**
  	 * @package ComaCMS
@@ -191,8 +190,14 @@
 			$this->PositionOfPage($page_data->page_id);
 			$this->PageID = $page_data->page_id;
 			if($page_data->page_type == 'text') {
+				include('./classes/textpage.php');
 				$textpage = new TextPage($page_data->page_id);
 				$this->Text = $textpage->HTML;
+			}
+			elseif($page_data->page_type == 'gallery') {
+				include('./classes/gallerypage.php');
+				$gallerypage = new GalleryPage($page_data->page_id);
+				$this->Text = $gallerypage->HTML;
 			}
 		}
 		

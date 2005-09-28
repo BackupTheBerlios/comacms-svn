@@ -315,9 +315,12 @@
 	}
 	
 	function page_files() {
-		global $_SERVER,$_FILES, $extern_action, $admin_lang, $extern_file_id, $extern_sure;
+		global $_SERVER, $_FILES, $admin_lang;
+		$extern_action = GetPostOrGet('action');
+		$extern_file_id = GetPostOrGet('file_id');
+		$extern_sure = GetPostOrGet('sure'); 
 		
-		$out = "Files<br />";
+		$out = "<h3>Files</h3><hr />";
 		$upload_path = './data/upload/';
 		if($extern_action == 'upload') {
 			foreach($_FILES as $name => $file) {
@@ -354,6 +357,39 @@
 				}
 			}
 		}
+		elseif($extern_action == 'check_new') {
+			//echo 'test';
+			$out .= "Hier werden alle Dateien angezeigt, die nicht über das Admin-Interface Verändert worden sind, um diese Veränderungen in die datenbank zu übernehmen haken sie alle die Dateien an, die sie aktualisieren möchten<br /><br />\r\n" .
+					"\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n" .
+					"\t\t<input type=\"hidden\" name=\"page\" value=\"files\"/>" .
+					"\t\t<input type=\"hidden\" name=\"action\" value=\"add_new\"/>";
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "files
+				ORDER BY file_date DESC";
+			$files_result = db_result($sql);
+			$md5s = array();
+			$newmd5s = array();
+			while($file = mysql_fetch_object($files_result)) {
+				if(file_exists($file->file_path))
+					$md5s[$file->file_path] = $file->file_md5;
+				else
+					$out .= "<input type=\"checkbox\" name=\"change[]\" value=\"$file->file_path\" checked=\"checked\" /><strong>Aus der Datenbank entfernen</strong> $file->file_name<br />\r\n";
+			}
+			$files = dir($upload_path);
+
+			while($entry = $files->read()) {
+  				if(is_file($upload_path.$entry))
+  					if(!in_array(md5_file($upload_path . $entry),$md5s))
+  						$out .= "<input type=\"checkbox\" name=\"change[]\" value=\"$upload_path$entry\" checked=\"checked\" /><strong>Zur Datenbank hinzufügen</strong> $entry<br />\r\n";
+  						
+  				//echo $upload_path.$entry . '-' . md5_file($upload_path.$entry) . "<br>";
+			}
+			$files->close();
+			$out .= "<input type=\"submit\" class=\"button\" value=\"Ausführen\"/>" .
+				"</form>\n\r";
+			return $out;
+			//print_r($md5s);
+		}
 		elseif($extern_action == 'delete') {
 			if($extern_file_id != '') {
 				$sql = "SELECT *
@@ -379,20 +415,47 @@
 
 			}
 		}
+		elseif($extern_action == 'add_new') {
+			$changes = GetPostOrGet('change');
+			foreach($changes as $change) {
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "files
+					WHERE file_path = '$change'";
+				$file_result = db_result($sql);
+				if($file = mysql_fetch_object($file_result) && !file_exists($change)) {
+					$sql = "DELETE FROM " . DB_PREFIX . "files
+						WHERE file_id=$file->file_id";
+					db_result($sql);
+				}
+				elseif(file_exists($change)) {
+					$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date)
+						VALUES('" . basename($change) . "', '" . GetMimeContentType($change) . "', '$change', '" . filesize($change) . "', '" . md5_file($change) . "', " . mktime() . ")";
+					db_result($sql);
+				}
+				
+				if(file_exists($change)) { // what is to do if the file exists? should it be added?
+					
+				}
+				else // there is no file? check the db, is there no file,too, remove the entry!
+				{
+				}
+				
+			}
+		}
 		$out .= "<form enctype=\"multipart/form-data\" action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
 			<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1600000\" />
 			<input type=\"hidden\" name=\"page\" value=\"files\" />
 			<input type=\"hidden\" name=\"action\" value=\"upload\" />
 			<input name=\"uploadfile0\" type=\"file\" />
-			<input type=\"submit\" value=\"Hochladen\"/>
+			<input type=\"submit\" class=\"button\" value=\"Hochladen\"/>
 		</form>";
 		$out .= "
-		[Auf Veränderungen überprüfen]
+		<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&action=check_new\">Auf Veränderungen überprüfen</a><br /><br />
 		<table>
 		<tr><td>id</td><td>Name</td><td>Größe</td><td>Hochgeladen am</td><td>Typ</td><td>Aktionen</td></tr>";
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "files
-			ORDER BY file_date DESC";
+			ORDER BY file_name ASC";
 		$files_result = db_result($sql);
 		$completesize = 0;
 		while($file = mysql_fetch_object($files_result)) {

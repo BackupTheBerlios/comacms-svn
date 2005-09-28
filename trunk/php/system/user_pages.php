@@ -359,7 +359,7 @@
 		}
 		elseif($extern_action == 'check_new') {
 			//echo 'test';
-			$out .= "Hier werden alle Dateien angezeigt, die nicht über das Admin-Interface Verändert worden sind, um diese Veränderungen in die datenbank zu übernehmen haken sie alle die Dateien an, die sie aktualisieren möchten<br /><br />\r\n" .
+			$out .= "Hier werden alle Dateien angezeigt, die nicht über das Admin-Interface Verändert worden sind, um diese Veränderungen in die Datenbank zu übernehmen haken sie alle die Dateien an, die sie aktualisieren möchten.<br /><br />\r\n" .
 					"\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n" .
 					"\t\t<input type=\"hidden\" name=\"page\" value=\"files\"/>" .
 					"\t\t<input type=\"hidden\" name=\"action\" value=\"add_new\"/>";

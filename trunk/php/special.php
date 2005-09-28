@@ -38,7 +38,7 @@
 			<table>
 				<tr><td>Loginname:</td><td><input type=\"text\" name=\"login_name\" /></td></tr>
 				<tr><td>Passwort:</td><td><input type=\"password\" name=\"login_password\" /></td></tr>
-				<tr><td colspan=\"2\"><input type=\"submit\" value=\"Login\" /></td></tr>
+				<tr><td colspan=\"2\"><input type=\"submit\" value=\"Login\" class=\"button\"/></td></tr>
 			</table>
 		</form>";
 	}

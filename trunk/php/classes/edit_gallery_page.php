@@ -65,6 +65,8 @@
 		 function _editAddNew($page_id) {
 		 	$images = GetPostOrGet('images');
 		 	$out = '';
+		 	
+		 	$sql = "SELECT * FROM " . DB_PREFIX . "gallery ";
 		 	$sql = "SELECT page.*, gallery.*
 				FROM (" . DB_PREFIX . "pages page 
 				LEFT JOIN " . DB_PREFIX . "pages_gallery gallery ON page.page_id = gallery.page_id)

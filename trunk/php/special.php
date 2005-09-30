@@ -32,9 +32,13 @@
 	$text = '';
 	$title = '';
 	if($extern_page == 'login') {
+		$action = GetPostOrGet('action');
+		$text_wrong = '';
+		if($action == 'wrong')
+			$text_wrong = '<strong>Eine Eingaben war leider falsch.</strong>';
 		$title = "Login";
 		$text = "<form method=\"post\" action=\"admin.php\">
-			<input type=\"hidden\" name=\"page\" value=\"admincontrol\" />
+			<input type=\"hidden\" name=\"page\" value=\"admincontrol\" />$text_wrong
 			<table>
 				<tr><td>Loginname:</td><td><input type=\"text\" name=\"login_name\" /></td></tr>
 				<tr><td>Passwort:</td><td><input type=\"password\" name=\"login_password\" /></td></tr>

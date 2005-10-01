@@ -178,14 +178,15 @@
 					FROM " . DB_PREFIX . "pages
 					WHERE page_id='$pagename'";	
 				$page_result = db_result($sql);
-				if(!($page_data =  mysql_fetch_object($page_result)))
-					header("Location: special.php?page=404");
+				if(!($page_data =  mysql_fetch_object($page_result))) {
+					header("Location: special.php?page=404&want=$pagename");
+				}
 			}
 			if($page_data->page_access == 'deleted')
 				die('deleted');
 			if($page_data->page_access == 'hidden')
 				if(!$user->IsLoggedIn)	
-					die("Page not found");
+					header("Location: special.php?page=login&want=$page_data->page_id");
 			$this->Title = $page_data->page_title;
 			$this->PositionOfPage($page_data->page_id);
 			$this->PageID = $page_data->page_id;

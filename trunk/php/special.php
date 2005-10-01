@@ -55,16 +55,18 @@
 		</form>";
 	}
 	elseif($extern_page == '404')
-	{
+	{	
+		$want = GetPostOrGet('want');
 		$title = 'Seite nicht gefunden.';
-		$text = 'Die Seite wurde leider nicht gefunden';
+		$text = "Die Seite mit dem Namen &quot;$want&quot; wurde leider nicht gefunden.<br />
+			Falls die Seite aber da sein müsste, melden sie sich bitte beim Seitenbetreiber.";
 	}
-	if($text == '')
+	if($text == '') {
 		header('Locaction: index.php');
+		die();
+	}
 	$page->Title = $title;
 	$page->SetText($text);
-	//$page = str_replace('[menu]', generatemenu(@$internal_style, 1, $extern_page), $page);
-	//$page = str_replace('[menu2]', generatemenu(@$internal_style, 2, $extern_page), $page);
 	$page->Template = str_replace("[inlinemenu]", '', $page->Template);
 	$page->Template = str_replace("[position]", "<a href=\"special.php?page=$extern_page\">$title</a>", $page->Template);
 	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);

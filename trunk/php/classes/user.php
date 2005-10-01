@@ -65,16 +65,23 @@
 		var $Language = 'de';
 		
 		/**
-		 * -1: no attempt to log in
-		 *  0: Everything is OK
-		 *  1: No Name
-		 *  2: No Password
-		 *  3: Nothing of both
-		 *  4: Sorry wrong data
+		 * LoginError
+		 * 
+		 * - -1: no attempt to log in
+		 * -  0: Everything is OK
+		 * -  1: No name
+		 * -  2: No password
+		 * -  3: Nothing of both
+		 * -  4: Sorry wrong data
 		 * @var integer is an error disciption for better login handling
+		 * asd
+		 * asd
 		 */
 		 var $LoginError = -1;
 		
+		/**
+		 * @return void
+		 */
 		function User() {
 			global $_COOKIE;
 			
@@ -145,6 +152,11 @@
 			
 		}
 		
+		/**
+		 * @return void
+		 * @param string page
+		 * @param Config config
+		 */
 		function SetPage($page, $config) {
 			global $REMOTE_ADDR;
 			

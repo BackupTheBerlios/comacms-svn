@@ -19,19 +19,37 @@
  	 * @package ComaCMS
  	 */
 	class User {
-	
+		
+		/**
+		 * @var string
+		 */
 		var $OnlineID = '';
 		
+		/**
+		 * @var string
+		 */
 		var $Name = '';
 		
+		/**
+		 * @var string
+		 */
 		var $Showname = '';
 		
+		/**
+		 * @var string
+		 */
 		var $PasswordMd5 = '';
 		
+		/**
+		 * @var integer
+		 */
 		var $ID = 0;
 		
 		var $AccessRghts = '';
 		
+		/**
+		 * @var bool
+		 */
 		var $IsAdmin = false;
 		
 		/**
@@ -39,13 +57,30 @@
 		 */
 		var $IsLoggedIn = false;
 		
-		// FIX ME: get this by default config or by HTTP headers of the client
+		/**
+		 * 
+		 * @var string
+		 */
+		// FIXME: get this by default config or by HTTP headers of the client
 		var $Language = 'de';
 		
-		
+		/**
+		 * -1: no attempt to log in
+		 *  0: Everything is OK
+		 *  1: No Name
+		 *  2: No Password
+		 *  3: Nothing of both
+		 *  4: Sorry wrong data
+		 * @var integer is an error disciption for better login handling
+		 */
+		 var $LoginError = -1;
 		
 		function User() {
-			global $extern_login_name, $extern_login_password, $extern_lang, $_COOKIE;
+			global $_COOKIE;
+			
+			$extern_login_name = GetPostOrGet('login_name');
+			$extern_login_password = GetPostOrGet('login_password');
+			$extern_lang = GetPostOrGet('lang');
 			$languages = array('de', 'en');
 			// Check: has the user changed the language by hand?
 			if(!empty($extern_lang)) {
@@ -76,31 +111,37 @@
 			// Has the user no OnlineId? Generate one!
 			if($this->OnlineID == '')
 				$this->OnlineID =  md5(uniqid(rand()));
-	
+			if($extern_login_name === '' && $extern_login_password === '')
+				$this->LoginError = 3;
+			elseif($extern_login_name === '' && $extern_login_password !== '')
+				$this->LoginError = 1;
+			elseif($extern_login_name !== '' && $extern_login_password === '')
+				$this->LoginError = 2;
 			// Check: is the user really logged in? Or had he typed in the right name and password?
-			if($this->Name != "" && $this->PasswordMd5 != "") {
+			elseif($this->Name != "" && $this->PasswordMd5 != "") {
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "users
 					WHERE user_name='$this->Name' AND user_password='$this->PasswordMd5'";
 				$original_user_result = db_result($sql);
-				$original_user = mysql_fetch_object($original_user_result);
-				if(@$original_user->user_name == '') {
-					$this->IsAdmin = false;
-					$this->IsLoggedIn = false;
-					$this->Name = '';
-					$this->PasswordMd5 = '';
-				}
-				else {
+				if($original_user = mysql_fetch_object($original_user_result)) {
 					$this->IsLoggedIn = true;
 					$this->Showname = $original_user->user_showname;
 					$this->ID = $original_user->user_id;
 					if($original_user->user_admin == 'y')
 						$this->IsAdmin = true;
+					$this->LoginError = 0;
+				}
+				else {
+					$this->IsAdmin = false;
+					$this->IsLoggedIn = false;
+					$this->Name = '';
+					$this->PasswordMd5 = '';
+					$this->LoginError = 4;
 				}
 			}
 			
 			// Set the cookie (for the next 4 hours) 
-			setcookie('ComaCMS_user',$this->OnlineID . '|' . $this->Name . '|' . $this->PasswordMd5, time() + 14400);
+			setcookie('ComaCMS_user', $this->OnlineID . '|' . $this->Name . '|' . $this->PasswordMd5, time() + 14400);
 			
 		}
 		

@@ -32,13 +32,21 @@
 	$text = '';
 	$title = '';
 	if($extern_page == 'login') {
-		$action = GetPostOrGet('action');
-		$text_wrong = '';
-		if($action == 'wrong')
-			$text_wrong = '<strong>Eine Eingaben war leider falsch.</strong>';
+		$error = GetPostOrGet('error');
+		$text_error = '';
+		if($error == '1')
+			$text_error = 'Der Login wurde nicht angegeben.';
+		if($error == '2')
+			$text_error = 'Das Passwort wurde nicht angegeben.';
+		if($error == '3')
+			$text_error = 'Es wurden keine Eingaben gemacht.';
+		if($error == '4')
+			$text_error = 'Der Benutzer und(oder) das Passwort sind falsch.';
+		if($text_error != '')
+			$text_error = "\r\n<strong>" . $text_error . '</strong>';
 		$title = "Login";
 		$text = "<form method=\"post\" action=\"admin.php\">
-			<input type=\"hidden\" name=\"page\" value=\"admincontrol\" />$text_wrong
+			<input type=\"hidden\" name=\"page\" value=\"admincontrol\" />$text_error
 			<table>
 				<tr><td>Loginname:</td><td><input type=\"text\" name=\"login_name\" /></td></tr>
 				<tr><td>Passwort:</td><td><input type=\"password\" name=\"login_password\" /></td></tr>

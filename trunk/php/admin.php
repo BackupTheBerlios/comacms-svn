@@ -23,14 +23,18 @@
 	
 	include('common.php');
 	
-	if(!$user->IsLoggedIn && GetPostOrGet('login_name') === null && GetPostOrGet('login_password') === null) {
+	/*if(!$user->IsLoggedIn && GetPostOrGet('login_name') === null && GetPostOrGet('login_password') === null) {
 		header('Location: special.php?page=login');
 		die();
+	}*/
+	if(!$user->IsLoggedIn)  {
+		header('Location: special.php?page=login' . (($user->LoginError != -1) ? ('&error=' . $user->LoginError) : ''));
+		die();
 	}
-	if(!$user->IsLoggedIn)
-		header('Location: special.php?page=login&action=wrong');
-	if(!$user->IsAdmin && $user->IsLoggedIn)
+	if(!$user->IsAdmin && $user->IsLoggedIn) {
 		header('Location: index.php');
+		die();
+	}
 	include_once('./system/functions.php');
 	
 	$text = '';

@@ -62,4 +62,6 @@
 	$admin_lang['articles'] = 'Artikel';
 	$admin_lang['inlinemenu'] = 'Zusatzmenü';
 	$admin_lang['pagestructure'] = 'Seiten-Struktur';
+	$admin_lang['generate_mainmenu'] = 'erstelle Hauptmenü';
+	$admin_lang['generate_menu_for'] = 'erstelle Untermenü zu';
 ?>

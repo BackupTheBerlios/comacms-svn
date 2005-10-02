@@ -26,7 +26,7 @@
  		 */
 		 function GetPage($action = '') {
 		 	global $admin_lang;
-			$out = "<h3>" . $admin_lang['pagestructure'] . "</h3><hr />\r\n";
+			$out = "\t\t\t<h3>" . $admin_lang['pagestructure'] . "</h3><hr />\r\n";
 		 	$action = strtolower($action);
 		 	switch ($action) {
 		 		case 'delete':		$out .= $this->_deletePage();
@@ -41,6 +41,8 @@
 							break;
 				case 'save':		$out .= $this->_savePage();
 							break;
+				case 'generate_menu':	$out .= $this->_generate_menu();
+							break;
 		 		default:		$out .= $this->_homePage();
 		 	}
 			return $out;
@@ -49,6 +51,11 @@
 		 /**
 		  * @return string
 		  */
+		 function _generate_menu() {
+		 	$out = '';
+		 	return $out;
+		 }
+		 
 		 function _deletePage() {
 		 	global $extern_sure, $extern_page_id, $admin_lang, $user;
 		 	
@@ -84,10 +91,12 @@
 		 
 		 function _homePage() {
 		 	global $admin_lang;
-			$out = "<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=new\">neue Seite</a>";;
-			$out .= "<form method=\"post\" action=\"$_SERVER['PHP_SELF']\" />";
+			$out = "\t\t\t<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=new\">neue Seite</a>\r\n";;
+			$out .= "\t\t\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n";
+			$out .= "\t\t\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />\r\n";
+			$out .= "\t\t\t<input type=\"hidden\" name=\"action\" value=\"generate_menu\" />\r\n";
 		 	$out .= $this->_showStructure(0);
-			$out .= "</form>";
+			$out .= "\t\t\t</form>\r\n";
 			
 			return $out;
 		 }
@@ -219,9 +228,9 @@
 	 		// TODO: ORDER BY page_sortid
 		 	$pages_result = db_result($sql);
 		 	if(mysql_num_rows($pages_result) != 0) {
-		 		$out .= "\r\n<ol>\r\n";
+		 		$out .= "\r\n\t\t\t<ol>\r\n";
 		 		while($page = mysql_fetch_object($pages_result)) {
-		 			$out .= "<li class=\"page_type_$page->page_type\"><input type=\"checkbox\" name=\"$page->page_id\" value=\"add\">";
+		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type\"><input type=\"checkbox\" name=\"$page->page_id\" value=\"add\" />\t";
 		 			if($page->page_access == 'deleted')
 		 				$out .= '<strike>';
 		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
@@ -236,11 +245,19 @@
 		 			if($page->page_access == 'deleted')
 		 				$out .= '</strike>';
 					$out .= $this->_showStructure($page->page_id);
-		 			$out .= "</li>\r\n";
+		 			$out .= "\t\t\t\t</li>\r\n";
 				}
 				
+				$out .= "\t\t\t\t<li><select name=\"page_parent_id\">
+							<option value=\"0\">Extern</option>\r\n";
+		 		$out .= $this->_structurePullDown(0);
+		 		$out .= "\t\t\t\t\t\t</select>\r\n" .
+		 				"<input type=\"text\" name=\"extern\" /><input type=\"submit\" name=\"pagestructure_sendlink\" value=\"Hinzufügen\" />\r\n" .
+						"</li>\r\n";
+				
 				if($topnode == 0) {
-					$out .= "<input type=\"submit\" name=\"senden\" value=\"erstelle Hauptmenü\">\r\n</ol>\r\n";
+					$out .= "\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" name=\"senden\" value=\"" . $admin_lang['generate_mainmenu'] . "\" /></li>" .
+						"\r\n\t\t\t</ol>\r\n";
 				}
 				else {
 					$sql = "SELECT *
@@ -249,7 +266,8 @@
 					$page_result = db_result($sql);
 					$page = mysql_fetch_object($page_result);
 					
-					$out .= "<input type=\"submit\" name=\"senden\" value=\"erstelle Untermenü zu: $page->page_title\">\r\n</ol>\r\n";
+					$out .= "\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" name=\"senden\" value=\"" . $admin_lang['generate_menu_for'] . ": $page->page_title\" /></li>" .
+						"\r\n\t\t\t</ol>\r\n\r\n";
 				}
 			}
 			

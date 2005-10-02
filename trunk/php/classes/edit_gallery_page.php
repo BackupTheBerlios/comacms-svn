@@ -115,6 +115,14 @@
 
 			$page_result = db_result($sql);
 			$page_data = mysql_fetch_object($page_result);
+			$ids = array();
+			$sql = "SELECT gallery_file_id
+				FROM " . DB_PREFIX . "gallery
+				WHERE gallery_id = $page_data->gallery_id";
+			$img_result = db_result($sql);
+			while($img = mysql_fetch_object($img_result)) {
+				$ids[] = $img->gallery_file_id;
+			}	
 		 	$out = "Bilder auswählen\r\n" .
 		 		"<form  action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">" .
 		 		"\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />" .
@@ -128,12 +136,17 @@
 		 		"\t\t\t\t<span class=\"info\">TODO</span>" .
 		 		"\t\t\t</td>" .
 		 		"\t\t\t<td>";
-		 	$sql = "SELECT file.*, image.*
+		 	/*$sql = "SELECT file.*, image.*
 		 		FROM (" . DB_PREFIX . "files file
 		 		LEFT JOIN " . DB_PREFIX . "gallery image
 		 		ON file.file_id = image.gallery_file_id)
 		 		WHERE file.file_type LIKE 'image/%'
-		 		ORDER BY file.file_name ASC";
+		 		ORDER BY file.file_name ASC";*/
+		 		
+		 	$sql = "SELECT *
+		 		FROM " . DB_PREFIX . "files
+		 		WHERE file_type LIKE 'image/%'
+		 		ORDER BY file_name ASC";
 	 		$images_result = db_result($sql);
 			while($image = mysql_fetch_object($images_result)) {
 				$thumb = str_replace('/upload/', '/thumbnails/', $image->file_path);
@@ -144,7 +157,7 @@
 				$imgmax = 100;
 				if(!file_exists($thumb))
 					$succes = generateThumb($image->file_path, $imgmax);
-				if((file_exists($thumb) || $succes ) && $image->gallery_id != $page_data->gallery_id) {
+				if((file_exists($thumb) || $succes )  && !in_array($image->file_id,$ids)) {
 					$sizes = getimagesize($thumb);
 					$margin_top = round(($imgmax - $sizes[1]) / 2);
 					$margin_bottom = $imgmax - $sizes[1] - $margin_top;

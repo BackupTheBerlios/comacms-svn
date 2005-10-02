@@ -348,12 +348,18 @@
 	 */
 	function GetPostOrGet($Name) {
 		global $_POST, $_GET;
-		
+		$value = null; // no GET- or POST-variable available
 		if(isset($_POST[$Name])) // exists an POST-value?
-			return $_POST[$Name];
+			$value = $_POST[$Name];
 		else if(isset($_GET[$Name])) // exists an GET-value?
-			return $_GET[$Name];
-		return null; // no GET- or POST-variable available 
+			$value = $_GET[$Name];
+		if($value !== null) {
+			if(get_magic_quotes_gpc())
+	   			$value = stripslashes($value);
+			if(!is_numeric($value))
+				$value =  mysql_real_escape_string($value);
+		}
+		return $value;
 	}
 	
 	function GetMimeContentType($filename)

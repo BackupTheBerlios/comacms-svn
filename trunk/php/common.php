@@ -29,7 +29,7 @@
 	}
 	import_request_variables("gP", "extern_");
 		
-	include('classes/page.php');
+	include('classes/outputpage.php');
 	include('classes/config.php');
 	include('classes/user.php');
 	include('classes/inlinemenu.php');
@@ -39,7 +39,7 @@
 	connect_to_db($d_user, $d_pw, $d_base, $d_server);
 	$config = new Config();
 	$config->LoadAll();
-	$page = new Page();
+	$page = new OutputPage();
 	$user = new User();
 	$style_name = $config->Get('style', 'clear');
 	$page->LoadTemplate('./styles/' . $style_name);

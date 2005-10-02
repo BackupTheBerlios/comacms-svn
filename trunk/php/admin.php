@@ -22,11 +22,7 @@
 	define('COMACMS_RUN', true);
 	
 	include('common.php');
-	
-	/*if(!$user->IsLoggedIn && GetPostOrGet('login_name') === null && GetPostOrGet('login_password') === null) {
-		header('Location: special.php?page=login');
-		die();
-	}*/
+
 	if(!$user->IsLoggedIn)  {
 		header('Location: special.php?page=login' . (($user->LoginError != -1) ? ('&error=' . $user->LoginError) : ''));
 		die();

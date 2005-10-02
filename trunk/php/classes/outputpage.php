@@ -4,7 +4,7 @@
  * @copyright (C) 2005 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
- # file			: page.php					#
+ # file			: outputpge.php					#
  # created		: 2005-09-01					#
  # copyright		: (C) 2005 The ComaCMS-Team			#
  # email		: comacms@williblau.de				#
@@ -23,7 +23,7 @@
  	/**
  	 * @package ComaCMS
  	 */
-	class Page {
+	class OutputPage {
 		
 		/**
 		 * @access public

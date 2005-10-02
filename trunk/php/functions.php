@@ -383,6 +383,7 @@
 			'.aif' => 'audio/x-aiff',
 			'.aifc' => 'audio/x-aiff',
 			'.aiff' => 'audio/x-aiff',
+			'.bmp' => 'image/bmp',
 			'.asc' => 'text/plain',
 			'.au' => 'audio/basic',
 			'.avi' => 'video/x-msvideo',

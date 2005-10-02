@@ -4,7 +4,7 @@
  * @copyright (C) 2005 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
- # file			: gallerypage.php					#
+ # file			: gallerypage.php				#
  # created		: 2005-09-21					#
  # copyright		: (C) 2005 The ComaCMS-Team			#
  # email		: comacms@williblau.de				#
@@ -26,12 +26,6 @@
 	class GalleryPage  extends Page{
 		
 		/**
-		 * @access public
-		 * @var string 
-		 */	
-		
-		
-		/**
 		 * @return void
 		 * @param integer page_id
 		 * 
@@ -39,11 +33,6 @@
 		function GalleryPage($page_id) {
 			if(empty($page_id))
 				return;
-			$sql = "SELECT page.*, gallery.* " .
-				"FROM (" . DB_PREFIX . "pages page " .
-				"LEFT JOIN " . DB_PREFIX . "pages_gallery gallery ON page.page_id = gallery.page_id)" .
-				"WHERE page.page_id=$page_id AND page.page_type='gallery' " .
-				"LIMIT 0,1";
 				
 			$sql = "SELECT *
 				FROM (" . DB_PREFIX ."gallery gallery
@@ -59,7 +48,7 @@
 				$margin_top = round(($imgmax - $sizes[1]) / 2);
 				$margin_bottom = $imgmax - $sizes[1] - $margin_top;
 				$this->HTML .= "\t\t\t\t<div class=\"imageblock\">" .
-					"\t\t\t\t\t<a href=\"" . generateUrl($image->gallery_image) . "\">" .
+					"\t\t\t\t\t<a href=\"special.php?page=image&id=" . $image->gallery_file_id . "\">" .
 					"\t\t\t\t\t<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" /></a><br />" .
 					"\t\t\t\t</div>";
 			}

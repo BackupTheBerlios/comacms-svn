@@ -420,9 +420,10 @@
 			foreach($changes as $change) {
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "files
-					WHERE file_path = '$change'";
+					WHERE file_path = '$change'
+					LIMIT 0,1";
 				$file_result = db_result($sql);
-				if($file = mysql_fetch_object($file_result) && !file_exists($change)) {
+				if(($file = mysql_fetch_object($file_result)) && !file_exists($change)) {
 					$sql = "DELETE FROM " . DB_PREFIX . "files
 						WHERE file_id=$file->file_id";
 					db_result($sql);
@@ -432,14 +433,6 @@
 						VALUES('" . basename($change) . "', '" . GetMimeContentType($change) . "', '$change', '" . filesize($change) . "', '" . md5_file($change) . "', " . mktime() . ")";
 					db_result($sql);
 				}
-				
-				if(file_exists($change)) { // what is to do if the file exists? should it be added?
-					
-				}
-				else // there is no file? check the db, is there no file,too, remove the entry!
-				{
-				}
-				
 			}
 		}
 		$out .= "<form enctype=\"multipart/form-data\" action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">

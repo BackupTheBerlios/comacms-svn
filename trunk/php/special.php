@@ -54,15 +54,28 @@
 			</table>
 		</form>";
 	}
-	elseif($extern_page == '404')
-	{	
+	elseif($extern_page == '404') {	
 		$want = GetPostOrGet('want');
 		$title = 'Seite nicht gefunden.';
 		$text = "Die Seite mit dem Namen &quot;$want&quot; wurde leider nicht gefunden.<br />
 			Falls die Seite aber da sein müsste, melden sie sich bitte beim Seitenbetreiber.";
 	}
+	elseif($extern_page == 'image') {
+		$image_id = GetPostOrGet('id');
+		if(is_numeric($image_id)) {
+			$title = 'Bild';
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "files
+				WHERE file_id= $image_id
+				LIMIT 0,1";
+			$image_result = db_result($sql);
+			if($image_data = mysql_fetch_object($image_result)) {
+				$text = "<img src=\"" . generateUrl($image_data->file_path) ."\"/>";
+			}
+		}
+	}
 	if($text == '') {
-		header('Locaction: index.php');
+		header('Location: index.php');
 		die();
 	}
 	$page->Title = $title;

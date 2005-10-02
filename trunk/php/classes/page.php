@@ -4,8 +4,8 @@
  * @copyright (C) 2005 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
- # file			: gbook.php					#
- # created		: 2005-09-04					#
+ # file			: page.php					#
+ # created		: 2005-10-02					#
  # copyright		: (C) 2005 The ComaCMS-Team			#
  # email		: comacms@williblau.de				#
  #----------------------------------------------------------------------#
@@ -14,38 +14,15 @@
  # the Free Software Foundation; either version 2 of the License, or	#
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
-	
-	/**
-	 * 
-	 */
-	require_once ('classes/page.php');
-	
-	/**
+ 
+ 	/**
 	 * @package ComaCMS
 	 */ 
-	class TextPage extends Page{
+	class Page {
 		/**
 		 * @access public
 		 * @var string
 		 */
-		var $Text = '';
-		
-		/**
-		 * @param integer page_id
-		 */
-		function TextPage($page_id) {
-			if(empty($page_id))
-				return;
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "pages_text
-				WHERE page_id = $page_id";
-			if($page_result = db_result($sql)) {
-				$page = mysql_fetch_object($page_result);
-				$this->Text = $page->text_page_text;
-				$this->HTML = $page->text_page_html;
-			}
-		}
+		var $HTML = '';
 	}
-
- 
 ?>

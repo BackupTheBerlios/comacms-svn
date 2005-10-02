@@ -14,20 +14,27 @@
  # the Free Software Foundation; either version 2 of the License, or	#
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
+	
+	/**
+	 * 
+	 */
+	require_once ('classes/page.php');
+	
 	/**
 	 * @package ComaCMS
 	 */ 
-	class GalleryPage {
+	class GalleryPage  extends Page{
 		
 		/**
 		 * @access public
 		 * @var string 
 		 */	
-		var $HTML = '';
+		
 		
 		/**
 		 * @return void
-		 * @param page_id integer
+		 * @param integer page_id
+		 * 
 		 */
 		function GalleryPage($page_id) {
 			if(empty($page_id))

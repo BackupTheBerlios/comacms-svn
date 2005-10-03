@@ -26,6 +26,7 @@
  		 */
 		 function GetPage($action = '') {
 		 	global $admin_lang;
+		 	
 			$out = "\t\t\t<h3>" . $admin_lang['pagestructure'] . "</h3><hr />\r\n";
 		 	$action = strtolower($action);
 		 	switch ($action) {

@@ -264,6 +264,15 @@ textarea.edit {
  width: 100%;
 }
 
+.dates thead td {
+ font-weight: bold;
+ border: none;
+}
+
+.dates td {
+ border-bottom: 1px dashed gray;
+}
+
 .pagestructure_sendbutton {
  list-style: none;
 }

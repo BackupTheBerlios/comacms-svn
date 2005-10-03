@@ -1183,7 +1183,7 @@
  *  returns the date-admin-page where you can write,change and delete topic-entries
  *
  *****************************************************************************/
- 	function page_dates() {
+ 	/*function page_dates() {
  		global $admin_lang, $extern_action, $extern_sure, $extern_topic, $extern_date, $extern_place, $extern_id, $_SERVER, $actual_user_id, $actual_user_showname, $user;
 		
 		if(!isset($extern_action))
@@ -1321,7 +1321,7 @@
 			</form>";
 	
 		return $out;
- 	}
+ 	}*/
 /*****************************************************************************
  *
  *  string page_articles()

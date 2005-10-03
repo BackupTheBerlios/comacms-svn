@@ -90,7 +90,9 @@
 	}
 	elseif($extern_page == 'dates') {
 		$title = $admin_lang['dates'];
-		$text = page_dates();
+		include('classes/admin_dates.php');
+		$admin_dates = new Admin_Dates();
+		$text = $admin_dates->GetPage($extern_action, $admin_lang);
 	}
 	elseif($extern_page == 'articles') {
 		$title = $admin_lang['articles'];

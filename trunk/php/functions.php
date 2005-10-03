@@ -310,10 +310,18 @@
 			ORDER BY date_date ASC
 			LIMIT 0, $count";
 		$result = db_result($sql);
-		$out = "<table class=\"dates\">
-			<tr><td>Datum</td><td>Ort</td><td>Veranstaltung</td></tr>";
+		$out = "<table class=\"dates\"><thead>
+				<tr>
+					<td>Datum</td>
+					<td>Ort</td>
+					<td>Veranstaltung</td>
+				</tr></thead>";
 		while($date = mysql_fetch_object($result)) {
-			$out .= "<tr><td>" . date("d.m.Y",$date->date_date) . "</td><td>$date->date_place</td><td>$date->date_topic</td></tr>";
+			$out .= "<tr>
+				<td>" . date("d.m.Y H:i",$date->date_date) . "</td>
+					<td>$date->date_place</td>
+					<td>$date->date_topic</td>
+				</tr>";
 		}
 		
 		$out .= "</table>";
@@ -341,6 +349,8 @@
 	}
 	
 	/**
+	 * GetPostOrGet
+	 * 
 	 * This function make it easier to catch a variable which is send by GET or POST
 	 * if the variable dosen't exist this function returns null
 	 * @return mixed

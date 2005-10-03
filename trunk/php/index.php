@@ -43,9 +43,10 @@
 			$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	}
 	
-	$page->ReplaceTagInText("articles-preview", articlesPreview(5));
-	include("news.php");
-	$page->ReplaceTagInText("news", getNews());
+	$page->ReplaceTagInText('articles-preview', articlesPreview(5));
+	include('news.php');
+	$page->ReplaceTagInText('news', getNews());
+	$page->ReplaceTagInText('dates', nextDates(10));
 	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
 	//else
 	//	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);

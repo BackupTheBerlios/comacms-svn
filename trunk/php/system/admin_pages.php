@@ -1184,7 +1184,7 @@
  *
  *****************************************************************************/
  	function page_dates() {
- 		global $admin_lang, $extern_action, $extern_sure, $extern_topic, $extern_date, $extern_place, $extern_id, $_SERVER, $actual_user_id, $actual_user_showname;
+ 		global $admin_lang, $extern_action, $extern_sure, $extern_topic, $extern_date, $extern_place, $extern_id, $_SERVER, $actual_user_id, $actual_user_showname, $user;
 		
 		if(!isset($extern_action))
 			$extern_action = '';
@@ -1216,7 +1216,7 @@
 		elseif($extern_action == "new") {
 			if($extern_topic != "" && $extern_place != "" && $extern_date != "") {
 				$date = explode(".", $extern_date);
-				db_result("INSERT INTO ".DB_PREFIX."dates (date_topic, date_place, date_date, date_creator) VALUES ('".$extern_topic."', '".$extern_place."', '".mktime(0, 0, 0, $date[1], $date[0], $date[2])."', '$actual_user_id')");
+				db_result("INSERT INTO ".DB_PREFIX."dates (date_topic, date_place, date_date, date_creator) VALUES ('".$extern_topic."', '".$extern_place."', '".mktime(0, 0, 0, $date[1], $date[0], $date[2])."', '$user->ID')");
 			}	
 		}
 		//
@@ -1247,7 +1247,7 @@
 						<td><input type=\"text\" name=\"topic\" maxlength=\"150\" /></td>
 					</tr>
 					<tr>
-						<td>Eingelogt als " . $actual_user_showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Senden\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
+						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Senden\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
 					</tr>
 				</table>
 				<br />
@@ -1330,7 +1330,7 @@
  *****************************************************************************/
  
  	function page_articles() {
- 		global $admin_lang, $extern_action, $extern_sure, $extern_title, $extern_text, $extern_image, $extern_description, $extern_id, $_SERVER, $actual_user_id, $actual_user_showname;
+ 		global $admin_lang, $extern_action, $extern_sure, $extern_title, $extern_text, $extern_image, $extern_description, $extern_id, $_SERVER, $actual_user_id, $actual_user_showname, $user;
 		
 		if(!isset($extern_action))
 			$extern_action = '';
@@ -1363,7 +1363,7 @@
 			if($extern_title != "" && $extern_description != "" && $extern_text) {
 				$sql = "INSERT INTO ".DB_PREFIX."articles
 					(article_title, article_description, article_text, article_html, article_creator, article_date)
-					VALUES ('$extern_title', '$extern_description', '$extern_text', '" . convertToPreHtml($extern_text) . "', '$actual_user_id', '" . mktime() . "')";
+					VALUES ('$extern_title', '$extern_description', '$extern_text', '" . convertToPreHtml($extern_text) . "', '$user->ID', '" . mktime() . "')";
 				db_result($sql);
 			}	
 		}
@@ -1401,7 +1401,7 @@
 						<td><textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea></td>
 					</tr>
 					<tr>
-						<td>Eingelogt als " . $actual_user_showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Senden\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
+						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Senden\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
 					</tr>
 				</table>
 				<br />
@@ -1429,7 +1429,7 @@
 						<td><textarea cols=\"60\" rows=\"6\" name=\"text\">" . $row->article_text . "</textarea></td>
 					</tr>
 					<tr>
-						<td>Eingelogt als " . $actual_user_showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
+						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
 					</tr>
 				</table>
 				<br />

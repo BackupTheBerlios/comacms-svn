@@ -34,13 +34,15 @@
 		 					break;
 		 		case 'info':		$out .= $this->_infoPage();
 		 					break;
-		 		case 'new':		$out .= $this->_newPage();
+		 		case 'new_page':	$out .= $this->_newPage();
+		 					break;
+		 		case 'new_link':	$out .= $this->_newLink();
 		 					break;
 		 		case 'add_new':		$out .= $this->_addPage();
 		 					break;
 		 		case 'edit':		$out .= $this->_editPage();
 							break;
-				case 'save':		$out .= $this->_savePage();
+				case 'save_page':	$out .= $this->_savePage();
 							break;
 				case 'generate_menu':	$out .= $this->_generate_menu();
 							break;
@@ -53,7 +55,61 @@
 		  * @return string
 		  */
 		 function _generate_menu() {
+		 	global $admin_lang;
 		 	$out = '';
+		 	$pages = GetPostOrGet('pagestructure_pages');
+		 	$menu = GetPostOrGet('pagestructure_savemenu');
+		 	
+		 	if($menu == $admin_lang['generate_mainmenu']) {
+		 		$menu_id = "1";
+		 		
+		 		$sql = "DELETE " .
+		 			"FROM " . DB_PREFIX . "menu ";
+		 		$db_result = db_result($sql);
+		 		
+		 		foreach($pages as $page) {
+		 			$sql = "SELECT * " .
+		 				"FROM " . DB_PREFIX . "pages " .
+		 				"WHERE page_id=$page";
+		 			$page_result = db_result($sql);
+		 			$page_db = mysql_fetch_object($page_result);
+		 			if($page_db->page_parent_id == "0") {
+		 				if($page_db->page_type != "link") {
+		 					$new = "no";
+		 				}
+		 				else {
+		 					$new = "yes";
+		 				}
+		 				
+		 				$link = "l:" . $page_db->page_name;
+		 				
+		 				$sql = "SELECT menu_orderid " .
+		 					"FROM " . DB_PREFIX . "menu " .
+		 					"WHERE menu_id=$menu_id " .
+		 					"ORDER BY menu_orderid DESC " .
+		 					"LIMIT 1";
+		 				$menu_result = db_result($sql);
+						$menu_data = mysql_fetch_object($menu_result);
+						if($menu_data != null)
+							$ordid = $menu_data->menu_orderid + 1;
+						else
+							$ordid = 0;
+						
+						
+						$sql = "INSERT INTO " . DB_PREFIX . "menu " .
+							"(menu_text, menu_link, menu_new, menu_orderid, menu_menuid) " .
+							"VALUES ('" . $page_db->page_title . "', '" . $link . "', '" . $new . "', '" . $ordid . "', '" . $menu_id . "')";
+						db_result($sql);
+		 			}
+		 		}
+		 	}
+		 	
+		 	return $out;
+		 }
+		 
+		 function _newLink() {
+		 	$out = '';
+		 	
 		 	return $out;
 		 }
 		 
@@ -92,7 +148,8 @@
 		 
 		 function _homePage() {
 		 	global $admin_lang;
-			$out = "\t\t\t<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=new\">neue Seite</a>\r\n";;
+			$out = "\t\t\t<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=new_page\">neue Seite</a><br />\r\n";;
+			$out .= "\t\t\t<a href =\"" . $_SERVER['PHP_SELF'] . "?page=pagestructur&amp;action=new_link\">neuer Link</a>\r\n";
 			$out .= "\t\t\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n";
 			$out .= "\t\t\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />\r\n";
 			$out .= "\t\t\t<input type=\"hidden\" name=\"action\" value=\"generate_menu\" />\r\n";
@@ -231,7 +288,7 @@
 		 	if(mysql_num_rows($pages_result) != 0) {
 		 		$out .= "\r\n\t\t\t<ol>\r\n";
 		 		while($page = mysql_fetch_object($pages_result)) {
-		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type\"><input type=\"checkbox\" name=\"$page->page_id\" value=\"add\" />\t";
+		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type\"><input type=\"checkbox\" name=\"pagestructure_pages[]\" value=\"$page->page_id\" />\t";
 		 			if($page->page_access == 'deleted')
 		 				$out .= '<strike>';
 		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
@@ -249,15 +306,8 @@
 		 			$out .= "\t\t\t\t</li>\r\n";
 				}
 				
-				$out .= "\t\t\t\t<li><select name=\"page_parent_id\">
-							<option value=\"0\">Extern</option>\r\n";
-		 		$out .= $this->_structurePullDown(0);
-		 		$out .= "\t\t\t\t\t\t</select>\r\n" .
-		 				"<input type=\"text\" name=\"extern\" /><input type=\"submit\" name=\"pagestructure_sendlink\" value=\"Hinzufügen\" />\r\n" .
-						"</li>\r\n";
-				
 				if($topnode == 0) {
-					$out .= "\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" name=\"senden\" value=\"" . $admin_lang['generate_mainmenu'] . "\" /></li>" .
+					$out .= "\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" name=\"pagestructure_savemenu\" value=\"" . $admin_lang['generate_mainmenu'] . "\" /></li>" .
 						"\r\n\t\t\t</ol>\r\n";
 				}
 				else {
@@ -267,7 +317,7 @@
 					$page_result = db_result($sql);
 					$page = mysql_fetch_object($page_result);
 					
-					$out .= "\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" name=\"senden\" value=\"" . $admin_lang['generate_menu_for'] . ": $page->page_title\" /></li>" .
+					$out .= "\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" name=\"pagestructu_savemenu\" value=\"" . $admin_lang['generate_menu_for'] . ": $page->page_title\" /></li>" .
 						"\r\n\t\t\t</ol>\r\n\r\n";
 				}
 			}
@@ -291,7 +341,10 @@
 								break;
 					case 'gallery':		include('classes/edit_gallery_page.php');
 								$edit = new Edit_Gallery_Page();
-								break;				
+								break;	
+					case 'link':		include('classes/edit_link_page.php');
+								$edit = new Edit_Link_Page();
+								break;			
 					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> lässt sich noch nicht bearbeiten.";
 								break;
 				}
@@ -331,6 +384,7 @@
 			global $extern_page_type, $user, $extern_page_access, $extern_page_name, $extern_page_title, $extern_page_parent_id, $extern_page_lang, $extern_page_edit;
 
 			$edit = null;
+			$out = '';
 			$id = -1;
 			// create new page_type-data-page
 			switch($extern_page_type) {
@@ -340,7 +394,11 @@
 				case 'gallery':		include('classes/edit_gallery_page.php');
 							$edit = new Edit_Gallery_Page();
 							break;
+				case 'link':		include('classes/edit_link_page.php');
+							$edit = new Edit_Link_Page();
+							break;
 				default:		$out .= "Der Seitentyp <strong>$extern_page_type</strong> lässt sich noch nicht bearbeiten.";
+							return $out;
 							break;
 			}
 			if($edit !== null) {

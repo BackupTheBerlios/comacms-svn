@@ -36,6 +36,7 @@
 	[ ]- Caching-system
 	[_]- Article-system
 	[_]- Events-/Dates-system
+		[ ]- Connect with articles
 	[ ]- 'Timezone-option'
 	[ ]- Submenues
 	[ ]- Registerform by a "hidden" page with an unique id
@@ -45,5 +46,6 @@
 	[ ]- Sitemap
 	[ ]- Downloads
 	[ ]- GUI-Generator
+	[ ]- XHTML-PageGenerator
 	[ ]- BUGS!!
 		[ ]-If you delete a page all subpages will be hidden by page-structure editor

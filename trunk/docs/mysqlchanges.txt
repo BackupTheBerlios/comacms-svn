@@ -281,3 +281,8 @@ CREATE TABLE `cms_gallery` (
 `gallery_image_thumbnail` VARCHAR( 255 ) NOT NULL ,
 `gallery_image` VARCHAR( 255 ) NOT NULL
 ) TYPE = MYISAM ;
+
+#r134
+#added field to identify pages which are linked to the menu
+ALTER TABLE `cms_menu` ADD `menu_page_id` INT( 10 ) NOT NULL ;
+ALTER TABLE `cms_menu` ADD INDEX ( `menu_page_id` ) ;

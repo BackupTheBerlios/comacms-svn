@@ -168,12 +168,12 @@ span.info, span.error{
  font-size: 0.75em;
  width: 20em;
  display: block;
- color: #C0C0C0;
+ color: #000000;
  font-style: italic;
  text-indent: 1em;
  text-align: justify;
  margin-left:1.5em;
- border: 1px dashed #C0C0C0;
+ border: 1px dashed #000000;
  padding: 0.3em;
 }
 

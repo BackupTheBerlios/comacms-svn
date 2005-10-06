@@ -21,6 +21,11 @@
  	class Admin_PageStructure {
  		
  		/**
+ 		 * @var array
+ 		 */
+ 		var $MenuPageIDs;
+ 		
+ 		/**
  		 * @return string
  		 * @param action string
  		 */
@@ -56,7 +61,7 @@
 		  */
 		 function _generate_menu() {
 		 	global $admin_lang;
-		 	$out = '';
+		 	//$out = '';
 		 	$pages = GetPostOrGet('pagestructure_pages');
 		 	$menu = GetPostOrGet('pagestructure_savemenu');
 		 	
@@ -74,37 +79,39 @@
 		 			$page_result = db_result($sql);
 		 			$page_db = mysql_fetch_object($page_result);
 		 			if($page_db->page_parent_id == "0") {
-		 				if($page_db->page_type != "link") {
-		 					$new = "no";
-		 				}
-		 				else {
-		 					$new = "yes";
-		 				}
+		 				if($page_db->page_access == 'public') {
+		 					if($page_db->page_type != 'link') {
+			 					$new = 'no';
+		 					}
+		 					else {
+		 						$new = 'yes';
+			 				}
+			 				// FIXME: What is gonig on if it is an link-page??
+			 				$link = "l:" . $page_db->page_name;
 		 				
-		 				$link = "l:" . $page_db->page_name;
-		 				
-		 				$sql = "SELECT menu_orderid " .
-		 					"FROM " . DB_PREFIX . "menu " .
-		 					"WHERE menu_id=$menu_id " .
-		 					"ORDER BY menu_orderid DESC " .
-		 					"LIMIT 1";
-		 				$menu_result = db_result($sql);
-						$menu_data = mysql_fetch_object($menu_result);
-						if($menu_data != null)
-							$ordid = $menu_data->menu_orderid + 1;
-						else
-							$ordid = 0;
+		 					$sql = "SELECT menu_orderid
+		 						FROM " . DB_PREFIX . "menu
+		 						WHERE menu_id=$menu_id
+		 						ORDER BY menu_orderid DESC
+			 					LIMIT 1";
+		 					$menu_result = db_result($sql);
+							$menu_data = mysql_fetch_object($menu_result);
+							if($menu_data != null)
+								$ordid = $menu_data->menu_orderid + 1;
+							else
+								$ordid = 0;
 						
 						
-						$sql = "INSERT INTO " . DB_PREFIX . "menu " .
-							"(menu_text, menu_link, menu_new, menu_orderid, menu_menuid) " .
-							"VALUES ('" . $page_db->page_title . "', '" . $link . "', '" . $new . "', '" . $ordid . "', '" . $menu_id . "')";
-						db_result($sql);
+							$sql = "INSERT INTO " . DB_PREFIX . "menu
+								(menu_text, menu_link, menu_new, menu_orderid, menu_menuid, menu_page_id)
+								VALUES ('$page_db->page_title', '$link', '$new', $ordid, $menu_id, $page_db->page_id)";
+							db_result($sql);
+		 				}
 		 			}
 		 		}
 		 	}
-		 	
-		 	return $out;
+		 	header('Location: ' . $_SERVER['PHP_SELF'] . '?page=pagestructure');
+		 	//return $out;
 		 }
 		 
 		 function _newLink() {
@@ -146,10 +153,20 @@
 		 	
 		 }
 		 
+		 function _getMenuPageIDs() {
+		 	$this->MenuPageIDs = array();
+		 	$sql = "SELECT menu_page_id
+		 		FROM " . DB_PREFIX . "menu";
+		 	$ids_result = db_result($sql);
+		 	while($id = mysql_fetch_object($ids_result))
+		 		$this->MenuPageIDs[] = $id->menu_page_id;
+		 }
+		 
 		 function _homePage() {
 		 	global $admin_lang;
+		 	$this->_getMenuPageIDs();
 			$out = "\t\t\t<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=new_page\">neue Seite</a><br />\r\n";;
-			$out .= "\t\t\t<a href =\"" . $_SERVER['PHP_SELF'] . "?page=pagestructur&amp;action=new_link\">neuer Link</a>\r\n";
+			$out .= "<!--\t\t\t<a href =\"" . $_SERVER['PHP_SELF'] . "?page=pagestructur&amp;action=new_link\">neuer Link</a>-->\r\n";
 			$out .= "\t\t\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n";
 			$out .= "\t\t\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />\r\n";
 			$out .= "\t\t\t<input type=\"hidden\" name=\"action\" value=\"generate_menu\" />\r\n";
@@ -288,7 +305,7 @@
 		 	if(mysql_num_rows($pages_result) != 0) {
 		 		$out .= "\r\n\t\t\t<ol>\r\n";
 		 		while($page = mysql_fetch_object($pages_result)) {
-		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type\"><input type=\"checkbox\" name=\"pagestructure_pages[]\" value=\"$page->page_id\" />\t";
+		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type\">" . (($topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page->page_id,$this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page->page_access != 'public') ? ' disabled="disabled"'  : '') . " value=\"$page->page_id\" />\t" : '' );
 		 			if($page->page_access == 'deleted')
 		 				$out .= '<strike>';
 		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
@@ -307,17 +324,17 @@
 				}
 				
 				if($topnode == 0) {
-					$out .= "\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" name=\"pagestructure_savemenu\" value=\"" . $admin_lang['generate_mainmenu'] . "\" /></li>" .
+					$out .= "\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" class=\"button\" name=\"pagestructure_savemenu\" value=\"" . $admin_lang['generate_mainmenu'] . "\" /></li>" .
 						"\r\n\t\t\t</ol>\r\n";
 				}
 				else {
-					$sql = "SELECT *
+					/*$sql = "SELECT *
 						FROM " . DB_PREFIX . "pages
 						WHERE page_id=$topnode";
 					$page_result = db_result($sql);
-					$page = mysql_fetch_object($page_result);
+					$page = mysql_fetch_object($page_result);*/
 					
-					$out .= "\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" name=\"pagestructu_savemenu\" value=\"" . $admin_lang['generate_menu_for'] . ": $page->page_title\" /></li>" .
+					$out .= /*"\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" name=\"pagestructu_savemenu\" value=\"" . $admin_lang['generate_menu_for'] . ": $page->page_title\" /></li>" .*/
 						"\r\n\t\t\t</ol>\r\n\r\n";
 				}
 			}

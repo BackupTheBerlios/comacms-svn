@@ -391,7 +391,7 @@
  *****************************************************************************/
  
 	function page_news() {
-		global $_GET, $_POST, $actual_user_showname, $actual_user_id;
+		global $_GET, $_POST, $actual_user_showname, $actual_user_id, $user;
 		
 		$out = "";
 		$action = "";
@@ -452,7 +452,7 @@
 			//
 			elseif($action == "new") {
 				if($text != "" && $title != "")
-					db_result("INSERT INTO ".DB_PREFIX."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$actual_user_id')");
+					db_result("INSERT INTO ".DB_PREFIX."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$user->ID')");
 			}
 			//
 			// update the selected entrie
@@ -471,7 +471,7 @@
 			<input type=\"hidden\" name=\"action\" value=\"new\" />
 			Titel: <input type=\"text\" name=\"title\" maxlength=\"60\" value=\"\" /><br />
 			<textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea><br />
-			Eingelogt als " . $actual_user_showname . " &nbsp;<input type=\"submit\" value=\"Senden\" /><br />
+			Eingelogt als " . $user->Showname . " &nbsp;<input type=\"submit\" value=\"Senden\" /><br />
 		</form>";
 		}
 			$out .= "\t\t<form method=\"post\" action=\"admin.php\">

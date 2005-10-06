@@ -47,7 +47,7 @@
 		 					break;
 		 		case 'edit':		$out .= $this->_editPage();
 							break;
-				case 'save_page':	$out .= $this->_savePage();
+				case 'save':		$out .= $this->_savePage();
 							break;
 				case 'generate_menu':	$out .= $this->_generate_menu();
 							break;

@@ -48,7 +48,7 @@
 				$margin_top = round(($imgmax - $sizes[1]) / 2);
 				$margin_bottom = $imgmax - $sizes[1] - $margin_top;
 				$this->HTML .= "\t\t\t\t<div class=\"imageblock\">" .
-					"\t\t\t\t\t<a href=\"special.php?page=image&id=" . $image->gallery_file_id . "\">" .
+					"\t\t\t\t\t<a href=\"special.php?page=image&amp;id=" . $image->gallery_file_id . "\">" .
 					"\t\t\t\t\t<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" /></a><br />" .
 					"\t\t\t\t</div>";
 			}

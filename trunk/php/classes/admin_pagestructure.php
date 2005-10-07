@@ -311,8 +311,8 @@
 		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
 		 			$out .= "[$page->page_lang]";
 		 			if($page->page_access != 'deleted')
-		 				$out .= " <a href=\"index.php?page=$page->page_name\">[Anschauen]</a>"; //an eye as picture
-		 			$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\">[Infos]</a>";	//a paper-page as picture
+		 				$out .= " <a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"anschauen\" title=\"anschauen\"/></a>"; //an eye as picture
+		 			$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\"><img src=\"./img/info.png\" height=\"16\" width=\"16\" alt=\"infos\" title=\"infos\"/></a>";	//a paper-page as picture
 		 			if($page->page_access != 'deleted')
 		 				$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
 		 			if($page->page_access != 'deleted')

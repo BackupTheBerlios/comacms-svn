@@ -375,8 +375,8 @@
 		$out .= "</select>
 			</label>
 
-			<input type=\"submit\" value=\"Vorschau\" onclick=\"preview_style();return false;\" name=\"preview\" />
-			<input type=\"submit\" value=\"Speichern\" name=\"save\" />
+			<input type=\"submit\" value=\"Vorschau\" onclick=\"preview_style();return false;\" name=\"preview\" class=\"button\" />
+			<input type=\"submit\" value=\"Speichern\" name=\"save\" class=\"button\" />
 
 		</form>";
 		
@@ -441,8 +441,8 @@
 					$result = db_result("SELECT * FROM " . DB_PREFIX . "news WHERE id=" . $id);
 					$row = mysql_fetch_object($result);
 					$out .= "Den News Eintrag &quot;" . $row->title . "&quot; wirklich löschen?<br />
-				<a href=\"admin.php?page=news&amp;action=delete&amp;id=" . $id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
-				<a href=\"admin.php?page=news\" title=\"Nicht Löschen\">nein</a>";
+				<a href=\"admin.php?page=news&amp;action=delete&amp;id=" . $id . "&amp;sure=1\" title=\"Wirklich Löschen\" class=\"button\">Ja</a>
+				<a href=\"admin.php?page=news\" title=\"Nicht Löschen\" class=\"button\">Nein</a>";
 				
 					return $out;
 				}
@@ -471,7 +471,7 @@
 			<input type=\"hidden\" name=\"action\" value=\"new\" />
 			Titel: <input type=\"text\" name=\"title\" maxlength=\"60\" value=\"\" /><br />
 			<textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea><br />
-			Eingelogt als " . $user->Showname . " &nbsp;<input type=\"submit\" value=\"Senden\" /><br />
+			Eingelogt als " . $user->Showname . " <input class=\"button\" type=\"submit\" value=\"Senden\" /><br />
 		</form>";
 		}
 			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
@@ -490,8 +490,8 @@
 				$out .= "\t\t\t\t<tr>
 					<td colspan=\"2\" id=\"newsid" . $row->id . "\">
 						<input type=\"hidden\" name=\"id\" value=\"".$row->id."\" />
-						<input type=\"submit\" value=\"Speichern\" />
-						&nbsp;<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\">Löschen</a>
+						<input type=\"submit\" value=\"Speichern\" class=\"button\" />
+						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\"  class=\"button\">Löschen</a>
 					</td>
 				</tr>
 				<tr>
@@ -520,8 +520,8 @@
 				$out .= "\t\t\t\t<tr>
 					<td colspan=\"2\">
 						<a id=\"newsid".$row->id."\" ></a>
-						<a href=\"admin.php?page=news&amp;action=edit&amp;id=".$row->id."#newsid".$row->id."\" title=\"Bearbeiten\">Bearbeiten</a>
-						&nbsp;<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\">Löschen</a>
+						<a href=\"admin.php?page=news&amp;action=edit&amp;id=".$row->id."#newsid".$row->id."\" title=\"Bearbeiten\" class=\"button\">Bearbeiten</a>
+						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\" class=\"button\">Löschen</a>
 					</td>
 				</tr>
 				<tr>
@@ -688,8 +688,8 @@
 					$result = db_result($sql);
 					$user = mysql_fetch_object($result);
 					$out .= "Den Benutzer &quot;" . $user->user_showname . "&quot; unwiederruflich löschen?<br />
-				<a href=\"admin.php?page=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich Löschen\">" . $admin_lang['yes'] . "</a> &nbsp;&nbsp;&nbsp;&nbsp;
-				<a href=\"admin.php?page=users\" title=\"Nicht Löschen\">" . $admin_lang['no'] . "</a>";
+				<a href=\"admin.php?page=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich Löschen\" class=\"button\">" . $admin_lang['yes'] . "</a>
+				<a href=\"admin.php?page=users\" title=\"Nicht Löschen\" class=\"button\">" . $admin_lang['no'] . "</a>";
 					
 					return $out;
 				}
@@ -876,7 +876,7 @@
 			}
 			//<tr><td colspan="7"><a href="<?php echo $PHP_SELF."?newuser=y"; " />Neuen User hinzuf&uuml;gen</a></td></tr>
 			$out .= "\t\t\t</table>
-			<a href=\"" . $PHP_SELF . "?page=users&amp;action=new\" title=\"Einen neuen Benutzer erstellen\">Neuen Benutzer erstellen</a>";
+			<a href=\"" . $PHP_SELF . "?page=users&amp;action=new\" title=\"Einen neuen Benutzer erstellen\" class=\"button\">Neuen Benutzer erstellen</a>";
 			//( if(!isset($pw)) { $pw = "1"; } if(!isset($pwwdh)) { $pwwdh= "1"; } if($pw!=$pwwdh) { echo "<h3>Die Wiederhohlung des Passwortes ist fehlerhaft...<br>Aus diesem Grund wurde der Eintrag nicht gespeichert.</h3>"; } 
 	
 		return $out;
@@ -1329,7 +1329,7 @@
  *
  *****************************************************************************/
  
- 	function page_articles() {
+ /*	function page_articles() {
  		global $admin_lang, $extern_action, $extern_sure, $extern_title, $extern_text, $extern_image, $extern_description, $extern_id, $_SERVER, $actual_user_id, $actual_user_showname, $user;
 		
 		if(!isset($extern_action))
@@ -1486,7 +1486,7 @@
 			</form>";
 	
 		return $out;
- 	}
+ 	}*/
  	
  /*****************************************************************************
  *

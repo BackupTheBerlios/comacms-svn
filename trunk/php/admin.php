@@ -96,7 +96,10 @@
 	}
 	elseif($extern_page == 'articles') {
 		$title = $admin_lang['articles'];
-		$text = page_articles();
+		include('classes/admin_articles.php');
+		$admin_articles = new Admin_Articles();
+		$text = $admin_articles->GetPage($extern_action, $admin_lang);
+		//$text = page_articles();
 	}
 /*	elseif($extern_page == 'pageeditor') {
 		$title = $admin_lang['pageeditor'];

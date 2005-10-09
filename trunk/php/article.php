@@ -22,23 +22,21 @@
 	
 	include("common.php");
 		
-	
-	if(isset($extern_page_id))	{
+	$page_id = GetPostOrGet('id');
+	$text = '';
+	if(is_numeric($page_id))	{
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "articles
-			WHERE article_id='$extern_page_id'";
+			WHERE article_id='$page_id'";
 		$article_result = db_result($sql);
-		if(!($article_data = mysql_fetch_object($article_result)))
-			header("Location: special.php?page=404&notfound=g:$extern_page");
-		
-		$title = "Artikel:&nbsp;$article_data->article_title";
-		$position = $article_data->article_title;
-		
-		$text = '';
-		$text .= "\t\t\t<h3>$article_data->article_title</h3><hr /><br />
-			$article_data->article_html";
+		if($article_data = mysql_fetch_object($article_result)) {
+			$title = "Artikel:&nbsp;$article_data->article_title";
+			$position = $article_data->article_title;
+			$text .= "\t\t\t<h3>$article_data->article_title</h3><hr /><br />
+				" . nl2br($article_data->article_html);
+		}
 	}
-	else	{
+	if($text == '')	{
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "articles";
 		$article_result = db_result($sql);
@@ -56,7 +54,7 @@
 		
 		while($articles_data = mysql_fetch_object($article_result))	{
 			$text .= "\t\t\t\t<tr>
-					<td><a href=\"article.php?page_id=$articles_data->article_id\">" . $articles_data->article_title . "</a></td>
+					<td><a href=\"article.php?id=$articles_data->article_id\">" . $articles_data->article_title . "</a></td>
 					<td>" . date('d.m.Y H:i:s', $articles_data->article_date) . "</td>
 					<td>" . nl2br($articles_data->article_description) . "</td>
 					<td>" . getUserByID($articles_data->article_creator) . "</td>
@@ -72,20 +70,11 @@
 	}
 	$page->SetText($text);
 	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
-	//
-	// insert data into style
-	//
-	/*
-	$page = str_replace("[title]", $title, $page);
-	$page = str_replace("[text]", $text, $page);
-	$page = str_replace("[menu]", generatemenu(@$internal_style, 1, $extern_page), $page);
-	$page = str_replace("[menu2]", generatemenu(@$internal_style, 2, $extern_page), $page);*/
+		
 	if(isset($position))
-		$page->Position = "<a href=\"article.php\">Artikel</a>-><a href=\"article.php?page_id=$article_data->article_id\">$position</a>";
+		$page->Position = "<a href=\"article.php\">Artikel</a> -> <a href=\"article.php?id=$article_data->article_id\">$position</a>";
 	else
 		$page->Position = "<a href=\"article.php\">Artikel</a>";
-	/*$page = str_replace("[inlinemenu]", '', $page);
-	$page = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page);*/
 	//
 	// end
 	//

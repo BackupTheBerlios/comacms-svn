@@ -18,7 +18,7 @@
 	/**
 	 * @return string
 	 */
-	function page_pageeditor() {
+	/*function page_pageeditor() {
 		global $admin_lang, $actual_user_lang, $_SERVER, $actual_user_id, $extern_action, $extern_page_name, $extern_page_title, $extern_page_lang, $extern_page_parentid, $extern_page_edit, $extern_page_text, $extern_page_visible, $extern_show_hidden_pages, $extern_show_deleted_pages, $extern_sure;
 		
 		
@@ -306,7 +306,7 @@
 		}
 		
 		return $out;
-	}
+	}*/
 
 	function page_logout() {
 		global $actual_user_online_id;
@@ -408,8 +408,8 @@
 				else {
 					$out .= "Sind sie sicher, dass sie die Datei &quot;$file->file_name&quot; unwiederruflich löschen wollen?<br />
 					Die Datei wurde am " . date('d.m.Y', $file->file_date) . " um " . date('H:i:s', $file->file_date) ." hochgeladen.<br />
-					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&amp;action=delete&amp;file_id=" . $extern_file_id . "&amp;sure=1\" title=\"Wirklich Löschen\">" . $admin_lang['yes'] . "</a> &nbsp;&nbsp;&nbsp;&nbsp;
-					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files\" title=\"Nicht Löschen\">" . $admin_lang['no'] . "</a>";
+					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&amp;action=delete&amp;file_id=" . $extern_file_id . "&amp;sure=1\" title=\"Wirklich Löschen\"  class=\"button\">" . $admin_lang['yes'] . "</a>
+					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files\" title=\"Nicht Löschen\" class=\"button\">" . $admin_lang['no'] . "</a>";
 					return $out;
 				}
 
@@ -443,7 +443,7 @@
 			<input type=\"submit\" class=\"button\" value=\"Hochladen\"/>
 		</form>";
 		$out .= "
-		<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&action=check_new\">Auf Veränderungen überprüfen</a><br /><br />
+		<a href=\"admin.php?page=files&amp;action=check_new\"  class=\"button\">Auf Veränderungen überprüfen</a><br /><br />
 		<table>
 		<tr><td>id</td><td>Name</td><td>Größe</td><td>Hochgeladen am</td><td>Typ</td><td>Aktionen</td></tr>";
 		$sql = "SELECT *

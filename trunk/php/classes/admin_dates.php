@@ -51,7 +51,7 @@
 	 	 */
 	 	function _homePage($admin_lang) {
 	 		$out = '';
-	 		$out .= "<a href=\"" . $_SERVER['PHP_SELF'] . "?page=dates&amp;action=new\">Neuen Termin hizufügen</a>
+	 		$out .= "<a href=\"admin.php?page=dates&amp;action=new\" class=\"button\">Neuen Termin hizufügen</a>
 				<table class=\"dates\">
 					<thead>
 						<tr>

@@ -143,7 +143,8 @@
 					db_result($sql);
 		 		}
 		 		else
-		 			$out .= "Wollen sie die Seite &quot;$page->page_title&quot; wirklich (vorerst) unwiederruflich löschen?<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$extern_page_id&amp;sure=1\">" . $admin_lang['yes'] . "</a>&nbsp;<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\">" . $admin_lang['no'] . "</a>";
+		 			$out .= "Wollen sie die Seite &quot;$page->page_title&quot; wirklich (vorerst) unwiederruflich löschen?<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$extern_page_id&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
+		 					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\" class=\"button\">" . $admin_lang['no'] . "</a>";
 		 	
 			 	return $out;
 		 	}
@@ -165,7 +166,7 @@
 		 function _homePage() {
 		 	global $admin_lang;
 		 	$this->_getMenuPageIDs();
-			$out = "\t\t\t<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=new_page\">neue Seite</a><br />\r\n";;
+			$out = "\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=new_page\" class=\"button\">neue Seite</a><br />\r\n";;
 			$out .= "<!--\t\t\t<a href =\"" . $_SERVER['PHP_SELF'] . "?page=pagestructur&amp;action=new_link\">neuer Link</a>-->\r\n";
 			$out .= "\t\t\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n";
 			$out .= "\t\t\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />\r\n";

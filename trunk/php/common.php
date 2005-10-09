@@ -42,6 +42,9 @@
 	$page = new OutputPage();
 	$user = new User();
 	$style_name = $config->Get('style', 'clear');
+	$style = GetPostOrGet('style');
+	if($style != '')
+		$style_name = $style; 
 	$page->LoadTemplate('./styles/' . $style_name);
 	if(!isset($extern_page) && endsWith($_SERVER['PHP_SELF'], 'index.php'))
 		$extern_page = $config->Get('default_page', 'home');

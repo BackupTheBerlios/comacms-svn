@@ -102,8 +102,8 @@
 					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">".$page_data->text_page_text."</textarea>
-				<input type=\"reset\" value=\"Zurücksetzten\" />
-				<input type=\"submit\" value=\"Speichern\" />
+				<input type=\"reset\" value=\"Zurücksetzten\" class=\"button\"/>
+				<input type=\"submit\" value=\"Speichern\" class=\"button\" />
 			</form>";
 			return $out;
 		}

@@ -16,6 +16,19 @@
  margin-right: 0;
 }
 
-.dates {
+.dates,.articles {
  width: 700px;
+}
+
+a.button {
+ padding-left: 50px;
+ padding-right: 50px;
+
+}
+
+
+input.button {
+border-width:1px;
+border-style: solid;
+line-height: normal;
 }

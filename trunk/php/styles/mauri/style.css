@@ -185,11 +185,32 @@ span.error {
  margin-bottom: 0.4em;
 }
 
-input.button {
- background-color: #FF0000;
+a.button , input.button, button{
+ color: #000000:
+ text-decoration: none;
  font-weight: bold;
+ border: 1px solid #000000;
+ background-color: #FF0000;
+ font-size: 0.8em;
+ padding: 1px;
+ padding-left: 7px;
+ padding-right: 7px;
+ white-space: pre;
+ cursor: pointer;
+ text-align: center;
+ word-spacing: normal;
+ letter-spacing: normal;
+ margin: 1px;
+ height: 22px;
+ line-height:2em;
 }
 
+a.button {
+ height: 16px;
+ padding-top: 4px;
+ padding-bottom:0px;
+
+}
 .sitepreview, #previewiframe { /*FIXME: make only one classss*/
  border: 1px dashed #000000;
  width: 100%;
@@ -260,17 +281,19 @@ textarea.edit {
  text-align: right;
 }
 
-.dates {
+table.dates, table.articles {
  width: 100%;
 }
 
-.dates thead td {
+.dates thead td, .articles thead td {
  font-weight: bold;
  border: none;
+
 }
 
-.dates td {
+.dates td, .articles td  {
  border-bottom: 1px dashed gray;
+ vertical-align: top;
 }
 
 .pagestructure_sendbutton {

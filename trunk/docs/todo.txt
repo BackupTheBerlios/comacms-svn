@@ -3,6 +3,7 @@
 	[_]- Manual
 	[ ]- Multi-Site-System(one installation with different sites, with a master- and a per-site-admin-interface
 	[ ]- Rights(per user, per group)
+	[ ]- Make authorisation over HTTP-AUTH
 	[_]- Userfriendly Installation
 	[_]- Translations
 	[ ]- Pluginsystem

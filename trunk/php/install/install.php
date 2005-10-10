@@ -99,11 +99,13 @@
 		CREATE TABLE " . $db_prefix . "menu (
 			menu_id int(10) unsigned NOT NULL auto_increment,
 			menu_link varchar(255) NOT NULL default '',
-			menu_text varchar(30) NOT NULL default '',
-			menu_new enum('yes','no') NOT NULL default 'no',
+  			menu_text varchar(30) NOT NULL default '',
+  			menu_new enum('yes','no') NOT NULL default 'no',
 			menu_orderid int(10) unsigned default NULL,
 			menu_menuid int(10) NOT NULL default '1',
-			PRIMARY KEY  (menu_id)
+			menu_page_id int(10) NOT NULL default '0',
+			PRIMARY KEY  (menu_id),
+			KEY `menu_page_id` (menu_page_id)
 		);
 		DROP TABLE IF EXISTS " . $db_prefix . "news;
 		CREATE TABLE " . $db_prefix . "news (
@@ -213,8 +215,8 @@
 		VALUES ('install_date', '" . mktime() . "');
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)
 		VALUES ('pagename', 'ComaCMS');
-		INSERT INTO " . $db_prefix . "menu (menu_link, menu_text, menu_new, menu_orderid, menu_menuid)
-		VALUES ('l:home', 'Home', 'no', 0, 1);";
+		INSERT INTO " . $db_prefix . "menu (menu_link, menu_text, menu_new, menu_orderid, menu_menuid, menu_page_id)
+		VALUES ('l:home', 'Home', 'no', 0, 1, 1);";
 		//TODO: make sure that the id of the default page is everytime the right one 
 
 	if($admin_name == "" || $admin_showname == "" || $admin_password == "")

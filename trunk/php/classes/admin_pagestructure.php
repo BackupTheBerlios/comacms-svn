@@ -166,7 +166,7 @@
 		 function _homePage() {
 		 	global $admin_lang;
 		 	$this->_getMenuPageIDs();
-			$out = "\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=new_page\" class=\"button\">neue Seite</a><br />\r\n";;
+			$out = "\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=new_page\" class=\"button\">" . $admin_lang['create_new_page'] . "</a><br />\r\n";;
 			$out .= "<!--\t\t\t<a href =\"" . $_SERVER['PHP_SELF'] . "?page=pagestructur&amp;action=new_link\">neuer Link</a>-->\r\n";
 			$out .= "\t\t\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n";
 			$out .= "\t\t\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />\r\n";
@@ -183,7 +183,7 @@
 		 	/*$out .= "<select>\r\n";
 		 	$out .= $this->_structurePullDown(0);
 		 	$out .= "</select>\r\n";*/
-		 	$out .= "\t\t\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">
+		 	$out .= "\t\t\t<form method=\"post\" action=\"admin.php\">
 				<fieldset>
 				<legend>Neue Seite</legend>
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
@@ -259,10 +259,17 @@
 					</tr>
 					<tr>
 						<td>
+							Kommentar
+							<span class=\"info\">Eine kurze Beschreibung, was hier gemacht wurde.</span>
+						</td>
+						<td><input type=\"text\" name=\"page_edit_comment\" value=\"" . $admin_lang['created_new_page'] . "\"/></td>
+					</tr>
+					<tr>
+						<td>
 							Bearbeiten?
 							<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die Übersichtseite zurückgekehrt werden?</span>
 						</td>
-						<td><input type=\"checkbox\" name=\"page_edit\" value=\"edit\" checked=\"true\"/></td>
+						<td><input type=\"checkbox\" name=\"page_edit\" value=\"edit\" checked=\"true\"/ class=\"checkbox\"></td>
 					</tr>
 					<tr>
 						<td colspan=\"2\">
@@ -280,7 +287,7 @@
 		 	$out = '';
 			$sql = "SELECT *
 		 		FROM " . DB_PREFIX . "pages
-		 		WHERE page_parent_id=$topnode";
+		 		WHERE page_parent_id=$topnode AND page_access !='deleted'";
 		 	// TODO: ORDER BY page_sortid
 		 	$pages_result = db_result($sql);
 		 	if(mysql_num_rows($pages_result) != 0) {
@@ -306,20 +313,22 @@
 		 	if(mysql_num_rows($pages_result) != 0) {
 		 		$out .= "\r\n\t\t\t<ol>\r\n";
 		 		while($page = mysql_fetch_object($pages_result)) {
-		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type\">" . (($topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page->page_id,$this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page->page_access != 'public') ? ' disabled="disabled"'  : '') . " value=\"$page->page_id\" />\t" : '' );
-		 			if($page->page_access == 'deleted')
-		 				$out .= '<strike>';
+		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type" . (($page->page_access == 'deleted') ? ' strike' : '' ). "\">" . (($topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page->page_id,$this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page->page_access != 'public') ? ' disabled="disabled"'  : '') . " value=\"$page->page_id\" class=\"checkbox\"/>\t" : '' );
+		 			
 		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
 		 			$out .= "[$page->page_lang]";
-		 			if($page->page_access != 'deleted')
-		 				$out .= " <a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"anschauen\" title=\"anschauen\"/></a>"; //an eye as picture
-		 			$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\"><img src=\"./img/info.png\" height=\"16\" width=\"16\" alt=\"infos\" title=\"infos\"/></a>";	//a paper-page as picture
+		 			// edit:
 		 			if($page->page_access != 'deleted')
 		 				$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
+		 			// info:
+		 			$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\"><img src=\"./img/info.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['info'] . "\" title=\"" . $admin_lang['info'] . "\"/></a>";
+		 			// view:
+		 			if($page->page_access != 'deleted')
+		 				$out .= " <a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>";
+		 			// delete:
 		 			if($page->page_access != 'deleted')
 		 				$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$page->page_id\"><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
-		 			if($page->page_access == 'deleted')
-		 				$out .= '</strike>';
+		 			
 					$out .= $this->_showStructure($page->page_id);
 		 			$out .= "\t\t\t\t</li>\r\n";
 				}
@@ -399,13 +408,23 @@
 		}
 		
 		function _addPage() {
-			global $extern_page_type, $user, $extern_page_access, $extern_page_name, $extern_page_title, $extern_page_parent_id, $extern_page_lang, $extern_page_edit;
-
+			global $user;
+			
+			$page_access = GetPostOrGet('page_access');
+			$page_edit = GetPostOrGet('page_edit');
+			$page_edit_comment = GetPostOrGet('page_edit_comment');
+			$page_lang = GetPostOrGet('page_lang');
+			$page_name = GetPostOrGet('page_name');
+			$page_parent_id = GetPostOrGet('page_parent_id');
+			$page_title = GetPostOrGet('page_title');
+			$page_type = GetPostOrGet('page_type');
+						
+			$page_edit_comment = htmlspecialchars($page_edit_comment);
 			$edit = null;
 			$out = '';
 			$id = -1;
 			// create new page_type-data-page
-			switch($extern_page_type) {
+			switch($page_type) {
 				case 'text':		include('classes/edit_text_page.php');
 							$edit = new Edit_Text_Page();
 							break;
@@ -415,27 +434,25 @@
 				case 'link':		include('classes/edit_link_page.php');
 							$edit = new Edit_Link_Page();
 							break;
-				default:		$out .= "Der Seitentyp <strong>$extern_page_type</strong> lässt sich noch nicht bearbeiten.";
+				default:		$out .= "Der Seitentyp <strong>$page_type</strong> lässt sich noch nicht bearbeiten.";
 							return $out;
 							break;
 			}
 			if($edit !== null) {
 				$a_access = array('public', 'private', 'hidden');
-				if(!in_array($extern_page_access, $a_access))
-					$extern_page_access = $a_access[0];
-				$extern_page_name = strtolower($extern_page_name);
-				$extern_page_name = str_replace(' ', '_', $extern_page_name);
-				$sql = "INSERT INTO " . DB_PREFIX . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date)
-					VALUES('$extern_page_lang', '$extern_page_access', '$extern_page_name', '$extern_page_title', $extern_page_parent_id, $user->ID, '$extern_page_type', " . mktime() . ")";
+				if(!in_array($page_access, $a_access))
+					$page_access = $a_access[0];
+				$page_name = strtolower($page_name);
+				$page_name = str_replace(' ', '_', $page_name);
+				$sql = "INSERT INTO " . DB_PREFIX . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)
+					VALUES('$page_lang', '$page_access', '$page_name', '$page_title', $page_parent_id, $user->ID, '$page_type', " . mktime() . ", '$page_edit_comment')";
 				db_result($sql);
 				$lastid =  mysql_insert_id();
 				$edit->NewPage($lastid);
 			}
-			if($extern_page_edit != '')
+			if($page_edit != '')
 				header("Location: " . $_SERVER['PHP_SELF'] . "?page=pagestructure&action=edit&page_id=$lastid");
-
-			
-				
+	
 		}
 		
 		function _pagePath($pageid=0) {
@@ -465,44 +482,75 @@
 				WHERE page_id=$extern_page_id";
 			$page_result = db_result($sql);
 			if($page = mysql_fetch_object($page_result)) {
-				$out .= "<table>
+				$out .= "\t\t\t<table>
 				<tr>
-				<td>Titel:</td><td>$page->page_title</td>
+					<td>Titel:</td>
+					<td>$page->page_title</td>
 				</tr>
 				<tr>
-				<td>Name:</td><td>$page->page_name</td>
+					<td>Name:</td>
+					<td>$page->page_name</td>
 				</tr>
 				<tr>
-				<td>Typ:</td><td>$page->page_type</td>
+					<td>Typ:</td>
+					<td>$page->page_type</td>
 				</tr>
 				<tr>
-				<td>Sprache:</td><td>" . $admin_lang[$page->page_lang] . "</td>
+					<td>Sprache:</td>
+					<td>" . $admin_lang[$page->page_lang] . "</td>
 				</tr>
 				<tr>
-				<td>Pfad:</td><td>" . $this->_pagePath($page->page_id) . "</td>
+					<td>Pfad:</td>
+					<td>" . $this->_pagePath($page->page_id) . "</td>
 				</tr>
 				<tr>
-				<td>Bearbeitet von:</td><td>" . getUserById($page->page_creator) . "</td>
+					<td>Bearbeitet von:</td>
+					<td>" . getUserById($page->page_creator) . "</td>
 				</tr>
 				<tr>
-				<td>Bearbeitet am:</td><td>" . date("d.m.Y H:i:s",$page->page_date) . "</td>
+					<td>Bearbeitet am:</td>
+					<td>" . date("d.m.Y H:i:s",$page->page_date) . "</td>
 				</tr>
-				</table>";
+			</table>\r\n";
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "pages_history
 					WHERE page_id = $extern_page_id
 					ORDER BY page_date DESC";
 				$result = db_result($sql);
-				if($change = mysql_fetch_object($result)) {
-					$out .="<h4>Veränderungen</h4>
-						<table>";
-					$out .= "<tr><td>Datum</td><td>Veränderer</td><td>Titel</td></tr>";
-					$out .= "<tr><td>" . date("d.m.Y H:i:s",$change->page_date) . "</td><td>".getUserById($change->page_creator) . "</td><td>$change->page_title</td></tr>";
-					while($change = mysql_fetch_object($result)) {
-						$out .= "<tr><td>" . date("d.m.Y H:i:s",$change->page_date) . "</td><td>".getUserById($change->page_creator) . "</td><td>$change->page_title</td></tr>";
-					}
-					$out .="</table>";
+				
+				$out .="\t\t\t<h4>Veränderungen(" . mysql_num_rows($result) . ")</h4><hr />
+			<table class=\"page_commits\">
+				<thead>
+					<tr>
+						<td>Datum</td>
+						<td>Veränderer</td>
+						<td>Titel</td>
+						<td>Kommentar</td>
+						<td>Aktionen</td>
+					</tr>
+				</thead>
+				<tr>
+					<td>" . date("d.m.Y H:i:s",$page->page_date) . "</td>
+					<td>".getUserById($page->page_creator) . "</td>
+					<td>$page->page_title</td>
+					<td>$page->page_edit_comment&nbsp;</td>
+					<td>
+						<a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>
+						<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
+					</td>
+				</tr>\r\n";
+				while($change = mysql_fetch_object($result)) {
+					$out .= "\t\t\t\t<tr>
+					<td>" . date("d.m.Y H:i:s",$change->page_date) . "</td>
+					<td>".getUserById($change->page_creator) . "</td>
+					<td>$change->page_title</td>
+					<td>$change->page_edit_comment&nbsp;</td>
+					<td><a href=\"index.php?page=$page->page_id&amp;history=$change->id\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>[Bearbeiten][Wiederherstellen]</td>
+				</tr>\r\n";
 				}
+				
+				$out .="\t\t\t</table>";
+				
 				
 			}
 			

@@ -64,4 +64,8 @@
 	$admin_lang['pagestructure'] = 'PageStructure';
 	$admin_lang['generate_mainmenu'] = 'generate Mainmenu';
 	$admin_lang['generate_menu_for'] = 'generate Inlinemenu for';
+	$admin_lang['create_new_page'] = 'Create new page';
+	$admin_lang['created_new_page'] = "Created new page";
+	$admin_lang['comment_on_change'] = 'Comment on change';
+	$admin_lang['edited'] = 'Edited';
 ?>

@@ -286,3 +286,8 @@ CREATE TABLE `cms_gallery` (
 #added field to identify pages which are linked to the menu
 ALTER TABLE `cms_menu` ADD `menu_page_id` INT( 10 ) NOT NULL ;
 ALTER TABLE `cms_menu` ADD INDEX ( `menu_page_id` ) ;
+
+#r140
+#added commenting fields
+ALTER TABLE `cms_pages_history` ADD `page_edit_comment` VARCHAR( 100 ) NOT NULL ;
+ALTER TABLE `cms_pages` ADD `page_edit_comment` VARCHAR( 100 ) NOT NULL ;

@@ -32,17 +32,30 @@
 		
 		/**
 		 * @param integer page_id
+		 * @param integer history_id
 		 */
-		function TextPage($page_id) {
+		function TextPage($page_id, $history_id = -1) {
 			if(empty($page_id))
 				return;
+			if($history_id == -1)
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages_text
 				WHERE page_id = $page_id";
+			else
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "pages_text_history
+				WHERE page_id=$history_id";
 			if($page_result = db_result($sql)) {
 				$page = mysql_fetch_object($page_result);
-				$this->Text = $page->text_page_text;
-				$this->HTML = $page->text_page_html;
+				if($history_id == -1) {
+					$this->Text = $page->text_page_text;
+					$this->HTML = $page->text_page_html;
+				}
+				else
+				{
+					$this->Text = $page->page_text;
+					$this->HTML = convertToPreHtml($page->page_text);
+				}
 			}
 		}
 	}

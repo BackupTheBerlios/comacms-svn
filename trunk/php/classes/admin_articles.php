@@ -101,14 +101,14 @@
 	 			<form method=\"post\" action=\"admin.php\">
 				<input type=\"hidden\" name=\"page\" value=\"articles\" />
 				<input type=\"hidden\" name=\"action\" value=\"add\" />
-				<table>
+				<table class=\"input_table\">
 					<tr>
 						<td>Titel: <span class=\"info\">Hier den Titel des Artikels eingeben</span></td>
-						<td><input type=\"text\" name=\"article_title\" maxlength=\"100\" value=\"\" /></td>
+						<td class=\"article_input\"><input type=\"text\" name=\"article_title\" maxlength=\"100\" value=\"\" class=\"article_input\" /></td>
 					</tr>
 					<tr>
 						<td>Beschreibung: <span class=\"info\">Hier eine Zusammenfassung oder Vorschau eingeben.(maximal 200 Zeichen)</span></td>
-						<td><textarea rows=\"4\" cols=\"60\" name=\"article_description\"></textarea></td>
+						<td><textarea rows=\"4\" cols=\"60\" name=\"article_description\" class=\"article_input\"></textarea></td>
 					</tr>
 					<tr>
 						<td>Text: <span class=\"info\">Hier den gesammten Text des Artikels eingeben.</span></td>
@@ -119,7 +119,7 @@
 								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
 								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
 							</script>
-							<textarea id=\"editor\" cols=\"60\" rows=\"6\" class=\"edit\" name=\"article_text\"></textarea></td>
+							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\"></textarea></td>
 					</tr>
 					<tr>
 						<td>Eingelogt als $user->Showname</td><td><input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" /></td>
@@ -147,14 +147,14 @@
 				<input type=\"hidden\" name=\"page\" value=\"articles\" />
 				<input type=\"hidden\" name=\"action\" value=\"save\" />
 				<input type=\"hidden\" name=\"article_id\" value=\"$id\" />
-				<table>
-					<tr>
+				<table class=\"input_table\">
+					<tr class=\"input_labels\">
 						<td>Titel: <span class=\"info\">Hier den Titel des Artikels eingeben</span></td>
-						<td><input type=\"text\" name=\"article_title\" maxlength=\"100\" value=\"$article->article_title\" /></td>
+						<td><input type=\"text\" name=\"article_title\" maxlength=\"100\" value=\"$article->article_title\" class=\"article_input\" /></td>
 					</tr>
 					<tr>
 						<td>Beschreibung: <span class=\"info\">Hier eine Zusammenfassung oder Vorschau eingeben.(maximal 200 Zeichen)</span></td>
-						<td><textarea name=\"article_description\">$article->article_description</textarea></td>
+						<td><textarea name=\"article_description\" rows=\"4\" cols=\"60\" class=\"article_input\">$article->article_description</textarea></td>
 					</tr>
 					<tr>
 						<td>Text: <span class=\"info\">Hier den gesammten Text des Artikels eingeben.</span></td>
@@ -165,7 +165,7 @@
 								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
 								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
 							</script>
-							<textarea id=\"editor\" class=\"edit\" name=\"article_text\">$article->article_text</textarea></td>
+							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\">$article->article_text</textarea></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" /><input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" /></td>

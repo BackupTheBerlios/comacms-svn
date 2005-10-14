@@ -9,15 +9,14 @@
 }
 
 .sitepreview, #previewiframe { /*FIXME: make only one classss*/
- width: 700px;
+ width: 820px;
 }
 
 .articles-block{
  margin-right: 0;
 }
-
-.dates,.articles {
- width: 700px;
+table.dates, table.articles, table.page_commits {
+ width: 99%;
 }
 
 a.button {
@@ -25,10 +24,23 @@ a.button {
  padding-right: 50px;
 
 }
+input.checkbox {
+border:none;
+}
+input.article_input {
+ width:99.5%;
+}
 
+table.input_table {
+ width: 99%;
+}
 
 input.button {
-border-width:1px;
-border-style: solid;
-line-height: normal;
+ border-width:1px;
+ border-style: solid;
+ line-height: normal;
+}
+
+textarea.edit {
+ width: 99%;
 }

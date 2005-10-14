@@ -31,9 +31,11 @@
 		}
 	
 		function Save($page_id) {
-			global $_SERVER, $extern_page_title, $extern_page_text, $user;
-			
-			if($extern_page_title != '' && $page_id != '' && $extern_page_text != '')
+			global $_SERVER, $user;
+			$page_edit_comment = GetPostOrGet('page_edit_comment');
+			$page_title = GetPostOrGet('page_title');
+			$page_text = GetPostOrGet('page_text');
+			if($page_title != '' && $page_id != '' && $page_text != '')
 			{
 				$sql = "SELECT struct.*, text.text_page_text
 				FROM ( " . DB_PREFIX. "pages struct
@@ -41,23 +43,23 @@
 				WHERE struct.page_id='$page_id' AND struct.page_type='text'";
 				$old_result = db_result($sql);
 				if($old = mysql_fetch_object($old_result)) { // exists the page?
-					if($old->page_title != $extern_page_title || $old->text_page_text != $extern_page_text) {
-												
-						$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date)
-							VALUES($old->page_id, '$old->page_type', '$old->page_name', '$old->page_title', $old->page_parent_id, '$old->page_lang', $old->page_creator,	$old->page_date)";
+					if($old->page_title != $page_title || $old->text_page_text != $page_text) {
+						if(!($page_title == $old->page_title && $old->text_page_text == '')) {					
+						$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
+							VALUES($old->page_id, '$old->page_type', '$old->page_name', '$old->page_title', $old->page_parent_id, '$old->page_lang', $old->page_creator, $old->page_date, '$old->page_edit_comment')";
 						db_result($sql);
 						$lastid =  mysql_insert_id();
 						$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, page_text)
 							VALUES ($lastid, '$old->text_page_text')";
 						db_result($sql);
-						//die();
-						$html = convertToPreHtml($extern_page_text);
+						}
+						$html = convertToPreHtml($page_text);
 						$sql = "UPDATE " . DB_PREFIX . "pages_text
-							SET text_page_text='$extern_page_text', text_page_html='$html'
+							SET text_page_text='$page_text', text_page_html='$html'
 							WHERE page_id='$old->page_id'";
 						db_result($sql);
 						$sql = "UPDATE " . DB_PREFIX . "pages
-							SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$extern_page_title'
+							SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment'
 							WHERE page_id=$page_id";
 						db_result($sql);
 						return "Die Seite sollte gespeichert sein!";
@@ -81,9 +83,15 @@
 		}
 		
 		function Edit($page_id) {
-			global $_SERVER;
-			
-			$sql = "SELECT struct.page_id, struct.page_title, text.text_page_text
+			global $_SERVER, $admin_lang;
+			//mysql_num_rows($result)
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "pages_history
+				WHERE page_id = $page_id
+				LIMIT 0,1";
+			$count_result = db_result($sql);
+			$count = mysql_num_rows($count_result);
+			$sql = "SELECT struct.page_id, struct.page_title, text.text_page_text, struct.page_edit_comment
 				FROM ( " . DB_PREFIX. "pages struct
 				LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
 				WHERE struct.page_id='$page_id' AND struct.page_type='text'";
@@ -102,6 +110,7 @@
 					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">".$page_data->text_page_text."</textarea>
+				" . $admin_lang['comment_on_change'] . ": <input name=\"page_edit_comment\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : $admin_lang['edited'] . '...') . "\" type=\"text\"/><br />	
 				<input type=\"reset\" value=\"Zurücksetzten\" class=\"button\"/>
 				<input type=\"submit\" value=\"Speichern\" class=\"button\" />
 			</form>";

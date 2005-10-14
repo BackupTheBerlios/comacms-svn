@@ -1,13 +1,13 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="de">
 	<head>
 		<title>[pagename] -> [title]</title>
 		<link rel="stylesheet" href="./styles/mauri/style.css" type="text/css" />
+		<link rel="stylesheet" href="./styles/mauri/print.css" type="text/css" media="print" />
 		<!--[if lte IE 7]><link rel="stylesheet" href="./styles/mauri/iefix.css" type="text/css" /><notathome>
 		<style type="text/css">#title {margin-bottom: 33px;} #position{border-bottom:none;}</style></notathome><![endif]--><forinlinemenu>
 		<style type="text/css">#text{margin-left: 345px;}</style>
 		<style type="text/css" media="print">#text{padding-left: 205px;}</style></forinlinemenu>
-		<link rel="stylesheet" href="./styles/mauri/print.css" type="text/css" media="print" />
 		<style type="text\/css">/*/*/@import url(./styles/mauri/operafix.c\ss) screen;/* */</style>
 		<meta name="author" content="St. Mauritius Hildesheim" />
 	</head>

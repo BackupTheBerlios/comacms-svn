@@ -35,6 +35,10 @@ legend {
  font-size: 1.2em;
 }
 
+thead td {
+ font-weight: bold;
+}
+
 #title {
  padding: 25px;
  padding-top: 42px;
@@ -281,21 +285,31 @@ textarea.edit {
  text-align: right;
 }
 
-table.dates, table.articles {
+table.dates, table.articles ,table.page_commits{
  width: 100%;
 }
 
-.dates thead td, .articles thead td {
- font-weight: bold;
+.dates thead td, .articles thead td, .page_commits thead td{
  border: none;
-
 }
 
-.dates td, .articles td  {
+.dates td, .articles td,.page_commits td {
  border-bottom: 1px dashed gray;
  vertical-align: top;
 }
 
 .pagestructure_sendbutton {
  list-style: none;
+}
+
+.article_input {
+ width: 100%;
+}
+
+table.input_table {
+ width: 100%;
+}
+
+.strike {
+text-decoration: line-through;
 }

@@ -45,8 +45,8 @@
 	$admin_lang['de'] = 'Deutsch';
 	$admin_lang['en'] = 'Englisch';
 	$admin_lang['info'] = 'Info';
-	$admin_lang['edit'] = 'bearbeiten';
-	$admin_lang['delete'] = 'löschen';
+	$admin_lang['edit'] = 'Bearbeiten';
+	$admin_lang['delete'] = 'Löschen';
 	$admin_lang['show deleted'] = 'Gelöschte anzeigen';
 	$admin_lang['show hidden'] = 'Versteckte anzeigen';
 	$admin_lang['show'] = 'Anzeigen';
@@ -62,6 +62,10 @@
 	$admin_lang['articles'] = 'Artikel';
 	$admin_lang['inlinemenu'] = 'Zusatzmenü';
 	$admin_lang['pagestructure'] = 'Seiten-Struktur';
-	$admin_lang['generate_mainmenu'] = 'erstelle Hauptmenü';
+	$admin_lang['generate_mainmenu'] = 'Hauptmenü erstellen';
 	$admin_lang['generate_menu_for'] = 'erstelle Untermenü zu';
+	$admin_lang['create_new_page'] = 'Neue Seite erstellen';
+	$admin_lang['created_new_page'] = "Neue Seite erstellt";
+	$admin_lang['comment_on_change'] = "Anmerkung zur Veränderung";
+	$admin_lang['edited'] = 'Bearbeitet';
 ?>

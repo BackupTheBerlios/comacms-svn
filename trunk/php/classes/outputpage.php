@@ -169,6 +169,17 @@
 		 * @return void
 		 */
 		function LoadPage($pagename, $user) {
+			$load_old = false;
+			$history = GetPostOrGet('history');
+			if(is_numeric($history) && $user->IsLoggedIn)
+				$load_old = true;
+			else
+				$history = -1;
+			if($load_old)
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "pages_history
+				WHERE page_id=$pagename && id=$history";
+			else
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages
 				WHERE page_name='$pagename'";
@@ -182,17 +193,19 @@
 					header("Location: special.php?page=404&want=$pagename");
 				}
 			}
-			if($page_data->page_access == 'deleted')
-				die('deleted');
-			if($page_data->page_access == 'hidden')
-				if(!$user->IsLoggedIn)	
-					header("Location: special.php?page=login&want=$page_data->page_id");
+			if(!$load_old) {
+				if($page_data->page_access == 'deleted')
+					die('deleted');
+				if($page_data->page_access == 'hidden')
+					if(!$user->IsLoggedIn)	
+						header("Location: special.php?page=login&want=$page_data->page_id");
+			}
 			$this->Title = $page_data->page_title;
 			$this->PositionOfPage($page_data->page_id);
 			$this->PageID = $page_data->page_id;
 			if($page_data->page_type == 'text') {
 				include('./classes/textpage.php');
-				$textpage = new TextPage($page_data->page_id);
+				$textpage = new TextPage($page_data->page_id, $history);
 				$this->Text = $textpage->HTML;
 			}
 			elseif($page_data->page_type == 'gallery') {

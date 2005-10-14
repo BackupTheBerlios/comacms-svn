@@ -22,6 +22,9 @@
         	a:hover {
         	  color: red;
         	}
+        	dt {
+        	  font-weight: bold;
+        	}
         	</style>
     	</head>
     	<body>
@@ -77,9 +80,9 @@
 			gemacht hat und wie man es nutzen kann bzw. benutzen muss, das es
 			richtig funktioniert. Doch was ist nun wenn jemand keine Ahnung hat wie
 			das ganze aufgebaut ist? Der hat ein Problem und ist auf sich allein
-			gestellt! Soetwas muss aber nicht sein, denn alles lässt sich hoffentlich
+			gestellt! So etwas muss aber nicht sein, denn alles lässt sich hoffentlich
 			erklären. Aus diesem Grund versuchen wir als <em>freundliche</em> Programmierer
-			den übergang von Unwissenheit zur Kenntniss duch dieses
+			den Übergang von Unwissenheit zur Kenntnis durch dieses
 			<acronym title="How To(engl.) = Wie ist das zu machen?">HOWTO</acronym> so einfach
 			wie möglich gestalten.
 		</div>
@@ -95,7 +98,8 @@
 			</div>
 			<div id="III.2." class="block">
 				<div class="title">III. 2. Abmelden</div>
-				Das Abmelden ist ganz einfach, man muss im Admin-Interface nur auf den Menüpunkt Logout klicken und man ist abgemeldet. Nach vier Stunden wird man automatisch ausgeloggt.
+				Um sich abzumelden muss man im Admin-Interface nur auf den Menüpunkt Logout (ganz unten) klicken und man ist abgemeldet.<br />
+				Nach vier Stunden wird man automatisch ausgeloggt.
 			</div>
 		</div>
 		<div id="IV." class="block">
@@ -104,22 +108,30 @@
 				<div class="title">IV. 1. Texte</div>
 				<div id="IV.1.1." class="block">
 					<div class="title">IV. 1. 1. Texte erstellen</div>
-					Um einen Text zu erstellen muss man sich selbstverständlicher Weise erst einmal einloggen und sich im Admin-Interface befinden. Nachdem diese Grundvorraussetzungen gegeben sind, klicken wir im Menü auf den Punkt <strong>Seiten-Struktur</strong> um in die Sruktrübersicht unserer Seite zu kommen. Dort befindent sich relativ weit oben ein Link mit der Aufschrift &quot;neue Seite&quot;, auf diesen Link klicken wir und bekommen nun ein Formular zu Gesicht. In diesem Formular sind alle relevanten Eigenschaften der neuen Seite einzustellen. Beginnen wir mit der Erklärung am besten Oben:
+					Um einen Text zu erstellen klickt man im Admin-Interface auf den Menüpunkt <strong>Seiten-Struktur</strong>. In der Strukturübersicht klickt man auf den Button mit der Aufschrift &quot;Neue Seite erstellen&quot;, der einen zu dem Dialog weiterleitet in dem eine neue Seite erstellt werden kann. In diesem Dialog sind einige Eingaben zu machen, was dort genau einzugeben ist kann man aus der folgenden Liste entnehmen.
 					<dl>
 						<dt>Name/Kürzel</dt>
-						<dd>Der Name/das Kürzel dient zum logischen und eindeutigen identifizieren der Seite.</dd>
+						<dd>Der Name/das Kürzel dient zum logischen und eindeutigen identifizieren der Seite. Mit ihm greift man auf die Seite zu.</dd>
 						<dt>Titel</dt>
-						<dd>Der Titel wird für gewöhnlich in der Titelleiste des Browsers angezeigt.</dd>
+						<dd>Der Titel wird für gewöhnlich in der Titelleiste des Browsers angezeigt und hat eine Art Überschriftfunktion.</dd>
 						<dt>Seiten-Typ</dt>
-						<dd>Über den Seiten-Typ bestimmt man was für eine Seite erstellt wird. Da wir einen Text erstellen wollen, müssen wir da natürlich die Eigenschaft Text auswählen(was aber für gewöhnlich schon auswgewähl ist).</dd>
+						<dd>Über den Seiten-Typ bestimmt man was für eine Seite erstellt wird. Um einen Text zu erstellen muss man natürlich hier die Eigenschaft &quot;Text&quot; auswählen.</dd>
 						<dt>Sprache</dt>
-						<dd>-</dd>
+						<dd>Die Sprache beschreibt in welcher Sprache der Text verfasst wird.<!-- und ist dann auch nur in der jeweiligen Sprachversion der Seite lesbar(Englische Seite = >englischer Text; Deutsche Seite => deutscher Text). Wenn nur eine Sprachversion zur verfügung steht wird diese angezeigt egal in welcher Sprache man auf die Seite zugreift--></dd>
 						<dt>Zugang</dt>
-						<dd>-</dd>
+						<dd>Über die Eigenschaft Zugang kann man bestimmen, wer später den Text lesen können soll.
+							<ul>
+								<li><strong>Öffentlich:</strong> Jeder kann den Text lesen</li>
+								<li><strong>Privat:</strong> Nur angemeldete Benutzer <!--aus selbst festgelegten Gruppen -->können den Text lesen</li>
+								<li><strong>Versteckt:</strong> Der Text ist nur eingetragen, aber noch nicht zum Lesezugriff freigegeben</li>
+							</ul>
+						</dd>
 						<dt>Unterseite von</dt>
-						<dd>-</dd>
+						<dd>Mit der Eigenschaft &quot;Unterseite von&quot; kann man den Text in die Seitenstruktur eingliedern um die Seite ein bisschen zu strukturisieren.</dd>
+						<dt>Kommentar</dt>
+						<dd>Der Kommentar gibt an was man gemacht hat und wird nachher bei der Versionsübersicht(Übersicht über alle Veränderungen) angezeigt um leichter zu erkennen um welche Version des Textes es sich handelt.</dd>
 						<dt>Bearbeiten</dt>
-						<dd>-</dd>
+						<dd>Wenn man dieses Kästchen ausgewählt hat wird man sofort zum Bearbeitungsdialog des Textes weitergeleitet, um die Seite bearbeiten zu können.</dd>
 					</dl>
 				</div>
 			</div>

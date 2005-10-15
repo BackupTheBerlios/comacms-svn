@@ -153,10 +153,3 @@ CHANGE `articles_date` `article_date` INT( 20 ) UNSIGNED NULL DEFAULT NULL ;
 #r93
 #addded the type intern to the enum of inlineenetrie_type
 ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlinieentrie_type` `inlinieentrie_type` ENUM( 'link', 'donwload', 'text', 'intern' ) NOT NULL DEFAULT 'link';
-
-REATE TABLE `cms_smilies` (
-`smilie_id` INT( 10 ) NOT NULL ,
-`smilie_path` VARCHAR( 250 ) NOT NULL ,
-`smilie_text` VARCHAR( 250 ) NOT NULL ,
-`smilie_title` VARCHAR( 250 ) NOT NULL
-);

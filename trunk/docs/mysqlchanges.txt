@@ -291,3 +291,14 @@ ALTER TABLE `cms_menu` ADD INDEX ( `menu_page_id` ) ;
 #added commenting fields
 ALTER TABLE `cms_pages_history` ADD `page_edit_comment` VARCHAR( 100 ) NOT NULL ;
 ALTER TABLE `cms_pages` ADD `page_edit_comment` VARCHAR( 100 ) NOT NULL ;
+
+#r142
+#added smilies table
+CREATE TABLE `cms_smilies` (
+`smilie_id` INT( 10 ) NOT NULL AUTO_INCREMENT ,
+`smilie_path` VARCHAR( 250 ) NOT NULL ,
+`smilie_text` VARCHAR( 100 ) NOT NULL ,
+`smilie_title` VARCHAR( 250 ) NOT NULL ,
+PRIMARY KEY ( `smilie_id` ) ,
+INDEX ( `smilie_text` )
+);

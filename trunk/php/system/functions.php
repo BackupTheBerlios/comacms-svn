@@ -102,6 +102,8 @@
 		//
 		// convert "/n" to "<br />" (more or less ;-))
 		//
+		$text = str_replace("\\r","\r", $text);
+		$text = str_replace("\\n","\n", $text);
 		$text = nl2br($text);
 		foreach($codes as $key => $match)
 			$text = str_replace('%' . $key . '%', $match, $text);

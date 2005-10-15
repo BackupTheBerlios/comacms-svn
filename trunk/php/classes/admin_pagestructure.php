@@ -121,11 +121,13 @@
 		 }
 		 
 		 function _deletePage() {
-		 	global $extern_sure, $extern_page_id, $admin_lang, $user;
+		 	global $admin_lang, $user;
 		 	
+		 	$sure = GetPostOrGet('sure');
+		 	$page_id = GetPostOrGet('page_id');
 		 	$sql = "SELECT *
 		 		FROM " . DB_PREFIX . "pages
-		 		WHERE page_id=$extern_page_id";
+		 		WHERE page_id=$page_id";
 		 	$page_result = db_result ($sql);
 		 	if($page = mysql_fetch_object($page_result)) {
 		 		$out = '';
@@ -135,15 +137,15 @@
 		 		$subpages_result = db_result($sql);
 		 		if($subpage = mysql_fetch_object($subpages_result))
 		 			$out .= "Das löschen von Seiten mit Unterseiten ist zur Zeit nicht möglich!<br /><strong>Tip:</strong> Löschen sie erst alle Unterseiten<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\">Zurück</a>";
-		 		elseif($extern_sure == 1) {
+		 		elseif($sure == 1) {
 		 			$out .= "Löschen...";
 		 			$sql = "UPDATE " . DB_PREFIX . "pages
 						SET  page_access='deleted', page_creator='$user->ID', page_date='" . mktime() . "'
-						WHERE page_id='$extern_page_id'";
+						WHERE page_id='$page_id'";
 					db_result($sql);
 		 		}
 		 		else
-		 			$out .= "Wollen sie die Seite &quot;$page->page_title&quot; wirklich (vorerst) unwiederruflich löschen?<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$extern_page_id&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
+		 			$out .= "Wollen sie die Seite &quot;$page->page_title&quot; wirklich (vorerst) unwiederruflich löschen?<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$page_id&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
 		 					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\" class=\"button\">" . $admin_lang['no'] . "</a>";
 		 	
 			 	return $out;
@@ -165,6 +167,7 @@
 		 
 		 function _homePage() {
 		 	global $admin_lang;
+		 	
 		 	$this->_getMenuPageIDs();
 			$out = "\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=new_page\" class=\"button\">" . $admin_lang['create_new_page'] . "</a><br />\r\n";;
 			$out .= "<!--\t\t\t<a href =\"" . $_SERVER['PHP_SELF'] . "?page=pagestructur&amp;action=new_link\">neuer Link</a>-->\r\n";
@@ -353,12 +356,11 @@
 		}
 		
 		function _editPage() {
-			global $extern_page_id;
-			
+			$page_id = GetPostOrGet('page_id');
 			$out = '';
 			$sql = "SELECT page_id, page_type
 				FROM " . DB_PREFIX . "pages
-				WHERE page_id = $extern_page_id";
+				WHERE page_id = $page_id";
 			$page_result = db_result($sql);
 			if($page = mysql_fetch_object($page_result)) {
 				$edit = null;
@@ -382,12 +384,11 @@
 		}
 		
 		function _savePage() {
-			global $extern_page_id;
-			
+			$page_id = GetPostOrGet('page_id');
 			$out = '';
 			$sql = "SELECT page_id, page_type
 				FROM " . DB_PREFIX . "pages
-				WHERE page_id = $extern_page_id";
+				WHERE page_id = $page_id";
 			$page_result = db_result($sql);
 			if($page = mysql_fetch_object($page_result)) {
 				$edit = null;
@@ -439,19 +440,49 @@
 							break;
 			}
 			if($edit !== null) {
+				
 				$a_access = array('public', 'private', 'hidden');
 				if(!in_array($page_access, $a_access))
 					$page_access = $a_access[0];
 				$page_name = strtolower($page_name);
 				$page_name = str_replace(' ', '_', $page_name);
-				$sql = "INSERT INTO " . DB_PREFIX . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)
-					VALUES('$page_lang', '$page_access', '$page_name', '$page_title', $page_parent_id, $user->ID, '$page_type', " . mktime() . ", '$page_edit_comment')";
-				db_result($sql);
-				$lastid =  mysql_insert_id();
-				$edit->NewPage($lastid);
+				
+				// check if the page exists
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "pages
+					WHERE page_name = '$page_name' AND page_lang = '$page_lang'
+					LIMIT 0,1";
+				$exists_result = db_result($sql);
+				if($exists = mysql_fetch_object($exists_result)) { // exists
+					if($exists->page_access == 'deleted') { // the page is deleted so we can overwrite it
+						
+						$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
+							VALUES($exists->page_id, '$exists->page_type', '$exists->page_name', '$exists->page_title', $exists->page_parent_id, '$exists->page_lang', $exists->page_creator, $exists->page_date, '$exists->page_edit_comment')";
+						db_result($sql);
+						$history_id = mysql_insert_id();
+						$sql = "UPDATE " . DB_PREFIX . "pages
+							SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment', page_access='$page_access', page_type='$page_type', page_parent_id='$page_parent_id'
+							WHERE page_id=$exists->page_id";
+						db_result($sql);
+						$lastid = $exists->page_id;
+						$edit->NewPage($exists->page_id, $history_id);
+					}
+					else {
+						return sprintf("a page with the name %s exists already", $exists->page_name);
+					}
+				}
+				else {// dont extist
+					$sql = "INSERT INTO " . DB_PREFIX . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)
+						VALUES('$page_lang', '$page_access', '$page_name', '$page_title', $page_parent_id, $user->ID, '$page_type', " . mktime() . ", '$page_edit_comment')";
+					db_result($sql);
+					$lastid = mysql_insert_id();
+					$edit->NewPage($lastid);
+				}
 			}
 			if($page_edit != '')
-				header("Location: " . $_SERVER['PHP_SELF'] . "?page=pagestructure&action=edit&page_id=$lastid");
+				header("Location: admin.php?page=pagestructure&action=edit&page_id=$lastid");
+			else
+				header("Location: admin.php?page=pagestructure");
 	
 		}
 		
@@ -462,7 +493,7 @@
 			WHERE page_id=$pageid";
 			$page_result = db_result($sql);
 			while($page = mysql_fetch_object($page_result)) {
-				$out = "<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\">$page->page_name</a>" . $out;
+				$out = "<a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\">$page->page_name</a>" . $out;
 				if($page->page_parent_id != 0)
 				$out = '/' . $out;
 				$sql = "SELECT *
@@ -474,12 +505,13 @@
 		}
 		
 		function _infoPage() {
-			global $extern_page_id, $admin_lang;
+			global $admin_lang;
 			
+			$page_id =  GetPostOrGet('page_id');
 			$out = '';
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages
-				WHERE page_id=$extern_page_id";
+				WHERE page_id=$page_id";
 			$page_result = db_result($sql);
 			if($page = mysql_fetch_object($page_result)) {
 				$out .= "\t\t\t<table>
@@ -514,11 +546,11 @@
 			</table>\r\n";
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "pages_history
-					WHERE page_id = $extern_page_id
+					WHERE page_id = $page_id
 					ORDER BY page_date DESC";
 				$result = db_result($sql);
-				
-				$out .="\t\t\t<h4>Veränderungen(" . mysql_num_rows($result) . ")</h4><hr />
+				$changes_count = mysql_num_rows($result);
+				$out .="\t\t\t<h4>Veränderungen($changes_count)</h4><hr />
 			<table class=\"page_commits\">
 				<thead>
 					<tr>
@@ -539,14 +571,16 @@
 						<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
 					</td>
 				</tr>\r\n";
+				
 				while($change = mysql_fetch_object($result)) {
 					$out .= "\t\t\t\t<tr>
 					<td>" . date("d.m.Y H:i:s",$change->page_date) . "</td>
 					<td>".getUserById($change->page_creator) . "</td>
 					<td>$change->page_title</td>
 					<td>$change->page_edit_comment&nbsp;</td>
-					<td><a href=\"index.php?page=$page->page_id&amp;history=$change->id\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>[Bearbeiten][Wiederherstellen]</td>
+					<td><a href=\"index.php?page=$page->page_id&amp;change=$changes_count\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>[Bearbeiten][Wiederherstellen]</td>
 				</tr>\r\n";
+					$changes_count--;
 				}
 				
 				$out .="\t\t\t</table>";

@@ -170,19 +170,21 @@
 		 */
 		function LoadPage($pagename, $user) {
 			$load_old = false;
-			$history = GetPostOrGet('history');
-			if(is_numeric($history) && $user->IsLoggedIn)
+			$change = GetPostOrGet('change');
+			if(is_numeric($change) && $user->IsLoggedIn && $change != 0)
 				$load_old = true;
 			else
-				$history = -1;
+				$change = 0;
 			if($load_old)
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "pages_history
-				WHERE page_id=$pagename && id=$history";
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "pages_history
+					WHERE page_id=$pagename
+					ORDER BY page_date ASC
+					LIMIT " . ($change - 1) . ",1";
 			else
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "pages
-				WHERE page_name='$pagename'";
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "pages
+					WHERE page_name='$pagename'";
 			$page_result = db_result($sql);
 			if(!($page_data =  mysql_fetch_object($page_result))) {
 				$sql = "SELECT *
@@ -205,7 +207,7 @@
 			$this->PageID = $page_data->page_id;
 			if($page_data->page_type == 'text') {
 				include('./classes/textpage.php');
-				$textpage = new TextPage($page_data->page_id, $history);
+				$textpage = new TextPage($page_data->page_id, $change);
 				$this->Text = $textpage->HTML;
 			}
 			elseif($page_data->page_type == 'gallery') {

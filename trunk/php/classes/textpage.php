@@ -32,22 +32,25 @@
 		
 		/**
 		 * @param integer page_id
-		 * @param integer history_id
+		 * @param integer change
 		 */
-		function TextPage($page_id, $history_id = -1) {
+		function TextPage($page_id, $change = 0) {
 			if(empty($page_id))
 				return;
-			if($history_id == -1)
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "pages_text
-				WHERE page_id = $page_id";
+			if($change == 0)
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "pages_text
+					WHERE page_id = $page_id";
 			else
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "pages_text_history
-				WHERE page_id=$history_id";
+				$sql = "SELECT *
+					FROM (" . DB_PREFIX . "pages_history page
+					LEFT JOIN " . DB_PREFIX . "pages_text_history text ON text.page_id = page.id ) 
+					WHERE page.page_id=$page_id
+					ORDER BY  page.page_date ASC
+					LIMIT " . ($change - 1) . ",1";
 			if($page_result = db_result($sql)) {
 				$page = mysql_fetch_object($page_result);
-				if($history_id == -1) {
+				if($change == 0) {
 					$this->Text = $page->text_page_text;
 					$this->HTML = $page->text_page_html;
 				}

@@ -22,12 +22,28 @@
 		/**
 		 * @access public
 		 * @return void
-		 * @param page_id integer
+		 * @param integer page_id
+		 * @param integer history_id
 		 */
-		function NewPage($page_id) {
-			$sql = "INSERT INTO " . DB_PREFIX . "pages_text (page_id, text_page_text,text_page_html)
-				VALUES ($page_id, '', '')";
-			db_result($sql);
+		function NewPage($page_id, $history_id = 0) {
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "pages_text
+				WHERE page_id=$page_id";
+			$exists_result = db_result($sql);
+			if($exists = mysql_fetch_object($exists_result)) {
+				$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, page_text)
+					VALUES ($history_id, '$exists->text_page_text')";
+				db_result($sql);
+				$sql = "UPDATE " . DB_PREFIX . "pages_text
+					SET text_page_text='', text_page_html=''
+					WHERE page_id='$page_id'";
+				db_result($sql);
+			}
+			else {
+				$sql = "INSERT INTO " . DB_PREFIX . "pages_text (page_id, text_page_text,text_page_html)
+					VALUES ($page_id, '', '')";
+				db_result($sql);
+			}
 		}
 	
 		function Save($page_id) {
@@ -37,21 +53,21 @@
 			$page_text = GetPostOrGet('page_text');
 			if($page_title != '' && $page_id != '' && $page_text != '')
 			{
-				$sql = "SELECT struct.*, text.text_page_text
+				$sql = "SELECT struct.*, text.*
 				FROM ( " . DB_PREFIX. "pages struct
 				LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
 				WHERE struct.page_id='$page_id' AND struct.page_type='text'";
 				$old_result = db_result($sql);
 				if($old = mysql_fetch_object($old_result)) { // exists the page?
-					if($old->page_title != $page_title || $old->text_page_text != $page_text) {
+					if($old->page_title != $page_title || MakeSecure($old->text_page_text) != $page_text) {
 						if(!($page_title == $old->page_title && $old->text_page_text == '')) {					
-						$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
-							VALUES($old->page_id, '$old->page_type', '$old->page_name', '$old->page_title', $old->page_parent_id, '$old->page_lang', $old->page_creator, $old->page_date, '$old->page_edit_comment')";
-						db_result($sql);
-						$lastid =  mysql_insert_id();
-						$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, page_text)
-							VALUES ($lastid, '$old->text_page_text')";
-						db_result($sql);
+							$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
+								VALUES($old->page_id, '$old->page_type', '$old->page_name', '$old->page_title', $old->page_parent_id, '$old->page_lang', $old->page_creator, $old->page_date, '$old->page_edit_comment')";
+							db_result($sql);
+							$lastid = mysql_insert_id();
+							$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, page_text)
+								VALUES ($lastid, '$old->text_page_text')";
+							db_result($sql);
 						}
 						$html = convertToPreHtml($page_text);
 						$sql = "UPDATE " . DB_PREFIX . "pages_text
@@ -66,7 +82,7 @@
 					}
 					else { // no changes
 						// TODO: Show it to the user
-						return "no changes!!";
+						return "keine Veränderungen!!";
 					}
 				}
 				else { // it dosen't

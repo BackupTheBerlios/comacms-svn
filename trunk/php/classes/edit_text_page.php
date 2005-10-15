@@ -110,7 +110,7 @@
 					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">".$page_data->text_page_text."</textarea>
-				" . $admin_lang['comment_on_change'] . ": <input name=\"page_edit_comment\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : $admin_lang['edited'] . '...') . "\" type=\"text\"/><br />	
+				" . $admin_lang['comment_on_change'] . ": <input name=\"page_edit_comment\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : $admin_lang['edited'] . '...') . "\" maxlength=\"100\" type=\"text\"/><br />	
 				<input type=\"reset\" value=\"Zurücksetzten\" class=\"button\"/>
 				<input type=\"submit\" value=\"Speichern\" class=\"button\" />
 			</form>";

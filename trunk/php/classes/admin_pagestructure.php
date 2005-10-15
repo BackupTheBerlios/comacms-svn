@@ -262,14 +262,14 @@
 							Kommentar
 							<span class=\"info\">Eine kurze Beschreibung, was hier gemacht wurde.</span>
 						</td>
-						<td><input type=\"text\" name=\"page_edit_comment\" value=\"" . $admin_lang['created_new_page'] . "\"/></td>
+						<td><input type=\"text\" name=\"page_edit_comment\" maxlength=\"100\" value=\"" . $admin_lang['created_new_page'] . "\"/></td>
 					</tr>
 					<tr>
 						<td>
 							Bearbeiten?
 							<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die Übersichtseite zurückgekehrt werden?</span>
 						</td>
-						<td><input type=\"checkbox\" name=\"page_edit\" value=\"edit\" checked=\"true\"/ class=\"checkbox\"></td>
+						<td><input type=\"checkbox\" name=\"page_edit\" value=\"edit\" checked=\"true\" class=\"checkbox\"/></td>
 					</tr>
 					<tr>
 						<td colspan=\"2\">

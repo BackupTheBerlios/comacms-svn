@@ -138,6 +138,7 @@
 			page_date int(20) NOT NULL default '0',
 			page_access enum('public','private','hidden','deleted') NOT NULL default 'public',
 			page_lang varchar(5) NOT NULL default '',
+			page_edit_comment varchar(100) NOT NULL default '',
 			PRIMARY KEY  (page_id)
 		);
 		DROP TABLE IF EXISTS " . $db_prefix . "pages_text;
@@ -158,6 +159,7 @@
 			page_lang varchar(5) NOT NULL default '',
 			page_creator int(10) NOT NULL default '0',
 			page_date int(20) NOT NULL default '0',
+			page_edit_comment varchar(100) NOT NULL default '',
 			PRIMARY KEY  (id)
 		);
 		DROP TABLE IF EXISTS " . $db_prefix . "pages_text_history;
@@ -205,6 +207,16 @@
 			gallery_image_thumbnail VARCHAR( 255 ) NOT NULL ,
 			gallery_image VARCHAR( 255 ) NOT NULL
 		);
+		DROP TABLE IF EXISTS " . $db_prefix . "smilies;
+		CREATE TABLE " . $db_prefix . "smilies (
+			smilie_id int(10) NOT NULL auto_increment,
+			smilie_path varchar(250) NOT NULL default '',
+			smilie_text varchar(100) NOT NULL default '',
+			smilie_title varchar(250) NOT NULL default '',
+			PRIMARY KEY  (smilie_id),
+			UNIQUE KEY smilie_text (smilie_text)
+		);
+        		
 		INSERT INTO " . $db_prefix . "users (user_name, user_showname, user_password, user_registerdate, user_admin, user_icq)
 		VALUES ('$admin_name', '$admin_showname', '" . md5($admin_password) . "', '" . mktime() . "', 'y', '');
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)

@@ -68,4 +68,7 @@
 	$admin_lang['created_new_page'] = "Created new page";
 	$admin_lang['comment_on_change'] = 'Comment on change';
 	$admin_lang['edited'] = 'Edited';
+	$admin_lang['apply'] = 'Apply';
+	$admin_lang['move_up'] = 'Move up';
+	$admin_lang['move_down'] = 'Move down';
 ?>

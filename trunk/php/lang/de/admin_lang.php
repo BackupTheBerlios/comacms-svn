@@ -68,4 +68,7 @@
 	$admin_lang['created_new_page'] = "Neue Seite erstellt";
 	$admin_lang['comment_on_change'] = "Anmerkung zur Veränderung";
 	$admin_lang['edited'] = 'Bearbeitet';
+	$admin_lang['apply'] = 'Übernehmen';
+	$admin_lang['move_up'] = 'Bewege um eins nach Oben';
+	$admin_lang['move_down'] = 'Bewege um eins nach Unten';
 ?>

@@ -302,3 +302,7 @@ CREATE TABLE `cms_smilies` (
 PRIMARY KEY ( `smilie_id` ) ,
 UNIQUE KEY smilie_text (smilie_text)
 );
+
+#r146
+#added field to make it possible to sort gallery-pictures
+ALTER TABLE `cms_gallery` ADD `gallery_orderid` INT( 10 ) DEFAULT '0' NOT NULL AFTER `gallery_file_id` ;

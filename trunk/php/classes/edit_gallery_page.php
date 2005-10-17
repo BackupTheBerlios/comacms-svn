@@ -308,7 +308,7 @@
 				$out .= "<img src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" />
 					Möchten sie das Bild wirklich aus der Galerie entfernen?<br />
 					<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=delete&amp;image_id=$image_id&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
-		 			<a href=\"admin.php?page=pagestructure&action=edit&page_id=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>
+		 			<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>
 					";
 			}
 			return $out;			

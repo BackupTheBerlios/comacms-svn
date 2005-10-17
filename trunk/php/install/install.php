@@ -166,7 +166,7 @@
 		CREATE TABLE " . $db_prefix . "pages_text_history (
 			id int(10) NOT NULL auto_increment,
 			page_id int(10) NOT NULL default '0',
-			page_text text NOT NULL,
+			text_page_text text NOT NULL,
 			PRIMARY KEY  (id)
 		);
 		DROP TABLE IF EXISTS " . $db_prefix . "sitedata_history;
@@ -204,6 +204,7 @@
 		CREATE TABLE " . $db_prefix . "gallery (
 			gallery_id INT( 10 ) NOT NULL ,
 			gallery_file_id MEDIUMINT( 10 ) NOT NULL ,
+			gallery_orderid INT( 10 ) DEFAULT '0' NOT NULL ,
 			gallery_image_thumbnail VARCHAR( 255 ) NOT NULL ,
 			gallery_image VARCHAR( 255 ) NOT NULL
 		);

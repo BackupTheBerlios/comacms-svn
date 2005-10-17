@@ -437,7 +437,6 @@
 							break;
 				default:		$out .= "Der Seitentyp <strong>$page_type</strong> lässt sich noch nicht bearbeiten.";
 							return $out;
-							break;
 			}
 			if($edit !== null) {
 				
@@ -568,7 +567,7 @@
 					<td>$page->page_edit_comment&nbsp;</td>
 					<td>
 						<a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>
-						<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
 					</td>
 				</tr>\r\n";
 				
@@ -578,7 +577,9 @@
 					<td>".getUserById($change->page_creator) . "</td>
 					<td>$change->page_title</td>
 					<td>$change->page_edit_comment&nbsp;</td>
-					<td><a href=\"index.php?page=$page->page_id&amp;change=$changes_count\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>[Bearbeiten][Wiederherstellen]</td>
+					<td><a href=\"index.php?page=$page->page_id&amp;change=$changes_count\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>
+					<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id&amp;change=$changes_count\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
+					<a href=\"admin.php?page=pagestructure&amp;action=save&amp;page_id=$page->page_id&amp;change=$changes_count\"><img src=\"./img/restore.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['restore'] . "\" title=\"" . $admin_lang['restore'] . "\"/></a></td>
 				</tr>\r\n";
 					$changes_count--;
 				}

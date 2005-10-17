@@ -1,4 +1,16 @@
-/* Der Quellcode stammt teilweise aus dem mediawiki
+
+// get the user-agent of the user
+var browser = navigator.userAgent.toLowerCase();
+var isGecko = (browser.indexOf('gecko') != -1 && browser.indexOf('spoofer') == -1 && browser.indexOf('khtml') == -1 && browser.indexOf('netscape/7.0') == -1);
+var isSafari = (browser.indexOf('applewebkit') != -1 && browser.indexOf('spoofer') == -1);
+var isKHTML = (navigator.vendor.toLowerCase() == 'kde' || ( document.childNodes && !document.all && !navigator.taintEnabled ));
+if(browser.indexOf('opera')!=-1) {
+	var isOpera = true;
+	var isOperaPreSeven = (window.opera && !document.childNodes);
+	var isOperaSeven = (window.opera && document.childNodes);
+}
+ 
+/* Der Quellcode ab hier stammt teilweise aus dem mediawiki
  *
  *
  */

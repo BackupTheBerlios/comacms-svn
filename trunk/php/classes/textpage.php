@@ -56,8 +56,8 @@
 				}
 				else
 				{
-					$this->Text = $page->page_text;
-					$this->HTML = convertToPreHtml($page->page_text);
+					$this->Text = $page->text_page_text;
+					$this->HTML = convertToPreHtml($page->text_page_text);
 				}
 			}
 		}

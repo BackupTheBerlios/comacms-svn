@@ -31,7 +31,7 @@
 				WHERE page_id=$page_id";
 			$exists_result = db_result($sql);
 			if($exists = mysql_fetch_object($exists_result)) {
-				$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, page_text)
+				$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, text_page_text)
 					VALUES ($history_id, '$exists->text_page_text')";
 				db_result($sql);
 				$sql = "UPDATE " . DB_PREFIX . "pages_text
@@ -47,7 +47,7 @@
 		}
 	
 		function Save($page_id) {
-			global $_SERVER, $user;
+			global $user, $admin_lang;
 			$page_edit_comment = GetPostOrGet('page_edit_comment');
 			$page_title = GetPostOrGet('page_title');
 			$page_text = GetPostOrGet('page_text');
@@ -65,7 +65,7 @@
 								VALUES($old->page_id, '$old->page_type', '$old->page_name', '$old->page_title', $old->page_parent_id, '$old->page_lang', $old->page_creator, $old->page_date, '$old->page_edit_comment')";
 							db_result($sql);
 							$lastid = mysql_insert_id();
-							$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, page_text)
+							$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, text_page_text)
 								VALUES ($lastid, '$old->text_page_text')";
 							db_result($sql);
 						}
@@ -78,6 +78,7 @@
 							SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment'
 							WHERE page_id=$page_id";
 						db_result($sql);
+						header("Location: admin.php?page=pagestructure");
 						return "Die Seite sollte gespeichert sein!";
 					}
 					else { // no changes
@@ -87,12 +88,60 @@
 				}
 				else { // it dosen't
 					// TODO: Show it to the user
-					return "error!!";
+					return "error2!!";
 				}
-				
 			}
 			else
 			{
+				//restore the old version if $change is given
+				$change = GetPostOrGet('change');
+				$sure = GetPostOrGet('sure');
+				if(is_numeric($change)) {
+					//load old version
+					//load actual version
+					$sql = "SELECT struct.*, text.*
+						FROM ( " . DB_PREFIX. "pages struct
+						LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
+						WHERE struct.page_id='$page_id' AND struct.page_type='text'";
+					$actual_result = db_result($sql);
+					$sql = "SELECT *
+						FROM (" . DB_PREFIX . "pages_history page
+						LEFT JOIN " . DB_PREFIX . "pages_text_history text ON text.page_id = page.id ) 
+						WHERE page.page_id=$page_id
+						ORDER BY  page.page_date ASC
+						LIMIT " . ($change - 1) . ",1";
+					$old_result = db_result($sql);
+					if(($old = mysql_fetch_object($old_result)) && ($actual = mysql_fetch_object($actual_result))) {
+						if($sure == 1) {
+							$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
+								VALUES($actual->page_id, '$actual->page_type', '$actual->page_name', '$actual->page_title', $actual->page_parent_id, '$actual->page_lang', $actual->page_creator, $actual->page_date, '$actual->page_edit_comment')";
+							db_result($sql);
+							$lastid = mysql_insert_id();
+							$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, text_page_text)
+								VALUES ($lastid, '$actual->text_page_text')";
+							db_result($sql);
+							$html = convertToPreHtml($old->text_page_text);
+							$sql = "UPDATE " . DB_PREFIX . "pages_text
+								SET text_page_text='$old->text_page_text', text_page_html='$html'
+								WHERE page_id='$page_id'";
+							db_result($sql);
+							$page_edit_comment = sprintf($admin_lang['reverted_from_version'], $change);
+							$sql = "UPDATE " . DB_PREFIX . "pages
+								SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$old->page_title', page_edit_comment='$page_edit_comment'
+								WHERE page_id=$page_id";
+							db_result($sql);
+							header("Location: admin.php?page=pagestructure");	
+						}
+						else {
+							$out = '';
+							$out .= "Möchten Sie diesen Text:<pre class=\"code\">$actual->text_page_text</pre>wirklich durch diesen Text:<pre class=\"code\">$old->text_page_text</pre>ersetzen?<br />
+								<a href=\"admin.php?page=pagestructure&amp;action=save&amp;page_id=$page_id&amp;change=$change&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
+		 						<a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>";
+							return $out;
+							
+						}
+					}
+				}
 				// TODO: Manage Errors and show them to the user
 				return "error!!";
 			}
@@ -100,23 +149,37 @@
 		
 		function Edit($page_id) {
 			global $_SERVER, $admin_lang;
-			//mysql_num_rows($result)
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "pages_history
-				WHERE page_id = $page_id
-				LIMIT 0,1";
-			$count_result = db_result($sql);
-			$count = mysql_num_rows($count_result);
-			$sql = "SELECT struct.page_id, struct.page_title, text.text_page_text, struct.page_edit_comment
-				FROM ( " . DB_PREFIX. "pages struct
-				LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
-				WHERE struct.page_id='$page_id' AND struct.page_type='text'";
+			
+			$change = GetPostOrGet('change');
+			$count = 1;
+			$out = '';
+			if(is_numeric($change)) {
+				$out .= "<strong>Achtung:</strong> Sie berarbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen überschreiben!";
+				$sql = "SELECT *
+					FROM (" . DB_PREFIX . "pages_history page
+					LEFT JOIN " . DB_PREFIX . "pages_text_history text ON text.page_id = page.id ) 
+					WHERE page.page_id=$page_id
+					ORDER BY  page.page_date ASC
+					LIMIT " . ($change - 1) . ",1";
+			}
+			else {
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "pages_history
+					WHERE page_id = $page_id
+					LIMIT 0,1";
+				$count_result = db_result($sql);
+				$count = mysql_num_rows($count_result);
+				$sql = "SELECT struct.page_id, struct.page_title, text.text_page_text, struct.page_edit_comment
+					FROM ( " . DB_PREFIX. "pages struct
+					LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
+					WHERE struct.page_id='$page_id' AND struct.page_type='text'";
+			}
 			$page_result = db_result($sql);
 			$page_data = mysql_fetch_object($page_result);
-			$out = "\t\t\t<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
+			$out .= "\t\t\t<form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"save\" />
-				<input type=\"hidden\" name=\"page_id\" value=\"" . $page_data->page_id . "\" />
+				<input type=\"hidden\" name=\"page_id\" value=\"" . $page_id . "\" />
 				<input type=\"text\" name=\"page_title\" value=\"" . $page_data->page_title . "\" /><br />
 				<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
 				<script type=\"text/javascript\" language=\"javascript\">
@@ -126,7 +189,7 @@
 					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">".$page_data->text_page_text."</textarea>
-				" . $admin_lang['comment_on_change'] . ": <input name=\"page_edit_comment\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : $admin_lang['edited'] . '...') . "\" maxlength=\"100\" type=\"text\"/><br />	
+				" . $admin_lang['comment_on_change'] . ": <input name=\"page_edit_comment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $admin_lang['edited'] . '...')) . "\" maxlength=\"100\" type=\"text\"/><br />
 				<input type=\"reset\" value=\"Zurücksetzten\" class=\"button\"/>
 				<input type=\"submit\" value=\"Speichern\" class=\"button\" />
 			</form>";

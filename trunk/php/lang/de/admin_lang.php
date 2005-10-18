@@ -72,6 +72,7 @@
 	$admin_lang['move_up'] = 'Bewege um eins nach Oben';
 	$admin_lang['move_down'] = 'Bewege um eins nach Unten';
 	$admin_lang['edited_from_version'] = 'Bearbeitet aus der Version %u';
-	$admin_lang['restore'] = "Wiederherstellen";
-	$admin_lang['reverted_from_version'] = 'Wiederhergestellt aus Version %u';
+	$admin_lang['restore'] = 'Wiederherstellen';
+	$admin_lang['restored_from_version'] = 'Wiederhergestellt aus Version %u';
+	$admin_lang['saved_page_modifications'] = 'Gespeicherte Veränderungen';
 ?>

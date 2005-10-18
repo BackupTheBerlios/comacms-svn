@@ -125,7 +125,7 @@
 								SET text_page_text='$old->text_page_text', text_page_html='$html'
 								WHERE page_id='$page_id'";
 							db_result($sql);
-							$page_edit_comment = sprintf($admin_lang['reverted_from_version'], $change);
+							$page_edit_comment = sprintf($admin_lang['restored_from_version'], $change);
 							$sql = "UPDATE " . DB_PREFIX . "pages
 								SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$old->page_title', page_edit_comment='$page_edit_comment'
 								WHERE page_id=$page_id";

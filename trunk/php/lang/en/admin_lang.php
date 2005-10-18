@@ -72,6 +72,7 @@
 	$admin_lang['move_up'] = 'Move up';
 	$admin_lang['move_down'] = 'Move down';
 	$admin_lang['edited_from_version'] = 'Edited from version %u';
-	$admin_lang['restore'] = "Restore";
-	$admin_lang['reverted_from_version'] = 'Reverted from version %u';
+	$admin_lang['restore'] = 'Restore';
+	$admin_lang['restored_from_version'] = 'Restored from version %u';
+	$admin_lang['saved_page_modifications'] = 'Saved page modifications';
 ?>

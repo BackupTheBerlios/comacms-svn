@@ -24,7 +24,7 @@
 	 * and a list of all visitors
 	 */
 
-	function page_admincontrol() {
+	/*function page_admincontrol() {
 		global $admin_lang, $config;
 		//
 		// get the coutnt of all pages
@@ -92,7 +92,7 @@
 		$out .= "</table>";
 	
 		return $out;
-	}
+	}*/
 
 /*****************************************************************************
  *

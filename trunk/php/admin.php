@@ -53,7 +53,6 @@
 	$menu_array[] = array($admin_lang['articles'], 'admin.php?page=articles');
 	$menu_array[] = array($admin_lang['sitestyle'], 'admin.php?page=sitestyle');
 	$menu_array[] = array($admin_lang['users'], 'admin.php?page=users');
-//	$menu_array[] = array($admin_lang['gallery editor'], 'admin.php?page=gallery_editor');
 	$menu_array[] = array($admin_lang['files'], 'admin.php?page=files');
 	$menu_array[] = array($admin_lang['logout'], 'admin.php?page=logout');
 	
@@ -70,7 +69,9 @@
 	
 	if($extern_page == 'admincontrol') {
 		$title = $admin_lang['admincontrol'];
-		$text = page_admincontrol();
+		include('classes/admin_admincontrol.php');
+		$admin_admincontrol = new Admin_AdminControl($admin_lang, $config);
+		$text = $admin_admincontrol->GetPage($extern_action);
 	}
 	elseif($extern_page == 'sitepreview') {
 		$title = $admin_lang['sitepreview'];

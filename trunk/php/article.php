@@ -64,8 +64,8 @@
 		$text .= "\t\t\t</table>";
 	}
 	
-	if($page->FindTag('inlinemenu')) {
-		$page->ReplaceTagInTemplate('inlinemenu', '');
+	if($page->FindTag('INLINEMENU')) {
+		$page->ReplaceTagInTemplate('INLINEMENU', '');
 		$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	}
 	$page->SetText($text);

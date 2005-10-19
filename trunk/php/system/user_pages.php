@@ -458,7 +458,7 @@
 				<td>" . kbormb($file->file_size) . "</td>
 				<td>" . date('d.m.Y H:i:s', $file->file_date) . "</td>
 				<td>$file->file_type</td>
-				<td><a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&amp;action=delete&amp;file_id=$file->file_id\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
+				<td><a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&amp;action=delete&amp;file_id=$file->file_id\" ><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
 			</tr>\r\n";
 			$completesize += $file->file_size;
 		}

@@ -330,12 +330,12 @@
  *
  *****************************************************************************/
 	function page_sitestyle() {
-		global $internal_style, $extern_save, $extern_style;
+		global $internal_style, $extern_save, $extern_style, $config;
 		
 		$out = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"./system/functions.js\"></script>";
 	
 		if(!isset($extern_save))
-			$extern_style = $internal_style;
+			$extern_style = $config->Get('style');
 	
 		if(isset($extern_save)) {
 			if(file_exists("./styles/$extern_style/mainpage.php")) {
@@ -674,11 +674,11 @@
 							FROM " . DB_PREFIX . "users
 							WHERE user_id=$user_id";
 						$result = db_result($sql);
-						$user = mysql_fetch_object($result);
+						$user_data = mysql_fetch_object($result);
 						$sql = "DELETE FROM " . DB_PREFIX . "users
 							WHERE user_id=$user_id";
 						db_result($sql);
-						$out .= "Der Benutzer &quot;" . $user->user_showname . "&quot; ist nun unwiederuflich gelöscht worden!<br />";
+						$out .= "Der Benutzer &quot;" . $user_data->user_showname . "&quot; ist nun unwiederuflich gelöscht worden!<br />";
 					}
 				}
 				else {
@@ -870,7 +870,7 @@
 					if($user->ID == $user_db->user_id)
 						$out .= "&nbsp;";
 					else
-						$out .= "<a href=\"".$PHP_SELF."?page=users&amp;action=delete&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
+						$out .= "<a href=\"".$PHP_SELF."?page=users&amp;action=delete&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
 					$out .= "</td>
 				</tr>\r\n";
 			}
@@ -1003,7 +1003,7 @@
  * returns the gallery-admin-page where you can add, change and delete gallerys
  *
  *****************************************************************************/
-	function page_gallery_editor() {
+/*	function page_gallery_editor() {
 		global $admin_lang, $extern_action, $_SERVER, $extern_images, $extern_gallery_name, $extern_gallery_title, $actual_user_id;
 		
 		if(!isset($extern_action))
@@ -1176,7 +1176,7 @@
 		}
 		
 		return $out;
-	}
+	}*/
 /*****************************************************************************
  *
  *  string page_dates()

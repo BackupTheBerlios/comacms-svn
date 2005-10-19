@@ -353,9 +353,9 @@
 					$out .= "\t\t\t\t<div class=\"imageblock\">
 						\t\t\t\t\t<a href=\"" . generateUrl($image->gallery_image) . "\">
 						\t\t\t\t\t<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" /></a><br />
-						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=up&amp;image_id=$image->gallery_file_id\"><img src=\"./img/up.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_up'] . "\" title=\"" . $admin_lang['move_up'] . "\"/></a>
-						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=delete&amp;image_id=$image->gallery_file_id\"><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
-						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=down&amp;image_id=$image->gallery_file_id\"><img src=\"./img/down.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_down'] . "\" title=\"" . $admin_lang['move_down'] . "\"/></a>
+						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=up&amp;image_id=$image->gallery_file_id\"><img src=\"./img/up.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_up'] . "\" title=\"" . $admin_lang['move_up'] . "\"/></a>
+						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=delete&amp;image_id=$image->gallery_file_id\"><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
+						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=down&amp;image_id=$image->gallery_file_id\"><img src=\"./img/down.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_down'] . "\" title=\"" . $admin_lang['move_down'] . "\"/></a>
 						\t\t\t\t</div>";
 					//$out .= "$image->gallery_image_thumbnail <br />";
 				}

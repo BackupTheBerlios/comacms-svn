@@ -2,20 +2,20 @@
 <html lang="de">
 	
 	<head>
-		<title>Schicho &#038; Willenborg GmbH -> [title]</title>
-		<link rel="stylesheet" href="./styles/holzhandwerk/style.css" type="text/css" />
+		<title>Schicho &#038; Willenborg GmbH -> [TITLE]</title>
+		<link rel="stylesheet" href="[STYLE_PATH]/style.css" type="text/css" />
 		<meta name="author" content="Sebastian Willenborg" />
 	</head>
 	
 	<body>
-		<div class="top"><img src="./styles/holzhandwerk/schicho.png" /></div>
+		<div class="top"><img src="[STYLE_PATH]/schicho.png" /></div>
 		<div class="menuepart">
 			<ul id="menu">
-[menu]
+[MENU]
 			</ul>
 		</div>
 		<div class="text">
-[text]
+[TEXT]
 		</div>
 	</body>
 	

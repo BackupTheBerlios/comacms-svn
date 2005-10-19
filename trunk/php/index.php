@@ -33,10 +33,10 @@
 	include('common.php');
 	
 	$page->LoadPage($extern_page, $user);
-	if($page->FindTag('inlinemenu')) {
+	if($page->FindTag('INLINEMENU')) {
 		$inlinemenu = new InlineMenu($page);
 		$inlinemenu_html = $inlinemenu->LoadInlineMenu();
-		$page->ReplaceTagInTemplate('inlinemenu', $inlinemenu_html);
+		$page->ReplaceTagInTemplate('INLINEMENU', $inlinemenu_html);
 		if($inlinemenu_html != '')
 			$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "$1", $page->Template);
 		else

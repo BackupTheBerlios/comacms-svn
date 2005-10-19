@@ -2,20 +2,20 @@
 <html lang="de">
 
 	<head>
-		<title>[pagename] -> [title]</title>
-		<link rel="stylesheet" href="./styles/clear/style.css" type="text/css" />
+		<title>[PAGENAME] -> [TITLE]</title>
+		<link rel="stylesheet" href="[STYLE_PATH]/style.css" type="text/css" />
 		<meta name="author" content="Sebastian Willenborg" />
 	</head>
 	
 	<body>
-		<div class="top">HomepageName<br /><br />[position]</div>
+		<div class="top">HomepageName<br /><br />[POSITION]</div>
 		<div class="menuepart">
 			<ul id="menue">
-[menu]
+[MENU]
 			</ul>
 		</div>
 		<div class="text">
-[text]
+[TEXT]
 		</div>
 	</body>
 	

@@ -148,22 +148,21 @@
 	$menu = '';
 	foreach($menu_array as $part) {
 		$menu_str = $menu_link;
-		$menu_str = str_replace('[text]', $part[0], $menu_str);
-		$menu_str = str_replace('[link]', $part[1], $menu_str);
-		$menu_str = str_replace('[new]', '', $menu_str);
+		$menu_str = str_replace('[TEXT]', $part[0], $menu_str);
+		$menu_str = str_replace('[LINK]', $part[1], $menu_str);
+		$menu_str = str_replace('[NEW]', '', $menu_str);
 		$menu .= $menu_str . "\r\n";
 	}
 	$path = '';
 	if($extern_page != 'admincontrol')
 		$path = " -> <a href=\"admin.php?page=$extern_page\">$title</a>";
-	$page->Template = str_replace("[position]", "<a href=\"admin.php?page=admincontrol\">Admin</a>$path", $page->Template);
-	$page->Template = str_replace('[menu]', $menu, $page->Template);
+	$page->Template = str_replace('[POSITION]', "<a href=\"admin.php?page=admincontrol\">Admin</a>$path", $page->Template);
+	$page->Template = str_replace('[MENU]', $menu, $page->Template);
 	$page->Title = $title;
-	$page->Template = str_replace('[menu2]', '', $page->Template);
-	//$page = str_replace('[text]', $text, $page);
+	$page->Template = str_replace('[MENU2]', '', $page->Template);
 	$page->Text = $text;
 	
-	$page->Template = str_replace("[inlinemenu]", '', $page->Template);
+	$page->Template = str_replace('[INLINEMENU]', '', $page->Template);
 	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '', $page->Template);
 	

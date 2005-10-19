@@ -80,8 +80,8 @@
 	}
 	$page->Title = $title;
 	$page->SetText($text);
-	$page->Template = str_replace("[inlinemenu]", '', $page->Template);
-	$page->Template = str_replace("[position]", "<a href=\"special.php?page=$extern_page\">$title</a>", $page->Template);
+	$page->Template = str_replace("[INLINEMENU]", '', $page->Template);
+	$page->Template = str_replace("[POSITION]", "<a href=\"special.php?page=$extern_page\">$title</a>", $page->Template);
 	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
 	echo $page->OutputHTML();

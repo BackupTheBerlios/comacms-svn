@@ -84,7 +84,7 @@
 						</td>
 						<td colspan=\"2\">
 							<a href=\"admin.php?page=dates&amp;action=edit&amp;date_id=" . $row->date_id . "\" title=\"" . $admin_lang['edit'] . "\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
-							&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;date_id=" . $row->date_id . "\" title=\"" . $admin_lang['delete'] . "\"><img src=\"./img/del.jpg\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
+							&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;date_id=" . $row->date_id . "\" title=\"" . $admin_lang['delete'] . "\"><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
 						</td>
 					</tr>\r\n";
 				

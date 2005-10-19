@@ -135,7 +135,7 @@
 						$menu_str = $menu_link;
 				else
 						$menu_str = $menu_link2;
-				$menu_str = str_replace('[text]', $menu_data->menu_text, $menu_str);
+				$menu_str = str_replace('[TEXT]', $menu_data->menu_text, $menu_str);
 				$link = $menu_data->menu_link;
 					if(substr($link, 0, 2) == 'l:')
 					$link = @$internal_page_root . 'index.php?page=' . substr($link, 2);
@@ -144,13 +144,13 @@
 					if(substr($link, 0, 2) == 'a:')
 						$link = @$internal_page_root . 'admin.php?page=' . substr($link, 2);
 						
-				$menu_str = str_replace('[link]', $link, $menu_str);
+				$menu_str = str_replace('[LINK]', $link, $menu_str);
 				$new = $menu_data->menu_new;
 					if($new == 'yes')
 					$new = 'target="_blank" ';
 					else
 					$new = '';
-				$menu_str = str_replace('[new]', $new, $menu_str);
+				$menu_str = str_replace('[NEW]', $new, $menu_str);
 				$menu_out .= $menu_str . "\r\n";
 			}
 			return $menu_out;
@@ -239,14 +239,15 @@
 			else
 				$this->Template = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", "$1", $this->Template);
 
-			$this->Template = str_replace("[pagename]", $config->Get('pagename', ''), $this->Template);
-			$this->Template = str_replace('[text]', $this->Text, $this->Template);
-			$this->Template = str_replace('[title]', $this->Title, $this->Template);
-			$this->Template = str_replace('[position]', $this->Position, $this->Template);
-			if($this->FindTag('menu'))
-				$this->Template = str_replace('[menu]', $this->GenerateMenu(1), $this->Template);;
-			if($this->FindTag('menu2'))
-				$this->Template = str_replace('[menu2]', $this->GenerateMenu(2), $this->Template);;
+			$this->Template = str_replace('[PAGENAME]', $config->Get('pagename', ''), $this->Template);
+			$this->Template = str_replace('[TEXT]', $this->Text, $this->Template);
+			$this->Template = str_replace('[TITLE]', $this->Title, $this->Template);
+			$this->Template = str_replace('[POSITION]', $this->Position, $this->Template);
+			$this->Template = str_replace('[STYLE_PATH]', $this->Templatefolder, $this->Template);
+			if($this->FindTag('MENU'))
+				$this->Template = str_replace('[MENU]', $this->GenerateMenu(1), $this->Template);;
+			if($this->FindTag('MENU2'))
+				$this->Template = str_replace('[MENU2]', $this->GenerateMenu(2), $this->Template);;
 			return $this->Template;
 		}
 	}

@@ -231,7 +231,7 @@
 							<a href=\"article.php?id=$article->article_id\" title=\"Anschauen\"><img src=\"./img/view.png\" alt=\"Anschauen\" title=\"Anschauen\" /></a> 
 							<!--<img scr=\"./img/info.png\"  alt=\"Infos\" title=\"Infos\" />-->
 							<a href=\"admin.php?page=articles&amp;action=edit&amp;article_id=$article->article_id\" title=\"Bearbeiten\"><img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-							<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=$article->article_id\" title=\"Löschen\"><img src=\"./img/del.jpg\" alt=\"Löschen\" title=\"Löschen\" /></a>
+							<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=$article->article_id\" title=\"Löschen\"><img src=\"./img/del.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
 						</td>
 					</tr>";
 			}

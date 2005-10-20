@@ -310,3 +310,7 @@ ALTER TABLE `cms_gallery` ADD `gallery_orderid` INT( 10 ) DEFAULT '0' NOT NULL A
 #r147
 #renamed field page_text to text_page_text
 ALTER TABLE `cms_pages_text_history` CHANGE `page_text` `text_page_text` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;
+
+#r150
+#renamed inlineentrie_menu_id to inlineentrie_page_id
+ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlineentrie_menu_id` `inlineentrie_page_id` INT( 10 ) NOT NULL DEFAULT '0;

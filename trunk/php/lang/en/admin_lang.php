@@ -75,4 +75,7 @@
 	$admin_lang['restore'] = 'Restore';
 	$admin_lang['restored_from_version'] = 'Restored from version %u';
 	$admin_lang['saved_page_modifications'] = 'Saved page modifications';
+	$admin_lang['create_inlinemenu'] = 'Create inlinemenu';
+	$admin_lang['edit_inlinemenu'] = 'Edit inlinemenu';
+	$admin_lang['back'] = 'Back';
 ?>

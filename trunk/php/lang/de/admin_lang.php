@@ -75,4 +75,7 @@
 	$admin_lang['restore'] = 'Wiederherstellen';
 	$admin_lang['restored_from_version'] = 'Wiederhergestellt aus Version %u';
 	$admin_lang['saved_page_modifications'] = 'Gespeicherte Veränderungen';
+	$admin_lang['create_inlinemenu'] = 'Zusatzmenü erstellen';
+	$admin_lang['edit_inlinemenu'] = 'Zusatzmenü bearbeiten';
+	$admin_lang['back'] = 'Zurück';
 ?>

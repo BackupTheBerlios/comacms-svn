@@ -38,7 +38,8 @@
 				FROM (" . DB_PREFIX ."gallery gallery
 				LEFT JOIN " . DB_PREFIX . "pages_gallery page
 				ON page.gallery_id = gallery.gallery_id)
-				WHERE page.page_id=$page_id";
+				WHERE page.page_id=$page_id
+				ORDER BY gallery.gallery_orderid";
 			$images = db_result($sql);
 			$imgmax = 100;
 			while($image = mysql_fetch_object($images)) {

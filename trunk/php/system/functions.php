@@ -203,10 +203,11 @@
 		return $default;
 	}
 	
-	function generateThumb($file, $maxsize = 100) {
+	function generateThumb($file, $outputdir, $maxsize= 100) {
 	
 		list($width, $height) = getimagesize($file);
-		$newfile = str_replace('/upload/', '/thumbnails/', $file);
+		
+		$newfile = $outputdir . basename($file);
 		preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $file, $ext);
 		//$newfile = './data/thumbnails/' . $ext[1] . '.' . $ext[2];
 		
@@ -228,13 +229,9 @@
 				$free_memory = 0;
 
 			$needspace = ($width * $height + $newwidth * $newheight) * 5;
-			//
 			// check for enough available memory to resize the image
-			//
 			if($needspace > $free_memory && $free_memory > 0)
 				return false;
-			
-			
 			
 			$newimage = ImageCreateTrueColor($newwidth, $newheight);
 			
@@ -264,18 +261,16 @@
 		}
 		else
 			return copy($file, $newfile);
-		
 	}
 	
-	function generateUrl($string)
-	{
+	function generateUrl($string) {
 		return str_replace(" ", "%20", $string);
 	}
 	
-	function generateinlinemenu($menuid) {
+	function generateinlinemenu($page_id) {
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "inlinemenu_entries
-			WHERE inlineentrie_menu_id=$menuid
+			WHERE inlineentrie_page_id=$page_id
 			ORDER BY inlineentrie_sortid ASC";
 		$entries = db_result($sql);
 		$text = '';
@@ -289,7 +284,7 @@
 		}
 		$sql = "UPDATE " . DB_PREFIX . "inlinemenu
 			SET inlinemenu_html='$text'
-			WHERE inlinemenu_id='$menuid'";
+			WHERE page_id='$page_id'";
 		db_result($sql);	
 	}
 ?>

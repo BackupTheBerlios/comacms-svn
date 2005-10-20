@@ -51,6 +51,8 @@
 							break;
 				case 'generate_menu':	$out .= $this->_generate_menu();
 							break;
+				case 'inlinemenu':	$out .= $this->_inlineMenu();
+							break;
 		 		default:		$out .= $this->_homePage();
 		 	}
 			return $out;
@@ -322,15 +324,18 @@
 		 			$out .= "[$page->page_lang]";
 		 			// edit:
 		 			if($page->page_access != 'deleted')
-		 				$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
+		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
 		 			// info:
-		 			$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['info'] . "\" title=\"" . $admin_lang['info'] . "\"/></a>";
+		 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['info'] . "\" title=\"" . $admin_lang['info'] . "\"/></a>";
 		 			// view:
 		 			if($page->page_access != 'deleted')
-		 				$out .= " <a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>";
+		 				$out .= " <a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen $page->page_title\" title=\"Anschauen\"/></a>";
+		 			// inlinemenu:
+		 			if($page->page_access != 'deleted')
+		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page->page_id\">" . $admin_lang['inlinemenu'] . "</a>";
 		 			// delete:
 		 			if($page->page_access != 'deleted')
-		 				$out .= " <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$page->page_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
+		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=delete&amp;page_id=$page->page_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
 		 			
 					$out .= $this->_showStructure($page->page_id);
 		 			$out .= "\t\t\t\t</li>\r\n";
@@ -485,20 +490,221 @@
 	
 		}
 		
-		function _pagePath($pageid=0) {
+		function _pagePath($pageid = 0) {
 			$out = '';
 			$sql = "SELECT *
 			FROM " . DB_PREFIX . "pages
 			WHERE page_id=$pageid";
 			$page_result = db_result($sql);
 			while($page = mysql_fetch_object($page_result)) {
-				$out = "<a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\">$page->page_name</a>" . $out;
+				if($pageid == $page->page_id)
+					$out = " <span title=\"$page->page_title\">$page->page_name</span>";
+				else
+					$out = "<a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\" title=\"$page->page_title\">$page->page_name</a>" . $out;
 				if($page->page_parent_id != 0)
-				$out = '/' . $out;
+					$out = '<strong>/</strong>' . $out;
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "pages
 					WHERE page_id=$page->page_parent_id";
 				$page_result = db_result($sql);
+			}
+			return $out;
+		}
+		/**
+		 * inlineMenu
+		 * inlinemenu-management
+		 */
+		function _inlineMenu() {
+			global $admin_lang;
+			
+			$page_id = GetPostOrGet('page_id');
+			$action2 = GetPostOrGet('action2');
+			$out = '';
+			$sql = "SELECT " . DB_PREFIX. "pages.*, " . DB_PREFIX . "inlinemenu.*
+				FROM ( " . DB_PREFIX. "pages
+				LEFT JOIN " . DB_PREFIX . "inlinemenu ON " . DB_PREFIX . "inlinemenu.page_id = " . DB_PREFIX. "pages.page_id )
+				WHERE " . DB_PREFIX. "pages.page_access!='deleted' AND " . DB_PREFIX. "pages.page_id = $page_id";
+			$inline_result = db_result($sql);
+			$inline =  mysql_fetch_object($inline_result);
+			if($inline->inlinemenu_html === null && $action2 == 'create') {
+				$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu (page_id, inlinemenu_image, inlinemenu_html)
+					VALUES($page_id, '', '')";
+				db_result($sql);
+			}
+				
+			
+			if($inline->inlinemenu_html === null && $action2 != 'create') {
+				$out .= "Es wurde bis jetzt kein Zusatzmenü erstellt, soll das nun geschehen?<br />
+				<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;action2=create&amp;page_id=$page_id&amp;sure=1\" title=\"" . $admin_lang['yes'] . "\" class=\"button\">" . $admin_lang['yes'] . "</a>
+				<a href=\"admin.php?page=pagestructure\" title=\"" . $admin_lang['no'] . "\" class=\"button\">" . $admin_lang['no'] . "</a>";
+			}
+			else if($action2 == 'select_image') {
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "files
+					WHERE file_type LIKE 'image/%'
+					ORDER BY file_name ASC";
+				$images_result = db_result($sql);
+				$imgmax = 100;
+				$imgmax2 = 200;
+				$inlinemenu_folder = 'data/thumbnails/';
+				$out .= "<form action=\"admin.php\" method=\"post\"><div class=\"imagesblock\">
+				<input type=\"hidden\" name=\"page\" value=\"pagestructure\"/>
+				<input type=\"hidden\" name=\"action\" value=\"inlinemenu\"/>
+				<input type=\"hidden\" name=\"page_id\" value=\"$page_id\"/>
+				<input type=\"hidden\" name=\"action2\" value=\"set_image\"/>";
+				while($image = mysql_fetch_object($images_result)) {
+					$thumb = basename($image->file_path);
+					preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
+					if(strtolower($ext[2]) == 'gif')
+						$thumb .= '.png';
+					$orig_sizes = getimagesize($image->file_path);
+					$succes = true;
+					if(!file_exists($inlinemenu_folder . $imgmax . '_' . $thumb))
+						$succes = generateThumb($image->file_path, $inlinemenu_folder . $imgmax . '_', 100);
+					if((file_exists($inlinemenu_folder . $imgmax . '_' . $thumb) || $succes) && $orig_sizes[0] >= $imgmax2) {
+						$sizes = getimagesize($inlinemenu_folder . $imgmax . '_' . $thumb);
+						$margin_top = round(($imgmax - $sizes[1]) / 2);
+						$margin_bottom = $imgmax - $sizes[1] - $margin_top;
+						$out .= "<div class=\"imageblock\">
+					<a href=\"" . generateUrl($image->file_path) . "\">
+					<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($inlinemenu_folder . $imgmax . '_' .$thumb) . "\" alt=\"$thumb\" /></a><br />
+					<input type=\"radio\" name=\"image_path\" " .(($inline->inlinemenu_image == $inlinemenu_folder . $imgmax2 . '_' . $thumb) ? 'checked="checked" ' : '') . " value=\"$image->file_path\"/></div>";
+					}
+				}
+				$out .= "</div><input type=\"submit\" value=\"" . $admin_lang['apply'] . "\" class=\"button\"/><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['back'] . "</a></form>";
+				
+			}
+			else if($action2 == 'set_image') {
+				$image_path = GetPostOrGet('image_path');
+				$imgmax2 = 200;
+				$inlinemenu_folder = 'data/thumbnails/';
+							
+				$new_path = $inlinemenu_folder . $imgmax2 . '_'. basename($image_path);
+				if(!file_exists($new_path)) {
+					
+					$succes = generateThumb($image_path, $inlinemenu_folder . $imgmax2 . '_', 200);
+				}
+				if(file_exists($new_path)) {
+					$sql = "UPDATE " . DB_PREFIX . "inlinemenu
+						SET inlinemenu_image='$new_path'
+						WHERE page_id=$page_id";
+					db_result($sql);
+					$inline->inlinemenu_image = $new_path;
+				}
+					
+			}
+			else if($action2 == 'up') {
+				$entrie_id = GetPostOrGet('entrie_id');
+				$sql = "SELECT *
+			 		FROM " . DB_PREFIX . "inlinemenu_entries
+					WHERE inlineentrie_id=$entrie_id";
+				$first_entrie_result = db_result($sql);
+				if($first_entrie = mysql_fetch_object($first_entrie_result)) {
+					$first_id = $first_entrie->inlineentrie_id;
+					$first_sortid = $first_entrie->inlineentrie_sortid;
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "inlinemenu_entries
+						WHERE inlineentrie_sortid < $first_sortid AND inlineentrie_page_id=$first_entrie->inlineentrie_page_id
+						ORDER BY inlineentrie_sortid DESC";
+					$second_entrie_result = db_result($sql);
+					if($second_entrie = mysql_fetch_object($second_entrie_result)) {
+						$second_id = $second_entrie->inlineentrie_id;
+						$second_sortid = $second_entrie->inlineentrie_sortid;
+						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
+							SET inlineentrie_sortid=$second_sortid
+							WHERE inlineentrie_id=$first_id";
+						db_result($sql);
+						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
+							SET inlineentrie_sortid=$first_sortid
+							WHERE inlineentrie_id=$second_id";
+						db_result($sql);
+						generateinlinemenu($second_entrie->inlineentrie_page_id);			
+					}
+				}			
+			}
+			else if($action2 == 'down') {
+				$entrie_id = GetPostOrGet('entrie_id');
+				$sql = "SELECT *
+			 		FROM " . DB_PREFIX . "inlinemenu_entries
+					WHERE inlineentrie_id=$entrie_id";
+				$first_entrie_result = db_result($sql);
+				if($first_entrie = mysql_fetch_object($first_entrie_result)) {
+					$first_id = $first_entrie->inlineentrie_id;
+					$first_sortid = $first_entrie->inlineentrie_sortid;
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "inlinemenu_entries
+						WHERE inlineentrie_sortid > $first_sortid AND inlineentrie_page_id=$first_entrie->inlineentrie_page_id
+						ORDER BY inlineentrie_sortid ASC";
+					$second_entrie_result = db_result($sql);
+					if($second_entrie = mysql_fetch_object($second_entrie_result)) {
+						$second_id = $second_entrie->inlineentrie_id;
+						$second_sortid = $second_entrie->inlineentrie_sortid;
+						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
+							SET inlineentrie_sortid=$second_sortid
+							WHERE inlineentrie_id=$first_id";
+						db_result($sql);
+						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
+							SET inlineentrie_sortid=$first_sortid
+							WHERE inlineentrie_id=$second_id";
+						db_result($sql);
+						generateinlinemenu($second_entrie->inlineentrie_page_id);			
+					}
+				}
+			}
+			else if($action2 == 'delete') {
+				$entrie_id = GetPostOrGet('entrie_id');
+				$sure= GetPostOrGet('sure');
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "inlinemenu_entries
+					WHERE inlineentrie_id=$entrie_id";
+ 				$entrie_result = db_result($sql);
+ 				if($entrie = mysql_fetch_object($entrie_result)) {
+ 					if($sure == 1) {
+	 					$sql = "DELETE FROM " . DB_PREFIX . "inlinemenu_entries
+							WHERE inlineentrie_id=$entrie_id";
+ 						db_result($sql);
+	 					generateinlinemenu($entrie->inlineentrie_page_id);
+ 						header("Location: admin.php?page=pagestructure&action=inlinemenu&page_id=$page_id");
+ 					}
+ 					else {
+						$out .= "Sind sie sicher das die das Element &quot;$entrie->inlineentrie_text&quot; unwiederruflich löschen?<br />
+							<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;entrie_id=$entrie_id&amp;action2=delete&amp;sure=1&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['yes'] . "</a >
+							<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id\"class=\"button\">" . $admin_lang['no'] . "</a >";
+					}
+ 				}
+			}
+			$hide = array('select_image', 'delete');
+			if(!in_array($action2, $hide)) {	
+				$out .= "
+			<table>
+				<tr>
+					<td>Pfad zum Bild:<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmenü zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgweählt werden.</span></td>
+					<td>" . ((file_exists($inline->inlinemenu_image)) ? "<img src=\"$inline->inlinemenu_image\"/>" : "Noch kein bild gesetzt" ) . "</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td><td><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=select_image\" class=\"button\">Bild auswählen/verändern</a></td>
+				</tr>
+			</table>";
+				$sql = "SELECT *
+					FROM " . DB_PREFIX ."inlinemenu_entries
+					WHERE inlineentrie_page_id = $page_id
+					ORDER BY inlineentrie_sortid ASC";
+				$entries_result = db_result($sql);
+				$out .= "<table>
+					<thead><tr><td>Text</td><td>Typ</td><td>Aktion</td></tr></thead>";
+				while($entrie = mysql_fetch_object($entries_result)) {
+					$out .= "<tr>
+					<td>$entrie->inlineentrie_text</td>
+					<td>$entrie->inlinieentrie_type</td>
+					<td>
+						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=up\"><img src=\"./img/up.png\" alt=\"" . $admin_lang['move_up'] ."\" title=\"" . $admin_lang['move_up'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=down\"><img src=\"./img/down.png\" alt=\"" . $admin_lang['move_down'] ."\" title=\"" . $admin_lang['move_down'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=delete\"><img src=\"./img/del.png\" alt=\"" . $admin_lang['delete'] ."\" title=\"" . $admin_lang['delete'] ."\" /></a>
+						<!--<img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" />-->
+					</td>
+					</tr>";
+				}
+				$out .= "</table>";
 			}
 			return $out;
 		}
@@ -532,7 +738,7 @@
 				</tr>
 				<tr>
 					<td>Pfad:</td>
-					<td>" . $this->_pagePath($page->page_id) . "</td>
+					<td><a href=\"admin.php?page=pagestructure\">root</a><strong>/</strong>" . $this->_pagePath($page->page_id) . "</td>
 				</tr>
 				<tr>
 					<td>Bearbeitet von:</td>
@@ -543,6 +749,17 @@
 					<td>" . date("d.m.Y H:i:s",$page->page_date) . "</td>
 				</tr>
 			</table>\r\n";
+				
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "pages
+					WHERE page_parent_id = $page_id
+					ORDER BY page_date DESC";
+				$subpages_c_result = db_result($sql);
+				$subpages_count = mysql_num_rows($subpages_c_result);
+				if($subpages_count != 0) {
+					$out .="\t\t\t<h4>Unterseiten</h4><hr />\r\n";
+					$out .= $this->_showStructure($page->page_id);
+				}
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "pages_history
 					WHERE page_id = $page_id
@@ -584,8 +801,7 @@
 					$changes_count--;
 				}
 				
-				$out .="\t\t\t</table>";
-				
+				$out .= "\t\t\t</table>";
 				
 			}
 			

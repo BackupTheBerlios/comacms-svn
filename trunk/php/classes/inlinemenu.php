@@ -45,9 +45,11 @@
 			$inlinemenu_result = db_result($sql);
 			$out = '';
 			if($inlinemenu = mysql_fetch_object($inlinemenu_result)) {
-				include($this->Page->Templatefolder . '/menu.php');
-				$out = str_replace('[text]', $inlinemenu->inlinemenu_html, $menu_inline);
-				$out = str_replace('[image]', $inlinemenu->inlinemenu_image, $out);
+				if($inlinemenu->inlinemenu_html != '') {
+					include($this->Page->Templatefolder . '/menu.php');
+					$out = str_replace('[TEXT]', $inlinemenu->inlinemenu_html, $menu_inline);
+					$out = str_replace('[IMG]', $inlinemenu->inlinemenu_image, $out);
+				}
 			}
 			
 			return $out;

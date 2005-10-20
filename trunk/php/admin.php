@@ -56,9 +56,9 @@
 	$menu_array[] = array($admin_lang['files'], 'admin.php?page=files');
 	$menu_array[] = array($admin_lang['logout'], 'admin.php?page=logout');
 	
-	//
+	// FIXME: add path links to make the usability much better! 
+	$path_add = '';
 	// insert the 'functions' here
-	//
 	if(!isset($extern_page))
 		$extern_page = 'admincontrol';
 	if($extern_page == '')
@@ -155,7 +155,7 @@
 	}
 	$path = '';
 	if($extern_page != 'admincontrol')
-		$path = " -> <a href=\"admin.php?page=$extern_page\">$title</a>";
+		$path = " -> <a href=\"admin.php?page=$extern_page\">$title</a>$path_add";
 	$page->Template = str_replace('[POSITION]', "<a href=\"admin.php?page=admincontrol\">Admin</a>$path", $page->Template);
 	$page->Template = str_replace('[MENU]', $menu, $page->Template);
 	$page->Title = $title;

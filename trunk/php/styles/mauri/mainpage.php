@@ -4,7 +4,7 @@
 		<title>[PAGENAME] -> [TITLE]</title>
 		<link rel="stylesheet" href="[STYLE_PATH]/style.css" type="text/css" />
 		<link rel="stylesheet" href="[STYLE_PATH]/print.css" type="text/css" media="print" />
-		<!--[if lte IE 7]><link rel="stylesheet" href="[STYLE_PATH]iefix.css" type="text/css" /><notathome>
+		<!--[if IE]><link rel="stylesheet" href="[STYLE_PATH]/iefix.css" type="text/css" /><notathome>
 		<style type="text/css">#title {margin-bottom: 33px;} #position{border-bottom:none;}</style></notathome><![endif]--><forinlinemenu>
 		<style type="text/css">#text{margin-left: 345px;}</style>
 		<style type="text/css" media="print">#text{padding-left: 205px;}</style></forinlinemenu>

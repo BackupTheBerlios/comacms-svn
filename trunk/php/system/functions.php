@@ -24,89 +24,83 @@
 	
 	/**
 	 * @return string
+	 */
+	function make_link($link) {
+		
+		
+		if(eregi("^[a-z0-9\._-]+@+[a-z0-9\._-]+\.+[a-z]{2,4}$", $link))
+			return "mailto:$link\" class=\"link_email";
+		else if(substr($link,0,4) == 'http')
+			return "$link\" class=\"link_extern";
+		// TODO: load the title of the page into the link title and set an other css-class if the page does not exists
+		return "index.php?page=$link\" class=\"link_intern";
+	}
+	
+	/**
+	 * @return string
 	 * @param text string
+	 * FIXME: port this function into a class
 	 */ 
 	function convertToPreHtml($text) {
-		$text = htmlspecialchars($text);
-		preg_match_all("/\[code\](.+?)\[\/code\]/s", $text, $matches);
+		
+		// extract all code we won't compile it <code>...CODE...</code>
+		preg_match_all("/\<code\>(.+?)\<\/code\>/s", $text, $matches);
 		$codes = array();
-		foreach ($matches[1] as $key => $match)  {
+		foreach($matches[1] as $key => $match)  {
 			$codes[$key] = $matches[1][$key];
-			$text = str_replace($matches[1][$key], '%' . $key . '%', $text);
+			$text = str_replace('<code>' . $matches[1][$key] . '</code>', '[code]%' . $key . '%[/code]', $text);
 		}
-		//
-		// convert all **text** to <strong>text</strong> => Bold
-		//
-		$text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $text);
-		//
-		// convert all //text// to <em>text</em> => Italic
-		//
-		$text = preg_replace("/\/\/(.+?)\/\//s", "<em>$1</em>", $text);
-		//
-		// convert all __text__ to <u>text</u> => Underline
-		//
-		$text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $text);
-		//
-		// todo: [[link|text]]
-		//
-		// covert [ul]text[/ul] to <ul>text</ul>
-		//
-		$text = preg_replace("/\[ul\](.+?)\[\/ul\]/s", "<ul>$1</ul>", $text); 
-		//
-		// covert [li]text[/li] to <li>text</li>
-		//
-		$text = preg_replace("/\[li\](.+?)\[\/li\]/s", "<li>$1</li>", $text);
-		//
-		// convert [code]-tags
-		//
-		$text = preg_replace("/\[code\](.+?)\[\/code\]/s", "<pre class=\"code\">$1</pre>", $text);
-		//
-		// convert === text === to a header
-		//
-		$text = preg_replace("/===\ (.+?)\ ===/s", "<h3>$1</h3><hr />", $text);
-		//
-		// insert images
-		//
-		$text = preg_replace("/\[img:(.+?)\]/s", "<img src=\"\\1\" />", $text);
-		//
-		// if there are images formated like image.png|text move the text into the title and alt tags
-		//
-		$text = preg_replace("/<img src=\"(.+?)\|(.+?)\" \/>/s", "<img src=\"$1\" title=\"$2\" alt=\"$2\"/>", $text);
-		//
-		// special style attributes with css-formatting by the user
-		//
-		$text = preg_replace("/\[style:(.+?)\](.+?)\[\/style\]/s", "<p style=\"$1\">$2</p>", $text);
-		//
-		// TODO: make a better link handling - it is to complicated
-		//
-		// convert links
-		//
-		$text = preg_replace("/\[link:(.+?)\](.+?)\[\/link\]/s", "<a href=\"$1\" >$2</a>", $text);
-		//
-		// convert extern links
-		//
-		$text = preg_replace("/\[linkex:(.+?)\](.+?)\[\/linkex\]/s", "<a href=\"$1\" target=\"_blank\">$2</a>", $text);
-		//
-		// convert local hrefs
-		//
-		$text = preg_replace("/\"l:(.+?)\"/s","\"index.php?page=$1\"", $text);
-		$text = preg_replace("/\"g:(.+?)\"/s","\"gallery.php?page=$1\"", $text);
-		//
-		// covert extern hrefs
-		//
-		$text = preg_replace("/\"([A-Za-z]{1,})\.(.+?)\.([a-zA-Z.]{2,6}(|\/.+?))\"/s","\"http://$1.$2.$3\"", $text);//"repai" urls
-		//
-		// if there are links formated like http://www.williblau.de|text move the text into the title attribut
-		//
-		$text = preg_replace("/<a href=\"(.+?)\|(.+?)\" >/s", "<a href=\"$1\" title=\"$2\">", $text);
-		//
-		// convert "/n" to "<br />" (more or less ;-))
-		//
+		// 'repair' all urls (wirh no http://)
+		$text = preg_replace("/(\ |\\r|\\n)([A-Za-z]{1,})\.(.+?)\.([a-zA-Z.]{2,6}(|\/.+?))/s", '$1' . "http://$2.$3.$4", $text);
+		// remove all html characters
+		// TODO: ad a configuration posibility to allow html
+		$text = htmlspecialchars($text);
+		// fixes for some security bugs
 		$text = str_replace("\\r","\r", $text);
 		$text = str_replace("\\n","\n", $text);
+		$text = preg_replace("!(\r\n)|(\r)!","\n",$text);
+		// catch all email-adresses which should be convertet to links ( <email@domain.com>)
+		preg_match_all("#\&lt\;([a-z0-9\._-]+?)\@([\w\-]+\.[a-z0-9\-\.]+\.*[\w]+)\&gt\;#s", $text, $emails);
+		// allowed auto-link protocols
+		$protos = "http|ftp|https";
+		// convert urls to links http://www.domain.com to [[http://www.domain.com|www.domain.com]]
+		$text = preg_replace("#(?<!\[\[)($protos):\/\/(.+?)(\ |\\n|\\r)#s",'[[$1://$2|$2]]$3', $text);
+		
+		// convert catched emails into the link format [[]]
+		// TODO: add a possibility to covert emails int anti-spam-bot-structures
+		foreach($emails[0] as $key => $email)
+			$text = str_replace("&lt;".$emails[1][$key].'@'.$emails[2][$key]."&gt;", "[[".$emails[1][$key].'@'.$emails[2][$key]."|".$emails[1][$key].'@'.$emails[2][$key]."]]", $text);
+		// catch all links
+		preg_match_all("#\[\[(.+?)\]\]#s", $text, $links);
+		$link_list = array();
+		$link_nr = 1;
+		// replace all links with a short uniqe id to replace them later back
+		foreach($links[1] as $link) {
+			$link_list[$link_nr] = $link;
+			$text = str_replace("[[$link]]", "[[%$link_nr%]]", $text);
+			$link_nr++;
+		}
+		// convert all **text** to <strong>text</strong> => Bold
+		$text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $text);
+		// convert all //text// to <em>text</em> => Italic
+		$text = preg_replace("/\/_\/(.+?)\/\/_/s", " <em>$1</em> ", $text);
+		// convert all __text__ to <u>text</u> => Underline
+		$text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $text);
+		// convert === text === to a header
+		$text = preg_replace("#===\ (.+?)\ ===#s", "<h3>$1</h3><hr />", $text);
+		// convert "/n" to "<br />" (more or less ;-))
 		$text = nl2br($text);
+		// paste links into the text
+		foreach($link_list as $link_nr => $link) {
+			if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))				
+				$text = str_replace("[[%$link_nr%]]", "<a href=\"".make_link($link2[1])."\">" . $link2[2] . "</a>", $text);
+
+			else
+				$text = str_replace("[[%$link_nr%]]", "<a href=\"".make_link($link)."\">" . $link . "</a>", $text);
+		}
+		// paste code back
 		foreach($codes as $key => $match)
-			$text = str_replace('%' . $key . '%', $match, $text);
+			$text = str_replace('[code]%' . $key . '%[/code]', "<pre class=\"code\">$match</pre>", $text);
 			
 		return $text;
 	}

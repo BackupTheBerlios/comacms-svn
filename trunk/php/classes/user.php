@@ -61,8 +61,7 @@
 		 * 
 		 * @var string
 		 */
-		// FIXME: get this by default config or by HTTP headers of the client
-		var $Language = 'de';
+		var $Language = '';
 		
 		/**
 		 * LoginError
@@ -89,6 +88,7 @@
 			$extern_login_password = GetPostOrGet('login_password');
 			$extern_lang = GetPostOrGet('lang');
 			$languages = array('de', 'en');
+			
 			// Check: has the user changed the language by hand?
 			if(!empty($extern_lang)) {
 				if(in_array($extern_lang, $languages))
@@ -98,6 +98,23 @@
 			elseif(isset($_COOKIE['ComaCMS_user_lang'])) {
 				if(in_array($_COOKIE['ComaCMS_user_lang'], $languages))
 					$this->Language = $_COOKIE['ComaCMS_user_lang'];
+			}
+			// if no language is set, load the language from the HTTP-header
+			if($this->Language == '') {
+				if(function_exists('apache_request_headers'))
+					$langs = apache_request_headers();
+				else
+					$langs =  getallheaders();
+				$langs = $langs['Accept-Language'];
+				$langs = preg_replace("#\;q=[0-9\.]+#i", '', $langs);
+				$langs = explode(',', $langs);
+				$this->Language = $languages[0];
+				foreach($langs as $lang) {
+					if(in_array($lang, $languages)) {
+						$this->Language = $lang;
+						break;
+					}
+				}
 			}
 			
 			// Set the cookie (for the next 93(= 3x31) days)

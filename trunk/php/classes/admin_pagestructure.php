@@ -673,7 +673,113 @@
 					}
  				}
 			}
-			$hide = array('select_image', 'delete');
+			else if($action2 == 'add_new_dialog') {
+				$type = GetPostOrGet('type');
+				if($type == '') {
+					$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
+						<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
+						<input type=\"hidden\" name=\"action2\" value=\"add_new_dialog\" />
+						<table>
+						<tr><td colspan=\"2\">Eintrags-Typ:</td></tr>
+						<tr><td>Link<span class=\"info\">TODO</span></td><td><input type=\"radio\" name=\"type\" value=\"link\" checked=\"checked\"/></td></tr>
+						<tr><td>Text<span class=\"info\">TODO</span></td><td><input type=\"radio\" name=\"type\" value=\"text\"/></td></tr>
+						<tr><td>Interner-Link<span class=\"info\">TODO</span></td><td><input type=\"radio\" name=\"type\" value=\"intern\"/></td></tr>
+						<tr><td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"Weiter\" /></td></tr>
+						</table>
+						</form>";
+				}
+				else if($type == 'link') {
+					$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
+						<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
+						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
+						<input type=\"hidden\" name=\"type\" value=\"link\" />
+						<table>
+						<tr><td>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></td><td><input type=\"text\" name=\"text\" value=\"\" /></td></tr>
+						<tr><td>Link<span class=\"info\">Hier kommt die URL hin die den Link später ergibt.</span></td><td><input type=\"text\" name=\"link\" value=\"http://\" /></td></tr>
+						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
+						</table>
+						</form>";
+				}
+				else if($type == 'text') {
+					$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
+						<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
+						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
+						<input type=\"hidden\" name=\"type\" value=\"text\" />
+						<table>
+						<tr><td>Text<span class=\"info\">Das ist der Text, der später angezeigt werden soll</span></td><td><textarea name=\"text\"></textarea></td></tr>
+						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
+						</table>
+						</form>";
+				}
+				else if($type == 'intern') {
+					$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
+						<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
+						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
+						<input type=\"hidden\" name=\"type\" value=\"intern\" />
+						<table>
+						<tr><td>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></td><td><input type=\"text\" name=\"text\" value=\"\" /></td></tr>
+						<tr><td>Interne Seite<span class=\"info\">Das ist die interne Seite, auf die der Link später führen soll.</span></td><td><select name=\"link\">";
+			$sql = "SELECT page_name, page_title
+				FROM " . DB_PREFIX . "pages
+				ORDER BY page_title ASC";
+			$pages_result = db_result($sql);
+			while($page = mysql_fetch_object($pages_result)) {
+				$out .= "\t\t\t\t<option value=\"$page->page_name\">$page->page_title($page->page_name)</option>\r\n";
+			}
+			
+			$out .= "</select></td></tr>
+						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
+						</table>
+						</form>";
+				}
+				else
+					$action2 = '';
+			}
+			else if($action2 == 'add_new') {
+				$sql = "SELECT inlineentrie_sortid
+			 	FROM " . DB_PREFIX . "inlinemenu_entries
+			 	WHERE inlineentrie_page_id = $page_id
+			 	ORDER BY inlineentrie_sortid DESC";
+				$lastsort_result = db_result($sql);
+				$sortid = 1;
+				if($lastsort = mysql_fetch_object($lastsort_result)){
+					$sortid = $lastsort->inlineentrie_sortid;
+					$sortid++;
+				}
+				$text = GetPostOrGet('text');
+				$type = GetPostOrGet('type');
+				$link = GetPostOrGet('link');
+				
+				$sql = '';
+				switch ($type) {
+					case 'link':		$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
+									VALUES ($sortid, $page_id, 'link', '$text','$link');";
+								break;
+					case 'intern':		$link = "index.php?page=$link";
+ 								$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
+									VALUES ($sortid, $page_id, 'intern', '$text','$link');";
+								break;
+					case 'text':		$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text)
+									VALUES ($sortid, $page_id, 'text', '$text');";
+								break;
+				
+					default:		break;
+				}
+				if($sql != '') {
+	 				db_result($sql);
+ 					generateinlinemenu($page_id);
+ 				}
+			}
+			
+			$hide = array('select_image', 'delete', 'add_new_dialog');
 			if(!in_array($action2, $hide)) {	
 				$out .= "
 			<table>
@@ -694,7 +800,7 @@
 					<thead><tr><td>Text</td><td>Typ</td><td>Aktion</td></tr></thead>";
 				while($entrie = mysql_fetch_object($entries_result)) {
 					$out .= "<tr>
-					<td>$entrie->inlineentrie_text</td>
+					<td>". nl2br($entrie->inlineentrie_text) ."</td>
 					<td>$entrie->inlinieentrie_type</td>
 					<td>
 						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=up\"><img src=\"./img/up.png\" alt=\"" . $admin_lang['move_up'] ."\" title=\"" . $admin_lang['move_up'] ."\" /></a>
@@ -704,7 +810,8 @@
 					</td>
 					</tr>";
 				}
-				$out .= "</table>";
+				$out .= "</table>
+					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=add_new_dialog\" class=\"button\">Einen Eintrag hinzufügen</a>";
 			}
 			return $out;
 		}

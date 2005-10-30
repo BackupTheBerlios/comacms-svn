@@ -290,6 +290,16 @@ ALTER TABLE `cms_menu` ADD INDEX ( `menu_page_id` ) ;
 #r140
 #added commenting fields
 ALTER TABLE `cms_pages_history` ADD `page_edit_comment` VARCHAR( 100 ) NOT NULL ;
+<<<<<<< .mine
+ALTER TABLE `cms_pages` ADD `page_edit_comment` VARCHAR( 100 ) NOT NULL ;
+
+CREATE TABLE `cms_smilies` (
+`smilie_id` INT( 10 ) NOT NULL ,
+`smilie_path` VARCHAR( 250 ) NOT NULL ,
+`smilie_text` VARCHAR( 250 ) NOT NULL ,
+`smilie_title` VARCHAR( 250 ) NOT NULL
+);
+=======
 ALTER TABLE `cms_pages` ADD `page_edit_comment` VARCHAR( 100 ) NOT NULL ;
 
 #r142
@@ -314,3 +324,13 @@ ALTER TABLE `cms_pages_text_history` CHANGE `page_text` `text_page_text` TEXT CH
 #r150
 #renamed inlineentrie_menu_id to inlineentrie_page_id
 ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlineentrie_menu_id` `inlineentrie_page_id` INT( 10 ) NOT NULL DEFAULT '0;
+ALTER TABLE `cms_pages_text_history` CHANGE `page_text` `text_page_text` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;>>>>>>> .r150
+
+#r152
+#added smilie table
+CREATE TABLE `cms_smilies` (
+`smilie_id` INT( 10 ) NOT NULL ,
+`smilie_path` VARCHAR( 250 ) NOT NULL ,
+`smilie_text` VARCHAR( 250 ) NOT NULL ,
+`smilie_title` VARCHAR( 250 ) NOT NULL
+);

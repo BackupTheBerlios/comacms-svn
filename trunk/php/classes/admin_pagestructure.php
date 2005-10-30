@@ -67,7 +67,6 @@
 		 	$pages = GetPostOrGet('pagestructure_pages');
 		 	$menu = GetPostOrGet('pagestructure_savemenu');
 		 	
-		 	if($menu == $admin_lang['generate_mainmenu']) {
 		 		$menu_id = "1";
 		 		
 		 		$sql = "DELETE " .
@@ -111,9 +110,8 @@
 		 				}
 		 			}
 		 		}
-		 	}
+
 		 	header('Location: ' . $_SERVER['PHP_SELF'] . '?page=pagestructure');
-		 	//return $out;
 		 }
 		 
 		 function _newLink() {

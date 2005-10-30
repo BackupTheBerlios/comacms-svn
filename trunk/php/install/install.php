@@ -89,7 +89,7 @@
 		CREATE TABLE " . $db_prefix . "inlinemenu_entries (
 			inlineentrie_id int(10) unsigned NOT NULL auto_increment,
 			inlineentrie_sortid int(10) NOT NULL default '0',
-			inlineentrie_menu_id int(10) NOT NULL default '0',
+			inlineentrie_page_id int(10) NOT NULL default '0',
 			inlinieentrie_type enum('link','donwload','text','intern') NOT NULL default 'link',
 			inlineentrie_text text NOT NULL,
 			inlineentrie_link varchar(255) NOT NULL default '',
@@ -247,8 +247,8 @@
 		}
 	}
 	
-	$sql = "INSERT INTO " . $db_prefix . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date)
-		VALUES('de', 'public', 'home', 'Hauptseite', 0, 1, 'text', " . mktime() . ")";
+	$sql = "INSERT INTO " . $db_prefix . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)
+		VALUES('de', 'public', 'home', 'Hauptseite', 0, 1, 'text', " . mktime() . ", 'Installed Home-page')";
 	mysql_query($sql, $connection) or die(mysql_error());
 	$lastid =  mysql_insert_id();
 	$sql = "INSERT INTO " . $db_prefix . "pages_text (page_id, text_page_text,text_page_html)

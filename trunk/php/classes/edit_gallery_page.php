@@ -146,7 +146,6 @@
 		 		db_result($sql);
 		 	}	
 		 	header("Location: admin.php?page=pagestructure&action=edit&page_id=$page_id");
-		 	
 		}
 		 
 		/**
@@ -170,33 +169,31 @@
 		 		ORDER BY gallery_orderid DESC
 		 		LIMIT 0,1";
 		 	$orderid_result = db_result($sql);
-		 	$orderid = 0; 
-		 	if($orderid_res = mysql_fetch_object($orderid_result)) 
+		 	$orderid = 0;
+		 	if($orderid_res = mysql_fetch_object($orderid_result))
 		 		$orderid = $orderid_res->gallery_orderid + 1;
-	
-		 	foreach($images as $id) {
-				$sql = "SELECT file_path, file_id
-					FROM " . DB_PREFIX . "files
-					WHERE file_id=$id";
-				$image_result = db_result($sql);
-				
-				if($image = mysql_fetch_object($image_result)) {
-					$thumb = str_replace('/upload/', '/thumbnails/', $image->file_path);
-					preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
-					if(strtolower($ext[2]) == 'gif')
-						$thumb .= '.png';
-					$succes = true;
-					$imgmax = 100;
-					if(!file_exists($thumb))
-						$succes = generateThumb($image->file_path, $imgmax);
-					if(file_exists($thumb) || $succes) {
-						//$out .=  "\r\n" . $image->file_path;
-						$sql = "INSERT INTO " . DB_PREFIX . "gallery (gallery_id, gallery_file_id, gallery_image_thumbnail, gallery_image, gallery_orderid)
-							VALUES($page_data->gallery_id, $image->file_id,'$thumb','$image->file_path', $orderid)";
-						db_result($sql);
+			$thumb_folder = 'data/thumbnails/';
+			$imgmax = 100;
+			if(count($images) > 0) {
+		 		foreach($images as $id) {
+					$sql = "SELECT file_path, file_id
+						FROM " . DB_PREFIX . "files
+						WHERE file_id=$id";
+					$image_result = db_result($sql);
+					
+					if($image = mysql_fetch_object($image_result)) {
+						$thumb = $thumb_folder . $imgmax . '_' . basename($image->file_path);
+						preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
+						if(strtolower($ext[2]) == 'gif')
+							$thumb .= '.png';
+						if(file_exists($thumb)) {
+							$sql = "INSERT INTO " . DB_PREFIX . "gallery (gallery_id, gallery_file_id, gallery_image_thumbnail, gallery_image, gallery_orderid)
+								VALUES($page_data->gallery_id, $image->file_id,'$thumb','$image->file_path', $orderid)";
+							db_result($sql);
+						}
 					}
+					$orderid++;
 				}
-				$orderid++;
 			}
 			header("Location: admin.php?page=pagestructure&action=edit&page_id=$page_id");
 		}
@@ -241,26 +238,31 @@
 		 		WHERE file_type LIKE 'image/%'
 		 		ORDER BY file_name ASC";
 	 		$images_result = db_result($sql);
+	 		$imgmax = 100;
+	 		$thumb_folder = 'data/thumbnails/';
+	 		$img_count = 0;
 			while($image = mysql_fetch_object($images_result)) {
-				$thumb = str_replace('/upload/', '/thumbnails/', $image->file_path);
+				$thumb = basename($image->file_path);
 				preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
 				if(strtolower($ext[2]) == 'gif')
 					$thumb .= '.png';
 				$succes = true;
-				$imgmax = 100;
-				if(!file_exists($thumb))
-					$succes = generateThumb($image->file_path, $imgmax);
-				if((file_exists($thumb) || $succes )  && !in_array($image->file_id,$ids)) {
-					$sizes = getimagesize($thumb);
+				if(!file_exists($thumb_folder . $imgmax . '_' . $thumb))
+					$succes = generateThumb($image->file_path, $thumb_folder . $imgmax . '_', $imgmax);
+				if((file_exists($thumb_folder . $imgmax . '_' . $thumb) || $succes )  && !in_array($image->file_id, $ids)) {
+					$img_count++;
+					$sizes = getimagesize($thumb_folder . $imgmax . '_' . $thumb);
 					$margin_top = round(($imgmax - $sizes[1]) / 2);
 					$margin_bottom = $imgmax - $sizes[1] - $margin_top;
 					$out .= "\t\t\t\t<div class=\"imageblock\">" .
 						"\t\t\t\t\t<a href=\"" . generateUrl($image->file_path) . "\">" .
-						"\t\t\t\t\t<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($thumb) . "\" alt=\"$thumb\" /></a><br />" .
+						"\t\t\t\t\t<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($thumb_folder . $imgmax . '_' . $thumb) . "\" alt=\"" . $imgmax . "_$thumb\" /></a><br />" .
 						"\t\t\t\t\t<input type=\"checkbox\" name=\"images[]\" value=\"$image->file_id\"/>Auswählen" .
 						"\t\t\t\t</div>";
-					}
 				}
+			}
+			if($img_count == 0)
+				header("Location: admin.php?page=pagestructure&action=edit&page_id=$page_id");
 			$out .= "</td>" .
 				"</tr>" .
 				"<tr>" .
@@ -347,17 +349,26 @@
 				$images = db_result($sql);
 				$imgmax = 100;
 				while($image = mysql_fetch_object($images)) {
-					$sizes = getimagesize($image->gallery_image_thumbnail);
-					$margin_top = round(($imgmax - $sizes[1]) / 2);
-					$margin_bottom = $imgmax - $sizes[1] - $margin_top;
-					$out .= "\t\t\t\t<div class=\"imageblock\">
+					if(!file_exists($image->gallery_image_thumbnail)) {
+						$path = pathinfo($image->gallery_image_thumbnail);
+						$imgmax1 = 100;
+						$upload_path = 'data/upload/';
+						if(file_exists($upload_path . substr($path['basename'], strlen($imgmax . '_'))))
+							generateThumb($upload_path . substr($path['basename'], strlen($imgmax . '_')), $path['dirname']. '/' . $imgmax . '_', $imgmax);
+
+					}
+					if(file_exists($image->gallery_image_thumbnail)) {
+						$sizes = getimagesize($image->gallery_image_thumbnail);
+						$margin_top = round(($imgmax - $sizes[1]) / 2);
+						$margin_bottom = $imgmax - $sizes[1] - $margin_top;
+						$out .= "\t\t\t\t<div class=\"imageblock\">
 						\t\t\t\t\t<a href=\"" . generateUrl($image->gallery_image) . "\">
 						\t\t\t\t\t<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" /></a><br />
 						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=up&amp;image_id=$image->gallery_file_id\"><img src=\"./img/up.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_up'] . "\" title=\"" . $admin_lang['move_up'] . "\"/></a>
 						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=delete&amp;image_id=$image->gallery_file_id\"><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
 						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=down&amp;image_id=$image->gallery_file_id\"><img src=\"./img/down.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_down'] . "\" title=\"" . $admin_lang['move_down'] . "\"/></a>
 						\t\t\t\t</div>";
-					//$out .= "$image->gallery_image_thumbnail <br />";
+					}
 				}
 			return $out;
 		}

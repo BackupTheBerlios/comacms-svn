@@ -105,18 +105,21 @@
 					$langs = apache_request_headers();
 				else
 					$langs =  getallheaders();
-				$langs = $langs['Accept-Language'];
-				$langs = preg_replace("#\;q=[0-9\.]+#i", '', $langs);
-				$langs = explode(',', $langs);
-				$this->Language = $languages[0];
-				foreach($langs as $lang) {
-					if(in_array($lang, $languages)) {
-						$this->Language = $lang;
-						break;
+				if(isset($langs['Accept-Language'])) {
+					$langs = $langs['Accept-Language'];
+					$langs = preg_replace("#\;q=[0-9\.]+#i", '', $langs);
+					$langs = explode(',', $langs);
+					$this->Language = $languages[0];
+					foreach($langs as $lang) {
+						if(in_array($lang, $languages)) {
+							$this->Language = $lang;
+							break;
+						}
 					}
 				}
 			}
-			
+			if($this->Language == '')
+				$this->Language = $languages[0];
 			// Set the cookie (for the next 93(= 3x31) days)
 			setcookie('ComaCMS_user_lang', $this->Language, time() + 8035200); 
 		

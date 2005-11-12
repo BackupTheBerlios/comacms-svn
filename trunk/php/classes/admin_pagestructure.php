@@ -535,6 +535,7 @@
 				$out .= "Es wurde bis jetzt kein Zusatzmenü erstellt, soll das nun geschehen?<br />
 				<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;action2=create&amp;page_id=$page_id&amp;sure=1\" title=\"" . $admin_lang['yes'] . "\" class=\"button\">" . $admin_lang['yes'] . "</a>
 				<a href=\"admin.php?page=pagestructure\" title=\"" . $admin_lang['no'] . "\" class=\"button\">" . $admin_lang['no'] . "</a>";
+				return $out;
 			}
 			else if($action2 == 'select_image') {
 				$sql = "SELECT *
@@ -558,7 +559,7 @@
 					$orig_sizes = getimagesize($image->file_path);
 					$succes = true;
 					if(!file_exists($inlinemenu_folder . $imgmax . '_' . $thumb))
-						$succes = generateThumb($image->file_path, $inlinemenu_folder . $imgmax . '_', 100);
+						$succes = generateThumb($image->file_path, $inlinemenu_folder . $imgmax . '_', $imgmax);
 					if((file_exists($inlinemenu_folder . $imgmax . '_' . $thumb) || $succes) && $orig_sizes[0] >= $imgmax2) {
 						$sizes = getimagesize($inlinemenu_folder . $imgmax . '_' . $thumb);
 						$margin_top = round(($imgmax - $sizes[1]) / 2);
@@ -778,12 +779,26 @@
 			}
 			
 			$hide = array('select_image', 'delete', 'add_new_dialog');
-			if(!in_array($action2, $hide)) {	
+			if(!in_array($action2, $hide)) {
+				$image = 'Noch kein bild gesetzt';
+				//((file_exists()) ? "<img src=\"$inline->inlinemenu_image\"/>" :
+				if(file_exists($inline->inlinemenu_image))
+					$image = "<img src=\"$inline->inlinemenu_image\"/>";
+				else {
+					$path = pathinfo($inline->inlinemenu_image);
+					$imgmax2 = 200;
+					$upload_path = 'data/upload/';
+					if(file_exists($upload_path . substr($path['basename'], strlen($imgmax2 . '_')))){
+						if(generateThumb($upload_path . substr($path['basename'], strlen($imgmax2 . '_')), $path['dirname']. '/' . $imgmax2 . '_', $imgmax2))
+							$image = "<img src=\"$inline->inlinemenu_image\"/>";
+					}
+						
+				}	
 				$out .= "
 			<table>
 				<tr>
 					<td>Pfad zum Bild:<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmenü zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgweählt werden.</span></td>
-					<td>" . ((file_exists($inline->inlinemenu_image)) ? "<img src=\"$inline->inlinemenu_image\"/>" : "Noch kein bild gesetzt" ) . "</td>
+					<td>" . $image . "</td>
 				</tr>
 				<tr>
 					<td>&nbsp;</td><td><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=select_image\" class=\"button\">Bild auswählen/verändern</a></td>

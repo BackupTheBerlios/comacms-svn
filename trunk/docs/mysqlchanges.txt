@@ -313,4 +313,3 @@ ALTER TABLE `cms_pages_text_history` CHANGE `page_text` `text_page_text` TEXT CH
 #r150
 #renamed inlineentrie_menu_id to inlineentrie_page_id
 ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlineentrie_menu_id` `inlineentrie_page_id` INT( 10 ) NOT NULL DEFAULT '0;
-ALTER TABLE `cms_pages_text_history` CHANGE `page_text` `text_page_text` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL ;

@@ -417,21 +417,23 @@
 		}
 		elseif($extern_action == 'add_new') {
 			$changes = GetPostOrGet('change');
-			foreach($changes as $change) {
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "files
-					WHERE file_path = '$change'
-					LIMIT 0,1";
-				$file_result = db_result($sql);
-				if(($file = mysql_fetch_object($file_result)) && !file_exists($change)) {
-					$sql = "DELETE FROM " . DB_PREFIX . "files
-						WHERE file_id=$file->file_id";
-					db_result($sql);
-				}
-				elseif(file_exists($change)) {
-					$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date)
-						VALUES('" . basename($change) . "', '" . GetMimeContentType($change) . "', '$change', '" . filesize($change) . "', '" . md5_file($change) . "', " . mktime() . ")";
-					db_result($sql);
+			if(count($changes) > 0) {
+				foreach($changes as $change) {
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "files
+						WHERE file_path = '$change'
+						LIMIT 0,1";
+					$file_result = db_result($sql);
+					if(($file = mysql_fetch_object($file_result)) && !file_exists($change)) {
+						$sql = "DELETE FROM " . DB_PREFIX . "files
+							WHERE file_id=$file->file_id";
+						db_result($sql);
+					}
+					elseif(file_exists($change)) {
+						$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date)
+							VALUES('" . basename($change) . "', '" . GetMimeContentType($change) . "', '$change', '" . filesize($change) . "', '" . md5_file($change) . "', " . mktime() . ")";
+						db_result($sql);
+					}
 				}
 			}
 		}

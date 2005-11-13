@@ -50,8 +50,8 @@
 			$codes[$key] = $matches[1][$key];
 			$text = str_replace('<code>' . $matches[1][$key] . '</code>', '[code]%' . $key . '%[/code]', $text);
 		}
-		// 'repair' all urls (wirh no http://)
-		$text = preg_replace("/(\ |\\r|\\n)([A-Za-z]{1,})\.(.+?)\.([a-zA-Z.]{2,6}(|\/.+?))/s", '$1' . "http://$2.$3.$4", $text);
+		// 'repair' all urls (with no http:// but a www or ftp)
+		$text = preg_replace("/(\ |\\r|\\n)(www|ftp)\.(.+?)\.([a-zA-Z.]{2,6}(|\/.+?))/s", '$1' . "http://$2.$3.$4", $text);
 		// remove all html characters
 		// TODO: ad a configuration posibility to allow html
 		$text = htmlspecialchars($text);
@@ -93,10 +93,9 @@
 		// paste links into the text
 		foreach($link_list as $link_nr => $link) {
 			if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))				
-				$text = str_replace("[[%$link_nr%]]", "<a href=\"".make_link($link2[1])."\">" . $link2[2] . "</a>", $text);
-
+				$text = str_replace("[[%$link_nr%]]", "<a href=\"" . make_link($link2[1]) . "\">" . $link2[2] . "</a>", $text);
 			else
-				$text = str_replace("[[%$link_nr%]]", "<a href=\"".make_link($link)."\">" . $link . "</a>", $text);
+				$text = str_replace("[[%$link_nr%]]", "<a href=\"" . make_link($link) . "\">" . $link . "</a>", $text);
 		}
 		// paste code back
 		foreach($codes as $key => $match)

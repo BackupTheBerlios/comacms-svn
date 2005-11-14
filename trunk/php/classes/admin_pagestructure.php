@@ -788,7 +788,8 @@
 					$path = pathinfo($inline->inlinemenu_image);
 					$imgmax2 = 200;
 					$upload_path = 'data/upload/';
-					if(file_exists($upload_path . substr($path['basename'], strlen($imgmax2 . '_')))){
+					$orig_file = $upload_path . substr($path['basename'], strlen($imgmax2 . '_'));
+					if(file_exists($orig_file) && is_file($orig_file)){
 						if(generateThumb($upload_path . substr($path['basename'], strlen($imgmax2 . '_')), $path['dirname']. '/' . $imgmax2 . '_', $imgmax2))
 							$image = "<img src=\"$inline->inlinemenu_image\"/>";
 					}

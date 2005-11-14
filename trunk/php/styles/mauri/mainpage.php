@@ -6,8 +6,8 @@
 		<link rel="stylesheet" href="[STYLE_PATH]/print.css" type="text/css" media="print" />
 		<!--[if IE]><link rel="stylesheet" href="[STYLE_PATH]/iefix.css" type="text/css" /><notathome>
 		<style type="text/css">#title {margin-bottom: 33px;} #position{border-bottom:none;}</style></notathome><![endif]--><forinlinemenu>
-		<style type="text/css">#text{margin-left: 345px;}</style>
-		<style type="text/css" media="print">#text{padding-left: 205px;}</style></forinlinemenu>
+		<style type="text/css">#text{margin-left: 350px;}</style>
+		<style type="text/css" media="print">#text{margin-left: 205px;}</style></forinlinemenu>
 		<style type="text\/css">/*/*/@import url([STYLE_PATH]/operafix.c\ss) screen;/* */</style>
 		<meta name="author" content="St. Mauritius Hildesheim" />
 	</head>

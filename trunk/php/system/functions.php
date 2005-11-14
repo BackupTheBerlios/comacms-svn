@@ -83,7 +83,7 @@
 		// convert all **text** to <strong>text</strong> => Bold
 		$text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $text);
 		// convert all //text// to <em>text</em> => Italic
-		$text = preg_replace("/\/_\/(.+?)\/\/_/s", " <em>$1</em> ", $text);
+		$text = preg_replace("/\/\/(.+?)\/\//s", " <em>$1</em> ", $text);
 		// convert all __text__ to <u>text</u> => Underline
 		$text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $text);
 		// convert === text === to a header

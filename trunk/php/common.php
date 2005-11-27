@@ -23,7 +23,7 @@
 		die("");
 	if(file_exists("./install/") && !file_exists("./.svn/")) {
 		if(defined("COMACMS_INSTALLED"))
-			die("Please remove the install-folder id would be better.");
+			die("Please remove the install-folder it would be better.");
 		else
 			header('location: install/install.html');
 	}

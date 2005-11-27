@@ -101,12 +101,8 @@
 			}
 			// if no language is set, load the language from the HTTP-header
 			if($this->Language == '') {
-				if(function_exists('apache_request_headers'))
-					$langs = apache_request_headers();
-				else
-					$langs =  getallheaders();
-				if(isset($langs['Accept-Language'])) {
-					$langs = $langs['Accept-Language'];
+				if(isset($_ENV['HTTP_ACCEPT_LANGUAGE'])) {
+					$langs = $_ENV['HTTP_ACCEPT_LANGUAGE'];
 					$langs = preg_replace("#\;q=[0-9\.]+#i", '', $langs);
 					$langs = explode(',', $langs);
 					$this->Language = $languages[0];

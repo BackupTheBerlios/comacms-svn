@@ -1,0 +1,46 @@
+#title {
+ margin-bottom: 0;
+}
+
+#position {
+ margin-left: 140px;
+ padding-left: 10px;
+ margin-top: -1px;
+}
+
+.sitepreview, #previewiframe { /*FIXME: make only one classss*/
+ width: 820px;
+}
+
+.articles-block{
+ margin-right: 0;
+}
+table.dates, table.articles, table.page_commits {
+ width: 99%;
+}
+
+a.button {
+ padding-left: 50px;
+ padding-right: 50px;
+
+}
+input.checkbox {
+border:none;
+}
+input.article_input {
+ width:99.5%;
+}
+
+table.input_table {
+ width: 99%;
+}
+
+input.button {
+ border-width:1px;
+ border-style: solid;
+ line-height: normal;
+}
+
+textarea.edit {
+ width: 99%;
+}

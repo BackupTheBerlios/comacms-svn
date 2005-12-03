@@ -1,0 +1,13 @@
+galley
+page_type = "gallery";
+page_text= "1,5		// File ids
+image1.jpg		// Pfad zu einem bild basisordner wird data/gallery, muss aber nicht
+.../bild woanders.png";	// Pfad zu einem weiiteren bild
+page_html = "";
+
+access definitions
+0 = none
+1 = read
+2 = write/change
+3 = add/delete
+4 = full

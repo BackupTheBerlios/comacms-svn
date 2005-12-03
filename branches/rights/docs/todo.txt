@@ -1,0 +1,52 @@
+		Todolist
+
+	[_]- Manual
+	[ ]- Multi-Site-System(one installation with different sites, with a master- and a per-site-admin-interface
+	[ ]- Rights(per user, per group)
+	[ ]- Make authorisation over HTTP-AUTH
+	[_]- Userfriendly Installation
+	[_]- Translations
+	[ ]- Pluginsystem
+	[ ]- Admin-Interface
+		[_]- Preferences
+		[_]- AdminControl(statistics etc.)
+		[X]- Stylemanagement(change, preview)
+		[_]- Usermanagement
+		[ ]- Rightsmanagement
+		[ ]- Groupmanagement
+		[ ]- Menu-editor
+		[ ]- Inlinemenu-editor
+	[ ]- 'User'-Interface
+		[ ]- Page-editor
+		[ ]- Own preferences
+		[ ]- Login
+	[ ]- Admin-/User-Interface
+		[ ]- Gallery-editor
+		[ ]- Page-editor
+			[ ]- Special-elements
+			[ ]- Spellcheck
+			[ ]- WYSIWYG (should we use TinyMCE from http://tinymce.moxiecode.com/? or use it as an reference and write our own.. |look at www.blogger.com for more infos we must write it totally on our own!!!it must run on every browser but only if it has activated java-script)
+	[_]- 'Full XHTML support'
+	[_]- Gallery-viewer
+	[ ]- Styles
+		[_]- Mauri-style
+		[ ]- Default-style
+	[ ]- Search
+	[ ]- Guestbook
+	[ ]- Forum
+	[ ]- Caching-system
+	[_]- Article-system
+	[_]- Events-/Dates-system
+		[ ]- Connect with articles
+	[ ]- 'Timezone-option'
+	[ ]- Submenues
+	[ ]- Registerform by a "hidden" page with an unique id
+	[ ]- Database-size-reducer
+	[ ]- Newsletter
+	[ ]- Administration can dedect elements which are configurable in the style
+	[ ]- Sitemap
+	[ ]- Downloads
+	[ ]- GUI-Generator
+	[ ]- XHTML-PageGenerator
+	[ ]- BUGS!!
+		[ ]-If you delete a page all subpages will be hidden by page-structure editor

@@ -17,4 +17,5 @@
 
 	setSetting("default_page", "Standart Startseite", "Auf diese Seite wird jeder besucher geleitet, der keine Seite angegeben hat.", "home");
 	setSetting("pagename", "Seitenname", "Hier wird der Name der Seite definiert.", "ComaCMS");
+	setSetting("thumbnailfolder", "Verzeichnis für erstellte Bilder", "In dem hier angegebenen verzeichnis werden die automatisch erstellten Bilder gespeichert. Für diesen Ordner sind Schreibrechte notwendig)", "data/thumbnails/");
 ?>

@@ -39,9 +39,69 @@
 		 					break;
 		 		case 'delete':		$out .= $this->_deleteArticle($admin_lang);
 		 					break;
+		 		case 'setimage':	$out .= $this->_setImageArticle($admin_lang);
+		 					break;
+		 		case 'saveimage':	$out .= $this->_saveImageArticle($admin_lang);
+		 					break;
 		 		default:		$out .= $this->_homePage($admin_lang);
 		 	}
 	 		return $out;
+	 	}
+	 	
+	 	function _saveImageArticle($admin_lang) {
+	 		$file_path = GetPostOrGet('image_path');
+	 		$article_id = GetPostOrGet('article_id');
+	 		if(file_exists($file_path)) {
+	 			$sql = "UPDATE ".DB_PREFIX."articles SET 
+					article_image= '$file_path'
+					WHERE article_id=$article_id";
+				db_result($sql);
+			}
+			header('Location: admin.php?page=articles');
+	 	}
+	 	
+	 	function _setImageArticle($admin_lang) {
+	 		$article_id = GetPostOrGet('article_id');
+	 		$sql = "SELECT *
+				FROM " . DB_PREFIX . "articles
+				WHERE article_id=$article_id";
+			$article_result = db_result($sql);
+			if($article = mysql_fetch_object($article_result)) {
+	 			$out = '';
+	 			$sql = "SELECT *
+					FROM " . DB_PREFIX . "files
+					WHERE file_type LIKE 'image/%'
+					ORDER BY file_name ASC";
+				$images_result = db_result($sql);
+				$imgmax = 100;
+				$imgmax2 = 300;
+				$inlinemenu_folder = 'data/thumbnails/';
+				$out .= "<form action=\"admin.php\" method=\"post\"><div class=\"imagesblock\">
+				<input type=\"hidden\" name=\"page\" value=\"articles\"/>
+				<input type=\"hidden\" name=\"action\" value=\"saveimage\"/>
+				<input type=\"hidden\" name=\"article_id\" value=\"$article_id\"/>";
+				while($image = mysql_fetch_object($images_result)) {
+					$thumb = basename($image->file_path);
+					preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
+					if(strtolower($ext[2]) == 'gif')
+						$thumb .= '.png';
+					$orig_sizes = getimagesize($image->file_path);
+					$succes = true;
+					if(!file_exists($inlinemenu_folder . $imgmax . '_' . $thumb))
+						$succes = generateThumb($image->file_path, $inlinemenu_folder . $imgmax . '_', $imgmax);
+					if((file_exists($inlinemenu_folder . $imgmax . '_' . $thumb) || $succes) && $orig_sizes[0] >= $imgmax2) {
+						$sizes = getimagesize($inlinemenu_folder . $imgmax . '_' . $thumb);
+						$margin_top = round(($imgmax - $sizes[1]) / 2);
+						$margin_bottom = $imgmax - $sizes[1] - $margin_top;
+						$out .= "<div class=\"imageblock\">
+					<a href=\"" . generateUrl($image->file_path) . "\">
+					<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($inlinemenu_folder . $imgmax . '_' .$thumb) . "\" alt=\"$thumb\" /></a><br />
+					<input type=\"radio\" name=\"image_path\" " .(($article->article_image  == $image->file_path) ? 'checked="checked" ' : '') . " value=\"$image->file_path\"/></div>";
+					}
+				}
+				$out .= "</div><input type=\"submit\" value=\"" . $admin_lang['apply'] . "\" class=\"button\"/><a href=\"admin.php?page=articles&amp;action=edit&amp;article_id=$article_id\" class=\"button\">" . $admin_lang['back'] . "</a></form>";
+				return $out;
+			}	
 	 	}
 	 	
 	 	function _deleteArticle () {
@@ -88,7 +148,12 @@
 					VALUES ('$title', '$description', '$text', '" . convertToPreHtml($text) . "', '$user->ID', '" . mktime() . "')";
 				db_result($sql);
 			}
-			header('Location: admin.php?page=articles');	
+			if(GetPostOrGet('add_image') == 'add') {
+				$id = mysql_insert_id();
+				header("Location: admin.php?page=articles&action=setimage&article_id=$id");
+			}
+			else
+				header('Location: admin.php?page=articles');	
 	 	}
 	 	
 	 	/**
@@ -122,6 +187,11 @@
 							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\"></textarea></td>
 					</tr>
 					<tr>
+						<td>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></td>
+						<td><input type=\"checkbox\" name=\"add_image\" id=\"add_image_checkbox\" checked=\"checked\"/ value=\"add\"><label for=\"add_image_checkbox\">Nach dem Eintragen des Arikels noch ein Bild auswählen<br/>
+							(ein Bild kann auch später noch über die Bearbeiten-Funktion hinzugefügt/verändert werden)</label></td>
+					</tr>
+					<tr>
 						<td>Eingelogt als $user->Showname</td><td><input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" /></td>
 					</tr>
 				</table>
@@ -135,13 +205,15 @@
 	 	 * @var array admin_lang
 	 	 */
 	 	function _editArticle($admin_lang) {
-	 		global $user;
+	 		global $user, $config;
 	 		$id = GetPostOrGet('article_id');
 	 		$sql = "SELECT *
 	 			FROM " . DB_PREFIX . "articles
 	 			WHERE article_id=$id";
 	 		$article_result = db_result($sql);
 	 		if($article = mysql_fetch_object($article_result)) {
+	 			$thumbnailfoler = $config->Get('thumbnailfolder', 'data/thumbnails/');
+	 			$imgmax = 100; 
 	 			$out = "\t\t\t<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
 	 			<form method=\"post\" action=\"admin.php\">
 				<input type=\"hidden\" name=\"page\" value=\"articles\" />
@@ -166,6 +238,10 @@
 								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
 							</script>
 							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\">$article->article_text</textarea></td>
+					</tr>
+					<tr>
+						<td>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></td>
+						<td>" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img style=\"float:left\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '<b>noch kein Bild festgelegt</b><br />') . "Wenn das Bild gesetzt oder verändert wird, gehen alle ungespeicherten Veränderungen an den Texten verloren!<br /><a class=\"button\" href=\"admin.php?page=articles&amp;action=setimage&amp;article_id=$id\">Bild setzen/verändern</a></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" /><input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" /></td>
@@ -206,12 +282,17 @@
 	 	 * @var array admin_lang
 	 	 */
 	 	function _homePage($admin_lang) {
+	 		global $config;
+	 		
+	 		$thumbnailfoler = $config->Get('thumbnailfolder', 'data/thumbnails/');
+	 		$imgmax = 100; 
 	 		$out = "<a href=\"admin.php?page=articles&amp;action=new\" class=\"button\">Neuen Artikel schreiben</a><br /> 
 	 			<table class=\"articles\">
 					<thead>
 						<tr>
 							<td>" . $admin_lang['date'] . "</td>
 							<td>Titel</td>
+							<td>Bild</td>
 							<td>Beschreibung</td>
 							<td>" . $admin_lang['creator'] . "</td>
 							<td>" . $admin_lang['actions'] . "</td>
@@ -225,6 +306,7 @@
 				$out .= "<tr>
 						<td>" . date('d.m.Y H:i', $article->article_date) . "</td>
 						<td>$article->article_title</td>
+						<td class=\"article_image\">" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '') . "</td>
 						<td class=\"articles\">" . nl2br($article->article_description) . "</td>
 						<td>" . getUserByID($article->article_creator) . "</td>
 						<td>

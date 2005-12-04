@@ -29,10 +29,25 @@
 			FROM " . DB_PREFIX . "articles
 			WHERE article_id='$page_id'";
 		$article_result = db_result($sql);
+		$image = '';
 		if($article_data = mysql_fetch_object($article_result)) {
+			$imgmax = 300;
+			$inlinemenu_folder = $config->Get('thumbnailfolder','data/thumbnails/');	
+			$thumb = basename($article_data->article_image);
+			preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
+			if(strtolower(@$ext[2]) == 'gif')
+				$thumb .= '.png';
+			//$orig_sizes = getimagesize($image->file_path);
+			$succes = true;
+			if(!file_exists($inlinemenu_folder . $imgmax . '_' . $thumb))
+				$succes = generateThumb($article_data->article_image, $inlinemenu_folder . $imgmax . '_', $imgmax);
+			if(file_exists($inlinemenu_folder . $imgmax . '_' . $thumb) || $succes) {
+				$image = "<img class=\"article_image\" src=\"" . generateUrl($inlinemenu_folder . $imgmax . '_' . $thumb) . "\" />";
+			}
+			
 			$title = "Artikel:&nbsp;$article_data->article_title";
 			$position = $article_data->article_title;
-			$text .= "\t\t\t<h3>$article_data->article_title</h3><hr /><br />
+			$text .= "\t\t\t<h3>$article_data->article_title</h3><hr /><br />$image
 				" . nl2br($article_data->article_html);
 		}
 	}
@@ -44,13 +59,15 @@
 		$title = "Artikelliste";
 		
 		$text = "\t\t\t<h3>Artikelliste</h3><hr /><br />\r\n";
-		$text .= "\t\t\t<table>\r\n";
-		$text .= "\t\t\t\t<tr>
-					<td>Titel</td>
-					<td>Datum</td>
-					<td>Beschreibung</td>
-					<td>Autor</td>
-				</tr>\r\n";
+		$text .= "\t\t\t<table class=\"tablestyle\">\r\n";
+		$text .= "\t\t\t\t<thead>
+					<tr>
+						<td>Titel</td>
+						<td>Datum</td>
+						<td>Beschreibung</td>
+						<td>Autor</td>
+					</tr>
+				</thead>\r\n";
 		
 		while($articles_data = mysql_fetch_object($article_result))	{
 			$text .= "\t\t\t\t<tr>

@@ -249,7 +249,9 @@ textarea.edit {
  border: 1px dashed #C0C0C0;
  margin: 4px;
  padding: 5px;
+ min-heigth: 1200px;
  position: relative;
+ clear: both;
 }
 
 .articles-block {
@@ -265,9 +267,9 @@ textarea.edit {
 
 .article-date, .news-date {
  font-weight: normal;
- position: absolute;
- right: 0%;
+ margin-left: 0.7em;
  font-size:0.8em;
+ float: right;
 }
 
 .article-title, .news-title {
@@ -276,6 +278,12 @@ textarea.edit {
  border-bottom: 1px dashed #C0C0C0;
  margin-left: -5px;
  padding-left: 8px;
+}
+
+.article_image{
+ margin : 2px;
+ margin-left: 0;
+ float: left;
 }
 
 .news-author, .article-author {
@@ -291,6 +299,7 @@ table.dates, table.articles ,table.page_commits{
 
 .dates thead td, .articles thead td, .page_commits thead td{
  border: none;
+ text-align: center;
 }
 
 .dates td, .articles td,.page_commits td {
@@ -318,4 +327,14 @@ text-decoration: line-through;
 margin-left:2em;
 margin-right:3em;
 border:1px dashed #000000;
+}
+
+td.articles {
+ width: 50%;
+ padding-right: 5px;
+}
+
+td.article_image {
+text-align: center;
+float: none;
 }

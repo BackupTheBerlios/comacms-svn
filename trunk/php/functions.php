@@ -141,19 +141,35 @@
 	}
 
 	function articlesPreview($count = 5) {
+		global $config;
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "articles
 			ORDER BY article_date DESC
 			LIMIT 0, $count";
 		$result = db_result($sql);
 		$out = '<div class="articles-block">';
+		$imgmax = 100;
+		$inlinemenu_folder = $config->Get('thumbnailfolder', 'data/thumbnails/');
 		while($data = mysql_fetch_object($result)) {
+			$thumb = '';
+			$size = '';
+			if($data->article_image != '') {
+				$filename = basename($data->article_image);
+				if(file_exists($inlinemenu_folder . $imgmax . '_' . $filename)) {
+					//$size = getimagesize($inlinemenu_folder . $imgmax . '_' . $filename);
+					
+					$thumb = '<img class="article_image" title="' . $data->article_title . '" alt="' . $data->article_title . '" src="' . generateUrl($inlinemenu_folder . $imgmax . '_' . $filename) . '" />';
+					$size = getimagesize($inlinemenu_folder . $imgmax . '_' . $filename);
+					$size = ' style="min-height:' . ($size[1] - 13) . 'px"';
+				}
+			}
+			
 			$out .= "\t\t\t<div class=\"article\">
 				<div class=\"article-title\">
 					<span class=\"article-date\">" . date('d.m.Y H:i:s', $data->article_date) . "</span>
 					$data->article_title
-				</div>
-				" . nl2br($data->article_description) . " <a href=\"article.php?id=$data->article_id\">mehr...</a>
+				</div><div class=\"article_inside\"$size>
+				$thumb" . nl2br($data->article_description) . " <a href=\"article.php?id=$data->article_id\" title=\"Den vollständigen Artikel '$data->article_title' lesen\">mehr...</a></div>
 				<div class=\"article-author\">" . getUserByID($data->article_creator) . "</div>
 			</div>\r\n";
 		}

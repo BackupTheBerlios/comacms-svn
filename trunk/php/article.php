@@ -48,7 +48,7 @@
 			$title = "Artikel:&nbsp;$article_data->article_title";
 			$position = $article_data->article_title;
 			$text .= "\t\t\t<h3>$article_data->article_title</h3><hr /><br />$image
-				" . nl2br($article_data->article_html);
+				" . $article_data->article_html;
 		}
 	}
 	if($text == '')	{
@@ -86,6 +86,7 @@
 		$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	}
 	$page->SetText($text);
+	$page->Title .= $title;
 	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
 		
 	if(isset($position))

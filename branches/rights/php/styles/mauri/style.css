@@ -31,12 +31,24 @@ input, select, textarea, fieldset {
  border: 1px solid #000000;
 }
 
+input, select,textarea {
+ width: 15em;
+}
+
+input[type="checkbox"] {
+ width: auto;
+}
+
 legend {
  font-size: 1.2em;
 }
 
 thead td {
  font-weight: bold;
+}
+
+#date_day, #date_month, #date_year, #date_hour, #date_minute {
+width : auto;
 }
 
 #title {
@@ -265,9 +277,9 @@ textarea.edit {
 
 .article-date, .news-date {
  font-weight: normal;
- position: absolute;
- right: 0%;
+ margin-left: 0.7em;
  font-size:0.8em;
+ float: right;
 }
 
 .article-title, .news-title {
@@ -285,15 +297,15 @@ textarea.edit {
  text-align: right;
 }
 
-table.dates, table.articles ,table.page_commits{
+table.dates, table.articles ,table.page_commits, table.tablestyle{
  width: 100%;
 }
 
-.dates thead td, .articles thead td, .page_commits thead td{
+.dates thead td, .articles thead td, .page_commits thead td, .tablestyle thead td{
  border: none;
 }
 
-.dates td, .articles td,.page_commits td {
+.dates td, .articles td,.page_commits td, .tablestyle td {
  border-bottom: 1px dashed gray;
  vertical-align: top;
 }

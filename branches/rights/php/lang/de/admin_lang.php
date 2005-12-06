@@ -27,6 +27,7 @@
 	$admin_lang['dates'] = 'Termine';
 	$admin_lang['sitestyle'] = 'Seitenstyle';
 	$admin_lang['users'] = 'Benutzer';
+	$admin_lang['groups'] = 'Gruppen';
 	$admin_lang['gallery'] = 'Galerie';
 	$admin_lang['gallery editor'] = 'GalerieEditor';
 	$admin_lang['logout'] = 'Logout';

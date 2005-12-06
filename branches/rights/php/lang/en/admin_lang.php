@@ -28,6 +28,7 @@
 	$admin_lang['dates'] = 'Dates';
 	$admin_lang['sitestyle'] = 'Sitestyle';
 	$admin_lang['users'] = 'Users';
+	$admin_lang['groups'] = 'Groups';
 	$admin_lang['gallery'] = 'Gallery';
 	$admin_lang['gallery editor'] = 'Gallery-Editor';
 	$admin_lang['logout'] = 'Logout';

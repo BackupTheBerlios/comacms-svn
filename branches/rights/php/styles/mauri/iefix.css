@@ -15,7 +15,7 @@
 .articles-block{
  margin-right: 0;
 }
-table.dates, table.articles, table.page_commits {
+table.dates, table.articles, table.page_commits, table.tablestyle {
  width: 99%;
 }
 

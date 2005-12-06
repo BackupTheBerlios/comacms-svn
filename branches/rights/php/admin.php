@@ -53,6 +53,7 @@
 	$menu_array[] = array($admin_lang['articles'], 'admin.php?page=articles');
 	$menu_array[] = array($admin_lang['sitestyle'], 'admin.php?page=sitestyle');
 	$menu_array[] = array($admin_lang['users'], 'admin.php?page=users');
+	$menu_array[] = array($admin_lang['groups'], 'admin.php?page=groups');
 	$menu_array[] = array($admin_lang['files'], 'admin.php?page=files');
 	$menu_array[] = array($admin_lang['logout'], 'admin.php?page=logout');
 	
@@ -137,6 +138,12 @@
 		include('classes/admin_pagestructure.php');
 		$admin_page = new Admin_PageStructure();
 		$text = $admin_page->GetPage($extern_action);
+	}
+	elseif($extern_page == 'groups') {
+		$title = $admin_lang['groups'];
+		include('classes/admin_groups.php');
+		$admin_page = new Admin_Groups();
+		$text = $admin_page->GetPage($extern_action, $admin_lang);
 	}
 	//
 	// end of the 'functions'

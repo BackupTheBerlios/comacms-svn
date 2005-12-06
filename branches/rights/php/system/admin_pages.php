@@ -18,81 +18,6 @@
 	/**
 	 * This file contains (nearly) all subsites in the admin-interface
 	 */
-	
-	/**
-	 * returns the AdminControl-page with a list of useful details about the page
-	 * and a list of all visitors
-	 */
-
-	/*function page_admincontrol() {
-		global $admin_lang, $config;
-		//
-		// get the coutnt of all pages
-		//
-		$sitedata_result = db_result("SELECT page_id FROM " . DB_PREFIX . "pages_text");
-		$page_count = mysql_num_rows($sitedata_result);
-		//
-		// get the count of all registered users
-		//
-		$users_result = db_result("SELECT user_id FROM " . DB_PREFIX . "users");
-		$users_count = mysql_num_rows($users_result);
-		//
-		// get the size of all tables with the prefix DB_PREFIX
-		//
-		$table_infos_result = db_result("SHOW TABLE STATUS");
-		$data_size = 0;
-		while($table_infos = mysql_fetch_object($table_infos_result)) {
-			if(substr($table_infos->Name, 0, strlen(DB_PREFIX)) == DB_PREFIX)
-				$data_size += $table_infos->Data_length + $table_infos->Index_length;
-		}
-		$installdate = $config->Get('install_date');
-		if($installdate == '') {
-			$config->Save('install_date', mktime());
-			$installdate = mktime();
-		}
-		
-		$out = "<h3>AdminControl</h3><hr />
-	<table>
-		<tr><td>" . $admin_lang['online since'] . "</td><td>". date("d.m.Y",$installdate) . "</td></tr>
-		<tr><td>" . $admin_lang['registered users'] . "</td><td>$users_count</td></tr>
-		<tr><td>" . $admin_lang['created pages'] . "</td><td>$page_count</td></tr>
-		<tr><td>" . $admin_lang['database size'] . "</td><td>" . kbormb($data_size) . "</td></tr>
-	</table>
-	
-	<h3>Aktuelle Besucher</h3><hr />
-	<table>
-		<tr>
-			<td>".$admin_lang['name']."</td>
-			<td>".$admin_lang['page']."</td>
-			<td>".$admin_lang['last action']."</td>
-			<td>".$admin_lang['language']."</td>
-			<td>".$admin_lang['ip']."</td>
-			<td>".$admin_lang['host']."</td>
-		</tr>";
-		//output all visitors surfing on the site
-		$sql = "SELECT userid, page, lastaction, lang, ip, host
-			FROM " . DB_PREFIX . "online
-			WHERE lastaction >= " . (mktime() - 300) . "";
-		$users_online_result = db_result($sql);
-		while($users_online = mysql_fetch_object($users_online_result)) {
-			if($users_online->userid == 0)
-				$username  = $admin_lang['not registered'];
-			else
-				$username = getUserById($users_online->userid);
-			$out .= "\t\t\t<tr>
-			<td>".$username."</td>
-			<td><a href=\"index.php?page=".$users_online->page."\">".$users_online->page."</a></td>
-			<td>" . date("d.m.Y H:i:s", $users_online->lastaction)."</td>
-			<td>" . $admin_lang[$users_online->lang] . "</td>
-			<td>" . $users_online->ip . "</td>
-			<td>" . $users_online->host . "</td>
-		</tr>\r\n";
-		}
-
-		$out .= "</table>";
-	
-		return $out;
-	}*/
 
 /*****************************************************************************
  *
@@ -781,7 +706,7 @@
 						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit diesem Passwort kann sich der Benutzer in die geschützten Bereiche einloggen. (";
 						if($action == "save-error" || $action == "edit")
 							$out .= "Wenn beide Felder für das Passwort leer gelassen werden, wird das Passwort nicht verändert.";
-						elseif($action == "add-error" || $action == "add")
+						elseif($action == "add-error" || $action == "new")
 							$out .= "Notwendig";
 						$out .= ")</span>
 						</td>

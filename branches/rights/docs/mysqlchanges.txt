@@ -313,3 +313,33 @@ ALTER TABLE `cms_pages_text_history` CHANGE `page_text` `text_page_text` TEXT CH
 #r150
 #renamed inlineentrie_menu_id to inlineentrie_page_id
 ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlineentrie_menu_id` `inlineentrie_page_id` INT( 10 ) NOT NULL DEFAULT '0;
+
+#r161
+#created the authorisation table
+CREATE TABLE `cms_auth` (
+`auth_group_id` INT( 20 ) ,
+`auth_user_id` INT( 20 ) ,
+`auth_page_id` INT( 20 ) DEFAULT '0' NOT NULL ,
+`auth_view` TINYINT( 1 ) DEFAULT '1' NOT NULL ,
+`auth_edit` TINYINT( 1 ) DEFAULT '0' NOT NULL ,
+`auth_delete` TINYINT( 1 ) DEFAULT '0' NOT NULL ,
+`auth_new_sub` TINYINT( 1 ) DEFAULT '0' NOT NULL
+) TYPE = MYISAM ;
+
+#r161
+#created the groups table
+CREATE TABLE `cms_groups` (
+  `group_id` int(20) NOT NULL auto_increment,
+  `group_name` varchar(40) NOT NULL default '',
+  `group_description` text NOT NULL,
+  `group_manager` int(20) NOT NULL default '0',
+  PRIMARY KEY  (`group_id`),
+  UNIQUE KEY `group_name` (`group_name`)
+) TYPE=MyISAM;
+
+#r161
+#created the table which connects users with the groups
+CREATE TABLE `cms_group_users` (
+`group_id` INT( 20 ) NOT NULL ,
+`user_id` INT( 20 ) NOT NULL
+) TYPE = MYISAM ;

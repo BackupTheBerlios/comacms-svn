@@ -223,8 +223,8 @@
 				$result = db_result($sql);
 				if($date = mysql_fetch_object($result)) {
 					$out = "Den Newseintrag &quot;" . $date->date_topic . "&quot; am " . date("d.m.Y", $date->date_date) . " um " . date("H:i", $date->date_date) . " Uhr wirklich löschen?<br />
-			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=dates&amp;action=delete&amp;date_id=" . $date_id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
-			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=dates\" title=\"Nicht Löschen\">nein</a>";
+			<a class=\"button\" href=\"" . $_SERVER['PHP_SELF'] . "?page=dates&amp;action=delete&amp;date_id=" . $date_id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
+			<a class=\"button\" href=\"" . $_SERVER['PHP_SELF'] . "?page=dates\" title=\"Nicht Löschen\">nein</a>";
 			
 					return $out;
 				}
@@ -251,7 +251,8 @@
 	 		$selected_month = date('n', $selected_date);
 	 		$selected_hour = date('G', $selected_date);
 	 		$selected_minute = date('i', $selected_date);
-	 		$out = "<select name=\"" . $prefix . "_day\">";
+	 			 			 		
+	 		$out = "<select id=\"" . $prefix . "_day\" name=\"" . $prefix . "_day\">";
 	 		for($i = 1; $i <= 31;$i++) {
 	 			if($i == $selected_day)
 	 				$out .= "<option selected=\"selected\" value=\"$i\">" . substr('0'.$i,-2) . "</option>\r\n";
@@ -259,7 +260,7 @@
 	 				$out .= "<option value=\"$i\">" . substr('0'.$i,-2) . "</option>\r\n";
 	 		}
 	 		$out .= "</select>\r\n
-				<select name=\"" . $prefix . "_month\">";
+				<select id=\"" . $prefix . "_month\" name=\"" . $prefix . "_month\">";
 	 		for($i = 1; $i <= 12;$i++) {
 	 			if($i == $selected_month)
 	 				$out .= "<option selected=\"selected\" value=\"$i\">" . substr('0'.$i,-2) . "</option>\r\n";
@@ -267,7 +268,7 @@
 	 				$out .= "<option value=\"$i\">" . substr('0'.$i,-2) . "</option>\r\n";
 	 		}
 	 		$out .= "</select>\r\n
-	 			<select name=\"" . $prefix . "_year\">";
+	 			<select id=\"" . $prefix . "_year\" name=\"" . $prefix . "_year\">";
 	 		for($i = ($selected_year - $years < 1970) ? 1970 : ($selected_year - $years); $i <= $endyear; $i++) {
 	 			if($i == $selected_year)
 	 				$out .= "<option selected=\"selected\" value=\"$i\">$i</option>\r\n";
@@ -275,7 +276,7 @@
 	 				$out .= "<option value=\"$i\">$i</option>\r\n";
 	 		}
 	 		$out .= "</select>\r\n
-				<select name=\"" . $prefix . "_hour\">";
+				<select id=\"" . $prefix . "_hour\" name=\"" . $prefix . "_hour\">";
 	 		for($i = 0; $i <= 23; $i++) {
 	 			if($i == $selected_hour)
 	 				$out .= "<option selected=\"selected\" value=\"$i\">" . substr('0'.$i,-2) . "</option>\r\n";
@@ -283,7 +284,7 @@
 	 				$out .= "<option value=\"$i\">" . substr('0'.$i,-2) . "</option>\r\n";
 	 		}
 	 		$out .= "</select>\r\n
-				<select name=\"" . $prefix . "_minute\">";
+				<select id=\"" . $prefix . "_minute\" name=\"" . $prefix . "_minute\">";
 	 		for($i = 0; $i <= 59;$i++) {
 	 			if($i == $selected_minute)
 	 				$out .= "<option selected=\"selected\" value=\"$i\">" . substr('0'.$i,-2) . "</option>\r\n";

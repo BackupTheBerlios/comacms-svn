@@ -1,7 +1,25 @@
-html, body {
+body {
  margin: 0;
  padding: 0;
  font-family: arial, verdana, helvetica, sans-serif;
+ font-size: 62.5%;
+ background-color: #FFFFFF;
+ color: #000000;
+}
+
+* {
+ margin: 0;
+ padding: 0;
+ font-size: 1em;
+ font-weight: normal;
+}
+
+strong {
+ font-weight: bold;
+}
+
+h1, h2, h3, h4, h5 {
+ font-weight: bold;
 }
 
 a, a:visited {
@@ -11,36 +29,55 @@ a, a:visited {
 }
 
 h1 {
+ font-size: 2em;
  text-align: center;
  padding: 0;
  margin: 0;
 }
 
+h2 {
+ font-size: 1.5em;
+}
+
+h3 {
+ font-size: 1.17em;
+}
+
 img {
  border: 0;
+ width: auto;
+ height: auto;
 }
 
 hr {
  background-color: #000000;
- border: 0px solid #000000;
- height: 1px;
- margin-top: 0px; 
+ border: 0;
+ height: 0.04em;
+ margin-top: 0;
+ margin-bottom: 1em; 
 }
 
 input, select, textarea, fieldset {
  border: 1px solid #000000;
 }
 
-input, select,textarea {
+input, select, textarea {
  width: 15em;
+ font-family: arial, verdana, helvetica, sans-serif;
 }
 
-input[type="checkbox"] {
+input[type="checkbox"], input[type="button"], input[type="submit"], input[type="reset"],input[type="file"] {
  width: auto;
+}
+
+fieldset {
+ margin:0.1em;
+ padding: 1em;
 }
 
 legend {
  font-size: 1.2em;
+ color: #000000;
 }
 
 thead td {
@@ -65,9 +102,11 @@ width : auto;
  min-height: 140px;
  height: 140px;
  border-bottom: 1px solid #000000;
+ font-size: 1.6em;
 }
 
 #menupart {
+ font-size: 1.6em;
  float: left;
  width: 140px;
  border-left: 1px solid #000000;
@@ -77,9 +116,11 @@ width : auto;
 }
 
 #text {
- padding: 5px;
- margin: 0 0 0 142px;
+ font-size: 1.6em;
+ padding: 0.5em;
+ margin: 0 0 0 9em;
  text-align: justify;
+ line-height: 1.4em;
 }
 
 #logo {
@@ -117,7 +158,6 @@ width : auto;
  border-left: none;
  border-top: 1px solid #EBEBEB;
  border-bottom: 1px solid #EBEBEB;
-
  float: left;
  background-color: #000000;
  padding: 1px;
@@ -181,6 +221,7 @@ width : auto;
 }
 
 span.info, span.error{
+ line-height: 1.3em;
  font-size: 0.75em;
  width: 20em;
  display: block;
@@ -222,12 +263,12 @@ a.button , input.button, button{
 }
 
 a.button {
- height: 16px;
+ height: 1em;
  padding-top: 4px;
  padding-bottom:0px;
 
 }
-.sitepreview, #previewiframe { /*FIXME: make only one classss*/
+.sitepreview, #previewiframe { /*FIXME: make only one class*/
  border: 1px dashed #000000;
  width: 100%;
  height: 310px;
@@ -323,11 +364,26 @@ table.input_table {
 }
 
 .strike {
-text-decoration: line-through;
+ text-decoration: line-through;
 }
 
 .code {
-margin-left:2em;
-margin-right:3em;
-border:1px dashed #000000;
+ margin-left:2em;
+ margin-right:3em;
+ border:1px dashed #000000;
+}
+
+li.page_type_text, li.page_type_gallery {
+ margin-left: 1.5em;
+}
+
+label.row {
+ float: left;
+ display: inline;
+ padding-right: 1em;
+ width: 17em;
+}
+
+div.row {
+ clear: both;
 }

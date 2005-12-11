@@ -17,9 +17,15 @@
  	
 	/**
 	 * @package ComaCMS
+	 * @todo manage group-members
 	 */
 	class Admin_Groups {
 		
+		/**
+		 * @param string action
+		 * @param array admin_lang
+		 * @access public
+		 */
 		function GetPage($action, $admin_lang) {
 			$out = "\t\t\t<h3>" . $admin_lang['groups'] . "</h3><hr />\r\n";
 		 	$action = strtolower($action);
@@ -28,13 +34,128 @@
 		 					break;
 		 		case 'new_group':	$out .= $this->newGroup($admin_lang);
 		 					break;
-		 		case 'delete':	$out .= $this->deleteGroup($admin_lang);
+		 		case 'edit_group':	$out .= $this->editGroup($admin_lang);
+		 					break;
+		 		case 'save':		$out .= $this->saveGroup($admin_lang);
+		 					break;
+		 		case 'delete':		$out .= $this->deleteGroup($admin_lang);
 		 					break;
 		 		default:		$out .= $this->overwiev($admin_lang);
 		 	}
 		 	return $out;
 		}
 		
+		/**
+		 * @param array admin_lang
+		 * @access private
+		 */
+		function saveGroup($admin_lang) {
+			$group_id = GetPostOrGet('group_id');
+			if(is_numeric($group_id)) {
+				$group_name = GetPostOrGet('group_name');
+				$group_manager = GetPostOrGet('group_manager');
+				$group_description= GetPostOrGet('group_description');	
+				// check for a group which has aleready the group_name which the user decidet to change it into 
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "groups
+					WHERE group_id != $group_id AND group_name = '$group_name'";
+				$check_result = db_result($sql);
+				if($check = mysql_fetch_object($check_result)) {
+					header("Location: admin.php?page=groups&action=edit_group&error=name&group_name=$group_name&group_id=$group_id");
+					die();
+				}
+				$sql = "UPDATE " . DB_PREFIX . "groups
+					SET group_name='$group_name', group_manager=$group_manager, group_description='$group_description'
+					WHERE group_id=$group_id";
+				db_result($sql);
+			}
+			header('Location: admin.php?page=groups');
+			die();
+		}
+		/**
+		 * @param array admin_lang
+		 * @access private
+		 */
+		function editGroup($admin_lang) {
+			$group_id = GetPostOrGet('group_id');
+			if(is_numeric($group_id)) {
+				$error = (GetPostOrGet('error') == 'name' );
+				$group_name = GetPostOrGet('group_name');
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "groups
+					WHERE group_id=$group_id";
+				$group_result = db_result($sql);
+				if($group = mysql_fetch_object($group_result)) {
+					$out = "\t\t\t<form action=\"admin.php\" method=\"post\">
+				<input type=\"hidden\" name=\"page\" value=\"groups\" />
+				<input type=\"hidden\" name=\"action\" value=\"save\" />
+				<input type=\"hidden\" name=\"group_id\" value=\"$group_id\" />
+				<fieldset>
+					<legend>Gruppeneigenschaften</legend>
+					<div class=\"row\">
+						<label class=\"row\" for=\"group_name\">
+							Gruppenname:";
+					if($error)
+						$out .= "<span class=\"error\">Der Name &quot;$group_name&quot; ist bereits fÃ¼r eine andere Gruppe Vergeben!</span>";
+					$out .= "\t\t\t\t\t<span class=\"info\">Das ist der Name der Gruppe. Er muss eindeutig sein und kann nicht doppelt vorkommen.</span>
+						</label>
+						<input type=\"text\" id=\"group_name\" name=\"group_name\" value=\"$group->group_name\"/>
+					</div>
+					<div class=\"row\">
+						<label class=\"row\" for=\"group_description\">
+							Beschreibung:
+							<span class=\"info\">TODO</span>
+						</label>
+						<textarea id=\"group_description\" name=\"group_description\">$group->group_description</textarea>
+					</div>
+					<div class=\"row\">
+						<label class=\"row\" for=\"group_manager\">
+							Gruppenmanager:
+							<span class=\"info\">TODO</span>
+						</label>
+						<select name=\"group_manager\" id=\"group_manager\">";
+					// list all registered users (alphabetic)
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "users
+						ORDER BY user_name ASC";
+					$users_result = db_result($sql);
+					while($user = mysql_fetch_object($users_result)) {
+						$out.= "\t\t\t\t\t\t\t<option value=\"$user->user_id\"";
+						// select the actual group-manager
+						if($user->user_id == $group->group_manager)
+							$out.= " selected=\"selected\"";	
+						$out.= ">$user->user_showname</option>\r\n";
+					}	
+					// TODO: add member-output
+					$out .= "\t\t\t\t\t\t</select>
+					</div>
+				</fieldset>
+					<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" />
+					<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />
+				<fieldset>
+					<legend>Gruppenmitglieder</legend>
+					<table class=\"tablestyle\">
+						<thead>
+							<tr>
+								<td>Benutzer</td>
+								<td>Aktionen</td>
+							</tr>
+						</thead>
+					</table>			
+				</fieldset>
+				
+			</form>";
+					return $out;
+				}
+			}
+			header('Location: admin.php?page=groups');
+			die();
+		}
+		
+		/**
+		 * @param array admin_lang
+		 * @access private
+		 */
 		function deleteGroup($admin_lang) {
 			$group_id = GetPostOrGet('group_id');
 			$sure = GetPostOrGet('sure');
@@ -49,9 +170,9 @@
 					WHERE group_id=$group_id";
 				$result = db_result($sql);
 				if($group = mysql_fetch_object($result)) {
-					$out = "Die Gruppe &quot;" . $group->group_name . "&quot; wirklich löschen?<br />
-			<a class=\"button\" href=\"admin.php?page=groups&amp;action=delete&amp;group_id=" . $group_id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
-			<a class=\"button\" href=\"admin.php?page=groups\" title=\"Nicht Löschen\">nein</a>";
+					$out = "Die Gruppe &quot;" . $group->group_name . "&quot; wirklich lÃ¶schen?<br />
+			<a class=\"button\" href=\"admin.php?page=groups&amp;action=delete&amp;group_id=" . $group_id . "&amp;sure=1\" title=\"Wirklich LÃ¶schen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
+			<a class=\"button\" href=\"admin.php?page=groups\" title=\"Nicht LÃ¶schen\">nein</a>";
 			
 					return $out;
 				}
@@ -60,21 +181,29 @@
 			die();
 		}
 		
+		/**
+		 * @param array admin_lang
+		 * @access private
+		 */
 		function addGroup($admin_lang) {
 			$group_name = GetPostOrGet('group_name');
 			$group_manager = GetPostOrGet('group_manager');
 			$group_description= GetPostOrGet('group_description');
-			//TODO: handle errors
+			// TODO: handle errors
+			// TODO: add the group-manager to the group-user connection table 
 			$sql = "INSERT INTO " . DB_PREFIX . "groups (group_name, group_manager, group_description)
 				VALUES ('$group_name', $group_manager, '$group_description')";
 			db_result($sql);
-			//$out = '';
 			header('Location: admin.php?page=groups');
 			die();
 			
 			
 		}
 		
+		/**
+		 * @param array admin_lang
+		 * @access private
+		 */
 		function newGroup($admin_lang) {
 			$out = "<fieldset>
 					<legend>Neue Gruppe erstellen</legend>
@@ -114,6 +243,10 @@
 			return $out;
 		} 
 		
+		/**
+		 * @param array admin_lang
+		 * @access private
+		 */
 		function overwiev($admin_lang) {
 			
 			$out = "<a class=\"button\" href=\"admin.php?page=groups&amp;action=new_group\">Neue Gruppe erstellen</a><br />
@@ -136,7 +269,7 @@
 					<td>" . nl2br($group->group_description) . "</td>
 					<td>" . getUserByID($group->group_manager) . "</td>
 					<td>
-						<img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/>
+						<a href=\"admin.php?page=groups&amp;action=edit_group&amp;group_id=$group->group_id\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
 						<a href=\"admin.php?page=groups&amp;action=delete&amp;group_id=$group->group_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
 					</td>
 				</tr>";

@@ -61,9 +61,9 @@
 					WHERE article_id=$id";
 				$article_result = db_result($sql);
 				if($row = mysql_fetch_object($article_result)) {
-					$out = "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich löschen?<br />
-			<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=" . $id . "&amp;sure=1\" title=\"Wirklich Löschen\" class=\"button\">Ja</a>
-			<a href=\"admin.php?page=articles\" title=\"Nicht Löschen\" class=\"button\">Nein</a>";
+					$out = "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich lÃ¶schen?<br />
+			<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=" . $id . "&amp;sure=1\" title=\"Wirklich LÃ¶schen\" class=\"button\">Ja</a>
+			<a href=\"admin.php?page=articles\" title=\"Nicht LÃ¶schen\" class=\"button\">Nein</a>";
 			
 					return $out;
 				}
@@ -117,7 +117,7 @@
 								writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 								writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
+								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als ï¿½berschrift\",\"=== \",\" ===\",\"ï¿½berschrift\",\"h\");
 							</script>
 							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\"></textarea></td>
 					</tr>
@@ -163,7 +163,7 @@
 								writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 								writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
+								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als ï¿½berschrift\",\"=== \",\" ===\",\"ï¿½berschrift\",\"h\");
 							</script>
 							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\">$article->article_text</textarea></td>
 					</tr>
@@ -231,7 +231,7 @@
 							<a href=\"article.php?id=$article->article_id\" title=\"Anschauen\"><img src=\"./img/view.png\" alt=\"Anschauen\" title=\"Anschauen\" /></a> 
 							<!--<img scr=\"./img/info.png\"  alt=\"Infos\" title=\"Infos\" />-->
 							<a href=\"admin.php?page=articles&amp;action=edit&amp;article_id=$article->article_id\" title=\"Bearbeiten\"><img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-							<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=$article->article_id\" title=\"Löschen\"><img src=\"./img/del.png\" alt=\"Löschen\" title=\"Löschen\" /></a>
+							<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=$article->article_id\" title=\"Lï¿½schen\"><img src=\"./img/del.png\" alt=\"Lï¿½schen\" title=\"Lï¿½schen\" /></a>
 						</td>
 					</tr>";
 			}

@@ -109,8 +109,8 @@
 				<table>
 					<tr>
 						<td>
-							Name/Kürzel:
-							<span class=\"info\">Mit diesem Kürzel wird auf die Seite zugegriffen und dient es zur eindeutigen Identifizierung der Seite.</span>
+							Name/Kï¿½rzel:
+							<span class=\"info\">Mit diesem Kï¿½rzel wird auf die Seite zugegriffen und dient es zur eindeutigen Identifizierung der Seite.</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"page_name\" value=\"" . $extern_page_name . "\" maxlength=\"20\" />
@@ -119,7 +119,7 @@
 					<tr>
 						<td>
 							Titel:
-							<span class=\"info\">Der Titel wird später in der Titelleiste des Browsers angezeigt.</span>
+							<span class=\"info\">Der Titel wird spï¿½ter in der Titelleiste des Browsers angezeigt.</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"page_title\" maxlength=\"100\" />
@@ -128,7 +128,7 @@
 					<tr>
 						<td>
 							" . $admin_lang['language'] . ":
-							<span class=\"info\">Der Text soll in der gewählten Sprache geschrieben werden.</span>
+							<span class=\"info\">Der Text soll in der gewï¿½hlten Sprache geschrieben werden.</span>
 						</td>
 						<td>
 							<select name=\"page_lang\">
@@ -140,12 +140,12 @@
 					<tr>
 						<td>
 							Zugang:
-							<span class=\"info\">Wer soll sich die Seite später anschauen können?<br />
-							Jeder (öffentlich), nur ausgewählte Benutzer (privat) oder soll die Seite nur erstellt werden um sie später zu veröffentlichen (versteckt)?</span>
+							<span class=\"info\">Wer soll sich die Seite spï¿½ter anschauen kï¿½nnen?<br />
+							Jeder (ï¿½ffentlich), nur ausgewï¿½hlte Benutzer (privat) oder soll die Seite nur erstellt werden um sie spï¿½ter zu verï¿½ffentlichen (versteckt)?</span>
 						</td>
 						<td>
 							<select name=\"page_visible\">
-								<option value=\"public\">Öffentlich</option>
+								<option value=\"public\">ï¿½ffentlich</option>
 								<option value=\"private\">Privat</option>
 								<option value=\"hidden\">Versteckt</option>
 							</select>
@@ -171,13 +171,13 @@
 					<tr>
 						<td>
 							Bearbeiten?
-							<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die Übersichtseite zurückgekehrt werden?</span>
+							<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die ï¿½bersichtseite zurï¿½ckgekehrt werden?</span>
 						</td>
 						<td><input type=\"checkbox\" name=\"page_edit\" checked=\"true\"/></td>
 					</tr>
 					<tr>
 						<td colspan=\"2\">
-							<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" />&nbsp;
+							<input type=\"reset\" class=\"button\" value=\"Zurï¿½cksetzen\" />&nbsp;
 							<input type=\"submit\" class=\"button\" value=\"Erstellen\" />
 						</td>
 					</tr>
@@ -196,7 +196,7 @@
 			$exists_result = db_result($sql);
 			$exists = null;
 			if(!$exists = mysql_fetch_object($exists_result)) {
-				$out .= "\t\t\tDer Eintag existiert garnicht, das löschen kann man sich also sparen<br />
+				$out .= "\t\t\tDer Eintag existiert garnicht, das lï¿½schen kann man sich also sparen<br />
 			<a href=\"" . $PHP_SELF . "?page=pageeditor\">".$admin_lang['ok']."</a>";
 				return $out;
 			}
@@ -211,7 +211,7 @@
 				header("Location: " .$_SERVER['PHP_SELF'] . "?page=pageeditor&action=tree");
 			}
 			else {
-				$out .= "\t\t\tMöchten sie die Seite &quot;" . $exists->page_title . " (" . $exists->page_name . ")&quot; wirklich löschen?<br />
+				$out .= "\t\t\tMï¿½chten sie die Seite &quot;" . $exists->page_title . " (" . $exists->page_name . ")&quot; wirklich lï¿½schen?<br />
 				<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pageeditor&amp;action=delete&amp;sure=1&amp;page_name=" . $extern_page_name . "\">" . $admin_lang['yes'] . "</a> <a href=\"" . $_SERVER['PHP_SELF'] . "?page=pageeditor\">" . $admin_lang['no'] . "</a>";
 			}
 			
@@ -257,10 +257,10 @@
 					writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 					writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 					writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
+					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als ï¿½berschrift\",\"=== \",\" ===\",\"ï¿½berschrift\",\"h\");
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">".$page_data->page_text."</textarea>
-				<input type=\"reset\" value=\"Zurücksetzten\" />
+				<input type=\"reset\" value=\"Zurï¿½cksetzten\" />
 				<input type=\"submit\" value=\"Speichern\" />
 			</form>";
 			}
@@ -283,12 +283,12 @@
 			$out .= "\t\t\tName: " . $actual->page_name . "<br />
 			Titel: " . $actual->page_title . "<br />
 			<fieldset><legend>Text</legend>".$actual->page_html."</fieldset>
-			Letzte Veränderung von: ".getUserById($actual->page_creator)."<br />
-			insgesamt " . mysql_num_rows($olds_result) . " Veränderungen<br />";
+			Letzte Verï¿½nderung von: ".getUserById($actual->page_creator)."<br />
+			insgesamt " . mysql_num_rows($olds_result) . " Verï¿½nderungen<br />";
 		}
 		else { // home site etc.
 			$out .= "<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pageeditor&amp;action=new\">Neue Seite</a><br />\r\n";
-			$out .= "<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pageeditor&amp;action=tree\">Übersicht</a><br />\r\n";
+			$out .= "<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pageeditor&amp;action=tree\">ï¿½bersicht</a><br />\r\n";
 			$out .= "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"get\">
 		<input type=\"hidden\" name=\"page\" value=\"pageeditor\" />
 		<input type=\"hidden\" name=\"action\" value=\"edit\" />
@@ -301,7 +301,7 @@
 			while($siteinfo = mysql_fetch_object($sites))
 				$out .= "\t\t\t\t\t\t<option value=\"".$siteinfo->page_name."\">" . $siteinfo->page_title . "(".$siteinfo->page_name.")</option>\r\n";
 			$out .= "\t\t\t\t\t\t\t</select>
-		<input type=\"submit\" class=\"button\" value=\"Öffnen\" /> 
+		<input type=\"submit\" class=\"button\" value=\"ï¿½ffnen\" /> 
 		</form>";
 		}
 		
@@ -332,7 +332,7 @@
 							$save_path = $upload_path . uniqid() . $file['name'];
 						if($file['error'] == 0) {
 							//
-							// TODO:dont allow an upload if a file with the same md5 exists
+							// TODO: dont allow an upload if a file with the same md5 exists
 							//
 							$file_md5 = md5_file($file['tmp_name']);
 							
@@ -359,7 +359,7 @@
 		}
 		elseif($extern_action == 'check_new') {
 			//echo 'test';
-			$out .= "Hier werden alle Dateien angezeigt, die nicht über das Admin-Interface Verändert worden sind, um diese Veränderungen in die Datenbank zu übernehmen haken sie alle die Dateien an, die sie aktualisieren möchten.<br /><br />\r\n" .
+			$out .= "Hier werden alle Dateien angezeigt, die nicht Ãœber das Admin-Interface VerÃ¤ndert worden sind, um diese VerÃ¤nderungen in die Datenbank zu Ã¼bernehmen haken sie alle die Dateien an, die sie aktualisieren mÃ¶chten.<br /><br />\r\n" .
 					"\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n" .
 					"\t\t<input type=\"hidden\" name=\"page\" value=\"files\"/>" .
 					"\t\t<input type=\"hidden\" name=\"action\" value=\"add_new\"/>";
@@ -380,12 +380,12 @@
 			while($entry = $files->read()) {
   				if(is_file($upload_path.$entry))
   					if(!in_array(md5_file($upload_path . $entry),$md5s))
-  						$out .= "<input type=\"checkbox\" name=\"change[]\" value=\"$upload_path$entry\" checked=\"checked\" /><strong>Zur Datenbank hinzufügen</strong> $entry<br />\r\n";
+  						$out .= "<input type=\"checkbox\" name=\"change[]\" value=\"$upload_path$entry\" checked=\"checked\" /><strong>Zur Datenbank hinzufÃ¼gen</strong> $entry<br />\r\n";
   						
   				//echo $upload_path.$entry . '-' . md5_file($upload_path.$entry) . "<br>";
 			}
 			$files->close();
-			$out .= "<input type=\"submit\" class=\"button\" value=\"Ausführen\"/>" .
+			$out .= "<input type=\"submit\" class=\"button\" value=\"Ausfï¿½hren\"/>" .
 				"</form>\n\r";
 			return $out;
 			//print_r($md5s);
@@ -406,10 +406,10 @@
 					//unlink()
 				}
 				else {
-					$out .= "Sind sie sicher, dass sie die Datei &quot;$file->file_name&quot; unwiederruflich löschen wollen?<br />
+					$out .= "Sind sie sicher, dass sie die Datei &quot;$file->file_name&quot; unwiederruflich lÃ¶schen wollen?<br />
 					Die Datei wurde am " . date('d.m.Y', $file->file_date) . " um " . date('H:i:s', $file->file_date) ." hochgeladen.<br />
-					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&amp;action=delete&amp;file_id=" . $extern_file_id . "&amp;sure=1\" title=\"Wirklich Löschen\"  class=\"button\">" . $admin_lang['yes'] . "</a>
-					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files\" title=\"Nicht Löschen\" class=\"button\">" . $admin_lang['no'] . "</a>";
+					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&amp;action=delete&amp;file_id=" . $extern_file_id . "&amp;sure=1\" title=\"Wirklich LÃ¶schen\"  class=\"button\">" . $admin_lang['yes'] . "</a>
+					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files\" title=\"Nicht LÃ¶schen\" class=\"button\">" . $admin_lang['no'] . "</a>";
 					return $out;
 				}
 
@@ -445,9 +445,18 @@
 			<input type=\"submit\" class=\"button\" value=\"Hochladen\"/>
 		</form>";
 		$out .= "
-		<a href=\"admin.php?page=files&amp;action=check_new\"  class=\"button\">Auf Veränderungen überprüfen</a><br /><br />
-		<table>
-		<tr><td>id</td><td>Name</td><td>Größe</td><td>Hochgeladen am</td><td>Typ</td><td>Aktionen</td></tr>";
+		<a href=\"admin.php?page=files&amp;action=check_new\"  class=\"button\">Auf VerÃ¤nderungen Ã¼berprÃ¼fen</a><br /><br />
+		<table class=\"tablestyle\">
+			<thead>
+				<tr>
+					<td>id</td>
+					<td>Name</td>
+					<td>GrÃ¶ÃŸe</td>
+					<td>Hochgeladen am</td>
+					<td>Typ</td>
+					<td>Aktionen</td>
+				</tr>
+			</thead>";
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "files
 			ORDER BY file_name ASC";

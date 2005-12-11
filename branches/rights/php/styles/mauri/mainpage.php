@@ -1,7 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html lang="de">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
 	<head>
 		<title>[PAGENAME] -> [TITLE]</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="author" content="St. Mauritius Hildesheim" />
+		<meta name="generator" content="ComaCMS 0.1" />
 		<link rel="stylesheet" href="[STYLE_PATH]/style.css" type="text/css" />
 		<link rel="stylesheet" href="[STYLE_PATH]/print.css" type="text/css" media="print" />
 		<!--[if IE]><link rel="stylesheet" href="[STYLE_PATH]/iefix.css" type="text/css" /><notathome>
@@ -9,7 +12,6 @@
 		<style type="text/css">#text{margin-left: 350px;}</style>
 		<style type="text/css" media="print">#text{margin-left: 205px;}</style></forinlinemenu>
 		<style type="text\/css">/*/*/@import url([STYLE_PATH]/operafix.c\ss) screen;/* */</style>
-		<meta name="author" content="St. Mauritius Hildesheim" />
 	</head>
 	<body>	
 		<div id="top">

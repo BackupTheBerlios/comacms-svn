@@ -60,6 +60,7 @@
 	// FIXME: add path links to make the usability much better! 
 	$path_add = '';
 	// insert the 'functions' here
+	$extern_action = GetPostOrGet('action');
 	if(!isset($extern_page))
 		$extern_page = 'admincontrol';
 	if($extern_page == '')

@@ -193,7 +193,8 @@
 				if(get_magic_quotes_gpc())
 					$handle = stripslashes($handle);
 				if(!is_numeric($handle))
-					$handle =  mysql_real_escape_string($handle);
+					//$handle =  mysql_real_escape_string($handle);
+					$handle =  addslashes($handle);
 			}
 		}
 		return $handle;

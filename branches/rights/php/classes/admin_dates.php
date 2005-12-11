@@ -51,7 +51,7 @@
 	 	 */
 	 	function _homePage($admin_lang) {
 	 		$out = '';
-	 		$out .= "<a href=\"admin.php?page=dates&amp;action=new\" class=\"button\">Neuen Termin hizufügen</a>
+	 		$out .= "<a href=\"admin.php?page=dates&amp;action=new\" class=\"button\">Neuen Termin hizufÃ¼gen</a>
 				<table class=\"dates\">
 					<thead>
 						<tr>
@@ -120,7 +120,7 @@
 	 					<td>" . $admin_lang['topic'] . ": <span class=\"info\">Dies ist die Beschreibung des Termins</span></td>
 	 					<td><input type=\"text\" name=\"date_topic\" value=\"$date->date_topic\"/></td></tr>
 	 				<tr>
-	 					<td></td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
+	 					<td></td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurï¿½cksetzen\" /></td>
 	 				</tr>
 	 			</table>
 	 			</form>";
@@ -176,7 +176,7 @@
 						<td><input type=\"text\" name=\"date_topic\" maxlength=\"150\" /></td>
 					</tr>
 					<tr>
-						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
+						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurï¿½cksetzen\" /></td>
 					</tr>
 				</table>
 			</form>";
@@ -222,9 +222,9 @@
 					WHERE date_id=$date_id";
 				$result = db_result($sql);
 				if($date = mysql_fetch_object($result)) {
-					$out = "Den Newseintrag &quot;" . $date->date_topic . "&quot; am " . date("d.m.Y", $date->date_date) . " um " . date("H:i", $date->date_date) . " Uhr wirklich löschen?<br />
-			<a class=\"button\" href=\"" . $_SERVER['PHP_SELF'] . "?page=dates&amp;action=delete&amp;date_id=" . $date_id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
-			<a class=\"button\" href=\"" . $_SERVER['PHP_SELF'] . "?page=dates\" title=\"Nicht Löschen\">nein</a>";
+					$out = "Den Newseintrag &quot;" . $date->date_topic . "&quot; am " . date("d.m.Y", $date->date_date) . " um " . date("H:i", $date->date_date) . " Uhr wirklich lÃ¶schen?<br />
+			<a class=\"button\" href=\"" . $_SERVER['PHP_SELF'] . "?page=dates&amp;action=delete&amp;date_id=" . $date_id . "&amp;sure=1\" title=\"Wirklich LÃ¶schen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
+			<a class=\"button\" href=\"" . $_SERVER['PHP_SELF'] . "?page=dates\" title=\"Nicht LÃ¶schen\">nein</a>";
 			
 					return $out;
 				}

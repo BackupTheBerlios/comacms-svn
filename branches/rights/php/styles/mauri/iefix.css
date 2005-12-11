@@ -11,7 +11,9 @@
 .sitepreview, #previewiframe { /*FIXME: make only one classss*/
  width: 820px;
 }
-
+input {
+ width: auto;
+}
 .articles-block{
  margin-right: 0;
 }
@@ -25,7 +27,7 @@ a.button {
 
 }
 input.checkbox {
-border:none;
+ border:none;
 }
 input.article_input {
  width:99.5%;

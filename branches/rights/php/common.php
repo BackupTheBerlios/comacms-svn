@@ -27,14 +27,13 @@
 		else
 			header('location: install/install.html');
 	}
-	import_request_variables("gP", "extern_");
-		
+	
 	include('classes/outputpage.php');
 	include('classes/config.php');
 	include('classes/user.php');
 	include('classes/inlinemenu.php');
 	include('functions.php');
-		
+	$extern_page = GetPostOrGet('page');	
 	define('DB_PREFIX', $d_pre);
 	connect_to_db($d_user, $d_pw, $d_base, $d_server);
 	$config = new Config();

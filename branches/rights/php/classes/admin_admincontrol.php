@@ -77,7 +77,7 @@
 				$config->Save('install_date', mktime());
 				$installdate = mktime();
 			}	
-			$out = "\t\t\t<h3>AdminControl</h3><hr />
+			$out = "\t\t\t<h3>" . $this->admin_lang['admincontrol'] . "</h3><hr />
 			<table>
 				<tr><td>" . $this->admin_lang['online since'] . ":</td><td>". date("d.m.Y",$installdate) . "</td></tr>
 				<tr><td>" . $this->admin_lang['registered users'] . ":</td><td>$users_count</td></tr>
@@ -86,7 +86,7 @@
 				<tr><td>" . $this->admin_lang['database size'] . ":</td><td>" . kbormb($data_size) . "</td></tr>
 			</table>
 			<h3>Aktuelle Besucher</h3><hr />
-			<table>
+			<table class=\"tablestyle\">
 				<thead>
 					<tr>
 						<td>".$this->admin_lang['name']."</td>

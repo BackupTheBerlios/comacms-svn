@@ -38,6 +38,8 @@
 		 					break;
 		 		case 'save':		$out .= $this->saveGroup($admin_lang);
 		 					break;
+		 		case 'add_member':	$out .= $this->addMember($admin_lang);
+		 					break;
 		 		case 'delete':		$out .= $this->deleteGroup($admin_lang);
 		 					break;
 		 		default:		$out .= $this->overwiev($admin_lang);
@@ -45,6 +47,23 @@
 		 	return $out;
 		}
 		
+		/**
+		 * @param array admin_lang
+		 * @access private
+		 */
+		function addMember($admin_lang) {
+			$group_id = GetPostOrGet('group_id');
+			$user_id = GetPostOrGet('user_id');
+			if(is_numeric($user_id) && is_numeric($group_id)) {
+				$sql = "INSERT INTO " . DB_PREFIX . "group_users (group_id, user_id)
+					VALUES ($group_id, $user_id)";
+				db_result($sql);
+				header("Location: admin.php?page=groups&action=edit_group&group_id=$group_id");
+				die();	
+			}
+			header('Location: admin.php?page=groups');
+			die();
+		}
 		/**
 		 * @param array admin_lang
 		 * @access private
@@ -94,9 +113,9 @@
 					<legend>Gruppeneigenschaften</legend>
 					<div class=\"row\">
 						<label class=\"row\" for=\"group_name\">
-							Gruppenname:";
+							Gruppenname:\r\n";
 					if($error)
-						$out .= "<span class=\"error\">Der Name &quot;$group_name&quot; ist bereits für eine andere Gruppe Vergeben!</span>";
+						$out .= "\t\t\t\t\t<span class=\"error\">Der Name &quot;$group_name&quot; ist bereits für eine andere Gruppe Vergeben!</span>\r\n";
 					$out .= "\t\t\t\t\t<span class=\"info\">Das ist der Name der Gruppe. Er muss eindeutig sein und kann nicht doppelt vorkommen.</span>
 						</label>
 						<input type=\"text\" id=\"group_name\" name=\"group_name\" value=\"$group->group_name\"/>
@@ -115,9 +134,11 @@
 						</label>
 						<select name=\"group_manager\" id=\"group_manager\">";
 					// list all registered users (alphabetic)
-					$sql = "SELECT *
-						FROM " . DB_PREFIX . "users
-						ORDER BY user_name ASC";
+					$sql = "SELECT user.*, link.*
+						FROM ( " . DB_PREFIX. "group_users link
+						LEFT JOIN " . DB_PREFIX . "users user ON user.user_id = link.user_id )
+						WHERE link.group_id = $group_id
+						ORDER BY user.user_name ASC";
 					$users_result = db_result($sql);
 					while($user = mysql_fetch_object($users_result)) {
 						$out.= "\t\t\t\t\t\t\t<option value=\"$user->user_id\"";
@@ -129,9 +150,16 @@
 					// TODO: add member-output
 					$out .= "\t\t\t\t\t\t</select>
 					</div>
+					<div class=\"row\">
+						<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" />
+						<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />
+					</div>
 				</fieldset>
-					<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" />
-					<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />
+			</form>
+			<form action=\"admin.php\" method=\"post\">
+				<input type=\"hidden\" name=\"page\" value=\"groups\" />
+				<input type=\"hidden\" name=\"action\" value=\"add_member\" />
+				<input type=\"hidden\" name=\"group_id\" value=\"$group_id\" />
 				<fieldset>
 					<legend>Gruppenmitglieder</legend>
 					<table class=\"tablestyle\">
@@ -140,8 +168,45 @@
 								<td>Benutzer</td>
 								<td>Aktionen</td>
 							</tr>
-						</thead>
-					</table>			
+						</thead>";
+						$sql = "SELECT user.*, link.*
+							FROM ( " . DB_PREFIX. "group_users link
+							LEFT JOIN " . DB_PREFIX . "users user ON user.user_id = link.user_id )
+							WHERE link.group_id = $group_id";
+						$mebmers_result = db_result($sql);
+						$users_in_group = array();
+						while($member = mysql_fetch_object($mebmers_result)) {
+							$users_in_group[] = $member->user_id;
+							$out .= "<tr>
+								<td>$member->user_showname</td>
+								<td>" .(($member->user_id != $group->group_manager)? '[delete]' : '&nbsp;') . "</td>
+								</tr>\r\n";
+						}
+					$out .= "\t\t\t\t\t</table><br />
+					<div class=\"row\">
+						<label for=\"user_id\" class=\"row\">
+							Benutzer hinzufügen:
+							<span class=\"info\">Hier können Benutzer zur Gruppe hinzugefügt werden.</span>
+						</label>
+						<select name=\"user_id\" id=\"user_id\">";
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "users
+						ORDER BY user_name ASC";
+					$users_result = db_result($sql);
+					$user_count = 0;
+					while($user = mysql_fetch_object($users_result)) {
+						if(!in_array($user->user_id, $users_in_group)) {
+							$out.= "\t\t\t\t\t\t\t<option value=\"$user->user_id\">$user->user_showname</option>\r\n";
+							$user_count++;
+						}
+					}
+					if($user_count == 0)
+						$out.= "\t\t\t\t\t\t\t<option value=\"no_user\" selected=\"selected\" disabled=\"disabled\">Keine Benutzer verfügbar</option>\r\n";
+					$out .= "\t\t\t\t\t\t</select>
+					</div>
+					<div class=\"row\">
+						<input type=\"submit\" class=\"button\" value=\"Benutzer Hinzufügen\"/>
+					</div>
 				</fieldset>
 				
 			</form>";
@@ -161,6 +226,9 @@
 			$sure = GetPostOrGet('sure');
 			if($sure == 1 && is_numeric($group_id)) {
 	 			$sql = "DELETE FROM " . DB_PREFIX . "groups
+	 				WHERE group_id=$group_id";
+				db_result($sql);
+				$sql = "DELETE FROM " . DB_PREFIX . "group_users
 	 				WHERE group_id=$group_id";
 				db_result($sql);
 			}
@@ -186,18 +254,38 @@
 		 * @access private
 		 */
 		function addGroup($admin_lang) {
+			// get the needed vars
 			$group_name = GetPostOrGet('group_name');
 			$group_manager = GetPostOrGet('group_manager');
 			$group_description= GetPostOrGet('group_description');
-			// TODO: handle errors
-			// TODO: add the group-manager to the group-user connection table 
-			$sql = "INSERT INTO " . DB_PREFIX . "groups (group_name, group_manager, group_description)
-				VALUES ('$group_name', $group_manager, '$group_description')";
-			db_result($sql);
+			if($group_name == '') {
+				// go back there is no group name!
+				header("Location: admin.php?page=groups&action=new_group&error=empty_name&group_manager=$group_manager&group_description=$group_description");
+				die();
+			}
+			else if(is_numeric($group_manager)) {// is this a valid call?
+				// check that there is no group with the same name
+				$sql = "SELECT *	
+					FROM " . DB_PREFIX . "groups
+					WHERE group_name='$group_name'";
+				$exist_result = db_result($sql);
+				if($exist = mysql_fetch_object($exist_result)) {
+					header("Location: admin.php?page=groups&action=new_group&error=name&group_name=$group_name&group_manager=$group_manager&group_description=$group_description");
+					die();
+				}
+				// TODO: add the group-manager to the group-user connection table
+				// create the group 
+				$sql = "INSERT INTO " . DB_PREFIX . "groups (group_name, group_manager, group_description)
+					VALUES ('$group_name', $group_manager, '$group_description')";
+				db_result($sql);
+				// add the user to the group
+				$group_id = mysql_insert_id();
+				$sql = "INSERT INTO " . DB_PREFIX . "group_users (group_id, user_id)
+					VALUES($group_id, $group_manager)";
+				db_result($sql);
+			}
 			header('Location: admin.php?page=groups');
 			die();
-			
-			
 		}
 		
 		/**
@@ -205,6 +293,7 @@
 		 * @access private
 		 */
 		function newGroup($admin_lang) {
+			// TODO: handle errors!
 			$out = "<fieldset>
 					<legend>Neue Gruppe erstellen</legend>
 					<form method=\"post\" action=\"admin.php\">

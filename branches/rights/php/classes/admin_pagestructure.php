@@ -887,7 +887,7 @@
 					ORDER BY page_date DESC";
 				$result = db_result($sql);
 				$changes_count = mysql_num_rows($result);
-				$out .="\t\t\t<h4>Ver�nderungen($changes_count)</h4><hr />
+				$out .="\t\t\t<h4>Veränderungen($changes_count)</h4><hr />
 			<table class=\"page_commits\">
 				<thead>
 					<tr>

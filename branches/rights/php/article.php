@@ -38,7 +38,8 @@
 	}
 	if($text == '')	{
 		$sql = "SELECT *
-			FROM " . DB_PREFIX . "articles";
+			FROM " . DB_PREFIX . "articles
+			ORDER BY article_date DESC";
 		$article_result = db_result($sql);
 		
 		$title = "Artikelliste";

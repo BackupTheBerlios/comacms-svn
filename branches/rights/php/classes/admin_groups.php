@@ -40,6 +40,8 @@
 		 					break;
 		 		case 'add_member':	$out .= $this->addMember($admin_lang);
 		 					break;
+		 		case 'remove_member':	$out .= $this->removeMember($admin_lang);
+		 					break;
 		 		case 'delete':		$out .= $this->deleteGroup($admin_lang);
 		 					break;
 		 		default:		$out .= $this->overwiev($admin_lang);
@@ -51,9 +53,37 @@
 		 * @param array admin_lang
 		 * @access private
 		 */
+		function removeMember($admin_lang) {
+			$group_id = GetPostOrGet('group_id');
+			$user_id = GetPostOrGet('user_id');
+			if(is_numeric($group_id) && is_numeric($user_id)) {
+				$sql = "SELECT group_manager
+					FROM " . DB_PREFIX . "groups
+					WHERE group_id = $group_id";
+				$group_result = db_result($sql);
+				if($group = mysql_fetch_object($group_result)) {
+					if($group->group_manager != $user_id) {
+						$sql = "DELETE FROM " . DB_PREFIX . "group_users
+							WHERE group_id = $group_id AND user_id = $user_id";
+						db_result($sql);
+					}
+					header("Location: admin.php?page=groups&action=edit_group&group_id=$group_id");
+					die();	
+				}
+			}
+		}
+		
+		/**
+		 * @param array admin_lang
+		 * @access private
+		 */
 		function addMember($admin_lang) {
 			$group_id = GetPostOrGet('group_id');
 			$user_id = GetPostOrGet('user_id');
+			if($user_id == '' && is_numeric($group_id)) {
+				header("Location: admin.php?page=groups&action=edit_group&group_id=$group_id");
+				die();
+			}
 			if(is_numeric($user_id) && is_numeric($group_id)) {
 				$sql = "INSERT INTO " . DB_PREFIX . "group_users (group_id, user_id)
 					VALUES ($group_id, $user_id)";
@@ -147,7 +177,6 @@
 							$out.= " selected=\"selected\"";	
 						$out.= ">$user->user_showname</option>\r\n";
 					}	
-					// TODO: add member-output
 					$out .= "\t\t\t\t\t\t</select>
 					</div>
 					<div class=\"row\">
@@ -179,7 +208,7 @@
 							$users_in_group[] = $member->user_id;
 							$out .= "<tr>
 								<td>$member->user_showname</td>
-								<td>" .(($member->user_id != $group->group_manager)? '[delete]' : '&nbsp;') . "</td>
+								<td>" .(($member->user_id != $group->group_manager)? "<a href=\"admin.php?page=groups&amp;action=remove_member&amp;group_id=$group_id&amp;user_id=$member->user_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>" : '&nbsp;') . "</td>
 								</tr>\r\n";
 						}
 					$out .= "\t\t\t\t\t</table><br />
@@ -273,7 +302,6 @@
 					header("Location: admin.php?page=groups&action=new_group&error=name&group_name=$group_name&group_manager=$group_manager&group_description=$group_description");
 					die();
 				}
-				// TODO: add the group-manager to the group-user connection table
 				// create the group 
 				$sql = "INSERT INTO " . DB_PREFIX . "groups (group_name, group_manager, group_description)
 					VALUES ('$group_name', $group_manager, '$group_description')";
@@ -299,19 +327,21 @@
 					<form method=\"post\" action=\"admin.php\">
 						<input type=\"hidden\" name=\"page\" value=\"groups\"/>
 						<input type=\"hidden\" name=\"action\" value=\"add_group\"/>
-						<table>
-							<tr>
-								<td>Gruppenname:<span class=\"info\">TODO</span></td>
-								<td><input type=\"text\" name=\"group_name\"/></td>
-							</tr>
-							<tr>
-								<td>Beschreibung:<span class=\"info\">TODO</span></td>
-								<td><textarea name=\"group_description\"></textarea></td>
-							</tr>
-							<tr>
-								<td>Gruppenleiter:<span class=\"info\">TODO</span></td>
-								<td>
-									<select name=\"group_manager\">";
+						<div class=\"row\">
+							<label class=\"row\" for=\"group_name\">Gruppenname:<span class=\"info\">TODO</span></label>
+							<input type=\"text\" id=\"group_name\" name=\"group_name\"/>
+						</div>
+						<div class=\"row\">
+							<label class=\"row\" for=\"group_description\">
+								Beschreibung:<span class=\"info\">TODO</span>
+							</label>
+							<textarea id=\"group_description\" name=\"group_description\"></textarea>
+						</div>
+						<div class=\"row\">
+							<label class=\"row\" for=\"group_manager\">
+								Gruppenleiter:<span class=\"info\">TODO</span>
+							</label>
+							<select id=\"group_manager\" name=\"group_manager\">";
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "users
 				ORDER BY user_name ASC";
@@ -319,14 +349,12 @@
 			while($user = mysql_fetch_object($users_result)) {
 				$out.= "<option value=\"$user->user_id\">$user->user_showname</option>\r\n";
 			}				
-			$out .= "\t\t\t\t\t\t\t</select></td>
-							</tr>
-							<td colspan=\"2\">
-								<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />&nbsp;
-								<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['create'] . "\" />
-							</td>
-						</table>
-					<form>
+			$out .= "\t\t\t\t\t\t\t</select></div>
+						<div class=\"row\">
+							<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />&nbsp;
+							<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['create'] . "\" />
+						</div>
+					</form>
 				</fieldset>";
 			
 			return $out;

@@ -191,96 +191,80 @@
 				<legend>Neue Seite</legend>
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"add_new\" />
-				<table>
-					<tr>
-						<td>
-							Name/Kürzel:
-							<span class=\"info\">Mit diesem Kürzel wird auf die Seite zugegriffen und dient es zur eindeutigen Identifizierung der Seite.</span>
-						</td>
-						<td>
-							<input type=\"text\" name=\"page_name\" maxlength=\"20\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Titel:
-							<span class=\"info\">Der Titel wird später in der Titelleiste des Browsers angezeigt.</span>
-						</td>
-						<td>
-							<input type=\"text\" name=\"page_title\" maxlength=\"100\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Seiten-Typ:
-							<span class=\"info\">TODO</span>
-						</td>
-						<td>
-							<select name=\"page_type\">
-								<option value=\"text\">Text</option>
-								<option value=\"gallery\">" . $admin_lang['gallery'] ."</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							" . $admin_lang['language'] . ":
-							<span class=\"info\">Der Text soll in der gewählten Sprache geschrieben werden.</span>
-						</td>
-						<td>
-							<select name=\"page_lang\">
-								<option value=\"de\">Deutsch</option>
-								<option value=\"en\">Englisch</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Zugang:
-							<span class=\"info\">Wer soll sich die Seite später anschauen können?<br />
-							Jeder (öffentlich), nur ausgewählte Benutzer (privat) oder soll die Seite nur erstellt werden um sie später zu veröffentlichen (versteckt)?</span>
-						</td>
-						<td>
-							<select name=\"page_access\">
-								<option value=\"public\">�ffentlich</option>
-								<option value=\"private\">Privat</option>
-								<option value=\"hidden\">Versteckt</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Unterseite von:
-							<span class=\"info\">TODO</span>	
-						</td>
-						<td>
-							<select name=\"page_parent_id\">
-								<option value=\"0\">Keiner</option>\r\n";
+				<div class=\"row\">
+					<label class=\"row\">
+						Name/Kürzel:
+						<span class=\"info\">Mit diesem Kürzel wird auf die Seite zugegriffen und dient es zur eindeutigen Identifizierung der Seite.</span>
+					</label>
+					<input type=\"text\" name=\"page_name\" maxlength=\"20\" />
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Titel:
+						<span class=\"info\">Der Titel wird später in der Titelleiste des Browsers angezeigt.</span>
+					</label>
+					<input type=\"text\" name=\"page_title\" maxlength=\"100\" />
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Seiten-Typ:
+						<span class=\"info\">TODO</span>
+					</label>
+					<select name=\"page_type\">
+						<option value=\"text\">Text</option>
+						<option value=\"gallery\">" . $admin_lang['gallery'] ."</option>
+					</select>
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						" . $admin_lang['language'] . ":
+						<span class=\"info\">Der Text soll in der gewählten Sprache geschrieben werden.</span>
+					</label>
+					<select name=\"page_lang\">
+						<option value=\"de\">Deutsch</option>
+						<option value=\"en\">Englisch</option>
+					</select>
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Zugang:
+						<span class=\"info\">Wer soll sich die Seite später anschauen können?<br />
+						Jeder (öffentlich), nur ausgewählte Benutzer (privat) oder soll die Seite nur erstellt werden um sie später zu veröffentlichen (versteckt)?</span>
+					</label>
+					<select name=\"page_access\">
+						<option value=\"public\">Öffentlich</option>
+						<option value=\"private\">Privat</option>
+						<option value=\"hidden\">Versteckt</option>
+					</select>
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Unterseite von:
+						<span class=\"info\">TODO</span>
+					</label>
+					<select name=\"page_parent_id\">
+						<option value=\"0\">Keiner</option>\r\n";
 		 	$out .= $this->_structurePullDown(0);
-		 	$out .= "\t\t\t\t\t\t\t</select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Kommentar
-							<span class=\"info\">Eine kurze Beschreibung, was hier gemacht wurde.</span>
-						</td>
-						<td><input type=\"text\" name=\"page_edit_comment\" maxlength=\"100\" value=\"" . $admin_lang['created_new_page'] . "\"/></td>
-					</tr>
-					<tr>
-						<td>
-							Bearbeiten?
-							<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die Übersichtseite zurückgekehrt werden?</span>
-						</td>
-						<td><input type=\"checkbox\" name=\"page_edit\" value=\"edit\" checked=\"true\" class=\"checkbox\"/></td>
-					</tr>
-					<tr>
-						<td colspan=\"2\">
-							<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" />&nbsp;
-							<input type=\"submit\" class=\"button\" value=\"Erstellen\" />
-						</td>
-					</tr>
-				</table>
+		 	$out .= "\t\t\t\t\t</select>
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Kommentar
+						<span class=\"info\">Eine kurze Beschreibung, was hier gemacht wurde.</span>
+					</label>
+					<input type=\"text\" name=\"page_edit_comment\" maxlength=\"100\" value=\"" . $admin_lang['created_new_page'] . "\"/>
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Bearbeiten?
+						<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die Übersichtseite zurückgekehrt werden?</span>
+					</label>
+					<input type=\"checkbox\" name=\"page_edit\" value=\"edit\" checked=\"true\" class=\"checkbox\"/>
+				</div>
+				<div class=\"row\">
+					<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" />&nbsp;
+					<input type=\"submit\" class=\"button\" value=\"Erstellen\" />
+				</div>
 			</fieldset>
 			</form>";
 		 	return $out;

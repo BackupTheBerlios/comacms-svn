@@ -4,7 +4,7 @@
 	
 	[_]-mauri-style
 	[X]-full user-management
-	[_]-gallery
+	[X]-gallery
 	[_]-settings
 		[X]-mainname
 		[ ]-mailsettings
@@ -13,9 +13,9 @@
 	[X]-"not on mainpage-parameter"
 	[X]-"not in adminsyste-parameter"
 	[X]-find a licence
-	[_]-calendar/tasklist
+	[X]-calendar/tasklist
 	[ ]-connect-news with ('special-')articles
-	[ ]-user friendly installation
+	[_]-user friendly installation
 	
 	0.2				Q4 2005
 

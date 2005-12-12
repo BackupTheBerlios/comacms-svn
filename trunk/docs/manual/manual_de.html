@@ -8,27 +8,66 @@
         	html, body {
  		  font-family: arial, verdana, helvetica, sans-serif;
 		}
+		
+		h1 {
+		  text-align: center;
+		}
+		
         	.block {
-        	  margin:10px;
+        	  margin: 1.2em;
+        	  margin-top: 0.25em;
+        	  margin-bottom: 0.25em;
+        	  text-align: justify;
         	}
+        	
         	.title {
         	  font-weight: bold;
+        	  margin-left: -1em;
         	}
+        	
+        	p{
+        	  text-indent: 1em;
+        	}
+        	
         	a {
         	  font-weight: bold;
         	  text-decoration: none;
         	  color:black;
         	}
+        	
         	a:hover {
         	  color: red;
         	}
+        	
         	dt {
         	  font-weight: bold;
         	}
+        	
+        	abbr, acronym {
+		  border-bottom: 1px dotted #3C528B;
+		  cursor: help;
+		}
+		.note {
+		   text-indent: 0;
+		   border: 1px dashed #3C528B;
+		   padding: 0.3em;
+		}
+		
+		.menu {
+		  list-style-type: upper-roman;
+		  float: right;
+		  margin: 2em;
+		  padding: 3em;
+		  padding-top: 1em;
+		  padding-bottom: 1em;
+		  padding-right: 2em;
+		  border: 1px solid #000000;
+		}
         	</style>
     	</head>
     	<body>
-  		<ol style="list-style-type:upper-roman;">
+  		<h1>ComaCMS <acronym title="How To(engl.) = Wie ist das zu machen?">HOWTO</acronym></h1>
+  		<ol class="menu" >
   			<li><a href="#I.">Vorwort</a></li>
   			<li><a href="#II.">Installation</a></li>
   			<li>
@@ -45,7 +84,7 @@
   						<a href="#IV.1.">Texte</a>
   						<ol>
   							<li><a href="#IV.1.1.">Texte erstellen</a></li>
-  							<li>Texte bearbeiten</li>
+  							<li><a href="#IV.1.2.">Texte bearbeiten</a></li>
   							<li>Texte entfernen</li>
   						</ol>
   					</li>
@@ -58,6 +97,12 @@
   						</ol>	
   					</li>
   					<li>
+  						Artikel
+  					</li>
+  					<li>
+  						News
+  					</li>
+  					<li>
  						Einstellungen
   					</li>
   					<li>
@@ -65,6 +110,9 @@
   					</li>
   					<li>
   						Benutzer
+  					</li>
+  					<li>
+  						Gruppen
   					</li>
   				</ol>
   				
@@ -75,40 +123,32 @@
 			TEXT
 		</div>-->
 		<div id="I." class="block">
-			<div class="title">I. Vorwort</div>
-			Als Programmierer hat man es immer schön einfach, man weiß was man 
-			gemacht hat und wie man es nutzen kann bzw. benutzen muss, das es
-			richtig funktioniert. Doch was ist nun wenn jemand keine Ahnung hat wie
-			das ganze aufgebaut ist? Der hat ein Problem und ist auf sich allein
-			gestellt! So etwas muss aber nicht sein, denn alles lässt sich hoffentlich
-			erklären. Aus diesem Grund versuchen wir als <em>freundliche</em> Programmierer
-			den Übergang von Unwissenheit zur Kenntnis durch dieses
-			<acronym title="How To(engl.) = Wie ist das zu machen?">HOWTO</acronym> so einfach
-			wie möglich gestalten.
+			<h2>I. Vorwort</h2>
+			<p>Als Programmierer hat man es immer schön einfach, man weiß was man gemacht hat und wie man es nutzen kann bzw. benutzen muss, das es richtig funktioniert. Doch was ist nun wenn jemand keine Ahnung hat wie das ganze aufgebaut ist? Der hat ein Problem und ist auf sich allein gestellt! So etwas muss aber nicht sein, denn alles lässt sich hoffentlich erklären. Aus diesem Grund versuchen wir als <em>freundliche</em> Programmierer den Übergang von Unwissenheit zur Kenntnis durch dieses <acronym title="How To(engl.) = Wie ist das zu machen?">HOWTO</acronym> so einfach  wie möglich gestalten.</p>
 		</div>
 		<div id="II." class="block">
-			<div class="title">II. Installation</div>
-			Die Installationsanleitung soll hier rein. Sie soll ;-)!
+			<h2>II. Installation</h2>
+			<p>Die Installationsanleitung soll hier rein. Sie soll ;-)!</p>
 		</div>
 		<div id="III." class="block">
-			<div class="title">II. Benutzerfunktionen</div>
+			<h2>II. Benutzerfunktionen</h2>
 			<div id="III.1." class="block">
-				<div class="title">III. 1. Anmelden</div>
-				Um sich in das Admin-Interface einzuloggen, öffnet man die Unterseite /admin(<i>z.B.: www.server.de/ => www.server.de/admin/ oder www.server.de/comacms/ => www.server.de/comacms/admin/</i>). Dort gibt man seinen Loginnamen(den Nick, nicht den Anzeigenamen!) und sein Passwort ein und klickt anschließend auf Login. Wenn alle eingaben korrekt waren ist man nun im Admin-Interface.
+				<h3>III. 1. Anmelden</h3>
+				<p>Um sich in das Admin-Interface einzuloggen, öffnet man die Unterseite /admin(<i>z.B.: www.server.de/ =&gt; www.server.de/admin/ oder www.server.de/comacms/ =&gt; www.server.de/comacms/admin/</i>). Dort gibt man seinen Loginnamen(den Nick, nicht den Anzeigenamen!) und sein Passwort ein und klickt anschließend auf Login. Wenn alle eingaben korrekt waren ist man nun im Admin-Interface.</p>
 			</div>
 			<div id="III.2." class="block">
-				<div class="title">III. 2. Abmelden</div>
-				Um sich abzumelden muss man im Admin-Interface nur auf den Menüpunkt Logout (ganz unten) klicken und man ist abgemeldet.<br />
-				Nach vier Stunden wird man automatisch ausgeloggt.
+				<h3>III. 2. Abmelden</h3>
+				<p>Um sich abzumelden muss man im Admin-Interface nur auf den Menüpunkt Logout (ganz unten) klicken und man ist abgemeldet.</p>
+				<p>Nach vier Stunden wird man automatisch ausgeloggt.</p>
 			</div>
 		</div>
 		<div id="IV." class="block">
-			<div class="title">IV. Grundfunktionen verwenden</div>
+			<h2>IV. Grundfunktionen verwenden</h2>
 			<div id="IV.1." class="block">
-				<div class="title">IV. 1. Texte</div>
+				<h3>IV. 1. Texte</h3>
 				<div id="IV.1.1." class="block">
-					<div class="title">IV. 1. 1. Texte erstellen</div>
-					Um einen Text zu erstellen klickt man im Admin-Interface auf den Menüpunkt <strong>Seiten-Struktur</strong>. In der Strukturübersicht klickt man auf den Button mit der Aufschrift &quot;Neue Seite erstellen&quot;, der einen zu dem Dialog weiterleitet in dem eine neue Seite erstellt werden kann. In diesem Dialog sind einige Eingaben zu machen, was dort genau einzugeben ist kann man aus der folgenden Liste entnehmen.
+					<h4>IV. 1. 1. Texte erstellen</h4>
+					<p>Um einen Text zu erstellen klickt man im Admin-Interface auf den Menüpunkt <strong>Seiten-Struktur</strong>. In der Strukturübersicht klickt man auf den Button mit der Aufschrift &quot;Neue Seite erstellen&quot;, der einen zu dem Dialog weiterleitet in dem eine neue Seite erstellt werden kann. In diesem Dialog sind einige Eingaben zu machen, was dort genau einzugeben ist kann man aus der folgenden Liste entnehmen.</p>
 					<dl>
 						<dt>Name/Kürzel</dt>
 						<dd>Der Name/das Kürzel dient zum logischen und eindeutigen identifizieren der Seite. Mit ihm greift man auf die Seite zu.</dd>
@@ -133,6 +173,12 @@
 						<dt>Bearbeiten</dt>
 						<dd>Wenn man dieses Kästchen ausgewählt hat wird man sofort zum Bearbeitungsdialog des Textes weitergeleitet, um die Seite bearbeiten zu können.</dd>
 					</dl>
+					<p>Nachdem man auf den Button mit der Aufschrift &quot;Erstellen&quot; wird die Seite erstellt und man wir je nach dem ob man das Kästchen &quot;Bearbeiten&quot; aktiviert hat wird man zum Seiteneditor weitergeleitet und kann den <a href="#IV.1.2.">Text bearbeiten</a>.</p>
+				</div>
+				<div id="IV.1.2." class="block">
+					<h4>IV. 1. 2. Texte bearbeiten</h4>
+					<p>Um in den Seiteneditor zu gelangen muss man entweder beim Erstellen der Seite das Kästchen &quot;Bearbeiten&quot; ausgewählt haben oder aber in der Seiten-Struktur-Ansicht auf das Bearbeiten-Symbol(weißes Papier mit Stift) der jeweiligen Seite geklickt haben.</p>
+					<p class="note"><strong>Info:</strong> Der Seiten-Editor kann auf verschiedenen Rechnern unterschiedlich aussehen. Das liegt daran, dass der Seiteneditor im Java-Script erweitert wird, wenn es möglich ist. Wenn allerdings Javascript deaktiviert ist erscheinen grundsätzlich keine Formatierungs-Buttons.</p>
 				</div>
 			</div>
 		</div>

@@ -889,7 +889,7 @@
  *
  *****************************************************************************/
 	function page_preferences() {
-		global $setting, $_SERVER, $admin_lang, $extern_action, $_GET, $_POST;
+		global $setting, $_SERVER, $admin_lang, $extern_action, $_GET, $_POST, $config;
 		/**
 		 * Load the template file for the preferences
 		 */
@@ -957,10 +957,7 @@
 				<input type=\"hidden\" name=\"action\" value=\"save\" />
 				<table>\r\n";
 			foreach($setting as $key => $value) {
-				$__intern = 'internal_'.$key;
-				global $$__intern;
-				//$out .= $value[0] . "=" . $value[2]."-" . $$__n . "<br />";
-				$_value = $$__intern;
+				$_value = $config->Get($key);
 				if($_value == '')
 					$_value = $value[2];
 				$out .= "\t\t\t\t\t<tr>

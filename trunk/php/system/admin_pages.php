@@ -137,11 +137,11 @@
 		// write the 'coose menue'  to make it able to switch betwen both possible menues
 		//
 		if($menue_id == "2")
-			$out .= "\t\t\t\t<li><a href=\"admin.php?page=menueeditor&amp;menue_id=1\">Menü 1</a></li>
-				<li><u>Menü 2</u></li>\r\n";
+			$out .= "\t\t\t\t<li><a href=\"admin.php?page=menueeditor&amp;menue_id=1\">Menï¿½ 1</a></li>
+				<li><u>Menï¿½ 2</u></li>\r\n";
 		else {
-			$out .= "\t\t\t\t<li><u>Menü 1</u></li>
-				<li><a href=\"admin.php?page=menueeditor&amp;menue_id=2\">Menü 2</a></li>\r\n";
+			$out .= "\t\t\t\t<li><u>Menï¿½ 1</u></li>
+				<li><a href=\"admin.php?page=menueeditor&amp;menue_id=2\">Menï¿½ 2</a></li>\r\n";
 			$menue_id = 1;
 		}
 		$out .= "\t\t\t</ul>\r\n";
@@ -217,8 +217,8 @@
 				else {
 					$_result = db_result("SELECT * FROM ".DB_PREFIX."menue WHERE id=".$id."");
 					$_data = mysql_fetch_object($_result);
-					$out .= "\t\t\t<div class=\"error\">Soll der Link ".$_data->text."(".$_data->link.") wirklich gelöscht werden?<br />
-			<a href=\"admin.php?page=menueeditor&amp;action=delete&amp;menue_id=".$menue_id."&amp;id=".$id."&amp;sure=1\" title=\"Wirklich Löschen?\">Ja</a> &nbsp;&nbsp;&nbsp; <a href=\"admin.php?page=menueeditor&amp;menue_id=".$menue_id."\" title=\"Nein! nicht löschen\">Nein</a></div>";
+					$out .= "\t\t\t<div class=\"error\">Soll der Link ".$_data->text."(".$_data->link.") wirklich gelï¿½scht werden?<br />
+			<a href=\"admin.php?page=menueeditor&amp;action=delete&amp;menue_id=".$menue_id."&amp;id=".$id."&amp;sure=1\" title=\"Wirklich Lï¿½schen?\">Ja</a> &nbsp;&nbsp;&nbsp; <a href=\"admin.php?page=menueeditor&amp;menue_id=".$menue_id."\" title=\"Nein! nicht lï¿½schen\">Nein</a></div>";
 					
 					return $out;
 				}
@@ -316,7 +316,7 @@
 						<td><input type=\"checkbox\" name=\"new_window\" /></td>
 					</tr>
 					<tr>
-						<td colspan=\"2\"><input type=\"submit\" value=\"Hinzufügen\" /></td>
+						<td colspan=\"2\"><input type=\"submit\" value=\"Hinzufï¿½gen\" /></td>
 					</tr>
 				</table>
 			</form>";
@@ -440,9 +440,9 @@
 				else {
 					$result = db_result("SELECT * FROM " . DB_PREFIX . "news WHERE id=" . $id);
 					$row = mysql_fetch_object($result);
-					$out .= "Den News Eintrag &quot;" . $row->title . "&quot; wirklich löschen?<br />
-				<a href=\"admin.php?page=news&amp;action=delete&amp;id=" . $id . "&amp;sure=1\" title=\"Wirklich Löschen\" class=\"button\">Ja</a>
-				<a href=\"admin.php?page=news\" title=\"Nicht Löschen\" class=\"button\">Nein</a>";
+					$out .= "Den News Eintrag &quot;" . $row->title . "&quot; wirklich lï¿½schen?<br />
+				<a href=\"admin.php?page=news&amp;action=delete&amp;id=" . $id . "&amp;sure=1\" title=\"Wirklich Lï¿½schen\" class=\"button\">Ja</a>
+				<a href=\"admin.php?page=news\" title=\"Nicht Lï¿½schen\" class=\"button\">Nein</a>";
 				
 					return $out;
 				}
@@ -491,7 +491,7 @@
 					<td colspan=\"2\" id=\"newsid" . $row->id . "\">
 						<input type=\"hidden\" name=\"id\" value=\"".$row->id."\" />
 						<input type=\"submit\" value=\"Speichern\" class=\"button\" />
-						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\"  class=\"button\">Löschen</a>
+						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Lï¿½schen\"  class=\"button\">Lï¿½schen</a>
 					</td>
 				</tr>
 				<tr>
@@ -521,7 +521,7 @@
 					<td colspan=\"2\">
 						<a id=\"newsid".$row->id."\" ></a>
 						<a href=\"admin.php?page=news&amp;action=edit&amp;id=".$row->id."#newsid".$row->id."\" title=\"Bearbeiten\" class=\"button\">Bearbeiten</a>
-						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\" class=\"button\">Löschen</a>
+						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Lï¿½schen\" class=\"button\">Lï¿½schen</a>
 					</td>
 				</tr>
 				<tr>
@@ -678,7 +678,7 @@
 						$sql = "DELETE FROM " . DB_PREFIX . "users
 							WHERE user_id=$user_id";
 						db_result($sql);
-						$out .= "Der Benutzer &quot;" . $user_data->user_showname . "&quot; ist nun unwiederuflich gelöscht worden!<br />";
+						$out .= "Der Benutzer &quot;" . $user_data->user_showname . "&quot; ist nun unwiederuflich gelï¿½scht worden!<br />";
 					}
 				}
 				else {
@@ -687,9 +687,9 @@
 						WHERE user_id=$user_id";
 					$result = db_result($sql);
 					$user = mysql_fetch_object($result);
-					$out .= "Den Benutzer &quot;" . $user->user_showname . "&quot; unwiederruflich löschen?<br />
-				<a href=\"admin.php?page=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich Löschen\" class=\"button\">" . $admin_lang['yes'] . "</a>
-				<a href=\"admin.php?page=users\" title=\"Nicht Löschen\" class=\"button\">" . $admin_lang['no'] . "</a>";
+					$out .= "Den Benutzer &quot;" . $user->user_showname . "&quot; unwiederruflich lï¿½schen?<br />
+				<a href=\"admin.php?page=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich Lï¿½schen\" class=\"button\">" . $admin_lang['yes'] . "</a>
+				<a href=\"admin.php?page=users\" title=\"Nicht Lï¿½schen\" class=\"button\">" . $admin_lang['no'] . "</a>";
 					
 					return $out;
 				}
@@ -732,7 +732,7 @@
 							Nick:\r\n";
 						if($action == "add-error" || $action == "save-error" && $user_name == "")
 							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Nick muss angegeben werden.</span>\r\n";		
-						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umständen komplizierten Namen,der angezeigt wird, eingeben muss.(Notwendig)</span>
+						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umstï¿½nden komplizierten Namen,der angezeigt wird, eingeben muss.(Notwendig)</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"user_name\" value=\"".$user_name."\" />
@@ -742,8 +742,8 @@
 						<td>
 							E-Mail:\r\n";
 						if($action == "add-error" || $action == "save-error" && $user_email != "" && !isEMailAddress($user_email))
-							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene E-Mail-Adresse ist ungültig.</span>\r\n";		
-						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Über die E-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene E-Mail-Adresse ist ungï¿½ltig.</span>\r\n";		
+						$out .= "\t\t\t\t\t\t\t<span class=\"info\">ï¿½ber die E-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"user_email\" value=\"".$user_email."\" />
@@ -753,7 +753,7 @@
 						<td>
 							ICQ:\r\n";
 						if(($action == "add-error" || $action == "save-error") && ($user_icq != "" && !isIcqNumber($user_icq)))
-							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene ICQ-Nummer ist ungültig.</span>\r\n";		
+							$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene ICQ-Nummer ist ungï¿½ltig.</span>\r\n";		
 						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Die ICQ Nummer kann angegben werden, ist aber nicht dirngend notwendig.</span>
 						</td>
 						<td>
@@ -778,9 +778,9 @@
 						}
 						if($action == "add-error" && $user_password_confirm == "" && $user_password != "")
 							$user_password = "";
-						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit diesem Passwort kann sich der Benutzer in die geschützten Bereiche einloggen. (";
+						$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit diesem Passwort kann sich der Benutzer in die geschï¿½tzten Bereiche einloggen. (";
 						if($action == "save-error" || $action == "edit")
-							$out .= "Wenn beide Felder für das Passwort leer gelassen werden, wird das Passwort nicht verändert.";
+							$out .= "Wenn beide Felder fï¿½r das Passwort leer gelassen werden, wird das Passwort nicht verï¿½ndert.";
 						elseif($action == "add-error" || $action == "add")
 							$out .= "Notwendig";
 						$out .= ")</span>
@@ -813,7 +813,7 @@
 					<tr>
 						<td>
 							Administrator:
-							<span class=\"info\">Ist ein Benutzer Administrator so hat er keinerlei Einschränkungen in seinem Handeln.<strong>Nur auswählen wenn es wirklich Notwendig ist.</strong></span>
+							<span class=\"info\">Ist ein Benutzer Administrator so hat er keinerlei Einschrï¿½nkungen in seinem Handeln.<strong>Nur auswï¿½hlen wenn es wirklich Notwendig ist.</strong></span>
 						</td>
 						<td>
 							<input type=\"checkbox\" name=\"user_admin\"";
@@ -844,7 +844,7 @@
 				<tr>
 					<td>id</td>
 					<td>" . $admin_lang['name'] . "</td>
-					<td>Kürzel</td>
+					<td>Kï¿½rzel</td>
 					<td>email</td>
 					<td>Admin</td>
 					<td colspan=\"2\">Aktionen</td>
@@ -893,6 +893,7 @@
 		/**
 		 * Load the template file for the preferences
 		 */
+		// TODO: rewrite the whole thing here into an own class
 		include('./system/settings.php');
 		$out = '';
 		if(!isset($extern_action))
@@ -900,30 +901,25 @@
 		if($extern_action == 'save') {
 			$tosave = array();
 			foreach($_GET as $key => $value) {
-				//$out .= $key."<br />";
 				if(substr($key, 0, 8) == 'setting_'){
 					$name = substr($key, 8);
-					$_n = 'internal_' . $name;
-					global $$_n;
-					if($$_n != $_GET[$key])
+					$conf_value = $config->Get($name);
+					if($conf_value != $_GET[$key])
 						$tosave[$name] = $value;
 				}
 			
 			}
 			foreach($_POST as $key => $value) {
-				//$out .= $key."<br />";
 				if(substr($key, 0, 8) == 'setting_'){
 					$name = substr($key, 8);
-					$_n = 'internal_' . $name;
-					global $$_n;
-					if($$_n != $_POST[$key])
+					$conf_value = $config->Get($name);
+					if($conf_value != $_POST[$key])
 						$tosave[$name] = $value;
 				}
 			}
 			foreach($tosave as $key => $value) {
-				$_n = 'internal_' . $key;
-				
-				if($$_n == '') {
+				$conf_value = $config->Get($key);
+				if($conf_value == '') {
 					$out .= "new: $key<br />";
 					$sql = "SELECT *
 						FROM " . DB_PREFIX . "config
@@ -1015,7 +1011,7 @@
 		$out = "<h3>" . $admin_lang['gallery editor'] . "</h3><hr />\r\n";
 		if($extern_action == 'select') {
 		
-			$out .= "Bilder auswählen
+			$out .= "Bilder auswï¿½hlen
 				<form  action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
 					<input type=\"hidden\" name=\"page\" value=\"gallery_editor\"/>
 					<input type=\"hidden\" name=\"action\" value=\"new\" />
@@ -1050,14 +1046,14 @@
 						$out .= "<div class=\"imageblock\">
 						<a href=\"" . generateUrl($image->file_path) . "\">
 						<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($thumb) . "\" alt=\"$thumb\" /></a><br />
-						<input type=\"checkbox\" name=\"images[]\" value=\"$image->file_id\"/>Auswählen</div>";
+						<input type=\"checkbox\" name=\"images[]\" value=\"$image->file_id\"/>Auswï¿½hlen</div>";
 					}
 				}
 			$out .= "</td>
 				</tr>
 				<tr>
 					<td colspan=\"2\">
-						<input class=\"button\" type=\"reset\" value=\"Auswahl rückgängig machen\" />&nbsp;
+						<input class=\"button\" type=\"reset\" value=\"Auswahl rï¿½ckgï¿½ngig machen\" />&nbsp;
 						<input class=\"button\" type=\"Submit\" value=\"Als Gallerie Zusammenfassen\"/>
 					</td>
 				</tr>
@@ -1145,7 +1141,7 @@
 								<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($thumb) . "\" alt=\"$thumb\" />
 							</a>
 							<br />
-							<input type=\"checkbox\" name=\"images[]\" value=\"$id\" checked=\"checked\"/>Auswählen
+							<input type=\"checkbox\" name=\"images[]\" value=\"$id\" checked=\"checked\"/>Auswï¿½hlen
 						</div>";
 				}
 			}
@@ -1153,7 +1149,7 @@
 			</tr>
 			<tr>
 				<td colspan=\"2\">
-					<a class=\"button\" href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=select\">Zurück</a><input class=\"button\" type=\"submit\" value=\"Erstellen\"/>
+					<a class=\"button\" href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=select\">Zurï¿½ck</a><input class=\"button\" type=\"submit\" value=\"Erstellen\"/>
 				</td>
 			</tr>
 		</table>
@@ -1161,14 +1157,14 @@
 		}
 		else {
 			$out .= "Bilder Verwalten<br />
-				&nbsp;-Hinzufügen/Hochladen<br />
+				&nbsp;-Hinzufï¿½gen/Hochladen<br />
 				&nbsp;-Bearbeiten<br />
-				&nbsp;-Löschen<br />
+				&nbsp;-Lï¿½schen<br />
 			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=select\">Neue Gallerie</a><br />
-			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=overview\">Übersicht</a><br />
+			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=overview\">ï¿½bersicht</a><br />
 				&nbsp;-Infos<br />
 				&nbsp;-Bearbeiten<br />
-				&nbsp;-Löschen";
+				&nbsp;-Lï¿½schen";
 			
 		}
 		
@@ -1200,9 +1196,9 @@
 			else {
 				$result = db_result("SELECT * FROM " . DB_PREFIX . "dates WHERE date_id=" . $extern_id);
 				$row = mysql_fetch_object($result);
-				$out .= "Den News Eintrag &quot;" . $row->date_topic . "&quot; wirklich löschen?<br />
-			<a href=\"admin.php?page=dates&amp;action=delete&amp;id=" . $extern_id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
-			<a href=\"admin.php?page=dates\" title=\"Nicht Löschen\">nein</a>";
+				$out .= "Den News Eintrag &quot;" . $row->date_topic . "&quot; wirklich lï¿½schen?<br />
+			<a href=\"admin.php?page=dates&amp;action=delete&amp;id=" . $extern_id . "&amp;sure=1\" title=\"Wirklich Lï¿½schen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
+			<a href=\"admin.php?page=dates\" title=\"Nicht Lï¿½schen\">nein</a>";
 			
 				return $out;
 			}
@@ -1244,7 +1240,7 @@
 						<td><input type=\"text\" name=\"topic\" maxlength=\"150\" /></td>
 					</tr>
 					<tr>
-						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Senden\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
+						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Senden\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurï¿½cksetzen\" /></td>
 					</tr>
 				</table>
 				<br />
@@ -1286,7 +1282,7 @@
 						</td>
 						<td>
 							<input type=\"submit\" value=\"Speichern\" class=\"button\" />
-							&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"Löschen\">Löschen</a>
+							&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"Lï¿½schen\">Lï¿½schen</a>
 						</td>
 					</tr>";
 			}
@@ -1309,7 +1305,7 @@
 						</td>
 						<td colspan=\"2\">
 							<a href=\"admin.php?page=dates&amp;action=edit&amp;id=".$row->date_id."#dateid".$row->date_id."\" title=\"Bearbeiten\">Bearbeiten</a>
-							&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"Löschen\">Löschen</a>
+							&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"Lï¿½schen\">Lï¿½schen</a>
 						</td>
 					</tr>\r\n";
 			}
@@ -1346,9 +1342,9 @@
 			else {
 				$result = db_result("SELECT * FROM " . DB_PREFIX . "articles WHERE article_id=" . $extern_id);
 				$row = mysql_fetch_object($result);
-				$out .= "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich löschen?<br />
-			<a href=\"admin.php?page=articles&amp;action=delete&amp;id=" . $extern_id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;
-			<a href=\"admin.php?page=articles\" title=\"Nicht Löschen\">nein</a>";
+				$out .= "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich lï¿½schen?<br />
+			<a href=\"admin.php?page=articles&amp;action=delete&amp;id=" . $extern_id . "&amp;sure=1\" title=\"Wirklich Lï¿½schen\">ja</a> &nbsp;
+			<a href=\"admin.php?page=articles\" title=\"Nicht Lï¿½schen\">nein</a>";
 			
 				return $out;
 			}
@@ -1398,7 +1394,7 @@
 						<td><textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea></td>
 					</tr>
 					<tr>
-						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Senden\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
+						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Senden\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurï¿½cksetzen\" /></td>
 					</tr>
 				</table>
 				<br />
@@ -1426,7 +1422,7 @@
 						<td><textarea cols=\"60\" rows=\"6\" name=\"text\">" . $row->article_text . "</textarea></td>
 					</tr>
 					<tr>
-						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /></td>
+						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zurï¿½cksetzen\" /></td>
 					</tr>
 				</table>
 				<br />
@@ -1474,7 +1470,7 @@
 						</td>
 						<td colspan=\"2\">
 							<a href=\"admin.php?page=articles&amp;action=edit&amp;id=" . $row->article_id . "#dateid" . $row->article_id . "\" title=\"Bearbeiten\">Bearbeiten</a>
-							&nbsp;<a href=\"admin.php?page=articles&amp;action=delete&amp;id=" . $row->article_id . "\" title=\"Löschen\">Löschen</a>
+							&nbsp;<a href=\"admin.php?page=articles&amp;action=delete&amp;id=" . $row->article_id . "\" title=\"Lï¿½schen\">Lï¿½schen</a>
 						</td>
 					</tr>\r\n";
 			}
@@ -1524,15 +1520,15 @@
 				$image_path = $imenu->inlinemenu_image;
 			else
 				$image_path = $extern_image_path;
- 			$out .= "<h4>Neues Zusatzmenü für die Seite &quot;<a href=\"index.php?page=$imenu->page_name\">$imenu->page_title</a>&quot; erstellen</h4>
+ 			$out .= "<h4>Neues Zusatzmenï¿½ fï¿½r die Seite &quot;<a href=\"index.php?page=$imenu->page_name\">$imenu->page_title</a>&quot; erstellen</h4>
 			<form action=\"" . $_SERVER['PHP_SELF'] . "\">
 			<input type=\"hidden\" name=\"page\" value=\"inlinemenu\"/>
 			<input type=\"hidden\" name=\"action\" value=\"save_image\"/>
 			<input type=\"hidden\" name=\"inlinemenu_id\" value=\"$imenu->inlinemenu_id\"/>
 			<table>
 				<tr>
-					<td>Pfad zum Bild:<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmenü zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgweählt werden.</span></td>
-					<td><input type=\"text\" name=\"image_path\" value=\"$image_path\"/> <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=select_image&amp;inlinemenu_id=$imenu->inlinemenu_id\">[Bild auswählen]</a></td>
+					<td>Pfad zum Bild:<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmenï¿½ zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgweï¿½hlt werden.</span></td>
+					<td><input type=\"text\" name=\"image_path\" value=\"$image_path\"/> <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=select_image&amp;inlinemenu_id=$imenu->inlinemenu_id\">[Bild auswï¿½hlen]</a></td>
 				</tr>
 				<tr>
 					<td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\"/></td>
@@ -1552,7 +1548,7 @@
 					<td>
 						<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=entrie_up&amp;entrie_id=$entrie->inlineentrie_id\"><img src=\"./img/up.jpg\" alt=\"Hoch\" title=\"Hoch\" /></a>
 						<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=entrie_down&amp;entrie_id=$entrie->inlineentrie_id\"><img src=\"./img/down.jpg\" alt=\"Runter\" title=\"Runter\" /></a>
-						<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete_entrie&amp;entrie_id=$entrie->inlineentrie_id\"><img src=\"./img/del.jpg\" alt=\"Löschen\" title=\"Löschen\" /></a>
+						<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete_entrie&amp;entrie_id=$entrie->inlineentrie_id\"><img src=\"./img/del.jpg\" alt=\"Lï¿½schen\" title=\"Lï¿½schen\" /></a>
 						<!--<img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" />-->
 					</td>
 					</tr>";
@@ -1565,7 +1561,7 @@
 			<input type=\"hidden\" name=\"inlinemenu_id\" value=\"$imenu->inlinemenu_id\"/>
 			<table>
 			<tr>
-			<td>Typ:<span class=\"info\">Über den Typ kann lässt sich bestimmen ob der neue Eintrag ein Link auf eine externe oder interne Seite sein soll oder nur ein kurzer Text, der eine Information weitergibt.</span></td>
+			<td>Typ:<span class=\"info\">ï¿½ber den Typ kann lï¿½sst sich bestimmen ob der neue Eintrag ein Link auf eine externe oder interne Seite sein soll oder nur ein kurzer Text, der eine Information weitergibt.</span></td>
 			<td><select name=\"entrie_type\">
 				<option value=\"link\">Link</option>
 				<option value=\"text\">Text</option>";
@@ -1580,9 +1576,9 @@
 			$out .= "</select></td>
 			</tr>
 			<tr><td>Text:<span class=\"info\">Dieses Feld beinhaltet den Text, mit dem der Link, egal ob extern oder intern, beschriftet wird, wenn der Typ auf Text gestellt ist, wird der Text einfach so angezeigt.</span></td><td><input type=\"text\" name=\"entrie_text\"/></td></tr>
-			<tr><td>Link:<span class=\"info\">Dieses Feld muss nur ausgefüllt werden, wenn im Typ der Typ Link ausgewählt worden ist, es beinhaltet den Link auf die Seite, auf die der Link im Zusatzmenü führen soll.</span></td><td><input type=\"text\" name=\"entrie_link\"/></td></tr>
+			<tr><td>Link:<span class=\"info\">Dieses Feld muss nur ausgefï¿½llt werden, wenn im Typ der Typ Link ausgewï¿½hlt worden ist, es beinhaltet den Link auf die Seite, auf die der Link im Zusatzmenï¿½ fï¿½hren soll.</span></td><td><input type=\"text\" name=\"entrie_link\"/></td></tr>
 				<tr>
-					<td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"Hinzufügen\"/></td>
+					<td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"Hinzufï¿½gen\"/></td>
 				</tr>
 			</table>
 		</form>";
@@ -1669,7 +1665,7 @@
  				header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu&action=edit&inlinemenu_id=$entrie->inlineentrie_menu_id");
  			}
  			else {
-				$out .= "Sind sie sicher das die das Element &quot;$entrie->inlineentrie_text&quot; unwiederruflich löschen?<br />
+				$out .= "Sind sie sicher das die das Element &quot;$entrie->inlineentrie_text&quot; unwiederruflich lï¿½schen?<br />
 				<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete_entrie&amp;entrie_id=$extern_entrie_id&amp;sure=1\">" . $admin_lang['yes'] . "</a > <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=edit&amp;inlinemenu_id=$entrie->inlineentrie_menu_id\">" . $admin_lang['no'] . "</a >";
 			}
  			
@@ -1732,10 +1728,10 @@
 					$out .= "<div class=\"imageblock\">
 					<a href=\"" . generateUrl($image->file_path) . "\">
 					<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($thumb) . "\" alt=\"$thumb\" /></a><br />
-					<input type=\"radio\" name=\"image_path\" value=\"$image->file_path\"/>Auswählen</div>";
+					<input type=\"radio\" name=\"image_path\" value=\"$image->file_path\"/>Auswï¿½hlen</div>";
 				}
 			}
-			$out .="<input type=\"submit\" value=\"Übernehmen\" /></form>";
+			$out .="<input type=\"submit\" value=\"ï¿½bernehmen\" /></form>";
  		}
  		elseif($extern_action == 'save_image') {
  			$sql = "UPDATE " . DB_PREFIX . "inlinemenu
@@ -1773,7 +1769,7 @@
 				header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu");
 			}
 			else {
-				$out .= "Sind sie sicher, dass sie das Zusatzmenü für die Seite &quot;$page->page_title&quot; unwiederruflich entfernen wollen.<br />
+				$out .= "Sind sie sicher, dass sie das Zusatzmenï¿½ fï¿½r die Seite &quot;$page->page_title&quot; unwiederruflich entfernen wollen.<br />
 				<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete&amp;page_id=$page->page_id&amp;sure=1\">" . $admin_lang['yes'] . "</a>&nbsp;<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu\">" . $admin_lang['no'] . "</a>";	
 			}
 			

@@ -228,12 +228,18 @@
 		VALUES ('install_date', '" . mktime() . "');
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)
 		VALUES ('pagename', 'ComaCMS');
+		INSERT INTO " . $db_prefix . "config (config_name, config_value)
+		VALUES ('news_date_format', 'd.m.Y');
+		INSERT INTO " . $db_prefix . "config (config_name, config_value)
+		VALUES ('news_time_format', 'H:i:s');
+		INSERT INTO " . $db_prefix . "config (config_name, config_value)
+		VALUES ('news_display_count', '6');
 		INSERT INTO " . $db_prefix . "menu (menu_link, menu_text, menu_new, menu_orderid, menu_menuid, menu_page_id)
 		VALUES ('l:home', 'Home', 'no', 0, 1, 1);";
 		//TODO: make sure that the id of the default page is everytime the right one 
 
 	if($admin_name == "" || $admin_showname == "" || $admin_password == "")
-		die("Die Angaben zum Adminaccount sind unvollst‰ndig..");
+		die("Die Angaben zum Adminaccount sind unvollst√§ndig..");
 
 	if($admin_password != $admin_password2)
 		die("Das Passwort wurde nicht korrekt wiederholt");

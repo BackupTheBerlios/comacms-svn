@@ -83,7 +83,7 @@
 					}
 					else { // no changes
 						// TODO: Show it to the user
-						return "keine Veränderungen!!";
+						return "keine VerÃ¤nderungen!!";
 					}
 				}
 				else { // it dosen't
@@ -134,7 +134,7 @@
 						}
 						else {
 							$out = '';
-							$out .= "Möchten Sie diesen Text:<pre class=\"code\">$actual->text_page_text</pre>wirklich durch diesen Text:<pre class=\"code\">$old->text_page_text</pre>ersetzen?<br />
+							$out .= "Mï¿½chten Sie diesen Text:<pre class=\"code\">$actual->text_page_text</pre>wirklich durch diesen Text:<pre class=\"code\">$old->text_page_text</pre>ersetzen?<br />
 								<a href=\"admin.php?page=pagestructure&amp;action=save&amp;page_id=$page_id&amp;change=$change&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
 		 						<a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>";
 							return $out;
@@ -154,7 +154,7 @@
 			$count = 1;
 			$out = '';
 			if(is_numeric($change)) {
-				$out .= "<strong>Achtung:</strong> Sie berarbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen überschreiben!";
+				$out .= "<strong>Achtung:</strong> Sie berarbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen ï¿½berschreiben!";
 				$sql = "SELECT *
 					FROM (" . DB_PREFIX . "pages_history page
 					LEFT JOIN " . DB_PREFIX . "pages_text_history text ON text.page_id = page.id ) 
@@ -186,11 +186,11 @@
 					writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 					writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 					writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
+					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als ï¿½berschrift\",\"=== \",\" ===\",\"ï¿½berschrift\",\"h\");
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">".$page_data->text_page_text."</textarea>
 				" . $admin_lang['comment_on_change'] . ": <input name=\"page_edit_comment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $admin_lang['edited'] . '...')) . "\" maxlength=\"100\" type=\"text\"/><br />
-				<input type=\"reset\" value=\"Zurücksetzten\" class=\"button\"/>
+				<input type=\"reset\" value=\"ZurÃ¼cksetzten\" class=\"button\"/>
 				<input type=\"submit\" value=\"Speichern\" class=\"button\" />
 			</form>";
 			return $out;

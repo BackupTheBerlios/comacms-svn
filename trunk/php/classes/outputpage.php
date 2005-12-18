@@ -234,11 +234,16 @@
 		 */
 		function OutputHTML() {
 			global $config;
-			if($this->PageID == $config->Get('default_page', '0'))
+			$default_page = $config->Get('default_page', '0');
+			if($this->PageID == $default_page)
 				$this->Template = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", '', $this->Template);
 			else
 				$this->Template = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", "$1", $this->Template);
-
+			
+			if($this->PageID != $default_page)
+				$this->Template = preg_replace("/\<athome\>(.+?)\<\/athome\>/s", '', $this->Template);
+			else
+				$this->Template = preg_replace("/\<athome\>(.+?)\<\/athome\>/s", "$1", $this->Template);
 			$this->Template = str_replace('[PAGENAME]', $config->Get('pagename', ''), $this->Template);
 			$this->Template = str_replace('[TEXT]', $this->Text, $this->Template);
 			$this->Template = str_replace('[TITLE]', $this->Title, $this->Template);

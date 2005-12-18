@@ -116,8 +116,8 @@
 						<td>" . $menue_data->text . "</td>
 						<td>" . $menue_data->link . "</td>
 						<td>
-							<a href=\"admin.php?page=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=delete&amp;id=" . $menue_data->id . "\" title=\"Löschen\">
-								<img src=\"./img/del.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"Löschen\" />
+							<a href=\"admin.php?page=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=delete&amp;id=" . $menue_data->id . "\" title=\"Lï¿½schen\">
+								<img src=\"./img/del.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"Lï¿½schen\" />
 							</a>
 							<a href=\"admin.php?page=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=up&amp;id=" . $menue_data->id . "\" title=\"Nach Oben\">
 								<img src=\"./img/up.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"Nach Oben\"/>
@@ -279,5 +279,12 @@
 			SET inlinemenu_html='$text'
 			WHERE page_id='$page_id'";
 		db_result($sql);	
+	}
+	
+	function isUTF8($string)
+	{
+   		if(strpos(utf8_encode($string), "ï¿½", 0) !== false ) // "ï¿½" is ALT+159
+         		return true;  // the original string was utf8
+   		return false; // no utf8
 	}
 ?>

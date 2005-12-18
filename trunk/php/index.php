@@ -45,7 +45,10 @@
 	
 	$page->ReplaceTagInText('articles-preview', articlesPreview(5));
 	include('news.php');
-	$page->ReplaceTagInText('news', getNews());
+	$news_display_count = $config->Get('news_display_count', 6);
+	if(!is_numeric($news_display_count))
+		$news_display_count = 6;
+	$page->ReplaceTagInText('news', getNews($news_display_count));
 	$page->ReplaceTagInText('dates', nextDates(10));
 	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
 	//else

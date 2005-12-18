@@ -121,9 +121,9 @@
 					WHERE article_id=$id";
 				$article_result = db_result($sql);
 				if($row = mysql_fetch_object($article_result)) {
-					$out = "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich lˆschen?<br />
-			<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=" . $id . "&amp;sure=1\" title=\"Wirklich Lˆschen\" class=\"button\">Ja</a>
-			<a href=\"admin.php?page=articles\" title=\"Nicht Lˆschen\" class=\"button\">Nein</a>";
+					$out = "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich l√∂schen?<br />
+			<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=" . $id . "&amp;sure=1\" title=\"Wirklich L√∂schen\" class=\"button\">Ja</a>
+			<a href=\"admin.php?page=articles\" title=\"Nicht L√∂schen\" class=\"button\">Nein</a>";
 			
 					return $out;
 				}
@@ -182,14 +182,14 @@
 								writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 								writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als ‹berschrift\",\"=== \",\" ===\",\"‹berschrift\",\"h\");
+								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als √úberschrift\",\"=== \",\" ===\",\"ÔøΩberschrift\",\"h\");
 							</script>
 							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\"></textarea></td>
 					</tr>
 					<tr>
 						<td>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></td>
-						<td><input type=\"checkbox\" name=\"add_image\" id=\"add_image_checkbox\" checked=\"checked\"/ value=\"add\"><label for=\"add_image_checkbox\">Nach dem Eintragen des Arikels noch ein Bild ausw‰hlen<br/>
-							(ein Bild kann auch sp‰ter noch ¸ber die Bearbeiten-Funktion hinzugef¸gt/ver‰ndert werden)</label></td>
+						<td><input type=\"checkbox\" name=\"add_image\" id=\"add_image_checkbox\" checked=\"checked\"/ value=\"add\"><label for=\"add_image_checkbox\">Nach dem Eintragen des Arikels noch ein Bild ausw√§hlen<br/>
+							(ein Bild kann auch sp√§ter noch √ºber die Bearbeiten-Funktion hinzugef√ºgt/ver√§ndert werden)</label></td>
 					</tr>
 					<tr>
 						<td>Eingelogt als $user->Showname</td><td><input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" /></td>
@@ -235,13 +235,13 @@
 								writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 								writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als ‹berschrift\",\"=== \",\" ===\",\"‹berschrift\",\"h\");
+								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als √úberschrift\",\"=== \",\" ===\",\"√úberschrift\",\"h\");
 							</script>
 							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\">$article->article_text</textarea></td>
 					</tr>
 					<tr>
 						<td>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></td>
-						<td>" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img style=\"float:left\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '<b>noch kein Bild festgelegt</b><br />') . "Wenn das Bild gesetzt oder ver‰ndert wird, gehen alle ungespeicherten Ver‰nderungen an den Texten verloren!<br /><a class=\"button\" href=\"admin.php?page=articles&amp;action=setimage&amp;article_id=$id\">Bild setzen/ver‰ndern</a></td>
+						<td>" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img style=\"float:left\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '<b>noch kein Bild festgelegt</b><br />') . "Wenn das Bild gesetzt oder ver√§ndert wird, gehen alle ungespeicherten Ver√§nderungen an den Texten verloren!<br /><a class=\"button\" href=\"admin.php?page=articles&amp;action=setimage&amp;article_id=$id\">Bild setzen/ver√§ndern</a></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" /><input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" /></td>
@@ -313,7 +313,7 @@
 							<a href=\"article.php?id=$article->article_id\" title=\"Anschauen\"><img src=\"./img/view.png\" alt=\"Anschauen\" title=\"Anschauen\" /></a> 
 							<!--<img scr=\"./img/info.png\"  alt=\"Infos\" title=\"Infos\" />-->
 							<a href=\"admin.php?page=articles&amp;action=edit&amp;article_id=$article->article_id\" title=\"Bearbeiten\"><img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-							<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=$article->article_id\" title=\"Lˆschen\"><img src=\"./img/del.png\" alt=\"Lˆschen\" title=\"Lˆschen\" /></a>
+							<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=$article->article_id\" title=\"LÔøΩschen\"><img src=\"./img/del.png\" alt=\"LÔøΩschen\" title=\"LÔøΩschen\" /></a>
 						</td>
 					</tr>";
 			}

@@ -2,6 +2,7 @@
 <html lang="de">
 	<head>
 		<title>[PAGENAME] -> [TITLE]</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" href="[STYLE_PATH]/style.css" type="text/css" />
 		<link rel="stylesheet" href="[STYLE_PATH]/print.css" type="text/css" media="print" />
 		<!--[if IE]><link rel="stylesheet" href="[STYLE_PATH]/iefix.css" type="text/css" /><notathome>

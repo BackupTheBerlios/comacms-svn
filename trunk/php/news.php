@@ -20,6 +20,7 @@
 	 * @param last integer
 	 */
 	function getNews($last = 6) {
+		global $config;
 		include_once("functions.php");
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "news
@@ -27,10 +28,11 @@
 		$result = db_result($sql);
 		$return_str = '<div class="news-block">';
 		while($row = mysql_fetch_object($result)) {
-			$return_str .= "\t\t\t<div class=\"news\">
-					
+			$date_format = $config->Get('news_date_format', 'd.m.Y');
+			$date_format .= ' ' . $config->Get('news_time_format', 'H:i:s'); 
+			$return_str .= "\t\t\t<div class=\"news\">					
 				<div class=\"news-title\">
-					<span class=\"news-date\">" . date('d.m.Y H:i:s', $row->date) . "</span>
+					<span class=\"news-date\">" . date($date_format, $row->date) . "</span>
 					 $row->title
 				</div>
 				" . nl2br($row->text) . "

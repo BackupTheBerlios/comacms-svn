@@ -48,7 +48,7 @@
 				if($inlinemenu->inlinemenu_html != '') {
 					include($this->Page->Templatefolder . '/menu.php');
 					$out = str_replace('[TEXT]', $inlinemenu->inlinemenu_html, $menu_inline);
-					$out = str_replace('[IMG]', $inlinemenu->inlinemenu_image, $out);
+					$out = str_replace('[IMG]', generateUrl($inlinemenu->inlinemenu_image), $out);
 				}
 			}
 			

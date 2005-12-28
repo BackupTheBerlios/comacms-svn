@@ -43,13 +43,20 @@
 	 */ 
 	function convertToPreHtml($text) {
 		
+		$text = str_replace("\\r","\r", $text);
+		$text = str_replace("\\n","\n", $text);
+		$text = preg_replace("!(\r\n)|(\r)!","\n",$text);
+		$text .= "\n";
+		//$text = str_replace("\n","[n]\n", $text);
+		
 		// extract all code we won't compile it <code>...CODE...</code>
 		preg_match_all("/\<code\>(.+?)\<\/code\>/s", $text, $matches);
 		$codes = array();
 		foreach($matches[1] as $key => $match)  {
 			$codes[$key] = $matches[1][$key];
 			$text = str_replace('<code>' . $matches[1][$key] . '</code>', '[code]%' . $key . '%[/code]', $text);
-		}
+		}			
+		
 		// 'repair' all urls (with no http:// but a www or ftp)
 		$text = preg_replace("/(\ |\\r|\\n)(www|ftp)\.(.+?)\.([a-zA-Z.]{2,6}(|\/.+?))/s", '$1' . "http://$2.$3.$4", $text);
 		// remove all html characters
@@ -86,10 +93,14 @@
 		$text = preg_replace("/\/\/(.+?)\/\//s", " <em>$1</em> ", $text);
 		// convert all __text__ to <u>text</u> => Underline
 		$text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $text);
-		// convert === text === to a header
-		$text = preg_replace("#===\ (.+?)\ ===#s", "<h3>$1</h3><hr />", $text);
+		// convert ==== text ==== to a header <h2>
+		$text = preg_replace("#====\ (.+?)\ ====#s", "<h2>$1</h2>", $text);
+		// convert === text === to a header <h3>
+		$text = preg_replace("#===\ (.+?)\ ===#s", "<h3>$1</h3>", $text);
+		// convert == text == to a header <h4>
+		$text = preg_replace("#==\ (.+?)\ ==#s", "<h4>$1</h4>", $text);
 		// convert "/n" to "<br />" (more or less ;-))
-		$text = nl2br($text);
+		//$text = nl2br($text);
 		// paste links into the text
 		foreach($link_list as $link_nr => $link) {
 			if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))				
@@ -97,11 +108,57 @@
 			else
 				$text = str_replace("[[%$link_nr%]]", "<a href=\"" . make_link($link) . "\">" . $link . "</a>", $text);
 		}
+		$lines = explode("\n", $text);
+		$open_list = false;
+		$new_text = '';
+		foreach($lines as $line) {
+			if(special_start_with('* ', $line)){
+				if(!$open_list) {
+					$new_text .= "<ul>\r\n";
+					$open_list = true;
+				}
+				$new_text .= "<li>" . substr(strstr($line, '* '), 2) . "</li>\r\n";
+			}
+			else {
+				if($open_list) {
+					$open_list = false;
+					$new_text .= "</ul>\r\n";
+				}
+				$line = str_replace("\t", '', $line);
+				if($line != '' && $line != ' ' )
+					$new_text .= "<p>$line</p>\r\n";
+			}
+				
+		}
+		$text = $new_text;
 		// paste code back
 		foreach($codes as $key => $match)
 			$text = str_replace('[code]%' . $key . '%[/code]', "<pre class=\"code\">$match</pre>", $text);
 			
 		return $text;
+	}
+	/** special_start_with
+	 * 
+	 * Diese Funktion schaut, ob ein String mit einer bestimmten Zeichenkette anfängt und ignoriert dabei einige Zeichen,
+	 * so können grundsätzlich noch Lehrzeichen und Tabs vor der Zeichenkette sein, nach der gesucht wird und dennoch
+	 * wird zurückgegeben, dass der String mit der gesuchten Zeichenkette beginnt. 
+	 * 
+	 * @return bool
+	 * @param string search
+	 * @param string str
+	 * @param array $allowedchars
+	 */
+	function special_start_with($search, $str, $allowedchars = array(' ', "\t")) {
+		$str_temp = ' '.$str;
+		$search_len = strlen($search);
+		do {
+			// ein weiteres unerwünschtes Zeichen entfernen
+			$str_temp = substr($str_temp, 1);
+			if(substr($str_temp, 0, $search_len) == $search) 
+				return true;
+			
+		} while(in_array(substr($str_temp,0,1), $allowedchars));
+		return false;
 	}
 	//
 	// TODO: language-compatibilty

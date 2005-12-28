@@ -169,7 +169,7 @@
 					<span class=\"article-date\">" . date('d.m.Y H:i:s', $data->article_date) . "</span>
 					$data->article_title
 				</div><div class=\"article_inside\"$size>
-				$thumb" . nl2br($data->article_description) . " <a href=\"article.php?id=$data->article_id\" title=\"Den vollständigen Artikel '$data->article_title' lesen\">mehr...</a></div>
+				$thumb" . nl2br($data->article_description) . " <a href=\"article.php?id=$data->article_id\" title=\"Den vollstï¿½ndigen Artikel '$data->article_title' lesen\">mehr...</a></div>
 				<div class=\"article-author\">" . getUserByID($data->article_creator) . "</div>
 			</div>\r\n";
 		}
@@ -209,7 +209,7 @@
 				if(get_magic_quotes_gpc())
 					$handle = stripslashes($handle);
 				if(!is_numeric($handle))
-					$handle =  mysql_real_escape_string($handle);
+					$handle =  addslashes($handle);
 			}
 		}
 		return $handle;

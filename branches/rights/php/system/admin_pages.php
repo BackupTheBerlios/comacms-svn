@@ -416,7 +416,7 @@
 					<td colspan=\"2\" id=\"newsid" . $row->id . "\">
 						<input type=\"hidden\" name=\"id\" value=\"".$row->id."\" />
 						<input type=\"submit\" value=\"Speichern\" class=\"button\" />
-						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"L�schen\"  class=\"button\">L�schen</a>
+						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\"  class=\"button\">Löschen</a>
 					</td>
 				</tr>
 				<tr>
@@ -446,7 +446,7 @@
 					<td colspan=\"2\">
 						<a id=\"newsid".$row->id."\" ></a>
 						<a href=\"admin.php?page=news&amp;action=edit&amp;id=".$row->id."#newsid".$row->id."\" title=\"Bearbeiten\" class=\"button\">Bearbeiten</a>
-						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"L�schen\" class=\"button\">L�schen</a>
+						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\" class=\"button\">Löschen</a>
 					</td>
 				</tr>
 				<tr>

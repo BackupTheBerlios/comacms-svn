@@ -27,7 +27,9 @@
 	$admin_lang['dates'] = 'Termine';
 	$admin_lang['sitestyle'] = 'Seitenstyle';
 	$admin_lang['users'] = 'Benutzer';
+	$admin_lang['user'] = 'Benutzer';
 	$admin_lang['groups'] = 'Gruppen';
+	$admin_lang['group'] = 'Gruppe';
 	$admin_lang['gallery'] = 'Galerie';
 	$admin_lang['gallery editor'] = 'GalerieEditor';
 	$admin_lang['logout'] = 'Logout';
@@ -66,8 +68,8 @@
 	$admin_lang['generate_mainmenu'] = 'Hauptmenü erstellen';
 	$admin_lang['generate_menu_for'] = 'erstelle Untermenü zu';
 	$admin_lang['create_new_page'] = 'Neue Seite erstellen';
-	$admin_lang['created_new_page'] = "Neue Seite erstellt";
-	$admin_lang['comment_on_change'] = "Anmerkung zur Veränderung";
+	$admin_lang['created_new_page'] = 'Neue Seite erstellt';
+	$admin_lang['comment_on_change'] = 'Anmerkung zur Veränderung';
 	$admin_lang['edited'] = 'Bearbeitet';
 	$admin_lang['apply'] = 'Übernehmen';
 	$admin_lang['move_up'] = 'Bewege um eins nach Oben';
@@ -79,4 +81,19 @@
 	$admin_lang['create_inlinemenu'] = 'Zusatzmenü erstellen';
 	$admin_lang['edit_inlinemenu'] = 'Zusatzmenü bearbeiten';
 	$admin_lang['back'] = 'Zurück';
+	$admin_lang['rights'] = 'Rechte';
+	$admin_lang['user_rights'] = 'Rechte für Benutzer';
+	$admin_lang['group_rights'] = 'Rechte für Gruppen';
+	$admin_lang['page_rights'] = 'Rechte für Seiten';
+	$admin_lang['select_user'] = 'Benutzer auswählen';
+	$admin_lang['the_rights_of_which_user_should_be_edited?'] = 'Die Rechte von welchem Benutzer sollen bearbeitet werden?';
+	$admin_lang['the_rights_of_which_group_should_be_edited?'] = 'Die Rechte von welcher Gruppe sollen bearbeitet werden?';
+	$admin_lang['default_rights_for_users_and_groups'] = 'Standardrechte für Benutzer und Gruppen';
+	$admin_lang['default_rights_for_%user%'] = 'Standardrechte für %s';
+	$admin_lang['default_rights_for_the_group_%group%'] = 'Standardrechte für die Gruppe &quot;%s&quot;';
+	$admin_lang['view_right'] = 'Betrachten';
+	$admin_lang['edit_right'] = 'Bearbeiten';
+	$admin_lang['delete_right'] = 'Löschen';
+	$admin_lang['add_new_subpage_right'] = 'Neue Unterseite erstellen';
+	$admin_lang['todo'] = '!noch zu machen!';
 ?>

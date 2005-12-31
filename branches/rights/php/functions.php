@@ -88,6 +88,15 @@
 		$row = mysql_fetch_object($result);
 		return $row->user_showname;
 	}
+	
+	function getGroupByID($id) {
+		$sql = "SELECT group_name
+			FROM " . DB_PREFIX . "groups
+			WHERE group_id = '$id'";
+		$result = db_result($sql);
+		$row = mysql_fetch_object($result);
+		return $row->group_name;
+	}
 
 	function replace_smilies($textdata) {
 		$sql = "SELECT *

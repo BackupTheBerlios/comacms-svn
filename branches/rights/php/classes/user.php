@@ -86,7 +86,7 @@
 			
 			$extern_login_name = GetPostOrGet('login_name');
 			$extern_login_password = GetPostOrGet('login_password');
-			$extern_lang = GetPostOrGet('lang');
+			$extern_lang = strtolower(GetPostOrGet('lang'));
 			$languages = array('de', 'en');
 			
 			// Check: has the user changed the language by hand?

@@ -83,7 +83,7 @@
 					}
 					else { // no changes
 						// TODO: Show it to the user
-						return "keine Ver�nderungen!!";
+						return "keine Veränderungen!!";
 					}
 				}
 				else { // it dosen't

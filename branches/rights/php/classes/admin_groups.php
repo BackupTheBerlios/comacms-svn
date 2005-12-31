@@ -17,7 +17,6 @@
  	
 	/**
 	 * @package ComaCMS
-	 * @todo manage group-members
 	 */
 	class Admin_Groups {
 		
@@ -44,7 +43,7 @@
 		 					break;
 		 		case 'delete':		$out .= $this->deleteGroup($admin_lang);
 		 					break;
-		 		default:		$out .= $this->overwiev($admin_lang);
+		 		default:		$out .= $this->overview($admin_lang);
 		 	}
 		 	return $out;
 		}
@@ -364,7 +363,7 @@
 		 * @param array admin_lang
 		 * @access private
 		 */
-		function overwiev($admin_lang) {
+		function overview($admin_lang) {
 			
 			$out = "<a class=\"button\" href=\"admin.php?page=groups&amp;action=new_group\">Neue Gruppe erstellen</a><br />
 			\t\t\t<table class=\"tablestyle\">

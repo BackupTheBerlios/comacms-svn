@@ -106,8 +106,13 @@
 		$list_has_prev = false;
 		$open_sub_list = false;
 		$new_text = '';
+		$open_table = false;
 		foreach($lines as $line) {
 			if(special_start_with('* ', $line)){
+				if($open_table) {
+					$open_table = false;
+					$new_text .= "</table>\r\n";
+				}
 				if(!$open_list) {
 					$new_text .= "<ul>\r\n";
 					$open_list = true;
@@ -124,6 +129,10 @@
 				
 			}
 			elseif(special_start_with('*+ ', $line)){
+				if($open_table) {
+					$open_table = false;
+					$new_text .= "</table>\r\n";
+				}
 				if(!$open_list) {
 					$new_text .= "<ul>\r\n\t<li>\r\n";
 					$open_list = true;
@@ -136,14 +145,59 @@
 				}
 				$new_text .= "\t\t\t<li>" . substr(strstr($line, '*+ '), 3) . "</li>\r\n";
 			}
-			else {
+			else if(special_start_with('|',$line) || special_start_with('^',$line)) {
 				if($open_sub_list) {
 					$open_sub_list = false;
 					$new_text .= "\t\t</ul>\r\n";
 					if($list_has_prev) {
-					$new_text .= 	"\t</li>\r\n";
+						$new_text .= 	"\t</li>\r\n";
+						$list_has_prev = false;
+					}
+				}
+				if($list_has_prev) {
+					$new_text .= 	"</li>\r\n";
 					$list_has_prev = false;
 				}
+				if($open_list) {
+					$open_list = false;
+					$new_text .= "</ul>\r\n";
+				}
+				if(!$open_table) {
+					$open_table = true;
+					$new_text .= "<table>\r\n";
+				}
+				$new_text .= "\t<tr>\r\n";
+				$row = str_replace('^', '|', $line);
+				$row_values = explode('|', $row);
+				$max = count($row_values) - 1;
+				$row_pos = strlen($row_values[0]) + 1;
+				if($line[$row_pos - 1] == '|')
+						$element = 'td';
+					else	
+						$element = 'th';
+				for($pos = 1; $pos < $max; $pos++) {
+					$new_text .= "\t\t<$element>\r\n\t\t\t".$row_values[$pos]."\r\n\t\t</$element>\r\n";
+					$row_pos += 1 + strlen($row_values[$pos]);
+					if($line[$row_pos - 1] == '|')
+						$element = 'td';
+					else	
+						$element = 'th';
+				}
+				$new_text .= "\t</tr>\r\n";
+				
+			}
+			else {
+				if($open_table) {
+					$open_table = false;
+					$new_text .= "</table>\r\n";
+				}
+				if($open_sub_list) {
+					$open_sub_list = false;
+					$new_text .= "\t\t</ul>\r\n";
+					if($list_has_prev) {
+						$new_text .= 	"\t</li>\r\n";
+						$list_has_prev = false;
+					}
 				}
 				if($list_has_prev) {
 					$new_text .= 	"</li>\r\n";
@@ -155,9 +209,10 @@
 					$new_text .= "</ul>\r\n";
 				}
 				$line = str_replace("\t", '', $line);
-				//echo "$line\r\n<br/>\r\n<br/>\r\n" . ((($line != '' && $line != ' ' && !special_start_with('<h', $line)&& !special_start_with('<pre', $line)))?'true':'false') . "<br/>\r\n<br/>\r\n";
 				if($line != '' && $line != ' ' && !special_start_with('<h', $line) && !special_start_with('[code]', $line))
 					$new_text .= "<p>$line</p>\r\n";
+				else
+					$new_text .= "$line\r\n";
 			}
 				
 		}

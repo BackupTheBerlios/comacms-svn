@@ -15,13 +15,6 @@
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
 
-	
-	/*function alt($link) {
-		$text = preg_replace("/(.+?)\|(.+$)/s","$1\" alt=\"\\2", $link);
-		echo $link.'<br \>' . $text . '<br \>';
-		return $text;
-	}*/
-	
 	/**
 	 * @return string
 	 */
@@ -90,7 +83,7 @@
 		// convert all **text** to <strong>text</strong> => Bold
 		$text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $text);
 		// convert all //text// to <em>text</em> => Italic
-		$text = preg_replace("/\/\/(.+?)\/\//s", " <em>$1</em> ", $text);
+		$text = preg_replace("/\/\/(.+?)\/\//s", "<em>$1</em>", $text);
 		// convert all __text__ to <u>text</u> => Underline
 		$text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $text);
 		// convert ==== text ==== to a header <h2>
@@ -110,6 +103,8 @@
 		}
 		$lines = explode("\n", $text);
 		$open_list = false;
+		$list_has_prev = false;
+		$open_sub_list = false;
 		$new_text = '';
 		foreach($lines as $line) {
 			if(special_start_with('* ', $line)){
@@ -117,15 +112,51 @@
 					$new_text .= "<ul>\r\n";
 					$open_list = true;
 				}
-				$new_text .= "<li>" . substr(strstr($line, '* '), 2) . "</li>\r\n";
+				if($open_sub_list) {
+					$open_sub_list = false;
+					$new_text .= "</ul>\r\n";
+				}
+				if($list_has_prev)
+					$new_text .= 	"</li>\r\n";
+				else
+					$list_has_prev = true;
+				$new_text .= "\t<li>" . substr(strstr($line, '* '), 2);
+				
+			}
+			elseif(special_start_with('*+ ', $line)){
+				if(!$open_list) {
+					$new_text .= "<ul>\r\n\t<li>\r\n";
+					$open_list = true;
+					$list_has_prev = true;
+				}
+				
+				if(!$open_sub_list) {
+					$new_text .= "\r\n\t\t<ul>\r\n";
+					$open_sub_list = true;
+				}
+				$new_text .= "\t\t\t<li>" . substr(strstr($line, '*+ '), 3) . "</li>\r\n";
 			}
 			else {
+				if($open_sub_list) {
+					$open_sub_list = false;
+					$new_text .= "\t\t</ul>\r\n";
+					if($list_has_prev) {
+					$new_text .= 	"\t</li>\r\n";
+					$list_has_prev = false;
+				}
+				}
+				if($list_has_prev) {
+					$new_text .= 	"</li>\r\n";
+					$list_has_prev = false;
+				}
+				
 				if($open_list) {
 					$open_list = false;
 					$new_text .= "</ul>\r\n";
 				}
 				$line = str_replace("\t", '', $line);
-				if($line != '' && $line != ' ' )
+				//echo "$line\r\n<br/>\r\n<br/>\r\n" . ((($line != '' && $line != ' ' && !special_start_with('<h', $line)&& !special_start_with('<pre', $line)))?'true':'false') . "<br/>\r\n<br/>\r\n";
+				if($line != '' && $line != ' ' && !special_start_with('<h', $line) && !special_start_with('[code]', $line))
 					$new_text .= "<p>$line</p>\r\n";
 			}
 				

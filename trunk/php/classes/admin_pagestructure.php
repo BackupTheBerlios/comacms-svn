@@ -286,7 +286,7 @@
 		 	return $out;
 		 }
 		 
-		 function _structurePullDown($topnode = 0, $deep = 0, $topnumber = '') {
+		 function _structurePullDown($topnode = 0, $deep = 0, $topnumber = '', $without = -1) {
 		 	$out = '';
 			$sql = "SELECT *
 		 		FROM " . DB_PREFIX . "pages
@@ -296,9 +296,11 @@
 		 	if(mysql_num_rows($pages_result) != 0) {
 		 		$number = 1;
 		 		while($page = mysql_fetch_object($pages_result)) {
-		 		$out .= "<option style=\"padding-left:" . ($deep * 1.5) . "em;\" value=\"$page->page_id\">$topnumber$number. $page->page_title ($page->page_name)</option>\r\n";
-		 		$out .= $this->_structurePullDown($page->page_id, $deep + 1, $topnumber . $number. "." );
-		 		$number++;
+		 			if($page->page_id != $without) {
+		 				$out .= "<option style=\"padding-left:" . ($deep * 1.5) . "em;\" value=\"$page->page_id\">$topnumber$number. $page->page_title ($page->page_name)</option>\r\n";
+		 				$out .= $this->_structurePullDown($page->page_id, $deep + 1, $topnumber . $number. "." ,$without);
+		 				$number++;
+		 			}
 		 		}
 		 	}
 		 	return $out;
@@ -834,39 +836,64 @@
 			global $admin_lang;
 			
 			$page_id =  GetPostOrGet('page_id');
+			if(GetPostOrGet('action2') == 'save_path') {
+				$page_parent_id = GetPostOrGet('page_parent_id');
+				if(is_numeric($page_parent_id) && is_numeric($page_id)) {
+					$sql = $sql = "UPDATE " . DB_PREFIX . "pages
+ 						SET page_parent_id=$page_parent_id
+ 						WHERE page_id = $page_id";
+ 					db_result($sql);
+				}
+			}
 			$out = '';
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages
 				WHERE page_id=$page_id";
 			$page_result = db_result($sql);
 			if($page = mysql_fetch_object($page_result)) {
-				$out .= "\t\t\t<table>
+				$out .= "\t\t\t<table class=\"text_table\">
 				<tr>
-					<td>Titel:</td>
+					<th>Titel</th>
 					<td>$page->page_title</td>
 				</tr>
 				<tr>
-					<td>Name:</td>
+					<th>Name</th>
 					<td>$page->page_name</td>
 				</tr>
 				<tr>
-					<td>Typ:</td>
+					<th>Typ</th>
 					<td>$page->page_type</td>
 				</tr>
 				<tr>
-					<td>Sprache:</td>
+					<th>Sprache</th>
 					<td>" . $admin_lang[$page->page_lang] . "</td>
 				</tr>
 				<tr>
-					<td>Pfad:</td>
-					<td><a href=\"admin.php?page=pagestructure\">root</a><strong>/</strong>" . $this->_pagePath($page->page_id) . "</td>
+					";
+				if(GetPostOrGet('action2') == 'change_path') {
+					$out .= "<th>Unterseite von</th>
+					<td><form action=\"admin.php\" method=\"post\">
+							<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+							<input type=\"hidden\" name=\"action\" value=\"info\" />
+							<input type=\"hidden\" name=\"page_id\" value=\"$page->page_id\" />
+							<input type=\"hidden\" name=\"action2\" value=\"save_path\" />
+							<select name=\"page_parent_id\">
+								<option value=\"0\">Keiner</option>\r\n";
+					$out .= $this->_structurePullDown(0,0,'', $page->page_id);
+					$out .= "\t\t\t\t\t\t\t</select><input type=\"submit\" value=\"" . $admin_lang['save'] . "\" class=\"button\" /></form>";
+				}
+				else
+					$out .= "<th>Pfad</th>
+					<td>
+						<a href=\"admin.php?page=pagestructure\">root</a><strong>/</strong>" . $this->_pagePath($page->page_id) . " <a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page->page_id&amp;action2=change_path\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
+				$out .= "</td>
 				</tr>
 				<tr>
-					<td>Bearbeitet von:</td>
+					<th>Bearbeitet von</th>
 					<td>" . getUserById($page->page_creator) . "</td>
 				</tr>
 				<tr>
-					<td>Bearbeitet am:</td>
+					<th>Bearbeitet am</th>
 					<td>" . date("d.m.Y H:i:s",$page->page_date) . "</td>
 				</tr>
 			</table>\r\n";

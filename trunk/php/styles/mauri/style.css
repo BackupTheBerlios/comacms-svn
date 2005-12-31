@@ -16,6 +16,18 @@ h1 {
  margin: 0;
 }
 
+h2 {
+ padding-left: 1em;
+ border-bottom: 1px solid black;
+
+}
+h3 {
+ padding-left: 1.5em;
+}
+
+h4 {
+ padding-left: 2em;
+}
 img {
  border: 0;
 }
@@ -337,4 +349,17 @@ td.articles {
 td.article_image {
 text-align: center;
 float: none;
+}
+
+table.text_table {
+ border-spacing: 0px;
+ border-collapse: collapse;
+}
+
+table.text_table td, table.text_table th{
+ border: 1px solid #000000;
+ padding: 0.1em;
+}
+table.text_table th {
+ background-color: #9B9FBF;
 }

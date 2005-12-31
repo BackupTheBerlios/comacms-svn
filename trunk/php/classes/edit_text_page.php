@@ -51,6 +51,12 @@
 			$page_edit_comment = GetPostOrGet('page_edit_comment');
 			$page_title = GetPostOrGet('page_title');
 			$page_text = GetPostOrGet('page_text');
+			if(GetPostOrGet('page_preview') != '')
+				return $this->Edit($page_id, $page_title, $page_text, $page_edit_comment);
+			if(GetPostOrGet('page_abort') != '') {
+				header('Location: admin.php?page=pagestructure');
+				die();
+			}
 			if($page_title != '' && $page_id != '' && $page_text != '')
 			{
 				$sql = "SELECT struct.*, text.*
@@ -147,52 +153,78 @@
 			}
 		}
 		
-		function Edit($page_id) {
+		function Edit($page_id, $title = '', $text = '', $edit_comment = '') {
 			global $_SERVER, $admin_lang;
 			
 			$change = GetPostOrGet('change');
 			$count = 1;
 			$out = '';
-			if(is_numeric($change)) {
-				$out .= "<strong>Achtung:</strong> Sie berarbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen �berschreiben!";
-				$sql = "SELECT *
-					FROM (" . DB_PREFIX . "pages_history page
-					LEFT JOIN " . DB_PREFIX . "pages_text_history text ON text.page_id = page.id ) 
-					WHERE page.page_id=$page_id
-					ORDER BY  page.page_date ASC
-					LIMIT " . ($change - 1) . ",1";
-			}
-			else {
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "pages_history
-					WHERE page_id = $page_id
-					LIMIT 0,1";
-				$count_result = db_result($sql);
-				$count = mysql_num_rows($count_result);
-				$sql = "SELECT struct.page_id, struct.page_title, text.text_page_text, struct.page_edit_comment
-					FROM ( " . DB_PREFIX. "pages struct
-					LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
-					WHERE struct.page_id='$page_id' AND struct.page_type='text'";
-			}
-			$page_result = db_result($sql);
-			$page_data = mysql_fetch_object($page_result);
-			$out .= "\t\t\t<form action=\"admin.php\" method=\"post\">
+			$page_data = null;
+			$got_mysql = false;
+			if($text == '' && $title == '') {
+				if(is_numeric($change) && $text == '' && $title == '') {
+					$out .= "<strong>Achtung:</strong> Sie berarbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen �berschreiben!";
+					$sql = "SELECT *
+						FROM (" . DB_PREFIX . "pages_history page
+						LEFT JOIN " . DB_PREFIX . "pages_text_history text ON text.page_id = page.id ) 
+						WHERE page.page_id=$page_id
+						ORDER BY  page.page_date ASC
+						LIMIT " . ($change - 1) . ",1";
+				}
+				else if($text == '' && $title == '') {
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "pages_history
+						WHERE page_id = $page_id
+						LIMIT 0,1";
+					$count_result = db_result($sql);
+					$count = mysql_num_rows($count_result);
+					$sql = "SELECT struct.page_id, struct.page_title, text.text_page_text, struct.page_edit_comment
+						FROM ( " . DB_PREFIX. "pages struct
+						LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
+						WHERE struct.page_id='$page_id' AND struct.page_type='text'";
+				}
+				$page_result = db_result($sql);
+				if($page_data = mysql_fetch_object($page_result))
+					$got_mysql = true;
+			}	
+			
+			
+			if($got_mysql || ($text != '' || $title != '')) {
+				if($text != '' || $title != '') {
+					$page_title = $title;
+					$page_text = $text;
+					$page_edit_comment = $edit_comment;
+					$show_preview = true;
+				}
+				else {
+					$page_title = $page_data->page_title;
+					$page_text = $page_data->text_page_text;
+					$page_edit_comment = $admin_lang['edited'] . '...';
+					$show_preview = false;
+				} 
+				$out .= "\t\t\t<fieldset><legend>Seite Bearbeiten</legend><form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"save\" />
-				<input type=\"hidden\" name=\"page_id\" value=\"" . $page_id . "\" />
-				<input type=\"text\" name=\"page_title\" value=\"" . $page_data->page_title . "\" /><br />
+				<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
+				<input type=\"text\" name=\"page_title\" value=\"$page_title\" /><br />
 				<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
 				<script type=\"text/javascript\" language=\"javascript\">
 					writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 					writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 					writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als �berschrift\",\"=== \",\" ===\",\"�berschrift\",\"h\");
+					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"==== \",\" ====\",\"�berschrift\",\"h\");
 				</script><br />
-				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">".$page_data->text_page_text."</textarea>
-				" . $admin_lang['comment_on_change'] . ": <input name=\"page_edit_comment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $admin_lang['edited'] . '...')) . "\" maxlength=\"100\" type=\"text\"/><br />
-				<input type=\"reset\" value=\"Zurücksetzten\" class=\"button\"/>
+				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">$page_text</textarea>
+				" . $admin_lang['comment_on_change'] . ": <input name=\"page_edit_comment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $page_edit_comment)) . "\" maxlength=\"100\" type=\"text\"/><br />
 				<input type=\"submit\" value=\"Speichern\" class=\"button\" />
-			</form>";
+				<input type=\"submit\" value=\"Vorschau\" name=\"page_preview\" class=\"button\" />
+				<input type=\"submit\" value=\"Abbrechen\" name=\"page_abort\" class=\"button\"/>
+			</form></fieldset>\r\n";
+				if($show_preview)
+					$out .= "<fieldset><legend>Vorschau</legend>"
+						 . convertToPreHtml($page_text) ."</fieldset>";
+				
+			}
 			return $out;
 		}
 	}

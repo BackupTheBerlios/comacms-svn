@@ -164,7 +164,7 @@
 				}
 				if(!$open_table) {
 					$open_table = true;
-					$new_text .= "<table>\r\n";
+					$new_text .= "<table class=\"text_table\">\r\n";
 				}
 				$new_text .= "\t<tr>\r\n";
 				$row = str_replace('^', '|', $line);

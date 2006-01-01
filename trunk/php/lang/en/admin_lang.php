@@ -78,4 +78,8 @@
 	$admin_lang['create_inlinemenu'] = 'Create inlinemenu';
 	$admin_lang['edit_inlinemenu'] = 'Edit inlinemenu';
 	$admin_lang['back'] = 'Back';
+	$admin_lang['deleted'] = 'Deleted';
+	$admin_lang['hidden'] = 'Hidden';
+	$admin_lang['public'] = 'Public';
+	$admin_lang['private'] = 'Private';
 ?>

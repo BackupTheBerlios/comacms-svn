@@ -242,9 +242,9 @@
 						</td>
 						<td>
 							<select name=\"page_access\">
-								<option value=\"public\">Öffentlich</option>
-								<option value=\"private\">Privat</option>
-								<option value=\"hidden\">Versteckt</option>
+								<option value=\"public\">" . $admin_lang['public'] . "</option>
+								<option value=\"private\">" . $admin_lang['private'] . "</option>
+								<option value=\"hidden\">" . $admin_lang['hidden'] . "</option>
 							</select>
 						</td>
 					</tr>
@@ -286,7 +286,7 @@
 		 	return $out;
 		 }
 		 
-		 function _structurePullDown($topnode = 0, $deep = 0, $topnumber = '', $without = -1) {
+		 function _structurePullDown($topnode = 0, $deep = 0, $topnumber = '', $without = -1, $selected = -1) {
 		 	$out = '';
 			$sql = "SELECT *
 		 		FROM " . DB_PREFIX . "pages
@@ -297,8 +297,8 @@
 		 		$number = 1;
 		 		while($page = mysql_fetch_object($pages_result)) {
 		 			if($page->page_id != $without) {
-		 				$out .= "<option style=\"padding-left:" . ($deep * 1.5) . "em;\" value=\"$page->page_id\">$topnumber$number. $page->page_title ($page->page_name)</option>\r\n";
-		 				$out .= $this->_structurePullDown($page->page_id, $deep + 1, $topnumber . $number. "." ,$without);
+		 				$out .= "<option style=\"padding-left:" . ($deep * 1.5) . "em;\" value=\"$page->page_id\"" . (($page->page_id == $selected) ? ' selected="selected"' : '') . ">$topnumber$number. $page->page_title ($page->page_name)</option>\r\n";
+		 				$out .= $this->_structurePullDown($page->page_id, $deep + 1, $topnumber . $number. "." ,$without, $selected);
 		 				$number++;
 		 			}
 		 		}
@@ -321,7 +321,7 @@
 		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type" . (($page->page_access == 'deleted') ? ' strike' : '' ). "\">" . (($topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page->page_id,$this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page->page_access != 'public') ? ' disabled="disabled"'  : '') . " value=\"$page->page_id\" class=\"checkbox\"/>\t" : '' );
 		 			
 		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
-		 			$out .= "[$page->page_lang]";
+		 			$out .= "<span class=\"page_lang\">[" . $admin_lang[$page->page_lang] . "]</span><span class=\"page_actions\">";
 		 			// edit:
 		 			if($page->page_access != 'deleted')
 		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
@@ -337,7 +337,7 @@
 		 			if($page->page_access != 'deleted')
 		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=delete&amp;page_id=$page->page_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
 		 			
-					$out .= $this->_showStructure($page->page_id);
+					$out .= '</span>' . $this->_showStructure($page->page_id);
 		 			$out .= "\t\t\t\t</li>\r\n";
 				}
 				
@@ -833,18 +833,51 @@
 		}
 		
 		function _infoPage() {
-			global $admin_lang;
+			global $admin_lang, $user;
 			
 			$page_id =  GetPostOrGet('page_id');
-			if(GetPostOrGet('action2') == 'save_path') {
+			$action2 = GetPostOrGet('action2');
+			if($action2 == 'save_path' || $action2 == 'save_access') {
+				$page_access = GetPostOrGet('page_access');
+				$page_access_old = GetPostOrGet('page_access_old');
 				$page_parent_id = GetPostOrGet('page_parent_id');
-				if(is_numeric($page_parent_id) && is_numeric($page_id)) {
-					$sql = $sql = "UPDATE " . DB_PREFIX . "pages
- 						SET page_parent_id=$page_parent_id
- 						WHERE page_id = $page_id";
- 					db_result($sql);
+				$page_parent_id_old = GetPostOrGet('page_parent_id_old');
+				if(($action2 == 'save_access' && $page_access_old != $page_access) || ($action2 == 'save_path' && $page_id != $page_parent_id && $page_parent_id != $page_parent_id_old)) {
+					$sql = "SELECT struct.*, text.*
+						FROM ( " . DB_PREFIX. "pages struct
+						LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
+						WHERE struct.page_id='$page_id' AND struct.page_type='text'";
+					$page_result = db_result($sql);
+					if($page = mysql_fetch_object($page_result)) {
+						
+						$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
+							VALUES($page->page_id, '$page->page_type', '$page->page_name', '$page->page_title', $page->page_parent_id, '$page->page_lang', $page->page_creator, $page->page_date, '$page->page_edit_comment')";
+						db_result($sql);
+						$lastid = mysql_insert_id();
+						
+						$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, text_page_text)
+							VALUES ($lastid, '$page->text_page_text')";
+						
+						}
+					
+					if($action2 == 'save_path') {
+						
+							if(is_numeric($page_parent_id) && is_numeric($page_id)) {
+							$sql = "UPDATE " . DB_PREFIX . "pages
+	 							SET page_parent_id=$page_parent_id, page_creator='$user->ID', page_date='" . mktime() . "',  page_edit_comment = 'Changed ParentID form $page_parent_id_old to $page_parent_id'
+ 								WHERE page_id = $page_id";
+ 								db_result($sql);
+							}
+						}
+					else if($action2 == 'save_access') {
+						
+						$sql = "UPDATE " . DB_PREFIX . "pages
+							SET  page_access='$page_access', page_creator='$user->ID', page_date='" . mktime() . "',  page_edit_comment = 'Changed Page-Access from $page_access_old to $page_access'
+							WHERE page_id='$page_id'";
+						db_result($sql);
+					}
 				}
-			}
+			}	
 			$out = '';
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages
@@ -865,6 +898,29 @@
 					<td>$page->page_type</td>
 				</tr>
 				<tr>
+					<th>Zugang</th>
+					<td>";
+					if(GetPostOrGet('action2') == 'change_access') {
+						$out .= "<form action=\"admin.php\" method=\"post\">
+							<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+							<input type=\"hidden\" name=\"action\" value=\"info\" />
+							<input type=\"hidden\" name=\"page_id\" value=\"$page->page_id\" />
+							<input type=\"hidden\" name=\"page_access_old\" value=\"$page->page_access\" />
+							<input type=\"hidden\" name=\"action2\" value=\"save_access\" />
+							<select name=\"page_access\">
+								<option value=\"public\"" . (($page->page_access == 'public') ? ' selected="selected"' : '') . ">" . $admin_lang['public'] . "</option>
+								<option value=\"private\"" . (($page->page_access == 'private') ? ' selected="selected"' : '') . ">" . $admin_lang['private'] . "</option>
+								<option value=\"hidden\"" . (($page->page_access == 'hidden') ? ' selected="selected"' : '') . ">" . $admin_lang['hidden'] . "</option>
+								<option value=\"deleted\"" . (($page->page_access == 'deleted') ? ' selected="selected"' : '') . ">" . $admin_lang['deleted'] . "</option>
+							</select>
+							<input type=\"submit\" value=\"" . $admin_lang['save'] . "\" class=\"button\" />
+							</form>";
+					}
+					else
+						$out .=	$admin_lang[$page->page_access] . " <a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page->page_id&amp;action2=change_access\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
+					$out .= "</td>
+				</tr>
+				<tr>
 					<th>Sprache</th>
 					<td>" . $admin_lang[$page->page_lang] . "</td>
 				</tr>
@@ -877,9 +933,10 @@
 							<input type=\"hidden\" name=\"action\" value=\"info\" />
 							<input type=\"hidden\" name=\"page_id\" value=\"$page->page_id\" />
 							<input type=\"hidden\" name=\"action2\" value=\"save_path\" />
+							<input type=\"hidden\" name=\"page_parent_id_old\" value=\"$page->page_parent_id\" />
 							<select name=\"page_parent_id\">
 								<option value=\"0\">Keiner</option>\r\n";
-					$out .= $this->_structurePullDown(0,0,'', $page->page_id);
+					$out .= $this->_structurePullDown(0,0,'', $page->page_id, $page->page_parent_id);
 					$out .= "\t\t\t\t\t\t\t</select><input type=\"submit\" value=\"" . $admin_lang['save'] . "\" class=\"button\" /></form>";
 				}
 				else

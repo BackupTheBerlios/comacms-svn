@@ -13,7 +13,7 @@
 		  text-align: center;
 		}
 		
-        	.block {
+		.block {
         	  margin: 1.2em;
         	  margin-top: 0.25em;
         	  margin-bottom: 0.25em;
@@ -26,7 +26,7 @@
         	}
         	
         	p{
-        	  text-indent: 1em;
+        	  text-indent: .5em;
         	}
         	
         	a {
@@ -63,6 +63,27 @@
 		  padding-right: 2em;
 		  border: 1px solid #000000;
 		}
+		
+		.code {
+        	  border:1px dashed #3C528B;
+	          padding: 0.3em;
+	          display: block;
+	          margin-left: 1em;
+	        }
+	        
+	        table.text_table {
+		  border-spacing: 0px;
+		  border-collapse: collapse;
+		}
+
+		table.text_table td, table.text_table th{
+		  border: 1px solid #000000;
+		  padding: 0.1em;
+		}
+
+		table.text_table th {
+		  background-color: #9B9FBF;
+		}
         	</style>
     	</head>
     	<body>
@@ -85,7 +106,9 @@
   						<ol>
   							<li><a href="#IV.1.1.">Texte erstellen</a></li>
   							<li><a href="#IV.1.2.">Texte bearbeiten</a></li>
-  							<li>Texte entfernen</li>
+  							<li><a href="#IV.1.3.">Texte formatieren</a></li>
+  							<li>Texte l&ouml;schen</li>
+  							
   						</ol>
   					</li>
   					<li>
@@ -179,6 +202,76 @@
 					<h4>IV. 1. 2. Texte bearbeiten</h4>
 					<p>Um in den Seiteneditor zu gelangen muss man entweder beim Erstellen der Seite das Kästchen &quot;Bearbeiten&quot; ausgewählt haben oder aber in der Seiten-Struktur-Ansicht auf das Bearbeiten-Symbol(weißes Papier mit Stift) der jeweiligen Seite geklickt haben.</p>
 					<p class="note"><strong>Info:</strong> Der Seiten-Editor kann auf verschiedenen Rechnern unterschiedlich aussehen. Das liegt daran, dass der Seiteneditor im Java-Script erweitert wird, wenn es möglich ist. Wenn allerdings Javascript deaktiviert ist erscheinen grundsätzlich keine Formatierungs-Buttons.</p>
+				</div>
+				<div id="IV.1.3." class="block">
+					<h4>IV. 1. 3. Texte formatieren</h4>
+					<p>Um Texte zu formatieren ist in ComaCMS eine eigene Formatierungssprache implemetiert worden, mit der man Texte übersichtlicher gestalten kann, die Texte aber immer noch dem Grunddesign entsprechen.</p>
+					<p>In dieser Erklärung wird immer kurz gezeigt, wie die Formatierung aussieht und anschließend der dazugehörige Formatierungscode angezeigt.</p>
+					<div id="IV.1.3.1" class="block">
+						<h5>IV.1.3.1 Schriftformatierung</h5>
+						<p>Mit ComaCMS kann man <strong>fette</strong>, <em>kursive</em> und <u>untersrichene</u> Texte erstellen.</p>
+						<p>Diese Formatierungen kann man natürlich auch <u><em><strong>kombinieren.</strong></em></u></p>
+						<pre class="code">
+Mit ComaCMS kann man **fette**, //kursive// und __untersrichene__ Texte erstellen.
+Diese Formatierungen kann man natürlich auch __//**kombinieren**//__
+</pre>
+					</div>
+					<!-- <div id="IV.1.3.2" class="block">
+						<h5>IV.1.3.2 Links</h5>
+						<p>&nbsp;</p>
+					</div>-->
+					<div id="IV.1.3.3" class="block">
+						<h5>IV.1.3.3 Listen</h5>
+						<p>Um bestimte Dinge übersichtlicher zu gestalten, kann man sie in Listen umwandeln.</p>
+						<ul>
+							<li>Dies ist ein Listenpunkt</li>
+							<li>Dies ist ein weiterer Listenpunkt</li>
+							<li>Dies ist ein Listenpunkt mit Unterpunkten
+								<ul>
+									<li>Ein Unterpunkt</li>
+									<li>Noch ein Unterpunkt</li>
+								</ul>
+							</li>
+							<li>Abschließend noch ein Listenpunkt in der ersten Ebene</li>
+						</ul>
+						<pre class="code">
+ * Dies ist ein Listenpunkt
+ * Dies ist ein weiterer Listenpunkt
+ * Dies ist ein ListenPunkt mit Unterpunkten
+ *+ Ein Untperunkt
+ *+ Noch ein Unterpunkt
+ * Abschließend noch ein Listenpunt in der ersten Ebene
+</pre>
+					</div>
+					<div id="IV.1.3.4" class="block">
+						<h5>IV.1.3.4 Tabellen</h5>
+						<p>Wenn man <abbr title="zum Beispiel">z.B.</abbr> Daten in eine tabellarische Form bringen möchte, so kann man dies auch machen.</p>
+						<table class="text_table">
+							<tr><th> Tabellenkopf 1   </th><th> Tabellenkopf 2    </th><th> Tabellenkopf 2   </th></tr>
+							<tr><td> Zeile 1 Spalte 1 </td><td>  Zeile 1 Spalte 2 </td><td> Zeile 1 Spalte 3 </td></tr>
+							<tr><td> Zeile 2 Spalte 1 </td><td>  Zeile 2 Spalte 2 </td><td> Zeile 2 Spalte 3 </td></tr>
+							<tr><td> Zeile 3 Spalte 1 </td><td>  Zeile 3 Spalte 2 </td><td> Zeile 3 Spalte 3 </td></tr>
+						</table>
+						<pre class="code">
+ ^ Tabellenkopf 1   ^ Tabellenkopf 2    ^ Tabellenkopf 2   ^
+ | Zeile 1 Spalte 1 |  Zeile 1 Spalte 2 | Zeile 1 Spalte 3 |
+ | Zeile 2 Spalte 1 |  Zeile 2 Spalte 2 | Zeile 2 Spalte 3 |
+ | Zeile 3 Spalte 1 |  Zeile 3 Spalte 2 | Zeile 3 Spalte 3 |
+ </pre>
+ 						<p>Die Tabellenköpfe müssen sich nicht nur in der obersten Zeile befinden.</p>
+ 						<table class="text_table">
+ 							<tr><td>                </td><th> Tabellenkopf 1   </th><th> Tabellenkopf 2   </th><th> Tabellenkopf 3   </th></tr>
+ 							<tr><th> Tabellenkopf 4 </th><td> Zeile 1 Spalte 1 </td><td> Zeile 1 Spalte 2 </td><td> Zeile 1 Spalte 3 </td></tr>
+ 							<tr><th> Tabellenkopf 5 </th><td> Zeile 2 Spalte 1 </td><td> Zeile 2 Spalte 2 </td><td> Zeile 2 Spalte 3 </td></tr>
+ 							<tr><th> Tabellenkopf 6 </th><td> Zeile 3 Spalte 1 </td><td> Zeile 3 Spalte 2 </td><td> Zeile 3 Spalte 3 </td></tr>
+ 						</table>
+ 						<pre class="code">
+|                ^ Tabellenkopf 1   ^ Tabellenkopf 2    ^ Tabellenkopf 2   ^
+^ Tabellenkopf 4 | Zeile 1 Spalte 1 |  Zeile 1 Spalte 2 | Zeile 1 Spalte 3 |
+^ Tabellenkopf 5 | Zeile 2 Spalte 1 |  Zeile 2 Spalte 2 | Zeile 2 Spalte 3 |
+^ Tabellenkopf 6 | Zeile 3 Spalte 1 |  Zeile 3 Spalte 2 | Zeile 3 Spalte 3 |
+</pre>
+					</div>
 				</div>
 			</div>
 		</div>

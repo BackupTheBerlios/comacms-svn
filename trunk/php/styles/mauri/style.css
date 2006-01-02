@@ -367,19 +367,14 @@ table.text_table th {
  background-color: #9B9FBF;
 }
 
-li.page_type_text , li.page_type_gallery{
-
-
-}
-
 .page_lang {
  position: absolute;
-right: 15em;
+ right: 15em;
 }
 
 .page_actions {
-	/*outline: 1px solid black;
-// float: right;*/
-position: absolute;
-right: 2em;
+ width: 12em;
+ position: absolute;
+ right: 1em;
 }
+

@@ -36,10 +36,12 @@
 	 */ 
 	function convertToPreHtml($text) {
 		
-		$text = str_replace("\\r","\r", $text);
-		$text = str_replace("\\n","\n", $text);
+		//$text = str_replace("\\r","\r", $text);
+		//$text = str_replace("\\\\","\\", $text);
+		//$text = str_replace("\\n","\n", $text);
+		$text = stripslashes($text);
 		$text = preg_replace("!(\r\n)|(\r)!","\n",$text);
-		$text .= "\n";
+		$text = "\n" . $text . "\n";
 		//$text = str_replace("\n","[n]\n", $text);
 		
 		// extract all code we won't compile it <code>...CODE...</code>
@@ -51,7 +53,7 @@
 		}			
 		
 		// 'repair' all urls (with no http:// but a www or ftp)
-		$text = preg_replace("/(\ |\\r|\\n)(www|ftp)\.(.+?)\.([a-zA-Z.]{2,6}(|\/.+?))/s", '$1' . "http://$2.$3.$4", $text);
+		$text = preg_replace("/(\ |\\r|\\n|\[)(www|ftp)\.(.+?)\.([a-zA-Z.]{2,6}(|\/.+?))/s", '$1' . "http://$2.$3.$4", $text);
 		// remove all html characters
 		// TODO: ad a configuration posibility to allow html
 		$text = htmlspecialchars($text);
@@ -59,13 +61,14 @@
 		$text = str_replace("\\r","\r", $text);
 		$text = str_replace("\\n","\n", $text);
 		$text = preg_replace("!(\r\n)|(\r)!","\n",$text);
+		$text = preg_replace("#\\\\(\ |\\r|\\n)#s","<br />\r\n", $text);
 		// catch all email-adresses which should be convertet to links ( <email@domain.com>)
 		preg_match_all("#\&lt\;([a-z0-9\._-]+?)\@([\w\-]+\.[a-z0-9\-\.]+\.*[\w]+)\&gt\;#s", $text, $emails);
 		// allowed auto-link protocols
 		$protos = "http|ftp|https";
 		// convert urls to links http://www.domain.com to [[http://www.domain.com|www.domain.com]]
 		$text = preg_replace("#(?<!\[\[)($protos):\/\/(.+?)(\ |\\n|\\r)#s",'[[$1://$2|$2]]$3', $text);
-		
+		$text = preg_replace("#\[\[($protos):\/\/([a-z0-9\-\.]+)\]\]#s",'[[$1://$2|$2]]', $text);
 		// convert catched emails into the link format [[]]
 		// TODO: add a possibility to covert emails int anti-spam-bot-structures
 		foreach($emails[0] as $key => $email)
@@ -107,8 +110,14 @@
 		$open_sub_list = false;
 		$new_text = '';
 		$open_table = false;
+		$last_line_was_empty = true;
+		$paragaph_open = false;
 		foreach($lines as $line) {
 			if(special_start_with('* ', $line)){
+				if($paragaph_open) {
+					$new_text .= "</p>\r\n";
+					$paragaph_open = false;
+				}
 				if($open_table) {
 					$open_table = false;
 					$new_text .= "</table>\r\n";
@@ -126,9 +135,13 @@
 				else
 					$list_has_prev = true;
 				$new_text .= "\t<li>" . substr(strstr($line, '* '), 2);
-				
+				$last_line_was_empty = true;
 			}
 			elseif(special_start_with('*+ ', $line)){
+				if($paragaph_open) {
+					$new_text .= "</p>\r\n";
+					$paragaph_open = false;
+				}
 				if($open_table) {
 					$open_table = false;
 					$new_text .= "</table>\r\n";
@@ -144,8 +157,13 @@
 					$open_sub_list = true;
 				}
 				$new_text .= "\t\t\t<li>" . substr(strstr($line, '*+ '), 3) . "</li>\r\n";
+				$last_line_was_empty = true;
 			}
 			else if(special_start_with('|',$line) || special_start_with('^',$line)) {
+				if($paragaph_open) {
+					$new_text .= "</p>\r\n";
+					$paragaph_open = false;
+				}
 				if($open_sub_list) {
 					$open_sub_list = false;
 					$new_text .= "\t\t</ul>\r\n";
@@ -184,6 +202,7 @@
 						$element = 'th';
 				}
 				$new_text .= "\t</tr>\r\n";
+				$last_line_was_empty = true;
 				
 			}
 			else {
@@ -210,9 +229,26 @@
 				}
 				$line = str_replace("\t", '', $line);
 				if($line != '' && $line != ' ' && !special_start_with('<h', $line) && !special_start_with('[code]', $line))
-					$new_text .= "<p>$line</p>\r\n";
-				else
-					$new_text .= "$line\r\n";
+				{
+					if($last_line_was_empty) {
+						$new_text .= '<p>'. $line;
+						$last_line_was_empty = false;
+						$paragaph_open = true;
+					}
+					else
+						$new_text .= "\r\n" . $line;
+				}
+				else {
+					if(special_start_with('$%&', $line . '$%&')) {
+						if($paragaph_open) {
+							$new_text .= "</p>\r\n";
+							$paragaph_open = false;
+						}
+						$last_line_was_empty = true;
+					}
+					else
+						$new_text .= "$line\r\n";
+				}
 			}
 				
 		}

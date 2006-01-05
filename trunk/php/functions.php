@@ -209,7 +209,7 @@
 				if(get_magic_quotes_gpc())
 					$handle = stripslashes($handle);
 				if(!is_numeric($handle))
-					$handle =  addslashes($handle);
+					$handle = addslashes($handle);
 			}
 		}
 		return $handle;

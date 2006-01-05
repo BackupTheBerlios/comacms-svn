@@ -66,9 +66,12 @@
 		
 		.code {
         	  border:1px dashed #3C528B;
-	          padding: 0.3em;
+	          padding: 0.5em;
 	          display: block;
+		  margin: 0.3em;
 	          margin-left: 1em;
+	          overflow-x: auto;
+		  overflow-y: auto;
 	        }
 	        
 	        table.text_table {
@@ -209,17 +212,34 @@
 					<p>In dieser Erklärung wird immer kurz gezeigt, wie die Formatierung aussieht und anschließend der dazugehörige Formatierungscode angezeigt.</p>
 					<div id="IV.1.3.1" class="block">
 						<h5>IV.1.3.1 Schriftformatierung</h5>
-						<p>Mit ComaCMS kann man <strong>fette</strong>, <em>kursive</em> und <u>untersrichene</u> Texte erstellen.</p>
-						<p>Diese Formatierungen kann man natürlich auch <u><em><strong>kombinieren.</strong></em></u></p>
+						<p>Mit ComaCMS kann man <strong>fette</strong>, <em>kursive</em> und <u>untersrichene</u> Texte erstellen.<br />
+						Diese Formatierungen kann man natürlich auch <u><em><strong>kombinieren.</strong></em></u></p>
 						<pre class="code">
-Mit ComaCMS kann man **fette**, //kursive// und __untersrichene__ Texte erstellen.
+Mit ComaCMS kann man **fette**, //kursive// und __untersrichene__ Texte erstellen.\\
 Diese Formatierungen kann man natürlich auch __//**kombinieren**//__
 </pre>
 					</div>
-					<!-- <div id="IV.1.3.2" class="block">
+					<div id="IV.1.3.2" class="block">
 						<h5>IV.1.3.2 Links</h5>
-						<p>&nbsp;</p>
-					</div>-->
+						<p>Es gibt verschiedene Möglichkeiten Links zu integrieren, ein Teil der Links wird sogar automatisch erkannt und  &quot;klickbar&quot; gemacht.</p>
+						<!--<p>So werden zum Beispiel normale urls wie www.google.de oder https://berlios.de</p>-->
+						
+						<p>So werden zum Beispiel normale urls wie <a href="http://www.berlios.de" class="link_extern">www.berlios.de</a> oder <a href="https://developer.berlios.de" class="link_extern">developer.berlios.de</a> in Links umgewandelt.<br />
+						Man kann aber auch Links erzwingen indem man sie mit eckigen Klammern umgibt (<a href="http://www.berlios.de" class="link_extern">www.berlios.de</a>).<br />
+						Mit den eckigen Klammern kann man auch einen Link umbenennen: <a href="http://www.berlios.de" class="link_extern">Die Homepage von BerliOS</a>.<br />
+						Um auf interne Seiten zu verlinken nimmt man den Namen oder die ID der Seite und schreibt dann: <a href="index.php?page=interne_seite" class="link_intern">Link auf eine interne Seite</a>.<br />
+						Auch Emailadressen können in Links umgeformt werden, sie müssen dann in spitze Klammern geschrieben werden: <a href="mailto:comacms@williblau.de" class="link_email">comacms@williblau.de</a></p>
+						<pre class="code">
+So werden zum Beispiel normale urls wie www.berlios.de oder https://developer.berlios.de in Links umgewandelt.\\
+Man kann aber auch Links erzwingen indem man sie mit eckigen Klammern umgibt ([[www.berlios.de]]).\\
+Mit den eckigen Klammern kann man auch einen Link umbenennen: [[www.berlios.de|Die Homepage von BerliOS]].
+Um auf interne Seiten zu verlinken nimmt man den Namen oder die ID der Seite und schreibt dann: [[interne_seite|Link auf eine interne Seite]].\\
+Auch Emailadressen können in Links umgeformt werden, sie müssen dann in spitze Klammern geschrieben werden: &lt;comacms@williblau.de&gt;
+</pre>
+	
+
+						
+					</div>
 					<div id="IV.1.3.3" class="block">
 						<h5>IV.1.3.3 Listen</h5>
 						<p>Um bestimte Dinge übersichtlicher zu gestalten, kann man sie in Listen umwandeln.</p>
@@ -257,7 +277,7 @@ Diese Formatierungen kann man natürlich auch __//**kombinieren**//__
  | Zeile 1 Spalte 1 |  Zeile 1 Spalte 2 | Zeile 1 Spalte 3 |
  | Zeile 2 Spalte 1 |  Zeile 2 Spalte 2 | Zeile 2 Spalte 3 |
  | Zeile 3 Spalte 1 |  Zeile 3 Spalte 2 | Zeile 3 Spalte 3 |
- </pre>
+</pre>
  						<p>Die Tabellenköpfe müssen sich nicht nur in der obersten Zeile befinden.</p>
  						<table class="text_table">
  							<tr><td>                </td><th> Tabellenkopf 1   </th><th> Tabellenkopf 2   </th><th> Tabellenkopf 3   </th></tr>

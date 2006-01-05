@@ -191,9 +191,9 @@
 			
 			if($got_mysql || ($text != '' || $title != '')) {
 				if($text != '' || $title != '') {
-					$page_title = $title;
-					$page_text = $text;
-					$page_edit_comment = $edit_comment;
+					$page_title = stripslashes($title);
+					$page_text = stripslashes($text);
+					$page_edit_comment = stripslashes($edit_comment);
 					$show_preview = true;
 				}
 				else {

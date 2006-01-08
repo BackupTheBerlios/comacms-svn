@@ -32,6 +32,8 @@
 		
 		$link = preg_replace("#\ *(.+?)\ *#s", "$1", $link);
 		$link = str_replace(" ", "%20", $link);
+		if(!eregi("#\.*\|\.*#s", $link))
+			$link .= "|$link";
 		$link = preg_replace("#(.+?)\|(.+?)#s", '\\1" alt="\\2', $link);
 		$link = $link . '" title' . strstr($link, '=');
 		if(substr($link, 0, 6) == 'media:')

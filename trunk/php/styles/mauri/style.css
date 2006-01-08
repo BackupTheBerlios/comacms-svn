@@ -378,19 +378,26 @@ table.text_table th {
  position: absolute;
  right: 1em;
 }
+
 img.img_img, img.img_left, img.img_center, img.img_right{
- padding: 1ex;
+ margin: 2ex;
+ margin-top: 1ex;
+ 
 }
 img.img_left {
  float: left;
+ margin-left: 1ex;
 }
 
 img.img_right {
  float: right;
+ margin-right: 1ex;
 }
 
 img.img_center {
  display: block;
  margin: auto;
 }
+
+
 

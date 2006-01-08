@@ -58,7 +58,7 @@
 		$want = GetPostOrGet('want');
 		$title = 'Seite nicht gefunden.';
 		$text = "Die Seite mit dem Namen &quot;$want&quot; wurde leider nicht gefunden.<br />
-			Falls die Seite aber da sein müsste, melden sie sich bitte beim Seitenbetreiber.";
+			Falls die Seite aber da sein mÃ¼sste, melden sie das bitte beim Seitenbetreiber.";
 	}
 	elseif($extern_page == 'image') {
 		$image_id = GetPostOrGet('id');

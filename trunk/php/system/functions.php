@@ -20,13 +20,24 @@
 	 */
 	function make_link($link) {
 		
-		
 		if(eregi("^[a-z0-9\._-]+@+[a-z0-9\._-]+\.+[a-z]{2,4}$", $link))
 			return "mailto:$link\" class=\"link_email";
-		else if(substr($link,0,4) == 'http')
+		else if(substr($link, 0, 4) == 'http')
 			return "$link\" class=\"link_extern";
 		// TODO: load the title of the page into the link title and set an other css-class if the page does not exists
 		return "index.php?page=$link\" class=\"link_intern";
+	}
+	
+	function make_media($link) {
+		
+		$link = preg_replace("#\ *(.+?)\ *#s", "$1", $link);
+		$link = str_replace(" ", "%20", $link);
+		$link = preg_replace("#(.+?)\|(.+?)#s", '\\1" alt="\\2', $link);
+		$link = $link . '" title' . strstr($link, '=');
+		if(substr($link, 0, 6) == 'media:')
+			return "data/upload/" . substr($link, 6);
+		else
+			return $link;
 	}
 	
 	/**
@@ -36,9 +47,6 @@
 	 */ 
 	function convertToPreHtml($text) {
 		
-		//$text = str_replace("\\r","\r", $text);
-		//$text = str_replace("\\\\","\\", $text);
-		//$text = str_replace("\\n","\n", $text);
 		$text = stripslashes($text);
 		$text = preg_replace("!(\r\n)|(\r)!","\n",$text);
 		$text = "\n" . $text . "\n";
@@ -52,6 +60,23 @@
 			$text = str_replace('<code>' . $matches[1][$key] . '</code>', '[code]%' . $key . '%[/code]', $text);
 		}			
 		
+		// images
+		preg_match_all("/\{\{(.+?)\}\}/s", $text, $images);
+		$images_html = array();
+		foreach($images[1] as $key => $match)  {
+			$first_is_space = (substr($images[1][$key],0,1) == ' ');
+			$last_is_space = (substr($images[1][$key],-1,1) == ' ');
+			if($last_is_space && $first_is_space)
+				$images_html[$key] = "<img src=\"" . make_media($images[1][$key]) . "\" class=\"img_center\" />";
+			else if($first_is_space)
+				$images_html[$key] = "<img src=\"" . make_media($images[1][$key]) . "\" class=\"img_left\" />";
+			else if($last_is_space)
+				$images_html[$key] = "<img src=\"" . make_media($images[1][$key]) . "\" class=\"img_right\" />";
+			else
+				$images_html[$key] = "<img src=\"" . make_media($images[1][$key]) . "\" class=\"img\" />";
+		
+			$text = str_replace('{{' . $images[1][$key] . '}}', '[img]%' . $key .'%[/img]', $text);
+		}
 		// 'repair' all urls (with no http:// but a www or ftp)
 		$text = preg_replace("/(\ |\\r|\\n|\[)(www|ftp)\.(.+?)\.([a-zA-Z.]{2,6}(|\/.+?))/s", '$1' . "http://$2.$3.$4", $text);
 		// remove all html characters
@@ -104,6 +129,10 @@
 			else
 				$text = str_replace("[[%$link_nr%]]", "<a href=\"" . make_link($link) . "\">" . $link . "</a>", $text);
 		}
+		// paste images into the text
+		foreach($images_html as $key => $match)
+			$text = str_replace('[img]%' . $key . '%[/img]', $match, $text);
+		
 		$lines = explode("\n", $text);
 		$open_list = false;
 		$list_has_prev = false;
@@ -436,6 +465,7 @@
 	}
 	
 	function generateUrl($string) {
+		$string = preg_replace("#\ *(.+?)\ *#s", "$1", $string);
 		return str_replace(" ", "%20", $string);
 	}
 	

@@ -396,8 +396,6 @@ img.img_right {
 
 img.img_center {
  display: block;
- margin: auto;
+ margin-left: auto;
+ margin-right: auto;
 }
-
-
-

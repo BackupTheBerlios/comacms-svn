@@ -87,6 +87,28 @@
 		table.text_table th {
 		  background-color: #9B9FBF;
 		}
+		
+		img.img_img, img.img_left, img.img_center, img.img_right{
+		  margin: 2ex;
+		  margin-top: 1ex;
+ 
+		}
+		
+		img.img_left {
+		  float: left;
+		  margin-left: 1ex;
+		}
+
+		img.img_right {
+		  float: right;
+		  margin-right: 1ex;
+		}
+
+		img.img_center {
+		  display: block;
+		  margin-left: auto;
+		  margin-right: auto;
+		}
         	</style>
     	</head>
     	<body>
@@ -230,11 +252,16 @@ Diese Formatierungen kann man natürlich auch __//**kombinieren**//__
 						Um auf interne Seiten zu verlinken nimmt man den Namen oder die ID der Seite und schreibt dann: <a href="index.php?page=interne_seite" class="link_intern">Link auf eine interne Seite</a>.<br />
 						Auch Emailadressen können in Links umgeformt werden, sie müssen dann in spitze Klammern geschrieben werden: <a href="mailto:comacms@williblau.de" class="link_email">comacms@williblau.de</a></p>
 						<pre class="code">
-So werden zum Beispiel normale urls wie www.berlios.de oder https://developer.berlios.de in Links umgewandelt.\\
-Man kann aber auch Links erzwingen indem man sie mit eckigen Klammern umgibt ([[www.berlios.de]]).\\
-Mit den eckigen Klammern kann man auch einen Link umbenennen: [[www.berlios.de|Die Homepage von BerliOS]].
-Um auf interne Seiten zu verlinken nimmt man den Namen oder die ID der Seite und schreibt dann: [[interne_seite|Link auf eine interne Seite]].\\
-Auch Emailadressen können in Links umgeformt werden, sie müssen dann in spitze Klammern geschrieben werden: &lt;comacms@williblau.de&gt;
+So werden zum Beispiel normale urls wie www.berlios.de
+oder https://developer.berlios.de in Links umgewandelt.\\
+Man kann aber auch Links erzwingen,
+indem man sie mit eckigen Klammern umgibt ([[www.berlios.de]]).\\
+Mit den eckigen Klammern kann man auch einen Link umbenennen:
+[[www.berlios.de|Die Homepage von BerliOS]].
+Um auf interne Seiten zu verlinken nimmt man den Namen oder die ID der Seite und schreibt dann:
+[[interne_seite|Link auf eine interne Seite]].\\
+Auch Emailadressen können in Links umgeformt werden,
+ sie müssen dann in spitze Klammern geschrieben werden: &lt;comacms@williblau.de&gt;
 </pre>
 	
 
@@ -290,6 +317,41 @@ Auch Emailadressen können in Links umgeformt werden, sie müssen dann in spitze K
 ^ Tabellenkopf 4 | Zeile 1 Spalte 1 |  Zeile 1 Spalte 2 | Zeile 1 Spalte 3 |
 ^ Tabellenkopf 5 | Zeile 2 Spalte 1 |  Zeile 2 Spalte 2 | Zeile 2 Spalte 3 |
 ^ Tabellenkopf 6 | Zeile 3 Spalte 1 |  Zeile 3 Spalte 2 | Zeile 3 Spalte 3 |
+</pre>
+					</div>
+					<div id="IV.1.3.5" class="block">
+						<h5>IV.1.3.5 Bilder</h5>
+						<p>Wichtig ist natürlich auch die Möglichkeit zur Einbindung von Bildern in den Text.</p>
+						<p>Es gibt zwei verschiedene Möglichkeiten Bilder einzubinden.</p>
+						<ul>
+							<li>mit der URL zum Bild: <img src="img/comacms_logo.png" alt="img/comacms_logo.png" title="img/comacms_logo.png" class="img" /></li>
+							<li>mit einer relativen Angabe zum medienordner der Homepage: <img src="img/comacms_logo.png" alt="media:comacms_logo.png" title="media:comacms_logo.png" class="img" /></li>
+						</ul>
+
+						<pre class="code">
+Es gibt zwei verschiedene Möglichkeiten Bilder einzubinden.
+ * mit der URL zum Bild: {{img/comacms_logo.png}}
+ * mit einer relativen Angabe zum medienordner der Homepage: {{media:comacms_logo.png}}
+</pre>
+						<p>Da einfache Bilder im Text nicht immer schön aussehen gibt es die Möglichkeit,
+						Bilder mit einem Lehrzeichen hinter bzw. und/oder vor den geschweiften Klammern,
+						auszurichten.
+						<img src="img/comacms_logo.png" alt="media:comacms_logo.png" title="media:comacms_logo.png" class="img_left" />
+						<img src="img/comacms_logo.png" alt="media:comacms_logo.png" title="media:comacms_logo.png" class="img_right" />
+						<img src="img/comacms_logo.png" alt="media:comacms_logo.png" title="media:comacms_logo.png" class="img_center" /></p>
+						<pre class="code">
+Da einfache Bilder im Text nicht immer schön aussehen gibt es die Möglichkeit,
+Bilder mit einem Lehrzeichen hinter bzw. und/oder vor den geschweiften Klammern,
+auszurichten.
+{{ media:comacms_logo.png}}
+{{media:comacms_logo.png }}
+{{ media:comacms_logo.png }}
+</pre>
+					<p>Zus&auml;tzlich kann man den Bildern einen Titel geben, der dann Angezeigt wird, wenn man mit der Maus &uuml;ber das Bild f&auml;hrt oder Bilder abgeschaltet hat.<img src="img/comacms_logo.png" alt="Das ist das Logo von ComaCMS" title="Das ist das Logo von ComaCMS" class="img_center" /></p>
+					<pre class="code">
+Zusätzlich kann man den Bildern einen Titel geben, der dann Angezeigt wird,
+wenn man mit der Maus über das Bild fährt oder Bilder abgeschaltet hat.
+{{ media:comacms_logo.png|Das ist das Logo von ComaCMS }}
 </pre>
 					</div>
 				</div>

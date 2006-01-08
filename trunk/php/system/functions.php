@@ -29,16 +29,18 @@
 	}
 	
 	function make_media($link) {
-		
-		$link = preg_replace("#\ *(.+?)\ *#s", "$1", $link);
-		$link = str_replace(" ", "%20", $link);
-		if(!eregi("#\.*\|\.*#s", $link))
+		// remove spaces at the start and end of the string
+		$link = preg_replace("~^\ *(.+?)\ *$~", "$1", $link);
+		// chech if the title text is given if not add the linktext as title
+		if(strpos($link, '|') === false)
 			$link .= "|$link";
-		$link = preg_replace("#(.+?)\|(.+?)#s", '\\1" alt="\\2', $link);
-		$link = $link . '" title' . strstr($link, '=');
-		if(substr($link, 0, 6) == 'media:')
+		// format from text URL to a real URL without the title and alt attribute inside
+		// replace also all spaces in the URL with %20
+		$link = preg_replace("/(.*)\|(.*)/e", "str_replace(' ', '%20', '\\1') . '\" alt=\"\\2\" title=\"\\2'", $link);
+		
+		if(substr($link, 0, 6) == 'media:') // set the path to the local media dir
 			return "data/upload/" . substr($link, 6);
-		else
+		else	// do nothing more
 			return $link;
 	}
 	
@@ -52,8 +54,15 @@
 		$text = stripslashes($text);
 		$text = preg_replace("!(\r\n)|(\r)!","\n",$text);
 		$text = "\n" . $text . "\n";
-		//$text = str_replace("\n","[n]\n", $text);
-		
+		$text = str_replace('&auml;', 'ä', $text);
+		$text = str_replace('&Auml;', 'Ä', $text);
+		$text = str_replace('&uuml;', 'ü', $text);
+		$text = str_replace('&Uuml;', 'Ü', $text);
+		$text = str_replace('&ouml;', 'ö', $text);
+		$text = str_replace('&Ouml;', 'Ö', $text);
+		$text = str_replace('&szlig;', 'ß', $text);
+		$text = str_replace('&gt;', '>', $text);
+		$text = str_replace('&lt;', '<', $text);
 		// extract all code we won't compile it <code>...CODE...</code>
 		preg_match_all("/\<code\>(.+?)\<\/code\>/s", $text, $matches);
 		$codes = array();
@@ -283,7 +292,25 @@
 			}
 				
 		}
+		
 		$text = $new_text;
+		// remove the spaces which are not necessary
+		$text = preg_replace('/\ \ +/', ' ', $text);
+		
+		$text = str_replace(' -- ', ' &ndash; ', $text);
+		
+		$text = str_replace(' --- ', ' &mdash; ', $text);
+		
+		$text = str_replace('(c)', '&copy;', $text);
+		
+		$text = str_replace('(r)', '&reg;', $text);
+		$text = str_replace('ä', '&auml;', $text);
+		$text = str_replace('Ä', '&Auml;', $text);
+		$text = str_replace('ü', '&uuml;', $text);
+		$text = str_replace('Ü', '&Uuml;', $text);
+		$text = str_replace('ö', '&ouml;', $text);
+		$text = str_replace('Ö', '&Ouml;', $text);
+		$text = str_replace('ß', '&szlig;', $text);
 		// paste code back
 		foreach($codes as $key => $match)
 			$text = str_replace('[code]%' . $key . '%[/code]', "<pre class=\"code\">$match</pre>", $text);

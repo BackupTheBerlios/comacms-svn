@@ -201,7 +201,16 @@
 					$page_text = $page_data->text_page_text;
 					$page_edit_comment = $admin_lang['edited'] . '...';
 					$show_preview = false;
-				} 
+				}
+				$page_text = str_replace('ä', '&auml;', $page_text);
+				$page_text = str_replace('Ä', '&Auml;', $page_text);
+				$page_text = str_replace('ü', '&uuml;', $page_text);
+				$page_text = str_replace('Ü', '&Uuml;', $page_text);
+				$page_text = str_replace('ö', '&ouml;', $page_text);
+				$page_text = str_replace('Ö', '&Ouml;', $page_text);
+				$page_text = str_replace('<', '&lt;', $page_text);
+				$page_text = str_replace('>', '&gt;', $page_text);
+				$page_text = str_replace('ß', '&szlig;', $page_text);
 				$out .= "\t\t\t<fieldset><legend>Seite Bearbeiten</legend><form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"save\" />

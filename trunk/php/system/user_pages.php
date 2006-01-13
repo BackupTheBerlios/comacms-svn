@@ -329,7 +329,9 @@
 					if($nr < 5) {
 						$save_path = $upload_path . $file['name'];
 						if(file_exists($save_path))
-							$save_path = $upload_path . uniqid() . $file['name'];
+							$save_path = uniqid($upload_path) . $file['name'];
+						if($file['size'] > 160000)
+							$file['error'] = 2;
 						if($file['error'] == 0) {
 							//
 							// TODO:dont allow an upload if a file with the same md5 exists
@@ -341,7 +343,7 @@
 								WHERE file_md5='$file_md5'";
 							$md5exists_result = db_result($sql);
 							if($md5exists = mysql_fetch_object($md5exists_result))
-								$out .= "Die Datei <strong>&quot;" . $file['name'] . "&quot;</strong> ist bereits hochgeladen worden (&quot;$md5exists->file_name&quot;)";
+								$out .= "Die Datei &quot;<strong>" . $file['name'] . "</strong>&quot; ist bereits hochgeladen worden" . (($md5exists->file_name != $file['name']) ? " (sie hat nur einen anderen Namen: &quot;<strong>$md5exists->file_name</strong>&quot;)." : '.');
 							else {
 								move_uploaded_file($file['tmp_name'], $save_path);
 								
@@ -351,7 +353,18 @@
 							}
 						}
 						else {
-							$out .= "Die Datei konnte nicht hochgeladen werden";
+							switch ($file['error']) {
+								case 1:		$out .= "Die Datei überschreitet die vom Server vorgegebene Maximalgr&ouml;ße für einen Upload.";
+										break;
+								case 2:		$out .= "Die Datei überschreitet vorgegebene Maximalgr&ouml;ße von 1,5MB für einen Upload.";
+										break;
+								case 3:		$out .= "Die Datei ist nur teilweise hochgeladen worden.";
+										break;
+								case 4:		$out .= "Es wurde keine Datei hochgeladen.";
+										break;							
+								default:	$out .= "Die Datei konnte nicht hochgeladen werden";
+										break;
+							}
 						}
 					}
 				}
@@ -449,8 +462,8 @@
 		</form>";
 		$out .= "
 		<a href=\"admin.php?page=files&amp;action=check_new\"  class=\"button\">Auf Veränderungen überprüfen</a><br /><br />
-		<table>
-		<tr><td>id</td><td>Name</td><td>Größe</td><td>Hochgeladen am</td><td>Typ</td><td>Aktionen</td></tr>";
+		<table class=\"text_table\">
+		<tr><th>id</th><th>Name</th><th>Größe</th><th>Hochgeladen am</th><th>Typ</th><th>Aktionen</th></tr>";
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "files
 			ORDER BY file_name ASC";

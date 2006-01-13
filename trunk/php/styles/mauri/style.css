@@ -399,3 +399,12 @@ img.img_center {
  margin-left: auto;
  margin-right: auto;
 }
+
+.strike img {
+ margin-left: 20px;
+}
+
+th img{
+vertical-align: middle;
+margin: 1px;
+}

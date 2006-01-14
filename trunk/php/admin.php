@@ -167,4 +167,5 @@
 	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '', $page->Template);
 	
 	echo $page->OutputHTML();
+	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $queries_count .' SQL queries -->';
 ?>

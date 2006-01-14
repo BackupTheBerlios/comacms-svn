@@ -42,14 +42,18 @@
 		else
 			$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	}
-	
-	$page->ReplaceTagInText('articles-preview', articlesPreview(5));
+	if($page->FindTag('articles-preview'))
+		$page->ReplaceTagInText('articles-preview', articlesPreview(5));
 	include('news.php');
-	$news_display_count = $config->Get('news_display_count', 6);
-	if(!is_numeric($news_display_count))
-		$news_display_count = 6;
-	$page->ReplaceTagInText('news', getNews($news_display_count));
-	$page->ReplaceTagInText('dates', nextDates(10));
+	
+	if($page->FindTag('news')) {
+		$news_display_count = $config->Get('news_display_count', 6);
+		if(!is_numeric($news_display_count))
+			$news_display_count = 6;
+		$page->ReplaceTagInText('news', getNews($news_display_count));
+	}
+	if($page->FindTag('dates'))
+		$page->ReplaceTagInText('dates', nextDates(10));
 	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
 	//else
 	//	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
@@ -97,5 +101,6 @@
 	//
 
 	echo $page->OutputHTML();
+	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $queries_count .' SQL queries -->';
 
 ?>

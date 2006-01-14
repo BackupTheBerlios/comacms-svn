@@ -98,4 +98,5 @@
 	// end
 	//
 	echo $page->OutputHTML();
+	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $queries_count .' SQL queries -->';
 ?>

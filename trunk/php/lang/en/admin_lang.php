@@ -28,6 +28,7 @@
 	$admin_lang['dates'] = 'Dates';
 	$admin_lang['sitestyle'] = 'Sitestyle';
 	$admin_lang['users'] = 'Users';
+	$admin_lang['user'] = 'User';
 	$admin_lang['gallery'] = 'Gallery';
 	$admin_lang['gallery editor'] = 'Gallery-Editor';
 	$admin_lang['logout'] = 'Logout';
@@ -65,7 +66,7 @@
 	$admin_lang['generate_mainmenu'] = 'generate Mainmenu';
 	$admin_lang['generate_menu_for'] = 'generate Inlinemenu for';
 	$admin_lang['create_new_page'] = 'Create new page';
-	$admin_lang['created_new_page'] = "Created new page";
+	$admin_lang['created_new_page'] = 'Created new page';
 	$admin_lang['comment_on_change'] = 'Comment on change';
 	$admin_lang['edited'] = 'Edited';
 	$admin_lang['apply'] = 'Apply';
@@ -82,4 +83,5 @@
 	$admin_lang['hidden'] = 'Hidden';
 	$admin_lang['public'] = 'Public';
 	$admin_lang['private'] = 'Private';
+	$admin_lang['comment'] = 'Comment';
 ?>

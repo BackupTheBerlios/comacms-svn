@@ -144,7 +144,8 @@
 			elseif($this->Name != "" && $this->PasswordMd5 != "") {
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "users
-					WHERE user_name='$this->Name' AND user_password='$this->PasswordMd5'";
+					WHERE user_name='$this->Name' AND user_password='$this->PasswordMd5'
+					LIMIT 0,1";
 				$original_user_result = db_result($sql);
 				if($original_user = mysql_fetch_object($original_user_result)) {
 					$this->IsLoggedIn = true;
@@ -192,7 +193,8 @@
 			// check if the user is new on the page
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "online
-				WHERE online_id='$this->OnlineID'";
+				WHERE online_id='$this->OnlineID'
+				LIMIT 0,1";
 			$result_new = db_result($sql);
 			if($row3 = mysql_fetch_object($result_new)) {
 				$sql = "UPDATE " . DB_PREFIX . "online

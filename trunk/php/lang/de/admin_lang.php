@@ -27,6 +27,7 @@
 	$admin_lang['dates'] = 'Termine';
 	$admin_lang['sitestyle'] = 'Seitenstyle';
 	$admin_lang['users'] = 'Benutzer';
+	$admin_lang['user'] = 'Benutzer';
 	$admin_lang['gallery'] = 'Galerie';
 	$admin_lang['gallery editor'] = 'GalerieEditor';
 	$admin_lang['logout'] = 'Logout';
@@ -65,8 +66,8 @@
 	$admin_lang['generate_mainmenu'] = 'Hauptmenü erstellen';
 	$admin_lang['generate_menu_for'] = 'erstelle Untermenü zu';
 	$admin_lang['create_new_page'] = 'Neue Seite erstellen';
-	$admin_lang['created_new_page'] = "Neue Seite erstellt";
-	$admin_lang['comment_on_change'] = "Anmerkung zur Veränderung";
+	$admin_lang['created_new_page'] = 'Neue Seite erstellt';
+	$admin_lang['comment_on_change'] = 'Anmerkung zur Veränderung';
 	$admin_lang['edited'] = 'Bearbeitet';
 	$admin_lang['apply'] = 'Übernehmen';
 	$admin_lang['move_up'] = 'Bewege um eins nach Oben';
@@ -82,4 +83,5 @@
 	$admin_lang['hidden'] = 'Versteckt';
 	$admin_lang['public'] = 'Öffentlich';
 	$admin_lang['private'] = 'Privat';
+	$admin_lang['comment'] = 'Kommentar';
 ?>

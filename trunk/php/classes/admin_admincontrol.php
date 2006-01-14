@@ -77,24 +77,62 @@
 				$config->Save('install_date', mktime());
 				$installdate = mktime();
 			}	
-			$out = "\t\t\t<h3>AdminControl</h3><hr />
-			<table>
-				<tr><td>" . $this->admin_lang['online since'] . ":</td><td>". date("d.m.Y",$installdate) . "</td></tr>
-				<tr><td>" . $this->admin_lang['registered users'] . ":</td><td>$users_count</td></tr>
-				<tr><td>" . $this->admin_lang['created pages'] . ":</td><td>$page_count</td></tr>
-				<tr><td>" . $this->admin_lang['saved_page_modifications'] . ":</td><td>$history_page_count</td></tr>
-				<tr><td>" . $this->admin_lang['database size'] . ":</td><td>" . kbormb($data_size) . "</td></tr>
+			$out = "\t\t\t<h2>AdminControl</h2>
+			<table class=\"text_table\">
+				<tr><th>" . $this->admin_lang['online since'] . ":</th><td>". date("d.m.Y",$installdate) . "</td></tr>
+				<tr><th>" . $this->admin_lang['registered users'] . ":</th><td>$users_count</td></tr>
+				<tr><th>" . $this->admin_lang['created pages'] . ":</th><td>$page_count</td></tr>
+				<tr><th>" . $this->admin_lang['saved_page_modifications'] . ":</th><td>$history_page_count</td></tr>
+				<tr><th>" . $this->admin_lang['database size'] . ":</th><td>" . kbormb($data_size) . "</td></tr>
 			</table>
-			<h3>Aktuelle Besucher</h3><hr />
-			<table>
+			<h2>Letzte Veränderungen</h2>
+			<table class=\"text_table\">
 				<thead>
 					<tr>
-						<td>".$this->admin_lang['name']."</td>
-						<td>".$this->admin_lang['page']."</td>
-						<td>".$this->admin_lang['last action']."</td>
-						<td>".$this->admin_lang['language']."</td>
-						<td>".$this->admin_lang['ip']."</td>
-						<td>".$this->admin_lang['host']."</td>
+						<th>" . $this->admin_lang['date'] . "</th><th>" . $this->admin_lang['page'] . "</th><th>" . $this->admin_lang['user'] . "</th><th>" . $this->admin_lang['comment'] . "</th>
+					</tr>
+				</thead>";
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "pages
+				ORDER BY page_date DESC
+				LIMIT 0,6";
+			$pages_result = db_result($sql);
+			$pages = array();
+			while($page = mysql_fetch_object($pages_result)) {
+				$pages[$page->page_date] = array($page->page_name, $page->page_title, $page->page_creator, $page->page_edit_comment);
+			}
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "pages_history
+				ORDER BY page_date DESC
+				LIMIT 0,6";
+			$pages_result = db_result($sql);
+			while($page = mysql_fetch_object($pages_result)) {
+				$pages[$page->page_date] = array($page->page_name, $page->page_title, $page->page_creator, $page->page_edit_comment);
+			}
+			arsort($pages);
+			$count = 0;
+			foreach ($pages as $date => $page) {
+   				$out .= "<tr>
+						<td>" . date("d.m.Y H:i:s", $date) . "</td>
+						<td><a href=\"index.php?page=" . $page[0] . "\">" . $page[1] . "</a> (" . $page[0] . ")</td>
+						<td>" . getUserById($page[2]) . "</td>
+						<td>" . $page[3] . "</td>
+					</tr>\r\n";
+   				$count++;
+   				if($count > 5)
+   					break;
+			}
+			$out .= "</table>
+			<h2>Aktuelle Besucher</h2>
+			<table class=\"text_table\">
+				<thead>
+					<tr>
+						<th>".$this->admin_lang['name']."</th>
+						<th>".$this->admin_lang['page']."</th>
+						<th>".$this->admin_lang['last action']."</th>
+						<th>".$this->admin_lang['language']."</th>
+						<th>".$this->admin_lang['ip']."</th>
+						<th>".$this->admin_lang['host']."</th>
 					</tr>
 				</thead>\r\n";
 			// output all visitors surfing on the site
@@ -109,8 +147,8 @@
 					$username = getUserById($users_online->userid);
 				$out .= "\t\t\t\t<tr>
 					<td>".$username."</td>
-					<td><a href=\"index.php?page=".$users_online->page."\">".$users_online->page."</a></td>
-					<td>" . date("d.m.Y H:i:s", $users_online->lastaction)."</td>
+					<td><a href=\"index.php?page=" . $users_online->page . "\">" . $users_online->page . "</a></td>
+					<td>" . date("d.m.Y H:i:s", $users_online->lastaction) . "</td>
 					<td>" . $this->admin_lang[$users_online->lang] . "</td>
 					<td>" . $users_online->ip . "</td>
 					<td>" . $users_online->host . "</td>

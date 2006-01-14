@@ -19,6 +19,7 @@
 	 * @ignore
 	 */
 	include_once("config.php");
+	$starttime = microtime();
 	if(!defined('COMACMS_RUN'))
 		die("");
 	if(file_exists("./install/") && !file_exists("./.svn/")) {
@@ -34,7 +35,8 @@
 	include('classes/user.php');
 	include('classes/inlinemenu.php');
 	include('functions.php');
-		
+	
+	$queries_count = 0;
 	define('DB_PREFIX', $d_pre);
 	connect_to_db($d_user, $d_pw, $d_base, $d_server);
 	$config = new Config();

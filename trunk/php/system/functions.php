@@ -126,11 +126,11 @@
 		// convert all __text__ to <u>text</u> => Underline
 		$text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $text);
 		// convert ==== text ==== to a header <h2>
-		$text = preg_replace("#====\ (.+?)\ ====#s", "<h2>$1</h2>", $text);
+		$text = preg_replace("#====\ (.+?)\ ====#s", "\n\n<h2>$1</h2>\n", $text);
 		// convert === text === to a header <h3>
-		$text = preg_replace("#===\ (.+?)\ ===#s", "<h3>$1</h3>", $text);
+		$text = preg_replace("#===\ (.+?)\ ===#s", "\n\n<h3>$1</h3>\n", $text);
 		// convert == text == to a header <h4>
-		$text = preg_replace("#==\ (.+?)\ ==#s", "<h4>$1</h4>", $text);
+		$text = preg_replace("#==\ (.+?)\ ==#s", "\n\n<h4>$1</h4>\n", $text);
 		// convert "/n" to "<br />" (more or less ;-))
 		//$text = nl2br($text);
 		// paste links into the text
@@ -296,7 +296,7 @@
 		$text = $new_text;
 		// remove the spaces which are not necessary
 		$text = preg_replace('/\ \ +/', ' ', $text);
-		
+
 		$text = str_replace(' -- ', ' &ndash; ', $text);
 		
 		$text = str_replace(' --- ', ' &mdash; ', $text);
@@ -512,6 +512,19 @@
 				$text .= "<div><a href=\"$entrie->inlineentrie_link\">$entrie->inlineentrie_text</a></div>";
 			elseif($entrie->inlinieentrie_type == 'intern')
 				$text .= "<div><a href=\"$entrie->inlineentrie_link\">$entrie->inlineentrie_text</a></div>";
+			elseif($entrie->inlinieentrie_type == 'download') {
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "files
+					WHERE file_id=$entrie->inlineentrie_link
+					Limit 0,1";
+				$file_result = db_result($sql);
+				if($file = mysql_fetch_object($file_result)) {
+					if(file_exists($file->file_path)) {
+						$size = kbormb(filesize($file->file_path));
+						$text .= "<div><a href=\"download.php?file_id=$entrie->inlineentrie_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Größe von $size\">$entrie->inlineentrie_text</a> ($size)</div>";
+					}
+				}
+			}
 		}
 		$sql = "UPDATE " . DB_PREFIX . "inlinemenu
 			SET inlinemenu_html='$text'

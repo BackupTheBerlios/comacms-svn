@@ -44,3 +44,7 @@ input.button {
 textarea.edit {
  width: 99%;
 }
+
+.structure_row {
+ border-bottom:1px dashed black;
+}

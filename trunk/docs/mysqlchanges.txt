@@ -1,12 +1,12 @@
-#Feld bei Users eingefügt
+#Feld bei Users eingefï¿½gt
 
 ALTER TABLE `cms_users` ADD `email` VARCHAR( 200 ) NOT NULL ;
 
-#Felder bei Sitedata eingefügt
-#parent_id für unterseiten
+#Felder bei Sitedata eingefï¿½gt
+#parent_id fï¿½r unterseiten
 ALTER TABLE `cms_sitedata` ADD `parent_id` INT( 10 ) DEFAULT '0' NOT NULL AFTER `id` ; 
 
-#type für gallery oder seite, nur wichtig für den editor, da die Gallery vorher erstellt wird(per Galleryeditor)
+#type fï¿½r gallery oder seite, nur wichtig fï¿½r den editor, da die Gallery vorher erstellt wird(per Galleryeditor)
 ALTER TABLE `cms_sitedata` ADD `type` VARCHAR( 15 ) NOT NULL AFTER `parent_id` ;
 
 #the menueid make it possible that we can manage more than one menue in the menue table
@@ -313,3 +313,7 @@ ALTER TABLE `cms_pages_text_history` CHANGE `page_text` `text_page_text` TEXT CH
 #r150
 #renamed inlineentrie_menu_id to inlineentrie_page_id
 ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlineentrie_menu_id` `inlineentrie_page_id` INT( 10 ) NOT NULL DEFAULT '0;
+
+#r187
+#fixed a small bug in cms_inlinemenu_entries
+ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlinieentrie_type` `inlinieentrie_type` ENUM( 'link', 'download', 'text', 'intern' ) NOT NULL DEFAULT 'link'

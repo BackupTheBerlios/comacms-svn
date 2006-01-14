@@ -318,7 +318,7 @@
 		 	if(mysql_num_rows($pages_result) != 0) {
 		 		$out .= "\r\n\t\t\t<ol>\r\n";
 		 		while($page = mysql_fetch_object($pages_result)) {
-		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type" . (($page->page_access == 'deleted') ? ' strike' : '' ). "\">" . (($topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page->page_id,$this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page->page_access != 'public') ? ' disabled="disabled"'  : '') . " value=\"$page->page_id\" class=\"checkbox\"/>\t" : '' );
+		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type" . (($page->page_access == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">" . (($topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page->page_id,$this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page->page_access != 'public') ? ' disabled="disabled"'  : '') . " value=\"$page->page_id\" class=\"checkbox\"/>\t" : '' );
 		 			
 		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
 		 			$out .= "<span class=\"page_lang\">[" . $admin_lang[$page->page_lang] . "]</span><span class=\"page_actions\">";
@@ -332,12 +332,12 @@
 		 				$out .= " <a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen $page->page_title\" title=\"Anschauen\"/></a>";
 		 			// inlinemenu:
 		 			if($page->page_access != 'deleted')
-		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page->page_id\">" . $admin_lang['inlinemenu'] . "</a>";
+		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page->page_id\" title=\"Das Zusatzmen&uuml; für &quot;$page->page_title&quot; bearbeiten\">" . $admin_lang['inlinemenu'] . "</a>";
 		 			// delete:
 		 			if($page->page_access != 'deleted')
 		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=delete&amp;page_id=$page->page_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
 		 			
-					$out .= '</span>' . $this->_showStructure($page->page_id);
+					$out .= '</span></span>' . $this->_showStructure($page->page_id);
 		 			$out .= "\t\t\t\t</li>\r\n";
 				}
 				
@@ -682,13 +682,41 @@
 						<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
 						<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
 						<input type=\"hidden\" name=\"action2\" value=\"add_new_dialog\" />
-						<table>
-						<tr><td colspan=\"2\">Eintrags-Typ:</td></tr>
-						<tr><td>Link<span class=\"info\">TODO</span></td><td><input type=\"radio\" name=\"type\" value=\"link\" checked=\"checked\"/></td></tr>
-						<tr><td>Text<span class=\"info\">TODO</span></td><td><input type=\"radio\" name=\"type\" value=\"text\"/></td></tr>
-						<tr><td>Interner-Link<span class=\"info\">TODO</span></td><td><input type=\"radio\" name=\"type\" value=\"intern\"/></td></tr>
-						<tr><td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"Weiter\" /></td></tr>
-						</table>
+						
+						<fieldset>
+							<legend>Eintrags-Typ:</legend>
+							<div class=\"row\">
+								<label class=\"row\" for=\"group_name\">
+									Link:
+									<span class=\"info\">TODO</span>
+								</label>
+								<input type=\"radio\" name=\"type\" value=\"link\" checked=\"checked\"/>
+							</div>
+							<div class=\"row\">
+								<label class=\"row\" for=\"group_name\">
+									Text:
+									<span class=\"info\">TODO</span>
+								</label>
+								<input type=\"radio\" name=\"type\" value=\"text\"/>
+							</div>
+							<div class=\"row\">
+								<label class=\"row\" for=\"group_name\">
+									Interner-Link:
+									<span class=\"info\">TODO</span>
+								</label>
+								<input type=\"radio\" name=\"type\" value=\"intern\"/>
+							</div>
+							<div class=\"row\">
+								<label class=\"row\" for=\"group_name\">
+									Download:
+									<span class=\"info\">TODO</span>
+								</label>
+								<input type=\"radio\" name=\"type\" value=\"download\"/>
+							</div>
+							<div class=\"row\">
+								<input type=\"submit\" class=\"button\" value=\"Weiter\" />
+							</div>
+						</fieldset>
 						</form>";
 				}
 				else if($type == 'link') {
@@ -741,6 +769,43 @@
 						</table>
 						</form>";
 				}
+				else if($type == 'download') {
+					$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
+						<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
+						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
+						<input type=\"hidden\" name=\"type\" value=\"download\" />
+						<fieldset>
+							<legend>Download Hinzufügen</legend>
+						
+						<div class=\"row\">
+							<label class=\"row\" for=\"download_text\">
+								Download-Titel:
+								<span class=\"info\">TODO</span>
+							</label>
+							<input type=\"text\" name=\"text\" id=\"download_text\" />
+						</div>
+						<div class=\"row\">
+							<label class=\"row\" for=\"link\">
+								Download-Titel:
+								<span class=\"info\">TODO</span>
+							</label>
+							<select name=\"link\" id=\"link\">";
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "files
+						ORDER BY file_name";
+					$files_result = db_result($sql);
+					while($file = mysql_fetch_object($files_result)) {
+						if(file_exists($file->file_path))
+							$out .= "<option value=\"$file->file_id\">". utf8_encode($file->file_name) . " (" . kbormb($file->file_size) . ")</option>\r\n";
+					}			
+					$out .= "</select>
+							</div>
+							<div class=\"row\"><input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></div>
+						</fieldset>
+						</form>";
+				}
 				else
 					$action2 = '';
 			}
@@ -771,6 +836,9 @@
 					case 'text':		$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text)
 									VALUES ($sortid, $page_id, 'text', '$text');";
 								break;
+					case 'download':	$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
+									VALUES ($sortid, $page_id, 'download', '$text','$link');";
+								break;
 				
 					default:		break;
 				}
@@ -800,7 +868,7 @@
 				$out .= "
 			<table>
 				<tr>
-					<td>Pfad zum Bild:<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmen� zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgwe�hlt werden.</span></td>
+					<td>Pfad zum Bild:<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmen� zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgew&auml;hlt werden.</span></td>
 					<td>" . $image . "</td>
 				</tr>
 				<tr>

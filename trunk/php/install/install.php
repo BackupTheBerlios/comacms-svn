@@ -90,7 +90,7 @@
 			inlineentrie_id int(10) unsigned NOT NULL auto_increment,
 			inlineentrie_sortid int(10) NOT NULL default '0',
 			inlineentrie_page_id int(10) NOT NULL default '0',
-			inlinieentrie_type enum('link','donwload','text','intern') NOT NULL default 'link',
+			inlinieentrie_type enum('link','download','text','intern') NOT NULL default 'link',
 			inlineentrie_text text NOT NULL,
 			inlineentrie_link varchar(255) NOT NULL default '',
 			PRIMARY KEY  (inlineentrie_id)

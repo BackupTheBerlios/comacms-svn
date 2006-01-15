@@ -163,7 +163,7 @@
 			$got_mysql = false;
 			if($text == '' && $title == '') {
 				if(is_numeric($change) && $text == '' && $title == '') {
-					$out .= "<strong>Achtung:</strong> Sie berarbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen �berschreiben!";
+					$out .= "<strong>Achtung:</strong> Sie bearbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen überschreiben!";
 					$sql = "SELECT *
 						FROM (" . DB_PREFIX . "pages_history page
 						LEFT JOIN " . DB_PREFIX . "pages_text_history text ON text.page_id = page.id ) 

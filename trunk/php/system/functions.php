@@ -494,7 +494,7 @@
 	}
 	
 	function generateUrl($string) {
-		$string = preg_replace("#\ *(.+?)\ *#s", "$1", $string);
+		$string = preg_replace("~^\ *(.+?)\ *$~", "$1", $string);
 		return str_replace(" ", "%20", $string);
 	}
 	
@@ -507,11 +507,11 @@
 		$text = '';
 		while($entrie = mysql_fetch_object($entries)) {
 			if($entrie->inlinieentrie_type == 'text')
-				$text .= "<div>" . nl2br($entrie->inlineentrie_text) . "</div>";
+				$text .= "<div class=\"inline_text\">" . nl2br($entrie->inlineentrie_text) . "</div>";
 			elseif($entrie->inlinieentrie_type == 'link')
-				$text .= "<div><a href=\"$entrie->inlineentrie_link\">$entrie->inlineentrie_text</a></div>";
+				$text .= "<div class=\"inline_link\"><a href=\"$entrie->inlineentrie_link\">$entrie->inlineentrie_text</a></div>";
 			elseif($entrie->inlinieentrie_type == 'intern')
-				$text .= "<div><a href=\"$entrie->inlineentrie_link\">$entrie->inlineentrie_text</a></div>";
+				$text .= "<div class=\"inline_intern\"><a href=\"$entrie->inlineentrie_link\">$entrie->inlineentrie_text</a></div>";
 			elseif($entrie->inlinieentrie_type == 'download') {
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "files
@@ -521,7 +521,7 @@
 				if($file = mysql_fetch_object($file_result)) {
 					if(file_exists($file->file_path)) {
 						$size = kbormb(filesize($file->file_path));
-						$text .= "<div><a href=\"download.php?file_id=$entrie->inlineentrie_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Größe von $size\">$entrie->inlineentrie_text</a> ($size)</div>";
+						$text .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$entrie->inlineentrie_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Größe von $size\">$entrie->inlineentrie_text</a> ($size)</div>";
 					}
 				}
 			}

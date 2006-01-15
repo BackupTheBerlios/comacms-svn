@@ -539,6 +539,13 @@
 				<a href=\"admin.php?page=pagestructure\" title=\"" . $admin_lang['no'] . "\" class=\"button\">" . $admin_lang['no'] . "</a>";
 				return $out;
 			}
+			else if($action2 == 'remove_image') {
+				$sql = "UPDATE " . DB_PREFIX . "inlinemenu
+						SET inlinemenu_image=''
+						WHERE page_id=$page_id";
+					db_result($sql);
+					$inline->inlinemenu_image = '';
+			}
 			else if($action2 == 'select_image') {
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "files
@@ -782,14 +789,14 @@
 						<div class=\"row\">
 							<label class=\"row\" for=\"download_text\">
 								Download-Titel:
-								<span class=\"info\">TODO</span>
+								<span class=\"info\">Der Text wird als Downloadlink angezeigt er kann zum Beispiel der Dateiname sein, aber auch ein kuzer eindeutiger Text ist sehr sinnvoll.</span>
 							</label>
 							<input type=\"text\" name=\"text\" id=\"download_text\" />
 						</div>
 						<div class=\"row\">
 							<label class=\"row\" for=\"link\">
-								Download-Titel:
-								<span class=\"info\">TODO</span>
+								Datei für den Download:
+								<span class=\"info\">Die hier angegebene Datei kann dann später heruntergeladen werden.</span>
 							</label>
 							<select name=\"link\" id=\"link\">";
 					$sql = "SELECT *
@@ -813,7 +820,8 @@
 				$sql = "SELECT inlineentrie_sortid
 			 	FROM " . DB_PREFIX . "inlinemenu_entries
 			 	WHERE inlineentrie_page_id = $page_id
-			 	ORDER BY inlineentrie_sortid DESC";
+			 	ORDER BY inlineentrie_sortid DESC
+			 	LIMIT 0,1";
 				$lastsort_result = db_result($sql);
 				$sortid = 1;
 				if($lastsort = mysql_fetch_object($lastsort_result)){
@@ -851,9 +859,9 @@
 			$hide = array('select_image', 'delete', 'add_new_dialog');
 			if(!in_array($action2, $hide)) {
 				$image = 'Noch kein bild gesetzt';
-				//((file_exists()) ? "<img src=\"$inline->inlinemenu_image\"/>" :
+
 				if(file_exists($inline->inlinemenu_image))
-					$image = "<img src=\"$inline->inlinemenu_image\"/>";
+					$image = "<img src=\"" . generateUrl($inline->inlinemenu_image) . "\"/>";
 				else {
 					$path = pathinfo($inline->inlinemenu_image);
 					$imgmax2 = 200;
@@ -861,27 +869,31 @@
 					$orig_file = $upload_path . substr($path['basename'], strlen($imgmax2 . '_'));
 					if(file_exists($orig_file) && is_file($orig_file)){
 						if(generateThumb($upload_path . substr($path['basename'], strlen($imgmax2 . '_')), $path['dirname']. '/' . $imgmax2 . '_', $imgmax2))
-							$image = "<img src=\"$inline->inlinemenu_image\"/>";
+							$image = "<img src=\"" . generateUrl($inline->inlinemenu_image) . "\"/>";
 					}
 						
 				}	
 				$out .= "
-			<table>
-				<tr>
-					<td>Pfad zum Bild:<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmen� zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgew&auml;hlt werden.</span></td>
-					<td>" . $image . "</td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td><td><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=select_image\" class=\"button\">Bild auswählen/verändern</a></td>
-				</tr>
-			</table>";
+				<fieldset>
+					<legend>" . $admin_lang['inlinemenu'] . "</legend>
+				<div class=\"row\">
+						<label class=\"row\">
+							Bild für das Zusatzmen&uuml;
+							<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmen&uuml; zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgew&auml;hlt werden.</span>
+						</label>
+						$image
+				</div>
+				<div class=\"row\">
+					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=select_image\" class=\"button\">Bild auswählen/ver&auml;ndern</a>
+					" .((file_exists($inline->inlinemenu_image)) ?  "<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=remove_image\" class=\"button\">Bild entfernen</a>" : '') . "
+				</div>";
 				$sql = "SELECT *
-					FROM " . DB_PREFIX ."inlinemenu_entries
+					FROM " . DB_PREFIX . "inlinemenu_entries
 					WHERE inlineentrie_page_id = $page_id
 					ORDER BY inlineentrie_sortid ASC";
 				$entries_result = db_result($sql);
-				$out .= "<table>
-					<thead><tr><td>Text</td><td>Typ</td><td>Aktion</td></tr></thead>";
+				$out .= "<table class=\"text_table\">
+					<thead><tr><th>Text</th><th>Typ</th><th>Aktion</th></tr></thead>";
 				while($entrie = mysql_fetch_object($entries_result)) {
 					$out .= "<tr>
 					<td>". nl2br($entrie->inlineentrie_text) ."</td>
@@ -895,7 +907,8 @@
 					</tr>";
 				}
 				$out .= "</table>
-					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=add_new_dialog\" class=\"button\">Einen Eintrag hinzufügen</a>";
+					<div class=\"row\"><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=add_new_dialog\" class=\"button\">Einen Eintrag hinzufügen</a></div>
+					</fieldset>";
 			}
 			return $out;
 		}

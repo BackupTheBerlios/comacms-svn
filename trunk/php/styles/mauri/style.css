@@ -50,7 +50,9 @@ legend {
 thead td {
  font-weight: bold;
 }
-
+table {
+ margin: 1em;
+}
 #title {
  padding: 25px;
  padding-top: 42px;
@@ -428,4 +430,10 @@ label.row {
 
 div.row {
  clear: both;
+}
+
+.inline_download a{
+padding-left: 18px;
+background-image: url("../../img/download.png");
+background-repeat: no-repeat;
 }

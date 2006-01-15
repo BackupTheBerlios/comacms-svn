@@ -109,7 +109,7 @@
 			while($page = mysql_fetch_object($pages_result)) {
 				$pages[$page->page_date] = array($page->page_name, $page->page_title, $page->page_creator, $page->page_edit_comment);
 			}
-			arsort($pages);
+			krsort($pages);
 			$count = 0;
 			foreach ($pages as $date => $page) {
    				$out .= "<tr>

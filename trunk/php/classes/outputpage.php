@@ -166,6 +166,15 @@
 		}
 		
 		/**
+		 * @return bool
+		 */
+		function FindTagInText($tag) {
+			if(strpos($this->Text, '[' . $tag . ']') === false) // Important: there must be three '='
+				return false;
+			return true;
+		}
+		
+		/**
 		 * @return void
 		 */
 		function LoadPage($pagename, $user) {

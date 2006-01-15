@@ -34,7 +34,7 @@
 
 	function db_result($command) {
 		global $db_con, $queries_count;
-		$queries_count ++;
+		$queries_count++;
 		/* helpful to find unnecessary SQL-queries(replace it only with the "++"):
 		 * 
 		 * .= "\r\n$command\r\n" . print_r(debug_backtrace(),true);

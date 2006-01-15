@@ -42,17 +42,17 @@
 		else
 			$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	}
-	if($page->FindTag('articles-preview'))
+	if($page->FindTagInText('articles-preview'))
 		$page->ReplaceTagInText('articles-preview', articlesPreview(5));
 	include('news.php');
 	
-	if($page->FindTag('news')) {
+	if($page->FindTagInText('news')) {
 		$news_display_count = $config->Get('news_display_count', 6);
 		if(!is_numeric($news_display_count))
 			$news_display_count = 6;
 		$page->ReplaceTagInText('news', getNews($news_display_count));
 	}
-	if($page->FindTag('dates'))
+	if($page->FindTagInText('dates'))
 		$page->ReplaceTagInText('dates', nextDates(10));
 	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
 	//else

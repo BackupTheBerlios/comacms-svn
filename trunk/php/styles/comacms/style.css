@@ -123,6 +123,105 @@ a img{
  margin-left: 0;
  float: left;
 }
+
+.stylepreview, .sitepreview{
+ width:100%;
+ height:19em;
+}
+
+#editor {
+ width:97%;
+ height:16em;
+}
+
+.inline_download a{
+ padding-left: 18px;
+ background-image: url("../../img/download.png");
+ background-repeat: no-repeat;
+}
+
+.strike {
+ text-decoration:line-through;
+}
+
+table.text_table {
+ border-spacing: 0px;
+ border-collapse: collapse;
+ margin-left:auto;
+ margin-right:auto;
+}
+
+table.text_table td, table.text_table th{
+ border: 1px solid #000000;
+ padding: 0.1em;
+}
+
+table.text_table th {
+ background-color: #9B9FBF;
+}
+
+.page_lang {
+ position: absolute;
+ right: 15em;
+}
+
+.page_actions {
+ width: 12em;
+ position: absolute;
+ right: 0.3%;
+}
+
+.structure_row {
+ width:98%;
+ display:block;
+}
+
+.structure_row:hover {
+ background-color: #87C6E9;
+}
+	
+
+img.img_img, img.img_left, img.img_center, img.img_right{
+ margin: 2ex;
+ margin-top: 1ex;
+ 
+}
+img.img_left {
+ float: left;
+ margin-left: 1ex;
+}
+
+img.img_right {
+ float: right;
+ margin-right: 1ex;
+}
+
+img.img_center {
+ display: block;
+ margin-left: auto;
+ margin-right: auto;
+}
+
+.strike img {
+ margin-left: 20px;
+}
+
+th img{
+vertical-align: middle;
+margin: 1px;
+}
+
+label.row {
+ float: left;
+ display: inline;
+ padding-right: 1em;
+ width: 17em;
+}
+
+div.row {
+ clear: both;
+}
+
 /*
 #top{
  background-color: #7C7EC6;

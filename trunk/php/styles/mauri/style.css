@@ -433,7 +433,7 @@ div.row {
 }
 
 .inline_download a{
-padding-left: 18px;
-background-image: url("../../img/download.png");
-background-repeat: no-repeat;
+ padding-left: 18px;
+ background-image: url("../../img/download.png");
+ background-repeat: no-repeat;
 }

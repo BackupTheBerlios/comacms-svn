@@ -36,7 +36,7 @@
 			$page_title = GetPostOrGet('page_title');
 			
 			$sql = "UPDATE " . DB_PREFIX . "pages " .
-				"SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title' " .
+				"SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$page_title' " .
 				"WHERE page_id=$page_id";
 			db_result($sql);
 			header("Location: admin.php?page=pagestructure&action=edit&page_id=$page_id");

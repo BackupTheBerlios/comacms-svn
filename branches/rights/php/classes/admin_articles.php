@@ -85,7 +85,7 @@
 	 		if($title !== null && $description !== null && $text !== null) {
 				$sql = "INSERT INTO " . DB_PREFIX . "articles
 					(article_title, article_description, article_text, article_html, article_creator, article_date)
-					VALUES ('$title', '$description', '$text', '" . convertToPreHtml($text) . "', '$user->ID', '" . mktime() . "')";
+					VALUES ('$title', '$description', '$text', '" . convertToPreHtml($text) . "', '$user->id', '" . mktime() . "')";
 				db_result($sql);
 			}
 			header('Location: admin.php?page=articles');	
@@ -122,7 +122,7 @@
 							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\"></textarea></td>
 					</tr>
 					<tr>
-						<td>Eingelogt als $user->Showname</td><td><input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" /></td>
+						<td>Eingelogt als $user->showname</td><td><input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" /></td>
 					</tr>
 				</table>
 				<br /> 

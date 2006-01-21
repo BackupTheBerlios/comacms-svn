@@ -89,8 +89,10 @@
 	$admin_lang['page_rights'] = 'Page-Rights';
 	$admin_lang['select_user'] = 'Select user';
 	$admin_lang['the_rights_of_which_user_should_be_edited?'] = 'The rights of which user should be edited?';
-	$admin_lang['default_rights_for_users_and_groups'] = 'Default-Rights for users and groups';
+	$admin_lang['edit_default_rights_for_users_and_groups'] = 'Edit default-rights for users and groups';
 	$admin_lang['default_rights_for_%user%'] = 'Default-Rights for %s';
+	$admin_lang['default_rights_for_the_group_%group%'] = 'Default-Rights for the group &quot;%s&quot;';
+	$admin_lang['default_rights_for_users_and_groups'] = 'Default-Rights for users and Groups';
 	$admin_lang['view_right'] = 'View-Right';
 	$admin_lang['edit_right'] = 'Edit-Right';
 	$admin_lang['delete_right'] = 'Delete-Right';

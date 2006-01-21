@@ -23,11 +23,11 @@
 	
 	include('common.php');
 
-	if(!$user->IsLoggedIn)  {
-		header('Location: special.php?page=login' . (($user->LoginError != -1) ? ('&error=' . $user->LoginError) : ''));
+	if(!$user->isLoggedIn)  {
+		header('Location: special.php?page=login' . (($user->loginError != -1) ? ('&error=' . $user->loginError) : ''));
 		die();
 	}
-	if(!$user->IsAdmin && $user->IsLoggedIn) {
+	if(!$user->isAdmin && $user->isLoggedIn) {
 		header('Location: index.php');
 		die();
 	}
@@ -38,7 +38,7 @@
 	/**
 	 * @ignore
 	 */
-	include('./lang/' . $user->Language . '/admin_lang.php');
+	include('./lang/' . $user->language . '/admin_lang.php');
 	include('./system/admin_pages.php');
 	$menu_array = array();
 	$menu_array[] = array($admin_lang['admincontrol'], 'admin.php?page=admincontrol');

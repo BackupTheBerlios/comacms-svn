@@ -75,7 +75,7 @@
 							WHERE page_id='$old->page_id'";
 						db_result($sql);
 						$sql = "UPDATE " . DB_PREFIX . "pages
-							SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment'
+							SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment'
 							WHERE page_id=$page_id";
 						db_result($sql);
 						header("Location: admin.php?page=pagestructure");
@@ -127,7 +127,7 @@
 							db_result($sql);
 							$page_edit_comment = sprintf($admin_lang['restored_from_version'], $change);
 							$sql = "UPDATE " . DB_PREFIX . "pages
-								SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$old->page_title', page_edit_comment='$page_edit_comment'
+								SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$old->page_title', page_edit_comment='$page_edit_comment'
 								WHERE page_id=$page_id";
 							db_result($sql);
 							header("Location: admin.php?page=pagestructure");	

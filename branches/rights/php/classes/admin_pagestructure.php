@@ -136,11 +136,11 @@
 		 			WHERE page_parent_id=$page->page_id";
 		 		$subpages_result = db_result($sql);
 		 		if($subpage = mysql_fetch_object($subpages_result))
-		 			$out .= "Das l�schen von Seiten mit Unterseiten ist zur Zeit nicht m�glich!<br /><strong>Tip:</strong> L�schen sie erst alle Unterseiten<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\">Zur�ck</a>";
+		 			$out .= "Das l&ouml;schen von Seiten mit Unterseiten ist zur Zeit nicht m6ounl;glich!<br /><strong>Tip:</strong> L&ouml;schen sie erst alle Unterseiten<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\">Zur&uuml;ck</a>";
 		 		elseif($sure == 1) {
-		 			$out .= "L�schen...";
+		 			$out .= "L&ouml;schen...";
 		 			$sql = "UPDATE " . DB_PREFIX . "pages
-						SET  page_access='deleted', page_creator='$user->ID', page_date='" . mktime() . "'
+						SET  page_access='deleted', page_creator='$user->id', page_date='" . mktime() . "'
 						WHERE page_id='$page_id'";
 					db_result($sql);
 		 		}
@@ -447,7 +447,7 @@
 						db_result($sql);
 						$history_id = mysql_insert_id();
 						$sql = "UPDATE " . DB_PREFIX . "pages
-							SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment', page_access='$page_access', page_type='$page_type', page_parent_id='$page_parent_id'
+							SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment', page_access='$page_access', page_type='$page_type', page_parent_id='$page_parent_id'
 							WHERE page_id=$exists->page_id";
 						db_result($sql);
 						$lastid = $exists->page_id;
@@ -459,7 +459,7 @@
 				}
 				else {// dont extist
 					$sql = "INSERT INTO " . DB_PREFIX . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)
-						VALUES('$page_lang', '$page_access', '$page_name', '$page_title', $page_parent_id, $user->ID, '$page_type', " . mktime() . ", '$page_edit_comment')";
+						VALUES('$page_lang', '$page_access', '$page_name', '$page_title', $page_parent_id, $user->id, '$page_type', " . mktime() . ", '$page_edit_comment')";
 					db_result($sql);
 					$lastid = mysql_insert_id();
 					$edit->NewPage($lastid);

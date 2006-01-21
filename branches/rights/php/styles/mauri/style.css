@@ -385,3 +385,12 @@ label.row {
 div.row {
  clear: both;
 }
+
+div.warning {
+border: 1px solid #000000;
+text-align: center;
+font-weight: bold;
+background-color: #FAA500;
+margin-bottom: 1em;
+margin-top: 1em;
+}

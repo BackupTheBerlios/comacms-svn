@@ -116,8 +116,8 @@
 						<td>" . $menue_data->text . "</td>
 						<td>" . $menue_data->link . "</td>
 						<td>
-							<a href=\"admin.php?page=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=delete&amp;id=" . $menue_data->id . "\" title=\"Löschen\">
-								<img src=\"./img/del.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"Löschen\" />
+							<a href=\"admin.php?page=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=delete&amp;id=" . $menue_data->id . "\" title=\"Lï¿½schen\">
+								<img src=\"./img/del.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"Lï¿½schen\" />
 							</a>
 							<a href=\"admin.php?page=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=up&amp;id=" . $menue_data->id . "\" title=\"Nach Oben\">
 								<img src=\"./img/up.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"Nach Oben\"/>
@@ -257,7 +257,9 @@
 	}
 	
 	function generateUrl($string) {
-		return str_replace(" ", "%20", $string);
+		$string = preg_replace("#\ *h(.+?)\ *#s", "$1", $string);
+		return $string;//rawurlencode($string);
+		//return str_replace(" ", "%20", $string);
 	}
 	
 	function generateinlinemenu($page_id) {

@@ -88,6 +88,7 @@
 	$admin_lang['select_user'] = 'Benutzer auswählen';
 	$admin_lang['the_rights_of_which_user_should_be_edited?'] = 'Die Rechte von welchem Benutzer sollen bearbeitet werden?';
 	$admin_lang['the_rights_of_which_group_should_be_edited?'] = 'Die Rechte von welcher Gruppe sollen bearbeitet werden?';
+	$admin_lang['edit_default_rights_for_users_and_groups'] = 'Standardrechte für Benutzer und Gruppen bearbeiten';
 	$admin_lang['default_rights_for_users_and_groups'] = 'Standardrechte für Benutzer und Gruppen';
 	$admin_lang['default_rights_for_%user%'] = 'Standardrechte für %s';
 	$admin_lang['default_rights_for_the_group_%group%'] = 'Standardrechte für die Gruppe &quot;%s&quot;';

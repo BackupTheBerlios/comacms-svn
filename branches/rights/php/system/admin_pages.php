@@ -377,7 +377,7 @@
 			//
 			elseif($action == "new") {
 				if($text != "" && $title != "")
-					db_result("INSERT INTO ".DB_PREFIX."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$user->ID')");
+					db_result("INSERT INTO ".DB_PREFIX."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$user->id')");
 			}
 			//
 			// update the selected entrie
@@ -396,7 +396,7 @@
 			<input type=\"hidden\" name=\"action\" value=\"new\" />
 			Titel: <input type=\"text\" name=\"title\" maxlength=\"60\" value=\"\" /><br />
 			<textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea><br />
-			Eingelogt als " . $user->Showname . " <input class=\"button\" type=\"submit\" value=\"Senden\" /><br />
+			Eingelogt als " . $user->showname . " <input class=\"button\" type=\"submit\" value=\"Senden\" /><br />
 		</form>";
 		}
 			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
@@ -575,7 +575,7 @@
 					else
 						$user_admin = "user_admin= 'n', ";
 					$user_icq = str_replace("-", "", $user_icq);
-					if($user_id == $user->ID) {
+					if($user_id == $user->id) {
 						if($user_password_confirm != "")
 							$actual_user_passwd_md5 = md5($user_password_confirm);
 						$actual_user_name = $user_name;
@@ -594,7 +594,7 @@
 					else
 						$sure = $_POST['sure'];
 					
-					if($sure == 1 && $user_id != $user->ID) {
+					if($sure == 1 && $user_id != $user->id) {
 						$sql = "SELECT *
 							FROM " . DB_PREFIX . "users
 							WHERE user_id=$user_id";
@@ -792,7 +792,7 @@
 					<td><a href=\"".$PHP_SELF."?page=users&amp;action=edit&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a></td>
 					<td>";
 					
-					if($user->ID == $user_db->user_id)
+					if($user->id == $user_db->user_id)
 						$out .= "&nbsp;";
 					else
 						$out .= "<a href=\"".$PHP_SELF."?page=users&amp;action=delete&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";

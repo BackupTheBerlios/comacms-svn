@@ -49,7 +49,7 @@
 	$admin_lang['en'] = 'Englisch';
 	$admin_lang['info'] = 'Info';
 	$admin_lang['edit'] = 'Bearbeiten';
-	$admin_lang['delete'] = 'L�schen';
+	$admin_lang['delete'] = 'L&ouml;schen';
 	$admin_lang['show deleted'] = 'Gel&ouml;schte anzeigen';
 	$admin_lang['show hidden'] = 'Versteckte anzeigen';
 	$admin_lang['show'] = 'Anzeigen';

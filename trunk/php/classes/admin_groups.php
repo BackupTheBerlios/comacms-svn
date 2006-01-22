@@ -190,11 +190,11 @@
 				<input type=\"hidden\" name=\"group_id\" value=\"$group_id\" />
 				<fieldset>
 					<legend>Gruppenmitglieder</legend>
-					<table class=\"text_table\">
+					<table class=\"text_table full_width\">
 						<thead>
 							<tr>
-								<td>Benutzer</td>
-								<td>Aktionen</td>
+								<th>Benutzer</th>
+								<th>Aktionen</th>
 							</tr>
 						</thead>";
 						$sql = "SELECT user.*, link.*

@@ -564,7 +564,7 @@
 						$sql = "DELETE FROM " . DB_PREFIX . "users
 							WHERE user_id=$user_id";
 						db_result($sql);
-						$out .= "Der Benutzer &quot;" . $user_data->user_showname . "&quot; ist nun unwiederuflich gel?scht worden!<br />";
+						$out .= "Der Benutzer &quot;" . $user_data->user_showname . "&quot; ist nun unwiederuflich gel&ouml;scht worden!<br />";
 					}
 				}
 				else {
@@ -573,9 +573,9 @@
 						WHERE user_id=$user_id";
 					$result = db_result($sql);
 					$user = mysql_fetch_object($result);
-					$out .= "Den Benutzer &quot;" . $user->user_showname . "&quot; unwiederruflich l�schen?<br />
-				<a href=\"admin.php?page=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich L�schen\" class=\"button\">" . $admin_lang['yes'] . "</a>
-				<a href=\"admin.php?page=users\" title=\"Nicht L�schen\" class=\"button\">" . $admin_lang['no'] . "</a>";
+					$out .= "Den Benutzer &quot;" . $user->user_showname . "&quot; unwiederruflich l&ouml;schen?<br />
+				<a href=\"admin.php?page=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich L&ouml;schen\" class=\"button\">" . $admin_lang['yes'] . "</a>
+				<a href=\"admin.php?page=users\" title=\"Nicht L&ouml;schen\" class=\"button\">" . $admin_lang['no'] . "</a>";
 					
 					return $out;
 				}
@@ -631,8 +631,8 @@
 						<td>
 							E-Mail:\r\n";
 					if($action == "add-error" || $action == "save-error" && $user_email != "" && !isEMailAddress($user_email))
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene E-Mail-Adresse ist ung�ltig.</span>\r\n";		
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">�ber die E-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene E-Mail-Adresse ist ung&uuml;ltig.</span>\r\n";		
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">&Uuml;ber die Egl-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"user_email\" value=\"".$user_email."\" />
@@ -642,7 +642,7 @@
 						<td>
 							ICQ:\r\n";
 					if(($action == "add-error" || $action == "save-error") && ($user_icq != "" && !isIcqNumber($user_icq)))
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene ICQ-Nummer ist ung�ltig.</span>\r\n";		
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene ICQ-Nummer ist ung&uuml;ltig.</span>\r\n";		
 					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Die ICQ Nummer kann angegben werden, ist aber nicht dirngend notwendig.</span>
 						</td>
 						<td>
@@ -667,9 +667,9 @@
 					}
 					if($action == "add-error" && $user_password_confirm == "" && $user_password != "")
 						$user_password = "";
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit diesem Passwort kann sich der Benutzer in die gesch�tzten Bereiche einloggen. (";
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit diesem Passwort kann sich der Benutzer in die gesch&auml;tzten Bereiche einloggen. (";
 					if($action == "save-error" || $action == "edit")
-						$out .= "Wenn beide Felder f�r das Passwort leer gelassen werden, wird das Passwort nicht ver�ndert.";
+						$out .= "Wenn beide Felder f&uuml;r das Passwort leer gelassen werden, wird das Passwort nicht ver&auml;ndert.";
 					elseif($action == "add-error" || $action == "new")
 						$out .= "Notwendig";
 					$out .= ")</span>
@@ -702,7 +702,7 @@
 					<tr>
 						<td>
 							Administrator:
-							<span class=\"info\">Ist ein Benutzer Administrator so hat er keinerlei Einschr�nkungen in seinem Handeln. <strong>Nur ausw�hlen wenn es wirklich Notwendig ist.</strong></span>
+							<span class=\"info\">Ist ein Benutzer Administrator so hat er keinerlei Einschr&auml;nkungen in seinem Handeln. <strong>Nur ausw&auml;hlen wenn es wirklich Notwendig ist.</strong></span>
 						</td>
 						<td>
 							<input type=\"checkbox\" name=\"user_admin\"";
@@ -728,21 +728,19 @@
 					}
 				}
 			}
-			$out .= "\t\t\t<table>
+			$out .= "\t\t\t<table class=\"text_table full_width\">
 				<tr>
-					<td>id</td>
-					<td>" . $admin_lang['name'] . "</td>
-					<td>K�rzel</td>
-					<td>email</td>
-					<td>Admin</td>
-					<td colspan=\"2\">Aktionen</td>
+					<th>" . $admin_lang['name'] . "</th>
+					<th>K&uuml;rzel</th>
+					<th>Email</th>
+					<th>Admin</th>
+					<th>Aktionen</th>
 				</tr>\r\n";
 
 			$users_result = db_result("SELECT * FROM " . DB_PREFIX . "users");
 			while($user_db = mysql_fetch_object($users_result))
 			{
 				$out .= "\t\t\t\t<tr>
-					<td>#".$user_db->user_id."</td>
 					<td>$user_db->user_showname</td>
 					<td>$user_db->user_name</td>
 					<td>$user_db->user_email</td>
@@ -752,8 +750,7 @@
 					else
 						$out .= $admin_lang['no'];
 					$out .= "</td>
-					<td><a href=\"".$PHP_SELF."?page=users&amp;action=edit&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a></td>
-					<td>";
+					<td><a href=\"".$PHP_SELF."?page=users&amp;action=edit&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
 					
 					if($user->id == $user_db->user_id)
 						$out .= "&nbsp;";

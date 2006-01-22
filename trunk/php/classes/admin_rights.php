@@ -18,8 +18,8 @@
  	/**
  	 * @ignore
  	 */
- 	 require_once('./classes/user_auth.php');
- 	 require_once('./classes/group_auth.php');
+ 	 require_once('./classes/auth_user.php');
+ 	 require_once('./classes/auth_group.php');
  	/**
 	 * @package ComaCMS
 	 */

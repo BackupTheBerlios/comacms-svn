@@ -92,6 +92,15 @@
 		$row = mysql_fetch_object($result);
 		return $row->user_showname;
 	}
+	
+	function getGroupByID($id) {
+		$sql = "SELECT group_name
+			FROM " . DB_PREFIX . "groups
+			WHERE group_id = '$id'";
+		$result = db_result($sql);
+		$row = mysql_fetch_object($result);
+		return $row->group_name;
+	}
 
 	function replace_smilies($textdata) {
 		$sql = "SELECT *
@@ -173,7 +182,7 @@
 					<span class=\"article-date\">" . date('d.m.Y H:i:s', $data->article_date) . "</span>
 					$data->article_title
 				</div><div class=\"article_inside\"$size>
-				$thumb" . nl2br($data->article_description) . " <a href=\"article.php?id=$data->article_id\" title=\"Den vollst�ndigen Artikel '$data->article_title' lesen\">mehr...</a></div>
+				$thumb" . nl2br($data->article_description) . " <a href=\"article.php?id=$data->article_id\" title=\"Den vollst?ndigen Artikel '$data->article_title' lesen\">mehr...</a></div>
 				<div class=\"article-author\">" . getUserByID($data->article_creator) . "</div>
 			</div>\r\n";
 		}

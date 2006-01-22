@@ -1,7 +1,25 @@
-html, body {
+body {
  margin: 0;
  padding: 0;
  font-family: arial, verdana, helvetica, sans-serif;
+ font-size: 62.5%;
+ background-color: #FFFFFF;
+ color: #000000;
+}
+
+* {
+ margin: 0;
+ padding: 0;
+ font-size: 1em;
+ font-weight: normal;
+}
+
+strong {
+ font-weight: bold;
+}
+
+h1, h2, h3, h4, h5 {
+ font-weight: bold;
 }
 
 a, a:visited {
@@ -11,19 +29,23 @@ a, a:visited {
 }
 
 h1 {
+ font-size: 2em;
  text-align: center;
  padding: 0;
  margin: 0;
 }
 
 h2 {
- padding-left: 1em;
+ font-size: 1.5em;
  border-bottom: 1px solid black;
-
+ margin-bottom: 1em;
 }
+
 h3 {
+ font-size: 1.17em;
  padding-left: 1.5em;
 }
+
 
 h4 {
  padding-left: 2em;
@@ -34,17 +56,33 @@ img {
 
 hr {
  background-color: #000000;
- border: 0px solid #000000;
- height: 1px;
- margin-top: 0px; 
+ border: 0;
+ height: 0.04em;
+ margin-top: 0;
+ margin-bottom: 1em; 
 }
 
 input, select, textarea, fieldset {
  border: 1px solid #000000;
 }
 
+input, select, textarea {
+ width: 15em;
+ font-family: arial, verdana, helvetica, sans-serif;
+}
+
+input[type="checkbox"], input[type="button"], input[type="submit"], input[type="reset"],input[type="file"] {
+ width: auto;
+}
+
+fieldset {
+ margin:0.1em;
+ padding: 1em;
+}
+
 legend {
  font-size: 1.2em;
+ color: #000000;
 }
 
 thead td {
@@ -53,6 +91,10 @@ thead td {
 table {
  margin: 1em;
 }
+#date_day, #date_month, #date_year, #date_hour, #date_minute {
+width : auto;
+}
+
 #title {
  padding: 25px;
  padding-top: 42px;
@@ -67,9 +109,11 @@ table {
  min-height: 140px;
  height: 140px;
  border-bottom: 1px solid #000000;
+ font-size: 1.6em;
 }
 
 #menupart {
+ font-size: 1.6em;
  float: left;
  width: 140px;
  border-left: 1px solid #000000;
@@ -79,9 +123,11 @@ table {
 }
 
 #text {
- padding: 5px;
- margin: 0 0 0 142px;
+ font-size: 1.6em;
+ padding: 0.5em;
+ margin: 0 0 0 9em;
  text-align: justify;
+ line-height: 1.4em;
 }
 
 #logo {
@@ -112,6 +158,14 @@ table {
  border-bottom: 1px dashed #FF0000;
 }
 
+#inlinemenu {
+ font-size: 1.6em;
+}
+
+p {
+ margin-bottom: 1em;
+}
+
 #secondmenu li {
  display: block;
  margin: 0;
@@ -119,7 +173,6 @@ table {
  border-left: none;
  border-top: 1px solid #EBEBEB;
  border-bottom: 1px solid #EBEBEB;
-
  float: left;
  background-color: #000000;
  padding: 1px;
@@ -185,6 +238,7 @@ table {
 }
 
 span.info, span.error{
+ line-height: 1.3em;
  font-size: 0.75em;
  width: 20em;
  display: block;
@@ -226,12 +280,12 @@ a.button , input.button, button{
 }
 
 a.button {
- height: 16px;
+ height: 1em;
  padding-top: 4px;
  padding-bottom:0px;
 
 }
-.sitepreview, #previewiframe { /*FIXME: make only one classss*/
+.sitepreview, #previewiframe { /*FIXME: make only one class*/
  border: 1px dashed #000000;
  width: 100%;
  height: 310px;
@@ -310,16 +364,16 @@ textarea.edit {
  text-align: right;
 }
 
-table.dates, table.articles ,table.page_commits{
- width: 100%;
+table.dates, table.articles ,table.page_commits, table.tablestyle{
+ width: 97%;
 }
 
-.dates thead td, .articles thead td, .page_commits thead td{
+.dates thead td, .articles thead td, .page_commits thead td, .tablestyle thead td{
  border: none;
  text-align: center;
 }
 
-.dates td, .articles td,.page_commits td {
+.dates td, .articles td,.page_commits td, .tablestyle td {
  border-bottom: 1px dashed gray;
  vertical-align: top;
 }
@@ -337,13 +391,13 @@ table.input_table {
 }
 
 .strike {
-text-decoration: line-through;
+ text-decoration: line-through;
 }
 
 .code {
-margin-left:2em;
-margin-right:3em;
-border:1px dashed #000000;
+ margin-left:2em;
+ margin-right:3em;
+ border:1px dashed #000000;
 }
 
 td.articles {
@@ -368,6 +422,16 @@ table.text_table td, table.text_table th{
 
 table.text_table th {
  background-color: #9B9FBF;
+ font-weight: bold;
+}
+
+.margin_cener {
+ margin-left:auto;
+ margin-right: auto;
+}
+
+.full_width {
+ width: 97%;
 }
 
 .page_lang {
@@ -389,7 +453,6 @@ table.text_table th {
 .structure_row:hover {
  background-color: #87C6E9;
 }
-	
 
 img.img_img, img.img_left, img.img_center, img.img_right{
  margin: 2ex;
@@ -417,8 +480,8 @@ img.img_center {
 }
 
 th img{
-vertical-align: middle;
-margin: 1px;
+ vertical-align: middle;
+ margin: 1px;
 }
 
 label.row {
@@ -436,4 +499,28 @@ div.row {
  padding-left: 18px;
  background-image: url("../../img/download.png");
  background-repeat: no-repeat;
+}
+
+li.page_type_text, li.page_type_gallery {
+ margin-left: 1.5em;
+}
+
+label.row {
+ float: left;
+ display: inline;
+ padding-right: 1em;
+ width: 17em;
+}
+
+div.row {
+ clear: both;
+}
+
+div.warning {
+border: 1px solid #000000;
+text-align: center;
+font-weight: bold;
+background-color: #FAA500;
+margin-bottom: 1em;
+margin-top: 1em;
 }

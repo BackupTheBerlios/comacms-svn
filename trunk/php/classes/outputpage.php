@@ -180,7 +180,7 @@
 		function LoadPage($pagename, $user) {
 			$load_old = false;
 			$change = GetPostOrGet('change');
-			if(is_numeric($change) && $user->IsLoggedIn && $change != 0)
+			if(is_numeric($change) && $user->isLoggedIn && $change != 0)
 				$load_old = true;
 			else
 				$change = 0;
@@ -202,15 +202,22 @@
 				$page_result = db_result($sql);
 				if(!($page_data =  mysql_fetch_object($page_result))) {
 					header("Location: special.php?page=404&want=$pagename");
+					die();
 				}
 			}
-			if(!$load_old) {
+			if(!$load_old && $page_data->page_access == 'deleted' && !$user->accessRghts->delete) {
+				header("Location: special.php?page=410&want=$pagename"); //HTTP 410 Gone
+				die();
+			}
+			
+			/*if(!$load_old) {
 				if($page_data->page_access == 'deleted')
 					die('deleted');
 				if($page_data->page_access == 'hidden')
 					if(!$user->IsLoggedIn)	
 						header("Location: special.php?page=login&want=$page_data->page_id");
-			}
+			}*/
+			//TODO: generate a warning if an 'old' page is shown
 			$this->Title = $page_data->page_title;
 			$this->PositionOfPage($page_data->page_id);
 			$this->PageID = $page_data->page_id;
@@ -224,6 +231,8 @@
 				$gallerypage = new GalleryPage($page_data->page_id);
 				$this->Text = $gallerypage->HTML;
 			}
+			if($load_old || $page_data->page_access == 'deleted')
+				$this->Text = "<div class=\"warning\">Sie befinden sich auf einer Seite, die so wie Sie sie sehen, nicht mehr existiert.</div>" . $this->Text;
 		}
 		
 		/**

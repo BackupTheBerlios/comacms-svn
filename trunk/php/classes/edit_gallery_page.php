@@ -36,7 +36,7 @@
 			$page_title = GetPostOrGet('page_title');
 			
 			$sql = "UPDATE " . DB_PREFIX . "pages " .
-				"SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title' " .
+				"SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$page_title' " .
 				"WHERE page_id=$page_id";
 			db_result($sql);
 			header("Location: admin.php?page=pagestructure&action=edit&page_id=$page_id");
@@ -219,7 +219,7 @@
 			while($img = mysql_fetch_object($img_result)) {
 				$ids[] = $img->gallery_file_id;
 			}	
-		 	$out = "Bilder auswÃ¤hlen\r\n" .
+		 	$out = "Bilder auswählen\r\n" .
 		 		"<form  action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">" .
 		 		"\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />" .
 				"\t<input type=\"hidden\" name=\"action\" value=\"edit\" />" .
@@ -257,7 +257,7 @@
 					$out .= "\t\t\t\t<div class=\"imageblock\">" .
 						"\t\t\t\t\t<a href=\"" . generateUrl($image->file_path) . "\">" .
 						"\t\t\t\t\t<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($thumb_folder . $imgmax . '_' . $thumb) . "\" alt=\"" . $imgmax . "_$thumb\" /></a><br />" .
-						"\t\t\t\t\t<input type=\"checkbox\" name=\"images[]\" value=\"$image->file_id\"/>AuswÃ¤hlen" .
+						"\t\t\t\t\t<input type=\"checkbox\" name=\"images[]\" value=\"$image->file_id\"/>Auswählen" .
 						"\t\t\t\t</div>";
 				}
 			}
@@ -267,8 +267,8 @@
 				"</tr>" .
 				"<tr>" .
 				"<td colspan=\"2\">" .
-				"<input class=\"button\" type=\"reset\" value=\"Auswahl rÃ¼ckgÃ¤ngig machen\" />&nbsp;" .
-				"<input class=\"button\" type=\"Submit\" value=\"Zur Galerie hinzufÃ¼gen\"/>" .
+				"<input class=\"button\" type=\"reset\" value=\"Auswahl rückgängig machen\" />&nbsp;" .
+				"<input class=\"button\" type=\"Submit\" value=\"Zur Galerie hinzufügen\"/>" .
 				"</td>" .
 				"</tr>" .
 				"</table>" .
@@ -308,7 +308,7 @@
 				$image_result = db_result($sql);
 				$image = mysql_fetch_object($image_result);
 				$out .= "<img src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" />
-					MÃ¶chten sie das Bild wirklich aus der Galerie entfernen?<br />
+					Möchten sie das Bild wirklich aus der Galerie entfernen?<br />
 					<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=delete&amp;image_id=$image_id&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
 		 			<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>
 					";
@@ -341,7 +341,7 @@
 				<tr><td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"" . $admin_lang['apply'] . "\"/><input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\"/></td></tr>
 				</table>
 				</form>
-				<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;action2=add_new_dialog&amp;page_id=$page_id\" class=\"button\">Bilder hinzufÃ¼gen</a>";
+				<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;action2=add_new_dialog&amp;page_id=$page_id\" class=\"button\">Bilder hinzufügen</a>";
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "gallery
 					WHERE gallery_id=$page_data->gallery_id

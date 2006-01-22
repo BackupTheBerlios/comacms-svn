@@ -85,7 +85,7 @@
 				<tr><th>" . $this->admin_lang['saved_page_modifications'] . ":</th><td>$history_page_count</td></tr>
 				<tr><th>" . $this->admin_lang['database size'] . ":</th><td>" . kbormb($data_size) . "</td></tr>
 			</table>
-			<h2>Letzte Veränderungen</h2>
+			<h2>Letzte Ver&auml;nderungen</h2>
 			<table class=\"text_table\">
 				<thead>
 					<tr>

@@ -29,6 +29,8 @@
 	$admin_lang['sitestyle'] = 'Sitestyle';
 	$admin_lang['users'] = 'Users';
 	$admin_lang['user'] = 'User';
+	$admin_lang['groups'] = 'Groups';
+	$admin_lang['group'] = 'Group';
 	$admin_lang['gallery'] = 'Gallery';
 	$admin_lang['gallery editor'] = 'Gallery-Editor';
 	$admin_lang['logout'] = 'Logout';
@@ -46,7 +48,9 @@
 	$admin_lang['de'] = 'German';
 	$admin_lang['en'] = 'English';
 	$admin_lang['info'] = 'info';
-	$admin_lang['edit'] = 'edit';
+	$admin_lang['the_rights_of_which_user_should_be_edited?'] = 'The rights of which user should be edited?';
+	$admin_lang['the_rights_of_which_group_should_be_edited?'] = 'The rights of which group should be edited?';
+	$admin_lang['edit'] = 'Edit';
 	$admin_lang['delete'] = 'delete';
 	$admin_lang['show deleted'] = 'Show deleted';
 	$admin_lang['show hidden'] = 'Show hidden';
@@ -79,9 +83,25 @@
 	$admin_lang['create_inlinemenu'] = 'Create inlinemenu';
 	$admin_lang['edit_inlinemenu'] = 'Edit inlinemenu';
 	$admin_lang['back'] = 'Back';
+	$admin_lang['rights'] = 'Rights';
+	$admin_lang['user_rights'] = 'User-Rights';
+	$admin_lang['group_rights'] = 'Group-Rights';
+	$admin_lang['page_rights'] = 'Page-Rights';
+	$admin_lang['select_user'] = 'Select user';
+	$admin_lang['the_rights_of_which_user_should_be_edited?'] = 'The rights of which user should be edited?';
+	$admin_lang['edit_default_rights_for_users_and_groups'] = 'Edit default-rights for users and groups';
+	$admin_lang['default_rights_for_%user%'] = 'Default-Rights for %s';
+	$admin_lang['default_rights_for_the_group_%group%'] = 'Default-Rights for the group &quot;%s&quot;';
+	$admin_lang['default_rights_for_users_and_groups'] = 'Default-Rights for users and Groups';
+	$admin_lang['view_right'] = 'View-Right';
+	$admin_lang['edit_right'] = 'Edit-Right';
+	$admin_lang['delete_right'] = 'Delete-Right';
+	$admin_lang['add_new_subpage_right'] = '&quot;Add-New-Subpage&quot;-Right';
+	$admin_lang['todo'] = '!this is to do!';
 	$admin_lang['deleted'] = 'Deleted';
 	$admin_lang['hidden'] = 'Hidden';
 	$admin_lang['public'] = 'Public';
 	$admin_lang['private'] = 'Private';
 	$admin_lang['comment'] = 'Comment';
+	$admin_lang['add_a_new_date'] = 'Add a new Date';
 ?>

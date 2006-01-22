@@ -25,7 +25,7 @@
 	/**
 	 * @ignore
 	 */
-	include('./lang/' . $user->Language  . '/admin_lang.php');
+	include('./lang/' . $user->language  . '/admin_lang.php');
 	
 	if(!isset($extern_page))
 		header('Locaction: index.php');
@@ -58,7 +58,10 @@
 		$want = GetPostOrGet('want');
 		$title = 'Seite nicht gefunden.';
 		$text = "Die Seite mit dem Namen &quot;$want&quot; wurde leider nicht gefunden.<br />
-			Falls die Seite aber da sein müsste, melden sie das bitte beim Seitenbetreiber.";
+			Falls die Seite aber da sein m?sste, melden sie sich bitte beim Seitenbetreiber.";
+	}
+	elseif($extern_page == '410') {	//Gone/Deleted
+		$text = ' '; 
 	}
 	elseif($extern_page == 'image') {
 		$image_id = GetPostOrGet('id');

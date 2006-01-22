@@ -54,13 +54,13 @@
 		$text = stripslashes($text);
 		$text = preg_replace("!(\r\n)|(\r)!","\n",$text);
 		$text = "\n" . $text . "\n";
-		$text = str_replace('&auml;', 'Ã¤', $text);
-		$text = str_replace('&Auml;', 'Ã„', $text);
-		$text = str_replace('&uuml;', 'Ã¼', $text);
-		$text = str_replace('&Uuml;', 'Ãœ', $text);
-		$text = str_replace('&ouml;', 'Ã¶', $text);
-		$text = str_replace('&Ouml;', 'Ã–', $text);
-		$text = str_replace('&szlig;', 'ÃŸ', $text);
+		$text = str_replace('&auml;', 'ä', $text);
+		$text = str_replace('&Auml;', 'Ä', $text);
+		$text = str_replace('&uuml;', 'ü', $text);
+		$text = str_replace('&Uuml;', 'Ü', $text);
+		$text = str_replace('&ouml;', 'ö', $text);
+		$text = str_replace('&Ouml;', 'Ö', $text);
+		$text = str_replace('&szlig;', 'ß', $text);
 		$text = str_replace('&gt;', '>', $text);
 		$text = str_replace('&lt;', '<', $text);
 		// extract all code we won't compile it <code>...CODE...</code>
@@ -304,13 +304,13 @@
 		$text = str_replace('(c)', '&copy;', $text);
 		
 		$text = str_replace('(r)', '&reg;', $text);
-		$text = str_replace('Ã¤', '&auml;', $text);
-		$text = str_replace('Ã„', '&Auml;', $text);
-		$text = str_replace('Ã¼', '&uuml;', $text);
-		$text = str_replace('Ãœ', '&Uuml;', $text);
-		$text = str_replace('Ã¶', '&ouml;', $text);
-		$text = str_replace('Ã–', '&Ouml;', $text);
-		$text = str_replace('ÃŸ', '&szlig;', $text);
+		$text = str_replace('ä', '&auml;', $text);
+		$text = str_replace('Ä', '&Auml;', $text);
+		$text = str_replace('ü', '&uuml;', $text);
+		$text = str_replace('Ü', '&Uuml;', $text);
+		$text = str_replace('ö', '&ouml;', $text);
+		$text = str_replace('Ö', '&Ouml;', $text);
+		$text = str_replace('ß', '&szlig;', $text);
 		// paste code back
 		foreach($codes as $key => $match)
 			$text = str_replace('[code]%' . $key . '%[/code]', "<pre class=\"code\">$match</pre>", $text);
@@ -319,9 +319,9 @@
 	}
 	/** special_start_with
 	 * 
-	 * Diese Funktion schaut, ob ein String mit einer bestimmten Zeichenkette anfÃ¤ngt und ignoriert dabei einige Zeichen,
-	 * so kÃ¶nnen grundsÃ¤tzlich noch Lehrzeichen und Tabs vor der Zeichenkette sein, nach der gesucht wird und dennoch
-	 * wird zurÃ¼ckgegeben, dass der String mit der gesuchten Zeichenkette beginnt. 
+	 * Diese Funktion schaut, ob ein String mit einer bestimmten Zeichenkette anfängt und ignoriert dabei einige Zeichen,
+	 * so können grundsätzlich noch Lehrzeichen und Tabs vor der Zeichenkette sein, nach der gesucht wird und dennoch
+	 * wird zurückgegeben, dass der String mit der gesuchten Zeichenkette beginnt. 
 	 * 
 	 * @return bool
 	 * @param string search
@@ -332,7 +332,7 @@
 		$str_temp = ' '.$str;
 		$search_len = strlen($search);
 		do {
-			// ein weiteres unerwÃ¼nschtes Zeichen entfernen
+			// ein weiteres unerwünschtes Zeichen entfernen
 			$str_temp = substr($str_temp, 1);
 			if(substr($str_temp, 0, $search_len) == $search) 
 				return true;
@@ -353,8 +353,8 @@
 						<td>" . $menue_data->text . "</td>
 						<td>" . $menue_data->link . "</td>
 						<td>
-							<a href=\"admin.php?page=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=delete&amp;id=" . $menue_data->id . "\" title=\"Lï¿½schen\">
-								<img src=\"./img/del.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"Lï¿½schen\" />
+							<a href=\"admin.php?page=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=delete&amp;id=" . $menue_data->id . "\" title=\"L?schen\">
+								<img src=\"./img/del.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"L?schen\" />
 							</a>
 							<a href=\"admin.php?page=menueeditor&amp;menue_id=" . $menue_id . "&amp;action=up&amp;id=" . $menue_data->id . "\" title=\"Nach Oben\">
 								<img src=\"./img/up.jpg\" height=\"16\" width=\"16\" border=\"0\" alt=\"Nach Oben\"/>
@@ -521,7 +521,7 @@
 				if($file = mysql_fetch_object($file_result)) {
 					if(file_exists($file->file_path)) {
 						$size = kbormb(filesize($file->file_path));
-						$text .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$entrie->inlineentrie_link\" title=\"Download von &quot;$file->file_name&quot; bei einer GrÃ¶ÃŸe von $size\">$entrie->inlineentrie_text</a> ($size)</div>";
+						$text .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$entrie->inlineentrie_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Größe von $size\">$entrie->inlineentrie_text</a> ($size)</div>";
 					}
 				}
 			}
@@ -534,7 +534,7 @@
 	
 	function isUTF8($string)
 	{
-   		if(strpos(utf8_encode($string), "ï¿½", 0) !== false ) // "ï¿½" is ALT+159
+   		if(strpos(utf8_encode($string), "?", 0) !== false ) // "?" is ALT+159
          		return true;  // the original string was utf8
    		return false; // no utf8
 	}

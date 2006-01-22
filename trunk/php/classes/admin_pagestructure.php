@@ -136,16 +136,16 @@
 		 			WHERE page_parent_id=$page->page_id";
 		 		$subpages_result = db_result($sql);
 		 		if($subpage = mysql_fetch_object($subpages_result))
-		 			$out .= "Das löschen von Seiten mit Unterseiten ist zur Zeit nicht möglich!<br /><strong>Tip:</strong> Löschen sie erst alle Unterseiten<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\">Zurück</a>";
+		 			$out .= "Das l&ouml;schen von Seiten mit Unterseiten ist zur Zeit nicht m6ounl;glich!<br /><strong>Tip:</strong> L&ouml;schen sie erst alle Unterseiten<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\">Zur&uuml;ck</a>";
 		 		elseif($sure == 1) {
-		 			$out .= "Löschen...";
+		 			$out .= "L&ouml;schen...";
 		 			$sql = "UPDATE " . DB_PREFIX . "pages
-						SET  page_access='deleted', page_creator='$user->ID', page_date='" . mktime() . "'
+						SET  page_access='deleted', page_creator='$user->id', page_date='" . mktime() . "'
 						WHERE page_id='$page_id'";
 					db_result($sql);
 		 		}
 		 		else
-		 			$out .= "Wollen sie die Seite &quot;$page->page_title&quot; wirklich (vorerst) unwiederruflich löschen?<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$page_id&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
+		 			$out .= "Wollen sie die Seite &quot;$page->page_title&quot; wirklich (vorerst) unwiederruflich l�schen?<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$page_id&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
 		 					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\" class=\"button\">" . $admin_lang['no'] . "</a>";
 		 	
 			 	return $out;
@@ -191,96 +191,80 @@
 				<legend>Neue Seite</legend>
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"add_new\" />
-				<table>
-					<tr>
-						<td>
-							Name/Kürzel:
-							<span class=\"info\">Mit diesem Kürzel wird auf die Seite zugegriffen und dient es zur eindeutigen Identifizierung der Seite.</span>
-						</td>
-						<td>
-							<input type=\"text\" name=\"page_name\" maxlength=\"20\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Titel:
-							<span class=\"info\">Der Titel wird später in der Titelleiste des Browsers angezeigt.</span>
-						</td>
-						<td>
-							<input type=\"text\" name=\"page_title\" maxlength=\"100\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Seiten-Typ:
-							<span class=\"info\">TODO</span>
-						</td>
-						<td>
-							<select name=\"page_type\">
-								<option value=\"text\">Text</option>
-								<option value=\"gallery\">" . $admin_lang['gallery'] ."</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							" . $admin_lang['language'] . ":
-							<span class=\"info\">Der Text soll in der gewählten Sprache geschrieben werden.</span>
-						</td>
-						<td>
-							<select name=\"page_lang\">
-								<option value=\"de\">Deutsch</option>
-								<option value=\"en\">Englisch</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Zugang:
-							<span class=\"info\">Wer soll sich die Seite später anschauen können?<br />
-							Jeder (öffentlich), nur ausgewählte Benutzer (privat) oder soll die Seite nur erstellt werden um sie später zu veröffentlichen (versteckt)?</span>
-						</td>
-						<td>
-							<select name=\"page_access\">
-								<option value=\"public\">" . $admin_lang['public'] . "</option>
-								<option value=\"private\">" . $admin_lang['private'] . "</option>
-								<option value=\"hidden\">" . $admin_lang['hidden'] . "</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Unterseite von:
-							<span class=\"info\">TODO</span>	
-						</td>
-						<td>
-							<select name=\"page_parent_id\">
-								<option value=\"0\">Keiner</option>\r\n";
+				<div class=\"row\">
+					<label class=\"row\">
+						Name/K&uuml;rzel:
+						<span class=\"info\">Mit diesem K&uuml;rzel wird auf die Seite zugegriffen und dient es zur eindeutigen Identifizierung der Seite.</span>
+					</label>
+					<input type=\"text\" name=\"page_name\" maxlength=\"20\" />
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Titel:
+						<span class=\"info\">Der Titel wird sp&auml;ter in der Titelleiste des Browsers angezeigt.</span>
+					</label>
+					<input type=\"text\" name=\"page_title\" maxlength=\"100\" />
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Seiten-Typ:
+						<span class=\"info\">TODO</span>
+					</label>
+					<select name=\"page_type\">
+						<option value=\"text\">Text</option>
+						<option value=\"gallery\">" . $admin_lang['gallery'] ."</option>
+					</select>
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						" . $admin_lang['language'] . ":
+						<span class=\"info\">Der Text soll in der gew&auml;hlten Sprache geschrieben werden.</span>
+					</label>
+					<select name=\"page_lang\">
+						<option value=\"de\">Deutsch</option>
+						<option value=\"en\">Englisch</option>
+					</select>
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Zugang:
+						<span class=\"info\">Wer soll sich die Seite sp&auml;ter anschauen k&ouml;nnen?<br />
+						Jeder (&Ouml;ffentlich), nur ausgew&auml;hlte Benutzer (privat) oder soll die Seite nur erstellt werden um sie sp&auml;ter zu ver&ouml;ffentlichen (versteckt)?</span>
+					</label>
+					<select name=\"page_access\">
+						<option value=\"public\">&Ouml;ffentlich</option>
+						<option value=\"private\">Privat</option>
+						<option value=\"hidden\">Versteckt</option>
+					</select>
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Unterseite von:
+						<span class=\"info\">TODO</span>
+					</label>
+					<select name=\"page_parent_id\">
+						<option value=\"0\">Keiner</option>\r\n";
 		 	$out .= $this->_structurePullDown(0);
-		 	$out .= "\t\t\t\t\t\t\t</select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Kommentar
-							<span class=\"info\">Eine kurze Beschreibung, was hier gemacht wurde.</span>
-						</td>
-						<td><input type=\"text\" name=\"page_edit_comment\" maxlength=\"100\" value=\"" . $admin_lang['created_new_page'] . "\"/></td>
-					</tr>
-					<tr>
-						<td>
-							Bearbeiten?
-							<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die Übersichtseite zurückgekehrt werden?</span>
-						</td>
-						<td><input type=\"checkbox\" name=\"page_edit\" value=\"edit\" checked=\"true\" class=\"checkbox\"/></td>
-					</tr>
-					<tr>
-						<td colspan=\"2\">
-							<input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" />&nbsp;
-							<input type=\"submit\" class=\"button\" value=\"Erstellen\" />
-						</td>
-					</tr>
-				</table>
+		 	$out .= "\t\t\t\t\t</select>
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Kommentar
+						<span class=\"info\">Eine kurze Beschreibung, was hier gemacht wurde.</span>
+					</label>
+					<input type=\"text\" name=\"page_edit_comment\" maxlength=\"100\" value=\"" . $admin_lang['created_new_page'] . "\"/>
+				</div>
+				<div class=\"row\">
+					<label class=\"row\">
+						Bearbeiten?
+						<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die &Uuml;bersichtseite zur&uuml;ckgekehrt werden?</span>
+					</label>
+					<input type=\"checkbox\" name=\"page_edit\" value=\"edit\" checked=\"true\" class=\"checkbox\"/>
+				</div>
+				<div class=\"row\">
+					<input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" />&nbsp;
+					<input type=\"submit\" class=\"button\" value=\"Erstellen\" />
+				</div>
 			</fieldset>
 			</form>";
 		 	return $out;
@@ -332,7 +316,7 @@
 		 				$out .= " <a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen $page->page_title\" title=\"Anschauen\"/></a>";
 		 			// inlinemenu:
 		 			if($page->page_access != 'deleted')
-		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page->page_id\" title=\"Das Zusatzmen&uuml; für &quot;$page->page_title&quot; bearbeiten\">" . $admin_lang['inlinemenu'] . "</a>";
+		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page->page_id\" title=\"Das Zusatzmen&uuml; f�r &quot;$page->page_title&quot; bearbeiten\">" . $admin_lang['inlinemenu'] . "</a>";
 		 			// delete:
 		 			if($page->page_access != 'deleted')
 		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=delete&amp;page_id=$page->page_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
@@ -379,7 +363,7 @@
 					case 'link':		include('classes/edit_link_page.php');
 								$edit = new Edit_Link_Page();
 								break;			
-					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> lässt sich noch nicht bearbeiten.";
+					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> l�sst sich noch nicht bearbeiten.";
 								break;
 				}
 				if($edit !== null)
@@ -404,7 +388,7 @@
 					case 'gallery':		include('classes/edit_gallery_page.php');
 								$edit = new Edit_Gallery_Page();
 								break;				
-					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> lässt sich noch nicht bearbeiten.";
+					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> l�sst sich noch nicht bearbeiten.";
 								break;
 				}
 				if($edit !== null)
@@ -440,7 +424,7 @@
 				case 'link':		include('classes/edit_link_page.php');
 							$edit = new Edit_Link_Page();
 							break;
-				default:		$out .= "Der Seitentyp <strong>$page_type</strong> lässt sich noch nicht bearbeiten.";
+				default:		$out .= "Der Seitentyp <strong>$page_type</strong> l�sst sich noch nicht bearbeiten.";
 							return $out;
 			}
 			if($edit !== null) {
@@ -465,7 +449,7 @@
 						db_result($sql);
 						$history_id = mysql_insert_id();
 						$sql = "UPDATE " . DB_PREFIX . "pages
-							SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment', page_access='$page_access', page_type='$page_type', page_parent_id='$page_parent_id'
+							SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment', page_access='$page_access', page_type='$page_type', page_parent_id='$page_parent_id'
 							WHERE page_id=$exists->page_id";
 						db_result($sql);
 						$lastid = $exists->page_id;
@@ -477,7 +461,7 @@
 				}
 				else {// dont extist
 					$sql = "INSERT INTO " . DB_PREFIX . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)
-						VALUES('$page_lang', '$page_access', '$page_name', '$page_title', $page_parent_id, $user->ID, '$page_type', " . mktime() . ", '$page_edit_comment')";
+						VALUES('$page_lang', '$page_access', '$page_name', '$page_title', $page_parent_id, $user->id, '$page_type', " . mktime() . ", '$page_edit_comment')";
 					db_result($sql);
 					$lastid = mysql_insert_id();
 					$edit->NewPage($lastid);
@@ -534,7 +518,7 @@
 				
 			
 			if($inline->inlinemenu_html === null && $action2 != 'create') {
-				$out .= "Es wurde bis jetzt kein Zusatzmenü erstellt, soll das nun geschehen?<br />
+				$out .= "Es wurde bis jetzt kein Zusatzmen� erstellt, soll das nun geschehen?<br />
 				<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;action2=create&amp;page_id=$page_id&amp;sure=1\" title=\"" . $admin_lang['yes'] . "\" class=\"button\">" . $admin_lang['yes'] . "</a>
 				<a href=\"admin.php?page=pagestructure\" title=\"" . $admin_lang['no'] . "\" class=\"button\">" . $admin_lang['no'] . "</a>";
 				return $out;
@@ -675,7 +659,7 @@
  						header("Location: admin.php?page=pagestructure&action=inlinemenu&page_id=$page_id");
  					}
  					else {
-						$out .= "Sind sie sicher das die das Element &quot;$entrie->inlineentrie_text&quot; unwiederruflich löschen?<br />
+						$out .= "Sind sie sicher das die das Element &quot;$entrie->inlineentrie_text&quot; unwiederruflich l�schen?<br />
 							<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;entrie_id=$entrie_id&amp;action2=delete&amp;sure=1&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['yes'] . "</a >
 							<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id\"class=\"button\">" . $admin_lang['no'] . "</a >";
 					}
@@ -735,8 +719,8 @@
 						<input type=\"hidden\" name=\"type\" value=\"link\" />
 						<table>
 						<tr><td>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></td><td><input type=\"text\" name=\"text\" value=\"\" /></td></tr>
-						<tr><td>Link<span class=\"info\">Hier kommt die URL hin die den Link später ergibt.</span></td><td><input type=\"text\" name=\"link\" value=\"http://\" /></td></tr>
-						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
+						<tr><td>Link<span class=\"info\">Hier kommt die URL hin die den Link sp�ter ergibt.</span></td><td><input type=\"text\" name=\"link\" value=\"http://\" /></td></tr>
+						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zur�cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
 						</table>
 						</form>";
 				}
@@ -748,8 +732,8 @@
 						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
 						<input type=\"hidden\" name=\"type\" value=\"text\" />
 						<table>
-						<tr><td>Text<span class=\"info\">Das ist der Text, der später angezeigt werden soll</span></td><td><textarea name=\"text\"></textarea></td></tr>
-						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
+						<tr><td>Text<span class=\"info\">Das ist der Text, der sp�ter angezeigt werden soll</span></td><td><textarea name=\"text\"></textarea></td></tr>
+						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zur�cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
 						</table>
 						</form>";
 				}
@@ -762,7 +746,7 @@
 						<input type=\"hidden\" name=\"type\" value=\"intern\" />
 						<table>
 						<tr><td>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></td><td><input type=\"text\" name=\"text\" value=\"\" /></td></tr>
-						<tr><td>Interne Seite<span class=\"info\">Das ist die interne Seite, auf die der Link später führen soll.</span></td><td><select name=\"link\">";
+						<tr><td>Interne Seite<span class=\"info\">Das ist die interne Seite, auf die der Link sp�ter f�hren soll.</span></td><td><select name=\"link\">";
 			$sql = "SELECT page_name, page_title
 				FROM " . DB_PREFIX . "pages
 				ORDER BY page_title ASC";
@@ -772,7 +756,7 @@
 			}
 			
 			$out .= "</select></td></tr>
-						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zur�cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
+						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zur?cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
 						</table>
 						</form>";
 				}
@@ -784,7 +768,7 @@
 						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
 						<input type=\"hidden\" name=\"type\" value=\"download\" />
 						<fieldset>
-							<legend>Download Hinzufügen</legend>
+							<legend>Download Hinzuf�gen</legend>
 						
 						<div class=\"row\">
 							<label class=\"row\" for=\"download_text\">
@@ -795,8 +779,8 @@
 						</div>
 						<div class=\"row\">
 							<label class=\"row\" for=\"link\">
-								Datei für den Download:
-								<span class=\"info\">Die hier angegebene Datei kann dann später heruntergeladen werden.</span>
+								Datei f�r den Download:
+								<span class=\"info\">Die hier angegebene Datei kann dann sp�ter heruntergeladen werden.</span>
 							</label>
 							<select name=\"link\" id=\"link\">";
 					$sql = "SELECT *
@@ -809,7 +793,7 @@
 					}			
 					$out .= "</select>
 							</div>
-							<div class=\"row\"><input type=\"reset\" class=\"button\" value=\"Zurücksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></div>
+							<div class=\"row\"><input type=\"reset\" class=\"button\" value=\"Zur�cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></div>
 						</fieldset>
 						</form>";
 				}
@@ -878,13 +862,13 @@
 					<legend>" . $admin_lang['inlinemenu'] . "</legend>
 				<div class=\"row\">
 						<label class=\"row\">
-							Bild für das Zusatzmen&uuml;
+							Bild f�r das Zusatzmen&uuml;
 							<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmen&uuml; zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgew&auml;hlt werden.</span>
 						</label>
 						$image
 				</div>
 				<div class=\"row\">
-					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=select_image\" class=\"button\">Bild auswählen/ver&auml;ndern</a>
+					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=select_image\" class=\"button\">Bild ausw�hlen/ver&auml;ndern</a>
 					" .((file_exists($inline->inlinemenu_image)) ?  "<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=remove_image\" class=\"button\">Bild entfernen</a>" : '') . "
 				</div>";
 				$sql = "SELECT *
@@ -907,7 +891,7 @@
 					</tr>";
 				}
 				$out .= "</table>
-					<div class=\"row\"><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=add_new_dialog\" class=\"button\">Einen Eintrag hinzufügen</a></div>
+					<div class=\"row\"><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=add_new_dialog\" class=\"button\">Einen Eintrag hinzuf�gen</a></div>
 					</fieldset>";
 			}
 			return $out;
@@ -1052,12 +1036,12 @@
 					ORDER BY page_date DESC";
 				$result = db_result($sql);
 				$changes_count = mysql_num_rows($result);
-				$out .="\t\t\t<h4>Veränderungen($changes_count)</h4><hr />
+				$out .="\t\t\t<h4>Ver&auml;nderungen($changes_count)</h4><hr />
 			<table class=\"page_commits\">
 				<thead>
 					<tr>
 						<td>Datum</td>
-						<td>Veränderer</td>
+						<td>Ver&auml;nderer</td>
 						<td>Titel</td>
 						<td>Kommentar</td>
 						<td>Aktionen</td>

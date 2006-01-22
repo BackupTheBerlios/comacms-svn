@@ -23,11 +23,11 @@
 	
 	include('common.php');
 
-	if(!$user->IsLoggedIn)  {
-		header('Location: special.php?page=login' . (($user->LoginError != -1) ? ('&error=' . $user->LoginError) : ''));
+	if(!$user->isLoggedIn)  {
+		header('Location: special.php?page=login' . (($user->loginError != -1) ? ('&error=' . $user->loginError) : ''));
 		die();
 	}
-	if(!$user->IsAdmin && $user->IsLoggedIn) {
+	if(!$user->isAdmin && $user->isLoggedIn) {
 		header('Location: index.php');
 		die();
 	}
@@ -38,7 +38,7 @@
 	/**
 	 * @ignore
 	 */
-	include('./lang/' . $user->Language . '/admin_lang.php');
+	include('./lang/' . $user->language . '/admin_lang.php');
 	include('./system/admin_pages.php');
 	$menu_array = array();
 	$menu_array[] = array($admin_lang['admincontrol'], 'admin.php?page=admincontrol');
@@ -53,12 +53,15 @@
 	$menu_array[] = array($admin_lang['articles'], 'admin.php?page=articles');
 	$menu_array[] = array($admin_lang['sitestyle'], 'admin.php?page=sitestyle');
 	$menu_array[] = array($admin_lang['users'], 'admin.php?page=users');
+	$menu_array[] = array($admin_lang['groups'], 'admin.php?page=groups');
+	$menu_array[] = array($admin_lang['rights'], 'admin.php?page=rights');
 	$menu_array[] = array($admin_lang['files'], 'admin.php?page=files');
 	$menu_array[] = array($admin_lang['logout'], 'admin.php?page=logout');
 	
 	// FIXME: add path links to make the usability much better! 
 	$path_add = '';
 	// insert the 'functions' here
+	$extern_action = GetPostOrGet('action');
 	if(!isset($extern_page))
 		$extern_page = 'admincontrol';
 	if($extern_page == '')
@@ -137,6 +140,18 @@
 		include('classes/admin_pagestructure.php');
 		$admin_page = new Admin_PageStructure();
 		$text = $admin_page->GetPage($extern_action);
+	}
+	elseif($extern_page == 'groups') {
+		$title = $admin_lang['groups'];
+		include('classes/admin_groups.php');
+		$admin_page = new Admin_Groups();
+		$text = $admin_page->GetPage($extern_action, $admin_lang);
+	}
+	elseif($extern_page == 'rights') {
+		$title = $admin_lang['rights'];
+		include('classes/admin_rights.php');
+		$admin_page = new Admin_Rights();
+		$text = $admin_page->GetPage($extern_action, $admin_lang);
 	}
 	//
 	// end of the 'functions'

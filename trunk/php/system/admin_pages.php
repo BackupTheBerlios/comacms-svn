@@ -18,81 +18,6 @@
 	/**
 	 * This file contains (nearly) all subsites in the admin-interface
 	 */
-	
-	/**
-	 * returns the AdminControl-page with a list of useful details about the page
-	 * and a list of all visitors
-	 */
-
-	/*function page_admincontrol() {
-		global $admin_lang, $config;
-		//
-		// get the coutnt of all pages
-		//
-		$sitedata_result = db_result("SELECT page_id FROM " . DB_PREFIX . "pages_text");
-		$page_count = mysql_num_rows($sitedata_result);
-		//
-		// get the count of all registered users
-		//
-		$users_result = db_result("SELECT user_id FROM " . DB_PREFIX . "users");
-		$users_count = mysql_num_rows($users_result);
-		//
-		// get the size of all tables with the prefix DB_PREFIX
-		//
-		$table_infos_result = db_result("SHOW TABLE STATUS");
-		$data_size = 0;
-		while($table_infos = mysql_fetch_object($table_infos_result)) {
-			if(substr($table_infos->Name, 0, strlen(DB_PREFIX)) == DB_PREFIX)
-				$data_size += $table_infos->Data_length + $table_infos->Index_length;
-		}
-		$installdate = $config->Get('install_date');
-		if($installdate == '') {
-			$config->Save('install_date', mktime());
-			$installdate = mktime();
-		}
-		
-		$out = "<h3>AdminControl</h3><hr />
-	<table>
-		<tr><td>" . $admin_lang['online since'] . "</td><td>". date("d.m.Y",$installdate) . "</td></tr>
-		<tr><td>" . $admin_lang['registered users'] . "</td><td>$users_count</td></tr>
-		<tr><td>" . $admin_lang['created pages'] . "</td><td>$page_count</td></tr>
-		<tr><td>" . $admin_lang['database size'] . "</td><td>" . kbormb($data_size) . "</td></tr>
-	</table>
-	
-	<h3>Aktuelle Besucher</h3><hr />
-	<table>
-		<tr>
-			<td>".$admin_lang['name']."</td>
-			<td>".$admin_lang['page']."</td>
-			<td>".$admin_lang['last action']."</td>
-			<td>".$admin_lang['language']."</td>
-			<td>".$admin_lang['ip']."</td>
-			<td>".$admin_lang['host']."</td>
-		</tr>";
-		//output all visitors surfing on the site
-		$sql = "SELECT userid, page, lastaction, lang, ip, host
-			FROM " . DB_PREFIX . "online
-			WHERE lastaction >= " . (mktime() - 300) . "";
-		$users_online_result = db_result($sql);
-		while($users_online = mysql_fetch_object($users_online_result)) {
-			if($users_online->userid == 0)
-				$username  = $admin_lang['not registered'];
-			else
-				$username = getUserById($users_online->userid);
-			$out .= "\t\t\t<tr>
-			<td>".$username."</td>
-			<td><a href=\"index.php?page=".$users_online->page."\">".$users_online->page."</a></td>
-			<td>" . date("d.m.Y H:i:s", $users_online->lastaction)."</td>
-			<td>" . $admin_lang[$users_online->lang] . "</td>
-			<td>" . $users_online->ip . "</td>
-			<td>" . $users_online->host . "</td>
-		</tr>\r\n";
-		}
-
-		$out .= "</table>";
-	
-		return $out;
-	}*/
 
 /*****************************************************************************
  *
@@ -119,7 +44,7 @@
  * it is possible to choose between two menues by $menue_id
  *
  *****************************************************************************/
-
+/*
 	function page_menueeditor() {
 		global $_GET,$_POST, $admin_language;
 	
@@ -137,11 +62,11 @@
 		// write the 'coose menue'  to make it able to switch betwen both possible menues
 		//
 		if($menue_id == "2")
-			$out .= "\t\t\t\t<li><a href=\"admin.php?page=menueeditor&amp;menue_id=1\">Menü 1</a></li>
-				<li><u>Menü 2</u></li>\r\n";
+			$out .= "\t\t\t\t<li><a href=\"admin.php?page=menueeditor&amp;menue_id=1\">Men� 1</a></li>
+				<li><u>Men� 2</u></li>\r\n";
 		else {
-			$out .= "\t\t\t\t<li><u>Menü 1</u></li>
-				<li><a href=\"admin.php?page=menueeditor&amp;menue_id=2\">Menü 2</a></li>\r\n";
+			$out .= "\t\t\t\t<li><u>Men� 1</u></li>
+				<li><a href=\"admin.php?page=menueeditor&amp;menue_id=2\">Men� 2</a></li>\r\n";
 			$menue_id = 1;
 		}
 		$out .= "\t\t\t</ul>\r\n";
@@ -217,8 +142,8 @@
 				else {
 					$_result = db_result("SELECT * FROM ".DB_PREFIX."menue WHERE id=".$id."");
 					$_data = mysql_fetch_object($_result);
-					$out .= "\t\t\t<div class=\"error\">Soll der Link ".$_data->text."(".$_data->link.") wirklich gelöscht werden?<br />
-			<a href=\"admin.php?page=menueeditor&amp;action=delete&amp;menue_id=".$menue_id."&amp;id=".$id."&amp;sure=1\" title=\"Wirklich Löschen?\">Ja</a> &nbsp;&nbsp;&nbsp; <a href=\"admin.php?page=menueeditor&amp;menue_id=".$menue_id."\" title=\"Nein! nicht löschen\">Nein</a></div>";
+					$out .= "\t\t\t<div class=\"error\">Soll der Link ".$_data->text."(".$_data->link.") wirklich gel�scht werden?<br />
+			<a href=\"admin.php?page=menueeditor&amp;action=delete&amp;menue_id=".$menue_id."&amp;id=".$id."&amp;sure=1\" title=\"Wirklich L�schen?\">Ja</a> &nbsp;&nbsp;&nbsp; <a href=\"admin.php?page=menueeditor&amp;menue_id=".$menue_id."\" title=\"Nein! nicht l�schen\">Nein</a></div>";
 					
 					return $out;
 				}
@@ -316,13 +241,13 @@
 						<td><input type=\"checkbox\" name=\"new_window\" /></td>
 					</tr>
 					<tr>
-						<td colspan=\"2\"><input type=\"submit\" value=\"Hinzufügen\" /></td>
+						<td colspan=\"2\"><input type=\"submit\" value=\"Hinzuf�gen\" /></td>
 					</tr>
 				</table>
 			</form>";
 	
 		return $out;
-	}
+	}*/
 /*****************************************************************************
  *
  * string page_sitesytle()
@@ -441,9 +366,9 @@
 				else {
 					$result = db_result("SELECT * FROM " . DB_PREFIX . "news WHERE id=" . $id);
 					$row = mysql_fetch_object($result);
-					$out .= "Den News Eintrag &quot;" . $row->title . "&quot; wirklich l?schen?<br />
-				<a href=\"admin.php?page=news&amp;action=delete&amp;id=" . $id . "&amp;sure=1\" title=\"Wirklich Löschen\" class=\"button\">Ja</a>
-				<a href=\"admin.php?page=news\" title=\"Nicht Löschen\" class=\"button\">Nein</a>";
+					$out .= "Den News Eintrag &quot;" . $row->title . "&quot; wirklich l&ouml;schen?<br />
+				<a href=\"admin.php?page=news&amp;action=delete&amp;id=" . $id . "&amp;sure=1\" title=\"Wirklich L&ouml;schen\" class=\"button\">Ja</a>
+				<a href=\"admin.php?page=news\" title=\"Nicht L�schen\" class=\"button\">Nein</a>";
 				
 					return $out;
 				}
@@ -453,7 +378,7 @@
 			//
 			elseif($action == "new") {
 				if($text != "" && $title != "")
-					db_result("INSERT INTO ".DB_PREFIX."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$user->ID')");
+					db_result("INSERT INTO ".DB_PREFIX."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$user->id')");
 			}
 			//
 			// update the selected entrie
@@ -472,7 +397,7 @@
 			<input type=\"hidden\" name=\"action\" value=\"new\" />
 			Titel: <input type=\"text\" name=\"title\" maxlength=\"60\" value=\"\" /><br />
 			<textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea><br />
-			Eingelogt als " . $user->Showname . " <input class=\"button\" type=\"submit\" value=\"Senden\" /><br />
+			Eingelogt als " . $user->showname . " <input class=\"button\" type=\"submit\" value=\"Senden\" /><br />
 		</form>";
 		}
 			$out .= "\t\t<form method=\"post\" action=\"admin.php\">
@@ -492,7 +417,7 @@
 					<td colspan=\"2\" id=\"newsid" . $row->id . "\">
 						<input type=\"hidden\" name=\"id\" value=\"".$row->id."\" />
 						<input type=\"submit\" value=\"Speichern\" class=\"button\" />
-						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"Löschen\"  class=\"button\">Löschen</a>
+						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"L&ouml;schen\"  class=\"button\">L&ouml;schen</a>
 					</td>
 				</tr>
 				<tr>
@@ -522,7 +447,7 @@
 					<td colspan=\"2\">
 						<a id=\"newsid".$row->id."\" ></a>
 						<a href=\"admin.php?page=news&amp;action=edit&amp;id=".$row->id."#newsid".$row->id."\" title=\"Bearbeiten\" class=\"button\">Bearbeiten</a>
-						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"L?schen\" class=\"button\">Löschen</a>
+						<a href=\"admin.php?page=news&amp;action=delete&amp;id=".$row->id."\" title=\"L&ouml;schen\" class=\"button\">L&ouml;schen</a>
 					</td>
 				</tr>
 				<tr>
@@ -611,7 +536,7 @@
 					else
 						$user_admin = "user_admin= 'n', ";
 					$user_icq = str_replace("-", "", $user_icq);
-					if($user_id == $user->ID) {
+					if($user_id == $user->id) {
 						if($user_password_confirm != "")
 							$actual_user_passwd_md5 = md5($user_password_confirm);
 						$actual_user_name = $user_name;
@@ -630,7 +555,7 @@
 					else
 						$sure = $_POST['sure'];
 					
-					if($sure == 1 && $user_id != $user->ID) {
+					if($sure == 1 && $user_id != $user->id) {
 						$sql = "SELECT *
 							FROM " . DB_PREFIX . "users
 							WHERE user_id=$user_id";
@@ -648,9 +573,9 @@
 						WHERE user_id=$user_id";
 					$result = db_result($sql);
 					$user = mysql_fetch_object($result);
-					$out .= "Den Benutzer &quot;" . $user->user_showname . "&quot; unwiederruflich löschen?<br />
-				<a href=\"admin.php?page=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich Löschen\" class=\"button\">" . $admin_lang['yes'] . "</a>
-				<a href=\"admin.php?page=users\" title=\"Nicht Löschen\" class=\"button\">" . $admin_lang['no'] . "</a>";
+					$out .= "Den Benutzer &quot;" . $user->user_showname . "&quot; unwiederruflich l�schen?<br />
+				<a href=\"admin.php?page=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich L�schen\" class=\"button\">" . $admin_lang['yes'] . "</a>
+				<a href=\"admin.php?page=users\" title=\"Nicht L�schen\" class=\"button\">" . $admin_lang['no'] . "</a>";
 					
 					return $out;
 				}
@@ -696,7 +621,7 @@
 							Nick:\r\n";
 					if($action == "add-error" || $action == "save-error" && $user_name == "")
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Nick muss angegeben werden.</span>\r\n";		
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umständen komplizierten Namen,der angezeigt wird, eingeben muss. (Notwendig)</span>
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umst�nden komplizierten Namen,der angezeigt wird, eingeben muss. (Notwendig)</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"user_name\" value=\"".$user_name."\" />
@@ -706,8 +631,8 @@
 						<td>
 							E-Mail:\r\n";
 					if($action == "add-error" || $action == "save-error" && $user_email != "" && !isEMailAddress($user_email))
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene E-Mail-Adresse ist ungültig.</span>\r\n";		
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Über die E-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene E-Mail-Adresse ist ung�ltig.</span>\r\n";		
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">�ber die E-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"user_email\" value=\"".$user_email."\" />
@@ -717,7 +642,7 @@
 						<td>
 							ICQ:\r\n";
 					if(($action == "add-error" || $action == "save-error") && ($user_icq != "" && !isIcqNumber($user_icq)))
-						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene ICQ-Nummer ist ungültig.</span>\r\n";		
+						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene ICQ-Nummer ist ung�ltig.</span>\r\n";		
 					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Die ICQ Nummer kann angegben werden, ist aber nicht dirngend notwendig.</span>
 						</td>
 						<td>
@@ -742,9 +667,9 @@
 					}
 					if($action == "add-error" && $user_password_confirm == "" && $user_password != "")
 						$user_password = "";
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit diesem Passwort kann sich der Benutzer in die geschützten Bereiche einloggen. (";
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit diesem Passwort kann sich der Benutzer in die gesch�tzten Bereiche einloggen. (";
 					if($action == "save-error" || $action == "edit")
-						$out .= "Wenn beide Felder für das Passwort leer gelassen werden, wird das Passwort nicht verändert.";
+						$out .= "Wenn beide Felder f�r das Passwort leer gelassen werden, wird das Passwort nicht ver�ndert.";
 					elseif($action == "add-error" || $action == "new")
 						$out .= "Notwendig";
 					$out .= ")</span>
@@ -777,7 +702,7 @@
 					<tr>
 						<td>
 							Administrator:
-							<span class=\"info\">Ist ein Benutzer Administrator so hat er keinerlei Einschränkungen in seinem Handeln. <strong>Nur auswählen wenn es wirklich Notwendig ist.</strong></span>
+							<span class=\"info\">Ist ein Benutzer Administrator so hat er keinerlei Einschr�nkungen in seinem Handeln. <strong>Nur ausw�hlen wenn es wirklich Notwendig ist.</strong></span>
 						</td>
 						<td>
 							<input type=\"checkbox\" name=\"user_admin\"";
@@ -807,7 +732,7 @@
 				<tr>
 					<td>id</td>
 					<td>" . $admin_lang['name'] . "</td>
-					<td>Kürzel</td>
+					<td>K�rzel</td>
 					<td>email</td>
 					<td>Admin</td>
 					<td colspan=\"2\">Aktionen</td>
@@ -830,7 +755,7 @@
 					<td><a href=\"".$PHP_SELF."?page=users&amp;action=edit&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a></td>
 					<td>";
 					
-					if($user->ID == $user_db->user_id)
+					if($user->id == $user_db->user_id)
 						$out .= "&nbsp;";
 					else
 						$out .= "<a href=\"".$PHP_SELF."?page=users&amp;action=delete&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
@@ -957,805 +882,5 @@
 		return $out;
 	}
 
-/*****************************************************************************
- *
- * string page_gallery_editor()
- * returns the gallery-admin-page where you can add, change and delete gallerys
- *
- *****************************************************************************/
-/*	function page_gallery_editor() {
-		global $admin_lang, $extern_action, $_SERVER, $extern_images, $extern_gallery_name, $extern_gallery_title, $actual_user_id;
-		
-		if(!isset($extern_action))
-			$extern_action = '';
-		if(!isset($extern_gallery_name))
-			$extern_gallery_name = '';
-		if(!isset($extern_gallery_title))
-			$extern_gallery_title = '';
-		if($extern_images === null)
-			$extern_images = array();
-			
-		$out = "<h3>" . $admin_lang['gallery editor'] . "</h3><hr />\r\n";
-		if($extern_action == 'select') {
-		
-			$out .= "Bilder ausw?hlen
-				<form  action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
-					<input type=\"hidden\" name=\"page\" value=\"gallery_editor\"/>
-					<input type=\"hidden\" name=\"action\" value=\"new\" />
-					<table>
-						<tr>
-							<td>
-								Bilder:
-								<span class=\"info\">TODO</span>
-							</td>
-						<td>
-					";
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "files
-					WHERE file_type LIKE 'image/%'
-					ORDER BY file_name ASC";
-				$images_result = db_result($sql);
-				while($image = mysql_fetch_object($images_result)) {
-					$thumb = str_replace('/upload/', '/thumbnails/', $image->file_path);
-					preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
-					//echo $thumb."<br />";
-					if(strtolower($ext[2]) == 'gif')
-						$thumb .= '.png';
-					
-					$succes = true;
-					$imgmax = 100;
-					if(!file_exists($thumb))
-						$succes = generateThumb($image->file_path, $imgmax);
-					if(file_exists($thumb) || $succes) {
-						$sizes = getimagesize($thumb);
-						$margin_top = round(($imgmax - $sizes[1]) / 2);
-						$margin_bottom = $imgmax - $sizes[1] - $margin_top;
-						$out .= "<div class=\"imageblock\">
-						<a href=\"" . generateUrl($image->file_path) . "\">
-						<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($thumb) . "\" alt=\"$thumb\" /></a><br />
-						<input type=\"checkbox\" name=\"images[]\" value=\"$image->file_id\"/>Ausw?hlen</div>";
-					}
-				}
-			$out .= "</td>
-				</tr>
-				<tr>
-					<td colspan=\"2\">
-						<input class=\"button\" type=\"reset\" value=\"Auswahl r?ckg?ngig machen\" />&nbsp;
-						<input class=\"button\" type=\"Submit\" value=\"Als Gallerie Zusammenfassen\"/>
-					</td>
-				</tr>
-			</table>
-		</form>";
-			return $out;
-		}
-		elseif($extern_action == 'add') {
-			//
-			// TODO: check for correct inputs
-			//
-			$page_text = implode(',', $extern_images);
-			
-			foreach($extern_images as $id) {
-				$sql = "SELECT file_path
-					FROM " . DB_PREFIX . "files
-					WHERE file_id=$id";
-				$image_result = db_result($sql);
-				$image = mysql_fetch_object($image_result);
-				$page_text .=  "\r\n" . $image->file_path;
-			}
-			//$out .= $page_text;
-			$sql = "INSERT INTO " . DB_PREFIX . "pages_content (page_name, page_type, page_title, page_text, page_lang, page_html, page_parent_id, page_creator, page_created, page_visible)
-					VALUES ('$extern_gallery_name', 'gallery', '$extern_gallery_title', '$page_text', '', '', '0', '$actual_user_id', '" . mktime() . "','public')";
-			db_result($sql);
-			
-		}
-		elseif($extern_action == 'overview') {
-			$out .= generatePagesTree(0, "\t\t\t", '', true, true,'gallery');
-		}
-		elseif($extern_action == 'new') {
-			//$images = array();
-			
-			
-			$out .= "<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">
-			<input type=\"hidden\" name=\"page\" value=\"gallery_editor\" />
-			<input type=\"hidden\" name=\"action\" value=\"add\" />
-			<table>
-			<tr>
-				<td>
-					Titel:
-					<span class=\"info\">TODO</span>
-				</td>
-				<td>
-					<input type=\"text\" name=\"gallery_title\"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					Name:
-					<span class=\"info\">TODO</span>
-				</td>
-				<td>
-					<input type=\"text\" name=\"gallery_name\"/>
-				</td>
-			</tr>
-			<tr>
-				<td class=\"topdesc\">
-					Bilder:
-					<span class=\"info\">TODO</span>
-				</td>
-				<td>";
-			foreach($extern_images as $id) {
-				$sql = "SELECT file_path
-					FROM " . DB_PREFIX . "files
-					WHERE file_id=$id";
-				$image_result = db_result($sql);
-				$image = mysql_fetch_object($image_result);
-				$thumb = str_replace('/upload/', '/thumbnails/', $image->file_path);
-				preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
-				//echo $thumb."<br />";
-				if(strtolower($ext[2]) == 'gif')
-					$thumb .= '.png';
-				
-				$succes = true;
-				$imgmax = 100;
-				if(!file_exists($thumb))
-					$succes = generateThumb($image->file_path, $imgmax);
-				if(file_exists($thumb) || $succes) {
-					$sizes = getimagesize($thumb);
-					$margin_top = round(($imgmax - $sizes[1]) / 2);
-					$margin_bottom = $imgmax - $sizes[1] - $margin_top;
-					$out .= "<div class=\"imageblock\">
-							<a href=\"" . generateUrl($image->file_path) . "\">
-								<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($thumb) . "\" alt=\"$thumb\" />
-							</a>
-							<br />
-							<input type=\"checkbox\" name=\"images[]\" value=\"$id\" checked=\"checked\"/>Ausw?hlen
-						</div>";
-				}
-			}
-			$out .= "</td>
-			</tr>
-			<tr>
-				<td colspan=\"2\">
-					<a class=\"button\" href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=select\">Zur?ck</a><input class=\"button\" type=\"submit\" value=\"Erstellen\"/>
-				</td>
-			</tr>
-		</table>
-		</form>";
-		}
-		else {
-			$out .= "Bilder Verwalten<br />
-				&nbsp;-Hinzuf?gen/Hochladen<br />
-				&nbsp;-Bearbeiten<br />
-				&nbsp;-L?schen<br />
-			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=select\">Neue Gallerie</a><br />
-			<a href=\"" . $_SERVER['PHP_SELF'] . "?page=gallery_editor&amp;action=overview\">?bersicht</a><br />
-				&nbsp;-Infos<br />
-				&nbsp;-Bearbeiten<br />
-				&nbsp;-L?schen";
-			
-		}
-		
-		return $out;
-	}*/
-/*****************************************************************************
- *
- *  string page_dates()
- *  returns the date-admin-page where you can write,change and delete topic-entries
- *
- *****************************************************************************/
- 	/*function page_dates() {
- 		global $admin_lang, $extern_action, $extern_sure, $extern_topic, $extern_date, $extern_place, $extern_id, $_SERVER, $actual_user_id, $actual_user_showname, $user;
-		
-		if(!isset($extern_action))
-			$extern_action = '';
-		
-		$out = "\t\t\t<h3>" . $admin_lang['dates'] . "</h3><hr />\r\n";
-		
-		//
-		// delete the selected entrie
-		//
-		if($extern_action == "delete") {
-			if(isset($extern_sure)) {
-							
-				if($extern_sure == 1)
-					db_result("DELETE FROM " . DB_PREFIX . "dates WHERE date_id=" . $extern_id);
-			}
-			else {
-				$result = db_result("SELECT * FROM " . DB_PREFIX . "dates WHERE date_id=" . $extern_id);
-				$row = mysql_fetch_object($result);
-				$out .= "Den News Eintrag &quot;" . $row->date_topic . "&quot; wirklich l?schen?<br />
-			<a href=\"admin.php?page=dates&amp;action=delete&amp;id=" . $extern_id . "&amp;sure=1\" title=\"Wirklich L?schen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
-			<a href=\"admin.php?page=dates\" title=\"Nicht L?schen\">nein</a>";
-			
-				return $out;
-			}
-		}
-		//
-		// add a new entrie
-		//
-		elseif($extern_action == "new") {
-			if($extern_topic != "" && $extern_place != "" && $extern_date != "") {
-				$date = explode(".", $extern_date);
-				db_result("INSERT INTO ".DB_PREFIX."dates (date_topic, date_place, date_date, date_creator) VALUES ('".$extern_topic."', '".$extern_place."', '".mktime(0, 0, 0, $date[1], $date[0], $date[2])."', '$user->ID')");
-			}	
-		}
-		//
-		// update the selected entrie
-		//
-		elseif($extern_action == "update") { 
-			if($extern_topic != "" && $extern_place != "" && $extern_date != "" && $extern_id != 0) {
-				$date = explode(".", $extern_date);
-				db_result("UPDATE ".DB_PREFIX."dates SET date_topic= '".$extern_topic."', date_place= '".$extern_place."', date_date='".mktime(0, 0, 0, $date[1], $date[0], $date[2])."' WHERE date_id=".$extern_id);
-			}
-		}
-		
-		if($extern_action != "edit") {
-			$out .= "\t\t\t<form method=\"post\" action=\"admin.php\">
-				<input type=\"hidden\" name=\"page\" value=\"dates\" />
-				<input type=\"hidden\" name=\"action\" value=\"new\" />
-				<table>
-					<tr>
-						<td>" . $admin_lang['date'] . ": <span class=\"info\">Dies ist das Datum, an dem die Veranstaltung stattfindet (Format: TT.MM.YYYY, Beispiel: 05.11.2005)</span></td>
-						<td><input type=\"text\" name=\"date\" maxlength=\"10\" value=\"\" /></td>
-					</tr>
-					<tr>
-						<td>" . $admin_lang['location'] . ": <span class=\"info\">Gemeint ist hier der Ort an welchem die Veranstaltung stattfindet.</span></td>
-						<td><input type=\"text\" name=\"place\" maxlength=\"60\" value=\"\" /></td>
-					</tr>
-					<tr>
-						<td>" . $admin_lang['topic'] . ": <span class=\"info\">Dies ist die Beschreibung des Termins</span></td>
-						<td><input type=\"text\" name=\"topic\" maxlength=\"150\" /></td>
-					</tr>
-					<tr>
-						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Senden\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zur?cksetzen\" /></td>
-					</tr>
-				</table>
-				<br />
-			</form>\r\n";
-		}
-			$out .= "\t\t\t<form method=\"post\" action=\"admin.php\">
-				<input type=\"hidden\" name=\"page\" value=\"dates\" />
-				<input type=\"hidden\" name=\"action\" value=\"update\" />
-				<table>
-					<tr>
-						<td>" . $admin_lang['date'] . ":</td>
-						<td>" . $admin_lang['location'] . ":</td>
-						<td>" . $admin_lang['topic'] . ":</td>
-						<td>" . $admin_lang['creator'] . ":</td>
-						<td>" . $admin_lang['actions'] . ":</td>
-					</tr>\r\n";
-		//
-		// write all news entries
-		//
-		$result = db_result("SELECT * FROM " . DB_PREFIX . "dates ORDER BY date_date ASC");
-		while($row = mysql_fetch_object($result)) {
-			//
-			// show an editform for the selected entrie
-			//
-			if($extern_id == $row->date_id && $extern_action == "edit") {
-				$out .= "\t\t\t\t\t<tr id=\"dateid" . $row->date_id . "\">
-						<td>
-							<input type=\"hidden\" name=\"id\" value=\"".$row->date_id."\" />
-							<input type=\"text\" name=\"date\" maxlength=\"10\" value=\"" . date("d.m.Y", $row->date_date) . "\" />
-						</td>
-						<td>
-							<input type=\"text\" name=\"place\" maxlength=\"60\" value=\"" . $row->date_place . "\" />
-						</td>
-						<td>
-							<input type=\"text\" name=\"topic\" value=\"" . $row->date_topic . "\" maxlength=\"150\" />
-						</td>
-						<td>
-							" . getUserByID($row->date_creator) . "
-						</td>
-						<td>
-							<input type=\"submit\" value=\"Speichern\" class=\"button\" />
-							&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"L?schen\">L?schen</a>
-						</td>
-					</tr>";
-			}
-			//
-			// show only the entrie
-			//
-			else {
-				$out .= "\t\t\t\t\t<tr ID=\"dateid" . $row->date_id . "\">
-						<td>
-							" . date("d.m.Y", $row->date_date) . "
-						</td>
-						<td>
-							" . $row->date_place . "
-						</td>
-						<td>
-							" . nl2br($row->date_topic) . "
-						</td>
-						<td>
-							" . getUserByID($row->date_creator) . "
-						</td>
-						<td colspan=\"2\">
-							<a href=\"admin.php?page=dates&amp;action=edit&amp;id=".$row->date_id."#dateid".$row->date_id."\" title=\"Bearbeiten\">Bearbeiten</a>
-							&nbsp;<a href=\"admin.php?page=dates&amp;action=delete&amp;id=".$row->date_id."\" title=\"L?schen\">L?schen</a>
-						</td>
-					</tr>\r\n";
-			}
-		}
-		$out .= "\t\t\t\t</table>
-			</form>";
-	
-		return $out;
- 	}*/
-/*****************************************************************************
- *
- *  string page_articles()
- *  returns the articles-admin-page where you can write,change and delete article-entries
- *
- *****************************************************************************/
- 
- /*	function page_articles() {
- 		global $admin_lang, $extern_action, $extern_sure, $extern_title, $extern_text, $extern_image, $extern_description, $extern_id, $_SERVER, $actual_user_id, $actual_user_showname, $user;
-		
-		if(!isset($extern_action))
-			$extern_action = '';
-		
-		$out = "\t\t\t<h3>" . $admin_lang['articles'] . "</h3><hr />\r\n";
-		
-		//
-		// delete the selected entrie
-		//
-		if($extern_action == "delete") {
-			if(isset($extern_sure)) {
-							
-				if($extern_sure == 1)
-					db_result("DELETE FROM " . DB_PREFIX . "articles WHERE article_id=" . $extern_id);
-			}
-			else {
-				$result = db_result("SELECT * FROM " . DB_PREFIX . "articles WHERE article_id=" . $extern_id);
-				$row = mysql_fetch_object($result);
-				$out .= "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich l?schen?<br />
-			<a href=\"admin.php?page=articles&amp;action=delete&amp;id=" . $extern_id . "&amp;sure=1\" title=\"Wirklich L?schen\">ja</a> &nbsp;
-			<a href=\"admin.php?page=articles\" title=\"Nicht L?schen\">nein</a>";
-			
-				return $out;
-			}
-		}
-		//
-		// add a new entrie
-		//
-		elseif($extern_action == "new") {
-			if($extern_title != "" && $extern_description != "" && $extern_text) {
-				$sql = "INSERT INTO ".DB_PREFIX."articles
-					(article_title, article_description, article_text, article_html, article_creator, article_date)
-					VALUES ('$extern_title', '$extern_description', '$extern_text', '" . convertToPreHtml($extern_text) . "', '$user->ID', '" . mktime() . "')";
-				db_result($sql);
-			}	
-		}
-		//
-		// update the selected entrie
-		//
-		elseif($extern_action == "update") { 
-			if($extern_title != "" && $extern_description != "" && $extern_text != "" && $extern_id != 0) {
-				$sql = "UPDATE ".DB_PREFIX."articles SET 
-					article_title= '$extern_title', 
-					article_description= '$extern_description', 
-					article_text= '$extern_text',
-					article_html= '" . convertToPreHtml($extern_text) . "',
-					article_date= '" . mktime() . "' 
-					WHERE article_id=".$extern_id;
-				db_result();
-			}
-		}
-		
-		if($extern_action != "edit") {
-			$out .= "\t\t\t<form method=\"post\" action=\"admin.php\">
-				<input type=\"hidden\" name=\"page\" value=\"articles\" />
-				<input type=\"hidden\" name=\"action\" value=\"new\" />
-				<table>
-					<tr>
-						<td>Titel: <span class=\"info\">Hier den Titel des Artikels eingeben</span></td>
-						<td><input type=\"text\" name=\"title\" maxlength=\"100\" value=\"\" /></td>
-					</tr>
-					<tr>
-						<td>Beschreibung: <span class=\"info\">Hier eine Zusammenfassung in einem Satz eingeben.</span></td>
-						<td><input type=\"text\" name=\"description\" maxlength=\"200\" value=\"\" /></td>
-					</tr>
-					<tr>
-						<td>Text: <span class=\"info\">Hier den gesammten Text des Artikels eingeben.</span></td>
-						<td><textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea></td>
-					</tr>
-					<tr>
-						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Senden\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zur?cksetzen\" /></td>
-					</tr>
-				</table>
-				<br />
-			</form>\r\n";
-		}
-		
-		if(isset($extern_id) && $extern_action == "edit") {
-			$sql = "SELECT * FROM " . DB_PREFIX . "articles WHERE article_id=$extern_id";
-			$result = db_result($sql);
-			$row = mysql_fetch_object($result);
-			$out .= "\t\t\t<form method=\"post\" action=\"admin.php\">
-				<input type=\"hidden\" name=\"page\" value=\"articles\" />
-				<input type=\"hidden\" name=\"action\" value=\"update\" />
-				<table>
-					<tr>
-						<td>Titel: <span class=\"info\">Hier den Titel des Artikels eingeben</span></td>
-						<td><input type=\"text\" name=\"title\" maxlength=\"10\" value=\"" . $row->article_title . "\" /></td>
-					</tr>
-					<tr>
-						<td>Beschreibung: <span class=\"info\">Hier eine Zusammenfassung in einem Satz eingeben.</span></td>
-						<td><input type=\"text\" name=\"description\" maxlength=\"60\" value=\"" . $row->article_description . "\" /></td>
-					</tr>
-					<tr>
-						<td>Text: <span class=\"info\">Hier den gesammten Text des Artikels eingeben.</span></td>
-						<td><textarea cols=\"60\" rows=\"6\" name=\"text\">" . $row->article_text . "</textarea></td>
-					</tr>
-					<tr>
-						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"Zur?cksetzen\" /></td>
-					</tr>
-				</table>
-				<br />
-			</form>\r\n";
-		}
-		
-		
-			$out .= "\t\t\t<form method=\"post\" action=\"admin.php\">
-				<input type=\"hidden\" name=\"page\" value=\"articles\" />
-				<input type=\"hidden\" name=\"action\" value=\"update\" />
-				<table>
-					<tr>
-						<td>Titel:</td>
-						<td>Beschreibung:</td>
-						<td>Text:</td>
-						<td>" . $admin_lang['date'] . "</td>
-						<td>" . $admin_lang['creator'] . ":</td>
-						<td>" . $admin_lang['actions'] . ":</td>
-					</tr>\r\n";
-		//
-		// write all news entries
-		//
-		$result = db_result("SELECT * FROM " . DB_PREFIX . "articles");
-		while($row = mysql_fetch_object($result)) {
-			if($extern_id == $row->article_id && $extern_action == "edit") {	}
-			//
-			// show only the entrie
-			//
-			else {
-				$out .= "\t\t\t\t\t<tr ID=\"dateid" . $row->article_id . "\">
-						<td>
-							" . $row->article_title . "
-						</td>
-						<td>
-							" . $row->article_description . "
-						</td>
-						<td>
-							" . $row->article_html . "
-						</td>
-						<td>
-							" . date("d.m.Y", $row->article_date) . "
-						</td>
-						<td>
-							" . getUserByID($row->article_creator) . "
-						</td>
-						<td colspan=\"2\">
-							<a href=\"admin.php?page=articles&amp;action=edit&amp;id=" . $row->article_id . "#dateid" . $row->article_id . "\" title=\"Bearbeiten\">Bearbeiten</a>
-							&nbsp;<a href=\"admin.php?page=articles&amp;action=delete&amp;id=" . $row->article_id . "\" title=\"L?schen\">L?schen</a>
-						</td>
-					</tr>\r\n";
-			}
-		}
-		$out .= "\t\t\t\t</table>
-			</form>";
-	
-		return $out;
- 	}*/
- 	
- /*****************************************************************************
- *
- * string page_inlinemenu()
- * returns the inlinemenu-admin-page where you can add,change and delete inlinemenus
- *
- *****************************************************************************/
- 	function page_inlinemenu() {
- 		global $extern_action, $_SERVER, $admin_lang, $extern_page_id, $extern_sure, $extern_inlinemenu_id, $extern_image_path, $extern_entrie_type, $extern_entrie_text, $extern_entrie_link, $extern_image_path, $extern_entrie_id;
- 		
-		$out = '<h3>' . $admin_lang['inlinemenu'] . '</h3><hr />';
- 		if($extern_action == 'new') {
- 			$sql = "SELECT *
-				FROM " . DB_PREFIX . "pages_content
-				WHERE page_id=$extern_page_id";
-			$page_result = db_result($sql);
-			$page = mysql_fetch_object($page_result);
-			$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu (inlinemenu_image)
-				VALUES('')";
-			$res = db_result($sql);
-			//$rr = mysql_fetch_object($r);
-			$lastid =  mysql_insert_id();
-			$sql = "UPDATE " . DB_PREFIX . "pages_content
-				SET page_inlinemenu=$lastid
-				WHERE page_id='$extern_page_id'";
-			db_result($sql);
-			header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu");
-			
- 		}
- 		elseif($extern_action == 'edit') {
- 			$sql = "SELECT cont.*, inline.*
-				FROM ( " . DB_PREFIX. "pages_content cont
-				LEFT JOIN " . DB_PREFIX . "inlinemenu inline ON inline.inlinemenu_id = cont.page_inlinemenu )
-				WHERE inline.inlinemenu_id=$extern_inlinemenu_id";
- 			$imenu_result = db_result($sql);
- 			$imenu = mysql_fetch_object($imenu_result);
-			if($extern_image_path == "")
-				$image_path = $imenu->inlinemenu_image;
-			else
-				$image_path = $extern_image_path;
- 			$out .= "<h4>Neues Zusatzmen? f?r die Seite &quot;<a href=\"index.php?page=$imenu->page_name\">$imenu->page_title</a>&quot; erstellen</h4>
-			<form action=\"" . $_SERVER['PHP_SELF'] . "\">
-			<input type=\"hidden\" name=\"page\" value=\"inlinemenu\"/>
-			<input type=\"hidden\" name=\"action\" value=\"save_image\"/>
-			<input type=\"hidden\" name=\"inlinemenu_id\" value=\"$imenu->inlinemenu_id\"/>
-			<table>
-				<tr>
-					<td>Pfad zum Bild:<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmen? zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgwe?hlt werden.</span></td>
-					<td><input type=\"text\" name=\"image_path\" value=\"$image_path\"/> <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=select_image&amp;inlinemenu_id=$imenu->inlinemenu_id\">[Bild ausw?hlen]</a></td>
-				</tr>
-				<tr>
-					<td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\"/></td>
-				</tr>
-			</table>
-		</form><table>
-		<tr><td>Text</td><td>Typ</td><td>Aktion</td></tr>";
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "inlinemenu_entries
-				WHERE inlineentrie_menu_id=$imenu->inlinemenu_id
-				ORDER BY inlineentrie_sortid ASC";
-			$entries_result = db_result($sql);
-			while($entrie = mysql_fetch_object($entries_result)) {
-				$out .= "<tr>
-					<td>$entrie->inlineentrie_text</td>
-					<td>$entrie->inlinieentrie_type</td>
-					<td>
-						<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=entrie_up&amp;entrie_id=$entrie->inlineentrie_id\"><img src=\"./img/up.jpg\" alt=\"Hoch\" title=\"Hoch\" /></a>
-						<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=entrie_down&amp;entrie_id=$entrie->inlineentrie_id\"><img src=\"./img/down.jpg\" alt=\"Runter\" title=\"Runter\" /></a>
-						<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete_entrie&amp;entrie_id=$entrie->inlineentrie_id\"><img src=\"./img/del.jpg\" alt=\"L?schen\" title=\"L?schen\" /></a>
-						<!--<img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" />-->
-					</td>
-					</tr>";
-			}
-			$out .= "
-		</table>
-		<form action=\"" . $_SERVER['PHP_SELF'] . "\">
-			<input type=\"hidden\" name=\"page\" value=\"inlinemenu\"/>
-			<input type=\"hidden\" name=\"action\" value=\"add_entrie\"/>
-			<input type=\"hidden\" name=\"inlinemenu_id\" value=\"$imenu->inlinemenu_id\"/>
-			<table>
-			<tr>
-			<td>Typ:<span class=\"info\">?ber den Typ kann l?sst sich bestimmen ob der neue Eintrag ein Link auf eine externe oder interne Seite sein soll oder nur ein kurzer Text, der eine Information weitergibt.</span></td>
-			<td><select name=\"entrie_type\">
-				<option value=\"link\">Link</option>
-				<option value=\"text\">Text</option>";
-			$sql = "SELECT page_type, page_name, page_title
-				FROM " . DB_PREFIX . "pages_content
-				ORDER BY page_type ASC";
-			$pages_result = db_result($sql);
-			while($page = mysql_fetch_object($pages_result)) {
-				$out .= "\t\t\t\t<option value=\"" . (($page->page_type == 'gallery' ) ? 'g' : 'l' ) . ":$page->page_name\">Interne " . (($page->page_type == 'gallery' ) ? 'Gallerie:' : 'Seite' ) . ": $page->page_title($page->page_name)</option>\r\n";
-			}
-//				<!--<option value=\"download\">Download</option>-->
-			$out .= "</select></td>
-			</tr>
-			<tr><td>Text:<span class=\"info\">Dieses Feld beinhaltet den Text, mit dem der Link, egal ob extern oder intern, beschriftet wird, wenn der Typ auf Text gestellt ist, wird der Text einfach so angezeigt.</span></td><td><input type=\"text\" name=\"entrie_text\"/></td></tr>
-			<tr><td>Link:<span class=\"info\">Dieses Feld muss nur ausgef?llt werden, wenn im Typ der Typ Link ausgew?hlt worden ist, es beinhaltet den Link auf die Seite, auf die der Link im Zusatzmen? f?hren soll.</span></td><td><input type=\"text\" name=\"entrie_link\"/></td></tr>
-				<tr>
-					<td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"Hinzuf?gen\"/></td>
-				</tr>
-			</table>
-		</form>";
-		
- 		}
- 		elseif($extern_action == 'entrie_up') {
- 			$sql = "SELECT *
-			 	FROM " . DB_PREFIX . "inlinemenu_entries
-				WHERE inlineentrie_id=$extern_entrie_id";
-			$self_result = db_result($sql);
-			$self_data = mysql_fetch_object($self_result);
-			$id1 = $self_data->inlineentrie_id;
-			
-			$sortid1 = $self_data->inlineentrie_sortid;
-			
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "inlinemenu_entries
-				WHERE inlineentrie_sortid < $sortid1 AND inlineentrie_menu_id=$self_data->inlineentrie_menu_id
-				ORDER BY inlineentrie_sortid DESC";
-			$pre_result = db_result($sql);
-			$pre_data = mysql_fetch_object($pre_result);
-		
-			if($pre_data != null) {
 
-				$id2 = $pre_data->inlineentrie_id;
-				$sortid2 = $pre_data->inlineentrie_sortid;
-				$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
-					SET inlineentrie_sortid=$sortid2
-					WHERE inlineentrie_id=$id1";
-				db_result($sql);
-				$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
-					SET inlineentrie_sortid=$sortid1
-					WHERE inlineentrie_id=$id2";
-				db_result($sql);
-			}
-			generateinlinemenu($self_data->inlineentrie_menu_id);
-			header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu&action=edit&inlinemenu_id=$self_data->inlineentrie_menu_id");
- 		}
- 		elseif($extern_action == 'entrie_down') {
- 			
- 			$sql = "SELECT *
-			 	FROM " . DB_PREFIX . "inlinemenu_entries
-				WHERE inlineentrie_id=$extern_entrie_id";
-			$self_result = db_result($sql);
-			$self_data = mysql_fetch_object($self_result);
-			$id1 = $self_data->inlineentrie_id;
-			
-			$sortid1 = $self_data->inlineentrie_sortid;
-			
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "inlinemenu_entries
-				WHERE inlineentrie_sortid > $sortid1 AND inlineentrie_menu_id=$self_data->inlineentrie_menu_id
-				ORDER BY inlineentrie_sortid ASC";
-			$pre_result = db_result($sql);
-			$pre_data = mysql_fetch_object($pre_result);
-		
-			if($pre_data != null) {
-
-				$id2 = $pre_data->inlineentrie_id;
-				$sortid2 = $pre_data->inlineentrie_sortid;
-				$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
-					SET inlineentrie_sortid=$sortid2
-					WHERE inlineentrie_id=$id1";
-				db_result($sql);
-				$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
-					SET inlineentrie_sortid=$sortid1
-					WHERE inlineentrie_id=$id2";
-				db_result($sql);
-			}
- 			generateinlinemenu($self_data->inlineentrie_menu_id);
-			header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu&action=edit&inlinemenu_id=$self_data->inlineentrie_menu_id");
- 		}
- 		elseif($extern_action == 'delete_entrie') {
- 			$sql = "SELECT *
-				FROM " . DB_PREFIX . "inlinemenu_entries
-				WHERE inlineentrie_id=$extern_entrie_id";
- 			$entrie_result = db_result($sql);
- 			$entrie = mysql_fetch_object($entrie_result);
- 			if($extern_sure == 1) {
- 				$sql = "DELETE FROM " . DB_PREFIX . "inlinemenu_entries
-					WHERE inlineentrie_id=$extern_entrie_id";
- 				db_result($sql);
-	 			generateinlinemenu($entrie->inlineentrie_menu_id);
- 				header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu&action=edit&inlinemenu_id=$entrie->inlineentrie_menu_id");
- 			}
- 			else {
-				$out .= "Sind sie sicher das die das Element &quot;$entrie->inlineentrie_text&quot; unwiederruflich l?schen?<br />
-				<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete_entrie&amp;entrie_id=$extern_entrie_id&amp;sure=1\">" . $admin_lang['yes'] . "</a > <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=edit&amp;inlinemenu_id=$entrie->inlineentrie_menu_id\">" . $admin_lang['no'] . "</a >";
-			}
- 			
- 		}
- 		elseif($extern_action == 'add_entrie') {
- 			$sql = "SELECT inlineentrie_sortid
-			 	FROM " . DB_PREFIX . "inlinemenu_entries
-			 	WHERE inlineentrie_menu_id = $extern_inlinemenu_id
-			 	ORDER BY inlineentrie_sortid DESC";
-			$lastsort_result = db_result($sql);
-			$sortid = 1;
-			if($lastsort = mysql_fetch_object($lastsort_result)){
-				$sortid = $lastsort->inlineentrie_sortid;
-				$sortid++;
-			}
-			
-			$sql = '';
-			if($extern_entrie_type == 'text') {
- 				$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_menu_id, inlinieentrie_type, inlineentrie_text)
-					VALUES ($sortid, $extern_inlinemenu_id, 'text', '$extern_entrie_text');";
- 			}
- 			elseif($extern_entrie_type == 'link') {
-				$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_menu_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
-					VALUES ($sortid, $extern_inlinemenu_id, 'link', '$extern_entrie_text','$extern_entrie_link');";
- 			}
- 			elseif(substr($extern_entrie_type, 1, 1) == ':') {
- 				$link = ( (substr($extern_entrie_type, 0, 1) == 'g') ? 'gallery.php' : 'index.php' ) . "?page=" . substr($extern_entrie_type, 2);
- 				$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_menu_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
-					VALUES ($sortid, $extern_inlinemenu_id, 'intern', '$extern_entrie_text','$link');";	
- 			}
- 			if($sql != '')
- 				db_result($sql);
- 			generateinlinemenu($extern_inlinemenu_id);
- 			header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu&action=edit&inlinemenu_id=$extern_inlinemenu_id");
- 		}
- 		elseif($extern_action == 'select_image') {
- 		 	$sql = "SELECT *
-				FROM " . DB_PREFIX . "files
-				WHERE file_type LIKE 'image/%'
-				ORDER BY file_name ASC";
-			$images_result = db_result($sql);
-			$out .= "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"get\">
-			<input type=\"hidden\" name=\"page\" value=\"inlinemenu\"/>
-			<input type=\"hidden\" name=\"action\" value=\"edit\"/>
-			<input type=\"hidden\" name=\"inlinemenu_id\" value=\"$extern_inlinemenu_id\"/>";
-			while($image = mysql_fetch_object($images_result)) {
-				$thumb = str_replace('/upload/', '/thumbnails/', $image->file_path);
-				preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
-				if(strtolower($ext[2]) == 'gif')
-					$thumb .= '.png';
-					
-				$succes = true;
-				$imgmax = 100;
-				if(!file_exists($thumb))
-					$succes = generateThumb($image->file_path, $imgmax);
-				if(file_exists($thumb) || $succes) {
-					$sizes = getimagesize($thumb);
-					$margin_top = round(($imgmax - $sizes[1]) / 2);
-					$margin_bottom = $imgmax - $sizes[1] - $margin_top;
-					$out .= "<div class=\"imageblock\">
-					<a href=\"" . generateUrl($image->file_path) . "\">
-					<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($thumb) . "\" alt=\"$thumb\" /></a><br />
-					<input type=\"radio\" name=\"image_path\" value=\"$image->file_path\"/>Ausw?hlen</div>";
-				}
-			}
-			$out .="<input type=\"submit\" value=\"?bernehmen\" /></form>";
- 		}
- 		elseif($extern_action == 'save_image') {
- 			$sql = "UPDATE " . DB_PREFIX . "inlinemenu
-				SET inlinemenu_image='$extern_image_path'
-				WHERE inlinemenu_id=$extern_inlinemenu_id";
-			db_result($sql);
-			header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu&action=edit&inlinemenu_id=$extern_inlinemenu_id");
- 		}
- 		elseif($extern_action == 'delete') {
- 			$sql = "SELECT *
-				FROM " . DB_PREFIX . "pages_content
-				WHERE page_id=$extern_page_id";
-			$page_result = db_result($sql);
-			$page = mysql_fetch_object($page_result);
-			if($extern_sure == 1) {
-				//
-				// Remove all inlinemenu_entries of the inlinemenu which is to delete
-				//
-				$sql = "DELETE FROM " . DB_PREFIX . "inlinemenu_entries
-					WHERE inlineentrie_menu_id=$page->page_inlinemenu";
-				db_result($sql);
-				//
-				// Remove the inlinemenu
-				//
-				$sql = "DELETE FROM " . DB_PREFIX . "inlinemenu
-					WHERE inlinemenu_id=$page->page_inlinemenu";
-				db_result($sql);
-				//
-				// Remove the inlinemenu_id from the page
-				//
-				$sql = "UPDATE " . DB_PREFIX . "pages_content
-					SET page_inlinemenu=-1
-					WHERE page_id=$extern_page_id";
-				db_result($sql);
-				header("Location: " . $_SERVER['PHP_SELF'] . "?page=inlinemenu");
-			}
-			else {
-				$out .= "Sind sie sicher, dass sie das Zusatzmen? f?r die Seite &quot;$page->page_title&quot; unwiederruflich entfernen wollen.<br />
-				<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete&amp;page_id=$page->page_id&amp;sure=1\">" . $admin_lang['yes'] . "</a>&nbsp;<a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu\">" . $admin_lang['no'] . "</a>";	
-			}
-			
-			 
- 		}
- 		else {
-			$sql = "SELECT cont.*, inline.*
-				FROM ( " . DB_PREFIX. "pages_content cont
-				LEFT JOIN " . DB_PREFIX . "inlinemenu inline ON inline.inlinemenu_id = cont.page_inlinemenu )
-				WHERE cont.page_visible!='deleted'
-				ORDER BY cont.page_id";
-			$pages_result = db_result($sql);
-			while($page = mysql_fetch_object($pages_result)) {
-				if($page->page_inlinemenu == -1)
-					$out .= "$page->page_title <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=new&amp;page_id=$page->page_id\">[Erstellen]</a><br />";
-				else
-					$out .= "$page->page_title <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=edit&amp;inlinemenu_id=$page->page_inlinemenu\">[Bearbeiten]</a>  <a href=\"" . $_SERVER['PHP_SELF'] . "?page=inlinemenu&amp;action=delete&amp;page_id=$page->page_id\">[Entfernen]</a><br />";
-			}	
-		}
- 		return $out;
- 	}
 ?>

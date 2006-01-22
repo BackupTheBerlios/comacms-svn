@@ -81,7 +81,7 @@
 							WHERE page_id='$old->page_id'";
 						db_result($sql);
 						$sql = "UPDATE " . DB_PREFIX . "pages
-							SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment'
+							SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment'
 							WHERE page_id=$page_id";
 						db_result($sql);
 						header("Location: admin.php?page=pagestructure");
@@ -89,7 +89,7 @@
 					}
 					else { // no changes
 						// TODO: Show it to the user
-						return "keine VerÃ¤nderungen!!";
+						return "keine Veränderungen!!";
 					}
 				}
 				else { // it dosen't
@@ -133,14 +133,14 @@
 							db_result($sql);
 							$page_edit_comment = sprintf($admin_lang['restored_from_version'], $change);
 							$sql = "UPDATE " . DB_PREFIX . "pages
-								SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$old->page_title', page_edit_comment='$page_edit_comment'
+								SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$old->page_title', page_edit_comment='$page_edit_comment'
 								WHERE page_id=$page_id";
 							db_result($sql);
 							header("Location: admin.php?page=pagestructure");	
 						}
 						else {
 							$out = '';
-							$out .= "Mï¿½chten Sie diesen Text:<pre class=\"code\">$actual->text_page_text</pre>wirklich durch diesen Text:<pre class=\"code\">$old->text_page_text</pre>ersetzen?<br />
+							$out .= "Möchten Sie diesen Text:<pre class=\"code\">$actual->text_page_text</pre>wirklich durch diesen Text:<pre class=\"code\">$old->text_page_text</pre>ersetzen?<br />
 								<a href=\"admin.php?page=pagestructure&amp;action=save&amp;page_id=$page_id&amp;change=$change&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
 		 						<a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>";
 							return $out;
@@ -163,7 +163,7 @@
 			$got_mysql = false;
 			if($text == '' && $title == '') {
 				if(is_numeric($change) && $text == '' && $title == '') {
-					$out .= "<strong>Achtung:</strong> Sie bearbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen Ã¼berschreiben!";
+					$out .= "<strong>Achtung:</strong> Sie bearbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen überschreiben!";
 					$sql = "SELECT *
 						FROM (" . DB_PREFIX . "pages_history page
 						LEFT JOIN " . DB_PREFIX . "pages_text_history text ON text.page_id = page.id ) 
@@ -202,15 +202,15 @@
 					$page_edit_comment = $admin_lang['edited'] . '...';
 					$show_preview = false;
 				}
-				$page_text = str_replace('Ã¤', '&auml;', $page_text);
-				$page_text = str_replace('Ã„', '&Auml;', $page_text);
-				$page_text = str_replace('Ã¼', '&uuml;', $page_text);
-				$page_text = str_replace('Ãœ', '&Uuml;', $page_text);
-				$page_text = str_replace('Ã¶', '&ouml;', $page_text);
-				$page_text = str_replace('Ã–', '&Ouml;', $page_text);
+				$page_text = str_replace('ä', '&auml;', $page_text);
+				$page_text = str_replace('Ä', '&Auml;', $page_text);
+				$page_text = str_replace('ü', '&uuml;', $page_text);
+				$page_text = str_replace('Ü', '&Uuml;', $page_text);
+				$page_text = str_replace('ö', '&ouml;', $page_text);
+				$page_text = str_replace('Ö', '&Ouml;', $page_text);
 				$page_text = str_replace('<', '&lt;', $page_text);
 				$page_text = str_replace('>', '&gt;', $page_text);
-				$page_text = str_replace('ÃŸ', '&szlig;', $page_text);
+				$page_text = str_replace('ß', '&szlig;', $page_text);
 				$out .= "\t\t\t<fieldset><legend>Seite Bearbeiten</legend><form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"save\" />
@@ -218,10 +218,10 @@
 				<input type=\"text\" name=\"page_title\" value=\"$page_title\" /><br />
 				<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
 				<script type=\"text/javascript\" language=\"javascript\">
-					writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
+					writeButton(\"img/button_fett.png\",\"Formatiert Text fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 					writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 					writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Ãœberschrift\",\"==== \",\" ====\",\"ï¿½berschrift\",\"h\");
+					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">$page_text</textarea>
 				" . $admin_lang['comment_on_change'] . ": <input name=\"page_edit_comment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $page_edit_comment)) . "\" maxlength=\"100\" type=\"text\"/><br />

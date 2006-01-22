@@ -22,7 +22,7 @@
 	 * @param database string
 	 * @param server string
 	 * */
-	function connect_to_db($username, $userpw, $database, $server = 'localhost') {
+	/*function connect_to_db($username, $userpw, $database, $server = 'localhost') {
 		global $db_con;
 
 		error_reporting(E_ALL);
@@ -30,19 +30,19 @@
 		or die('Mysql-error:' . mysql_error());
 		mysql_select_db($database, $db_con)
 		or die('Mysql-error:' . mysql_error());
-		}
-
+	}*/
+	//FIXME: make it possible to remove this alias
 	function db_result($command) {
-		global $db_con, $queries_count;
-		$queries_count++;
+		global $sql_connection;//$db_con, $queries_count;
+		//$queries_count++;
 		/* helpful to find unnecessary SQL-queries(replace it only with the "++"):
 		 * 
 		 * .= "\r\n$command\r\n" . print_r(debug_backtrace(),true);
 		 */ 
-		$result = mysql_query ($command, $db_con);
+		/*$result = mysql_query ($command, $db_con);
 		if(!$result)
-			echo 'Error: ' . $command . ':' . mysql_error () . ';';
-		return $result;
+			echo 'Error: ' . $command . ':' . mysql_error () . ';';*/
+		return $sql_connection->SqlQuery($command);
 	}
 
 	function generate_password($length) {
@@ -76,30 +76,37 @@
 	}
 
 	function getUserIDByName($name) {
-		$sql = "SELECT user_id
+		global $lib;
+		return $lib->GetUserIDByName($name);
+		/*$sql = "SELECT user_id
 			FROM " . DB_PREFIX . "users
 			WHERE user_name='$name'";
 		$result = db_result($sql);
 		$row = mysql_fetch_object($result);
-		return $row->user_id;
+		return $row->user_id;*/
 	}
 
 	function getUserByID($id) {
-		$sql = "SELECT user_showname
+		global $lib;
+		return $lib->GetUserByID($id);
+		/*$sql = "SELECT user_showname
 			FROM " . DB_PREFIX . "users
 			WHERE user_id = '$id'";
 		$result = db_result($sql);
 		$row = mysql_fetch_object($result);
-		return $row->user_showname;
+		return $row->user_showname;*/
 	}
 	
 	function getGroupByID($id) {
+		global $lib;
+		return $lib->GetGroupByID($id);
+		/*
 		$sql = "SELECT group_name
 			FROM " . DB_PREFIX . "groups
 			WHERE group_id = '$id'";
 		$result = db_result($sql);
 		$row = mysql_fetch_object($result);
-		return $row->group_name;
+		return $row->group_name;*/
 	}
 
 	function replace_smilies($textdata) {

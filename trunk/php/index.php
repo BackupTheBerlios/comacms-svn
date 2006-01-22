@@ -101,6 +101,6 @@
 	//
 
 	echo $page->OutputHTML();
-	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $queries_count .' SQL queries -->';
+	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sql_connection->QueriesCount .' SQL queries -->';
 
 ?>

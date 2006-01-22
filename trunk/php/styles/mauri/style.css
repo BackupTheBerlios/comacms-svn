@@ -18,6 +18,10 @@ strong {
  font-weight: bold;
 }
 
+li {
+margin-left: 1em;
+}
+
 h1, h2, h3, h4, h5 {
  font-weight: bold;
 }
@@ -39,16 +43,21 @@ h2 {
  font-size: 1.5em;
  border-bottom: 1px solid black;
  margin-bottom: 1em;
+ margin-top: 0.5em;
 }
 
 h3 {
  font-size: 1.17em;
  padding-left: 1.5em;
+ margin-bottom: 1em;
+ margin-top: 0.5em;
 }
 
 
 h4 {
+ margin-top: 0.5em;
  padding-left: 2em;
+ margin-bottom: 1em;
 }
 img {
  border: 0;
@@ -88,9 +97,13 @@ legend {
 thead td {
  font-weight: bold;
 }
+
 table {
  margin: 1em;
 }
+
+
+
 #date_day, #date_month, #date_year, #date_hour, #date_minute {
 width : auto;
 }
@@ -201,6 +214,7 @@ p {
  border-top: 1px solid #000000;
  white-space: nowrap;
  width: 130px;
+ margin-left: 0;
 }
 
 #menu a:hover {

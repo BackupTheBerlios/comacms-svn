@@ -28,7 +28,7 @@
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "articles
 			WHERE article_id='$page_id'";
-		$article_result = db_result($sql);
+		$article_result = $sql_connection->SqlQuery($sql);
 		$image = '';
 		if($article_data = mysql_fetch_object($article_result)) {
 			$imgmax = 300;
@@ -55,7 +55,7 @@
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "articles
 			ORDER BY article_date DESC";
-		$article_result = db_result($sql);
+		$article_result = $sql_connection->SqlQuery($sql);
 		
 		$title = "Artikelliste";
 		
@@ -98,5 +98,5 @@
 	// end
 	//
 	echo $page->OutputHTML();
-	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $queries_count .' SQL queries -->';
+	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sql_connection->QueriesCount .' SQL queries -->';
 ?>

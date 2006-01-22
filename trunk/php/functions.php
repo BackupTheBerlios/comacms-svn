@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
  # file 		: functions.php					#
  # created		: 2005-06-17					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
+ # copyright		: (C) 2005-2006 The ComaCMS-Team		#
  # email		: comacms@williblau.de				#
  #----------------------------------------------------------------------#
  # This program is free software; you can redistribute it and/or modify	#
@@ -33,7 +33,7 @@
 	}*/
 	//FIXME: make it possible to remove this alias
 	function db_result($command) {
-		global $sql_connection;//$db_con, $queries_count;
+		global $sqlConnection;//$db_con, $queries_count;
 		//$queries_count++;
 		/* helpful to find unnecessary SQL-queries(replace it only with the "++"):
 		 * 
@@ -42,7 +42,7 @@
 		/*$result = mysql_query ($command, $db_con);
 		if(!$result)
 			echo 'Error: ' . $command . ':' . mysql_error () . ';';*/
-		return $sql_connection->SqlQuery($command);
+		return $sqlConnection->SqlQuery($command);
 	}
 
 	function generate_password($length) {

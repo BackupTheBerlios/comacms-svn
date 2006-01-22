@@ -44,11 +44,11 @@
 	$queries_count = 0;
 	define('DB_PREFIX', $d_pre);
 	//connect_to_db($d_user, $d_pw, $d_base, $d_server);
-	$sql_connection = new Sql($d_user, $d_pw, $d_server);
-	$sql_connection->Connect($d_base);
+	$sqlConnection = new Sql($d_user, $d_pw, $d_server);
+	$sqlConnection->Connect($d_base);
 	$config = new Config();
 	$config->LoadAll();
-	$page = new OutputPage();
+	$page = new OutputPage($sqlConnection);
 	$user = new User();
 	$style_name = $config->Get('style', 'clear');
 	$style = GetPostOrGet('style');

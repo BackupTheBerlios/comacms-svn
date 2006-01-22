@@ -62,6 +62,20 @@
 		var $PageID;
 		
 		/**
+		 * @access private
+		 * @var Sql
+		 */
+		var $_SqlConnection;
+		
+		/**
+		 * @access public
+		 * return void
+		 */
+		function Outputpage($SqlConnection) {
+			$this->_SqlConnection = $SqlConnection;
+		}
+		
+		/**
 		 * @return void
 		 */
 		function SetText($text, $compiled = true) {
@@ -96,7 +110,7 @@
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages
 				WHERE page_id=$page_id";
-			$actual_result = db_result($sql);
+			$actual_result = $this->_SqlConnection->SqlQuery($sql);
 			$actual = mysql_fetch_object($actual_result);
 			$parent_id = $actual->page_parent_id;
 			$way_to_root = '';		
@@ -105,7 +119,7 @@
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "pages
 					WHERE page_id=$parent_id";
-				$parent_result = db_result($sql);
+				$parent_result = $this->_SqlConnection->SqlQuery($sql);
 				$parent = mysql_fetch_object($parent_result);
 				$parent_id = $parent->page_parent_id;
 				$page_title = $parent->page_title;
@@ -122,19 +136,22 @@
 		/**
 		 * @return string
 		 */
-		function GenerateMenu($menuid = 1) {
+		function GenerateMenu($menuid = 1, $PageID = -1) {
 			include($this->Templatefolder . '/menu.php');
 			$menu_out = '';
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "menu
 				WHERE menu_menuid='$menuid'
 				ORDER BY menu_orderid ASC";
-			$menu_result = db_result($sql);
+			$menu_result = $this->_SqlConnection->SqlQuery($sql);
 			while($menu_data = mysql_fetch_object($menu_result)) {
-				if($menuid == 1)
-						$menu_str = $menu_link;
-				else
-						$menu_str = $menu_link2;
+				if($menuid == 1) {
+						$menu_str = ($menu_data->menu_page_id == $PageID) ? $menu_actual_link : $menu_link;
+				}
+				else {
+						$menu_str = ($menu_data->menu_page_id == $PageID) ? $menu2_actual_link : $menu2_link;
+				}
+				
 				$menu_str = str_replace('[TEXT]', $menu_data->menu_text, $menu_str);
 				$link = $menu_data->menu_link;
 					if(substr($link, 0, 2) == 'l:')
@@ -194,12 +211,12 @@
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "pages
 					WHERE page_name='$pagename'";
-			$page_result = db_result($sql);
+			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			if(!($page_data =  mysql_fetch_object($page_result))) {
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "pages
 					WHERE page_id='$pagename'";	
-				$page_result = db_result($sql);
+				$page_result = $this->_SqlConnection->SqlQuery($sql);
 				if(!($page_data =  mysql_fetch_object($page_result))) {
 					header("Location: special.php?page=404&want=$pagename");
 					die();
@@ -268,9 +285,9 @@
 			$this->Template = str_replace('[POSITION]', $this->Position, $this->Template);
 			$this->Template = str_replace('[STYLE_PATH]', $this->Templatefolder, $this->Template);
 			if($this->FindTag('MENU'))
-				$this->Template = str_replace('[MENU]', $this->GenerateMenu(1), $this->Template);;
+				$this->Template = str_replace('[MENU]', $this->GenerateMenu(1, $this->PageID), $this->Template);;
 			if($this->FindTag('MENU2'))
-				$this->Template = str_replace('[MENU2]', $this->GenerateMenu(2), $this->Template);;
+				$this->Template = str_replace('[MENU2]', $this->GenerateMenu(2, $this->PageID), $this->Template);;
 			return $this->Template;
 		}
 	}

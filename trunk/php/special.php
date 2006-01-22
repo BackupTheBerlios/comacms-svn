@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
  # file			: special.php					#
  # created		: 2005-08-10					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
+ # copyright		: (C) 2005-2006 The ComaCMS-Team		#
  # email		: comacms@williblau.de				#
  #----------------------------------------------------------------------#
  # This program is free software; you can redistribute it and/or modify	#
@@ -88,6 +88,5 @@
 	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
 	echo $page->OutputHTML();
-	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sql_connection->QueriesCount .' SQL queries -->';
-
+	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sqlConnection->QueriesCount .' SQL queries -->';
 ?>

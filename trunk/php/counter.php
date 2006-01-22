@@ -19,7 +19,7 @@
 	$en = array('is', 'are');
 	$en_count = array('no', 'one');
 	$de = array('ist', 'sind');
-	$de_count = array('kein', 'ein', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'zehn');
+	$de_count = array('kein', 'ein', 'zwei', 'drei', 'vier', 'fï¿½nf', 'sechs', 'sieben', 'acht', 'zehn');
 	$internal_counter_online = 0;
 	$internal_counter_online_text = ":-)";
 	

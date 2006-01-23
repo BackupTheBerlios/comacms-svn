@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
  # file			: user_pages.php				#
  # created		: 2005-07-16					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
+ # copyright		: (C) 2005-2006 The ComaCMS-Team		#
  # email		: comacms@williblau.de				#
  #----------------------------------------------------------------------#
  # This program is free software; you can redistribute it and/or modify	#
@@ -354,9 +354,9 @@
 						}
 						else {
 							switch ($file['error']) {
-								case 1:		$out .= "Die Datei überschreitet die vom Server vorgegebene Maximalgr&ouml;ße für einen Upload.";
+								case 1:		$out .= "Die Datei &uuml;berschreitet die vom Server vorgegebene Maximalgr&ouml;ï¿½e fï¿½r einen Upload.";
 										break;
-								case 2:		$out .= "Die Datei überschreitet vorgegebene Maximalgr&ouml;ße von 1,5MB für einen Upload.";
+								case 2:		$out .= "Die Datei &uuml;berschreitet vorgegebene Maximalgr&ouml;ï¿½e von 1,5MB f&uuml;r einen Upload.";
 										break;
 								case 3:		$out .= "Die Datei ist nur teilweise hochgeladen worden.";
 										break;
@@ -372,7 +372,7 @@
 		}
 		elseif($extern_action == 'check_new') {
 			//echo 'test';
-			$out .= "Hier werden alle Dateien angezeigt, die nicht Über das Admin-Interface Verändert worden sind, um diese Veränderungen in die Datenbank zu übernehmen haken sie alle die Dateien an, die sie aktualisieren möchten.<br /><br />\r\n" .
+			$out .= "Hier werden alle Dateien angezeigt, die nicht &uuml;ber das Admin-Interface Ver&auml;ndert worden sind, um diese Ver&auml;nderungen in die Datenbank zu &uuml;bernehmen haken sie alle die Dateien an, die sie aktualisieren m&ouml;chten.<br /><br />\r\n" .
 					"\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n" .
 					"\t\t<input type=\"hidden\" name=\"page\" value=\"files\"/>" .
 					"\t\t<input type=\"hidden\" name=\"action\" value=\"add_new\"/>";
@@ -393,12 +393,12 @@
 			while($entry = $files->read()) {
   				if(is_file($upload_path.$entry))
   					if(!in_array(md5_file($upload_path . $entry),$md5s))
-  						$out .= "<input type=\"checkbox\" name=\"change[]\" value=\"" . generateUrl(utf8_encode($upload_path . $entry)) ."\" checked=\"checked\" /><strong>Zur Datenbank hinzufügen</strong> " . utf8_encode($entry) . "<br />\r\n";
+  						$out .= "<input type=\"checkbox\" name=\"change[]\" value=\"" . generateUrl(utf8_encode($upload_path . $entry)) ."\" checked=\"checked\" /><strong>Zur Datenbank hinzufï¿½gen</strong> " . utf8_encode($entry) . "<br />\r\n";
   						
   				//echo $upload_path.$entry . '-' . md5_file($upload_path.$entry) . "<br>";
 			}
 			$files->close();
-			$out .= "<input type=\"submit\" class=\"button\" value=\"Ausführen\"/>" .
+			$out .= "<input type=\"submit\" class=\"button\" value=\"Ausfï¿½hren\"/>" .
 				"</form>\n\r";
 			return $out;
 			//print_r($md5s);
@@ -419,10 +419,10 @@
 					//unlink()
 				}
 				else {
-					$out .= "Sind sie sicher, dass sie die Datei &quot;$file->file_name&quot; unwiederruflich löschen wollen?<br />
+					$out .= "Sind sie sicher, dass sie die Datei &quot;$file->file_name&quot; unwiederruflich l&ouml;schen wollen?<br />
 					Die Datei wurde am " . date('d.m.Y', $file->file_date) . " um " . date('H:i:s', $file->file_date) ." hochgeladen.<br />
-					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&amp;action=delete&amp;file_id=" . $extern_file_id . "&amp;sure=1\" title=\"Wirklich Löschen\"  class=\"button\">" . $admin_lang['yes'] . "</a>
-					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files\" title=\"Nicht Löschen\" class=\"button\">" . $admin_lang['no'] . "</a>";
+					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files&amp;action=delete&amp;file_id=" . $extern_file_id . "&amp;sure=1\" title=\"Wirklich L&ouml;schen\"  class=\"button\">" . $admin_lang['yes'] . "</a>
+					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=files\" title=\"Nicht Lï¿½schen\" class=\"button\">" . $admin_lang['no'] . "</a>";
 					return $out;
 				}
 
@@ -461,9 +461,9 @@
 			<input type=\"submit\" class=\"button\" value=\"Hochladen\"/>
 		</form>";
 		$out .= "
-		<a href=\"admin.php?page=files&amp;action=check_new\"  class=\"button\">Auf Veränderungen überprüfen</a><br /><br />
+		<a href=\"admin.php?page=files&amp;action=check_new\"  class=\"button\">Auf Ver&auml;nderungen &uuml;berpr&uuml;fen</a><br /><br />
 		<table class=\"text_table\">
-		<tr><th>id</th><th>Name</th><th>Größe</th><th>Hochgeladen am</th><th>Typ</th><th>Aktionen</th></tr>";
+		<tr><th>id</th><th>Name</th><th>Gr&ouml;&szlig;e</th><th>Hochgeladen am</th><th>Typ</th><th>Aktionen</th></tr>";
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "files
 			ORDER BY file_name ASC";

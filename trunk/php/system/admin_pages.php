@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
  # file			: admin_pages.php				#
  # created		: 2005-07-12					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
+ # copyright		: (C) 2005-2006 The ComaCMS-Team		#
  # email		: comacms@williblau.de				#
  #----------------------------------------------------------------------#
  # This program is free software; you can redistribute it and/or modify	#
@@ -260,15 +260,16 @@
 		$out = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"./system/functions.js\"></script>";
 		$save = GetPostOrGet('save');
 		$style = GetPostOrGet('style_intern');
-		if(!empty($save))
-			$extern_style = $config->Get('style');
+		if(empty($style))
+			$style = $config->Get('style');
 	
-		if(isset($extern_save)) {
+		if(!empty($save)) {
 			if(file_exists("./styles/$style/mainpage.php")) {
-				$sql = "UPDATE " . DB_PREFIX . "config
+				/*$sql = "UPDATE " . DB_PREFIX . "config
 					SET config_value= '$style'
 					WHERE config_name='style'";
-				db_result($sql);
+				db_result($sql);*/
+				$config->Save('style', $style);
 			}
 		}
 	
@@ -278,11 +279,9 @@
 			<label for=\"stylepreviewselect\">Style:
 				<select id=\"stylepreviewselect\" name=\"style_intern\" size=\"1\">";
 	
-		$verz = dir("./styles/");
-		//
+		$styleFolder = dir("./styles/");
 		// read the available styles
-		//
-		while($entry = $verz->read()) {
+		while($entry = $styleFolder->read()) {
 			//
 			// check if the style really exists
 			//
@@ -290,13 +289,13 @@
 				//
 				// mark the selected style as selected in the list
 				//
-				if($entry == $extern_style)
+				if($entry == $style)
 					$out .= "\t\t\t\t\t<option value=\"".$entry."\" selected=\"selected\">".$entry."</option>\r\n";	
 				else
 					$out .= "\t\t\t\t\t<option value=\"".$entry."\">".$entry."</option>\r\n";
 			}
 		}
-		$verz->close();
+		$styleFolder->close();
 	
 		$out .= "</select>
 			</label>

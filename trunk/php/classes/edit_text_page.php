@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
  # file			: edit_text_page.php				#
  # created		: 2005-09-08					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
+ # copyright		: (C) 2005-2006 The ComaCMS-Team		#
  # email		: comacms@williblau.de				#
  #----------------------------------------------------------------------#
  # This program is free software; you can redistribute it and/or modify	#
@@ -89,7 +89,7 @@
 					}
 					else { // no changes
 						// TODO: Show it to the user
-						return "keine Veränderungen!!";
+						return "keine Verï¿½nderungen!!";
 					}
 				}
 				else { // it dosen't
@@ -140,7 +140,7 @@
 						}
 						else {
 							$out = '';
-							$out .= "Möchten Sie diesen Text:<pre class=\"code\">$actual->text_page_text</pre>wirklich durch diesen Text:<pre class=\"code\">$old->text_page_text</pre>ersetzen?<br />
+							$out .= "Mï¿½chten Sie diesen Text:<pre class=\"code\">$actual->text_page_text</pre>wirklich durch diesen Text:<pre class=\"code\">$old->text_page_text</pre>ersetzen?<br />
 								<a href=\"admin.php?page=pagestructure&amp;action=save&amp;page_id=$page_id&amp;change=$change&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
 		 						<a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>";
 							return $out;
@@ -163,7 +163,7 @@
 			$got_mysql = false;
 			if($text == '' && $title == '') {
 				if(is_numeric($change) && $text == '' && $title == '') {
-					$out .= "<strong>Achtung:</strong> Sie bearbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen überschreiben!";
+					$out .= "<strong>Achtung:</strong> Sie bearbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen ï¿½berschreiben!";
 					$sql = "SELECT *
 						FROM (" . DB_PREFIX . "pages_history page
 						LEFT JOIN " . DB_PREFIX . "pages_text_history text ON text.page_id = page.id ) 
@@ -202,15 +202,15 @@
 					$page_edit_comment = $admin_lang['edited'] . '...';
 					$show_preview = false;
 				}
-				$page_text = str_replace('ä', '&auml;', $page_text);
-				$page_text = str_replace('Ä', '&Auml;', $page_text);
-				$page_text = str_replace('ü', '&uuml;', $page_text);
-				$page_text = str_replace('Ü', '&Uuml;', $page_text);
-				$page_text = str_replace('ö', '&ouml;', $page_text);
-				$page_text = str_replace('Ö', '&Ouml;', $page_text);
+				$page_text = str_replace('ï¿½', '&auml;', $page_text);
+				$page_text = str_replace('ï¿½', '&Auml;', $page_text);
+				$page_text = str_replace('ï¿½', '&uuml;', $page_text);
+				$page_text = str_replace('ï¿½', '&Uuml;', $page_text);
+				$page_text = str_replace('ï¿½', '&ouml;', $page_text);
+				$page_text = str_replace('ï¿½', '&Ouml;', $page_text);
 				$page_text = str_replace('<', '&lt;', $page_text);
 				$page_text = str_replace('>', '&gt;', $page_text);
-				$page_text = str_replace('ß', '&szlig;', $page_text);
+				$page_text = str_replace('ï¿½', '&szlig;', $page_text);
 				$out .= "\t\t\t<fieldset><legend>Seite Bearbeiten</legend><form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"save\" />
@@ -221,7 +221,7 @@
 					writeButton(\"img/button_fett.png\",\"Formatiert Text fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 					writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 					writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
+					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als &Uuml;berschrift\",\"=== \",\" ===\",\"ï¿½berschrift\",\"h\");
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">$page_text</textarea>
 				" . $admin_lang['comment_on_change'] . ": <input name=\"page_edit_comment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $page_edit_comment)) . "\" maxlength=\"100\" type=\"text\"/><br />

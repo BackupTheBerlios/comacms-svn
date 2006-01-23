@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
  # file			: functions.php					#
  # created		: 2005-06-17					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
+ # copyright		: (C) 2005-2006 The ComaCMS-Team		#
  # email		: comacms@williblau.de				#
  #----------------------------------------------------------------------#
  # This program is free software; you can redistribute it and/or modify	#
@@ -14,7 +14,16 @@
  # the Free Software Foundation; either version 2 of the License, or	#
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
-
+	// Constants for image aligns
+	define('IMG_ALIGN_NORMAL', 'normal');
+	define('IMG_ALIGN_LEFT', 'left');
+	define('IMG_ALIGN_CENTER', 'center');
+	define('IMG_ALIGN_RIGHT', 'right');
+	// Constants for image layouts
+	define('IMG_DISPLAY_PICTURE', 'picture');
+	define('IMG_DISPLAY_BOX', 'box');
+	define('IMG_DISPLAY_BOX_ONLY', 'box_only');
+	
 	/**
 	 * @return string
 	 */
@@ -28,20 +37,130 @@
 		return "index.php?page=$link\" class=\"link_intern";
 	}
 	
-	function make_media($link) {
-		// remove spaces at the start and end of the string
-		$link = preg_replace("~^\ *(.+?)\ *$~", "$1", $link);
-		// chech if the title text is given if not add the linktext as title
-		if(strpos($link, '|') === false)
-			$link .= "|$link";
-		// format from text URL to a real URL without the title and alt attribute inside
-		// replace also all spaces in the URL with %20
-		$link = preg_replace("/(.*)\|(.*)/e", "str_replace(' ', '%20', '\\1') . '\" alt=\"\\2\" title=\"\\2'", $link);
+	function makeMedia($Image, $ImageAlign) {
+		global $config;
+		#[size] {[int_x]X[int_y],[int_maxsize], w[int_maxwidth], thumb=>w180, original=>[orig_x]X[orig_y], big=>800}
+		#[format] {box, box_only, picture}
+		#[Url]|[Title] => [Url]|box|thumb|[Title]
+		#[Url]|[size]|[Title] = [Url]|box|[size]|[Title]
+		#[Url]|[display]|[size]|[Title]
 		
-		if(substr($link, 0, 6) == 'media:') // set the path to the local media dir
-			return "data/upload/" . substr($link, 6);
-		else	// do nothing more
-			return $link;
+		// remove spaces at the start and end of the string
+		$Image = preg_replace("~^\ *(.+?)\ *$~", '$1', $Image);
+		
+		$parameter = explode('|', $Image);
+		
+		// set the path to the local media dir
+		$imageUrl = preg_replace("~^\media:\ *(.+?)$~", "data/upload/" . '$1', $parameter[0]);
+		// set some other default values
+		$imageTitle = $parameter[0];
+		$imageWidth = 0;
+		$imageHeight = 0;
+		$imageSize = 'w180';
+		$imageDisplay = IMG_DISPLAY_BOX;
+		
+		//remove first entry (we don't have to check it)
+		unset($parameter[0]);
+		
+		// go through each parameter
+		foreach($parameter as $key => $value) {
+			// extract the image layout
+			if(preg_match('~^(' . IMG_DISPLAY_BOX_ONLY .'|' . IMG_DISPLAY_BOX . '|' . IMG_DISPLAY_PICTURE . ')$~', $value))
+				$imageDisplay = $value;
+			// extract the size for the image
+			else if(preg_match('~^(thumb|original|big|[0-9]+[Xx][0-9]+|[0-9]+|\w[0-9]+)$~', $value))
+				$imageSize = $value;
+			else // its the Title of the picture (it is the last unused parameter)
+				$imageTitle = $value;
+		}
+		// is te file available?
+		if(!file_exists($imageUrl))
+			return '';
+		// resize the image (?):
+		
+		// get the original sizes
+		list($originalWidth, $originalHeight) = getimagesize($imageUrl);
+		
+		// convert the 'name-sizes' to 'pixel-sizes' 
+		if($imageSize == 'thumb') 
+			$imageSize = 'w180'; //width: 180px
+		else if ($imageSize == 'big')
+			$imageSize = '800'; // maximal width/length: 800px
+		else if ($imageSize == 'original') {
+			// took the original sizes
+			$imageWidth = $originalWidth;
+			$imageHeight = $originalHeight;
+		}
+		// 'width-format''
+		if(preg_match('~^w[0-9]+$~', $imageSize)) {
+			$imageWidth = substr($imageSize, 1);
+			// calculate the proporitonal height 
+			$imageHeight = round($originalHeight / $originalWidth *  $imageWidth, 0);
+		}
+		// 'maximal-format'
+		else if(preg_match('~^[0-9]+$~', $imageSize)) {
+			// look for the longer side and resize it to te given size,
+			// short the other side proportional to the longer side
+			$imageWidth = ($originalWidth > $originalHeight) ? round($imageSize, 0) : round($originalWidth / ($originalHeight / $imageSize), 0);
+			$imageHeight = ($originalHeight > $originalWidth) ? round($imageSize, 0) : round($originalHeight / ($originalWidth / $imageSize), 0);
+		}
+		// 'exacact-size'
+		else if(preg_match('~^([0-9]+)[Xx]([0-9]+)$~', $imageSize, $maches)) {
+			// took the given sizes
+			$imageWidth = $maches[1];
+			$imageHeight = $maches[2];
+			
+		}
+		// should we generate a thumbnail?
+		// has it the original size?
+		// would it be bigger than the original?
+		if(($imageWidth != $originalWidth && $imageHeight != $originalHeight) || ($imageWidth * $imageHeight < $originalWidth * $originalHeight)) {
+			// generate the path of the thumbnail
+			$thumbnails = $config->Get('thumbnailfolder', 'data/thumbnails/');
+			$oldUrl = $imageUrl;
+			$fileName = basename($imageUrl);
+			$fileName = $thumbnails . $imageWidth . 'x' . $imageHeight . '_' . $fileName;
+			// check if the file already exists
+			if(!file_exists($fileName)) { // it doesn't exists! 
+				// resize it!
+				if(resizeImage($imageUrl, $fileName, $imageWidth, $imageHeight)) // was the resize action succesfull?
+					// set the thumbnail-path 
+					$imageUrl = $fileName; 
+			}
+			else
+				// set the thumbnail-path 
+				$imageUrl = $fileName;
+		}
+		
+		// generate the HTML-code for the images
+		
+		// remove spaces from the image_url
+		$imageUrl = str_replace(' ', '%20', $imageUrl);
+		$imageString = '';
+		
+		// HTMLcode for the box style
+		if($imageDisplay == IMG_DISPLAY_BOX) {
+			
+			$imageString = "\n<div class=\"thumb t" . $ImageAlign . "\">
+						<div style=\"width:" . ($imageWidth + 4) . "px\">
+							<img width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />
+							<div class=\"description\" title=\"$imageTitle\">$imageTitle</div>
+						</div>
+					</div>\n";
+		}
+		// HTMLcode for the box style without a title
+		else if($imageDisplay == IMG_DISPLAY_BOX_ONLY) {
+			$imageString = "\n\n<div class=\"thumb t" . $ImageAlign . "\">
+						<div style=\"width:" . ($imageWidth + 4) . "px\">
+							<img width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />
+						</div>
+					</div>\n";
+		}
+		// HTMLcode for the picture only
+		else if($imageDisplay == IMG_DISPLAY_PICTURE) {
+			$imageString = "<img class=\"img_" . $ImageAlign . "\" width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />";
+		}
+		return $imageString;
 	}
 	
 	/**
@@ -54,13 +173,13 @@
 		$text = stripslashes($text);
 		$text = preg_replace("!(\r\n)|(\r)!","\n",$text);
 		$text = "\n" . $text . "\n";
-		$text = str_replace('&auml;', 'ä', $text);
-		$text = str_replace('&Auml;', 'Ä', $text);
-		$text = str_replace('&uuml;', 'ü', $text);
-		$text = str_replace('&Uuml;', 'Ü', $text);
-		$text = str_replace('&ouml;', 'ö', $text);
-		$text = str_replace('&Ouml;', 'Ö', $text);
-		$text = str_replace('&szlig;', 'ß', $text);
+		$text = str_replace('&auml;', 'Ã¤', $text);
+		$text = str_replace('&Auml;', 'Ã„', $text);
+		$text = str_replace('&uuml;', 'Ã¼', $text);
+		$text = str_replace('&Uuml;', 'Ãœ', $text);
+		$text = str_replace('&ouml;', 'Ã¶', $text);
+		$text = str_replace('&Ouml;', 'O', $text);
+		$text = str_replace('&szlig;', 'ÃŸ', $text);
 		$text = str_replace('&gt;', '>', $text);
 		$text = str_replace('&lt;', '<', $text);
 		// extract all code we won't compile it <code>...CODE...</code>
@@ -78,15 +197,15 @@
 			$first_is_space = (substr($images[1][$key],0,1) == ' ');
 			$last_is_space = (substr($images[1][$key],-1,1) == ' ');
 			if($last_is_space && $first_is_space)
-				$images_html[$key] = "<img src=\"" . make_media($images[1][$key]) . "\" class=\"img_center\" />";
+				$images_html[$key] = makeMedia($images[1][$key], IMG_ALIGN_CENTER);
 			else if($first_is_space)
-				$images_html[$key] = "<img src=\"" . make_media($images[1][$key]) . "\" class=\"img_left\" />";
+				$images_html[$key] = makeMedia($images[1][$key], IMG_ALIGN_LEFT);
 			else if($last_is_space)
-				$images_html[$key] = "<img src=\"" . make_media($images[1][$key]) . "\" class=\"img_right\" />";
+				$images_html[$key] = makeMedia($images[1][$key], IMG_ALIGN_RIGHT);
 			else
-				$images_html[$key] = "<img src=\"" . make_media($images[1][$key]) . "\" class=\"img\" />";
+				$images_html[$key] = makeMedia($images[1][$key], IMG_ALIGN_NORMAL);
 		
-			$text = str_replace('{{' . $images[1][$key] . '}}', '[img]%' . $key .'%[/img]', $text);
+			$text = str_replace('{{' . $images[1][$key] . '}}', '%[img]%' . $key .'%[/img]%', $text);
 		}
 		// 'repair' all urls (with no http:// but a www or ftp)
 		$text = preg_replace("/(\ |\\r|\\n|\[)(www|ftp)\.(.+?)\.([a-zA-Z.]{2,6}(|\/.+?))/s", '$1' . "http://$2.$3.$4", $text);
@@ -131,6 +250,8 @@
 		$text = preg_replace("#===\ (.+?)\ ===#s", "\n\n<h3>$1</h3>\n", $text);
 		// convert == text == to a header <h4>
 		$text = preg_replace("#==\ (.+?)\ ==#s", "\n\n<h4>$1</h4>\n", $text);
+		// convert == text == to a header <h4>
+		$text = preg_replace("#&lt;center&gt;(.+?)&lt;/center&gt;#s", "\n\n<div class=\"center\">$1</div>\n", $text);
 		// convert "/n" to "<br />" (more or less ;-))
 		//$text = nl2br($text);
 		// paste links into the text
@@ -142,7 +263,7 @@
 		}
 		// paste images into the text
 		foreach($images_html as $key => $match)
-			$text = str_replace('[img]%' . $key . '%[/img]', $match, $text);
+			$text = str_replace('%[img]%' . $key . '%[/img]%', $match, $text);
 		
 		$lines = explode("\n", $text);
 		$open_list = false;
@@ -153,6 +274,7 @@
 		$last_line_was_empty = true;
 		$paragaph_open = false;
 		foreach($lines as $line) {
+			//echo ($last_line_was_empty ? '1 - ': '0 - ') . htmlentities($line)."<br/>\r\n";
 			if(special_start_with('* ', $line)){
 				if($paragaph_open) {
 					$new_text .= "</p>\r\n";
@@ -268,7 +390,7 @@
 					$new_text .= "</ul>\r\n";
 				}
 				$line = str_replace("\t", '', $line);
-				if($line != '' && $line != ' ' && !special_start_with('<h', $line) && !special_start_with('[code]', $line))
+				if($line != '' && $line != ' ' && !special_start_with('<h', $line) && !special_start_with('<div', $line) && !special_start_with('[code]', $line))
 				{
 					if($last_line_was_empty) {
 						$new_text .= '<p>'. $line;
@@ -279,7 +401,7 @@
 						$new_text .= "\r\n" . $line;
 				}
 				else {
-					if(special_start_with('$%&', $line . '$%&')) {
+					if(special_start_with('$%&', $line . '$%&', array(' ', "\t", "\r"))) {
 						if($paragaph_open) {
 							$new_text .= "</p>\r\n";
 							$paragaph_open = false;
@@ -289,8 +411,11 @@
 					else
 						$new_text .= "$line\r\n";
 				}
-			}
-				
+				if(special_start_with('$%&', $line . '$%&', array(' ', "\t", "\r")))
+					$last_line_was_empty = true;
+				else
+					$last_line_was_empty = false;
+			}		
 		}
 		
 		$text = $new_text;
@@ -304,13 +429,13 @@
 		$text = str_replace('(c)', '&copy;', $text);
 		
 		$text = str_replace('(r)', '&reg;', $text);
-		$text = str_replace('ä', '&auml;', $text);
-		$text = str_replace('Ä', '&Auml;', $text);
-		$text = str_replace('ü', '&uuml;', $text);
-		$text = str_replace('Ü', '&Uuml;', $text);
-		$text = str_replace('ö', '&ouml;', $text);
-		$text = str_replace('Ö', '&Ouml;', $text);
-		$text = str_replace('ß', '&szlig;', $text);
+		$text = str_replace('Ã¤', '&auml;', $text);
+		$text = str_replace('Ã„', '&Auml;', $text);
+		$text = str_replace('Ã¼', '&uuml;', $text);
+		$text = str_replace('Ãœ', '&Uuml;', $text);
+		$text = str_replace('Ã¶', '&ouml;', $text);
+		$text = str_replace('Ã–', '&Ouml;', $text);
+		$text = str_replace('ÃŸ', '&szlig;', $text);
 		// paste code back
 		foreach($codes as $key => $match)
 			$text = str_replace('[code]%' . $key . '%[/code]', "<pre class=\"code\">$match</pre>", $text);
@@ -319,9 +444,9 @@
 	}
 	/** special_start_with
 	 * 
-	 * Diese Funktion schaut, ob ein String mit einer bestimmten Zeichenkette anfängt und ignoriert dabei einige Zeichen,
-	 * so können grundsätzlich noch Lehrzeichen und Tabs vor der Zeichenkette sein, nach der gesucht wird und dennoch
-	 * wird zurückgegeben, dass der String mit der gesuchten Zeichenkette beginnt. 
+	 * Diese Funktion schaut, ob ein String mit einer bestimmten Zeichenkette anfï¿½ngt und ignoriert dabei einige Zeichen,
+	 * so kï¿½nnen grundsï¿½tzlich noch Lehrzeichen und Tabs vor der Zeichenkette sein, nach der gesucht wird und dennoch
+	 * wird zurï¿½ckgegeben, dass der String mit der gesuchten Zeichenkette beginnt. 
 	 * 
 	 * @return bool
 	 * @param string search
@@ -332,7 +457,7 @@
 		$str_temp = ' '.$str;
 		$search_len = strlen($search);
 		do {
-			// ein weiteres unerwünschtes Zeichen entfernen
+			// ein weiteres unerwï¿½nschtes Zeichen entfernen
 			$str_temp = substr($str_temp, 1);
 			if(substr($str_temp, 0, $search_len) == $search) 
 				return true;
@@ -485,12 +610,60 @@
 				case 'png' : imagepng($newimage, $newfile);
 					break;
 			}
-			imagejpeg($newimage, $newfile ,100);
+			//imagejpeg($newimage, $newfile ,100);
 			
 			return true;
 		}
 		else
 			return copy($file, $newfile);
+	}
+	
+	function resizeImage($InputFile, $OutputFile, $Width, $Height) {
+		
+		preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $InputFile, $ext);
+		
+		list($originalWidth, $originalHeight) = getimagesize($InputFile);
+		
+		$memory_limit = ini_get("memory_limit");
+		if(substr($memory_limit, -1) == 'M')
+			$memory_limit = substr($memory_limit, 0, -1) * 1048576;
+		/*
+		 * mostly all php-binarys for windows are not compiled with --enable-memory-limit
+		 * and don't suport memory_get_usage() and are able to handle bigger data
+		 * (it is not bad for us) 
+		 */
+		if(function_exists('memory_get_usage'))
+			$free_memory = $memory_limit - memory_get_usage();
+		else
+			$free_memory = 0;
+		$needspace = ($originalWidth * $originalHeight + $Width * $Height) * 5;
+		// check for enough available memory to resize the image
+		if($needspace > $free_memory && $free_memory > 0)
+			return false;
+		
+		$newImage = ImageCreateTrueColor($Width, $Height);
+			
+		switch (strtolower($ext[2])) {
+			case 'jpg' :
+			case 'jpeg': $source  = imagecreatefromjpeg($InputFile);
+				break;
+			case 'gif' : $source  = imagecreatefromgif($InputFile);
+				break;
+			case 'png' : $source  = imagecreatefrompng($InputFile);
+				break;
+			default    : return false;
+		}
+		imagecopyresized($newImage, $source, 0, 0, 0, 0, $Width, $Height, $originalWidth, $originalHeight);
+		switch (strtolower($ext[2])) {
+			case 'jpg' :
+			case 'jpeg': imagejpeg($newImage, $OutputFile ,100);
+				break;
+			case 'gif' : imagepng($newImage, $OutputFile . '.png');
+				break;
+			case 'png' : imagepng($newImage, $OutputFile);
+				break;
+		}
+		return true;
 	}
 	
 	function generateUrl($string) {
@@ -521,7 +694,7 @@
 				if($file = mysql_fetch_object($file_result)) {
 					if(file_exists($file->file_path)) {
 						$size = kbormb(filesize($file->file_path));
-						$text .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$entrie->inlineentrie_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Größe von $size\">$entrie->inlineentrie_text</a> ($size)</div>";
+						$text .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$entrie->inlineentrie_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Grï¿½ï¿½e von $size\">$entrie->inlineentrie_text</a> ($size)</div>";
 					}
 				}
 			}

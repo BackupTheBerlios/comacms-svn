@@ -167,7 +167,7 @@
 			ORDER BY article_date DESC
 			LIMIT 0, $count";
 		$result = db_result($sql);
-		$out = '<div class="articles-block">';
+		$out = '</p><div class="articles-block">';
 		$imgmax = 100;
 		$inlinemenu_folder = $config->Get('thumbnailfolder', 'data/thumbnails/');
 		while($data = mysql_fetch_object($result)) {
@@ -193,7 +193,7 @@
 				<div class=\"article-author\">" . getUserByID($data->article_creator) . "</div>
 			</div>\r\n";
 		}
-		$out .= '</div>';
+		$out .= '</div><p>';
 		return $out;
 	}
 

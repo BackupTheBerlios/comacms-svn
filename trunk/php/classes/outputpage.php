@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
  # file			: outputpge.php					#
  # created		: 2005-09-01					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
+ # copyright		: (C) 2005-2006 The ComaCMS-Team		#
  # email		: comacms@williblau.de				#
  #----------------------------------------------------------------------#
  # This program is free software; you can redistribute it and/or modify	#
@@ -288,6 +288,7 @@
 				$this->Template = str_replace('[MENU]', $this->GenerateMenu(1, $this->PageID), $this->Template);;
 			if($this->FindTag('MENU2'))
 				$this->Template = str_replace('[MENU2]', $this->GenerateMenu(2, $this->PageID), $this->Template);;
+			$this->Template = str_replace('<p></p>', '', $this->Template);
 			return $this->Template;
 		}
 	}

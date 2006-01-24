@@ -111,6 +111,9 @@
 			$imageHeight = $maches[2];
 			
 		}
+		
+		$originalUrl = str_replace(' ', '%20', basename($imageUrl));
+		
 		// should we generate a thumbnail?
 		// has it the original size?
 		// would it be bigger than the original?
@@ -141,18 +144,19 @@
 		// HTMLcode for the box style
 		if($imageDisplay == IMG_DISPLAY_BOX) {
 			
-			$imageString = "\n<div class=\"thumb t" . $ImageAlign . "\">
+			$imageString = "\n\n<div class=\"thumb t" . $ImageAlign . "\">
 						<div style=\"width:" . ($imageWidth + 4) . "px\">
 							<img width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />
-							<div class=\"description\" title=\"$imageTitle\">$imageTitle</div>
+							<div class=\"description\" title=\"$imageTitle\"><div class=\"magnify\"><a href=\"special.php?page=image&amp;file=$originalUrl\" title=\"vergr&ouml;&szlig;ern\"><img src=\"img/magnify.png\" title=\"vergr&ouml;&szlig;ern\" alt=\"vergr&ouml;&szlig;ern\"/></a></div>$imageTitle</div>
 						</div>
 					</div>\n";
 		}
 		// HTMLcode for the box style without a title
 		else if($imageDisplay == IMG_DISPLAY_BOX_ONLY) {
-			$imageString = "\n\n<div class=\"thumb t" . $ImageAlign . "\">
+			$imageString = "\n\n<div class=\"thumb tbox t" . $ImageAlign . "\">
 						<div style=\"width:" . ($imageWidth + 4) . "px\">
 							<img width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />
+							<div class=\"magnify\"><a href=\"special.php?page=image&amp;file=$originalUrl\" title=\"vergr&ouml;&szlig;ern\"><img src=\"img/magnify.png\" title=\"vergr&ouml;&szlig;ern\" alt=\"vergr&ouml;&szlig;ern\"/></a></div>
 						</div>
 					</div>\n";
 		}

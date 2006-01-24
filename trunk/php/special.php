@@ -64,18 +64,23 @@
 		$text = ' '; 
 	}
 	elseif($extern_page == 'image') {
-		$image_id = GetPostOrGet('id');
-		if(is_numeric($image_id)) {
+		$imageID = GetPostOrGet('id');
+		$imageFile = GetPostOrGet('file');
+		if(is_numeric($imageID) || !empty($imageFile)) {
 			$title = 'Bild';
+			$condition = 'file_id = ' . $imageID;
+			if(empty($fileID))
+				$condition = "file_name = '$imageFile'";	
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "files
-				WHERE file_id= $image_id
+				WHERE $condition
 				LIMIT 0,1";
-			$image_result = db_result($sql);
-			if($image_data = mysql_fetch_object($image_result)) {
-				$text = "<img src=\"" . generateUrl($image_data->file_path) ."\"/>";
+			$imageResult = $sqlConnection->SqlQuery($sql);
+			if($imageData = mysql_fetch_object($imageResult)) {
+				$text = "<img src=\"" . generateUrl($imageData->file_path) ."\"/>";
 			}
 		}
+		
 	}
 	if($text == '') {
 		header('Location: index.php');

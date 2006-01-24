@@ -518,7 +518,7 @@
 				
 			
 			if($inline->inlinemenu_html === null && $action2 != 'create') {
-				$out .= "Es wurde bis jetzt kein Zusatzmen� erstellt, soll das nun geschehen?<br />
+				$out .= "Es wurde bis jetzt kein Zusatzmen&uuml; erstellt, soll das nun geschehen?<br />
 				<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;action2=create&amp;page_id=$page_id&amp;sure=1\" title=\"" . $admin_lang['yes'] . "\" class=\"button\">" . $admin_lang['yes'] . "</a>
 				<a href=\"admin.php?page=pagestructure\" title=\"" . $admin_lang['no'] . "\" class=\"button\">" . $admin_lang['no'] . "</a>";
 				return $out;
@@ -719,8 +719,8 @@
 						<input type=\"hidden\" name=\"type\" value=\"link\" />
 						<table>
 						<tr><td>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></td><td><input type=\"text\" name=\"text\" value=\"\" /></td></tr>
-						<tr><td>Link<span class=\"info\">Hier kommt die URL hin die den Link sp�ter ergibt.</span></td><td><input type=\"text\" name=\"link\" value=\"http://\" /></td></tr>
-						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zur�cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
+						<tr><td>Link<span class=\"info\">Hier kommt die URL hin die den Link sp&auml;ter ergibt.</span></td><td><input type=\"text\" name=\"link\" value=\"http://\" /></td></tr>
+						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
 						</table>
 						</form>";
 				}
@@ -732,8 +732,8 @@
 						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
 						<input type=\"hidden\" name=\"type\" value=\"text\" />
 						<table>
-						<tr><td>Text<span class=\"info\">Das ist der Text, der sp�ter angezeigt werden soll</span></td><td><textarea name=\"text\"></textarea></td></tr>
-						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zur�cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
+						<tr><td>Text<span class=\"info\">Das ist der Text, der sp&auml;ter angezeigt werden soll</span></td><td><textarea name=\"text\"></textarea></td></tr>
+						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
 						</table>
 						</form>";
 				}
@@ -746,7 +746,7 @@
 						<input type=\"hidden\" name=\"type\" value=\"intern\" />
 						<table>
 						<tr><td>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></td><td><input type=\"text\" name=\"text\" value=\"\" /></td></tr>
-						<tr><td>Interne Seite<span class=\"info\">Das ist die interne Seite, auf die der Link sp�ter f�hren soll.</span></td><td><select name=\"link\">";
+						<tr><td>Interne Seite<span class=\"info\">Das ist die interne Seite, auf die der Link sp&aumlter f&uuml;hren soll.</span></td><td><select name=\"link\">";
 			$sql = "SELECT page_name, page_title
 				FROM " . DB_PREFIX . "pages
 				ORDER BY page_title ASC";
@@ -768,7 +768,7 @@
 						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
 						<input type=\"hidden\" name=\"type\" value=\"download\" />
 						<fieldset>
-							<legend>Download Hinzuf�gen</legend>
+							<legend>Download Hinzuf&uuml;gen</legend>
 						
 						<div class=\"row\">
 							<label class=\"row\" for=\"download_text\">
@@ -780,7 +780,7 @@
 						<div class=\"row\">
 							<label class=\"row\" for=\"link\">
 								Datei f�r den Download:
-								<span class=\"info\">Die hier angegebene Datei kann dann sp�ter heruntergeladen werden.</span>
+								<span class=\"info\">Die hier angegebene Datei kann dann sp&auml;ter heruntergeladen werden.</span>
 							</label>
 							<select name=\"link\" id=\"link\">";
 					$sql = "SELECT *
@@ -793,7 +793,7 @@
 					}			
 					$out .= "</select>
 							</div>
-							<div class=\"row\"><input type=\"reset\" class=\"button\" value=\"Zur�cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></div>
+							<div class=\"row\"><input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></div>
 						</fieldset>
 						</form>";
 				}
@@ -868,7 +868,7 @@
 						$image
 				</div>
 				<div class=\"row\">
-					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=select_image\" class=\"button\">Bild ausw�hlen/ver&auml;ndern</a>
+					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=select_image\" class=\"button\">Bild ausw&auml;hlen/ver&auml;ndern</a>
 					" .((file_exists($inline->inlinemenu_image)) ?  "<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=remove_image\" class=\"button\">Bild entfernen</a>" : '') . "
 				</div>";
 				$sql = "SELECT *
@@ -891,7 +891,7 @@
 					</tr>";
 				}
 				$out .= "</table>
-					<div class=\"row\"><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=add_new_dialog\" class=\"button\">Einen Eintrag hinzuf�gen</a></div>
+					<div class=\"row\"><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=add_new_dialog\" class=\"button\">Einen Eintrag hinzuf&uuml;gen</a></div>
 					</fieldset>";
 			}
 			return $out;

@@ -526,6 +526,28 @@ div.thumb div img {
  border: 1px solid #000000;
 }
 
+div.thumb div.magnify a{
+cursor: pointer;
+}
+
+div.thumb div.magnify a img {
+ border: none;
+}
+
+div.thumb div.magnify {
+margin: -3px;
+ height: 16px;
+ padding: 0;
+ border: none;
+ float: right;
+}
+
+div.tbox div.magnify{
+ float: right;
+ margin-right: 0;
+
+}
+
 div.left_thumbbox div, div.center_thumbbox div, div.right_thumbbox div, div.normal_thumbbox div{
  padding-left: 1ex;
  font-size: 0.7em;

@@ -28,7 +28,7 @@
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "articles
 			WHERE article_id='$page_id'";
-		$article_result = $sql_connection->SqlQuery($sql);
+		$article_result = $sqlConnection->SqlQuery($sql);
 		$image = '';
 		if($article_data = mysql_fetch_object($article_result)) {
 			$imgmax = 300;
@@ -55,7 +55,7 @@
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "articles
 			ORDER BY article_date DESC";
-		$article_result = $sql_connection->SqlQuery($sql);
+		$article_result = $sqlConnection->SqlQuery($sql);
 		
 		$title = "Artikelliste";
 		

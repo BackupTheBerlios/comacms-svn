@@ -330,7 +330,7 @@
 						$save_path = $upload_path . $file['name'];
 						if(file_exists($save_path))
 							$save_path = uniqid($upload_path) . $file['name'];
-						if($file['size'] > 160000)
+						if($file['size'] > 1600000)
 							$file['error'] = 2;
 						if($file['error'] == 0) {
 							//

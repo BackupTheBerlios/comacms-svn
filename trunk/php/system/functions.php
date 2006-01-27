@@ -621,13 +621,43 @@
 		else
 			return copy($file, $newfile);
 	}
+	// TODO...
+	/**
+	 * @return string filename of the thumbnail
+	 */
+	function resizteImageToMaximum($InputFile, $OutputDir, $Maximum) {
+		list($originalWidth, $originalHeight) = getimagesize($InputFile);
+		$width = ($originalWidth > $originalHeight) ? round($Maximum, 0) : round($originalWidth / ($originalHeight / $Maximum), 0);
+		$height = ($originalHeight > $originalWidth) ? round($Maximum, 0) : round($originalHeight / ($originalWidth / $Maximum), 0);
+		$outputFile = (substr($OutputDir, -1) == '/') ? $OutputDir :  $OutputDir . '/';
+		$outputFile .= $width . 'x' . $height . '_'. basename($InputFile);
+		return resizeImage($InputFile, $outputFile, $width, $height);
+	}
 	
+	/**
+	 * @return string filename of the thumbnail
+	 */
+	function resizteImageToWidth($InputFile, $OutputDir, $Width) {
+		if(!file_exists($InputFile))
+			return false;
+		list($originalWidth, $originalHeight) = getimagesize($InputFile);
+		$height = round($originalHeight / $originalWidth *  $Width, 0);
+		$outputFile = (substr($OutputDir, -1) == '/') ? $OutputDir :  $OutputDir . '/';
+		$outputFile .= $Width . 'x' . $height . '_'. basename($InputFile);
+		return resizeImage($InputFile, $outputFile, $Width, $height);
+	}
+	
+	/**
+	 * @return string filename of the thumbnail
+	 */
 	function resizeImage($InputFile, $OutputFile, $Width, $Height) {
 		
 		preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $InputFile, $ext);
 		
+		if(file_exists($OutputFile))
+			return $OutputFile;
 		list($originalWidth, $originalHeight) = getimagesize($InputFile);
-		
+
 		$memory_limit = ini_get("memory_limit");
 		if(substr($memory_limit, -1) == 'M')
 			$memory_limit = substr($memory_limit, 0, -1) * 1048576;
@@ -660,14 +690,15 @@
 		imagecopyresized($newImage, $source, 0, 0, 0, 0, $Width, $Height, $originalWidth, $originalHeight);
 		switch (strtolower($ext[2])) {
 			case 'jpg' :
-			case 'jpeg': imagejpeg($newImage, $OutputFile ,100);
+			case 'jpeg': imagejpeg($newImage, $OutputFile, 100);
 				break;
 			case 'gif' : imagepng($newImage, $OutputFile . '.png');
+				$OutputFile .= '.png';
 				break;
 			case 'png' : imagepng($newImage, $OutputFile);
 				break;
 		}
-		return true;
+		return $OutputFile;
 	}
 	
 	function generateUrl($string) {
@@ -698,7 +729,7 @@
 				if($file = mysql_fetch_object($file_result)) {
 					if(file_exists($file->file_path)) {
 						$size = kbormb(filesize($file->file_path));
-						$text .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$entrie->inlineentrie_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Gr��e von $size\">$entrie->inlineentrie_text</a> ($size)</div>";
+						$text .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$entrie->inlineentrie_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Gr&ouml;&szlig;e von $size\">$entrie->inlineentrie_text</a> ($size)</div>";
 					}
 				}
 			}

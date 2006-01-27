@@ -39,7 +39,7 @@
 		 * @return string The html-code for the inlinemenu, based on the style files
 		 */
 		function LoadInlineMenu() {
-			$sql = "SELECT inlinemenu_html, inlinemenu_image
+			$sql = "SELECT inlinemenu_html, inlinemenu_image, inlinemenu_image_thumb, inlinemenu_image_title
 				FROM " . DB_PREFIX . "inlinemenu
 				WHERE page_id = " . $this->Page->PageID;
 			$inlinemenu_result = db_result($sql);
@@ -48,7 +48,21 @@
 				if($inlinemenu->inlinemenu_html != '') {
 					include($this->Page->Templatefolder . '/menu.php');
 					$out = str_replace('[TEXT]', $inlinemenu->inlinemenu_html, $menu_inline);
-					$out = str_replace('[IMG]', generateUrl($inlinemenu->inlinemenu_image), $out);
+					$imageString = '';
+					if(file_exists($inlinemenu->inlinemenu_image_thumb)){
+						list($imageWidth, $imageHeight) = getimagesize($inlinemenu->inlinemenu_image_thumb);
+						$imageString = "<div class=\"thumb\">
+	<img width=\"200\" height=\"$imageHeight\"src=\"" . generateUrl($inlinemenu->inlinemenu_image_thumb) . "\" title=\"$inlinemenu->inlinemenu_image_title\" alt=\"$inlinemenu->inlinemenu_image_title\" />
+	<div class=\"description\" title=\"$inlinemenu->inlinemenu_image_title\">
+		<div class=\"magnify\">
+			<a href=\"special.php?page=image&amp;file=" . generateUrl(basename($inlinemenu->inlinemenu_image)) . "\" title=\"vergr&ouml;&szlig;ern\">
+				<img src=\"img/magnify.png\" title=\"vergr&ouml;&szlig;ern\" alt=\"vergr&ouml;&szlig;ern\"/>
+			</a>
+		</div>$inlinemenu->inlinemenu_image_title
+	</div>
+</div>";
+					}
+					$out = str_replace('[IMG]', $imageString, $out);
 				}
 			}
 			

@@ -525,10 +525,18 @@
 			}
 			else if($action2 == 'remove_image') {
 				$sql = "UPDATE " . DB_PREFIX . "inlinemenu
-						SET inlinemenu_image=''
+						SET inlinemenu_image='', inlinemenu_image_thumb=''
 						WHERE page_id=$page_id";
 					db_result($sql);
-					$inline->inlinemenu_image = '';
+					$inline->inlinemenu_image_thumb = '';
+			}
+			else if($action2 == 'set_thumb_title') {
+				$thumbTitle = GetPostOrGet('thumb_title');
+				$sql = "UPDATE " . DB_PREFIX . "inlinemenu
+						SET inlinemenu_image_title='$thumbTitle'
+						WHERE page_id=$page_id";
+					db_result($sql);
+					$inline->inlinemenu_image_title = $thumbTitle;
 			}
 			else if($action2 == 'select_image') {
 				$sql = "SELECT *
@@ -545,43 +553,28 @@
 				<input type=\"hidden\" name=\"page_id\" value=\"$page_id\"/>
 				<input type=\"hidden\" name=\"action2\" value=\"set_image\"/>";
 				while($image = mysql_fetch_object($images_result)) {
-					$thumb = basename($image->file_path);
-					preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
-					if(strtolower($ext[2]) == 'gif')
-						$thumb .= '.png';
-					$orig_sizes = getimagesize($image->file_path);
-					$succes = true;
-					if(!file_exists($inlinemenu_folder . $imgmax . '_' . $thumb))
-						$succes = generateThumb($image->file_path, $inlinemenu_folder . $imgmax . '_', $imgmax);
-					if((file_exists($inlinemenu_folder . $imgmax . '_' . $thumb) || $succes) && $orig_sizes[0] >= $imgmax2) {
-						$sizes = getimagesize($inlinemenu_folder . $imgmax . '_' . $thumb);
-						$margin_top = round(($imgmax - $sizes[1]) / 2);
-						$margin_bottom = $imgmax - $sizes[1] - $margin_top;
+					$thumbnail = resizteImageToMaximum($image->file_path, $inlinemenu_folder ,$imgmax);
+					if($thumbnail !== false) {
 						$out .= "<div class=\"imageblock\">
 					<a href=\"" . generateUrl($image->file_path) . "\">
-					<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($inlinemenu_folder . $imgmax . '_' .$thumb) . "\" alt=\"$thumb\" /></a><br />
-					<input type=\"radio\" name=\"image_path\" " .(($inline->inlinemenu_image == $inlinemenu_folder . $imgmax2 . '_' . $thumb) ? 'checked="checked" ' : '') . " value=\"$image->file_path\"/></div>";
+					<img style=\"display:block;margin:auto;\" src=\"" . generateUrl($thumbnail) . "\" alt=\"". basename($thumbnail) ."\" /></a><br />
+					<input type=\"radio\" name=\"image_path\" " .(($inline->inlinemenu_image == $image->file_path) ? 'checked="checked" ' : '') . " value=\"$image->file_path\"/></div>";
 					}
 				}
 				$out .= "</div><input type=\"submit\" value=\"" . $admin_lang['apply'] . "\" class=\"button\"/><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['back'] . "</a></form>";
 				
 			}
 			else if($action2 == 'set_image') {
-				$image_path = GetPostOrGet('image_path');
+				$imagePath = GetPostOrGet('image_path');
 				$imgmax2 = 200;
 				$inlinemenu_folder = 'data/thumbnails/';
-							
-				$new_path = $inlinemenu_folder . $imgmax2 . '_'. basename($image_path);
-				if(!file_exists($new_path)) {
-					
-					$succes = generateThumb($image_path, $inlinemenu_folder . $imgmax2 . '_', 200);
-				}
-				if(file_exists($new_path)) {
+				$thumbnail = resizteImageToWidth($imagePath, $inlinemenu_folder, $imgmax2);
+				if(file_exists($thumbnail)) {
 					$sql = "UPDATE " . DB_PREFIX . "inlinemenu
-						SET inlinemenu_image='$new_path'
+						SET inlinemenu_image_thumb='$thumbnail', inlinemenu_image='$imagePath'
 						WHERE page_id=$page_id";
 					db_result($sql);
-					$inline->inlinemenu_image = $new_path;
+					$inline->inlinemenu_image_thumb = $thumbnail;
 				}
 					
 			}
@@ -844,16 +837,14 @@
 			if(!in_array($action2, $hide)) {
 				$image = 'Noch kein bild gesetzt';
 
-				if(file_exists($inline->inlinemenu_image))
-					$image = "<img src=\"" . generateUrl($inline->inlinemenu_image) . "\"/>";
+				if(file_exists($inline->inlinemenu_image_thumb))
+					$image = "<img src=\"" . generateUrl($inline->inlinemenu_image_thumb) . "\"/>";
 				else {
-					$path = pathinfo($inline->inlinemenu_image);
 					$imgmax2 = 200;
-					$upload_path = 'data/upload/';
-					$orig_file = $upload_path . substr($path['basename'], strlen($imgmax2 . '_'));
-					if(file_exists($orig_file) && is_file($orig_file)){
-						if(generateThumb($upload_path . substr($path['basename'], strlen($imgmax2 . '_')), $path['dirname']. '/' . $imgmax2 . '_', $imgmax2))
-							$image = "<img src=\"" . generateUrl($inline->inlinemenu_image) . "\"/>";
+					$inlinemenuFolder = 'data/thumbnails/';
+					$thumbnail = resizteImageToWidth($inline->inlinemenu_image, $inlinemenuFolder, $imgmax2);
+					if($thumbnail !== false){
+						$image = "<img src=\"" . generateUrl($thumbnail) . "\"/>";
 					}
 						
 				}	
@@ -862,15 +853,31 @@
 					<legend>" . $admin_lang['inlinemenu'] . "</legend>
 				<div class=\"row\">
 						<label class=\"row\">
-							Bild f�r das Zusatzmen&uuml;
+							Bild f&uuml;r das Zusatzmen&uuml;
 							<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmen&uuml; zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgew&auml;hlt werden.</span>
 						</label>
 						$image
 				</div>
 				<div class=\"row\">
 					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=select_image\" class=\"button\">Bild ausw&auml;hlen/ver&auml;ndern</a>
-					" .((file_exists($inline->inlinemenu_image)) ?  "<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=remove_image\" class=\"button\">Bild entfernen</a>" : '') . "
-				</div>";
+					" .((file_exists($inline->inlinemenu_image_thumb)) ?  "<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=remove_image\" class=\"button\">Bild entfernen</a>" : '') . "
+				</div>
+				<form action=\"admin.php\" method=\"post\">
+				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+				<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
+				<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
+				<input type=\"hidden\" name=\"action2\" value=\"set_thumb_title\" />
+				<div class=\"row\">
+					<label for=\"inlinemenu_thumb_title\"class=\"row\">
+						Bildunterschrift
+						<span class=\"info\">Die Bildunterschrift kann das Bild noch ein wenig erl&auml;utern.</span>
+					</label>
+					<input id=\"inlinemenu_thumb_title\" name=\"thumb_title\" type=\"text\" value=\"$inline->inlinemenu_image_title\" />
+				</div>
+				<div>
+					<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" />
+				</div>
+				</form>";
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "inlinemenu_entries
 					WHERE inlineentrie_page_id = $page_id

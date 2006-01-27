@@ -19,7 +19,7 @@ strong {
 }
 
 li {
-margin-left: 1em;
+ margin-left: 1em;
 }
 
 h1, h2, h3, h4, h5 {
@@ -87,6 +87,11 @@ input[type="checkbox"], input[type="radio"], input[type="button"], input[type="s
 fieldset {
  margin:0.1em;
  padding: 1em;
+
+}
+
+fieldset * {
+ clear: left;
 }
 
 legend {
@@ -102,10 +107,8 @@ table {
  margin: 1em;
 }
 
-
-
 #date_day, #date_month, #date_year, #date_hour, #date_minute {
-width : auto;
+ width : auto;
 }
 
 #title {
@@ -169,10 +172,6 @@ width : auto;
 
 #secondmenu a:hover{
  border-bottom: 1px dashed #FF0000;
-}
-
-#inlinemenu {
- font-size: 1.6em;
 }
 
 p {
@@ -248,15 +247,13 @@ p {
 }
 
 #inlinemenu {
+ font-size: 1.6em;
  float: left;
  width: 200px;
- padding-left: 12px;
 }
 
-#inlinemenuimage {
- width: 200px;
- margin-bottom: 6px;
- margin-left: -12px;
+#inlinemenu  div {
+ margin-left: 1em;
 }
 
 span.info, span.error{
@@ -282,7 +279,7 @@ span.error {
 }
 
 a.button , input.button, button{
- color: #000000:
+ color: #000000;
  text-decoration: none;
  font-weight: bold;
  border: 1px solid #000000;
@@ -507,7 +504,7 @@ div.tcenter * {
  margin-right: auto;
 }
 
-div.thumb div {
+div.thumb div, #inlinemenu div.thumb {
  border: 1px solid #000000;
  padding: 3px !important;
  background-color: #9B9FBF;
@@ -516,36 +513,45 @@ div.thumb div {
  overflow: hidden;
 }
 
-div.thumb div div.description {
- border: none;
+div.thumb div div.description, #inlinemenu div.thumb div.description {
+ border: none !important;
  text-align: left;
  line-height: 1.4em;
  padding: .3em 0 .1em 0;
+ margin-left: auto;
 }
-div.thumb div img {
+
+div.thumb div img, #inlinemenu div.thumb img{
  border: 1px solid #000000;
 }
 
 div.thumb div.magnify a{
-cursor: pointer;
+ cursor: pointer;
+ margin: 0;
+ padding: 0;
 }
 
 div.thumb div.magnify a img {
- border: none;
+ border: none !important;
 }
 
 div.thumb div.magnify {
-margin: -3px;
+ margin: -3px;
  height: 16px;
  padding: 0;
  border: none;
  float: right;
+ width: 16px;
 }
 
 div.tbox div.magnify{
  float: right;
  margin-right: 0;
+}
 
+#inlinemenu div.thumb {
+ margin: 3px !important;
+ width: 202px;
 }
 
 div.left_thumbbox div, div.center_thumbbox div, div.right_thumbbox div, div.normal_thumbbox div{
@@ -559,12 +565,7 @@ div.left_thumbbox, div.center_thumbbox, div.right_thumbbox, div.normal_thumbbox 
  background-color: #9B9FBF;
 }
 div.center_thumbbox{
-width: auto;
-
-}
-
-div.center_thumbbox img{
- 
+ width: auto;
 }
 
 img.img_normal, img.img_left, img.img_center, img.img_right, div.left_thumbbox, div.center_thumbbox, div.right_thumbbox, div.normal_thumbbox{
@@ -589,9 +590,7 @@ img.img_center {
  display: block;
  margin-left: auto;
  margin-right: auto;
-
 }
-
 
 .strike img {
  margin-left: 20px;
@@ -602,21 +601,23 @@ th img{
  margin: 1px;
 }
 
-label.row {
- float: left;
- display: inline;
- padding-right: 1em;
- width: 17em;
-}
-
-div.row {
- clear: both;
-}
-
 .inline_download a{
  padding-left: 18px;
  background-image: url("../../img/download.png");
  background-repeat: no-repeat;
+}
+
+.inline_link a{
+ padding-left: 18px;
+ background-image: url("../../img/extern.png");
+ background-repeat: no-repeat;
+}
+
+.inline_intern a{
+ padding-left: 18px;
+ background-image: url("../../img/view.png");
+ background-repeat: no-repeat;
+ 
 }
 
 li.page_type_text, li.page_type_gallery {
@@ -628,27 +629,33 @@ label.row {
  display: inline;
  padding-right: 1em;
  width: 17em;
+ padding-bottom: 1em;
 }
 
 div.row {
  clear: both;
+ padding-bottom: 1em;
 }
 
 div.warning {
-border: 1px solid #000000;
-text-align: center;
-font-weight: bold;
-background-color: #FAA500;
-margin-bottom: 1em;
-margin-top: 1em;
+ border: 1px solid #000000;
+ text-align: center;
+ font-weight: bold;
+ background-color: #FAA500;
+ margin-bottom: 1em;
+ margin-top: 1em;
 }
-
 
 .center {
  width: 100%;
  text-align: center;
 }
+
 *.center * {
  margin-left: auto;
  margin-right: auto;
+}
+
+h3 a {
+ border-bottom:1px dashed #000000;
 }

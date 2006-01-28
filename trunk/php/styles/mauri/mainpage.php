@@ -19,7 +19,7 @@
 			<ul id="secondmenu">
 [MENU2]
 			</ul>
-						<h1 id="title">Sankt Mauritius Hildesheim</h1><notathome>
+						<h1 id="title">Seelsorgeeinheit<br /> Sankt Mauritius und Sankt Michael</h1><notathome>
 						<span id="position">Pfad: [POSITION]</span></notathome>
 		</div>
 		<div id="menupart">

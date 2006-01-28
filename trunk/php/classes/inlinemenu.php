@@ -45,7 +45,7 @@
 			$inlinemenu_result = db_result($sql);
 			$out = '';
 			if($inlinemenu = mysql_fetch_object($inlinemenu_result)) {
-				if($inlinemenu->inlinemenu_html != '') {
+				if($inlinemenu->inlinemenu_html != ''  || $inlinemenu->inlinemenu_image_thumb!= '') {
 					include($this->Page->Templatefolder . '/menu.php');
 					$out = str_replace('[TEXT]', $inlinemenu->inlinemenu_html, $menu_inline);
 					$imageString = '';

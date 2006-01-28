@@ -14,7 +14,11 @@
  # the Free Software Foundation; either version 2 of the License, or	#
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
-	
+	/**
+ 	 * @ignore
+ 	 */
+ 	require_once('./classes/pagestructure.php');
+ 	
 	/**
 	 * @package ComaCMS 
 	 */
@@ -25,15 +29,28 @@
  		 */
  		var $MenuPageIDs;
  		
+ 		var $_SqlConnection;
+ 		var $_Pagestructure;
+ 		var $_AdminLang;
+ 		
+ 		
+ 		function Admin_PageStructure($SqlConnection, $AdminLang) {
+			$this->_SqlConnection = $SqlConnection;
+			$this->_AdminLang = $AdminLang;
+			$this->_Pagestructure = new Pagestructure($this->_SqlConnection);
+		}
+ 		
  		/**
  		 * @return string
  		 * @param action string
  		 */
 		 function GetPage($action = '') {
-		 	global $admin_lang;
+		 	$adminLang = $this->_AdminLang;
 		 	
-			$out = "\t\t\t<h3>" . $admin_lang['pagestructure'] . "</h3><hr />\r\n";
-		 	$action = strtolower($action);
+			$out = '';
+			$action = strtolower($action);
+			if($action != 'intern_home')
+				$out .= "\t\t\t<h2>" . $adminLang['pagestructure'] . "</h2>\r\n";
 		 	switch ($action) {
 		 		case 'delete':		$out .= $this->_deletePage();
 		 					break;
@@ -62,61 +79,17 @@
 		  * @return string
 		  */
 		 function _generate_menu() {
-		 	global $admin_lang;
-		 	//$out = '';
 		 	$pages = GetPostOrGet('pagestructure_pages');
-		 	$menu = GetPostOrGet('pagestructure_savemenu');
-		 	
-		 		$menu_id = "1";
-		 		
-		 		$sql = "DELETE " .
-		 			"FROM " . DB_PREFIX . "menu ";
-		 		$db_result = db_result($sql);
-		 		
-		 		foreach($pages as $page) {
-		 			$sql = "SELECT * " .
-		 				"FROM " . DB_PREFIX . "pages " .
-		 				"WHERE page_id=$page";
-		 			$page_result = db_result($sql);
-		 			$page_db = mysql_fetch_object($page_result);
-		 			if($page_db->page_parent_id == "0") {
-		 				if($page_db->page_access == 'public') {
-		 					if($page_db->page_type != 'link') {
-			 					$new = 'no';
-		 					}
-		 					else {
-		 						$new = 'yes';
-			 				}
-			 				// FIXME: What is gonig on if it is an link-page??
-			 				$link = "l:" . $page_db->page_name;
-		 				
-		 					$sql = "SELECT menu_orderid
-		 						FROM " . DB_PREFIX . "menu
-		 						WHERE menu_id=$menu_id
-		 						ORDER BY menu_orderid DESC
-			 					LIMIT 1";
-		 					$menu_result = db_result($sql);
-							$menu_data = mysql_fetch_object($menu_result);
-							if($menu_data != null)
-								$ordid = $menu_data->menu_orderid + 1;
-							else
-								$ordid = 0;
-						
-						
-							$sql = "INSERT INTO " . DB_PREFIX . "menu
-								(menu_text, menu_link, menu_new, menu_orderid, menu_menuid, menu_page_id)
-								VALUES ('$page_db->page_title', '$link', '$new', $ordid, $menu_id, $page_db->page_id)";
-							db_result($sql);
-		 				}
-		 			}
-		 		}
-
-		 	header('Location: ' . $_SERVER['PHP_SELF'] . '?page=pagestructure');
+		 	// Clear the main-menu
+		 	$this->_Pagestructure->ClearMenu(1);
+		 	// Insert the pages to the main-menu
+		 	$this->_Pagestructure->GenerateMenu($pages, 1);
+		 	// Print out the default view
+		 	return $this->GetPage('intern_home');
 		 }
 		 
 		 function _newLink() {
 		 	$out = '';
-		 	
 		 	return $out;
 		 }
 		 
@@ -151,7 +124,7 @@
 			 	return $out;
 		 	}
 		 	else {
-		 		header('Location: ' . $_SERVER['PHP_SELF'] . '?page=pagestructure');
+		 		return $this->GetPage('intern_home');
 		 	}
 		 	
 		 }
@@ -175,6 +148,7 @@
 			$out .= "\t\t\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />\r\n";
 			$out .= "\t\t\t<input type=\"hidden\" name=\"action\" value=\"generate_menu\" />\r\n";
 		 	$out .= $this->_showStructure(0);
+		 	$out .= "<input type=\"submit\" class=\"button\" name=\"pagestructure_savemenu\" value=\"" . $admin_lang['generate_mainmenu'] . "\" />\r\n";
 			$out .= "\t\t\t</form>\r\n";
 			
 			return $out;
@@ -316,7 +290,7 @@
 		 				$out .= " <a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen $page->page_title\" title=\"Anschauen\"/></a>";
 		 			// inlinemenu:
 		 			if($page->page_access != 'deleted')
-		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page->page_id\" title=\"Das Zusatzmen&uuml; f�r &quot;$page->page_title&quot; bearbeiten\">" . $admin_lang['inlinemenu'] . "</a>";
+		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page->page_id\" title=\"Das Zusatzmen&uuml; f&uuml;r &quot;$page->page_title&quot; bearbeiten\">" . $admin_lang['inlinemenu'] . "</a>";
 		 			// delete:
 		 			if($page->page_access != 'deleted')
 		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=delete&amp;page_id=$page->page_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
@@ -324,21 +298,7 @@
 					$out .= '</span></span>' . $this->_showStructure($page->page_id);
 		 			$out .= "\t\t\t\t</li>\r\n";
 				}
-				
-				if($topnode == 0) {
-					$out .= "\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" class=\"button\" name=\"pagestructure_savemenu\" value=\"" . $admin_lang['generate_mainmenu'] . "\" /></li>" .
-						"\r\n\t\t\t</ol>\r\n";
-				}
-				else {
-					/*$sql = "SELECT *
-						FROM " . DB_PREFIX . "pages
-						WHERE page_id=$topnode";
-					$page_result = db_result($sql);
-					$page = mysql_fetch_object($page_result);*/
-					
-					$out .= /*"\t\t\t\t<li class=\"pagestructure_sendbutton\"><input type=\"submit\" name=\"pagestructu_savemenu\" value=\"" . $admin_lang['generate_menu_for'] . ": $page->page_title\" /></li>" .*/
-						"\r\n\t\t\t</ol>\r\n\r\n";
-				}
+				$out .= "\r\n\t\t\t</ol>\r\n\r\n";
 			}
 			
 			return $out;
@@ -529,6 +489,7 @@
 						WHERE page_id=$page_id";
 					db_result($sql);
 					$inline->inlinemenu_image_thumb = '';
+					$inline->inlinemenu_image = '';
 			}
 			else if($action2 == 'set_thumb_title') {
 				$thumbTitle = GetPostOrGet('thumb_title');

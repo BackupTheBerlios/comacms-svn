@@ -13,12 +13,19 @@ padding-top: 13px;
 .sitepreview, #previewiframe { /*FIXME: make only one classss*/
  width: 820px;
 }
+
+div.tcenter {
+ width: 99.5%;
+}
+
 input {
  width: auto;
 }
+
 .articles-block{
  margin-right: 0;
 }
+
 table.dates, table.articles, table.page_commits, table.tablestyle {
  width: 99%;
 }

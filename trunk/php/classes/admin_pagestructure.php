@@ -844,7 +844,7 @@
 					WHERE inlineentrie_page_id = $page_id
 					ORDER BY inlineentrie_sortid ASC";
 				$entries_result = db_result($sql);
-				$out .= "<table class=\"text_table\">
+				$out .= "<table class=\"text_table noform\">
 					<thead><tr><th>Text</th><th>Typ</th><th>Aktion</th></tr></thead>";
 				while($entrie = mysql_fetch_object($entries_result)) {
 					$out .= "<tr>

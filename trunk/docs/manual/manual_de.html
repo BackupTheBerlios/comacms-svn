@@ -4,20 +4,59 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
         	<title>ComaCMS Howto</title>
-        	<style type="text/css">
+	       	<link rel="stylesheet" href="manual.css" type="text/css" />
+	       	<link rel="stylesheet" href="style.css" type="text/css" />
+        <!-- <style type="text/css">
+        	* {
+ margin: 0;
+ padding: 0;
+ font-size: 1em;
+ font-weight: normal;
+}
+li {
+ margin-left: 1em;
+}
+
+h1, h2, h3, h4, h5 {
+ font-weight: bold;
+}
+h1 {
+ font-size: 2em;
+ text-align: center;
+ padding: 0;
+ margin: 0;
+}
+img {
+ border: 0;
+}
+h2 {
+ font-size: 1.5em;
+ margin-bottom: 1em;
+ margin-top: 0.5em;
+}
+
+h3 {
+ font-size: 1.17em;
+ padding-left: 1.5em;
+ margin-bottom: 1em;
+ margin-top: 0.5em;
+}
+
+
+h4 {
+ margin-top: 0.5em;
+ padding-left: 2em;
+ margin-bottom: 1em;
+}
         	html, body {
  		  font-family: arial, verdana, helvetica, sans-serif;
-		}
-		
-		h1 {
-		  text-align: center;
 		}
 		
 		.block {
         	  margin: 1.2em;
         	  margin-top: 0.25em;
         	  margin-bottom: 0.25em;
-        	  text-align: justify;
+        	  text-align: left;
         	}
         	
         	.title {
@@ -26,7 +65,9 @@
         	}
         	
         	p{
-        	  text-indent: .5em;
+        	  text-indent: 1em;
+        	  
+		 
         	}
         	
         	a {
@@ -42,7 +83,9 @@
         	dt {
         	  font-weight: bold;
         	}
-        	
+        	dd {
+        	 margin-left: 1em;
+        	}
         	abbr, acronym {
 		  border-bottom: 1px dotted #3C528B;
 		  cursor: help;
@@ -88,9 +131,10 @@
 		  background-color: #9B9FBF;
 		}
 		
-		img.img_img, img.img_left, img.img_center, img.img_right{
+		img.img_normal, img.img_left, img.img_center, img.img_right{
 		  margin: 2ex;
-		  margin-top: 1ex;
+		  margin-top: 2ex;
+		  margin-bottom: 0;
  
 		}
 		
@@ -101,7 +145,8 @@
 
 		img.img_right {
 		  float: right;
-		  margin-right: 1ex;
+		  clear: right;
+		  margin-left: 1ex;
 		}
 
 		img.img_center {
@@ -109,11 +154,11 @@
 		  margin-left: auto;
 		  margin-right: auto;
 		}
-        	</style>
+        	</style>-->
     	</head>
     	<body>
   		<h1>ComaCMS <acronym title="How To(engl.) = Wie ist das zu machen?">HOWTO</acronym></h1>
-  		<ol class="menu" >
+  		<ol id="menu" >
   			<li><a href="#I.">Vorwort</a></li>
   			<li><a href="#II.">Installation</a></li>
   			<li>
@@ -258,7 +303,8 @@ Man kann aber auch Links erzwingen,
 indem man sie mit eckigen Klammern umgibt ([[www.berlios.de]]).\\
 Mit den eckigen Klammern kann man auch einen Link umbenennen:
 [[www.berlios.de|Die Homepage von BerliOS]].
-Um auf interne Seiten zu verlinken nimmt man den Namen oder die ID der Seite und schreibt dann:
+Um auf interne Seiten zu verlinken nimmt man den Namen
+oder die ID der Seite und schreibt dann:
 [[interne_seite|Link auf eine interne Seite]].\\
 Auch Emailadressen können in Links umgeformt werden,
  sie müssen dann in spitze Klammern geschrieben werden: &lt;comacms@williblau.de&gt;
@@ -322,23 +368,61 @@ Auch Emailadressen können in Links umgeformt werden,
 					<div id="IV.1.3.5" class="block">
 						<h5>IV.1.3.5 Bilder</h5>
 						<p>Wichtig ist natürlich auch die Möglichkeit zur Einbindung von Bildern in den Text.</p>
-						<p>Es gibt zwei verschiedene Möglichkeiten Bilder einzubinden.</p>
+						<p>Es gibt zwei verschiedene M&ouml;glichkeiten Bilder einzubinden.</p>
 						<ul>
-							<li>mit der URL zum Bild: <img src="img/comacms_logo.png" alt="img/comacms_logo.png" title="img/comacms_logo.png" class="img" /></li>
-							<li>mit einer relativen Angabe zum medienordner der Homepage: <img src="img/comacms_logo.png" alt="media:comacms_logo.png" title="media:comacms_logo.png" class="img" /></li>
+							<li>mit der URL zum Bild: </li>
 						</ul>
-
+						<div class="thumb tnormal">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="img/comacms_logo.png" alt="img/comacms_logo.png" />
+								<div class="description" title="img/comacms_logo.png">
+									<div class="magnify">
+										<a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a>
+									</div>
+									img/comacms_logo.png
+								</div>
+							</div>
+						</div>
+						<ul>
+							<li>mit einer relativen Angabe zum medienordner der Homepage: </li>
+						</ul>
+						<div class="thumb tnormal">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="media:comacms_logo.png" alt="media:comacms_logo.png" />
+								<div class="description" title="media:comacms_logo.png">
+									<div class="magnify">
+										<a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a>
+									</div>
+									media:comacms_logo.png
+								</div>
+							</div>
+						</div>
 						<pre class="code">
 Es gibt zwei verschiedene Möglichkeiten Bilder einzubinden.
  * mit der URL zum Bild: {{img/comacms_logo.png}}
  * mit einer relativen Angabe zum medienordner der Homepage: {{media:comacms_logo.png}}
 </pre>
-						<p>Da einfache Bilder im Text nicht immer schön aussehen gibt es die Möglichkeit,
+						<p>Da einfache Bilder im Text nicht immer sch&ouml;n aussehen gibt es die M&ouml;glichkeit,
 						Bilder mit einem Lehrzeichen hinter bzw. und/oder vor den geschweiften Klammern,
-						auszurichten.
-						<img src="img/comacms_logo.png" alt="media:comacms_logo.png" title="media:comacms_logo.png" class="img_left" />
-						<img src="img/comacms_logo.png" alt="media:comacms_logo.png" title="media:comacms_logo.png" class="img_right" />
-						<img src="img/comacms_logo.png" alt="media:comacms_logo.png" title="media:comacms_logo.png" class="img_center" /></p>
+						auszurichten.</p>
+						<div class="thumb tleft">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="media:comacms_logo.png" alt="media:comacms_logo.png" />
+								<div class="description" title="media:comacms_logo.png"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>media:comacms_logo.png</div>
+							</div>
+						</div>
+						<div class="thumb tright">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="media:comacms_logo.png" alt="media:comacms_logo.png" />
+								<div class="description" title="media:comacms_logo.png"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>media:comacms_logo.png</div>
+							</div>
+						</div>
+						<div class="thumb tcenter">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="media:comacms_logo.png" alt="media:comacms_logo.png" />
+								<div class="description" title="media:comacms_logo.png"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>media:comacms_logo.png</div>
+							</div>
+						</div>
 						<pre class="code">
 Da einfache Bilder im Text nicht immer schön aussehen gibt es die Möglichkeit,
 Bilder mit einem Lehrzeichen hinter bzw. und/oder vor den geschweiften Klammern,
@@ -347,11 +431,81 @@ auszurichten.
 {{media:comacms_logo.png }}
 {{ media:comacms_logo.png }}
 </pre>
-					<p>Zus&auml;tzlich kann man den Bildern einen Titel geben, der dann Angezeigt wird, wenn man mit der Maus &uuml;ber das Bild f&auml;hrt oder Bilder abgeschaltet hat.<img src="img/comacms_logo.png" alt="Das ist das Logo von ComaCMS" title="Das ist das Logo von ComaCMS" class="img_center" /></p>
-					<pre class="code">
+						<p>Zus&auml;tzlich kann man den Bildern einen Titel geben, der dann Angezeigt wird,
+						wenn man mit der Maus &uuml;ber das Bild f&auml;hrt oder Bilder abgeschaltet hat.</p>
+						<div class="thumb tcenter">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="Das ist das Logo von ComaCMS" alt="Das ist das Logo von ComaCMS" />
+								<div class="description" title="Das ist das Logo von ComaCMS"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>Das ist das Logo von ComaCMS</div>
+							</div>
+						</div>
+						<pre class="code">
 Zusätzlich kann man den Bildern einen Titel geben, der dann Angezeigt wird,
 wenn man mit der Maus über das Bild fährt oder Bilder abgeschaltet hat.
 {{ media:comacms_logo.png|Das ist das Logo von ComaCMS }}
+</pre>
+						<p>Das Aussehen der Bilder kann durch verschiedene Parameter ver&auml;ndert werden. Es gibt zwei verschiedene Typen an Parametern, einmal die Parameter f&uuml;r das Aussehen und einmal die Parameter f&uuml;r die Gr&ouml;&szlig;e der Bilder.</p>
+<ul>
+	<li><strong>Aussehen</strong>
+
+		<ul>
+			<li><strong>box</strong>: Das Bild steht in einem Kasten mit dem Titel als Bildunterschrift (<em>Standardeinstellung</em>)</li>
+			<li><strong>box_only</strong>: Das Bild steht in einem Kasten ohne Bildunterschrift</li>
+			<li><strong>picture</strong>: Das Bild steht f&uuml;r sich alleine</li>
+
+		</ul>
+	</li>
+</ul>
+<div class="thumb tbox tright">
+<div style="width:184px">
+<img width="180" height="90" src="img/180x90_comacms_logo.png" title="&quot;Nur Box&quot;" alt="&quot;Nur Box&quot;" />
+<div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>
+</div>
+</div>
+<div class="thumb tbox tleft">
+<img width="180" height="90" src="img/180x90_comacms_logo.png" title="Nur das Bild" alt="Nur das Bild" />
+</div><div class="thumb tcenter">
+<div style="width:184px">
+<img width="180" height="90" src="img/180x90_comacms_logo.png" title="Box mit Bildunterschrift" alt="Box mit Bildunterschrift" />
+<div class="description" title="Box mit Bildunterschrift"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>Box mit Bildunterschrift</div>
+</div>
+</div>
+						<pre class="code">
+{{media:comacms_logo.png|box_only|"Nur Box" }}
+{{ media:comacms_logo.png|picture|Nur das Bild}}
+{{ media:comacms_logo.png|box|Box mit Bildunterschrift }}
+</pre>
+<ul>
+
+	<li><strong>Gr&ouml;&szlig;e</strong>
+		<ul>
+			<li><strong>original</strong>: Stellt das Bild in der Originalg&ouml;&szlig;e dar</li>
+			<li><strong>thumb</strong>: Begrenzt die Breite des Bildes auf 180 Pixel (<em>Standardeinstellung</em>)</li>
+			<li><strong>w80</strong>: Begrenzt die Breite des Bildes auf die angegebene Breite (in diesem Fall auf 80 Pixel)</li>
+
+		</ul>
+	</li>
+</ul>
+<div class="thumb tright">
+<div style="width:204px">
+<img width="200" height="100" src="img/comacms_logo.png" title="Originalgr&ouml;&szlig;e" alt="Originalgr&ouml;&szlig;e" />
+<div class="description" title="Originalgr&ouml;&szlig;e"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>Originalgr&ouml;&szlig;e</div>
+</div>
+</div><div class="thumb tleft">
+<div style="width:84px">
+<img width="80" height="40" src="img/80x40_comacms_logo.png" title="80 Pixel Breit" alt="80 Pixel Breit" />
+<div class="description" title="80 Pixel Breit"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>80 Pixel Breit</div>
+</div>
+</div><div class="thumb tcenter">
+<div style="width:184px">
+<img width="180" height="90" src="img/180x90_comacms_logo.png" title="" alt="" />
+								<div class="description" title=""><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div></div>
+							</div>
+						</div>
+						<pre class="code">
+{{media:comacms_logo.png|original|Originalgröße }}
+{{ media:comacms_logo.png|w80|80 Pixel Breit}}
+{{ media:comacms_logo.png|thumb| }}
 </pre>
 					</div>
 				</div>

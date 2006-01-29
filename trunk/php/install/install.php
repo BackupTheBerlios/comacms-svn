@@ -80,9 +80,11 @@
 		);
 		DROP TABLE IF EXISTS " . $db_prefix . "inlinemenu;
 		CREATE TABLE " . $db_prefix . "inlinemenu (
-			page_id int(10) unsigned NOT NULL,
+			page_id int(10) unsigned NOT NULL default '0',
 			inlinemenu_image varchar(150) NOT NULL default '',
+			inlinemenu_image_thumb varchar(255) NOT NULL default '',
 			inlinemenu_html text NOT NULL,
+			inlinemenu_image_title varchar(100) NOT NULL default '',
 			PRIMARY KEY  (page_id)
 		);
 		DROP TABLE IF EXISTS " . $db_prefix . "inlinemenu_entries;
@@ -217,7 +219,30 @@
 			PRIMARY KEY  (smilie_id),
 			UNIQUE KEY smilie_text (smilie_text)
 		);
-        		
+		DROP TABLE IF EXISTS " . $db_prefix . "auth;
+        	CREATE TABLE " . $db_prefix . "auth (
+			auth_group_id INT( 20 ) ,
+			auth_user_id INT( 20 ) ,
+			auth_page_id INT( 20 ) DEFAULT '0' NOT NULL ,
+			auth_view TINYINT( 1 ) DEFAULT '1' NOT NULL ,
+			auth_edit TINYINT( 1 ) DEFAULT '0' NOT NULL ,
+			auth_delete TINYINT( 1 ) DEFAULT '0' NOT NULL ,
+			auth_new_sub TINYINT( 1 ) DEFAULT '0' NOT NULL
+		);
+		DROP TABLE IF EXISTS " . $db_prefix . "groups;
+		CREATE TABLE " . $db_prefix . "groups (
+			group_id int(20) NOT NULL auto_increment,
+			group_name varchar(40) NOT NULL default '',
+			group_description text NOT NULL,
+			group_manager int(20) NOT NULL default '0',
+			PRIMARY KEY  (group_id),
+			UNIQUE KEY group_name (group_name)
+		);
+		DROP TABLE IF EXISTS " . $db_prefix . "roup_users;
+		CREATE TABLE " . $db_prefix . "group_users (
+			group_id INT( 20 ) NOT NULL ,
+			user_id INT( 20 ) NOT NULL
+		);			
 		INSERT INTO " . $db_prefix . "users (user_name, user_showname, user_password, user_registerdate, user_admin, user_icq)
 		VALUES ('$admin_name', '$admin_showname', '" . md5($admin_password) . "', '" . mktime() . "', 'y', '');
 		INSERT INTO " . $db_prefix . "config (config_name, config_value)

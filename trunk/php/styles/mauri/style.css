@@ -90,7 +90,7 @@ fieldset {
 
 }
 
-fieldset * {
+fieldset .noform {
  clear: left;
 }
 
@@ -139,7 +139,7 @@ table {
 #text {
  font-size: 1.6em;
  padding: 0.5em;
- margin: 0 0 0 9em;
+ margin: 0 0.2em 0 9em;
  text-align: left;
  line-height: 1.4em;
 }
@@ -470,6 +470,7 @@ table.text_table th {
 .structure_row:hover {
  background-color: #87C6E9;
 }
+
 div.thumb {
  margin-bottom: .5em;
  border: none;
@@ -477,13 +478,14 @@ div.thumb {
 }
 
 div.tcenter {
-
  width: 100%;
  text-align: center;
+ margin-bottom: 1ex;
 }
 
 div.tleft {
  float: left;
+ clear: left;
  margin-right: 1ex;
  margin-bottom: 1ex;
  margin-top: 0;
@@ -556,12 +558,14 @@ div.left_thumbbox div, div.center_thumbbox div, div.right_thumbbox div, div.norm
  padding-left: 1ex;
  font-size: 0.7em;
 }
+
 div.left_thumbbox, div.center_thumbbox, div.right_thumbbox, div.normal_thumbbox  {
  text-align: left;
  padding: 0.5ex;
  border: 1px solid black;
  background-color: #9B9FBF;
 }
+
 div.center_thumbbox{
  width: auto;
 }
@@ -588,6 +592,7 @@ img.img_center {
  display: block;
  margin-left: auto;
  margin-right: auto;
+ width: 99.5%;
 }
 
 .strike img {

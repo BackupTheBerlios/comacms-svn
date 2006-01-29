@@ -141,6 +141,8 @@
 		$imageUrl = str_replace(' ', '%20', $imageUrl);
 		$imageString = '';
 		
+		$imageTitle = str_replace('"', '&quot;', $imageTitle);
+		
 		// HTMLcode for the box style
 		if($imageDisplay == IMG_DISPLAY_BOX) {
 			
@@ -162,7 +164,9 @@
 		}
 		// HTMLcode for the picture only
 		else if($imageDisplay == IMG_DISPLAY_PICTURE) {
-			$imageString = "<img class=\"img_" . $ImageAlign . "\" width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />";
+			$imageString = "\n\n<div class=\"thumb tbox t" . $ImageAlign . "\">
+					<img width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />
+					</div>";
 		}
 		return $imageString;
 	}

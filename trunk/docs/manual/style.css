@@ -1,0 +1,103 @@
+/* Tables 
+========================================*/
+
+table.text_table {
+ border-spacing: 0px;
+ border-collapse: collapse;
+}
+
+table.text_table td, table.text_table th{
+ border: 1px solid #000000;
+ padding: 0.1em;
+}
+
+table.text_table th {
+ background-color: #9B9FBF;
+}
+
+/* Images
+========================================*/
+
+div.thumb {
+ margin-bottom: .5em;
+ border: none;
+ width: auto;
+}
+
+div.tcenter {
+ width: 100%;
+ text-align: center;
+ margin-bottom: 1ex;
+}
+
+div.tleft {
+ float: left;
+ margin-right: 1ex;
+ margin-bottom: 1ex;
+ margin-top: 0;
+}
+
+div.tright {
+ float: right;
+ clear: right;
+ margin-left: 1ex;
+ margin-bottom: 1ex;
+ margin-top: 0;
+}
+
+div.tcenter * {
+ margin-left: auto;
+ margin-right: auto;
+}
+
+div.thumb div {
+ border: 1px solid #000000;
+ padding: 3px !important;
+ padding-left: auto !important;
+ padding-right: auto !important;
+ background-color: #9B9FBF;
+ font-size: 94%;
+ text-align: center;
+ overflow: hidden;
+}
+
+div.thumb div div.description {
+ border: none !important;
+ text-align: left;
+ line-height: 1.4em;
+ padding: .3em 0 .1em 0;
+ margin-left: auto;
+ margin-right: auto;
+}
+
+div.thumb div img {
+ border: 1px solid #000000;
+ margin-left: auto;
+ margin-right: auto;
+ display: block;
+ padding:0;
+}
+
+div.thumb div.magnify a{
+ cursor: pointer;
+ margin: 0;
+ padding: 0;
+}
+
+div.thumb div.magnify a img {
+ border: none !important;
+}
+
+div.thumb div.magnify {
+ margin: -3px;
+ height: 16px;
+ padding: 0;
+ border: none;
+ float: right;
+ width: 16px;
+}
+
+div.tbox div.magnify{
+ float: right;
+ margin-right: 0;
+}

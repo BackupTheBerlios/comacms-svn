@@ -44,14 +44,14 @@
  		 * @return string
  		 * @param action string
  		 */
-		 function GetPage($action = '') {
+		 function GetPage($Action = '') {
 		 	$adminLang = $this->_AdminLang;
 		 	
 			$out = '';
-			$action = strtolower($action);
-			if($action != 'intern_home')
+			$Action = strtolower($Action);
+			if($Action != 'intern_home')
 				$out .= "\t\t\t<h2>" . $adminLang['pagestructure'] . "</h2>\r\n";
-		 	switch ($action) {
+		 	switch ($Action) {
 		 		case 'delete':		$out .= $this->_deletePage();
 		 					break;
 		 		case 'info':		$out .= $this->_infoPage();
@@ -142,7 +142,7 @@
 		 	global $admin_lang;
 		 	
 		 	$this->_getMenuPageIDs();
-			$out = "\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=new_page\" class=\"button\">" . $admin_lang['create_new_page'] . "</a><br />\r\n";;
+			$out = "\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=new_page\" class=\"button\">" . $admin_lang['create_new_page'] . "</a><br />\r\n";
 			$out .= "<!--\t\t\t<a href =\"" . $_SERVER['PHP_SELF'] . "?page=pagestructur&amp;action=new_link\">neuer Link</a>-->\r\n";
 			$out .= "\t\t\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n";
 			$out .= "\t\t\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />\r\n";

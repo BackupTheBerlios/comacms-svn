@@ -346,7 +346,7 @@ CREATE TABLE `cms_group_users` (
 
 #r187
 #fixed a small bug in cms_inlinemenu_entries
-ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlinieentrie_type` `inlinieentrie_type` ENUM( 'link', 'download', 'text', 'intern' ) NOT NULL DEFAULT 'link'
+ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlinieentrie_type` `inlinieentrie_type` ENUM( 'link', 'download', 'text', 'intern' ) NOT NULL DEFAULT 'link';
 
 #202
 #added the fields for the thumbnaild and a title of the thumbnail

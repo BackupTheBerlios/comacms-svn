@@ -4,7 +4,7 @@
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
- # file			: filename.php					#
+ # file			: menu.php					#
  # created		: 2005-01-28					#
  # copyright		: (C) 2005-2006 The ComaCMS-Team		#
  # email		: comacms@williblau.de				#
@@ -15,4 +15,15 @@
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
  
+ 	/**
+	 * @package ComaCMS
+	 */
+	
+ 	class Menu {
+ 		var $_SqlConnection;
+ 		
+ 		function Menu($SqlConnection) {
+ 			$this->_SqlConnection = $SqlConnection;
+ 		}
+ 	}
 ?>

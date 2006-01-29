@@ -22,7 +22,7 @@
 	$admin_lang['admincontrol'] = 'AdminControl';
 	$admin_lang['sitepreview'] = 'Sitepreview';
 	$admin_lang['preferences'] = 'Preferences';
-	$admin_lang['menueeditor'] = 'MenueEditor';
+	$admin_lang['menu-editor'] = 'Menu-Editor';
 	$admin_lang['pageeditor'] = 'PageEditor';
 	$admin_lang['news'] = 'News';
 	$admin_lang['dates'] = 'Dates';
@@ -104,4 +104,6 @@
 	$admin_lang['private'] = 'Private';
 	$admin_lang['comment'] = 'Comment';
 	$admin_lang['add_a_new_date'] = 'Add a new Date';
+	$admin_lang['mainmenu'] = 'Mainmenu';
+	$admin_lang['secondmenu'] = 'second Menu';
 ?>

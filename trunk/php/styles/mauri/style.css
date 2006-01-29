@@ -217,8 +217,7 @@ p {
 #menu li.actual {
  background: #FAAB00;
 }
-#menu li.actual a {
- 
+#menu li.actual a { 
  border-bottom: 1px dashed black;
 }
 
@@ -661,4 +660,8 @@ div.warning {
 
 h3 a {
  border-bottom:1px dashed #000000;
+}
+
+.actual {
+ background: #FAAB00 !important;
 }

@@ -21,7 +21,7 @@
 	$admin_lang['ok'] = 'OK';
 	$admin_lang['admincontrol'] = 'AdminControl';
 	$admin_lang['preferences'] = 'Einstellungen';
-	$admin_lang['menueeditor'] = 'Men&uml;Editor';
+	$admin_lang['menu-editor'] = 'Men&uuml;-Editor';
 	$admin_lang['pageeditor'] = 'SeitenEditor';
 	$admin_lang['news'] = 'News';
 	$admin_lang['dates'] = 'Termine';
@@ -103,4 +103,6 @@
 	$admin_lang['private'] = 'Privat';
 	$admin_lang['comment'] = 'Kommentar';
 	$admin_lang['add_a_new_date'] = 'Neuen Termin hinzuf&uuml;gen';
+	$admin_lang['mainmenu'] = 'Hauptmen&uuml;';
+	$admin_lang['secondmenu'] = 'Zusatzmen&uuml;';
 ?>

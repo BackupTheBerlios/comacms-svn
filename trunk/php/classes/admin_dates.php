@@ -52,14 +52,14 @@
 	 	function _homePage($admin_lang) {
 	 		$out = '';
 	 		$out .= "<a href=\"admin.php?page=dates&amp;action=new\" class=\"button\">" . $admin_lang['add_a_new_date'] . "</a>
-				<table class=\"dates\">
+				<table class=\"text_table full_width\">
 					<thead>
 						<tr>
-							<td>" . $admin_lang['date'] . "</td>
-							<td>" . $admin_lang['location'] . "</td>
-							<td>" . $admin_lang['topic'] . "</td>
-							<td>" . $admin_lang['creator'] . "</td>
-							<td>" . $admin_lang['actions'] . "</td>
+							<th>" . $admin_lang['date'] . "</th>
+							<th>" . $admin_lang['location'] . "</th>
+							<th>" . $admin_lang['topic'] . "</th>
+							<th>" . $admin_lang['creator'] . "</th>
+							<th>" . $admin_lang['actions'] . "</th>
 						</tr>
 					</thead>\r\n";
 

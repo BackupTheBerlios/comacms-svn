@@ -21,13 +21,19 @@ if(browser.indexOf('opera')!=-1) {
  * Additional: Some additional code to make workrounds possible
  */
 function SetHover(TagName, ClassName, HoverClassName, Additional) {
+	// IE only
 	if(document.all) {
+		// Get the count of all $TagName elements
 		var tagsCount = document.getElementsByTagName(TagName).length;
 		for(var i = 0; i < tagsCount; i++){
+			// Check it for the right css-class
 			if(document.getElementsByTagName(TagName)[i].className == ClassName) {
 				var rowSpan = document.getElementsByTagName(TagName)[i];
+				// Remove the border
 				rowSpan.style.border = 'none';
+				// Set onMouseOver
 				rowSpan.onmouseover = function onmouseover(event) { Hover(this, ClassName, HoverClassName);Additional(); };
+				// Set onMouseOut
 				rowSpan.onmouseout =  function onmouseover(event) { HoverOut(this, ClassName);Additional(); };
 			}
 		}
@@ -36,12 +42,16 @@ function SetHover(TagName, ClassName, HoverClassName, Additional) {
 }
 
 function Hover(ObjectToHover, ClassName, HoverClassName) {
+	// IE only
 	if(document.all)
+		// Set both css-classes
 		ObjectToHover.className = ClassName + " " + HoverClassName;
 }
 
 function HoverOut(ObjectToHover, ClassName) {
+	// IE only
 	if(document.all)
+		// Reset To default css-class
 		ObjectToHover.className = ClassName;
 }
 

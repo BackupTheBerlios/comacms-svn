@@ -59,3 +59,7 @@ textarea.edit {
 .structure_row {
  border-bottom:1px dashed black;
 }
+
+.full_width {
+ width: 93%;
+}

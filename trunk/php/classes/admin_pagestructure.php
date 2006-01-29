@@ -34,6 +34,8 @@
  		var $_AdminLang;
  		var $_User;
  		
+ 		var $_Pages = array();
+ 		
  		function Admin_PageStructure($SqlConnection, $AdminLang, $User) {
 			$this->_SqlConnection = $SqlConnection;
 			$this->_AdminLang = $AdminLang;
@@ -114,45 +116,13 @@
 		 	}
 		 	else
 		 		return $this->GetPage('intern_home');
-		 	/*global $admin_lang, $user;
-		 	
-		 	$sure = GetPostOrGet('sure');
-		 	$page_id = GetPostOrGet('page_id');
-		 	$sql = "SELECT *
-		 		FROM " . DB_PREFIX . "pages
-		 		WHERE page_id=$page_id";
-		 	$page_result = db_result ($sql);
-		 	if($page = mysql_fetch_object($page_result)) {
-		 		$out = '';
-		 		$sql = "SELECT *
-		 			FROM " . DB_PREFIX . "pages
-		 			WHERE page_parent_id=$page->page_id";
-		 		$subpages_result = db_result($sql);
-		 		if($subpage = mysql_fetch_object($subpages_result))
-		 			$out .= "Das l&ouml;schen von Seiten mit Unterseiten ist zur Zeit nicht m6ounl;glich!<br /><strong>Tip:</strong> L&ouml;schen sie erst alle Unterseiten<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\">Zur&uuml;ck</a>";
-		 		elseif($sure == 1) {
-		 			$out .= "L&ouml;schen...";
-		 			$sql = "UPDATE " . DB_PREFIX . "pages
-						SET  page_access='deleted', page_creator='$user->id', page_date='" . mktime() . "'
-						WHERE page_id='$page_id'";
-					db_result($sql);
-		 		}
-		 		else
-		 			$out .= "Wollen sie die Seite &quot;$page->page_title&quot; wirklich (vorerst) unwiederruflich l�schen?<br /><a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure&amp;action=delete&amp;page_id=$page_id&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
-		 					<a href=\"" . $_SERVER['PHP_SELF'] . "?page=pagestructure\" class=\"button\">" . $admin_lang['no'] . "</a>";
-		 	
-			 	return $out;
-		 	}
-		 	else {
-		 		return $this->GetPage('intern_home');
-		 	}*/
-		 	
 		 }
 		 
 		 function _getMenuPageIDs() {
 		 	$this->MenuPageIDs = array();
 		 	$sql = "SELECT menu_page_id
-		 		FROM " . DB_PREFIX . "menu";
+		 		FROM " . DB_PREFIX . "menu
+		 		WHERE menu_menuid=1";
 		 	$ids_result = db_result($sql);
 		 	while($id = mysql_fetch_object($ids_result))
 		 		$this->MenuPageIDs[] = $id->menu_page_id;
@@ -288,43 +258,56 @@
 		 	return $out;
 		 }
 		 
+		 function _Structure($Topnode = 0) {
+		 	$adminLang = $this->_AdminLang;
+		 	$out = '';
+		 	if(empty($this->_Pages[$Topnode]))
+		 		return;
+		 	$out .= "\r\n\t\t\t<ol>\r\n";
+		 	foreach($this->_Pages[$Topnode] as $page) {
+	 			$out .= "\t\t\t\t<li class=\"page_type_". $page['type'] . (($page['access'] == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">" . (($Topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page['id'], $this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page['access'] != 'public') ? ' disabled="disabled"'  : '') . " value=\"" . $page['id'] . "\" class=\"checkbox\"/>\t" : '' );
+	 			$out .= "<strong>" . $page['title'] . "</strong> (" . $page['name'] . ")";
+		 			$out .= "<span class=\"page_lang\">[" . $adminLang[$page['lang']] . "]</span><span class=\"page_actions\">";
+		 			// edit:
+		 			if($page['access'] != 'deleted')
+		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=" . $page['id'] . "\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['edit'] . "\" title=\"" . $adminLang['edit'] . "\"/></a>";
+		 			// info:
+		 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=" . $page['id'] . "\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['info'] . "\" title=\"" . $adminLang['info'] . "\"/></a>";
+		 			// view:
+		 			if($page['access'] != 'deleted')
+		 				$out .= " <a href=\"index.php?page=" . $page['name'] . "\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen " . $page['title'] . "\" title=\"Anschauen\"/></a>";
+		 			// inlinemenu:
+		 			if($page['access'] != 'deleted')
+		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=" . $page['id'] . "\" title=\"Das Zusatzmen&uuml; f&uuml;r &quot;" . $page['title'] . "&quot; bearbeiten\">" . $adminLang['inlinemenu'] . "</a>";
+		 			// delete:
+		 			if($page['access'] != 'deleted')
+		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=delete&amp;page_id=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['delete'] . "\" title=\"" . $adminLang['delete'] . "\"/></a>";
+		 			$out .= '</span></span>' . $this->_Structure($page['id']);
+		 			$out .= "\t\t\t\t</li>\r\n";
+		 	}
+		 	$out .= "\r\n\t\t\t</ol>\r\n\r\n";
+		 	return $out;
+		 }
+		 
 		 function _showStructure($topnode = 0) {
 		 	global $admin_lang, $_SERVER;
 			
 			$out = '';
+			// TODO: ORDER BY page_sortid
 			$sql = "SELECT *
 		 		FROM " . DB_PREFIX . "pages
-		 		WHERE page_parent_id=$topnode";
-	 		// TODO: ORDER BY page_sortid
-		 	$pages_result = db_result($sql);
-		 	if(mysql_num_rows($pages_result) != 0) {
-		 		$out .= "\r\n\t\t\t<ol>\r\n";
-		 		while($page = mysql_fetch_object($pages_result)) {
-		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type" . (($page->page_access == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">" . (($topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page->page_id,$this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page->page_access != 'public') ? ' disabled="disabled"'  : '') . " value=\"$page->page_id\" class=\"checkbox\"/>\t" : '' );
-		 			
-		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
-		 			$out .= "<span class=\"page_lang\">[" . $admin_lang[$page->page_lang] . "]</span><span class=\"page_actions\">";
-		 			// edit:
-		 			if($page->page_access != 'deleted')
-		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
-		 			// info:
-		 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['info'] . "\" title=\"" . $admin_lang['info'] . "\"/></a>";
-		 			// view:
-		 			if($page->page_access != 'deleted')
-		 				$out .= " <a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen $page->page_title\" title=\"Anschauen\"/></a>";
-		 			// inlinemenu:
-		 			if($page->page_access != 'deleted')
-		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page->page_id\" title=\"Das Zusatzmen&uuml; f&uuml;r &quot;$page->page_title&quot; bearbeiten\">" . $admin_lang['inlinemenu'] . "</a>";
-		 			// delete:
-		 			if($page->page_access != 'deleted')
-		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=delete&amp;page_id=$page->page_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
-		 			
-					$out .= '</span></span>' . $this->_showStructure($page->page_id);
-		 			$out .= "\t\t\t\t</li>\r\n";
-				}
-				$out .= "\r\n\t\t\t</ol>\r\n\r\n";
-			}
-			
+		 		ORDER BY page_parent_id";
+		 	$pageResult = $this->_SqlConnection->SqlQuery($sql);
+	 		while($page = mysql_fetch_object($pageResult)) {
+	 			$this->_Pages[$page->page_parent_id][] =
+	 					array('id' => $page->page_id,
+	 						'name' => $page->page_name,
+	 						'type' => $page->page_type,
+	 						'lang' => $page->page_lang,
+	 						'title' => $page->page_title,
+	 						'access' => $page->page_access);
+	 		}
+	 		$out .= $this->_Structure($topnode);
 			return $out;
 		}
 		
@@ -993,7 +976,7 @@
 							<input type=\"hidden\" name=\"page_parent_id_old\" value=\"$page->page_parent_id\" />
 							<select name=\"page_parent_id\">
 								<option value=\"0\">Keiner</option>\r\n";
-					$out .= $this->_structurePullDown(0,0,'', $page->page_id, $page->page_parent_id);
+					$out .= $this->_structurePullDown(0, 0, '', $page->page_id, $page->page_parent_id);
 					$out .= "\t\t\t\t\t\t\t</select><input type=\"submit\" value=\"" . $admin_lang['save'] . "\" class=\"button\" /></form>";
 				}
 				else
@@ -1019,8 +1002,12 @@
 				$subpages_c_result = db_result($sql);
 				$subpages_count = mysql_num_rows($subpages_c_result);
 				if($subpages_count != 0) {
-					$out .="\t\t\t<h4>Unterseiten</h4><hr />\r\n";
+					$out .="\t\t\t<h4>Unterseiten</h4><hr />\r\n
+						<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>";
 					$out .= $this->_showStructure($page->page_id);
+					$out .= "<script type=\"text/javascript\" language=\"JavaScript\">
+						SetHover('span', 'structure_row', 'structure_row_hover', function additional() {document.getElementById(\"menu\").className = \"\";});
+						</script>\r\n";
 				}
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "pages_history

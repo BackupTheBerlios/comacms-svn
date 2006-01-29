@@ -26,13 +26,19 @@ if (clientPC.indexOf('opera')!=-1) {
     var is_opera_seven = (window.opera && document.childNodes);
 }
 
+function Hover(ObjectToHover) {
+//document.writeln(ObjectToHover.data);
+// alert(ObjectToHover.class);
+ // = "structure_row structure_row_hover";
+}
+
 function preview_style()
 {
-	//das <select> element auswählen
+	//das <select> element auswaehlen
 	data = document.getElementById('stylepreviewselect');
-	//den <iframe> auswählen
+	//den <iframe> auswaehlen
 	dframe = document.getElementById('previewiframe');
-	//das ausgewählte in den <iframe> übertragen
+	//das ausgewaehlte in den <iframe> ?bertragen
 	dframe.src = "index.php?style=" + data.value;
 }
 

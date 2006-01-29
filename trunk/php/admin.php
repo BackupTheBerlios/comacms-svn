@@ -23,11 +23,11 @@
 	
 	include('common.php');
 
-	if(!$user->isLoggedIn)  {
-		header('Location: special.php?page=login' . (($user->loginError != -1) ? ('&error=' . $user->loginError) : ''));
+	if(!$user->IsLoggedIn)  {
+		header('Location: special.php?page=login' . (($user->LoginError != -1) ? ('&error=' . $user->LoginError) : ''));
 		die();
 	}
-	if(!$user->isAdmin && $user->isLoggedIn) {
+	if(!$user->IsAdmin && $user->IsLoggedIn) {
 		header('Location: index.php');
 		die();
 	}
@@ -38,26 +38,26 @@
 	/**
 	 * @ignore
 	 */
-	include('./lang/' . $user->language . '/admin_lang.php');
+	include('./lang/' . $user->Language . '/admin_lang.php');
 	include('./system/admin_pages.php');
 	$menu_array = array();
-	$menu_array[] = array($admin_lang['admincontrol'], 'admin.php?page=admincontrol');
-	$menu_array[] = array($admin_lang['sitepreview'], 'admin.php?page=sitepreview');
-	$menu_array[] = array($admin_lang['preferences'], 'admin.php?page=preferences');
-	$menu_array[] = array($admin_lang['pagestructure'], 'admin.php?page=pagestructure');
-	$menu_array[] = array($admin_lang['menu-editor'], 'admin.php?page=menueditor');
+	$menu_array[] = array($admin_lang['admincontrol'], 'admincontrol',);
+	$menu_array[] = array($admin_lang['sitepreview'], 'sitepreview');
+	$menu_array[] = array($admin_lang['preferences'], 'preferences');
+	$menu_array[] = array($admin_lang['pagestructure'], 'pagestructure');
+	$menu_array[] = array($admin_lang['menu-editor'], 'menueditor');
 //	$menu_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
 //	$menu_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
 //	$menu_array[] = array($admin_lang['inlinemenu'], 'admin.php?page=inlinemenu');
-	$menu_array[] = array($admin_lang['news'], 'admin.php?page=news');
-	$menu_array[] = array($admin_lang['dates'], 'admin.php?page=dates');
-	$menu_array[] = array($admin_lang['articles'], 'admin.php?page=articles');
-	$menu_array[] = array($admin_lang['sitestyle'], 'admin.php?page=sitestyle');
-	$menu_array[] = array($admin_lang['users'], 'admin.php?page=users');
-	$menu_array[] = array($admin_lang['groups'], 'admin.php?page=groups');
-	$menu_array[] = array($admin_lang['rights'], 'admin.php?page=rights');
-	$menu_array[] = array($admin_lang['files'], 'admin.php?page=files');
-	$menu_array[] = array($admin_lang['logout'], 'admin.php?page=logout');
+	$menu_array[] = array($admin_lang['news'], 'news');
+	$menu_array[] = array($admin_lang['dates'], 'dates');
+	$menu_array[] = array($admin_lang['articles'], 'articles');
+	$menu_array[] = array($admin_lang['sitestyle'], 'sitestyle');
+	$menu_array[] = array($admin_lang['users'], 'users');
+	$menu_array[] = array($admin_lang['groups'], 'groups');
+	$menu_array[] = array($admin_lang['rights'], 'rights');
+	$menu_array[] = array($admin_lang['files'], 'files');
+	$menu_array[] = array($admin_lang['logout'], 'logout');
 	
 	// FIXME: add path links to make the usability much better! 
 	$path_add = '';
@@ -139,7 +139,7 @@
 	elseif($extern_page == 'pagestructure') {
 		$title = $admin_lang['pagestructure'];
 		include('classes/admin_pagestructure.php');
-		$admin_page = new Admin_PageStructure($sqlConnection, $admin_lang);
+		$admin_page = new Admin_PageStructure($sqlConnection, $admin_lang, $user);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'groups') {
@@ -169,9 +169,12 @@
 	include($page->Templatefolder . '/menu.php');
 	$menu = '';
 	foreach($menu_array as $part) {
-		$menu_str = $menu_link;
+		if($extern_page == $part[1])
+			$menu_str = $menu_actual_link;
+		else
+			$menu_str = $menu_link;
 		$menu_str = str_replace('[TEXT]', $part[0], $menu_str);
-		$menu_str = str_replace('[LINK]', $part[1], $menu_str);
+		$menu_str = str_replace('[LINK]', 'admin.php?page=' . $part[1], $menu_str);
 		$menu_str = str_replace('[NEW]', '', $menu_str);
 		$menu .= $menu_str . "\r\n";
 	}

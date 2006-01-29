@@ -14,6 +14,9 @@
  # the Free Software Foundation; either version 2 of the License, or	#
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
+	/**
+	 *
+	 */
 	// Constants for image aligns
 	define('IMG_ALIGN_NORMAL', 'normal');
 	define('IMG_ALIGN_LEFT', 'left');

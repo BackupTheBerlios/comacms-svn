@@ -22,12 +22,57 @@
 	class Pagestructure {
 		
 		var $_SqlConnection;
-		
+		var $_User;
+		var $_Pages = array();
 		/**
 		 * @param SqlConnection SqlConnection
+		 * @param User User
 		 */
-		function Pagestructure($SqlConnection) {
+		function Pagestructure($SqlConnection, $User) {
 			$this->_SqlConnection = $SqlConnection;
+			$this->_User = $User;
+		}
+		
+		/**
+		 * @param integer PageID
+		 * @param string PageAccess
+		 * @return void
+		 */
+		function SetPageDeleted($PageID) {
+			$sql = "UPDATE " . DB_PREFIX . "pages
+				SET  page_access='deleted', page_creator='$this->_User->ID', page_date='" . mktime() . "'
+				WHERE page_id='$PageID'";
+			$this->_SqlConnection->SqlQuery($sql);
+		}
+		
+		function LoadData($PageID) {
+			if(empty($this->_Pages[$PageID])) {
+				$sql = "SELECT *
+		 			FROM " . DB_PREFIX . "pages
+		 			WHERE page_id=$PageID
+		 			LIMIT 0, 1";
+		 		$pageResult = $this->_SqlConnection->SqlQuery($sql);
+		 		if($page = mysql_fetch_object($pageResult))
+			 		$this->_Pages[$PageID] = array('name' => $page->page_name, 'title' => $page->page_title);
+		 	}
+		}
+		
+		/**
+		 * @param integer PageID
+		 * @return boolean
+		 */
+		function PageExists($PageID) {
+			$this->LoadData($PageID);
+			return !empty($this->_Pages[$PageID]);
+		}
+		
+		function GetPageData($PageID, $Field) {
+			$this->LoadData($PageID);
+			if(empty($this->_Pages[$PageID])) {
+				return false;
+			}
+			else
+				return $this->_Pages[$PageID][$Field];
 		}
 		
 		/**

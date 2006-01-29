@@ -32,12 +32,13 @@
  		var $_SqlConnection;
  		var $_Pagestructure;
  		var $_AdminLang;
+ 		var $_User;
  		
- 		
- 		function Admin_PageStructure($SqlConnection, $AdminLang) {
+ 		function Admin_PageStructure($SqlConnection, $AdminLang, $User) {
 			$this->_SqlConnection = $SqlConnection;
 			$this->_AdminLang = $AdminLang;
-			$this->_Pagestructure = new Pagestructure($this->_SqlConnection);
+			$this->_User = $User;
+			$this->_Pagestructure = new Pagestructure($this->_SqlConnection, $this->_User);
 		}
  		
  		/**
@@ -94,7 +95,26 @@
 		 }
 		 
 		 function _deletePage() {
-		 	global $admin_lang, $user;
+		 	$adminLang = $this->_AdminLang;
+		 	$confirmation = GetPostOrGet('confirmation');
+		 	$pageID = GetPostOrGet('page_id');
+		 	if(!is_numeric($pageID))
+		 		return $this->GetPage('intern_home');
+		 	if($this->_Pagestructure->PageExists($pageID)) {
+		 		if($confirmation == 1) {
+		 			$this->_Pagestructure->SetPageDeleted($pageID);
+		 			return $this->GetPage('intern_home');
+		 		}
+		 		else {//Do you realy want to delete the page &quot;%s&quot;?
+		 			$out = sprintf($adminLang['Do you really want to delete the page %page_title%?'], $this->_Pagestructure->GetPageData($pageID, 'title')) . "<br />
+		 				<a href=\"admin.php?page=pagestructure&amp;action=delete&amp;page_id=$pageID&amp;confirmation=1\" class=\"button\">" . $adminLang['yes'] . "</a>
+		 					<a href=\"admin.php?page=pagestructure\" class=\"button\">" . $adminLang['no'] . "</a>";
+		 			return $out;
+		 		}
+		 	}
+		 	else
+		 		return $this->GetPage('intern_home');
+		 	/*global $admin_lang, $user;
 		 	
 		 	$sure = GetPostOrGet('sure');
 		 	$page_id = GetPostOrGet('page_id');
@@ -125,7 +145,7 @@
 		 	}
 		 	else {
 		 		return $this->GetPage('intern_home');
-		 	}
+		 	}*/
 		 	
 		 }
 		 
@@ -142,14 +162,17 @@
 		 	global $admin_lang;
 		 	
 		 	$this->_getMenuPageIDs();
-			$out = "\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=new_page\" class=\"button\">" . $admin_lang['create_new_page'] . "</a><br />\r\n";
+		 	$out = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
+			<a href=\"admin.php?page=pagestructure&amp;action=new_page\" class=\"button\">" . $admin_lang['create_new_page'] . "</a><br />\r\n";
 			$out .= "<!--\t\t\t<a href =\"" . $_SERVER['PHP_SELF'] . "?page=pagestructur&amp;action=new_link\">neuer Link</a>-->\r\n";
 			$out .= "\t\t\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n";
 			$out .= "\t\t\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />\r\n";
 			$out .= "\t\t\t<input type=\"hidden\" name=\"action\" value=\"generate_menu\" />\r\n";
 		 	$out .= $this->_showStructure(0);
 		 	$out .= "<input type=\"submit\" class=\"button\" name=\"pagestructure_savemenu\" value=\"" . $admin_lang['generate_mainmenu'] . "\" />\r\n";
-			$out .= "\t\t\t</form>\r\n";
+			$out .= "\t\t\t</form>
+			<!--<script>
+			</script>-->\r\n";
 			
 			return $out;
 		 }
@@ -276,7 +299,7 @@
 		 	if(mysql_num_rows($pages_result) != 0) {
 		 		$out .= "\r\n\t\t\t<ol>\r\n";
 		 		while($page = mysql_fetch_object($pages_result)) {
-		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type" . (($page->page_access == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">" . (($topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page->page_id,$this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page->page_access != 'public') ? ' disabled="disabled"'  : '') . " value=\"$page->page_id\" class=\"checkbox\"/>\t" : '' );
+		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type" . (($page->page_access == 'deleted') ? ' strike' : '' ). "\"><span onMouseOver=\"Hover(this)\" class=\"structure_row\">" . (($topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page->page_id,$this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page->page_access != 'public') ? ' disabled="disabled"'  : '') . " value=\"$page->page_id\" class=\"checkbox\"/>\t" : '' );
 		 			
 		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
 		 			$out .= "<span class=\"page_lang\">[" . $admin_lang[$page->page_lang] . "]</span><span class=\"page_actions\">";

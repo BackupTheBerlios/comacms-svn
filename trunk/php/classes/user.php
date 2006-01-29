@@ -27,43 +27,43 @@
 		/**
 		 * @var string
 		 */
-		var $onlineID = '';
+		var $OnlineID = '';
 		
 		/**
 		 * @var string
 		 */
-		var $name = '';
+		var $Name = '';
 		
 		/**
 		 * @var string
 		 */
-		var $showname = '';
+		var $Showname = '';
 		
 		/**
 		 * @var string
 		 */
-		var $passwordMd5 = '';
+		var $PasswordMd5 = '';
 		
 		/**
 		 * @var integer
 		 */
-		var $id = 0;
+		var $ID = 0;
 		
 		/**
 		 * @var bool
 		 */
-		var $isAdmin = false;
+		var $IsAdmin = false;
 		
 		/**
 		 * @var bool
 		 */
-		var $isLoggedIn = false;
+		var $IsLoggedIn = false;
 		
 		/**
 		 * 
 		 * @var string
 		 */
-		var $language = '';
+		var $Language = '';
 		
 		/**
 		 * LoginError
@@ -76,12 +76,12 @@
 		 * -  4: Sorry wrong data
 		 * @var integer is an error disciption for better login handling
 		 */
-		var $loginError = -1;
+		var $LoginError = -1;
 		
 		/**
 		 * @var Auth_All
 		 */
-		var $accessRghts;
+		var $AccessRghts;
 		
 		/**
 		 * @return void
@@ -97,85 +97,85 @@
 			// Check: has the user changed the language by hand?
 			if(!empty($extern_lang)) {
 				if(in_array($extern_lang, $languages))
-					$this->language = $extern_lang;
+					$this->Language = $extern_lang;
 			}
 			// Get the language from the cookie if it' s not changed
 			elseif(isset($_COOKIE['ComaCMS_user_lang'])) {
 				if(in_array($_COOKIE['ComaCMS_user_lang'], $languages))
-					$this->language = $_COOKIE['ComaCMS_user_lang'];
+					$this->Language = $_COOKIE['ComaCMS_user_lang'];
 			}
 			// if no language is set, load the language from the HTTP-header
-			if($this->language == '') {
+			if($this->Language == '') {
 				if(isset($_ENV['HTTP_ACCEPT_LANGUAGE'])) {
 					$langs = $_ENV['HTTP_ACCEPT_LANGUAGE'];
 					$langs = preg_replace("#\;q=[0-9\.]+#i", '', $langs);
 					$langs = explode(',', $langs);
-					$this->language = $languages[0];
+					$this->Language = $languages[0];
 					foreach($langs as $lang) {
 						if(in_array($lang, $languages)) {
-							$this->language = $lang;
+							$this->Language = $lang;
 							break;
 						}
 					}
 				}
 			}
-			if($this->language == '')
-				$this->language = $languages[0];
+			if($this->Language == '')
+				$this->Language = $languages[0];
 			// Set the cookie (for the next 93(= 3x31) days)
-			setcookie('ComaCMS_user_lang', $this->language, time() + 8035200); 
+			setcookie('ComaCMS_user_lang', $this->Language, time() + 8035200); 
 		
 			// Tells the cookie: "the user is logged in!"?
 			if(isset($_COOKIE['ComaCMS_user'])) {
 				$data = explode('|', $_COOKIE['ComaCMS_user']);
-				$this->onlineID = @$data[0];
-				$this->name = @$data[1];
-				$this->passwordMd5 = @$data[2];
+				$this->OnlineID = @$data[0];
+				$this->Name = @$data[1];
+				$this->PasswordMd5 = @$data[2];
 			}
 			// Tries somebody to log in?
 			if(!empty($extern_login_name) && !empty($extern_login_password)) {
-				$this->name = $extern_login_name;
-				$this->passwordMd5 = md5($extern_login_password);
+				$this->Name = $extern_login_name;
+				$this->PasswordMd5 = md5($extern_login_password);
 			}
 			// Has the user no OnlineId? Generate one!
-			if($this->onlineID == '')
-				$this->onlineID =  md5(uniqid(rand()));
+			if($this->OnlineID == '')
+				$this->OnlineID =  md5(uniqid(rand()));
 			if($extern_login_name === '' && $extern_login_password === '')
-				$this->loginError = 3;
+				$this->LoginError = 3;
 			elseif($extern_login_name === '' && $extern_login_password !== '')
-				$this->loginError = 1;
+				$this->LoginError = 1;
 			elseif($extern_login_name !== '' && $extern_login_password === '')
-				$this->loginError = 2;
+				$this->LoginError = 2;
 			// Check: is the user really logged in? Or had he typed in the right name and password?
-			elseif($this->name != '' && $this->passwordMd5 != '') {
+			elseif($this->Name != '' && $this->PasswordMd5 != '') {
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "users
-					WHERE user_name='$this->name' AND user_password='$this->passwordMd5'
+					WHERE user_name='$this->Name' AND user_password='$this->PasswordMd5'
 					LIMIT 0,1";
 				$original_user_result = db_result($sql);
 				if($original_user = mysql_fetch_object($original_user_result)) {
-					$this->isLoggedIn = true;
-					$this->showname = $original_user->user_showname;
-					$this->id = $original_user->user_id;
+					$this->IsLoggedIn = true;
+					$this->Showname = $original_user->user_showname;
+					$this->ID = $original_user->user_id;
 					if($original_user->user_admin == 'y')
-						$this->isAdmin = true;
-					$this->loginError = 0;
+						$this->IsAdmin = true;
+					$this->LoginError = 0;
 				}
 				else {
-					$this->isAdmin = false;
-					$this->isLoggedIn = false;
-					$this->name = '';
-					$this->passwordMd5 = '';
-					$this->loginError = 4;
+					$this->IsAdmin = false;
+					$this->IsLoggedIn = false;
+					$this->Name = '';
+					$this->PasswordMd5 = '';
+					$this->LoginError = 4;
 				}
 			}
-			$this->accessRghts = new Auth_All($this->id);
-			if(!$this->isAdmin) 
+			$this->accessRghts = new Auth_All($this->ID);
+			if(!$this->IsAdmin) 
 				$this->accessRghts->Load();
 			else
 				$this->accessRghts->setAdmin();
 			
 			// Set the cookie (for the next 4 hours) 
-			setcookie('ComaCMS_user', $this->onlineID . '|' . $this->name . '|' . $this->passwordMd5, time() + 14400);
+			setcookie('ComaCMS_user', $this->OnlineID . '|' . $this->Name . '|' . $this->PasswordMd5, time() + 14400);
 			
 		}
 		
@@ -203,18 +203,18 @@
 			// check if the user is new on the page
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "online
-				WHERE online_id='$this->onlineID'
+				WHERE online_id='$this->OnlineID'
 				LIMIT 0,1";
 			$result_new = db_result($sql);
 			if($row3 = mysql_fetch_object($result_new)) {
 				$sql = "UPDATE " . DB_PREFIX . "online
-					SET lastaction='" . mktime() . "', userid=$this->id, lang='$this->language', page='$page'
-					WHERE online_id='$this->onlineID'";
+					SET lastaction='" . mktime() . "', userid=$this->ID, lang='$this->Language', page='$page'
+					WHERE online_id='$this->OnlineID'";
 				db_result($sql);
 			}
 			else {
 				$sql = "INSERT INTO " . DB_PREFIX . "online (online_id, ip, lastaction, page, userid, lang, host)
-				VALUES ('$this->onlineID', '$REMOTE_ADDR', '" . mktime() . "', '$page', $this->id, '$this->language', '" . gethostbyaddr($REMOTE_ADDR). "')";
+				VALUES ('$this->OnlineID', '$REMOTE_ADDR', '" . mktime() . "', '$page', $this->ID, '$this->Language', '" . gethostbyaddr($REMOTE_ADDR). "')";
 				db_result($sql);
 				$counter_all++;
 			}

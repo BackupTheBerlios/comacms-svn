@@ -105,5 +105,6 @@
 	$admin_lang['comment'] = 'Comment';
 	$admin_lang['add_a_new_date'] = 'Add a new Date';
 	$admin_lang['mainmenu'] = 'Mainmenu';
+	$admin_lang['Do you really want to delete the page %page_title%?'] = 'Do you really want to delete the page &quot;%s&quot;?';
 	$admin_lang['secondmenu'] = 'second Menu';
 ?>

@@ -25,7 +25,7 @@
 	/**
 	 * @ignore
 	 */
-	include('./lang/' . $user->language  . '/admin_lang.php');
+	include('./lang/' . $user->Language  . '/admin_lang.php');
 	
 	if(!isset($extern_page))
 		header('Locaction: index.php');
@@ -64,13 +64,14 @@
 		$text = ' '; 
 	}
 	elseif($extern_page == 'image') {
+		
 		$imageID = GetPostOrGet('id');
 		$imageFile = GetPostOrGet('file');
 		if(is_numeric($imageID) || !empty($imageFile)) {
 			$title = 'Bild';
 			$condition = 'file_id = ' . $imageID;
-			if(empty($fileID))
-				$condition = "file_name = '$imageFile'";	
+			if(empty($imageID))
+				$condition = "file_name = '$imageFile'";
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "files
 				WHERE $condition
@@ -78,6 +79,13 @@
 			$imageResult = $sqlConnection->SqlQuery($sql);
 			if($imageData = mysql_fetch_object($imageResult)) {
 				$text = "<img src=\"" . generateUrl($imageData->file_path) ."\"/>";
+				$exif = exif_read_data($imageData->file_path, 0, true);
+
+				foreach ($exif as $key => $section) {
+   					foreach ($section as $name => $val) {
+       $text .= "$key.$name: $val<br />\n";
+   }
+				}
 			}
 		}
 		

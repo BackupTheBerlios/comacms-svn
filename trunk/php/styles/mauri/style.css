@@ -217,7 +217,8 @@ p {
 #menu li.actual {
  background: #FAAB00;
 }
-#menu li.actual a { 
+
+#menu li.actual a {
  border-bottom: 1px dashed black;
 }
 
@@ -466,7 +467,7 @@ table.text_table th {
  display:block;
 }
 
-.structure_row:hover {
+.structure_row:hover, .structure_row_hover  {
  background-color: #87C6E9;
 }
 

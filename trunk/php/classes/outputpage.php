@@ -69,7 +69,7 @@
 		
 		/**
 		 * @access public
-		 * return void
+		 * @return void
 		 */
 		function Outputpage($SqlConnection) {
 			$this->_SqlConnection = $SqlConnection;

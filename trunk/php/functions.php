@@ -15,33 +15,10 @@
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
 
-	/**
-	 * @return void
-	 * @param username string
-	 * @param userpw string
-	 * @param database string
-	 * @param server string
-	 * */
-	/*function connect_to_db($username, $userpw, $database, $server = 'localhost') {
-		global $db_con;
-
-		error_reporting(E_ALL);
-		$db_con = mysql_pconnect($server, $username, $userpw)
-		or die('Mysql-error:' . mysql_error());
-		mysql_select_db($database, $db_con)
-		or die('Mysql-error:' . mysql_error());
-	}*/
 	//FIXME: make it possible to remove this alias
 	function db_result($command) {
 		global $sqlConnection;//$db_con, $queries_count;
-		//$queries_count++;
-		/* helpful to find unnecessary SQL-queries(replace it only with the "++"):
-		 * 
-		 * .= "\r\n$command\r\n" . print_r(debug_backtrace(),true);
-		 */ 
-		/*$result = mysql_query ($command, $db_con);
-		if(!$result)
-			echo 'Error: ' . $command . ':' . mysql_error () . ';';*/
+		
 		return $sqlConnection->SqlQuery($command);
 	}
 

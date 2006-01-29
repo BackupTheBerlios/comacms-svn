@@ -105,4 +105,5 @@
 	$admin_lang['add_a_new_date'] = 'Neuen Termin hinzuf&uuml;gen';
 	$admin_lang['mainmenu'] = 'Hauptmen&uuml;';
 	$admin_lang['secondmenu'] = 'Zusatzmen&uuml;';
+	$admin_lang['Do you really want to delete the page %page_title%?'] = 'Wollen sie die Seite &quot;%s&quot; wirklich l&ouml;schen?';
 ?>

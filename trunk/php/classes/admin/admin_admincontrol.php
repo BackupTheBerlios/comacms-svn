@@ -16,9 +16,13 @@
  #----------------------------------------------------------------------#
 	
 	/**
+	 * @ignore
+	 */
+	require_once('./classes/admin/admin.php');
+	/**
 	 * @package ComaCMS
 	 */
-	class Admin_AdminControl {
+	class Admin_AdminControl extends Admin{
 		
 		/**
 		 * @access private

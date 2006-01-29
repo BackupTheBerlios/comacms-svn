@@ -19,16 +19,17 @@
 	/**
 	 * @package ComaCMS
 	 */ 
-	class Pagestructure {
+	class PageStructure {
 		
 		var $_SqlConnection;
 		var $_User;
 		var $_Pages = array();
+		var $_ParentIDPages = array();
 		/**
 		 * @param SqlConnection SqlConnection
 		 * @param User User
 		 */
-		function Pagestructure($SqlConnection, $User) {
+		function PageStructure($SqlConnection, $User) {
 			$this->_SqlConnection = $SqlConnection;
 			$this->_User = $User;
 		}
@@ -55,6 +56,23 @@
 		 		if($page = mysql_fetch_object($pageResult))
 			 		$this->_Pages[$PageID] = array('name' => $page->page_name, 'title' => $page->page_title);
 		 	}
+		}
+		
+		function LoadParentIDs() {
+			// TODO: ORDER BY page_sortid
+			$sql = "SELECT *
+		 		FROM " . DB_PREFIX . "pages
+		 		ORDER BY page_parent_id";
+		 	$pageResult = $this->_SqlConnection->SqlQuery($sql);
+	 		while($page = mysql_fetch_object($pageResult)) {
+	 			$this->_ParentIDPages[$page->page_parent_id][] =
+	 					array('id' => $page->page_id,
+	 						'name' => $page->page_name,
+	 						'type' => $page->page_type,
+	 						'lang' => $page->page_lang,
+	 						'title' => $page->page_title,
+	 						'access' => $page->page_access);
+	 		}
 		}
 		
 		/**
@@ -110,5 +128,21 @@
 				WHERE menu_menuid=$MenuID";
 			$this->_SqlConnection->SqlQuery($sql);
 		}
+		
+		function PageStructurePulldown($Topnode = 0, $Deep = 0, $Topnumber = '', $Without = -1, $Selected = -1) {
+		 	$out = '';
+			if(empty($this->_ParentIDPages[$Topnode]))
+		 		return '';
+		 	$number = 1;
+		 	foreach($this->_ParentIDPages[$Topnode] as $page) {
+		 		if($page['id'] != $Without) {
+		 			$out .= "<option style=\"padding-left:" . ($Deep * 1.5) . "em;\" value=\"" . $page['id'] . "\"" . (($page['id'] == $Selected) ? ' selected="selected"' : '') . ">$Topnumber$number. " . $page['title'] . " (" . $page['name'] . ")</option>\r\n";
+		 			$out .= $this->PageStructurePulldown($page['id'], $Deep + 1, $Topnumber . $number. "." ,$Without, $Selected);
+		 			$number++;
+		 		}
+		 		
+		 	}
+		 	return $out;
+		 }
 	}
 ?>

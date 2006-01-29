@@ -14,11 +14,16 @@
  # the Free Software Foundation; either version 2 of the License, or	#
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
-
+	
+	/**
+	 * @ignore
+	 */
+	require_once('./classes/admin/admin.php');
+	
 	/**
 	 * @package ComaCMS
 	 */
-	 class Admin_Articles {
+	 class Admin_Articles extends Admin{
 	 	/**
 	 	 * @access public
 	 	 * @param string action
@@ -121,9 +126,9 @@
 					WHERE article_id=$id";
 				$article_result = db_result($sql);
 				if($row = mysql_fetch_object($article_result)) {
-					$out = "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich löschen?<br />
-			<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=" . $id . "&amp;sure=1\" title=\"Wirklich Löschen\" class=\"button\">Ja</a>
-			<a href=\"admin.php?page=articles\" title=\"Nicht Löschen\" class=\"button\">Nein</a>";
+					$out = "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich lï¿½schen?<br />
+			<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=" . $id . "&amp;sure=1\" title=\"Wirklich Lï¿½schen\" class=\"button\">Ja</a>
+			<a href=\"admin.php?page=articles\" title=\"Nicht Lï¿½schen\" class=\"button\">Nein</a>";
 			
 					return $out;
 				}
@@ -182,14 +187,14 @@
 								writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 								writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"?berschrift\",\"h\");
+								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als ï¿½berschrift\",\"=== \",\" ===\",\"?berschrift\",\"h\");
 							</script>
 							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\"></textarea></td>
 					</tr>
 					<tr>
 						<td>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></td>
-						<td><input type=\"checkbox\" name=\"add_image\" id=\"add_image_checkbox\" checked=\"checked\"/ value=\"add\"><label for=\"add_image_checkbox\">Nach dem Eintragen des Arikels noch ein Bild auswählen<br/>
-							(ein Bild kann auch später noch über die Bearbeiten-Funktion hinzugefügt/verändert werden)</label></td>
+						<td><input type=\"checkbox\" name=\"add_image\" id=\"add_image_checkbox\" checked=\"checked\"/ value=\"add\"><label for=\"add_image_checkbox\">Nach dem Eintragen des Arikels noch ein Bild auswï¿½hlen<br/>
+							(ein Bild kann auch spï¿½ter noch ï¿½ber die Bearbeiten-Funktion hinzugefï¿½gt/verï¿½ndert werden)</label></td>
 					</tr>
 					<tr>
 						<td>Eingelogt als $user->Showname</td><td><input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" /></td>
@@ -235,13 +240,13 @@
 								writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 								writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als Überschrift\",\"=== \",\" ===\",\"Überschrift\",\"h\");
+								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als ï¿½berschrift\",\"=== \",\" ===\",\"ï¿½berschrift\",\"h\");
 							</script>
 							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\">$article->article_text</textarea></td>
 					</tr>
 					<tr>
 						<td>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></td>
-						<td>" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img style=\"float:left\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '<b>noch kein Bild festgelegt</b><br />') . "Wenn das Bild gesetzt oder verändert wird, gehen alle ungespeicherten Veränderungen an den Texten verloren!<br /><a class=\"button\" href=\"admin.php?page=articles&amp;action=setimage&amp;article_id=$id\">Bild setzen/verändern</a></td>
+						<td>" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img style=\"float:left\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '<b>noch kein Bild festgelegt</b><br />') . "Wenn das Bild gesetzt oder verï¿½ndert wird, gehen alle ungespeicherten Verï¿½nderungen an den Texten verloren!<br /><a class=\"button\" href=\"admin.php?page=articles&amp;action=setimage&amp;article_id=$id\">Bild setzen/verï¿½ndern</a></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" /><input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" /></td>

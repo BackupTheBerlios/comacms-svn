@@ -18,12 +18,13 @@
  	/**
  	 * @ignore
  	 */
- 	 require_once('./classes/auth_user.php');
- 	 require_once('./classes/auth_group.php');
+ 	 require_once('./classes/admin/admin.php');
+ 	 require_once('./classes/auth/auth_user.php');
+ 	 require_once('./classes/auth/auth_group.php');
  	/**
 	 * @package ComaCMS
 	 */
-	class Admin_Rights {
+	class Admin_Rights extends Admin{
 		
 		/**
 		 * @param string action
@@ -72,7 +73,7 @@
 		function saveUser($admin_lang) {
 			$user_id = GetPostOrGet('user_id');
 			if(is_numeric($user_id)) {
-				$auth = new User_Auth($user_id);
+				$auth = new Auth_User($user_id);
 				if(!$auth->is_admin) {
 					$auth_view = GetPostOrGet('auth_view');
 					$auth_edit = GetPostOrGet('auth_edit');
@@ -93,7 +94,7 @@
 			$group_id = GetPostOrGet('group_id');
 			if(is_numeric($group_id)) {
 				
-				$auth = new Group_Auth($group_id);
+				$auth = new Auth_Group($group_id);
 				$auth_view = GetPostOrGet('auth_view');
 				$auth_edit = GetPostOrGet('auth_edit');
 				$auth_delete = GetPostOrGet('auth_delete');
@@ -114,7 +115,7 @@
 			if(is_numeric($group_id)) {
 				
 			
-			$auth = new Group_Auth($group_id);
+			$auth = new Auth_Group($group_id);
 			
 			$edit_for_str = sprintf($admin_lang['default_rights_for_the_group_%group%'], getGroupByID($group_id));	
 				
@@ -180,7 +181,7 @@
 			if(!is_numeric($user_id)) {
 				$user_id = 0;
 			}
-			$auth = new User_Auth($user_id);
+			$auth = new Auth_User($user_id);
 			$edit_for_str = $admin_lang['default_rights_for_users_and_groups']; 
 			if($user_id != 0)
 				$edit_for_str = sprintf($admin_lang['default_rights_for_%user%'], getUserByID($user_id));	

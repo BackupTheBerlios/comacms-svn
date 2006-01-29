@@ -18,14 +18,14 @@
  	/**
  	 * @ignore
  	 */
- 	
+ 	require_once('./classes/admin/admin.php');
  	require_once('./classes/menu.php');
  	
 	/**
 	 * @package ComaCMS
 	 */
 	 
-	class Admin_Menu {
+	class Admin_Menu extends Admin{
 	 	
 	 	/**
  		 * @var array

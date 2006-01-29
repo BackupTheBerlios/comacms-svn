@@ -73,7 +73,7 @@
 	
 	if($extern_page == 'admincontrol') {
 		$title = $admin_lang['admincontrol'];
-		include('classes/admin_admincontrol.php');
+		include('classes/admin/admin_admincontrol.php');
 		$admin_admincontrol = new Admin_AdminControl($admin_lang, $config);
 		$text = $admin_admincontrol->GetPage($extern_action);
 	}
@@ -95,22 +95,17 @@
 	}
 	elseif($extern_page == 'dates') {
 		$title = $admin_lang['dates'];
-		include('classes/admin_dates.php');
+		include('classes/admin/admin_dates.php');
 		$admin_dates = new Admin_Dates();
 		$text = $admin_dates->GetPage($extern_action, $admin_lang);
 	}
 	elseif($extern_page == 'articles') {
 		$title = $admin_lang['articles'];
-		include('classes/admin_articles.php');
+		include('classes/admin/admin_articles.php');
 		$admin_articles = new Admin_Articles();
 		$text = $admin_articles->GetPage($extern_action, $admin_lang);
 		//$text = page_articles();
 	}
-/*	elseif($extern_page == 'pageeditor') {
-		$title = $admin_lang['pageeditor'];
-		include('./system/user_pages.php');
-		$text = page_pageeditor();
-	}*/
 	elseif($extern_page == 'users') {
 		$title = $admin_lang['users'];
 		$text = page_users();
@@ -120,43 +115,38 @@
 		page_logout();
 	}
 	elseif($extern_page == 'preferences') {
+		include('classes/admin/admin_preferences.php');
 		$title = $admin_lang['preferences'];
-		$text = page_preferences();
+		//$text = page_preferences();
+		$admin_page = new Admin_Preferences($sqlConnection, $admin_lang, $config);
+		$text = $admin_page->GetPage($extern_action);
 	}
-/*	elseif($extern_page == 'gallery_editor') {
-		$title = $admin_lang['gallery editor'];
-		$text = page_gallery_editor();
-	}*/
 	elseif($extern_page == 'files') {
 		include('system/user_pages.php');
 		$title = $admin_lang['files'];
 		$text = page_files();
 	}
-/*	elseif($extern_page == 'inlinemenu') {
-		$title = $admin_lang['inlinemenu'];
-		$text = page_inlinemenu();
-	}*/
 	elseif($extern_page == 'pagestructure') {
 		$title = $admin_lang['pagestructure'];
-		include('classes/admin_pagestructure.php');
+		include('classes/admin/admin_pagestructure.php');
 		$admin_page = new Admin_PageStructure($sqlConnection, $admin_lang, $user);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'groups') {
 		$title = $admin_lang['groups'];
-		include('classes/admin_groups.php');
+		include('classes/admin/admin_groups.php');
 		$admin_page = new Admin_Groups();
 		$text = $admin_page->GetPage($extern_action, $admin_lang);
 	}
 	elseif($extern_page == 'rights') {
 		$title = $admin_lang['rights'];
-		include('classes/admin_rights.php');
+		include('classes/admin/admin_rights.php');
 		$admin_page = new Admin_Rights();
 		$text = $admin_page->GetPage($extern_action, $admin_lang);
 	}
 	elseif($extern_page == 'menueditor') {
 		$title = $admin_lang['menu-editor'];
-		include('classes/admin_menu.php');
+		include('classes/admin/admin_menu.php');
 		$admin_page = new Admin_Menu($sqlConnection, $admin_lang);
 		$text = $admin_page->GetPage($extern_action);
 	}

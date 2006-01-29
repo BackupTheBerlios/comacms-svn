@@ -18,17 +18,17 @@
  	/**
  	 * @ignore
  	 */
- 	require_once('./classes/auth.php');
+ 	require_once('./classes/auth/auth.php');
  	
  	/**
 	 * @package ComaCMS
 	 */
- 	class User_Auth extends Auth{
+ 	class Auth_User extends Auth{
  		var $user_id = 0;
  		var $is_admin = false;
  		var $has_own = false;
  		
- 		function User_Auth($user_id = 0) {
+ 		function Auth_User($user_id = 0) {
  			$this->user_id = $user_id;
  			if($this->user_id != 0) {
  				$sql = "SELECT user_admin

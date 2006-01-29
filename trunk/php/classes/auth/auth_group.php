@@ -18,16 +18,16 @@
  	/**
  	 * @ignore
  	 */
- 	require_once('./classes/auth.php');
+ 	require_once('./classes/auth/auth.php');
  	
  	/**
 	 * @package ComaCMS
 	 */
- 	class Group_Auth extends Auth{
+ 	class Auth_Group extends Auth{
  		var $group_id = 0;
  		var $has_own = false;
  		
- 		function Group_Auth($group_id = 0) {
+ 		function Auth_Group($group_id = 0) {
  			$this->group_id = $group_id;	  			
  			$sql = "SELECT *
  				FROM " . DB_PREFIX . "auth

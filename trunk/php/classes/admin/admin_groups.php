@@ -15,10 +15,15 @@
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
  	
+ 	/**
+ 	 * @ignore
+ 	 */
+ 	require_once('./classes/admin/admin.php');
+ 	
 	/**
 	 * @package ComaCMS
 	 */
-	class Admin_Groups {
+	class Admin_Groups extends Admin{
 		
 		/**
 		 * @param string action

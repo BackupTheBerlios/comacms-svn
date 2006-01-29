@@ -15,6 +15,10 @@
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
 
+	/**
+	 * @deprecated 27.01.2006
+	 * 
+	 */
 	//FIXME: make it possible to remove this alias
 	function db_result($command) {
 		global $sqlConnection;//$db_con, $queries_count;

@@ -554,11 +554,6 @@
 		return $out;
 	}
 
-	function setSetting($name, $display, $description, $default = '') {
-		global $setting;
-		$setting[$name] = array($display, $description, $default);
-	}
-	
 	function getSubmitVar($name, $default = "") {
 		global $_GET, $_POST;
 		
@@ -628,7 +623,7 @@
 		else
 			return copy($file, $newfile);
 	}
-	// TODO...
+	
 	/**
 	 * @return string filename of the thumbnail
 	 */

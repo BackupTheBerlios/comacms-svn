@@ -81,7 +81,7 @@
 							WHERE page_id='$old->page_id'";
 						db_result($sql);
 						$sql = "UPDATE " . DB_PREFIX . "pages
-							SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment'
+							SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment'
 							WHERE page_id=$page_id";
 						db_result($sql);
 						header("Location: admin.php?page=pagestructure");
@@ -89,7 +89,7 @@
 					}
 					else { // no changes
 						// TODO: Show it to the user
-						return "keine Ver�nderungen!!";
+						return "keine Ver&auml;nderungen!!";
 					}
 				}
 				else { // it dosen't
@@ -133,14 +133,14 @@
 							db_result($sql);
 							$page_edit_comment = sprintf($admin_lang['restored_from_version'], $change);
 							$sql = "UPDATE " . DB_PREFIX . "pages
-								SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$old->page_title', page_edit_comment='$page_edit_comment'
+								SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$old->page_title', page_edit_comment='$page_edit_comment'
 								WHERE page_id=$page_id";
 							db_result($sql);
 							header("Location: admin.php?page=pagestructure");	
 						}
 						else {
 							$out = '';
-							$out .= "M�chten Sie diesen Text:<pre class=\"code\">$actual->text_page_text</pre>wirklich durch diesen Text:<pre class=\"code\">$old->text_page_text</pre>ersetzen?<br />
+							$out .= "M&ouml;chten Sie diesen Text:<pre class=\"code\">$actual->text_page_text</pre>wirklich durch diesen Text:<pre class=\"code\">$old->text_page_text</pre>ersetzen?<br />
 								<a href=\"admin.php?page=pagestructure&amp;action=save&amp;page_id=$page_id&amp;change=$change&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
 		 						<a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>";
 							return $out;

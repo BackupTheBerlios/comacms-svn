@@ -14,15 +14,17 @@
  # the Free Software Foundation; either version 2 of the License, or	#
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
+
 	/**
  	 * @ignore
  	 */
  	require_once('./classes/pagestructure.php');
+ 	require_once('./classes/admin/admin.php');
  	
 	/**
 	 * @package ComaCMS 
 	 */
- 	class Admin_PageStructure {
+ 	class Admin_PageStructure extends Admin{
  		
  		/**
  		 * @var array
@@ -30,17 +32,15 @@
  		var $MenuPageIDs;
  		
  		var $_SqlConnection;
- 		var $_Pagestructure;
+ 		var $_PageStructure;
  		var $_AdminLang;
  		var $_User;
- 		
- 		var $_Pages = array();
  		
  		function Admin_PageStructure($SqlConnection, $AdminLang, $User) {
 			$this->_SqlConnection = $SqlConnection;
 			$this->_AdminLang = $AdminLang;
 			$this->_User = $User;
-			$this->_Pagestructure = new Pagestructure($this->_SqlConnection, $this->_User);
+			$this->_PageStructure = new PageStructure($this->_SqlConnection, $this->_User);
 		}
  		
  		/**
@@ -84,9 +84,9 @@
 		 function _generate_menu() {
 		 	$pages = GetPostOrGet('pagestructure_pages');
 		 	// Clear the main-menu
-		 	$this->_Pagestructure->ClearMenu(1);
+		 	$this->_PageStructure->ClearMenu(1);
 		 	// Insert the pages to the main-menu
-		 	$this->_Pagestructure->GenerateMenu($pages, 1);
+		 	$this->_PageStructure->GenerateMenu($pages, 1);
 		 	// Print out the default view
 		 	return $this->GetPage('intern_home');
 		 }
@@ -261,10 +261,10 @@
 		 function _Structure($Topnode = 0) {
 		 	$adminLang = $this->_AdminLang;
 		 	$out = '';
-		 	if(empty($this->_Pages[$Topnode]))
+		 	if(empty($this->_PageStructure->_ParentIDPages[$Topnode]))
 		 		return;
 		 	$out .= "\r\n\t\t\t<ol>\r\n";
-		 	foreach($this->_Pages[$Topnode] as $page) {
+		 	foreach($this->_PageStructure->_ParentIDPages[$Topnode] as $page) {
 	 			$out .= "\t\t\t\t<li class=\"page_type_". $page['type'] . (($page['access'] == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">" . (($Topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page['id'], $this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page['access'] != 'public') ? ' disabled="disabled"'  : '') . " value=\"" . $page['id'] . "\" class=\"checkbox\"/>\t" : '' );
 	 			$out .= "<strong>" . $page['title'] . "</strong> (" . $page['name'] . ")";
 		 			$out .= "<span class=\"page_lang\">[" . $adminLang[$page['lang']] . "]</span><span class=\"page_actions\">";
@@ -293,20 +293,7 @@
 		 	global $admin_lang, $_SERVER;
 			
 			$out = '';
-			// TODO: ORDER BY page_sortid
-			$sql = "SELECT *
-		 		FROM " . DB_PREFIX . "pages
-		 		ORDER BY page_parent_id";
-		 	$pageResult = $this->_SqlConnection->SqlQuery($sql);
-	 		while($page = mysql_fetch_object($pageResult)) {
-	 			$this->_Pages[$page->page_parent_id][] =
-	 					array('id' => $page->page_id,
-	 						'name' => $page->page_name,
-	 						'type' => $page->page_type,
-	 						'lang' => $page->page_lang,
-	 						'title' => $page->page_title,
-	 						'access' => $page->page_access);
-	 		}
+			$this->_PageStructure->LoadParentIDs();
 	 		$out .= $this->_Structure($topnode);
 			return $out;
 		}
@@ -1002,7 +989,7 @@
 				$subpages_c_result = db_result($sql);
 				$subpages_count = mysql_num_rows($subpages_c_result);
 				if($subpages_count != 0) {
-					$out .="\t\t\t<h4>Unterseiten</h4><hr />\r\n
+					$out .="\t\t\t<h2>Unterseiten</h2>\r\n
 						<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>";
 					$out .= $this->_showStructure($page->page_id);
 					$out .= "<script type=\"text/javascript\" language=\"JavaScript\">
@@ -1015,7 +1002,7 @@
 					ORDER BY page_date DESC";
 				$result = db_result($sql);
 				$changes_count = mysql_num_rows($result);
-				$out .="\t\t\t<h4>Ver&auml;nderungen($changes_count)</h4><hr />
+				$out .="\t\t\t<h2>Ver&auml;nderungen($changes_count)</h2>
 			<table class=\"page_commits\">
 				<thead>
 					<tr>

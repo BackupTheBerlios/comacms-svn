@@ -171,8 +171,9 @@
 		 	$out .= $this->_showStructure(0);
 		 	$out .= "<input type=\"submit\" class=\"button\" name=\"pagestructure_savemenu\" value=\"" . $admin_lang['generate_mainmenu'] . "\" />\r\n";
 			$out .= "\t\t\t</form>
-			<!--<script>
-			</script>-->\r\n";
+			<script type=\"text/javascript\" language=\"JavaScript\">
+				SetHover('span', 'structure_row', 'structure_row_hover', function additional() {document.getElementById(\"menu\").className = \"\";});
+			</script>\r\n";
 			
 			return $out;
 		 }
@@ -299,7 +300,7 @@
 		 	if(mysql_num_rows($pages_result) != 0) {
 		 		$out .= "\r\n\t\t\t<ol>\r\n";
 		 		while($page = mysql_fetch_object($pages_result)) {
-		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type" . (($page->page_access == 'deleted') ? ' strike' : '' ). "\"><span onMouseOver=\"Hover(this)\" class=\"structure_row\">" . (($topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page->page_id,$this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page->page_access != 'public') ? ' disabled="disabled"'  : '') . " value=\"$page->page_id\" class=\"checkbox\"/>\t" : '' );
+		 			$out .= "\t\t\t\t<li class=\"page_type_$page->page_type" . (($page->page_access == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">" . (($topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page->page_id,$this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page->page_access != 'public') ? ' disabled="disabled"'  : '') . " value=\"$page->page_id\" class=\"checkbox\"/>\t" : '' );
 		 			
 		 			$out .= "<strong>$page->page_title</strong> ($page->page_name)";
 		 			$out .= "<span class=\"page_lang\">[" . $admin_lang[$page->page_lang] . "]</span><span class=\"page_actions\">";

@@ -396,7 +396,7 @@
 			<input type=\"hidden\" name=\"action\" value=\"new\" />
 			Titel: <input type=\"text\" name=\"title\" maxlength=\"60\" value=\"\" /><br />
 			<textarea cols=\"60\" rows=\"6\" name=\"text\"></textarea><br />
-			Eingelogt als " . $user->showname . " <input class=\"button\" type=\"submit\" value=\"Senden\" /><br />
+			Eingelogt als " . $user->Showname . " <input class=\"button\" type=\"submit\" value=\"Senden\" /><br />
 		</form>";
 		}
 			$out .= "\t\t<form method=\"post\" action=\"admin.php\">

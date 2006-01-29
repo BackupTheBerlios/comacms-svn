@@ -3,12 +3,49 @@
 var browser = navigator.userAgent.toLowerCase();
 var isGecko = (browser.indexOf('gecko') != -1 && browser.indexOf('spoofer') == -1 && browser.indexOf('khtml') == -1 && browser.indexOf('netscape/7.0') == -1);
 var isSafari = (browser.indexOf('applewebkit') != -1 && browser.indexOf('spoofer') == -1);
-var isKHTML = (navigator.vendor.toLowerCase() == 'kde' || ( document.childNodes && !document.all && !navigator.taintEnabled ));
+var isKHTML = false;
+if(navigator.vendor)
+	isKHTML = (navigator.vendor.toLowerCase() == 'kde' || ( document.childNodes && !document.all && !navigator.taintEnabled ));
 if(browser.indexOf('opera')!=-1) {
 	var isOpera = true;
 	var isOperaPreSeven = (window.opera && !document.childNodes);
 	var isOperaSeven = (window.opera && document.childNodes);
 }
+
+/* SetHover 
+ * This function applies the hover-functionality for all html tags in Internet Explorer
+ * 
+ * TagName: The name of the tag which should have the hover functionality
+ * ClassName: The name of the css-class, which the tag has
+ * HoverClassName: The name of the css-class, which applies the hover-style
+ * Additional: Some additional code to make workrounds possible
+ */
+function SetHover(TagName, ClassName, HoverClassName, Additional) {
+	if(document.all) {
+		var tagsCount = document.getElementsByTagName(TagName).length;
+		for(var i = 0; i < tagsCount; i++){
+			if(document.getElementsByTagName(TagName)[i].className == ClassName) {
+				var rowSpan = document.getElementsByTagName(TagName)[i];
+				rowSpan.style.border = 'none';
+				rowSpan.onmouseover = function onmouseover(event) { Hover(this, ClassName, HoverClassName);Additional(); };
+				rowSpan.onmouseout =  function onmouseover(event) { HoverOut(this, ClassName);Additional(); };
+			}
+		}
+		Additional();
+	}
+}
+
+function Hover(ObjectToHover, ClassName, HoverClassName) {
+	if(document.all)
+		ObjectToHover.className = ClassName + " " + HoverClassName;
+}
+
+function HoverOut(ObjectToHover, ClassName) {
+	if(document.all)
+		ObjectToHover.className = ClassName;
+}
+
+
  
 /* Der Quellcode ab hier stammt teilweise aus dem mediawiki
  *
@@ -26,11 +63,7 @@ if (clientPC.indexOf('opera')!=-1) {
     var is_opera_seven = (window.opera && document.childNodes);
 }
 
-function Hover(ObjectToHover) {
-//document.writeln(ObjectToHover.data);
-// alert(ObjectToHover.class);
- // = "structure_row structure_row_hover";
-}
+
 
 function preview_style()
 {

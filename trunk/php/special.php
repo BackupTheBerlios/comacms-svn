@@ -79,16 +79,8 @@
 			$imageResult = $sqlConnection->SqlQuery($sql);
 			if($imageData = mysql_fetch_object($imageResult)) {
 				$text = "<img src=\"" . generateUrl($imageData->file_path) ."\"/>";
-				$exif = exif_read_data($imageData->file_path, 0, true);
-
-				foreach ($exif as $key => $section) {
-   					foreach ($section as $name => $val) {
-       $text .= "$key.$name: $val<br />\n";
-   }
-				}
 			}
 		}
-		
 	}
 	if($text == '') {
 		header('Location: index.php');

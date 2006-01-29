@@ -157,7 +157,7 @@ table {
  top: 0;
  left: 0;
  list-style-type: none;
- white-space: nowarp;
+ white-space: nowrap;
  background-color: #000000;
  margin: 0;
  padding: 0;
@@ -194,7 +194,7 @@ p {
  text-align: center;
  vertical-align: middle;
  border-collapse: collapse;
- white-space: nowarp;
+ white-space: nowrap;
 }
 
 #menu {
@@ -270,7 +270,7 @@ span.info, span.error{
 
 span.error {
  color: red;
- font-style: none;
+ font-style: normal;
  border: 1px dashed #FF0000;
  font-weight: bold;
  margin-bottom: 0.4em;
@@ -336,7 +336,7 @@ textarea.edit {
  border: 1px dashed #C0C0C0;
  margin: 4px;
  padding: 5px;
- min-heigth: 1200px;
+ min-height: 1200px;
  position: relative;
  clear: both;
  text-align: left;
@@ -463,12 +463,14 @@ table.text_table th {
 }
 
 .structure_row {
- width:98%;
+ width:99.5%;
  display:block;
+ border: none;
 }
 
 .structure_row:hover, .structure_row_hover  {
  background-color: #87C6E9;
+ border: none;
 }
 
 div.thumb {

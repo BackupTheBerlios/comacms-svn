@@ -415,7 +415,7 @@
 				}
 				else {// dont extist
 					$sql = "INSERT INTO " . DB_PREFIX . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)
-						VALUES('$page_lang', '$page_access', '$page_name', '$page_title', $page_parent_id, $user->id, '$page_type', " . mktime() . ", '$page_edit_comment')";
+						VALUES('$page_lang', '$page_access', '$page_name', '$page_title', $page_parent_id, $user->ID, '$page_type', " . mktime() . ", '$page_edit_comment')";
 					db_result($sql);
 					$lastid = mysql_insert_id();
 					$edit->NewPage($lastid);

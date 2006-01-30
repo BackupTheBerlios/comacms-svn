@@ -27,12 +27,6 @@
 	 
 	class Admin_Menu extends Admin{
 	 	
-	 	/**
- 		 * @var array
- 		 */
- 		
-	 	var $_SqlConnection;
-	 	var $_AdminLang;
 	 	var $_Menu;
 	 	
 	 	function Admin_Menu($SqlConnection, $AdminLang) {
@@ -47,6 +41,10 @@
 	 		$out = "\t\t\t<h2>" . $adminLang['menu-editor'] . "</h2>\r\n";
 	 		$Action = strtolower($Action);
 	 		switch ($Action) {
+	 			case 'edit':		$out .= $this->_EditMenuEntry(GetPostOrGet('menu_id'));
+	 						break;
+	 			case 'up':		$out .= $this->_Menu->_MoveUp(GetPostOrGet('menu_orderid'), GetPostOrGet('menu_id'));
+	 			case 'down':		$out .= $this->_Menu->_MoveDown(GetPostOrGet('menu_orderid'), GetPostOrGet('menu_id'));
 	 			default:		$out .= $this->_HomePage();
 	 		}
 	 		return $out; 
@@ -68,6 +66,7 @@
 	 	
 	 	function _ShowMenu($MenuID) {
 	 		$out = '';
+	 		$adminLang = $this->_AdminLang;
 	 		
 	 		$sql = "SELECT *
 	 			FROM " . DB_PREFIX . "menu
@@ -78,11 +77,17 @@
 	 		$out .= "\t\t\t<ol>\r\n";
 	 		
 	 		while ($menuEntry = mysql_fetch_object($menuResult)) {
-	 			$out .= "\t\t\t\t<li class=\"page_type_text\">\r\n" .
-	 				"\t\t\t\t\t<span class=\"structure_row\">\r\n";
-	 			$out .= "\t\t\t\t\t\t<strong>" . $menuEntry->menu_text . "</strong>\r\n";
-	 			$out .= "\t\t\t\t\t</span>\r\n" .
-	 				"\t\t\t\t</li>\r\n";
+	 			$out .= "\t\t\t\t<li class=\"page_type_text\">\r\n
+					<span class=\"structure_row\">\r\n
+						<strong>" . $menuEntry->menu_text . "</strong>\r\n	 			
+	 					<span class=\"page_actions\">\r\n
+	 						<a href=\"admin.php?page=menueditor&amp;action=edit&amp;menu_id=" . $menuEntry->menu_id . "\"><img src=\"./img/edit.png\" class=\"icon\" alt=\"" . $adminLang['edit']. "\" title=\"" . $adminLang['edit'] . "\" height=\"16\" width=\"16\"></a>
+	 						<a href=\"admin.php?page=menueditor&amp;action=up&amp;menu_orderid=" . $menuEntry->menu_orderid . "&amp;menu_id=" . $menuEntry->menu_menuid . "\"><img src=\"./img/up.png\" class=\"icon\" alt=\"" . $adminLang['move_up'] . "\" title=\"" . $adminLang['move_up'] . "\" height=\"16\" width=\"16\"></a>
+	 						<a href=\"admin.php?page=menueditor&amp;action=down&amp;menu_orderid=" . $menuEntry->menu_orderid . "&amp;menu_id=" . $menuEntry->menu_menuid . "\"><img src=\"./img/down.png\" class=\"icon\" alt=\"" . $adminLang['move_down'] . "\" title=\"" . $adminLang['move_down'] . "\" height=\"16\" width=\"16\"></a>
+	 						<a href=\"admin.php?page=menueditor&amp;action=delete&amp;menu_id=" . $menuEntry->menu_id . "\"><img src=\"./img/del.png\" class=\"icon\" alt=\"" . $adminLang['delete'] . "\" title=\"" . $adminLang['delete'] . "\" height=\"16\" width=\"16\"></a>
+	 					</span>\r\n
+	 				</span>\r\n
+	 			</li>\r\n";
 	 		}
 	 		$out .= "\t\t\t</ol>";
 	 		

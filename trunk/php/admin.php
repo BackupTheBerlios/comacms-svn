@@ -129,7 +129,7 @@
 	elseif($extern_page == 'pagestructure') {
 		$title = $admin_lang['pagestructure'];
 		include('classes/admin/admin_pagestructure.php');
-		$admin_page = new Admin_PageStructure($sqlConnection, $admin_lang, $user);
+		$admin_page = new Admin_PageStructure($sqlConnection, $admin_lang, $user, $config);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'groups') {

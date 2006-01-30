@@ -27,12 +27,12 @@
 		var $Page = null;
 		
 		/**
-		 * @param Page
+		 * @param Page Üage
 		 * @return void
 		 */		 
-		function InlineMenu($page) {
-			if(!empty($page))
-				$this->Page = $page;
+		function InlineMenu($Page) {
+			if(!empty($Page))
+				$this->Page = $Page;
 		}
 		
 		/**

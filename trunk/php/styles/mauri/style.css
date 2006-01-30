@@ -314,12 +314,32 @@ textarea.edit {
  font-family: arial, verdana, helvetica, sans-serif;
 }
 
+
 .imageblock, .gallery_image {
  width: 120px;
- height: 130px;
+ min-height: 140px;
  margin: 5px;
  text-align: center;
  float: left;
+ padding: 0;
+}
+
+.imageblock input {
+ border: none;
+}
+
+.imageblock a img{
+ display: block;
+ margin: 0;
+ margin-left: auto!important;
+ margin-right: auto!important;
+ float: none;
+}
+
+.imageblock a {
+ float: none;
+ display: block;
+ margin: 0;
 }
 
 .imagesblock {
@@ -336,7 +356,7 @@ textarea.edit {
  border: 1px dashed #C0C0C0;
  margin: 4px;
  padding: 5px;
- min-height: 1200px;
+
  position: relative;
  clear: both;
  text-align: left;

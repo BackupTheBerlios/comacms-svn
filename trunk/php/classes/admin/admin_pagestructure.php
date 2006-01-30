@@ -31,15 +31,16 @@
  		 */
  		var $MenuPageIDs;
  		
- 		var $_SqlConnection;
+
  		var $_PageStructure;
- 		var $_AdminLang;
  		var $_User;
+ 		var $_Config;
  		
- 		function Admin_PageStructure($SqlConnection, $AdminLang, $User) {
+ 		function Admin_PageStructure($SqlConnection, $AdminLang, $User, $Config) {
 			$this->_SqlConnection = $SqlConnection;
 			$this->_AdminLang = $AdminLang;
 			$this->_User = $User;
+			$this->_Config = $Config;
 			$this->_PageStructure = new PageStructure($this->_SqlConnection, $this->_User);
 		}
  		
@@ -453,11 +454,40 @@
 		 * inlinemenu-management
 		 */
 		function _inlineMenu() {
-			global $admin_lang;
-			
-			$page_id = GetPostOrGet('page_id');
-			$action2 = GetPostOrGet('action2');
+			$adminLang = $this->_AdminLang;
+			$pageID = GetPostOrGet('page_id');
+			$action = strtolower(GetPostOrGet('action2'));
 			$out = '';
+			
+			if(!$this->_PageStructure->InlineMenuExists($pageID)) {
+				if($action == 'create') {
+					$this->_PageStructure->CreateInlineMenu($pageID);
+					$out .= $this->_inlineMenu();
+				}
+				else {
+					$out .= $adminLang['at_the_moment_there_is_no_inlinemenu_for_this_page_created,_should_this_be_done_now'] . "<br />
+					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;action2=create&amp;page_id=$pageID\" title=\"" . $adminLang['yes'] . "\" class=\"button\">" . $adminLang['yes'] . "</a>
+					<a href=\"admin.php?page=pagestructure\" title=\"" . $adminLang['no'] . "\" class=\"button\">" . $adminLang['no'] . "</a>";	
+				}
+				
+			}
+			else {
+				switch ($action) {
+					case 'select_image':	$out .= $this->_InlineMenuSelectImage($pageID);
+								break;
+					case 'set_image':	$out .= $this->_InlineMenuSetImagePage($pageID);
+								break;
+					case 'remove_image':	$out .= $this->_InlineMenuRemoveImagePage($pageID);
+								break;
+					case 'set_image_title':	$out .= $this->_InlineMenuSetImageTitlePage($pageID);
+								break;
+					default:		$out .= $this->_InlineMenuHomePage($pageID);
+								break;
+				}
+			}
+			
+			
+			/*
 			$sql = "SELECT " . DB_PREFIX. "pages.*, " . DB_PREFIX . "inlinemenu.*
 				FROM ( " . DB_PREFIX. "pages
 				LEFT JOIN " . DB_PREFIX . "inlinemenu ON " . DB_PREFIX . "inlinemenu.page_id = " . DB_PREFIX. "pages.page_id )
@@ -855,7 +885,149 @@
 				$out .= "</table>
 					<div class=\"row\"><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=add_new_dialog\" class=\"button\">Einen Eintrag hinzuf&uuml;gen</a></div>
 					</fieldset>";
+			}*/
+			return $out;
+		}
+		
+		function _InlineMenuSetImagePage($PageID) {
+			$imagePath = GetPostOrGet('image_path');
+			$imgmax2 = 200;
+			$inlinemenuFolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
+			
+			//$inlinemenuFolder = 'data/thumbnails/';
+			$thumbnail = resizteImageToWidth($imagePath, $inlinemenuFolder, $imgmax2);
+			//return $thumbnail;
+			if(file_exists($thumbnail)) {
+				
+				$this->_PageStructure->SetInlineMenuImage($PageID, $thumbnail, $imagePath);
+				/*$sql = "UPDATE " . DB_PREFIX . "inlinemenu
+					SET inlinemenu_image_thumb='$thumbnail', inlinemenu_image='$imagePath'
+					WHERE page_id=$PageID";
+				db_result($sql);
+				$inline->inlinemenu_image_thumb = $thumbnail;*/
 			}
+			return $this->_InlineMenuHomePage($PageID);
+		}
+		
+		function _InlineMenuSetImageTitlePage($PageID) {
+			$imageTitle = GetPostOrGet('image_title');
+			$this->_PageStructure->SetInlineMenuImageTitle($PageID, $imageTitle);
+			return $this->_InlineMenuHomePage($PageID);
+		}
+		
+		function _InlineMenuRemoveImagePage($PageID) {
+			$this->_PageStructure->RemoveInlineMenuImage($PageID);
+			return $this->_InlineMenuHomePage($PageID);
+		}
+		
+		function _InlineMenuSelectImage($PageID) {
+			$imagePath = $this->_PageStructure->GetInlineMenuData($PageID, 'image');
+			$adminLang = $this->_AdminLang;
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "files
+				WHERE file_type LIKE 'image/%'
+				ORDER BY file_name ASC";
+			$images_result = db_result($sql);
+			$imgmax = 100;
+			$imgmax2 = 200;
+			$inlinemenu_folder = 'data/thumbnails/';
+			$out = "<form action=\"admin.php\" method=\"post\">
+				<input type=\"hidden\" name=\"page\" value=\"pagestructure\"/>
+				<input type=\"hidden\" name=\"action\" value=\"inlinemenu\"/>
+				<input type=\"hidden\" name=\"page_id\" value=\"$PageID\"/>
+				<input type=\"hidden\" name=\"action2\" value=\"set_image\"/>
+				<fieldset>
+				<legend>" . $adminLang['inlinemenu_image'] . "</legend>
+				<div class=\"row\"><div class=\"imagesblock\">";
+			while($image = mysql_fetch_object($images_result)) {
+				$thumbnail = resizteImageToMaximum($image->file_path, $inlinemenu_folder ,$imgmax);
+				if($thumbnail !== false) {
+					list($originalWidth, $originalHeight) = getimagesize($thumbnail);
+					
+					$out .= "<div class=\"imageblock\">
+				<a href=\"" . generateUrl($image->file_path) . "\">
+				<img style=\"margin-top:" . ($imgmax-$originalHeight) . "px;\" src=\"" . generateUrl($thumbnail) . "\" alt=\"". basename($thumbnail) ."\" /></a><br />
+				<input type=\"radio\" name=\"image_path\" " .(($imagePath == $image->file_path) ? 'checked="checked" ' : '') . " value=\"$image->file_path\"/></div>";
+				}
+			}
+			$out .= "</div></div>
+				<div class=\"row noform\"><input type=\"submit\" value=\"" . $adminLang['apply'] . "\" class=\"button\"/>
+				<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID\" class=\"button\">" . $adminLang['back'] . "</a></div></fieldset></form>";
+				
+			
+			return $out;
+		}
+		
+		function _InlineMenuHomePage($PageID) {
+			$adminLang = $this->_AdminLang;
+			$image = 'Noch kein Bild gesetzt';
+			$thumbPath = $this->_PageStructure->GetInlineMenuData($PageID, 'image_thumb');
+			$imagePath = $this->_PageStructure->GetInlineMenuData($PageID, 'image');
+			$imageTitle = $this->_PageStructure->GetInlineMenuData($PageID, 'image_title');
+			echo  $thumbPath;
+			if(file_exists($thumbPath))
+				$image = "<img src=\"" . generateUrl($thumbPath) . "\"/>";
+			else {
+				$imgmax2 = 200;
+				$inlinemenuFolder = 'data/thumbnails/';
+				$thumbnail = resizteImageToWidth($imagePath, $inlinemenuFolder, $imgmax2);
+				if($thumbnail !== false){
+					$image = "<img src=\"" . generateUrl($thumbnail) . "\"/>";
+				}
+			}	
+				$out = "
+				<fieldset>
+					<legend>" . $adminLang['inlinemenu'] . "</legend>
+				<div class=\"row\">
+						<label class=\"row\">
+							" . $adminLang['inlinemenu_image'] . ":
+							<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmen&uuml; zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgew&auml;hlt werden.</span>
+						</label>
+						$image
+				</div>
+				<div class=\"row\">
+					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;action2=select_image\" class=\"button\">Bild ausw&auml;hlen/ver&auml;ndern</a>
+					" .((file_exists($thumbPath)) ?  "<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;action2=remove_image\" class=\"button\">Bild entfernen</a>" : '') . "
+				</div>
+				<form action=\"admin.php\" method=\"post\">
+				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+				<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
+				<input type=\"hidden\" name=\"page_id\" value=\"$PageID\" />
+				<input type=\"hidden\" name=\"action2\" value=\"set_image_title\" />
+				<div class=\"row\">
+					<label for=\"inlinemenu_thumb_title\"class=\"row\">
+						Bildunterschrift:
+						<span class=\"info\">Die Bildunterschrift kann das Bild noch ein wenig erl&auml;utern.</span>
+					</label>
+					<input id=\"inlinemenu_thumb_title\" name=\"image_title\" type=\"text\" value=\"$imageTitle\" />
+				</div>
+				<div class=\"row\">
+					<input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\" />
+				</div>
+				</form>";
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "inlinemenu_entries
+					WHERE inlineentrie_page_id = $PageID
+					ORDER BY inlineentrie_sortid ASC";
+				$entries_result = db_result($sql);
+				$out .= "<div class=\"row\"><table class=\"text_table full_width\">
+					<thead><tr><th>Text</th><th>Typ</th><th>Aktion</th></tr></thead>";
+				while($entrie = mysql_fetch_object($entries_result)) {
+					$out .= "<tr>
+					<td>". nl2br($entrie->inlineentrie_text) ."</td>
+					<td>$entrie->inlinieentrie_type</td>
+					<td>
+						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=up\"><img src=\"./img/up.png\" alt=\"" . $adminLang['move_up'] ."\" title=\"" . $adminLang['move_up'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=down\"><img src=\"./img/down.png\" alt=\"" . $adminLang['move_down'] ."\" title=\"" . $adminLang['move_down'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=delete\"><img src=\"./img/del.png\" alt=\"" . $adminLang['delete'] ."\" title=\"" . $adminLang['delete'] ."\" /></a>
+						<!--<img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" />-->
+					</td>
+					</tr>";
+				}
+				$out .= "</table>
+					</div>
+					<div class=\"row\"><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;action2=add_new_dialog\" class=\"button\">Einen Eintrag hinzuf&uuml;gen</a></div>
+					</fieldset>";
 			return $out;
 		}
 		

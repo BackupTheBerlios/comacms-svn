@@ -128,7 +128,17 @@
 				WHERE menu_menuid=$MenuID";
 			$this->_SqlConnection->SqlQuery($sql);
 		}
-		
+		/** PageStructurePulldown
+		 * This function generates all <option>-tags to create a pull-down-list wherec you can select a page 
+		 * 
+		 * @access public
+		 * @param integer Topnode The ID of the root-element
+		 * @param integer Deep
+		 * @param string Topnumber
+		 * @param integer Without The element with this ID and all its child-elemnts will be ignored
+		 * @param integer Selected This element will be selected
+		 * @return string
+		 */
 		function PageStructurePulldown($Topnode = 0, $Deep = 0, $Topnumber = '', $Without = -1, $Selected = -1) {
 		 	$out = '';
 			if(empty($this->_ParentIDPages[$Topnode]))
@@ -143,6 +153,74 @@
 		 		
 		 	}
 		 	return $out;
-		 }
+		}
+		
+		function LoadInlineMenuData($PageID) {
+			if(empty($this->_InlineMenus[$PageID])) {
+				$sql = "SELECT *
+		 			FROM " . DB_PREFIX . "inlinemenu
+		 			WHERE page_id=$PageID
+		 			LIMIT 0, 1";
+		 		$menuResult = $this->_SqlConnection->SqlQuery($sql);
+		 		if($menu = mysql_fetch_object($menuResult))
+			 		$this->_InlineMenus[$PageID] = array('image' => $menu->inlinemenu_image,
+									'image_thumb' => $menu->inlinemenu_image_thumb,
+									'image_title' => $menu->inlinemenu_image_title,
+									'html' => $menu->inlinemenu_html);
+		 	}
+		}
+		
+		function InlineMenuExists($PageID) {
+			$this->LoadInlineMenuData($PageID);
+			return !empty($this->_InlineMenus[$PageID]);
+		}
+		
+		function CreateInlineMenu($PageID) {
+			$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu (page_id, inlinemenu_image, inlinemenu_image_thumb, inlinemenu_image_title, inlinemenu_html)
+				VALUES($PageID, '', '', '', '')";
+			$this->_SqlConnection->SqlQuery($sql);
+			$this->_InlineMenus[$PageID] = array('image' => '',
+								'image_thumb' => '',
+								'image_title' => '',
+								'html' => '');
+		}
+		
+		function GetInlineMenuData($PageID, $Field) {
+			$this->LoadInlineMenuData($PageID);
+			if(empty($this->_InlineMenus[$PageID])) {
+				return false;
+			}
+			else
+				return $this->_InlineMenus[$PageID][$Field];
+		}
+		
+		function SetInlineMenuImage($PageID, $ImageThumb, $Image) {
+			//echo $PageID . "<br>" . $ImageThumb. "<br>" . $Image;
+			$sql = "UPDATE " . DB_PREFIX . "inlinemenu
+				SET inlinemenu_image_thumb='$ImageThumb', inlinemenu_image='$Image'
+				WHERE page_id=$PageID";
+			//echo "<br>$sql";
+			$this->_SqlConnection->SqlQuery($sql);
+			$this->_InlineMenus[$PageID]['image'] = $Image;
+			$this->_InlineMenus[$PageID]['image_thumb'] = $ImageThumb;
+		}
+		
+		function SetInlineMenuImageTitle($PageID, $Title) {
+			$sql = "UPDATE " . DB_PREFIX . "inlinemenu
+				SET inlinemenu_image_title='$Title'
+				WHERE page_id=$PageID";
+			$this->_SqlConnection->SqlQuery($sql);
+			$this->_InlineMenus[$PageID]['image_title'] = $Title;
+		}
+		
+		function RemoveInlineMenuImage($PageID) {
+			$sql = "UPDATE " . DB_PREFIX . "inlinemenu
+				SET inlinemenu_image='', inlinemenu_image_thumb=''
+				WHERE page_id=$PageID";
+			$this->_SqlConnection->SqlQuery($sql);
+			$this->_InlineMenus[$PageID]['image'] = '';
+			$this->_InlineMenus[$PageID]['image_thumb'] = '';
+		}
+		
 	}
 ?>

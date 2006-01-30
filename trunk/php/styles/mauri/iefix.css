@@ -1,7 +1,10 @@
+html, body {
+height: 100%;
+}
 #title {
  margin-bottom: 0;
-padding-bottom:0;
-padding-top: 13px;
+ padding-bottom:0;
+ padding-top: 13px;
 }
 
 #position {

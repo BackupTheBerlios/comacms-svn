@@ -107,4 +107,6 @@
 	$admin_lang['mainmenu'] = 'Mainmenu';
 	$admin_lang['Do you really want to delete the page %page_title%?'] = 'Do you really want to delete the page &quot;%s&quot;?';
 	$admin_lang['secondmenu'] = 'second Menu';
+	$admin_lang['at_the_moment_there_is_no_inlinemenu_for_this_page_created,_should_this_be_done_now'] = 'At the moment there is no Inlinemenu for this Page created, should this be done now?';
+	$admin_lang['inlinemenu_image'] = 'Inlinemenu-Image';
 ?>

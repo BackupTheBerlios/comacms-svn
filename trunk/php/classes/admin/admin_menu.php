@@ -44,7 +44,11 @@
 	 			case 'edit':		$out .= $this->_EditMenuEntry(GetPostOrGet('menu_id'));
 	 						break;
 	 			case 'up':		$out .= $this->_Menu->_MoveUp(GetPostOrGet('menu_orderid'), GetPostOrGet('menu_id'));
+	 						$out .= $this->_HomePage();
+	 						break;
 	 			case 'down':		$out .= $this->_Menu->_MoveDown(GetPostOrGet('menu_orderid'), GetPostOrGet('menu_id'));
+	 						$out .= $this->_HomePage();
+	 						break;
 	 			default:		$out .= $this->_HomePage();
 	 		}
 	 		return $out; 

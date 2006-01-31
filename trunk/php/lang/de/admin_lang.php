@@ -108,4 +108,6 @@
 	$admin_lang['Do you really want to delete the page %page_title%?'] = 'Wollen sie die Seite &quot;%s&quot; wirklich l&ouml;schen?';
 	$admin_lang['at_the_moment_there_is_no_inlinemenu_for_this_page_created,_should_this_be_done_now'] = 'Es wurde bis jetzt kein Zusatzmen&uuml; erstellt, soll das nun geschehen?';
 	$admin_lang['inlinemenu_image'] = 'Bild f&uuml;r das Zusatzmen&uuml;';
+	$admin_lang['edit_menu_entry'] = 'Men&uuml;eintrag bearbeiten';
+	$admin_lang['belongs_to_menu'] = 'Geh&ouml;hrt zu Menu:';
 ?>

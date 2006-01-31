@@ -183,7 +183,7 @@
 						<td><input type=\"text\" name=\"date_topic\" maxlength=\"150\" /></td>
 					</tr>
 					<tr>
-						<td>Eingelogt als " . $user->showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" /></td>
+						<td>Eingelogt als " . $user->Showname . " &nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"Speichern\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" /></td>
 					</tr>
 				</table>
 			</form>";
@@ -202,7 +202,7 @@
 	 		if($date_topic !== null && $date_place !== null) {
 	 			$date_date =  mktime(GetPostOrGet('date_hour'), GetPostOrGet('date_minute'),0, GetPostOrGet('date_month'), GetPostOrGet('date_day'), GetPostOrGet('date_year'));
 				$sql = "INSERT INTO " . DB_PREFIX . "dates (date_topic, date_place, date_date, date_creator)
-					VALUES ('$date_topic', '$date_place', '$date_date', '$user->id')";
+					VALUES ('$date_topic', '$date_place', '$date_date', '$user->ID')";
 				db_result($sql);
 				
 			} 

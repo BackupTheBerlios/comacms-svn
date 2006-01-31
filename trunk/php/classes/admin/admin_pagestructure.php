@@ -103,13 +103,13 @@
 		 	$pageID = GetPostOrGet('page_id');
 		 	if(!is_numeric($pageID))
 		 		return $this->GetPage('intern_home');
-		 	if($this->_Pagestructure->PageExists($pageID)) {
+		 	if($this->_PageStructure->PageExists($pageID)) {
 		 		if($confirmation == 1) {
-		 			$this->_Pagestructure->SetPageDeleted($pageID);
+		 			$this->_PageStructure->SetPageDeleted($pageID);
 		 			return $this->GetPage('intern_home');
 		 		}
 		 		else {//Do you realy want to delete the page &quot;%s&quot;?
-		 			$out = sprintf($adminLang['Do you really want to delete the page %page_title%?'], $this->_Pagestructure->GetPageData($pageID, 'title')) . "<br />
+		 			$out = sprintf($adminLang['Do you really want to delete the page %page_title%?'], $this->_PageStructure->GetPageData($pageID, 'title')) . "<br />
 		 				<a href=\"admin.php?page=pagestructure&amp;action=delete&amp;page_id=$pageID&amp;confirmation=1\" class=\"button\">" . $adminLang['yes'] . "</a>
 		 					<a href=\"admin.php?page=pagestructure\" class=\"button\">" . $adminLang['no'] . "</a>";
 		 			return $out;

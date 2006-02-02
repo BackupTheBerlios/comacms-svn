@@ -69,6 +69,7 @@
 	$admin_lang['generate_menu_for'] = 'erstelle Untermen&uuml; zu';
 	$admin_lang['create_new_page'] = 'Neue Seite erstellen';
 	$admin_lang['created_new_page'] = 'Neue Seite erstellt';
+	$admin_lang['new_page'] = 'Seite erstellt';
 	$admin_lang['comment_on_change'] = 'Anmerkung zur Ver&auml;nderung';
 	$admin_lang['edited'] = 'Bearbeitet';
 	$admin_lang['apply'] = '&Uuml;bernehmen';
@@ -109,5 +110,7 @@
 	$admin_lang['at_the_moment_there_is_no_inlinemenu_for_this_page_created,_should_this_be_done_now'] = 'Es wurde bis jetzt kein Zusatzmen&uuml; erstellt, soll das nun geschehen?';
 	$admin_lang['inlinemenu_image'] = 'Bild f&uuml;r das Zusatzmen&uuml;';
 	$admin_lang['edit_menu_entry'] = 'Men&uuml;eintrag bearbeiten';
-	$admin_lang['belongs_to_menu'] = 'Geh&ouml;hrt zu Menu:';
+	$admin_lang['belongs_to_menu'] = 'Geh&ouml;hrt zu Menu';
+	$admin_lang['name/contraction'] = 'Name/K&uuml;rzel';
+	$admin_lang['title'] = 'Titel';
 ?>

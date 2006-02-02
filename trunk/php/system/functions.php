@@ -30,14 +30,16 @@
 	/**
 	 * @return string
 	 */
-	function make_link($link) {
+	function make_link($Link) {
 		
-		if(eregi("^[a-z0-9\._-]+@+[a-z0-9\._-]+\.+[a-z]{2,4}$", $link))
-			return "mailto:$link\" class=\"link_email";
-		else if(substr($link, 0, 4) == 'http')
-			return "$link\" class=\"link_extern";
+		$Link = encodeUri($Link);
+		
+		if(eregi("^[a-z0-9\._-]+@+[a-z0-9\._-]+\.+[a-z]{2,4}$", $Link))
+			return "mailto:$Link\" class=\"link_email";
+		else if(substr($Link, 0, 4) == 'http')
+			return "$Link\" class=\"link_extern";
 		// TODO: load the title of the page into the link title and set an other css-class if the page does not exists
-		return "index.php?page=$link\" class=\"link_intern";
+		return "index.php?page=$Link\" class=\"link_intern";
 	}
 	
 	function makeMedia($Image, $ImageAlign) {
@@ -447,12 +449,14 @@
 		$text = str_replace('ö', '&ouml;', $text);
 		$text = str_replace('Ö', '&Ouml;', $text);
 		$text = str_replace('ß', '&szlig;', $text);
+
 		// paste code back
 		foreach($codes as $key => $match)
 			$text = str_replace('[code]%' . $key . '%[/code]', "<pre class=\"code\">$match</pre>", $text);
 			
 		return $text;
 	}
+	
 	/** special_start_with
 	 * 
 	 * Diese Funktion schaut, ob ein String mit einer bestimmten Zeichenkette anf�ngt und ignoriert dabei einige Zeichen,
@@ -706,40 +710,6 @@
 	function generateUrl($string) {
 		$string = preg_replace("~^\ *(.+?)\ *$~", "$1", $string);
 		return str_replace(" ", "%20", $string);
-	}
-	
-	function generateinlinemenu($page_id) {
-		$sql = "SELECT *
-			FROM " . DB_PREFIX . "inlinemenu_entries
-			WHERE inlineentrie_page_id=$page_id
-			ORDER BY inlineentrie_sortid ASC";
-		$entries = db_result($sql);
-		$text = '';
-		while($entrie = mysql_fetch_object($entries)) {
-			if($entrie->inlinieentrie_type == 'text')
-				$text .= "<div class=\"inline_text\">" . nl2br($entrie->inlineentrie_text) . "</div>";
-			elseif($entrie->inlinieentrie_type == 'link')
-				$text .= "<div class=\"inline_link\"><a href=\"$entrie->inlineentrie_link\">$entrie->inlineentrie_text</a></div>";
-			elseif($entrie->inlinieentrie_type == 'intern')
-				$text .= "<div class=\"inline_intern\"><a href=\"$entrie->inlineentrie_link\">$entrie->inlineentrie_text</a></div>";
-			elseif($entrie->inlinieentrie_type == 'download') {
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "files
-					WHERE file_id=$entrie->inlineentrie_link
-					Limit 0,1";
-				$file_result = db_result($sql);
-				if($file = mysql_fetch_object($file_result)) {
-					if(file_exists($file->file_path)) {
-						$size = kbormb(filesize($file->file_path));
-						$text .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$entrie->inlineentrie_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Gr&ouml;&szlig;e von $size\">$entrie->inlineentrie_text</a> ($size)</div>";
-					}
-				}
-			}
-		}
-		$sql = "UPDATE " . DB_PREFIX . "inlinemenu
-			SET inlinemenu_html='$text'
-			WHERE page_id='$page_id'";
-		db_result($sql);	
 	}
 	
 	function isUTF8($string)

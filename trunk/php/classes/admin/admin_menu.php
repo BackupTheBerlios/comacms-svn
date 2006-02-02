@@ -111,7 +111,7 @@
 				<legend>" . $adminLang['edit_menu_entry'] . "</legend>
 				<form action=\"admin.php\" method=\"post\">
 					<div class=\"row\">
-						<label for=\"menuID\">" . $adminLang['belongs_to_menu'] . "<span class=\"info\">" . $adminLang['todo'] . "</span></label>
+						<label for=\"menuID\">" . $adminLang['belongs_to_menu'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
 						<select id=\"menuID\" name=\"menuID\">
 							<option value=\"1\"" . (($menuEntry->menu_menuid == 1) ? ' selected="selected"' : '') . ">" . $adminLang['mainmenu'] . "</option>
 							<option value=\"2\"" . (($menuEntry->menu_menuid == 2) ? ' selected="selected"' : '') . ">" . $adminLang['secondmenu'] . "</option>

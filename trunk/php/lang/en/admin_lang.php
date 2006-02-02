@@ -71,6 +71,7 @@
 	$admin_lang['generate_menu_for'] = 'generate Inlinemenu for';
 	$admin_lang['create_new_page'] = 'Create new page';
 	$admin_lang['created_new_page'] = 'Created new page';
+	$admin_lang['new_page'] = 'New page';
 	$admin_lang['comment_on_change'] = 'Comment on change';
 	$admin_lang['edited'] = 'Edited';
 	$admin_lang['apply'] = 'Apply';
@@ -110,5 +111,7 @@
 	$admin_lang['at_the_moment_there_is_no_inlinemenu_for_this_page_created,_should_this_be_done_now'] = 'At the moment there is no Inlinemenu for this Page created, should this be done now?';
 	$admin_lang['inlinemenu_image'] = 'Inlinemenu-Image';
 	$admin_lang['edit_menu_entry'] = 'Edit menuentry';
-	$admin_lang['belongs_to_menu'] = 'Belongs to menu:';
+	$admin_lang['belongs_to_menu'] = 'Belongs to menu';
+	$admin_lang['name/contraction'] = 'Name/Contraction';
+	$admin_lang['title'] = 'Title';
 ?>

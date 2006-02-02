@@ -48,12 +48,12 @@
 	
 		function Save($page_id) {
 			global $user, $admin_lang;
-			$page_edit_comment = GetPostOrGet('page_edit_comment');
-			$page_title = GetPostOrGet('page_title');
-			$page_text = GetPostOrGet('page_text');
-			if(GetPostOrGet('page_preview') != '')
+			$page_edit_comment = GetPostOrGet('pageEditComment');
+			$page_title = GetPostOrGet('pageTitle');
+			$page_text = GetPostOrGet('pageText');
+			if(GetPostOrGet('pagePreview') != '')
 				return $this->Edit($page_id, $page_title, $page_text, $page_edit_comment);
-			if(GetPostOrGet('page_abort') != '') {
+			if(GetPostOrGet('pageAbort') != '') {
 				header('Location: admin.php?page=pagestructure');
 				die();
 			}
@@ -141,8 +141,8 @@
 						else {
 							$out = '';
 							$out .= "M&ouml;chten Sie diesen Text:<pre class=\"code\">$actual->text_page_text</pre>wirklich durch diesen Text:<pre class=\"code\">$old->text_page_text</pre>ersetzen?<br />
-								<a href=\"admin.php?page=pagestructure&amp;action=save&amp;page_id=$page_id&amp;change=$change&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
-		 						<a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>";
+								<a href=\"admin.php?page=pagestructure&amp;action=savePage&amp;pageID=$page_id&amp;change=$change&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
+		 						<a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>";
 							return $out;
 							
 						}
@@ -163,7 +163,7 @@
 			$got_mysql = false;
 			if($text == '' && $title == '') {
 				if(is_numeric($change) && $text == '' && $title == '') {
-					$out .= "<strong>Achtung:</strong> Sie bearbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen �berschreiben!";
+					$out .= "<strong>Achtung:</strong> Sie bearbeiten nicht die aktuelle Version, wenn Sie speichern wird ihr Text den aktuellen Text &uuml;berschreiben!";
 					$sql = "SELECT *
 						FROM (" . DB_PREFIX . "pages_history page
 						LEFT JOIN " . DB_PREFIX . "pages_text_history text ON text.page_id = page.id ) 
@@ -213,21 +213,21 @@
 				$page_text = str_replace('�', '&szlig;', $page_text);
 				$out .= "\t\t\t<fieldset><legend>Seite Bearbeiten</legend><form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-				<input type=\"hidden\" name=\"action\" value=\"save\" />
-				<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
-				<input type=\"text\" name=\"page_title\" value=\"$page_title\" /><br />
+				<input type=\"hidden\" name=\"action\" value=\"savePage\" />
+				<input type=\"hidden\" name=\"pageID\" value=\"$page_id\" />
+				<input type=\"text\" name=\"pageTitle\" value=\"$page_title\" /><br />
 				<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
 				<script type=\"text/javascript\" language=\"javascript\">
 					writeButton(\"img/button_fett.png\",\"Formatiert Text fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 					writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 					writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als &Uuml;berschrift\",\"=== \",\" ===\",\"�berschrift\",\"h\");
+					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als &Uuml;berschrift\",\"==== \",\" ====\",\"�berschrift\",\"h\");
 				</script><br />
-				<textarea id=\"editor\" class=\"edit\" name=\"page_text\">$page_text</textarea>
-				" . $admin_lang['comment_on_change'] . ": <input name=\"page_edit_comment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $page_edit_comment)) . "\" maxlength=\"100\" type=\"text\"/><br />
+				<textarea id=\"editor\" class=\"edit\" name=\"pageText\">$page_text</textarea>
+				" . $admin_lang['comment_on_change'] . ": <input name=\"pageEditComment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $page_edit_comment)) . "\" maxlength=\"100\" type=\"text\"/><br />
 				<input type=\"submit\" value=\"Speichern\" class=\"button\" />
-				<input type=\"submit\" value=\"Vorschau\" name=\"page_preview\" class=\"button\" />
-				<input type=\"submit\" value=\"Abbrechen\" name=\"page_abort\" class=\"button\"/>
+				<input type=\"submit\" value=\"Vorschau\" name=\"pagePreview\" class=\"button\" />
+				<input type=\"submit\" value=\"Abbrechen\" name=\"pageAbort\" class=\"button\"/>
 			</form></fieldset>\r\n";
 				if($show_preview)
 					$out .= "<fieldset><legend>Vorschau</legend>"

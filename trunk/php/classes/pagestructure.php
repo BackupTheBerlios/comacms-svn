@@ -25,13 +25,14 @@
 		var $_User;
 		var $_Pages = array();
 		var $_ParentIDPages = array();
+		var $_NextSortID = array();
 		/**
 		 * @param SqlConnection SqlConnection
 		 * @param User User
 		 */
 		function PageStructure($SqlConnection, $User) {
-			$this->_SqlConnection = $SqlConnection;
-			$this->_User = $User;
+			$this->_SqlConnection = &$SqlConnection;
+			$this->_User = &$User;
 		}
 		
 		/**
@@ -164,8 +165,8 @@
 		 		$menuResult = $this->_SqlConnection->SqlQuery($sql);
 		 		if($menu = mysql_fetch_object($menuResult))
 			 		$this->_InlineMenus[$PageID] = array('image' => $menu->inlinemenu_image,
-									'image_thumb' => $menu->inlinemenu_image_thumb,
-									'image_title' => $menu->inlinemenu_image_title,
+									'imageThumb' => $menu->inlinemenu_image_thumb,
+									'imageTitle' => $menu->inlinemenu_image_title,
 									'html' => $menu->inlinemenu_html);
 		 	}
 		}
@@ -180,8 +181,8 @@
 				VALUES($PageID, '', '', '', '')";
 			$this->_SqlConnection->SqlQuery($sql);
 			$this->_InlineMenus[$PageID] = array('image' => '',
-								'image_thumb' => '',
-								'image_title' => '',
+								'imageThumb' => '',
+								'imageTitle' => '',
 								'html' => '');
 		}
 		
@@ -202,7 +203,7 @@
 			//echo "<br>$sql";
 			$this->_SqlConnection->SqlQuery($sql);
 			$this->_InlineMenus[$PageID]['image'] = $Image;
-			$this->_InlineMenus[$PageID]['image_thumb'] = $ImageThumb;
+			$this->_InlineMenus[$PageID]['imageThumb'] = $ImageThumb;
 		}
 		
 		function SetInlineMenuImageTitle($PageID, $Title) {
@@ -210,7 +211,7 @@
 				SET inlinemenu_image_title='$Title'
 				WHERE page_id=$PageID";
 			$this->_SqlConnection->SqlQuery($sql);
-			$this->_InlineMenus[$PageID]['image_title'] = $Title;
+			$this->_InlineMenus[$PageID]['imageTitle'] = $Title;
 		}
 		
 		function RemoveInlineMenuImage($PageID) {
@@ -219,8 +220,100 @@
 				WHERE page_id=$PageID";
 			$this->_SqlConnection->SqlQuery($sql);
 			$this->_InlineMenus[$PageID]['image'] = '';
-			$this->_InlineMenus[$PageID]['image_thumb'] = '';
+			$this->_InlineMenus[$PageID]['imageThumb'] = '';
 		}
 		
+		/**
+		 * @param integer PageID
+		 * @return integer
+		 */
+		function LoadNextInlineMenuSortID($PageID) {
+			// Check if already has loaded
+			if(!isset($this->_NextSortID[$PageID])) {
+				// Load it!
+				$sql = "SELECT inlineentrie_sortid
+			 		FROM " . DB_PREFIX . "inlinemenu_entries
+			 		WHERE inlineentrie_page_id = $PageID
+			 		ORDER BY inlineentrie_sortid DESC
+			 		LIMIT 0, 1";
+			 	$lastOrderIDResult = $this->_SqlConnection->SqlQuery($sql);
+			 	if($lastOrderID = mysql_fetch_object($lastOrderIDResult)){
+					$this->_NextSortID[$PageID] = $lastOrderID->inlineentrie_sortid;
+				}
+				else // No entries! Start with zero
+					$this->_NextSortID[$PageID] = 0;
+			}
+			// Increment the order ID
+			$this->_NextSortID[$PageID]++;
+			
+			return $this->_NextSortID[$PageID];
+		}
+		
+		function AddInlineMenuLink($Text, $Link, $PageID) {
+			$sortID = $this->LoadNextInlineMenuSortID($PageID);
+			$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
+				VALUES ($sortID, $PageID, 'link', '$Text','$Link')";
+			$this->_SqlConnection->SqlQuery($sql);
+			$this->GenerateInlineMenu($PageID);
+		}
+		
+		function AddInlineMenuInternLink($Text, $Link, $PageID) {
+			$sortID = $this->LoadNextInlineMenuSortID($PageID);
+			$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
+				VALUES ($sortID, $PageID, 'intern', '$Text','index.php?page=$Link')";
+			$this->_SqlConnection->SqlQuery($sql);
+			$this->GenerateInlineMenu($PageID);
+		}
+		
+		function AddInlineMenuText($Text, $PageID) {
+			$sortID = $this->LoadNextInlineMenuSortID($PageID);
+			$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text)
+				VALUES ($sortID, $PageID, 'text', '$Text')";
+			$this->_SqlConnection->SqlQuery($sql);
+			$this->GenerateInlineMenu($PageID);
+		}
+		
+		function AddInlineMenuDownload($Text, $Link, $PageID) {
+			$sortID = $this->LoadNextInlineMenuSortID($PageID);
+			$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
+				VALUES ($sortID, $PageID, 'download', '$Text','$Link')";
+			$this->_SqlConnection->SqlQuery($sql);
+			$this->GenerateInlineMenu($PageID);
+		}
+		
+		function GenerateInlineMenu($PageID) {
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "inlinemenu_entries
+				WHERE inlineentrie_page_id=$PageID
+				ORDER BY inlineentrie_sortid ASC";
+			$inlieMenuEntriesResult = $this->_SqlConnection->SqlQuery($sql);
+			$inlieMenuHtml = '';
+			while($inlieMenuEntry = mysql_fetch_object($inlieMenuEntriesResult)) {
+				if($inlieMenuEntry->inlinieentrie_type == 'text')
+					$inlieMenuHtml .= "<div class=\"inline_text\">" . nl2br($inlieMenuEntry->inlineentrie_text) . "</div>";
+				elseif($inlieMenuEntry->inlinieentrie_type == 'link')
+					$inlieMenuHtml .= "<div class=\"inline_link\"><a href=\"$inlieMenuEntry->inlineentrie_link\">$inlieMenuEntry->inlineentrie_text</a></div>";
+				elseif($inlieMenuEntry->inlinieentrie_type == 'intern')
+					$inlieMenuHtml .= "<div class=\"inline_intern\"><a href=\"$inlieMenuEntry->inlineentrie_link\">$inlieMenuEntry->inlineentrie_text</a></div>";
+				elseif($inlieMenuEntry->inlinieentrie_type == 'download') {
+						$sql = "SELECT *
+						FROM " . DB_PREFIX . "files
+						WHERE file_id=$inlieMenuEntry->inlineentrie_link
+						Limit 0,1";
+					$fileResult = $this->_SqlConnection->SqlQuery($sql);
+					if($file = mysql_fetch_object($fileResult)) {
+						if(file_exists($file->file_path)) {
+							$size = kbormb(filesize($file->file_path));
+							$inlieMenuHtml .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$inlieMenuEntry->inlineentrie_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Gr&ouml;&szlig;e von $size\">$inlieMenuEntry->inlineentrie_text</a> ($size)</div>";
+						}
+					}
+				}
+			}
+			$sql = "UPDATE " . DB_PREFIX . "inlinemenu
+				SET inlinemenu_html='$inlieMenuHtml'
+				WHERE page_id='$PageID'";
+			$this->_SqlConnection->SqlQuery($sql);	
+		}
+	
 	}
 ?>

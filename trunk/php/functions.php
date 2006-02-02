@@ -386,5 +386,25 @@
 			return $mime[$ext];
 		return 'application/unknown';
 	}
+	
+	function encodeUri($Uri) {
+		$urlData = parse_url($Uri);
+		if(isset($urlData['scheme']) && isset($urlData['host'])) {
+			// FIXME: here is a bug with non ASCII characters, it generates no-standard-URIs
+			$encoded = $urlData['scheme'] . '://' . rawurlencode($urlData['host']);
+			if(isset($urlData['path'])) // TODO: Try to fast me up!
+				$encoded .= preg_replace( "|([\/]{0,1})(.+?)([\/]{0,1})|e", "'\\1' . rawurlencode('\\2') . '\\3'", $urlData['path'] );
+			if(isset($urlData['query'])) // TODO: Try to fast me up!
+				$encoded .= '?' . preg_replace( "|([&=]{0,1})(.+?)([&=]{0,1})|e", "'\\1' . rawurlencode('\\2') . '\\3'", $urlData['query'] ); 
+			if(isset($urlData['fragment']))
+				$encoded .= "#" . rawurlencode($urlData['fragment']);
+			return $encoded;
+			
+		}
+		else
+			return  rawurlencode($Uri);
+		
+			
+	}
 
 ?>

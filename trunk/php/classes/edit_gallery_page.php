@@ -33,29 +33,29 @@
 	
 		function Save($page_id) {
 			global $user;
-			$page_title = GetPostOrGet('page_title');
+			$page_title = GetPostOrGet('pageTitle');
 			
 			$sql = "UPDATE " . DB_PREFIX . "pages " .
-				"SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$page_title' " .
+				"SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title' " .
 				"WHERE page_id=$page_id";
 			db_result($sql);
-			header("Location: admin.php?page=pagestructure&action=edit&page_id=$page_id");
+			header("Location: admin.php?page=pagestructure&action=editPage&pageID=$page_id");
 		}
 		
 		function Edit($page_id) {
 			$action2 = GetPostOrGet('action2');
 			$out = '';
-			$action2 = strtolower($action2);
+			
 		 	switch ($action2) {
-		 		case 'add_new_dialog':		$out .= $this->_editAddNewDialog($page_id);
+		 		case 'addNewImageDialog':	$out .= $this->_editAddNewDialog($page_id);
 		 						break;
-		 		case 'add_new':			$out .= $this->_editAddNew($page_id);
+		 		case 'addNewImage':		$out .= $this->_editAddNew($page_id);
 		 						break;
-		 		case 'delete':			$out .= $this->_editRemoveImage($page_id);
+		 		case 'removeImage':		$out .= $this->_editRemoveImage($page_id);
 		 						break;
-		 		case 'up':			$out .= $this->_editUp($page_id);
+		 		case 'moveImageUp':		$out .= $this->_editUp($page_id);
 		 						break;
-		 		case 'down':			$out .= $this->_editDown($page_id);
+		 		case 'moveImageDown':		$out .= $this->_editDown($page_id);
 		 						break;
 		 		default:			$out .= $this->_editOverView($page_id);
 		 	}
@@ -67,7 +67,7 @@
 		 * @return string 
 		 */
 		 function _editUp($page_id) {
-		 	$image_id = GetPostOrGet('image_id');
+		 	$image_id = GetPostOrGet('imageID');
 			$sure = GetPostOrGet('sure');
 			$sql = "SELECT gallery.gallery_id
 				FROM (" . DB_PREFIX . "pages page
@@ -102,7 +102,7 @@
 		 			WHERE gallery_id=$gallery_id AND gallery_file_id=$second_id";
 		 		db_result($sql);
 		 	}	
-		 	header("Location: admin.php?page=pagestructure&action=edit&page_id=$page_id");
+		 	header("Location: admin.php?page=pagestructure&action=editPage&pageID=$page_id");
 		}
 		
 		/**
@@ -110,7 +110,7 @@
 		 * @return string 
 		 */
 		 function _editDown($page_id) {
-		 	$image_id = GetPostOrGet('image_id');
+		 	$image_id = GetPostOrGet('imageID');
 			$sure = GetPostOrGet('sure');
 			$sql = "SELECT gallery.gallery_id
 				FROM (" . DB_PREFIX . "pages page
@@ -145,7 +145,7 @@
 		 			WHERE gallery_id=$gallery_id AND gallery_file_id=$second_id";
 		 		db_result($sql);
 		 	}	
-		 	header("Location: admin.php?page=pagestructure&action=edit&page_id=$page_id");
+		 	header("Location: admin.php?page=pagestructure&action=editPage&pageID=$page_id");
 		}
 		 
 		/**
@@ -195,7 +195,7 @@
 					$orderid++;
 				}
 			}
-			header("Location: admin.php?page=pagestructure&action=edit&page_id=$page_id");
+			header("Location: admin.php?page=pagestructure&action=editPage&pageID=$page_id");
 		}
 		
 		/**
@@ -222,9 +222,9 @@
 		 	$out = "Bilder ausw�hlen\r\n" .
 		 		"<form  action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">" .
 		 		"\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />" .
-				"\t<input type=\"hidden\" name=\"action\" value=\"edit\" />" .
-				"\t<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />" .
-				"\t<input type=\"hidden\" name=\"action2\" value=\"add_new\" />" .
+				"\t<input type=\"hidden\" name=\"action\" value=\"editPage\" />" .
+				"\t<input type=\"hidden\" name=\"pageID\" value=\"$page_id\" />" .
+				"\t<input type=\"hidden\" name=\"action2\" value=\"addNewImage\" />" .
 		 		"\t<table>" .
 		 		"\t\t<tr>" .
 		 		"\t\t\t<td>" .
@@ -262,7 +262,7 @@
 				}
 			}
 			if($img_count == 0)
-				header("Location: admin.php?page=pagestructure&action=edit&page_id=$page_id");
+				header("Location: admin.php?page=pagestructure&action=editPage&pageID=$page_id");
 			$out .= "</td>" .
 				"</tr>" .
 				"<tr>" .
@@ -284,7 +284,7 @@
 			global $admin_lang;
 					
 			$out = '';
-			$image_id = GetPostOrGet('image_id');
+			$image_id = GetPostOrGet('imageID');
 			$sure = GetPostOrGet('sure');
 			$sql = "SELECT gallery.gallery_id
 				FROM (" . DB_PREFIX . "pages page
@@ -299,7 +299,7 @@
 				$sql = "DELETE FROM " . DB_PREFIX . "gallery
 					WHERE gallery_id=$gallery_id AND gallery_file_id=$image_id";
 				db_result($sql);
-				header("Location: admin.php?page=pagestructure&action=edit&page_id=$page_id");
+				header("Location: admin.php?page=pagestructure&action=editPage&pageID=$page_id");
 			}
 			else{
 				$sql = "SELECT *
@@ -308,9 +308,9 @@
 				$image_result = db_result($sql);
 				$image = mysql_fetch_object($image_result);
 				$out .= "<img src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" />
-					M�chten sie das Bild wirklich aus der Galerie entfernen?<br />
-					<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=delete&amp;image_id=$image_id&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
-		 			<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>
+					M&ouml;chten sie das Bild wirklich aus der Galerie entfernen?<br />
+					<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=removeImage&amp;imageID=$image_id&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
+		 			<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>
 					";
 			}
 			return $out;			
@@ -334,14 +334,14 @@
 			$page_data = mysql_fetch_object($page_result);
 			$out .= "<form action=\"admin.php\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-				<input type=\"hidden\" name=\"action\" value=\"save\" />
-				<input type=\"hidden\" name=\"page_id\" value=\"$page_data->page_id\" />
+				<input type=\"hidden\" name=\"action\" value=\"savePage\" />
+				<input type=\"hidden\" name=\"pageID\" value=\"$page_data->page_id\" />
 				<table>
-				<tr><td>Titel:</td><td><input name=\"page_title\" value=\"$page_data->page_title\"/></td></tr>
+				<tr><td>Titel:</td><td><input name=\"pageTitle\" value=\"$page_data->page_title\"/></td></tr>
 				<tr><td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"" . $admin_lang['apply'] . "\"/><input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\"/></td></tr>
 				</table>
 				</form>
-				<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;action2=add_new_dialog&amp;page_id=$page_id\" class=\"button\">Bilder hinzuf&uuml;gen</a>";
+				<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;action2=addNewImageDialog&amp;pageID=$page_id\" class=\"button\">Bilder hinzuf&uuml;gen</a>";
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "gallery
 					WHERE gallery_id=$page_data->gallery_id
@@ -364,9 +364,9 @@
 						$out .= "\t\t\t\t<div class=\"imageblock\">
 						\t\t\t\t\t<a href=\"" . generateUrl($image->gallery_image) . "\">
 						\t\t\t\t\t<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" /></a><br />
-						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=up&amp;image_id=$image->gallery_file_id\"><img src=\"./img/up.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_up'] . "\" title=\"" . $admin_lang['move_up'] . "\"/></a>
-						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=delete&amp;image_id=$image->gallery_file_id\"><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
-						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page_id&amp;action2=down&amp;image_id=$image->gallery_file_id\"><img src=\"./img/down.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_down'] . "\" title=\"" . $admin_lang['move_down'] . "\"/></a>
+						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=moveImageUp&amp;imageID=$image->gallery_file_id\"><img src=\"./img/up.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_up'] . "\" title=\"" . $admin_lang['move_up'] . "\"/></a>
+						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=removeImage&amp;imageID=$image->gallery_file_id\"><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
+						\t\t\t\t\t<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=moveImageDown&amp;imageID=$image->gallery_file_id\"><img src=\"./img/down.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_down'] . "\" title=\"" . $admin_lang['move_down'] . "\"/></a>
 						\t\t\t\t</div>";
 					}
 				}

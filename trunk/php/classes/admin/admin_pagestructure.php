@@ -36,11 +36,11 @@
  		var $_User;
  		var $_Config;
  		
- 		function Admin_PageStructure($SqlConnection, $AdminLang, $User, $Config) {
-			$this->_SqlConnection = $SqlConnection;
-			$this->_AdminLang = $AdminLang;
-			$this->_User = $User;
-			$this->_Config = $Config;
+ 		function Admin_PageStructure(&$SqlConnection, &$AdminLang, &$User, &$Config) {
+			$this->_SqlConnection = &$SqlConnection;
+			$this->_AdminLang = &$AdminLang;
+			$this->_User = &$User;
+			$this->_Config = &$Config;
 			$this->_PageStructure = new PageStructure($this->_SqlConnection, $this->_User);
 		}
  		
@@ -49,30 +49,27 @@
  		 * @param action string
  		 */
 		 function GetPage($Action = '') {
-		 	$adminLang = $this->_AdminLang;
-		 	
-			$out = '';
-			$Action = strtolower($Action);
-			if($Action != 'intern_home')
+		 	$adminLang = &$this->_AdminLang;
+		 	$out = '';
+			
+			if($Action != 'internHome')
 				$out .= "\t\t\t<h2>" . $adminLang['pagestructure'] . "</h2>\r\n";
 		 	switch ($Action) {
-		 		case 'delete':		$out .= $this->_deletePage();
+		 		case 'deletePage':		$out .= $this->_deletePage();
 		 					break;
-		 		case 'info':		$out .= $this->_infoPage();
+		 		case 'pageInfo':	$out .= $this->_infoPage();
 		 					break;
-		 		case 'new_page':	$out .= $this->_newPage();
+		 		case 'newPage':		$out .= $this->_newPage();
 		 					break;
-		 		case 'new_link':	$out .= $this->_newLink();
+		 		case 'addNewPage':	$out .= $this->_addPage();
 		 					break;
-		 		case 'add_new':		$out .= $this->_addPage();
-		 					break;
-		 		case 'edit':		$out .= $this->_editPage();
+		 		case 'editPage':	$out .= $this->_editPage();
 							break;
-				case 'save':		$out .= $this->_savePage();
+				case 'savePage':	$out .= $this->_savePage();
 							break;
-				case 'generate_menu':	$out .= $this->_generate_menu();
+				case 'generateMenu':	$out .= $this->_generate_menu();
 							break;
-				case 'inlinemenu':	$out .= $this->_inlineMenu();
+				case 'pageInlineMenu':	$out .= $this->_inlineMenu();
 							break;
 		 		default:		$out .= $this->_homePage();
 		 	}
@@ -83,30 +80,26 @@
 		  * @return string
 		  */
 		 function _generate_menu() {
-		 	$pages = GetPostOrGet('pagestructure_pages');
+		 	$pages = GetPostOrGet('mainMenuPages');
 		 	// Clear the main-menu
 		 	$this->_PageStructure->ClearMenu(1);
 		 	// Insert the pages to the main-menu
 		 	$this->_PageStructure->GenerateMenu($pages, 1);
 		 	// Print out the default view
-		 	return $this->GetPage('intern_home');
+		 	return $this->GetPage('internHome');
 		 }
-		 
-		 function _newLink() {
-		 	$out = '';
-		 	return $out;
-		 }
+
 		 
 		 function _deletePage() {
-		 	$adminLang = $this->_AdminLang;
+		 	$adminLang = &$this->_AdminLang;
 		 	$confirmation = GetPostOrGet('confirmation');
-		 	$pageID = GetPostOrGet('page_id');
+		 	$pageID = GetPostOrGet('pageID');
 		 	if(!is_numeric($pageID))
-		 		return $this->GetPage('intern_home');
+		 		return $this->GetPage('internHome');
 		 	if($this->_PageStructure->PageExists($pageID)) {
 		 		if($confirmation == 1) {
 		 			$this->_PageStructure->SetPageDeleted($pageID);
-		 			return $this->GetPage('intern_home');
+		 			return $this->GetPage('internHome');
 		 		}
 		 		else {//Do you realy want to delete the page &quot;%s&quot;?
 		 			$out = sprintf($adminLang['Do you really want to delete the page %page_title%?'], $this->_PageStructure->GetPageData($pageID, 'title')) . "<br />
@@ -116,7 +109,7 @@
 		 		}
 		 	}
 		 	else
-		 		return $this->GetPage('intern_home');
+		 		return $this->GetPage('internHome');
 		 }
 		 
 		 function _getMenuPageIDs() {
@@ -130,111 +123,106 @@
 		 }
 		 
 		 function _homePage() {
-		 	global $admin_lang;
-		 	
+		 	$adminLang = &$this->_AdminLang;
 		 	$this->_getMenuPageIDs();
-		 	$out = "<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
-			<a href=\"admin.php?page=pagestructure&amp;action=new_page\" class=\"button\">" . $admin_lang['create_new_page'] . "</a><br />\r\n";
-			$out .= "<!--\t\t\t<a href =\"" . $_SERVER['PHP_SELF'] . "?page=pagestructur&amp;action=new_link\">neuer Link</a>-->\r\n";
-			$out .= "\t\t\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n";
-			$out .= "\t\t\t<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />\r\n";
-			$out .= "\t\t\t<input type=\"hidden\" name=\"action\" value=\"generate_menu\" />\r\n";
+		 	$out = "\t\t\t<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
+			<a href=\"admin.php?page=pagestructure&amp;action=newPage\" class=\"button\">" . $adminLang['create_new_page'] . "</a>
+			<form method=\"post\" action=\"admin.php\">
+				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+				<input type=\"hidden\" name=\"action\" value=\"generateMenu\" />\r\n";
 		 	$out .= $this->_showStructure(0);
-		 	$out .= "<input type=\"submit\" class=\"button\" name=\"pagestructure_savemenu\" value=\"" . $admin_lang['generate_mainmenu'] . "\" />\r\n";
-			$out .= "\t\t\t</form>
+		 	$out .= "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"" . $adminLang['generate_mainmenu'] . "\" />
+			</form>
 			<script type=\"text/javascript\" language=\"JavaScript\">
 				SetHover('span', 'structure_row', 'structure_row_hover', function additional() {document.getElementById(\"menu\").className = \"\";});
-			</script>\r\n";
-			
+			</script>";
 			return $out;
 		 }
 		 
 		 function _newPage() {
-		 	global $_SERVER, $admin_lang;
-			$out = '';
-		 	/*$out .= "<select>\r\n";
-		 	$out .= $this->_structurePullDown(0);
-		 	$out .= "</select>\r\n";*/
-		 	$out .= "\t\t\t<form method=\"post\" action=\"admin.php\">
+		 	$adminLang = &$this->_AdminLang;
+		 	$this->_PageStructure->LoadParentIDs();
+				 	
+		 	$out = "\t\t\t<form method=\"post\" action=\"admin.php\">
 				<fieldset>
-				<legend>Neue Seite</legend>
-				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-				<input type=\"hidden\" name=\"action\" value=\"add_new\" />
-				<div class=\"row\">
-					<label class=\"row\">
-						Name/K&uuml;rzel:
-						<span class=\"info\">Mit diesem K&uuml;rzel wird auf die Seite zugegriffen und dient es zur eindeutigen Identifizierung der Seite.</span>
-					</label>
-					<input type=\"text\" name=\"page_name\" maxlength=\"20\" />
-				</div>
-				<div class=\"row\">
-					<label class=\"row\">
-						Titel:
-						<span class=\"info\">Der Titel wird sp&auml;ter in der Titelleiste des Browsers angezeigt.</span>
-					</label>
-					<input type=\"text\" name=\"page_title\" maxlength=\"100\" />
-				</div>
-				<div class=\"row\">
-					<label class=\"row\">
-						Seiten-Typ:
-						<span class=\"info\">TODO</span>
-					</label>
-					<select name=\"page_type\">
-						<option value=\"text\">Text</option>
-						<option value=\"gallery\">" . $admin_lang['gallery'] ."</option>
-					</select>
-				</div>
-				<div class=\"row\">
-					<label class=\"row\">
-						" . $admin_lang['language'] . ":
-						<span class=\"info\">Der Text soll in der gew&auml;hlten Sprache geschrieben werden.</span>
-					</label>
-					<select name=\"page_lang\">
-						<option value=\"de\">Deutsch</option>
-						<option value=\"en\">Englisch</option>
-					</select>
-				</div>
-				<div class=\"row\">
-					<label class=\"row\">
-						Zugang:
-						<span class=\"info\">Wer soll sich die Seite sp&auml;ter anschauen k&ouml;nnen?<br />
-						Jeder (&Ouml;ffentlich), nur ausgew&auml;hlte Benutzer (privat) oder soll die Seite nur erstellt werden um sie sp&auml;ter zu ver&ouml;ffentlichen (versteckt)?</span>
-					</label>
-					<select name=\"page_access\">
-						<option value=\"public\">&Ouml;ffentlich</option>
-						<option value=\"private\">Privat</option>
-						<option value=\"hidden\">Versteckt</option>
-					</select>
-				</div>
-				<div class=\"row\">
-					<label class=\"row\">
-						Unterseite von:
-						<span class=\"info\">TODO</span>
-					</label>
-					<select name=\"page_parent_id\">
-						<option value=\"0\">Keiner</option>\r\n";
-		 	$out .= $this->_structurePullDown(0);
-		 	$out .= "\t\t\t\t\t</select>
-				</div>
-				<div class=\"row\">
-					<label class=\"row\">
-						Kommentar
-						<span class=\"info\">Eine kurze Beschreibung, was hier gemacht wurde.</span>
-					</label>
-					<input type=\"text\" name=\"page_edit_comment\" maxlength=\"100\" value=\"" . $admin_lang['created_new_page'] . "\"/>
-				</div>
-				<div class=\"row\">
-					<label class=\"row\">
-						Bearbeiten?
-						<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die &Uuml;bersichtseite zur&uuml;ckgekehrt werden?</span>
-					</label>
-					<input type=\"checkbox\" name=\"page_edit\" value=\"edit\" checked=\"true\" class=\"checkbox\"/>
-				</div>
-				<div class=\"row\">
-					<input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" />&nbsp;
-					<input type=\"submit\" class=\"button\" value=\"Erstellen\" />
-				</div>
-			</fieldset>
+					<legend>" . $adminLang['new_page'] . "</legend>
+					<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+					<input type=\"hidden\" name=\"action\" value=\"addNewPage\" />
+					<div class=\"row\">
+						<label>
+							" . $adminLang['name/contraction'] . ":
+							<span class=\"info\">Mit diesem K&uuml;rzel wird auf die Seite zugegriffen und dient es zur eindeutigen Identifizierung der Seite.</span>
+						</label>
+						<input type=\"text\" name=\"pageName\" maxlength=\"20\" />
+					</div>
+					<div class=\"row\">
+						<label>
+							" . $adminLang['title'] . ":
+							<span class=\"info\">Der Titel wird sp&auml;ter in der Titelleiste des Browsers angezeigt.</span>
+						</label>
+						<input type=\"text\" name=\"pageTitle\" maxlength=\"100\" />
+					</div>
+					<div class=\"row\">
+						<label>
+							Seiten-Typ:
+							<span class=\"info\">TODO</span>
+						</label>
+						<select name=\"pageType\">
+							<option value=\"text\">Text</option>
+							<option value=\"gallery\">" . $adminLang['gallery'] ."</option>
+						</select>
+					</div>
+					<div class=\"row\">
+						<label>
+							" . $adminLang['language'] . ":
+							<span class=\"info\">Der Text soll in der gew&auml;hlten Sprache geschrieben werden.</span>
+						</label>
+						<select name=\"pageLang\">
+							<option value=\"de\">Deutsch</option>
+							<option value=\"en\">Englisch</option>
+						</select>
+					</div>
+					<div class=\"row\">
+						<label>
+							Zugang:
+							<span class=\"info\">Wer soll sich die Seite sp&auml;ter anschauen k&ouml;nnen?<br />
+							Jeder (&Ouml;ffentlich), nur ausgew&auml;hlte Benutzer (privat) oder soll die Seite nur erstellt werden um sie sp&auml;ter zu ver&ouml;ffentlichen (versteckt)?</span>
+						</label>
+						<select name=\"pageAccess\">
+							<option value=\"public\">&Ouml;ffentlich</option>
+							<option value=\"private\">Privat</option>
+							<option value=\"hidden\">Versteckt</option>
+						</select>
+					</div>
+					<div class=\"row\">
+						<label>
+							Unterseite von:
+							<span class=\"info\">TODO</span>
+						</label>
+						<select name=\"pageParentID\">
+							<option value=\"0\">Keiner</option>\r\n";
+		 	$out .= $this->_PageStructure->PageStructurePulldown();
+		 	$out .=	"\t\t\t\t\t\t</select>
+					</div>
+					<div class=\"row\">
+						<label>
+							Kommentar
+							<span class=\"info\">Eine kurze Beschreibung, was hier gemacht wurde.</span>
+						</label>
+						<input type=\"text\" name=\"pageEditComment\" maxlength=\"100\" value=\"" . $adminLang['created_new_page'] . "\"/>
+					</div>
+					<div class=\"row\">
+						<label>
+							Bearbeiten?
+							<span class=\"info\">Soll die Seite nach dem Erstellen bearbeitet werden oder soll wieder auf die &Uuml;bersichtseite zur&uuml;ckgekehrt werden?</span>
+						</label>
+						<input type=\"checkbox\" name=\"pageEdit\" value=\"edit\" checked=\"true\" class=\"checkbox\"/>
+					</div>
+					<div class=\"row\">
+						<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\" />&nbsp;
+						<input type=\"submit\" class=\"button\" value=\"" . $adminLang['create'] . "\" />
+					</div>
+				</fieldset>
 			</form>";
 		 	return $out;
 		 }
@@ -259,30 +247,30 @@
 		 	return $out;
 		 }
 		 
-		 function _Structure($Topnode = 0) {
+		 function _Structure($TopNodeID = 0) {
 		 	$adminLang = $this->_AdminLang;
 		 	$out = '';
-		 	if(empty($this->_PageStructure->_ParentIDPages[$Topnode]))
+		 	if(empty($this->_PageStructure->_ParentIDPages[$TopNodeID]))
 		 		return;
 		 	$out .= "\r\n\t\t\t<ol>\r\n";
-		 	foreach($this->_PageStructure->_ParentIDPages[$Topnode] as $page) {
-	 			$out .= "\t\t\t\t<li class=\"page_type_". $page['type'] . (($page['access'] == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">" . (($Topnode == 0) ?  "<input type=\"checkbox\" name=\"pagestructure_pages[]\"" . ((in_array($page['id'], $this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page['access'] != 'public') ? ' disabled="disabled"'  : '') . " value=\"" . $page['id'] . "\" class=\"checkbox\"/>\t" : '' );
+		 	foreach($this->_PageStructure->_ParentIDPages[$TopNodeID] as $page) {
+	 			$out .= "\t\t\t\t<li class=\"page_type_". $page['type'] . (($page['access'] == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">" . (($TopNodeID == 0) ?  "<input type=\"checkbox\" name=\"mainMenuPages[]\"" . ((in_array($page['id'], $this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page['access'] != 'public') ? ' disabled="disabled"'  : '') . " value=\"" . $page['id'] . "\" class=\"checkbox\"/>\t" : '' );
 	 			$out .= "<strong>" . $page['title'] . "</strong> (" . $page['name'] . ")";
 		 			$out .= "<span class=\"page_lang\">[" . $adminLang[$page['lang']] . "]</span><span class=\"page_actions\">";
 		 			// edit:
 		 			if($page['access'] != 'deleted')
-		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=" . $page['id'] . "\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['edit'] . "\" title=\"" . $adminLang['edit'] . "\"/></a>";
+		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['edit'] . "\" title=\"" . $adminLang['edit'] . "\"/></a>";
 		 			// info:
-		 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=" . $page['id'] . "\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['info'] . "\" title=\"" . $adminLang['info'] . "\"/></a>";
+		 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=" . $page['id'] . "\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['info'] . "\" title=\"" . $adminLang['info'] . "\"/></a>";
 		 			// view:
 		 			if($page['access'] != 'deleted')
 		 				$out .= " <a href=\"index.php?page=" . $page['name'] . "\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen " . $page['title'] . "\" title=\"Anschauen\"/></a>";
 		 			// inlinemenu:
 		 			if($page['access'] != 'deleted')
-		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=" . $page['id'] . "\" title=\"Das Zusatzmen&uuml; f&uuml;r &quot;" . $page['title'] . "&quot; bearbeiten\">" . $adminLang['inlinemenu'] . "</a>";
+		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=" . $page['id'] . "\" title=\"Das Zusatzmen&uuml; f&uuml;r &quot;" . $page['title'] . "&quot; bearbeiten\">" . $adminLang['inlinemenu'] . "</a>";
 		 			// delete:
 		 			if($page['access'] != 'deleted')
-		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=delete&amp;page_id=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['delete'] . "\" title=\"" . $adminLang['delete'] . "\"/></a>";
+		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['delete'] . "\" title=\"" . $adminLang['delete'] . "\"/></a>";
 		 			$out .= '</span></span>' . $this->_Structure($page['id']);
 		 			$out .= "\t\t\t\t</li>\r\n";
 		 	}
@@ -290,17 +278,18 @@
 		 	return $out;
 		 }
 		 
-		 function _showStructure($topnode = 0) {
-		 	global $admin_lang, $_SERVER;
+		 function _showStructure($TopNodeID = 0) {
+		 	
+		 	//global $admin_lang, $_SERVER;
 			
-			$out = '';
+			//$out = '';
 			$this->_PageStructure->LoadParentIDs();
-	 		$out .= $this->_Structure($topnode);
+	 		$out = $this->_Structure($TopNodeID);
 			return $out;
 		}
 		
 		function _editPage() {
-			$page_id = GetPostOrGet('page_id');
+			$page_id = GetPostOrGet('pageID');
 			$out = '';
 			$sql = "SELECT page_id, page_type
 				FROM " . DB_PREFIX . "pages
@@ -328,11 +317,11 @@
 		}
 		
 		function _savePage() {
-			$page_id = GetPostOrGet('page_id');
+			$pageID = GetPostOrGet('pageID');
 			$out = '';
 			$sql = "SELECT page_id, page_type
 				FROM " . DB_PREFIX . "pages
-				WHERE page_id = $page_id";
+				WHERE page_id = $pageID";
 			$page_result = db_result($sql);
 			if($page = mysql_fetch_object($page_result)) {
 				$edit = null;
@@ -353,16 +342,16 @@
 		}
 		
 		function _addPage() {
-			global $user;
 			
-			$page_access = GetPostOrGet('page_access');
-			$page_edit = GetPostOrGet('page_edit');
-			$page_edit_comment = GetPostOrGet('page_edit_comment');
-			$page_lang = GetPostOrGet('page_lang');
-			$page_name = GetPostOrGet('page_name');
-			$page_parent_id = GetPostOrGet('page_parent_id');
-			$page_title = GetPostOrGet('page_title');
-			$page_type = GetPostOrGet('page_type');
+			$user = &$this->_User;
+			$page_access = GetPostOrGet('pageAccess');
+			$page_edit = GetPostOrGet('pageEdit');
+			$page_edit_comment = GetPostOrGet('pageEditComment');
+			$page_lang = GetPostOrGet('pageLang');
+			$page_name = GetPostOrGet('pageName');
+			$page_parent_id = GetPostOrGet('pageParentID');
+			$page_title = GetPostOrGet('pageTitle');
+			$page_type = GetPostOrGet('pageType');
 						
 			$page_edit_comment = htmlspecialchars($page_edit_comment);
 			$edit = null;
@@ -423,23 +412,23 @@
 				}
 			}
 			if($page_edit != '')
-				header("Location: admin.php?page=pagestructure&action=edit&page_id=$lastid");
+				header("Location: admin.php?page=pagestructure&action=editPage&pageID=$lastid");
 			else
 				header("Location: admin.php?page=pagestructure");
 	
 		}
 		
-		function _pagePath($pageid = 0) {
+		function _pagePath($PageID = 0) {
 			$out = '';
 			$sql = "SELECT *
 			FROM " . DB_PREFIX . "pages
-			WHERE page_id=$pageid";
+			WHERE page_id=$PageID";
 			$page_result = db_result($sql);
 			while($page = mysql_fetch_object($page_result)) {
-				if($pageid == $page->page_id)
+				if($PageID == $page->page_id)
 					$out = " <span title=\"$page->page_title\">$page->page_name</span>";
 				else
-					$out = "<a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page->page_id\" title=\"$page->page_title\">$page->page_name</a>" . $out;
+					$out = "<a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id\" title=\"$page->page_title\">$page->page_name</a>" . $out;
 				if($page->page_parent_id != 0)
 					$out = '<strong>/</strong>' . $out;
 				$sql = "SELECT *
@@ -454,11 +443,16 @@
 		 * inlinemenu-management
 		 */
 		function _inlineMenu() {
-			$adminLang = $this->_AdminLang;
-			$pageID = GetPostOrGet('page_id');
-			$action = strtolower(GetPostOrGet('action2'));
-			$out = '';
+			$adminLang = &$this->_AdminLang;
+			// Get data from header
+			$pageID = GetPostOrGet('pageID');
+			$action = GetPostOrGet('action2');
 			
+			// The ID of the page must(!) be an numeric value!
+			if(!is_numeric($pageID))
+				return $this->_homePage();
+			
+			$out = '';
 			if(!$this->_PageStructure->InlineMenuExists($pageID)) {
 				if($action == 'create') {
 					$this->_PageStructure->CreateInlineMenu($pageID);
@@ -466,20 +460,26 @@
 				}
 				else {
 					$out .= $adminLang['at_the_moment_there_is_no_inlinemenu_for_this_page_created,_should_this_be_done_now'] . "<br />
-					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;action2=create&amp;page_id=$pageID\" title=\"" . $adminLang['yes'] . "\" class=\"button\">" . $adminLang['yes'] . "</a>
+					<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;action2=create&amp;pageID=$pageID\" title=\"" . $adminLang['yes'] . "\" class=\"button\">" . $adminLang['yes'] . "</a>
 					<a href=\"admin.php?page=pagestructure\" title=\"" . $adminLang['no'] . "\" class=\"button\">" . $adminLang['no'] . "</a>";	
 				}
 				
 			}
 			else {
 				switch ($action) {
-					case 'select_image':	$out .= $this->_InlineMenuSelectImage($pageID);
+					case 'selectImage':	$out .= $this->_InlineMenuSelectImage($pageID);
 								break;
-					case 'set_image':	$out .= $this->_InlineMenuSetImagePage($pageID);
+					case 'setImage':	$out .= $this->_InlineMenuSetImagePage($pageID);
 								break;
-					case 'remove_image':	$out .= $this->_InlineMenuRemoveImagePage($pageID);
+					case 'removeImage':	$out .= $this->_InlineMenuRemoveImagePage($pageID);
 								break;
-					case 'set_image_title':	$out .= $this->_InlineMenuSetImageTitlePage($pageID);
+					case 'setImageTitle':	$out .= $this->_InlineMenuSetImageTitlePage($pageID);
+								break;
+					case 'addNewEntryDialog':	$out .= $this->_InlineMenuAddNewEntryDialogPage($pageID);
+								break;
+					case 'addNewEntry':	$out .= $this->_InlineMenuAddNewEntryPage($pageID); 
+								break;
+					case 'moveUp':		$out .= $this->_InlineMenuMoveUpPage($pageID);
 								break;
 					default:		$out .= $this->_InlineMenuHomePage($pageID);
 								break;
@@ -889,28 +889,246 @@
 			return $out;
 		}
 		
+		/**
+		 * @param integer PageID
+		 * @return string
+		 */
 		function _InlineMenuSetImagePage($PageID) {
-			$imagePath = GetPostOrGet('image_path');
+			// Get data from header
+			$imagePath = GetPostOrGet('imagePath');
+			// FIXME: load from config?
 			$imgmax2 = 200;
+			// Get data form config
 			$inlinemenuFolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
-			
-			//$inlinemenuFolder = 'data/thumbnails/';
-			$thumbnail = resizteImageToWidth($imagePath, $inlinemenuFolder, $imgmax2);
-			//return $thumbnail;
+			// resize the image if it doesn't exist
+			$thumbnail = resizeImageToWidth($imagePath, $inlinemenuFolder, $imgmax2);
+			// if resizing was successful ...
 			if(file_exists($thumbnail)) {
-				
+				// ... set it to the inlinemenu
 				$this->_PageStructure->SetInlineMenuImage($PageID, $thumbnail, $imagePath);
-				/*$sql = "UPDATE " . DB_PREFIX . "inlinemenu
-					SET inlinemenu_image_thumb='$thumbnail', inlinemenu_image='$imagePath'
-					WHERE page_id=$PageID";
-				db_result($sql);
-				$inline->inlinemenu_image_thumb = $thumbnail;*/
 			}
+			// go back to the overview of the inlinemenu
 			return $this->_InlineMenuHomePage($PageID);
 		}
 		
+		/**
+		 * @param integer PageID
+		 * @return string
+		 */
+		function _InlineMenuAddNewEntryPage($PageID) {
+			$text = GetPostOrGet('text');
+			$type = GetPostOrGet('type');
+			$link = GetPostOrGet('link');
+			$sql = '';
+			switch ($type) {
+				case 'link':		$this->_PageStructure->AddInlineMenuLink($text, $link, $PageID);
+							break;
+				case 'intern':		$this->_PageStructure->AddInlineMenuInternLink($text, $link, $PageID);
+							break;
+				case 'text':		$this->_PageStructure->AddInlineMenuText($text, $PageID);
+							break;
+				case 'download':	$this->_PageStructure->AddInlineMenuDownload($text, $link, $PageID);
+							break;
+				default:		break;
+			}
+			
+ 			return $this->_InlineMenuHomePage($PageID);
+		}
+		
+		/**
+		 * @param integer PageID
+		 * @return string
+		 */
+		function _InlineMenuAddNewEntryDialogPage($PageID) {
+			$adminLang = &$this->_AdminLang;
+			// Get data from header
+			$type = GetPostOrGet('type');
+			
+			$out = '';
+			
+			if($type == 'link') {
+				$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
+						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
+						<input type=\"hidden\" name=\"action2\" value=\"addNewEntry\" />
+						<input type=\"hidden\" name=\"type\" value=\"link\" />
+						<fieldset>
+						<legend>Erstelle neuen InlineMen&uuml;-Interner-Link:</legend>
+						<div class=\"row\">
+							<label>Link-Titel:
+								<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span>
+							</label>
+							<input type=\"text\" name=\"text\" value=\"\" />
+						</div>
+						<div class=\"row\">
+							<label>Link:
+								<span class=\"info\">Hier kommt die URL hin die den Link sp&auml;ter ergibt.</span>
+							</label>
+							<input type=\"text\" name=\"link\" value=\"http://\" />
+						</div>
+						<div class=\"row\">
+							<input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" />
+							<input type=\"submit\" class=\"button\" value=\"Speichern\" />
+						</div>
+						</fieldset>
+						</form>";
+			}
+			else if($type == 'text') {
+				$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
+						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
+						<input type=\"hidden\" name=\"action2\" value=\"addNewEntry\" />
+						<input type=\"hidden\" name=\"type\" value=\"text\" />
+						<fieldset>
+						<legend>Erstelle neuen InlineMen&uuml;-Text:</legend>
+						<div class=\"row\"><label>Text: <span class=\"info\">Das ist der Text, der sp&auml;ter angezeigt werden soll</span></label>
+							<textarea name=\"text\"></textarea></div>
+						<div class=\"row\">
+							<input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" />
+							<input type=\"submit\" class=\"button\" value=\"Speichern\" />
+						</div>
+						</fieldset>
+						</form>";
+			}
+			else if($type == 'intern') {
+				$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
+						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
+						<input type=\"hidden\" name=\"action2\" value=\"addNewEntry\" />
+						<input type=\"hidden\" name=\"type\" value=\"intern\" />
+						<fieldset>
+						<legend>Erstelle neuen InlineMen&uuml;-Interner-Link:</legend>
+						<div class=\"row\"><label>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></label><input type=\"text\" name=\"text\" value=\"\" /></div>
+						<div class=\"row\"><label>Interne Seite<span class=\"info\">Das ist die interne Seite, auf die der Link sp&auml;ter f&uuml;hren soll.</span></label><select name=\"link\">";
+						$out .= $this->_structurePullDown(0);
+				$out .= "</select></div>
+						<div class=\"row\">
+							<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\" />
+							<input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\" />
+						</div>
+						</fieldset>
+						</form>";
+			}
+			else if($type == 'download') {
+				$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
+						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
+						<input type=\"hidden\" name=\"action2\" value=\"addNewEntry\" />
+						<input type=\"hidden\" name=\"type\" value=\"download\" />
+						<fieldset>
+							<legend>Download Hinzuf&uuml;gen</legend>
+						
+						<div class=\"row\">
+							<label class=\"row\" for=\"download_text\">
+								Download-Titel:
+								<span class=\"info\">Der Text wird als Downloadlink angezeigt er kann zum Beispiel der Dateiname sein, aber auch ein kuzer eindeutiger Text ist sehr sinnvoll.</span>
+							</label>
+							<input type=\"text\" name=\"text\" id=\"download_text\" />
+						</div>
+						<div class=\"row\">
+							<label class=\"row\" for=\"link\">
+								Datei f�r den Download:
+								<span class=\"info\">Die hier angegebene Datei kann dann sp&auml;ter heruntergeladen werden.</span>
+							</label>
+							<select name=\"link\" id=\"link\">";
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "files
+						ORDER BY file_name";
+					$files_result = db_result($sql);
+					while($file = mysql_fetch_object($files_result)) {
+						if(file_exists($file->file_path))
+							$out .= "<option value=\"$file->file_id\">". utf8_encode($file->file_name) . " (" . kbormb($file->file_size) . ")</option>\r\n";
+					}			
+					$out .= "</select>
+							</div>
+							<div class=\"row\"><input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></div>
+						</fieldset>
+						</form>";
+			}
+			else {
+				$out = "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
+						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
+						<input type=\"hidden\" name=\"action2\" value=\"addNewEntryDialog\" />
+						
+						<fieldset>
+							<legend>Eintrags-Typ:</legend>
+							<div class=\"row\">
+								<label for=\"type_link\">
+									Link:
+									<span class=\"info\">TODO</span>
+								</label>
+								<input id=\"type_link\" type=\"radio\" name=\"type\" value=\"link\" checked=\"checked\"/>
+							</div>
+							<div class=\"row\">
+								<label for=\"type_text\">
+									Text:
+									<span class=\"info\">TODO</span>
+								</label>
+								<input id=\"type_text\" type=\"radio\" name=\"type\" value=\"text\"/>
+							</div>
+							<div class=\"row\">
+								<label for=\"type_intern\">
+									Interner-Link:
+									<span class=\"info\">TODO</span>
+								</label>
+								<input id=\"type_intern\" type=\"radio\" name=\"type\" value=\"intern\"/>
+							</div>
+							<div class=\"row\">
+								<label for=\"type_download\">
+									Download:
+									<span class=\"info\">TODO</span>
+								</label>
+								<input id=\"type_download\" type=\"radio\" name=\"type\" value=\"download\"/>
+							</div>
+							<div class=\"row\">
+								<input type=\"submit\" class=\"button\" value=\"Weiter\" />
+							</div>
+						</fieldset>
+						</form>";
+			}
+			return $out;
+		}
+		
+		function _InlineMenuMoveUpPage($PageID) {
+			// TODO: this part must be rewritten
+			/*
+			$entrie_id = GetPostOrGet('entrieOrderID');
+				$sql = "SELECT *
+			 		FROM " . DB_PREFIX . "inlinemenu_entries
+					WHERE inlineentrie_id=$entrie_id";
+				$first_entrie_result = db_result($sql);
+				if($first_entrie = mysql_fetch_object($first_entrie_result)) {
+					$first_id = $first_entrie->inlineentrie_id;
+					$first_sortid = $first_entrie->inlineentrie_sortid;
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "inlinemenu_entries
+						WHERE inlineentrie_sortid < $first_sortid AND inlineentrie_page_id=$first_entrie->inlineentrie_page_id
+						ORDER BY inlineentrie_sortid DESC";
+					$second_entrie_result = db_result($sql);
+					if($second_entrie = mysql_fetch_object($second_entrie_result)) {
+						$second_id = $second_entrie->inlineentrie_id;
+						$second_sortid = $second_entrie->inlineentrie_sortid;
+						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
+							SET inlineentrie_sortid=$second_sortid
+							WHERE inlineentrie_id=$first_id";
+						db_result($sql);
+						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
+							SET inlineentrie_sortid=$first_sortid
+							WHERE inlineentrie_id=$second_id";
+						db_result($sql);
+						generateinlinemenu($second_entrie->inlineentrie_page_id);			
+					}
+				}*/
+		}
+		
 		function _InlineMenuSetImageTitlePage($PageID) {
-			$imageTitle = GetPostOrGet('image_title');
+			$imageTitle = GetPostOrGet('imageTitle');
 			$this->_PageStructure->SetInlineMenuImageTitle($PageID, $imageTitle);
 			return $this->_InlineMenuHomePage($PageID);
 		}
@@ -933,9 +1151,9 @@
 			$inlinemenu_folder = 'data/thumbnails/';
 			$out = "<form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\"/>
-				<input type=\"hidden\" name=\"action\" value=\"inlinemenu\"/>
-				<input type=\"hidden\" name=\"page_id\" value=\"$PageID\"/>
-				<input type=\"hidden\" name=\"action2\" value=\"set_image\"/>
+				<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\"/>
+				<input type=\"hidden\" name=\"pageID\" value=\"$PageID\"/>
+				<input type=\"hidden\" name=\"action2\" value=\"setImage\"/>
 				<fieldset>
 				<legend>" . $adminLang['inlinemenu_image'] . "</legend>
 				<div class=\"row\"><div class=\"imagesblock\">";
@@ -947,24 +1165,25 @@
 					$out .= "<div class=\"imageblock\">
 				<a href=\"" . generateUrl($image->file_path) . "\">
 				<img style=\"margin-top:" . ($imgmax-$originalHeight) . "px;\" src=\"" . generateUrl($thumbnail) . "\" alt=\"". basename($thumbnail) ."\" /></a><br />
-				<input type=\"radio\" name=\"image_path\" " .(($imagePath == $image->file_path) ? 'checked="checked" ' : '') . " value=\"$image->file_path\"/></div>";
+				<input type=\"radio\" name=\"imagePath\" " .(($imagePath == $image->file_path) ? 'checked="checked" ' : '') . " value=\"$image->file_path\"/></div>";
 				}
 			}
 			$out .= "</div></div>
 				<div class=\"row noform\"><input type=\"submit\" value=\"" . $adminLang['apply'] . "\" class=\"button\"/>
-				<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID\" class=\"button\">" . $adminLang['back'] . "</a></div></fieldset></form>";
+				<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID\" class=\"button\">" . $adminLang['back'] . "</a></div></fieldset></form>";
 				
 			
 			return $out;
 		}
 		
 		function _InlineMenuHomePage($PageID) {
+			
 			$adminLang = $this->_AdminLang;
 			$image = 'Noch kein Bild gesetzt';
-			$thumbPath = $this->_PageStructure->GetInlineMenuData($PageID, 'image_thumb');
+			$thumbPath = $this->_PageStructure->GetInlineMenuData($PageID, 'imageThumb');
 			$imagePath = $this->_PageStructure->GetInlineMenuData($PageID, 'image');
-			$imageTitle = $this->_PageStructure->GetInlineMenuData($PageID, 'image_title');
-			echo  $thumbPath;
+			$imageTitle = $this->_PageStructure->GetInlineMenuData($PageID, 'imageTitle');
+			
 			if(file_exists($thumbPath))
 				$image = "<img src=\"" . generateUrl($thumbPath) . "\"/>";
 			else {
@@ -975,7 +1194,7 @@
 					$image = "<img src=\"" . generateUrl($thumbnail) . "\"/>";
 				}
 			}	
-				$out = "
+			$out = "
 				<fieldset>
 					<legend>" . $adminLang['inlinemenu'] . "</legend>
 				<div class=\"row\">
@@ -986,47 +1205,47 @@
 						$image
 				</div>
 				<div class=\"row\">
-					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;action2=select_image\" class=\"button\">Bild ausw&auml;hlen/ver&auml;ndern</a>
-					" .((file_exists($thumbPath)) ?  "<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;action2=remove_image\" class=\"button\">Bild entfernen</a>" : '') . "
+					<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;action2=selectImage\" class=\"button\">Bild ausw&auml;hlen/ver&auml;ndern</a>
+					" .((file_exists($thumbPath)) ?  "<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;action2=removeImage\" class=\"button\">Bild entfernen</a>" : '') . "
 				</div>
 				<form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-				<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
-				<input type=\"hidden\" name=\"page_id\" value=\"$PageID\" />
-				<input type=\"hidden\" name=\"action2\" value=\"set_image_title\" />
+				<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
+				<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
+				<input type=\"hidden\" name=\"action2\" value=\"setImageTitle\" />
 				<div class=\"row\">
-					<label for=\"inlinemenu_thumb_title\"class=\"row\">
+					<label for=\"inlinemenuThumbTitle\"class=\"row\">
 						Bildunterschrift:
 						<span class=\"info\">Die Bildunterschrift kann das Bild noch ein wenig erl&auml;utern.</span>
 					</label>
-					<input id=\"inlinemenu_thumb_title\" name=\"image_title\" type=\"text\" value=\"$imageTitle\" />
+					<input id=\"inlinemenuThumbTitle\" name=\"imageTitle\" type=\"text\" value=\"$imageTitle\" />
 				</div>
 				<div class=\"row\">
 					<input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\" />
 				</div>
 				</form>";
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "inlinemenu_entries
-					WHERE inlineentrie_page_id = $PageID
-					ORDER BY inlineentrie_sortid ASC";
-				$entries_result = db_result($sql);
-				$out .= "<div class=\"row\"><table class=\"text_table full_width\">
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "inlinemenu_entries
+				WHERE inlineentrie_page_id = $PageID
+				ORDER BY inlineentrie_sortid ASC";
+			$entries_result = db_result($sql);
+			$out .= "<div class=\"row\"><table class=\"text_table full_width\">
 					<thead><tr><th>Text</th><th>Typ</th><th>Aktion</th></tr></thead>";
 				while($entrie = mysql_fetch_object($entries_result)) {
 					$out .= "<tr>
 					<td>". nl2br($entrie->inlineentrie_text) ."</td>
 					<td>$entrie->inlinieentrie_type</td>
 					<td>
-						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=up\"><img src=\"./img/up.png\" alt=\"" . $adminLang['move_up'] ."\" title=\"" . $adminLang['move_up'] ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=down\"><img src=\"./img/down.png\" alt=\"" . $adminLang['move_down'] ."\" title=\"" . $adminLang['move_down'] ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=delete\"><img src=\"./img/del.png\" alt=\"" . $adminLang['delete'] ."\" title=\"" . $adminLang['delete'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrieID=$entrie->inlineentrie_id&amp;action2=moveEntryUp\"><img src=\"./img/up.png\" alt=\"" . $adminLang['move_up'] ."\" title=\"" . $adminLang['move_up'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrieID=$entrie->inlineentrie_id&amp;action2=moveEntryDown\"><img src=\"./img/down.png\" alt=\"" . $adminLang['move_down'] ."\" title=\"" . $adminLang['move_down'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrieID=$entrie->inlineentrie_id&amp;action2=deleteEntry\"><img src=\"./img/del.png\" alt=\"" . $adminLang['delete'] ."\" title=\"" . $adminLang['delete'] ."\" /></a>
 						<!--<img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" />-->
 					</td>
 					</tr>";
 				}
 				$out .= "</table>
 					</div>
-					<div class=\"row\"><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$PageID&amp;action2=add_new_dialog\" class=\"button\">Einen Eintrag hinzuf&uuml;gen</a></div>
+					<div class=\"row\"><a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;action2=addNewEntryDialog\" class=\"button\">Einen Eintrag hinzuf&uuml;gen</a></div>
 					</fieldset>";
 			return $out;
 		}
@@ -1034,14 +1253,14 @@
 		function _infoPage() {
 			global $admin_lang, $user;
 			
-			$page_id =  GetPostOrGet('page_id');
+			$page_id =  GetPostOrGet('pageID');
 			$action2 = GetPostOrGet('action2');
-			if($action2 == 'save_path' || $action2 == 'save_access') {
-				$page_access = GetPostOrGet('page_access');
-				$page_access_old = GetPostOrGet('page_access_old');
-				$page_parent_id = GetPostOrGet('page_parent_id');
-				$page_parent_id_old = GetPostOrGet('page_parent_id_old');
-				if(($action2 == 'save_access' && $page_access_old != $page_access) || ($action2 == 'save_path' && $page_id != $page_parent_id && $page_parent_id != $page_parent_id_old)) {
+			if($action2 == 'savePath' || $action2 == 'saveAccess') {
+				$page_access = GetPostOrGet('pageAccess');
+				$page_access_old = GetPostOrGet('pageAccessOld');
+				$page_parent_id = GetPostOrGet('pageParentID');
+				$page_parent_id_old = GetPostOrGet('pageParentIDOld');
+				if(($action2 == 'saveAccess' && $page_access_old != $page_access) || ($action2 == 'savePath' && $page_id != $page_parent_id && $page_parent_id != $page_parent_id_old)) {
 					$sql = "SELECT struct.*, text.*
 						FROM ( " . DB_PREFIX. "pages struct
 						LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
@@ -1059,7 +1278,7 @@
 						
 						}
 					
-					if($action2 == 'save_path') {
+					if($action2 == 'savePath') {
 						
 							if(is_numeric($page_parent_id) && is_numeric($page_id)) {
 							$sql = "UPDATE " . DB_PREFIX . "pages
@@ -1068,7 +1287,7 @@
  								db_result($sql);
 							}
 						}
-					else if($action2 == 'save_access') {
+					else if($action2 == 'saveAccess') {
 						
 						$sql = "UPDATE " . DB_PREFIX . "pages
 							SET  page_access='$page_access', page_creator='$user->ID', page_date='" . mktime() . "',  page_edit_comment = 'Changed Page-Access from $page_access_old to $page_access'
@@ -1099,14 +1318,14 @@
 				<tr>
 					<th>Zugang</th>
 					<td>";
-					if(GetPostOrGet('action2') == 'change_access') {
+					if(GetPostOrGet('action2') == 'changeAccess') {
 						$out .= "<form action=\"admin.php\" method=\"post\">
 							<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-							<input type=\"hidden\" name=\"action\" value=\"info\" />
-							<input type=\"hidden\" name=\"page_id\" value=\"$page->page_id\" />
-							<input type=\"hidden\" name=\"page_access_old\" value=\"$page->page_access\" />
-							<input type=\"hidden\" name=\"action2\" value=\"save_access\" />
-							<select name=\"page_access\">
+							<input type=\"hidden\" name=\"action\" value=\"pageInfo\" />
+							<input type=\"hidden\" name=\"pageID\" value=\"$page->page_id\" />
+							<input type=\"hidden\" name=\"pageAccessOld\" value=\"$page->page_access\" />
+							<input type=\"hidden\" name=\"action2\" value=\"saveAccess\" />
+							<select name=\"pageAccess\">
 								<option value=\"public\"" . (($page->page_access == 'public') ? ' selected="selected"' : '') . ">" . $admin_lang['public'] . "</option>
 								<option value=\"private\"" . (($page->page_access == 'private') ? ' selected="selected"' : '') . ">" . $admin_lang['private'] . "</option>
 								<option value=\"hidden\"" . (($page->page_access == 'hidden') ? ' selected="selected"' : '') . ">" . $admin_lang['hidden'] . "</option>
@@ -1116,7 +1335,7 @@
 							</form>";
 					}
 					else
-						$out .=	$admin_lang[$page->page_access] . " <a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page->page_id&amp;action2=change_access\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
+						$out .=	$admin_lang[$page->page_access] . " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id&amp;action2=changeAccess\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
 					$out .= "</td>
 				</tr>
 				<tr>
@@ -1125,15 +1344,15 @@
 				</tr>
 				<tr>
 					";
-				if(GetPostOrGet('action2') == 'change_path') {
+				if(GetPostOrGet('action2') == 'changePath') {
 					$out .= "<th>Unterseite von</th>
 					<td><form action=\"admin.php\" method=\"post\">
 							<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-							<input type=\"hidden\" name=\"action\" value=\"info\" />
-							<input type=\"hidden\" name=\"page_id\" value=\"$page->page_id\" />
-							<input type=\"hidden\" name=\"action2\" value=\"save_path\" />
-							<input type=\"hidden\" name=\"page_parent_id_old\" value=\"$page->page_parent_id\" />
-							<select name=\"page_parent_id\">
+							<input type=\"hidden\" name=\"action\" value=\"pageInfo\" />
+							<input type=\"hidden\" name=\"pageID\" value=\"$page->page_id\" />
+							<input type=\"hidden\" name=\"action2\" value=\"savePath\" />
+							<input type=\"hidden\" name=\"pageParentIDOld\" value=\"$page->page_parent_id\" />
+							<select name=\"pageParentID\">
 								<option value=\"0\">Keiner</option>\r\n";
 					$out .= $this->_structurePullDown(0, 0, '', $page->page_id, $page->page_parent_id);
 					$out .= "\t\t\t\t\t\t\t</select><input type=\"submit\" value=\"" . $admin_lang['save'] . "\" class=\"button\" /></form>";
@@ -1141,7 +1360,7 @@
 				else
 					$out .= "<th>Pfad</th>
 					<td>
-						<a href=\"admin.php?page=pagestructure\">root</a><strong>/</strong>" . $this->_pagePath($page->page_id) . " <a href=\"admin.php?page=pagestructure&amp;action=info&amp;page_id=$page->page_id&amp;action2=change_path\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
+						<a href=\"admin.php?page=pagestructure\">root</a><strong>/</strong>" . $this->_pagePath($page->page_id) . " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id&amp;action2=changePath\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
 				$out .= "</td>
 				</tr>
 				<tr>
@@ -1192,7 +1411,7 @@
 					<td>$page->page_edit_comment&nbsp;</td>
 					<td>
 						<a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
 					</td>
 				</tr>\r\n";
 				
@@ -1203,8 +1422,8 @@
 					<td>$change->page_title</td>
 					<td>$change->page_edit_comment&nbsp;</td>
 					<td><a href=\"index.php?page=$page->page_id&amp;change=$changes_count\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>
-					<a href=\"admin.php?page=pagestructure&amp;action=edit&amp;page_id=$page->page_id&amp;change=$changes_count\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
-					<a href=\"admin.php?page=pagestructure&amp;action=save&amp;page_id=$page->page_id&amp;change=$changes_count\"><img src=\"./img/restore.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['restore'] . "\" title=\"" . $admin_lang['restore'] . "\"/></a></td>
+					<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page->page_id&amp;change=$changes_count\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
+					<a href=\"admin.php?page=pagestructure&amp;action=savePage&amp;pageID=$page->page_id&amp;change=$changes_count\"><img src=\"./img/restore.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['restore'] . "\" title=\"" . $admin_lang['restore'] . "\"/></a></td>
 				</tr>\r\n";
 					$changes_count--;
 				}

@@ -314,6 +314,54 @@
 				WHERE page_id='$PageID'";
 			$this->_SqlConnection->SqlQuery($sql);	
 		}
-	
+		
+		function InlineMenuEntryMoveUp ($InlineMenuEntrySortID, $PageID) {
+ 			$sql = "SELECT *
+				FROM " . DB_PREFIX . "inlinemenu_entries
+				WHERE inlineentrie_sortid <= $InlineMenuEntrySortID AND inlineentrie_page_id = $PageID
+				ORDER BY inlineentrie_sortid DESC
+				LIMIT 0 , 2";
+			$entriesResult = $this->_SqlConnection->SqlQuery($sql);
+			
+			$this->_InlineMenuEntriesSwitchSortIDs($entriesResult);
+ 		}
+ 		
+ 		function InlineMenuEntryMoveDown ($InlineMenuEntrySortID, $PageID) {
+ 			$sql = "SELECT *
+				FROM " . DB_PREFIX . "inlinemenu_entries
+				WHERE inlineentrie_sortid >= $InlineMenuEntrySortID AND inlineentrie_page_id = $PageID
+				ORDER BY inlineentrie_sortid ASC
+				LIMIT 0 , 2";
+			$entriesResult = $this->_SqlConnection->SqlQuery($sql);
+			
+			$this->_InlineMenuEntriesSwitchSortIDs($entriesResult);
+ 		}
+ 		
+ 		function _InlineMenuEntriesSwitchSortIDs ($InlineMenuEntriesResult) {
+ 			if ($entry = mysql_fetch_object($InlineMenuEntriesResult)) {
+				$inlineMenuEntryID1 = $entry->inlineentrie_id;
+				$inlineMenuEntryOrderID1 = $entry->inlineentrie_sortid;
+				
+				if ($entry = mysql_fetch_object($InlineMenuEntriesResult)) {
+					$inlineMenuEntryID2 = $entry->inlineentrie_id;
+					$inlineMenuEntryOrderID2 = $entry->inlineentrie_sortid;
+					
+					$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
+						SET inlineentrie_sortid=$inlineMenuEntryOrderID2
+						WHERE inlineentrie_id=$inlineMenuEntryID1";
+					$this->_SqlConnection->SqlQuery($sql);
+						 
+					$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
+						SET inlineentrie_sortid=$inlineMenuEntryOrderID1
+						WHERE inlineentrie_id=$inlineMenuEntryID2";
+					$this->_SqlConnection->SqlQuery($sql);
+				}
+			}
+ 		}
+ 		function RemoveInlineMenuEntry ($EntryID) {
+ 			$sql = "DELETE FROM " . DB_PREFIX . "inlinemenu_entries
+				WHERE inlineentrie_id=$EntryID";
+			$this->_SqlConnection->SqlQuery($sql);
+ 		}
 	}
 ?>

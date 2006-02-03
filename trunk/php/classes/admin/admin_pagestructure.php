@@ -279,10 +279,6 @@
 		 }
 		 
 		 function _showStructure($TopNodeID = 0) {
-		 	
-		 	//global $admin_lang, $_SERVER;
-			
-			//$out = '';
 			$this->_PageStructure->LoadParentIDs();
 	 		$out = $this->_Structure($TopNodeID);
 			return $out;
@@ -479,421 +475,45 @@
 								break;
 					case 'addNewEntry':	$out .= $this->_InlineMenuAddNewEntryPage($pageID); 
 								break;
-					case 'moveUp':		$out .= $this->_InlineMenuMoveUpPage($pageID);
+					case 'moveEntryUp':	$out .= $this->_InlineMenuMoveUpPage($pageID);
+								break;
+					case 'moveEntryDown':	$out .= $this->_InlineMenuMoveDownPage($pageID);
+								break;
+					case 'removeEntry':	$out .= $this->_InlineMenuRemoveEntryPage($pageID);
 								break;
 					default:		$out .= $this->_InlineMenuHomePage($pageID);
 								break;
 				}
 			}
-			
-			
-			/*
-			$sql = "SELECT " . DB_PREFIX. "pages.*, " . DB_PREFIX . "inlinemenu.*
-				FROM ( " . DB_PREFIX. "pages
-				LEFT JOIN " . DB_PREFIX . "inlinemenu ON " . DB_PREFIX . "inlinemenu.page_id = " . DB_PREFIX. "pages.page_id )
-				WHERE " . DB_PREFIX. "pages.page_access!='deleted' AND " . DB_PREFIX. "pages.page_id = $page_id";
-			$inline_result = db_result($sql);
-			$inline =  mysql_fetch_object($inline_result);
-			if($inline->inlinemenu_html === null && $action2 == 'create') {
-				$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu (page_id, inlinemenu_image, inlinemenu_html)
-					VALUES($page_id, '', '')";
-				db_result($sql);
-			}
-				
-			
-			if($inline->inlinemenu_html === null && $action2 != 'create') {
-				$out .= "Es wurde bis jetzt kein Zusatzmen&uuml; erstellt, soll das nun geschehen?<br />
-				<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;action2=create&amp;page_id=$page_id&amp;sure=1\" title=\"" . $admin_lang['yes'] . "\" class=\"button\">" . $admin_lang['yes'] . "</a>
-				<a href=\"admin.php?page=pagestructure\" title=\"" . $admin_lang['no'] . "\" class=\"button\">" . $admin_lang['no'] . "</a>";
-				return $out;
-			}
-			else if($action2 == 'remove_image') {
-				$sql = "UPDATE " . DB_PREFIX . "inlinemenu
-						SET inlinemenu_image='', inlinemenu_image_thumb=''
-						WHERE page_id=$page_id";
-					db_result($sql);
-					$inline->inlinemenu_image_thumb = '';
-					$inline->inlinemenu_image = '';
-			}
-			else if($action2 == 'set_thumb_title') {
-				$thumbTitle = GetPostOrGet('thumb_title');
-				$sql = "UPDATE " . DB_PREFIX . "inlinemenu
-						SET inlinemenu_image_title='$thumbTitle'
-						WHERE page_id=$page_id";
-					db_result($sql);
-					$inline->inlinemenu_image_title = $thumbTitle;
-			}
-			else if($action2 == 'select_image') {
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "files
-					WHERE file_type LIKE 'image/%'
-					ORDER BY file_name ASC";
-				$images_result = db_result($sql);
-				$imgmax = 100;
-				$imgmax2 = 200;
-				$inlinemenu_folder = 'data/thumbnails/';
-				$out .= "<form action=\"admin.php\" method=\"post\"><div class=\"imagesblock\">
-				<input type=\"hidden\" name=\"page\" value=\"pagestructure\"/>
-				<input type=\"hidden\" name=\"action\" value=\"inlinemenu\"/>
-				<input type=\"hidden\" name=\"page_id\" value=\"$page_id\"/>
-				<input type=\"hidden\" name=\"action2\" value=\"set_image\"/>";
-				while($image = mysql_fetch_object($images_result)) {
-					$thumbnail = resizteImageToMaximum($image->file_path, $inlinemenu_folder ,$imgmax);
-					if($thumbnail !== false) {
-						$out .= "<div class=\"imageblock\">
-					<a href=\"" . generateUrl($image->file_path) . "\">
-					<img style=\"display:block;margin:auto;\" src=\"" . generateUrl($thumbnail) . "\" alt=\"". basename($thumbnail) ."\" /></a><br />
-					<input type=\"radio\" name=\"image_path\" " .(($inline->inlinemenu_image == $image->file_path) ? 'checked="checked" ' : '') . " value=\"$image->file_path\"/></div>";
-					}
-				}
-				$out .= "</div><input type=\"submit\" value=\"" . $admin_lang['apply'] . "\" class=\"button\"/><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['back'] . "</a></form>";
-				
-			}
-			else if($action2 == 'set_image') {
-				$imagePath = GetPostOrGet('image_path');
-				$imgmax2 = 200;
-				$inlinemenu_folder = 'data/thumbnails/';
-				$thumbnail = resizteImageToWidth($imagePath, $inlinemenu_folder, $imgmax2);
-				if(file_exists($thumbnail)) {
-					$sql = "UPDATE " . DB_PREFIX . "inlinemenu
-						SET inlinemenu_image_thumb='$thumbnail', inlinemenu_image='$imagePath'
-						WHERE page_id=$page_id";
-					db_result($sql);
-					$inline->inlinemenu_image_thumb = $thumbnail;
-				}
-					
-			}
-			else if($action2 == 'up') {
-				$entrie_id = GetPostOrGet('entrie_id');
-				$sql = "SELECT *
-			 		FROM " . DB_PREFIX . "inlinemenu_entries
-					WHERE inlineentrie_id=$entrie_id";
-				$first_entrie_result = db_result($sql);
-				if($first_entrie = mysql_fetch_object($first_entrie_result)) {
-					$first_id = $first_entrie->inlineentrie_id;
-					$first_sortid = $first_entrie->inlineentrie_sortid;
-					$sql = "SELECT *
-						FROM " . DB_PREFIX . "inlinemenu_entries
-						WHERE inlineentrie_sortid < $first_sortid AND inlineentrie_page_id=$first_entrie->inlineentrie_page_id
-						ORDER BY inlineentrie_sortid DESC";
-					$second_entrie_result = db_result($sql);
-					if($second_entrie = mysql_fetch_object($second_entrie_result)) {
-						$second_id = $second_entrie->inlineentrie_id;
-						$second_sortid = $second_entrie->inlineentrie_sortid;
-						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
-							SET inlineentrie_sortid=$second_sortid
-							WHERE inlineentrie_id=$first_id";
-						db_result($sql);
-						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
-							SET inlineentrie_sortid=$first_sortid
-							WHERE inlineentrie_id=$second_id";
-						db_result($sql);
-						generateinlinemenu($second_entrie->inlineentrie_page_id);			
-					}
-				}			
-			}
-			else if($action2 == 'down') {
-				$entrie_id = GetPostOrGet('entrie_id');
-				$sql = "SELECT *
-			 		FROM " . DB_PREFIX . "inlinemenu_entries
-					WHERE inlineentrie_id=$entrie_id";
-				$first_entrie_result = db_result($sql);
-				if($first_entrie = mysql_fetch_object($first_entrie_result)) {
-					$first_id = $first_entrie->inlineentrie_id;
-					$first_sortid = $first_entrie->inlineentrie_sortid;
-					$sql = "SELECT *
-						FROM " . DB_PREFIX . "inlinemenu_entries
-						WHERE inlineentrie_sortid > $first_sortid AND inlineentrie_page_id=$first_entrie->inlineentrie_page_id
-						ORDER BY inlineentrie_sortid ASC";
-					$second_entrie_result = db_result($sql);
-					if($second_entrie = mysql_fetch_object($second_entrie_result)) {
-						$second_id = $second_entrie->inlineentrie_id;
-						$second_sortid = $second_entrie->inlineentrie_sortid;
-						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
-							SET inlineentrie_sortid=$second_sortid
-							WHERE inlineentrie_id=$first_id";
-						db_result($sql);
-						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
-							SET inlineentrie_sortid=$first_sortid
-							WHERE inlineentrie_id=$second_id";
-						db_result($sql);
-						generateinlinemenu($second_entrie->inlineentrie_page_id);			
-					}
-				}
-			}
-			else if($action2 == 'delete') {
-				$entrie_id = GetPostOrGet('entrie_id');
-				$sure= GetPostOrGet('sure');
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "inlinemenu_entries
-					WHERE inlineentrie_id=$entrie_id";
- 				$entrie_result = db_result($sql);
- 				if($entrie = mysql_fetch_object($entrie_result)) {
- 					if($sure == 1) {
-	 					$sql = "DELETE FROM " . DB_PREFIX . "inlinemenu_entries
-							WHERE inlineentrie_id=$entrie_id";
- 						db_result($sql);
-	 					generateinlinemenu($entrie->inlineentrie_page_id);
- 						header("Location: admin.php?page=pagestructure&action=inlinemenu&page_id=$page_id");
- 					}
- 					else {
-						$out .= "Sind sie sicher das die das Element &quot;$entrie->inlineentrie_text&quot; unwiederruflich l�schen?<br />
-							<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;entrie_id=$entrie_id&amp;action2=delete&amp;sure=1&amp;page_id=$page_id\" class=\"button\">" . $admin_lang['yes'] . "</a >
-							<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id\"class=\"button\">" . $admin_lang['no'] . "</a >";
-					}
- 				}
-			}
-			else if($action2 == 'add_new_dialog') {
-				$type = GetPostOrGet('type');
-				if($type == '') {
-					$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-						<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
-						<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
-						<input type=\"hidden\" name=\"action2\" value=\"add_new_dialog\" />
-						
-						<fieldset>
-							<legend>Eintrags-Typ:</legend>
-							<div class=\"row\">
-								<label class=\"row\" for=\"group_name\">
-									Link:
-									<span class=\"info\">TODO</span>
-								</label>
-								<input type=\"radio\" name=\"type\" value=\"link\" checked=\"checked\"/>
-							</div>
-							<div class=\"row\">
-								<label class=\"row\" for=\"group_name\">
-									Text:
-									<span class=\"info\">TODO</span>
-								</label>
-								<input type=\"radio\" name=\"type\" value=\"text\"/>
-							</div>
-							<div class=\"row\">
-								<label class=\"row\" for=\"group_name\">
-									Interner-Link:
-									<span class=\"info\">TODO</span>
-								</label>
-								<input type=\"radio\" name=\"type\" value=\"intern\"/>
-							</div>
-							<div class=\"row\">
-								<label class=\"row\" for=\"group_name\">
-									Download:
-									<span class=\"info\">TODO</span>
-								</label>
-								<input type=\"radio\" name=\"type\" value=\"download\"/>
-							</div>
-							<div class=\"row\">
-								<input type=\"submit\" class=\"button\" value=\"Weiter\" />
-							</div>
-						</fieldset>
-						</form>";
-				}
-				else if($type == 'link') {
-					$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-						<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
-						<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
-						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
-						<input type=\"hidden\" name=\"type\" value=\"link\" />
-						<table>
-						<tr><td>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></td><td><input type=\"text\" name=\"text\" value=\"\" /></td></tr>
-						<tr><td>Link<span class=\"info\">Hier kommt die URL hin die den Link sp&auml;ter ergibt.</span></td><td><input type=\"text\" name=\"link\" value=\"http://\" /></td></tr>
-						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
-						</table>
-						</form>";
-				}
-				else if($type == 'text') {
-					$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-						<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
-						<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
-						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
-						<input type=\"hidden\" name=\"type\" value=\"text\" />
-						<table>
-						<tr><td>Text<span class=\"info\">Das ist der Text, der sp&auml;ter angezeigt werden soll</span></td><td><textarea name=\"text\"></textarea></td></tr>
-						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
-						</table>
-						</form>";
-				}
-				else if($type == 'intern') {
-					$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-						<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
-						<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
-						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
-						<input type=\"hidden\" name=\"type\" value=\"intern\" />
-						<table>
-						<tr><td>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></td><td><input type=\"text\" name=\"text\" value=\"\" /></td></tr>
-						<tr><td>Interne Seite<span class=\"info\">Das ist die interne Seite, auf die der Link sp&aumlter f&uuml;hren soll.</span></td><td><select name=\"link\">";
-			$sql = "SELECT page_name, page_title
-				FROM " . DB_PREFIX . "pages
-				ORDER BY page_title ASC";
-			$pages_result = db_result($sql);
-			while($page = mysql_fetch_object($pages_result)) {
-				$out .= "\t\t\t\t<option value=\"$page->page_name\">$page->page_title($page->page_name)</option>\r\n";
-			}
-			
-			$out .= "</select></td></tr>
-						<tr><td colspan=\"2\"><input type=\"reset\" class=\"button\" value=\"Zur?cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></td></tr>
-						</table>
-						</form>";
-				}
-				else if($type == 'download') {
-					$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-						<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
-						<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
-						<input type=\"hidden\" name=\"action2\" value=\"add_new\" />
-						<input type=\"hidden\" name=\"type\" value=\"download\" />
-						<fieldset>
-							<legend>Download Hinzuf&uuml;gen</legend>
-						
-						<div class=\"row\">
-							<label class=\"row\" for=\"download_text\">
-								Download-Titel:
-								<span class=\"info\">Der Text wird als Downloadlink angezeigt er kann zum Beispiel der Dateiname sein, aber auch ein kuzer eindeutiger Text ist sehr sinnvoll.</span>
-							</label>
-							<input type=\"text\" name=\"text\" id=\"download_text\" />
-						</div>
-						<div class=\"row\">
-							<label class=\"row\" for=\"link\">
-								Datei f�r den Download:
-								<span class=\"info\">Die hier angegebene Datei kann dann sp&auml;ter heruntergeladen werden.</span>
-							</label>
-							<select name=\"link\" id=\"link\">";
-					$sql = "SELECT *
-						FROM " . DB_PREFIX . "files
-						ORDER BY file_name";
-					$files_result = db_result($sql);
-					while($file = mysql_fetch_object($files_result)) {
-						if(file_exists($file->file_path))
-							$out .= "<option value=\"$file->file_id\">". utf8_encode($file->file_name) . " (" . kbormb($file->file_size) . ")</option>\r\n";
-					}			
-					$out .= "</select>
-							</div>
-							<div class=\"row\"><input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></div>
-						</fieldset>
-						</form>";
-				}
-				else
-					$action2 = '';
-			}
-			else if($action2 == 'add_new') {
-				$sql = "SELECT inlineentrie_sortid
-			 	FROM " . DB_PREFIX . "inlinemenu_entries
-			 	WHERE inlineentrie_page_id = $page_id
-			 	ORDER BY inlineentrie_sortid DESC
-			 	LIMIT 0,1";
-				$lastsort_result = db_result($sql);
-				$sortid = 1;
-				if($lastsort = mysql_fetch_object($lastsort_result)){
-					$sortid = $lastsort->inlineentrie_sortid;
-					$sortid++;
-				}
-				$text = GetPostOrGet('text');
-				$type = GetPostOrGet('type');
-				$link = GetPostOrGet('link');
-				
-				$sql = '';
-				switch ($type) {
-					case 'link':		$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
-									VALUES ($sortid, $page_id, 'link', '$text','$link');";
-								break;
-					case 'intern':		$link = "index.php?page=$link";
- 								$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
-									VALUES ($sortid, $page_id, 'intern', '$text','$link');";
-								break;
-					case 'text':		$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text)
-									VALUES ($sortid, $page_id, 'text', '$text');";
-								break;
-					case 'download':	$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentrie_sortid, inlineentrie_page_id, inlinieentrie_type, inlineentrie_text, inlineentrie_link)
-									VALUES ($sortid, $page_id, 'download', '$text','$link');";
-								break;
-				
-					default:		break;
-				}
-				if($sql != '') {
-	 				db_result($sql);
- 					generateinlinemenu($page_id);
- 				}
-			}
-			
-			$hide = array('select_image', 'delete', 'add_new_dialog');
-			if(!in_array($action2, $hide)) {
-				$image = 'Noch kein bild gesetzt';
-
-				if(file_exists($inline->inlinemenu_image_thumb))
-					$image = "<img src=\"" . generateUrl($inline->inlinemenu_image_thumb) . "\"/>";
-				else {
-					$imgmax2 = 200;
-					$inlinemenuFolder = 'data/thumbnails/';
-					$thumbnail = resizteImageToWidth($inline->inlinemenu_image, $inlinemenuFolder, $imgmax2);
-					if($thumbnail !== false){
-						$image = "<img src=\"" . generateUrl($thumbnail) . "\"/>";
-					}
-						
-				}	
-				$out .= "
-				<fieldset>
-					<legend>" . $admin_lang['inlinemenu'] . "</legend>
-				<div class=\"row\">
-						<label class=\"row\">
-							Bild f&uuml;r das Zusatzmen&uuml;
-							<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmen&uuml; zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgew&auml;hlt werden.</span>
-						</label>
-						$image
-				</div>
-				<div class=\"row\">
-					<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=select_image\" class=\"button\">Bild ausw&auml;hlen/ver&auml;ndern</a>
-					" .((file_exists($inline->inlinemenu_image_thumb)) ?  "<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=remove_image\" class=\"button\">Bild entfernen</a>" : '') . "
-				</div>
-				<form action=\"admin.php\" method=\"post\">
-				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-				<input type=\"hidden\" name=\"action\" value=\"inlinemenu\" />
-				<input type=\"hidden\" name=\"page_id\" value=\"$page_id\" />
-				<input type=\"hidden\" name=\"action2\" value=\"set_thumb_title\" />
-				<div class=\"row\">
-					<label for=\"inlinemenu_thumb_title\"class=\"row\">
-						Bildunterschrift
-						<span class=\"info\">Die Bildunterschrift kann das Bild noch ein wenig erl&auml;utern.</span>
-					</label>
-					<input id=\"inlinemenu_thumb_title\" name=\"thumb_title\" type=\"text\" value=\"$inline->inlinemenu_image_title\" />
-				</div>
-				<div>
-					<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" />
-				</div>
-				</form>";
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "inlinemenu_entries
-					WHERE inlineentrie_page_id = $page_id
-					ORDER BY inlineentrie_sortid ASC";
-				$entries_result = db_result($sql);
-				$out .= "<table class=\"text_table noform\">
-					<thead><tr><th>Text</th><th>Typ</th><th>Aktion</th></tr></thead>";
-				while($entrie = mysql_fetch_object($entries_result)) {
-					$out .= "<tr>
-					<td>". nl2br($entrie->inlineentrie_text) ."</td>
-					<td>$entrie->inlinieentrie_type</td>
-					<td>
-						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=up\"><img src=\"./img/up.png\" alt=\"" . $admin_lang['move_up'] ."\" title=\"" . $admin_lang['move_up'] ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=down\"><img src=\"./img/down.png\" alt=\"" . $admin_lang['move_down'] ."\" title=\"" . $admin_lang['move_down'] ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;entrie_id=$entrie->inlineentrie_id&amp;action2=delete\"><img src=\"./img/del.png\" alt=\"" . $admin_lang['delete'] ."\" title=\"" . $admin_lang['delete'] ."\" /></a>
-						<!--<img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" />-->
-					</td>
-					</tr>";
-				}
-				$out .= "</table>
-					<div class=\"row\"><a href=\"admin.php?page=pagestructure&amp;action=inlinemenu&amp;page_id=$page_id&amp;action2=add_new_dialog\" class=\"button\">Einen Eintrag hinzuf&uuml;gen</a></div>
-					</fieldset>";
-			}*/
 			return $out;
+		}
+		
+		function _InlineMenuRemoveEntryPage ($PageID) {
+			$entryID = GetPostOrGet('entryID');
+			$confirmation = GetPostOrGet('confirmation');
+			$adminLang = &$this->_AdminLang;
+			if($confirmation == 1) {
+				$this->_PageStructure->RemoveInlineMenuEntry($entryID);
+				return $this->_InlineMenuHomePage($PageID);
+			}
+			else {
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "inlinemenu_entries
+					WHERE inlineentrie_id=$entryID";
+ 				$entryResult = $this->_SqlConnection->SqlQuery($sql);
+ 				if($entry = mysql_fetch_object($entryResult)) {
+					return "Sind sie sicher, dass sie das Element &quot;$entry->inlineentrie_text&quot; unwiederruflich l&ouml;schen m&ouml;chten?<br />
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;entryID=$entryID&amp;action2=removeEntry&amp;confirmation=1&amp;pageID=$PageID\" class=\"button\">" . $adminLang['yes'] . "</a >
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID\"class=\"button\">" . $adminLang['no'] . "</a >";
+ 				}
+			}
 		}
 		
 		/**
 		 * @param integer PageID
 		 * @return string
 		 */
-		function _InlineMenuSetImagePage($PageID) {
+		function _InlineMenuSetImagePage ($PageID) {
 			// Get data from header
 			$imagePath = GetPostOrGet('imagePath');
 			// FIXME: load from config?
@@ -915,7 +535,7 @@
 		 * @param integer PageID
 		 * @return string
 		 */
-		function _InlineMenuAddNewEntryPage($PageID) {
+		function _InlineMenuAddNewEntryPage ($PageID) {
 			$text = GetPostOrGet('text');
 			$type = GetPostOrGet('type');
 			$link = GetPostOrGet('link');
@@ -1096,35 +716,15 @@
 		}
 		
 		function _InlineMenuMoveUpPage($PageID) {
-			// TODO: this part must be rewritten
-			/*
-			$entrie_id = GetPostOrGet('entrieOrderID');
-				$sql = "SELECT *
-			 		FROM " . DB_PREFIX . "inlinemenu_entries
-					WHERE inlineentrie_id=$entrie_id";
-				$first_entrie_result = db_result($sql);
-				if($first_entrie = mysql_fetch_object($first_entrie_result)) {
-					$first_id = $first_entrie->inlineentrie_id;
-					$first_sortid = $first_entrie->inlineentrie_sortid;
-					$sql = "SELECT *
-						FROM " . DB_PREFIX . "inlinemenu_entries
-						WHERE inlineentrie_sortid < $first_sortid AND inlineentrie_page_id=$first_entrie->inlineentrie_page_id
-						ORDER BY inlineentrie_sortid DESC";
-					$second_entrie_result = db_result($sql);
-					if($second_entrie = mysql_fetch_object($second_entrie_result)) {
-						$second_id = $second_entrie->inlineentrie_id;
-						$second_sortid = $second_entrie->inlineentrie_sortid;
-						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
-							SET inlineentrie_sortid=$second_sortid
-							WHERE inlineentrie_id=$first_id";
-						db_result($sql);
-						$sql = "UPDATE " . DB_PREFIX . "inlinemenu_entries
-							SET inlineentrie_sortid=$first_sortid
-							WHERE inlineentrie_id=$second_id";
-						db_result($sql);
-						generateinlinemenu($second_entrie->inlineentrie_page_id);			
-					}
-				}*/
+			$entrySortID = GetPostOrGet('entrySortID');
+			$this->_PageStructure->InlineMenuEntryMoveUp($entrySortID, $PageID);
+			return $this->_InlineMenuHomePage($PageID);
+		}
+		
+		function _InlineMenuMoveDownPage($PageID) {
+			$entrySortID = GetPostOrGet('entrySortID');
+			$this->_PageStructure->InlineMenuEntryMoveDown($entrySortID, $PageID);
+			return $this->_InlineMenuHomePage($PageID);
 		}
 		
 		function _InlineMenuSetImageTitlePage($PageID) {
@@ -1229,16 +829,17 @@
 				WHERE inlineentrie_page_id = $PageID
 				ORDER BY inlineentrie_sortid ASC";
 			$entries_result = db_result($sql);
-			$out .= "<div class=\"row\"><table class=\"text_table full_width\">
+			$out .= "<h3 id=\"entries\">Eintr&auml;ge</h3>
+				<div class=\"row\"><table class=\"text_table full_width\">
 					<thead><tr><th>Text</th><th>Typ</th><th>Aktion</th></tr></thead>";
 				while($entrie = mysql_fetch_object($entries_result)) {
 					$out .= "<tr>
 					<td>". nl2br($entrie->inlineentrie_text) ."</td>
 					<td>$entrie->inlinieentrie_type</td>
 					<td>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrieID=$entrie->inlineentrie_id&amp;action2=moveEntryUp\"><img src=\"./img/up.png\" alt=\"" . $adminLang['move_up'] ."\" title=\"" . $adminLang['move_up'] ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrieID=$entrie->inlineentrie_id&amp;action2=moveEntryDown\"><img src=\"./img/down.png\" alt=\"" . $adminLang['move_down'] ."\" title=\"" . $adminLang['move_down'] ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrieID=$entrie->inlineentrie_id&amp;action2=deleteEntry\"><img src=\"./img/del.png\" alt=\"" . $adminLang['delete'] ."\" title=\"" . $adminLang['delete'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entrie->inlineentrie_sortid&amp;action2=moveEntryUp#entries\"><img src=\"./img/up.png\" alt=\"" . $adminLang['move_up'] ."\" title=\"" . $adminLang['move_up'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entrie->inlineentrie_sortid&amp;action2=moveEntryDown#entries\"><img src=\"./img/down.png\" alt=\"" . $adminLang['move_down'] ."\" title=\"" . $adminLang['move_down'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entrie->inlineentrie_id&amp;action2=removeEntry\"><img src=\"./img/del.png\" alt=\"" . $adminLang['delete'] ."\" title=\"" . $adminLang['delete'] ."\" /></a>
 						<!--<img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" />-->
 					</td>
 					</tr>";

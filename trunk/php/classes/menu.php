@@ -26,10 +26,10 @@
  			$this->_SqlConnection = $SqlConnection;
  		}
  		
- 		function _MoveUp ($MenuOrderID, $MenuID = 1) {
+ 		function ItemMoveUp ($MenuItemSortID, $MenuID = 1) {
  			$sql = "SELECT *
 				FROM " . DB_PREFIX . "menu
-				WHERE menu_orderid <= $MenuOrderID AND menu_menuid = $MenuID
+				WHERE menu_orderid <= $MenuItemSortID AND menu_menuid = $MenuID
 				ORDER BY menu_orderid DESC
 				LIMIT 0 , 2";
 			$menuResult = $this->_SqlConnection->SqlQuery($sql);
@@ -37,10 +37,10 @@
 			$this->_SwitchOrderIDs($menuResult);
  		}
  		
- 		function _MoveDown ($MenuOrderID, $MenuID = 1) {
+ 		function ItemMoveDown ($MenuItemSortID, $MenuID = 1) {
  			$sql = "SELECT *
 				FROM " . DB_PREFIX . "menu
-				WHERE menu_orderid >= $MenuOrderID AND menu_menuid = $MenuID
+				WHERE menu_orderid >= $MenuItemSortID AND menu_menuid = $MenuID
 				ORDER BY menu_orderid ASC
 				LIMIT 0 , 2";
 			$menuResult = $this->_SqlConnection->SqlQuery($sql);
@@ -51,19 +51,19 @@
  		function _SwitchOrderIDs ($MenuResult) {
  			if ($menuItem = mysql_fetch_object($MenuResult)) {
 				$menuItemID1 = $menuItem->menu_id;
-				$menuItemOrderID1 = $menuItem->menu_orderid;
+				$MenuItemSortID1 = $menuItem->menu_orderid;
 				
 				if ($menuItem = mysql_fetch_object($MenuResult)) {
 					$menuItemID2 = $menuItem->menu_id;
-					$menuItemOrderID2 = $menuItem->menu_orderid;
+					$MenuItemSortID2 = $menuItem->menu_orderid;
 					
 					$sql = "UPDATE " . DB_PREFIX . "menu
-						SET menu_orderid=$menuItemOrderID2
+						SET menu_orderid=$MenuItemSortID2
 						WHERE menu_id=$menuItemID1";
 					$this->_SqlConnection->SqlQuery($sql);
 						 
 					$sql = "UPDATE " . DB_PREFIX . "menu
-						SET menu_orderid=$menuItemOrderID1
+						SET menu_orderid=$MenuItemSortID1
 						WHERE menu_id=$menuItemID2";
 					$this->_SqlConnection->SqlQuery($sql);
 				}

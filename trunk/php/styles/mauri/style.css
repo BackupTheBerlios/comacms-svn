@@ -315,6 +315,13 @@ textarea.edit {
  font-family: arial, verdana, helvetica, sans-serif;
 }
 
+table th.small_width {
+ width: 10em;
+}
+
+table th.actions {
+ width: 5em;
+}
 
 .imageblock, .gallery_image {
  width: 120px;

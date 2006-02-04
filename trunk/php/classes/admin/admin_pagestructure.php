@@ -481,11 +481,134 @@
 								break;
 					case 'removeEntry':	$out .= $this->_InlineMenuRemoveEntryPage($pageID);
 								break;
+					case 'editEntry':	$out .= $this->_InlineMenuEditEntryPage($pageID);
+								break;
+					case 'saveEntry':	$out .= $this->_InlineMenuSaveEntryPage($pageID);
+								break;
 					default:		$out .= $this->_InlineMenuHomePage($pageID);
 								break;
 				}
 			}
 			return $out;
+		}
+		
+		function _InlineMenuEditEntryPage($PageID) {
+			$adminLang = &$this->_AdminLang;
+			$entryID = GetPostOrGet('entryID');
+			if($entryData = $this->_PageStructure->LoadInlineMenuEntry($entryID)) {
+				$out = '';
+				
+				if($entryData['type'] == 'link') {
+					$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
+						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
+						<input type=\"hidden\" name=\"entryID\" value=\"$entryID\" />
+						<input type=\"hidden\" name=\"action2\" value=\"saveEntry\" />
+						<input type=\"hidden\" name=\"type\" value=\"link\" />
+						<fieldset>
+						<legend>Erstelle neuen InlineMen&uuml;-Interner-Link:</legend>
+						<div class=\"row\">
+							<label>Link-Titel:
+								<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span>
+							</label>
+							<input type=\"text\" name=\"text\" value=\"" . $entryData['text'] . "\" />
+						</div>
+						<div class=\"row\">
+							<label>Link:
+								<span class=\"info\">Hier kommt die URL hin die den Link sp&auml;ter ergibt.</span>
+							</label>
+							<input type=\"text\" name=\"link\" value=\"" . $entryData['link'] . "\" />
+						</div>
+						<div class=\"row\">
+							<input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" />
+							<input type=\"submit\" class=\"button\" value=\"Speichern\" />
+						</div>
+						</fieldset>
+						</form>";
+				}
+				else if($entryData['type'] == 'text') {
+					$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
+						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
+						<input type=\"hidden\" name=\"entryID\" value=\"$entryID\" />
+						<input type=\"hidden\" name=\"action2\" value=\"saveEntry\" />
+						<input type=\"hidden\" name=\"type\" value=\"text\" />
+						<fieldset>
+						<legend>Erstelle neuen InlineMen&uuml;-Text:</legend>
+						<div class=\"row\"><label>Text: <span class=\"info\">Das ist der Text, der sp&auml;ter angezeigt werden soll</span></label>
+							<textarea name=\"text\">" . $entryData['text'] . "</textarea></div>
+						<div class=\"row\">
+							<input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" />
+							<input type=\"submit\" class=\"button\" value=\"Speichern\" />
+						</div>
+						</fieldset>
+						</form>";
+				}
+				else if($entryData['type'] == 'intern') {
+					$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
+						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
+						<input type=\"hidden\" name=\"entryID\" value=\"$entryID\" />
+						<input type=\"hidden\" name=\"action2\" value=\"saveEntry\" />
+						<input type=\"hidden\" name=\"type\" value=\"intern\" />
+						<fieldset>
+						<legend>Erstelle neuen InlineMen&uuml;-Interner-Link:</legend>
+						<div class=\"row\"><label>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></label><input type=\"text\" name=\"text\" value=\"" . $entryData['text'] . "\" /></div>
+						<div class=\"row\"><label>Interne Seite<span class=\"info\">Das ist die interne Seite, auf die der Link sp&auml;ter f&uuml;hren soll.</span></label><select name=\"link\">";
+					$out .= $this->_structurePullDown(0, 0, '', -1, substr($entryData['link'], 15));
+					$out .= "</select></div>
+						<div class=\"row\">
+							<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\" />
+							<input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\" />
+						</div>
+						</fieldset>
+						</form>";
+				}
+				else if($entryData['type'] == 'download') {
+					$out .= "<form action=\"admin.php\" method=\"post\">
+						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
+						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
+						<input type=\"hidden\" name=\"entryID\" value=\"$entryID\" />
+						<input type=\"hidden\" name=\"action2\" value=\"saveEntry\" />
+						<input type=\"hidden\" name=\"type\" value=\"download\" />
+						<fieldset>
+							<legend>Download Hinzuf&uuml;gen</legend>
+						
+						<div class=\"row\">
+							<label class=\"row\" for=\"download_text\">
+								Download-Titel:
+								<span class=\"info\">Der Text wird als Downloadlink angezeigt er kann zum Beispiel der Dateiname sein, aber auch ein kuzer eindeutiger Text ist sehr sinnvoll.</span>
+							</label>
+							<input type=\"text\" name=\"text\" id=\"download_text\" value=\"" . $entryData['text'] . "\" />
+						</div>
+						<div class=\"row\">
+							<label class=\"row\" for=\"link\">
+								Datei f&uuml;r den Download:
+								<span class=\"info\">Die hier angegebene Datei kann dann sp&auml;ter heruntergeladen werden.</span>
+							</label>
+							<select name=\"link\" id=\"link\">";
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "files
+						ORDER BY file_name";
+					$files_result = db_result($sql);
+					while($file = mysql_fetch_object($files_result)) {
+						if(file_exists($file->file_path))
+							$out .= "<option " . (($entryData['link'] == $file->file_id) ? 'selected="selected" ' : '') . "value=\"$file->file_id\">" . utf8_encode($file->file_name) . " (" . kbormb($file->file_size) . ")</option>\r\n";
+					}			
+					$out .= "</select>
+							</div>
+							<div class=\"row\"><input type=\"reset\" class=\"button\" value=\"Zur&uuml;cksetzen\" /><input type=\"submit\" class=\"button\" value=\"Speichern\" /></div>
+						</fieldset>
+						</form>";
+				}
+				
+				return $out;
+			}
+			return $this->_InlineMenuHomePage($PageID); 
 		}
 		
 		function _InlineMenuRemoveEntryPage ($PageID) {
@@ -529,6 +652,31 @@
 			}
 			// go back to the overview of the inlinemenu
 			return $this->_InlineMenuHomePage($PageID);
+		}
+		
+		/**
+		 * @param integer PageID
+		 * @return string
+		 */
+		function _InlineMenuSaveEntryPage ($PageID) {
+			$entryID = GetPostOrGet('entryID');
+			$text = GetPostOrGet('text');
+			$type = GetPostOrGet('type');
+			$link = GetPostOrGet('link');
+			$sql = '';
+			switch ($type) {
+				case 'link':		$this->_PageStructure->SaveInlineMenuLink($text, $link, $entryID, $PageID);
+							break;
+				case 'intern':		$this->_PageStructure->SaveInlineMenuInternLink($text, $link, $entryID, $PageID);
+							break;
+				case 'text':		$this->_PageStructure->SaveInlineMenuText($text, $entryID, $PageID);
+							break;
+				case 'download':	$this->_PageStructure->SaveInlineMenuDownload($text, $link, $entryID, $PageID);
+							break;
+				default:		break;
+			}
+			
+ 			return $this->_InlineMenuHomePage($PageID);
 		}
 		
 		/**
@@ -651,7 +799,7 @@
 						</div>
 						<div class=\"row\">
 							<label class=\"row\" for=\"link\">
-								Datei f�r den Download:
+								Datei f&uuml;r den Download:
 								<span class=\"info\">Die hier angegebene Datei kann dann sp&auml;ter heruntergeladen werden.</span>
 							</label>
 							<select name=\"link\" id=\"link\">";
@@ -661,7 +809,7 @@
 					$files_result = db_result($sql);
 					while($file = mysql_fetch_object($files_result)) {
 						if(file_exists($file->file_path))
-							$out .= "<option value=\"$file->file_id\">". utf8_encode($file->file_name) . " (" . kbormb($file->file_size) . ")</option>\r\n";
+							$out .= "<option value=\"$file->file_id\">" . utf8_encode($file->file_name) . " (" . kbormb($file->file_size) . ")</option>\r\n";
 					}			
 					$out .= "</select>
 							</div>
@@ -826,21 +974,34 @@
 				</form>";
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "inlinemenu_entries
-				WHERE inlineentrie_page_id = $PageID
-				ORDER BY inlineentrie_sortid ASC";
+				WHERE inlineentry_page_id = $PageID
+				ORDER BY inlineentry_sortid ASC";
 			$entries_result = db_result($sql);
 			$out .= "<h3 id=\"entries\">Eintr&auml;ge</h3>
 				<div class=\"row\"><table class=\"text_table full_width\">
-					<thead><tr><th>Text</th><th>Typ</th><th>Aktion</th></tr></thead>";
-				while($entrie = mysql_fetch_object($entries_result)) {
+					<thead><tr><th>Text</th><th class=\"small_width\">Typ</th><th class=\"actions\">Aktion</th></tr></thead>";
+				while($entry = mysql_fetch_object($entries_result)) {
+					$typeImage = '';
+					switch ($entry->inlineentry_type) {
+						case 'download':	$typeImage = "<img alt=\"\" src=\"img/download.png\"/>Download";
+									break;
+						case 'link':		$typeImage = "<img alt=\"\" src=\"img/extern.png\"/>Externer-Link";
+									break;
+						case 'intern':		$typeImage = "<img alt=\"\" src=\"img/view.png\"/>Interner-Link";
+									break;
+						default:		$typeImage = "Text";
+									break;
+					}
+					
 					$out .= "<tr>
-					<td>". nl2br($entrie->inlineentrie_text) ."</td>
-					<td>$entrie->inlinieentrie_type</td>
+					<td>". nl2br($entry->inlineentry_text) ."</td>
+					<td>" . $typeImage . "</td>
 					<td>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entrie->inlineentrie_sortid&amp;action2=moveEntryUp#entries\"><img src=\"./img/up.png\" alt=\"" . $adminLang['move_up'] ."\" title=\"" . $adminLang['move_up'] ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entrie->inlineentrie_sortid&amp;action2=moveEntryDown#entries\"><img src=\"./img/down.png\" alt=\"" . $adminLang['move_down'] ."\" title=\"" . $adminLang['move_down'] ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entrie->inlineentrie_id&amp;action2=removeEntry\"><img src=\"./img/del.png\" alt=\"" . $adminLang['delete'] ."\" title=\"" . $adminLang['delete'] ."\" /></a>
-						<!--<img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" />-->
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entry->inlineentry_sortid&amp;action2=moveEntryUp#entries\"><img src=\"./img/up.png\" alt=\"" . $adminLang['move_up'] ."\" title=\"" . $adminLang['move_up'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entry->inlineentry_sortid&amp;action2=moveEntryDown#entries\"><img src=\"./img/down.png\" alt=\"" . $adminLang['move_down'] ."\" title=\"" . $adminLang['move_down'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entry->inlineentry_id&amp;action2=editEntry\"><img src=\"./img/edit.png\" alt=\"" . $adminLang['edit'] ."\" title=\"" . $adminLang['edit'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entry->inlineentry_id&amp;action2=removeEntry\"><img src=\"./img/del.png\" alt=\"" . $adminLang['delete'] ."\" title=\"" . $adminLang['delete'] ."\" /></a>
+						
 					</td>
 					</tr>";
 				}

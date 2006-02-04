@@ -1,12 +1,12 @@
-#Feld bei Users eingef?gt
+#Feld bei Users eingefuegt
 
 ALTER TABLE `cms_users` ADD `email` VARCHAR( 200 ) NOT NULL ;
 
-#Felder bei Sitedata eingef?gt
-#parent_id f?r unterseiten
+#Felder bei Sitedata eingefuegt
+#parent_id fuer unterseiten
 ALTER TABLE `cms_sitedata` ADD `parent_id` INT( 10 ) DEFAULT '0' NOT NULL AFTER `id` ; 
 
-#type f?r gallery oder seite, nur wichtig f?r den editor, da die Gallery vorher erstellt wird(per Galleryeditor)
+#type fuer gallery oder seite, nur wichtig fuer den editor, da die Gallery vorher erstellt wird(per Galleryeditor)
 ALTER TABLE `cms_sitedata` ADD `type` VARCHAR( 15 ) NOT NULL AFTER `parent_id` ;
 
 #the menueid make it possible that we can manage more than one menue in the menue table
@@ -352,3 +352,12 @@ ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlinieentrie_type` `inlinieentrie_
 #added the fields for the thumbnaild and a title of the thumbnail
 ALTER TABLE `cms_inlinemenu` ADD `inlinemenu_image_title` VARCHAR( 100 ) NOT NULL ;
 ALTER TABLE `cms_inlinemenu` ADD `inlinemenu_image_thumb` VARCHAR( 255 ) NOT NULL AFTER `inlinemenu_image` ;
+
+#216
+#renamed 'inlineentrie' to 'inlineentry'
+ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlineentrie_id` `inlineentry_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+CHANGE `inlineentrie_sortid` `inlineentry_sortid` INT( 10 ) NOT NULL DEFAULT '0',
+CHANGE `inlineentrie_page_id` `inlineentry_page_id` INT( 10 ) NOT NULL DEFAULT '0',
+CHANGE `inlinieentrie_type` `inlineentry_type` ENUM( 'link', 'download', 'text', 'intern' ) NOT NULL DEFAULT 'link',
+CHANGE `inlineentrie_text` `inlineentry_text` TEXT NOT NULL ,
+CHANGE `inlineentrie_link` `inlineentry_link` VARCHAR( 255 ) NOT NULL ;

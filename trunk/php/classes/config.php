@@ -40,11 +40,7 @@
 		}
 		 	
 		function Save($name, $value) {
-			$sql = "SELECT config_name
-				FROM " . DB_PREFIX . "config
-				WHERE config_name='$name'";
-			$exists_result = db_result($sql);
-			if($exists = mysql_fetch_object($exists_result)) {
+			if(isset($this->Elements[$name])) {
 				$sql = "UPDATE " . DB_PREFIX . "config
 					SET config_value = '$value'
 					WHERE config_name = '$name'";

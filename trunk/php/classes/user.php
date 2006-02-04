@@ -221,7 +221,7 @@
 			}
 
 			// set the new counterstatus with the count of all users who visted the site since countig
-			if($counter_all != 1)
+			if($counter_all != 1 && $counter_all != $config->Get('counter_all'))
 				$config->Save('counter_all', $counter_all);
 			
 			// delete all enries with a last action which is more than 20 minutes passed

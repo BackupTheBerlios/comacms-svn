@@ -69,5 +69,50 @@
 				}
 			}
  		}
+ 		
+ 		function UpdateMenuEntry($MenuID, $Menu_MenuID, $MenuText, $MenuLink) {
+ 			$sql = "SELECT *
+ 				FROM " . DB_PREFIX . "pages
+ 				WHERE page_id=$MenuLink";
+ 			$pageResult = $this->_SqlConnection->SqlQuery($sql);
+ 			$numRows = mysql_num_rows($pageResult);
+ 			$out = '';
+ 			
+ 			if($numRows = 1) {
+ 				$page = mysql_fetch_object($pageResult);
+ 				$link = "l:" . $page->page_name;
+ 				
+ 				$sql = "SELECT *
+ 					FROM " . DB_PREFIX . "menu
+ 					WHERE menu_id=$MenuID";
+ 				$menuResult = $this->_SqlConnection->SqlQuery($sql);
+ 				$menuEntry = mysql_fetch_object($menuResult);
+ 				$menuOrderID = $menuEntry->menu_orderid;
+ 				
+ 				if($Menu_MenuID != $menuEntry->menu_menuid) {
+ 					$sql = "SELECT *
+ 						FROM " . DB_PREFIX . "menu
+ 						WHERE menu_menuid=$Menu_MenuID
+ 						ORDER BY menu_orderid DESC
+ 						LIMIT 1";
+ 					$menuResult = $this->_SqlConnection->SqlQuery($sql);
+ 					if($menuEntry = mysql_fetch_object($menuResult)) {
+ 						$menuOrderID = $menuEntry->menu_orderid + 1;
+ 					}
+ 					else {
+ 						$menuOrderID = 0;
+ 					}
+ 				}
+ 				
+ 				$sql = "UPDATE " . DB_PREFIX . "menu
+ 					SET menu_menuid='$Menu_MenuID', menu_text='$MenuText', menu_link='$link', menu_page_id='$MenuLink', menu_orderid='$menuOrderID'
+ 					WHERE menu_id='$MenuID'";
+ 				$menuResult = $this->_SqlConnection->SqlQuery($sql);
+ 				
+ 				$out .= 'erfolgreich bearbeitet.';
+ 			}
+ 			
+ 			return $out;
+ 		}
  	}
 ?>

@@ -417,8 +417,8 @@
 		function _pagePath($PageID = 0) {
 			$out = '';
 			$sql = "SELECT *
-			FROM " . DB_PREFIX . "pages
-			WHERE page_id=$PageID";
+				FROM " . DB_PREFIX . "pages
+				WHERE page_id=$PageID";
 			$page_result = db_result($sql);
 			while($page = mysql_fetch_object($page_result)) {
 				if($PageID == $page->page_id)

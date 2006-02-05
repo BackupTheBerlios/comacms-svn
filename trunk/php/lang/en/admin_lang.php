@@ -111,7 +111,9 @@
 	$admin_lang['at_the_moment_there_is_no_inlinemenu_for_this_page_created,_should_this_be_done_now'] = 'At the moment there is no Inlinemenu for this Page created, should this be done now?';
 	$admin_lang['inlinemenu_image'] = 'Inlinemenu-Image';
 	$admin_lang['edit_menu_entry'] = 'Edit menuentry';
+	$admin_lang['menu_entry_title'] = 'Menuentry title';
 	$admin_lang['belongs_to_menu'] = 'Belongs to menu';
+	$admin_lang['menu_entry_link'] = 'Menuentrylink';
 	$admin_lang['name/contraction'] = 'Name/Contraction';
 	$admin_lang['title'] = 'Title';
 ?>

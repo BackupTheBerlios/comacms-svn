@@ -116,4 +116,5 @@
 	$admin_lang['menu_entry_link'] = 'Menuentrylink';
 	$admin_lang['name/contraction'] = 'Name/Contraction';
 	$admin_lang['title'] = 'Title';
+	$admin_lang['Do you really want to delete the menuentry %menuEntryTitle%?'] = 'Do you really want to delete the menuentry &quot;%s&quot;?';
 ?>

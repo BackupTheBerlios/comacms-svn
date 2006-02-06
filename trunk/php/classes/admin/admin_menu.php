@@ -41,7 +41,7 @@
 	 		
 	 		$out = "\t\t\t<h2>" . $adminLang['menu-editor'] . "</h2>\r\n";
 	 		switch ($Action) {
-	 			case 'edit':		$out .= $this->_EditMenuEntry(GetPostOrGet('menu_id'));
+	 			case 'edit':		$out .= $this->_EditMenuEntry(GetPostOrGet('menuID'));
 	 						break;
 	 			case 'updateEntry':	$this->_Menu->UpdateMenuEntry(GetPostOrGet('menuID'), GetPostOrGet('menu_MenuID'), GetPostOrGet('menu_MenuText'), GetPostOrGet('menu_MenuLink'));
 	 						$out .= $this->_HomePage();
@@ -50,6 +50,11 @@
 	 						$out .= $this->_HomePage();
 	 						break;
 	 			case 'down':		$out .= $this->_Menu->ItemMoveDown(GetPostOrGet('menu_orderid'), GetPostOrGet('menu_id'));
+	 						$out .= $this->_HomePage();
+	 						break;
+	 			case 'delete':		$out .= $this->_DeleteMenuEntry(GetPostOrGet('menuID'));
+	 						break;
+	 			case 'deleteSure':	$out .= $this->_Menu->DeleteMenuEntry(GetPostOrGet('menuID'));
 	 						$out .= $this->_HomePage();
 	 						break;
 	 			default:		$out .= $this->_HomePage();
@@ -90,10 +95,10 @@
 					<span class=\"structure_row\">
 						<strong>" . $menuEntry->menu_text . "</strong>	 			
 	 					<span class=\"page_actions\">
-	 						<a href=\"admin.php?page=menueditor&amp;action=edit&amp;menu_id=" . $menuEntry->menu_id . "\"><img src=\"./img/edit.png\" class=\"icon\" alt=\"" . $adminLang['edit']. "\" title=\"" . $adminLang['edit'] . "\" height=\"16\" width=\"16\" /></a>
+	 						<a href=\"admin.php?page=menueditor&amp;action=edit&amp;menuID=" . $menuEntry->menu_id . "\"><img src=\"./img/edit.png\" class=\"icon\" alt=\"" . $adminLang['edit']. "\" title=\"" . $adminLang['edit'] . "\" height=\"16\" width=\"16\" /></a>
 	 						<a href=\"admin.php?page=menueditor&amp;action=up&amp;menu_orderid=" . $menuEntry->menu_orderid . "&amp;menu_id=" . $menuEntry->menu_menuid . "\"><img src=\"./img/up.png\" class=\"icon\" alt=\"" . $adminLang['move_up'] . "\" title=\"" . $adminLang['move_up'] . "\" height=\"16\" width=\"16\" /></a>
 	 						<a href=\"admin.php?page=menueditor&amp;action=down&amp;menu_orderid=" . $menuEntry->menu_orderid . "&amp;menu_id=" . $menuEntry->menu_menuid . "\"><img src=\"./img/down.png\" class=\"icon\" alt=\"" . $adminLang['move_down'] . "\" title=\"" . $adminLang['move_down'] . "\" height=\"16\" width=\"16\" /></a>
-	 						<a href=\"admin.php?page=menueditor&amp;action=delete&amp;menu_id=" . $menuEntry->menu_id . "\"><img src=\"./img/del.png\" class=\"icon\" alt=\"" . $adminLang['delete'] . "\" title=\"" . $adminLang['delete'] . "\" height=\"16\" width=\"16\" /></a>
+	 						<a href=\"admin.php?page=menueditor&amp;action=delete&amp;menuID=" . $menuEntry->menu_id . "\"><img src=\"./img/del.png\" class=\"icon\" alt=\"" . $adminLang['delete'] . "\" title=\"" . $adminLang['delete'] . "\" height=\"16\" width=\"16\" /></a>
 	 					</span>
 	 				</span>
 	 			</li>\r\n";
@@ -145,6 +150,23 @@
 					</div>
 				</form>
 			</fieldset>";
+	 		
+	 		return $out;
+	 	}
+	 	
+	 	function _DeleteMenuEntry($MenuID) {
+	 		$out = '';
+	 		$adminLang = $this->_AdminLang;
+	 		
+	 		$sql = "SELECT *
+	 			FROM " . DB_PREFIX . "menu
+	 			WHERE menu_id=$MenuID";
+	 		$menuResult = $this->_SqlConnection->SqlQuery($sql);
+	 		$menuEntry = mysql_fetch_object($menuResult);
+	 		
+	 		$out .= "\t\t\t" . sprintf($adminLang['Do you really want to delete the menuentry %menuEntryTitle%?'], $menuEntry->menu_text) . "<br />
+			<a href=\"admin.php?page=menueditor&amp;action=deleteSure&amp;menuID=$MenuID\" class=\"button\">" . $adminLang['yes'] . "</a>
+		 	<a href=\"admin.php?page=menueditor\" class=\"button\">" . $adminLang['no'] . "</a>";
 	 		
 	 		return $out;
 	 	}

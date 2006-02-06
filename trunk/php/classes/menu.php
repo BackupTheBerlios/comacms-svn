@@ -114,5 +114,12 @@
  			
  			return $out;
  		}
+ 		
+ 		function DeleteMenuEntry ($MenuID) {
+ 			$sql = "DELETE
+ 				FROM " . DB_PREFIX . "menu
+ 				WHERE menu_id=$MenuID";
+ 			$menuResult = $this->_SqlConnection->SqlQuery($sql);
+ 		}
  	}
 ?>

@@ -115,4 +115,5 @@
 	$admin_lang['menu_entry_link'] = 'Men&uuml;eintragsziel';
 	$admin_lang['name/contraction'] = 'Name/K&uuml;rzel';
 	$admin_lang['title'] = 'Titel';
+	$admin_lang['Do you really want to delete the menuentry %menuEntryTitle%?'] = 'Wollen sie den Men&uuml;eintrag &quot;%s&quot; wirklich l&ouml;schen?';
 ?>

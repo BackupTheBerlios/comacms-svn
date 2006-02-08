@@ -148,12 +148,18 @@
 			ORDER BY article_date DESC
 			LIMIT 0, $count";
 		$result = db_result($sql);
-		$out = '</p><div class="articles-block">';
+		$articlesTitle =  $config->Get('articles_title', '');
+		if($articlesTitle != '')
+			$articlesTitle = '<h3>' . $articlesTitle . '</h3>';
+		$out = '</p><div class="articles-block">' . $articlesTitle;
 		$imgmax = 100;
 		$inlinemenu_folder = $config->Get('thumbnailfolder', 'data/thumbnails/');
+		$dateFormat = $config->Get('articles_date_format', 'd.m.Y');
+		$dateFormat .= ' ' . $config->Get('articles_time_format', 'H:i:s'); 
 		while($data = mysql_fetch_object($result)) {
 			$thumb = '';
 			$size = '';
+			$showAuthor = $config->Get('articles_display_author', 1);
 			if($data->article_image != '') {
 				$filename = basename($data->article_image);
 				if(file_exists($inlinemenu_folder . $imgmax . '_' . $filename)) {
@@ -161,17 +167,20 @@
 					
 					$thumb = '<img class="article_image" title="' . $data->article_title . '" alt="' . $data->article_title . '" src="' . generateUrl($inlinemenu_folder . $imgmax . '_' . $filename) . '" />';
 					$size = getimagesize($inlinemenu_folder . $imgmax . '_' . $filename);
-					$size = ' style="min-height:' . ($size[1] - 13) . 'px"';
+					$size = ' style="min-height:' . ($size[1] - (13 * $showAuthor)) . 'px"';
 				}
 			}
 			
 			$out .= "\t\t\t<div class=\"article\">
 				<div class=\"article-title\">
-					<span class=\"article-date\">" . date('d.m.Y H:i:s', $data->article_date) . "</span>
+					<span class=\"article-date\">" . date($dateFormat, $data->article_date) . "</span>
 					$data->article_title
 				</div><div class=\"article_inside\"$size>
-				$thumb" . nl2br($data->article_description) . " <a href=\"article.php?id=$data->article_id\" title=\"Den vollst?ndigen Artikel '$data->article_title' lesen\">mehr...</a></div>
-				<div class=\"article-author\">" . getUserByID($data->article_creator) . "</div>
+				$thumb" . nl2br($data->article_description) . " <a href=\"article.php?id=$data->article_id\" title=\"Den vollst&auml;ndigen Artikel '$data->article_title' lesen\">mehr...</a></div>\r\n";
+					 
+			if($showAuthor == 1)	
+				$out .= "<div class=\"article-author\">" . getUserByID($data->article_creator) . "</div>\r\n";
+			$out .= "
 			</div>\r\n";
 		}
 		$out .= '</div><p>';
@@ -203,8 +212,7 @@
 	function MakeSecure($handle) {
 		if($handle !== null) {
 			if(is_array($handle)) {
-				while(next($handle))
-					$hanlde[key($handle)] = MakeSecure(current($handle));
+				array_map(MakeSecure, $handle);
 			}
 			else {
 				if(get_magic_quotes_gpc())

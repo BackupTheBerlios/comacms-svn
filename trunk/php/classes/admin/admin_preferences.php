@@ -107,17 +107,24 @@
 										$pageStructure->LoadParentIDs();
 										$out .= "<select id=\"setting_" . $setting['name'] . "\" name=\"setting_" . $setting['name'] . "\">" . $pageStructure->PageStructurePulldown(0, 0, '',  -1, $setting['default']) . '</select>';
 										break;
+							// 'bool'-options-list
+							case 'bool':		$out .= "<select id=\"setting_" . $setting['name'] . "\" name=\"setting_" . $setting['name'] . "\">
+												<option value=\"1\"" . (($setting['default'] == 1 ) ? ' selected="selected"': '') . ">" . $adminLang['yes'] . "</option>
+												<option value=\"0\"" . (($setting['default'] == 0 ) ? ' selected="selected"': '') . ">" . $adminLang['no'] . "</option>
+											</select>";
+										break;
 							// Every thing else
 							default: 		$out .= "<input id=\"setting_" . $setting['name'] . "\" name=\"setting_" . $setting['name'] . "\" type=\"text\" value=\"" . $setting['default'] . "\"/>";
 										break;
 						}
  					$out .= "</div>";
  				}
+ 				$out .= "<div class=\"row\"><input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\"/>
+ 				<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\"/></div>";
+ 				
  				$out .= "</fieldset>";
  			}
- 			$out .= "<input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\"/>
- 				<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\"/>
- 				</form>";
+ 			$out .= "</form>";
  			return $out;
  		}
  		
@@ -148,7 +155,8 @@
 			foreach($this->_Preferences->Settings as $settings) {
  				foreach($settings as $setting) {
  					$settingValue = GetPostOrGet('setting_' . $setting['name']);
- 					if(!empty($settingValue)) {
+ 					//TODO : value-type-check!!
+ 					if(!empty($settingValue) || (is_numeric($settingValue) && $settingValue == 0) || $setting['datatype'] == 'string0') {
  						$currentValue = $this->_Config->Get($setting['name']);
  						// Check if something has changed
  						if($currentValue != $settingValue) {

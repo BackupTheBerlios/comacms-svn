@@ -42,8 +42,12 @@
 		else
 			$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
 	}
-	if($page->FindTagInText('articles-preview'))
-		$page->ReplaceTagInText('articles-preview', articlesPreview(5));
+	if($page->FindTagInText('articles-preview')){
+		$articlesDisplayCount = $config->Get('articles_display_count', 6);
+		if(!is_numeric($articlesDisplayCount))
+			$articlesDisplayCount = 6;
+		$page->ReplaceTagInText('articles-preview', articlesPreview($articlesDisplayCount));
+	}
 	include('news.php');
 	
 	if($page->FindTagInText('news')) {

@@ -41,10 +41,12 @@
 		 	
 		function Save($name, $value) {
 			if(isset($this->Elements[$name])) {
+				if($value != $this->Elements[$name]) {
 				$sql = "UPDATE " . DB_PREFIX . "config
 					SET config_value = '$value'
 					WHERE config_name = '$name'";
 				db_result($sql);
+				}
 			}
 			else {
 				$sql = "INSERT INTO " . DB_PREFIX . "config (config_name , config_value )

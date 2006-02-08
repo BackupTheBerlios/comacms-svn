@@ -26,20 +26,25 @@
 			FROM " . DB_PREFIX . "news
 			ORDER BY date DESC LIMIT 0, $last";
 		$result = db_result($sql);
-		$return_str = '</p><div class="news-block">';
+		$newsTitle =  $config->Get('news_title', '');
+		if($newsTitle != '')
+			$newsTitle = '<h3>' . $newsTitle . '</h3>';
+		$returnStr = '</p><div class="news-block">' . $newsTitle;
+		$dateFormat = $config->Get('news_date_format', 'd.m.Y');
+		$dateFormat .= ' ' . $config->Get('news_time_format', 'H:i:s');
 		while($row = mysql_fetch_object($result)) {
-			$date_format = $config->Get('news_date_format', 'd.m.Y');
-			$date_format .= ' ' . $config->Get('news_time_format', 'H:i:s'); 
-			$return_str .= "\t\t\t<div class=\"news\">					
+			$returnStr .= "\t\t\t<div class=\"news\">					
 				<div class=\"news-title\">
-					<span class=\"news-date\">" . date($date_format, $row->date) . "</span>
+					<span class=\"news-date\">" . date($dateFormat, $row->date) . "</span>
 					 $row->title
 				</div>
-				" . nl2br($row->text) . "
-				<div class=\"news-author\">" . getUserByID($row->userid) . "</div>
-				</div>\r\n";	
+				" . nl2br($row->text) . "\r\n";
+					 
+			if($config->Get('news_display_author', 1) == 1)	
+				$returnStr .= "<div class=\"news-author\">" . getUserByID($row->userid) . "</div>\r\n";
+			$returnStr .= "</div>\r\n";	
 		}
-		$return_str .= "</div><p>";
-		return $return_str;
+		$returnStr .= "</div><p>";
+		return $returnStr;
 	}
 ?>

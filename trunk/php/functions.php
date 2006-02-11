@@ -212,7 +212,7 @@
 	function MakeSecure($handle) {
 		if($handle !== null) {
 			if(is_array($handle)) {
-				array_map(MakeSecure, $handle);
+				array_map('MakeSecure', $handle);
 			}
 			else {
 				if(get_magic_quotes_gpc())
@@ -223,9 +223,8 @@
 		}
 		return $handle;
 	}
-
-	function GetMimeContentType($filename)
-	{
+	
+	function GetMimeContentType ($filename) {
 		$mime = array(
 			'.ai' => 'application/postscript',
 			'.aif' => 'audio/x-aiff',

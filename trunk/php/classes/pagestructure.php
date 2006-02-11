@@ -42,9 +42,19 @@
 		 */
 		function SetPageDeleted($PageID) {
 			$sql = "UPDATE " . DB_PREFIX . "pages
-				SET  page_access='deleted', page_creator='$this->_User->ID', page_date='" . mktime() . "'
+				SET  page_access='deleted', page_creator='" . $this->_User->ID . "', page_date='" . mktime() . "'
 				WHERE page_id='$PageID'";
 			$this->_SqlConnection->SqlQuery($sql);
+		}
+		
+		function SetSubPagesDeleted($ParentPageID) {
+			$this->LoadParentIDs();
+			foreach($this->_ParentIDPages[$ParentPageID] as $element) {
+				if(!empty($this->_ParentIDPages[$element['id']]))
+					$this->SetSubPagesDeleted($element['id']);
+				$this->SetPageDeleted($element['id']);
+			}
+			
 		}
 		
 		function LoadData($PageID) {
@@ -60,20 +70,23 @@
 		}
 		
 		function LoadParentIDs() {
-			// TODO: ORDER BY page_sortid
-			$sql = "SELECT *
-		 		FROM " . DB_PREFIX . "pages
-		 		ORDER BY page_parent_id";
-		 	$pageResult = $this->_SqlConnection->SqlQuery($sql);
-	 		while($page = mysql_fetch_object($pageResult)) {
-	 			$this->_ParentIDPages[$page->page_parent_id][] =
-	 					array('id' => $page->page_id,
-	 						'name' => $page->page_name,
-	 						'type' => $page->page_type,
-	 						'lang' => $page->page_lang,
-	 						'title' => $page->page_title,
-	 						'access' => $page->page_access);
-	 		}
+			if(count($this->_ParentIDPages) <= 0) {
+				// TODO: ORDER BY page_sortid
+				$sql = "SELECT *
+			 		FROM " . DB_PREFIX . "pages
+		 			ORDER BY page_parent_id";
+		 		$pageResult = $this->_SqlConnection->SqlQuery($sql);
+	 			while($page = mysql_fetch_object($pageResult)) {
+		 			$this->_ParentIDPages[$page->page_parent_id][] =
+	 						array('id' => $page->page_id,
+		 						'name' => $page->page_name,
+	 							'type' => $page->page_type,
+	 							'lang' => $page->page_lang,
+	 							'title' => $page->page_title,
+	 							'access' => $page->page_access);
+	 				$this->_Pages[$page->page_id] = array('name' => $page->page_name, 'title' => $page->page_title);
+	 			}
+			}
 		}
 		
 		/**
@@ -84,6 +97,41 @@
 			$this->LoadData($PageID);
 			return !empty($this->_Pages[$PageID]);
 		}
+		
+		/**
+		 * @param integer PageID
+		 * @return boolean
+		 */
+		function PageHasSubPages($PageID, $IgnoreDeleted = true) {
+		 	$this->LoadParentIDs();
+		 	if(empty($this->_ParentIDPages[$PageID]))
+		 		return false;
+		 	else if($IgnoreDeleted){
+		 		foreach($this->_ParentIDPages[$PageID] as $element) {
+		 			if($element['access'] != 'deleted')
+		 				return true;
+		 		}
+		 		return false;
+		 	}
+		 	else
+		 		return true;
+		 	
+		}
+		
+		function MoveSubPagesFromTo($ParentPageID, $NewParentPageID) {
+			$this->LoadParentIDs();
+			foreach($this->_ParentIDPages[$ParentPageID] as $element) {
+		 		$this->MoveSubPageTo($element['id'], $NewParentPageID);
+		 	}
+		}
+		
+		function MoveSubPageTo($PageID, $NewParentPageID) {
+			$sql = "UPDATE " . DB_PREFIX . "pages
+	 			SET page_parent_id=$NewParentPageID
+ 				WHERE page_id = $PageID";
+ 				$this->_SqlConnection->SqlQuery($sql);	
+		}
+		
 		
 		function GetPageData($PageID, $Field) {
 			$this->LoadData($PageID);

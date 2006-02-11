@@ -197,7 +197,7 @@
 		function LoadPage($pagename, $user) {
 			$load_old = false;
 			$change = GetPostOrGet('change');
-			if(is_numeric($change) && $user->isLoggedIn && $change != 0)
+			if(is_numeric($change) && $user->IsLoggedIn && $change != 0)
 				$load_old = true;
 			else
 				$change = 0;

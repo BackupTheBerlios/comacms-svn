@@ -27,15 +27,32 @@
  	class Admin_PageStructure extends Admin{
  		
  		/**
+ 		 * All pageIDs of the pages which are in the main-menu
  		 * @var array
  		 */
  		var $MenuPageIDs;
  		
-
+		/**
+		 * PageStructure functions
+		 * @var PageStructure
+		 */
  		var $_PageStructure;
+ 		/**
+ 		 * The current User
+ 		 * @var User;
+ 		 */
  		var $_User;
+ 		/**
+ 		 * A Config-link
+ 		 * @var Config
+ 		 */
  		var $_Config;
  		
+ 		/**
+ 		 * @param SqlConnection SqlConnection
+ 		 * @param array AdminLang
+ 		 * @return void
+ 		 */
  		function Admin_PageStructure(&$SqlConnection, &$AdminLang, &$User, &$Config) {
 			$this->_SqlConnection = &$SqlConnection;
 			$this->_AdminLang = &$AdminLang;
@@ -46,7 +63,7 @@
  		
  		/**
  		 * @return string
- 		 * @param action string
+ 		 * @param string Action
  		 */
 		 function GetPage($Action = '') {
 		 	$adminLang = &$this->_AdminLang;
@@ -55,7 +72,7 @@
 			if($Action != 'internHome')
 				$out .= "\t\t\t<h2>" . $adminLang['pagestructure'] . "</h2>\r\n";
 		 	switch ($Action) {
-		 		case 'deletePage':		$out .= $this->_deletePage();
+		 		case 'deletePage':	$out .= $this->_deletePage();
 		 					break;
 		 		case 'pageInfo':	$out .= $this->_infoPage();
 		 					break;
@@ -88,7 +105,6 @@
 		 	// Print out the default view
 		 	return $this->GetPage('internHome');
 		 }
-
 		 
 		 function _deletePage() {
 		 	$adminLang = &$this->_AdminLang;
@@ -101,10 +117,67 @@
 		 			$this->_PageStructure->SetPageDeleted($pageID);
 		 			return $this->GetPage('internHome');
 		 		}
-		 		else {//Do you realy want to delete the page &quot;%s&quot;?
-		 			$out = sprintf($adminLang['Do you really want to delete the page %page_title%?'], $this->_PageStructure->GetPageData($pageID, 'title')) . "<br />
-		 				<a href=\"admin.php?page=pagestructure&amp;action=delete&amp;page_id=$pageID&amp;confirmation=1\" class=\"button\">" . $adminLang['yes'] . "</a>
+		 		else if($confirmation == 2) {
+		 			$newParentPageID = GetPostOrGet('newParentPageID');
+		 			$action2 = GetPostOrGet('action2');
+		 			if($action2 == 'move') {
+		 				if(!is_numeric($newParentPageID))
+		 					return $this->GetPage('internHome');
+		 				$this->_PageStructure->MoveSubPagesFromTo($pageID, $newParentPageID);
+		 				$this->_PageStructure->SetPageDeleted($pageID);
+		 			}
+		 			else if($action2 == 'deleteAll') {
+		 				$this->_PageStructure->SetSubPagesDeleted($pageID);
+		 				$this->_PageStructure->SetPageDeleted($pageID);	
+		 			}
+		 			return $this->GetPage('internHome');
+		 		}
+		 		else {
+		 			$out = '';
+		 			if ($this->_PageStructure->PageHasSubPages($pageID, false)) {
+		 				$out .= "<fieldset>
+		 						<legend>Unterseiten vorhanden</legend>
+		 						<form action=\"admin.php\" method=\"post\">
+		 							<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+		 							<input type=\"hidden\" name=\"action\" value=\"deletePage\" />
+		 							<input type=\"hidden\" name=\"pageID\" value=\"$pageID\" />
+		 							<input type=\"hidden\" name=\"confirmation\" value=\"2\" />
+		 							<div class=\"row error\">
+		 								Diese Seite besitzt eine oder mehrere Unterseiten, wie möchten sie mit diesen verfahren?
+		 							</div>
+		 							<div class=\"row\">
+		 								<label for=\"action2\">Aktion:
+		 									<span class=\"info\">...</span>
+		 								</label>
+		 								<select id=\"action2\" name=\"action2\">
+		 									<option value=\"move\">Alle Unterseiten verschieben</option>
+		 									<option value=\"deleteAll\">Alle Unterseiten löschen.</option>
+		 									<option value=\"nothing\">Alles beim Alten belassen</option>
+		 								</select>
+		 							</div>
+		 							<div class=\"row\">
+		 								<label for=\"newParentPageID\">Neue Elternseite:
+		 									<span class=\"info\">...</span>
+		 								</label>
+		 							<select id=\"newParentPageID\" name=\"newParentPageID\">";
+		 				$out .= $this->_structurePullDown(0, 0, '', $pageID, $pageID);
+		 				$out .= "</select>
+		 							</div>
+		 							<div class=\"row error\">
+		 								Mit dem Klicken auf OK wird die Aktion sofort durchgeführt und nicht noch einmal hinterfragt!
+		 							</div>
+		 							<div class=\"row\">
+		 								<a href=\"admin.php?page=pagestructure\" class=\"button\">" . $adminLang['back'] . "</a>
+		 								<input type=\"submit\" class=\"button\" value=\"" . $adminLang['ok'] . "\"/>
+		 							</div>	
+		 						</form>
+		 					</fieldset>";
+		 			}
+		 			else {
+		 				$out .= sprintf($adminLang['Do you really want to delete the page %page_title%?'], $this->_PageStructure->GetPageData($pageID, 'title')) . "<br />
+		 				<a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=$pageID&amp;confirmation=1\" class=\"button\">" . $adminLang['yes'] . "</a>
 		 					<a href=\"admin.php?page=pagestructure\" class=\"button\">" . $adminLang['no'] . "</a>";
+		 			}
 		 			return $out;
 		 		}
 		 	}
@@ -1132,6 +1205,16 @@
 				<tr>
 					<th>Bearbeitet am</th>
 					<td>" . date("d.m.Y H:i:s",$page->page_date) . "</td>
+				</tr>";
+				$sql = "SELECT *
+				FROM " . DB_PREFIX . "inlinemenu_entries
+				WHERE inlineentry_page_id = $page_id
+				ORDER BY inlineentry_sortid ASC";
+				$inlineMenuEntriesResult = $this->_SqlConnection->SqlQuery($sql);
+				
+				$out .= "<tr>
+					<th>" . $admin_lang['inlinemenu'] . "</th>
+					<td>" . mysql_num_rows($inlineMenuEntriesResult) . " Einträge [<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$page_id\">" . $admin_lang['inlinemenu'] . "</a>]</td>
 				</tr>
 			</table>\r\n";
 				

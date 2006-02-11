@@ -481,13 +481,15 @@ table.text_table th {
 
 .page_lang {
  position: absolute;
- right: 15em;
+ right: 9em;
 }
 
 .page_actions {
  width: 12em;
  position: absolute;
  right: 0.3%;
+ text-align: right;
+ margin-right: 1em;
 }
 
 .structure_row {

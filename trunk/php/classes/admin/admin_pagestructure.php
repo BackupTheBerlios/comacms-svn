@@ -340,10 +340,10 @@
 		 				$out .= " <a href=\"index.php?page=" . $page['name'] . "\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen " . $page['title'] . "\" title=\"Anschauen\"/></a>";
 		 			// inlinemenu:
 		 			if($page['access'] != 'deleted')
-		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=" . $page['id'] . "\" title=\"Das Zusatzmen&uuml; f&uuml;r &quot;" . $page['title'] . "&quot; bearbeiten\">" . $adminLang['inlinemenu'] . "</a>";
+		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=" . $page['id'] . "\" title=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\"><img src=\"./img/inlinemenu.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\" title=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\"/></a>";
 		 			// delete:
 		 			if($page['access'] != 'deleted')
-		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['delete'] . "\" title=\"" . $adminLang['delete'] . "\"/></a>";
+		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($adminLang['delete_page_%page_title%'], $page['title']) . "\" title=\"" . sprintf($adminLang['delete_page_%page_title%'], $page['title']) . "\"/></a>";
 		 			$out .= '</span></span>' . $this->_Structure($page['id']);
 		 			$out .= "\t\t\t\t</li>\r\n";
 		 	}

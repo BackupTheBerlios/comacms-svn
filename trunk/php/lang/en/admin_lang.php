@@ -117,4 +117,6 @@
 	$admin_lang['name/contraction'] = 'Name/Contraction';
 	$admin_lang['title'] = 'Title';
 	$admin_lang['Do you really want to delete the menuentry %menuEntryTitle%?'] = 'Do you really want to delete the menuentry &quot;%s&quot;?';
+	$admin_lang['edit_inlinemenu_of_%page_title%'] = 'Edit the inlinemenu of &quot;%s&quot;';
+	$admin_lang['delete_page_%page_title%'] = 'Delete page &quot;%s&quot;';
 ?>

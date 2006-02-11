@@ -116,4 +116,6 @@
 	$admin_lang['name/contraction'] = 'Name/K&uuml;rzel';
 	$admin_lang['title'] = 'Titel';
 	$admin_lang['Do you really want to delete the menuentry %menuEntryTitle%?'] = 'Wollen sie den Men&uuml;eintrag &quot;%s&quot; wirklich l&ouml;schen?';
+	$admin_lang['edit_inlinemenu_of_%page_title%'] = 'Das Zusatzmen&uuml; der Seite &quot;%s&quot; bearbeiten';
+	$admin_lang['delete_page_%page_title%'] = 'L&ouml;schen der Seite &quot;%s&quot;';
 ?>

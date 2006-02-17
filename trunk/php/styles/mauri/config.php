@@ -4,7 +4,7 @@
  */
  $config['longname'] = 'Mauritius Style';
  $config['css-files'][]['all'] = 'style.css';
- $config['css-files'][]['print'] = 'printerstyle.css';
+ $config['css-files'][]['print'] = 'print.css';
  $config['css-files'][]['iefix']['lt IE 7'] = 'iefix.css';
  $config['css-files'][]['operafix'] = 'operafix.css'; 
  $config['template'] = 'mainpage.php';

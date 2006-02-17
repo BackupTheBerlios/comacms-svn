@@ -1,23 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="de">
-
-	<head>
-		<title>[PAGENAME] -> [TITLE]</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<link rel="stylesheet" href="[STYLE_PATH]/style.css" type="text/css" />
-		<meta name="author" content="Sebastian Willenborg" />
-	</head>
-	
-	<body>
-		<div class="top">HomepageName<br /><br />[POSITION]</div>
-		<div class="menuepart">
-			<ul id="menue">
-[MENU]
-			</ul>
+		<div id="all">
+			<div id="top">
+				<h1 id="title">ComaCMS</h1>
+			</div>
+			<ul id="menu">
+				<MENU:loop>
+				<li{LINK_STYLE}><a href="{LINK}">{LINK_TEXT}</a></li>
+				</MENU>		
+					</ul>
+			<div id="content">
+				<inlinemenu:condition>
+		<div id="inlinemenu">
+			{INLINEMENU_IMAGE}
+			<br />
+			{INLINEMENU_TEXT}
 		</div>
-		<div class="text">
-[TEXT]
+		</inlinemenu>
+				<div id="text">
+{TEXT}
+				</div>
+			</div>
+			<div id="bottom">
+				<a href="http://developer.berlios.de" title="BerliOS Developer"> <img src="http://developer.berlios.de/bslogo.php?group_id=5648" width="124" height="32" border="0" alt="BerliOS Developer Logo" /></a><br />
+				<a href="http://developer.berlios.de/projects/comacms" title="Coma Content Management System">&copy;2005 The ComaCMS-Team</a>
+			</div>
 		</div>
-	</body>
-	
-</html>

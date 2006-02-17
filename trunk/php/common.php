@@ -43,7 +43,6 @@
 	
 	$queries_count = 0;
 	define('DB_PREFIX', $d_pre);
-	//connect_to_db($d_user, $d_pw, $d_base, $d_server);
 	$sqlConnection = new Sql($d_user, $d_pw, $d_server);
 	$sqlConnection->Connect($d_base);
 	$config = new Config();
@@ -56,16 +55,9 @@
 	if(!empty($headerStyleName))
 		$styleName = $headerStyleName; 
 	$output->LoadTemplate('./styles/', $styleName);
-	$output->SetMeta('generator', 'ComaCMS 0.1');
+	$output->SetMeta('generator', 'ComaCMS 0.1 (http://comacms.berlios.de)');
 	$output->SetCondition('notinadmin', true);
 	
-	
-	//$Output->SetDoctype('')
-	/*$style_name = $config->Get('style', 'clear');
-	$style = GetPostOrGet('style');
-	if($style != '')
-		$style_name = $style; 
-	$page->LoadTemplate('./styles/' . $style_name);*/
 	if(!isset($extern_page) && endsWith($_SERVER['PHP_SELF'], 'index.php'))
 		$extern_page = $config->Get('default_page', 'home');
 	elseif(!isset($extern_page))
@@ -75,20 +67,8 @@
 		
 //	include_once("functions.php");
 	//include_once("counter.php");
-	//_start();
-	//
-	// load vars
-	//
-//	$sql = "SELECT *
-//		FROM " . DB_PREFIX . "config";
-//	$var_result = db_result($sql);
-//	while($var_data = mysql_fetch_object($var_result)) {
-//		$_N_ = 'internal_' . $var_data->config_name;
-//		$$_N_ = $var_data->config_value;
-//	}
-	//
-	// end
-	//
+
+	
 	
 	//
 	// if there is no sitename to load get the defaultssite

@@ -29,7 +29,7 @@
 	function page_sitepreview() {
 		global $admin_lang;
 		
-		$out = '<h2>' . $admin_lang['sitepreview'].'</h2><iframe src="index.php" class="sitepreview"></iframe>';
+		$out = '<h2>' . $admin_lang['sitepreview'].'</h2><iframe src="index.php" class="pagepreview"></iframe>';
 		return $out;
 	}
 
@@ -58,7 +58,7 @@
 			}
 		}
 	
-		$out .= "<iframe id=\"previewiframe\" src=\"./index.php?style=$style\" class=\"stylepreview\"></iframe>
+		$out .= "<iframe id=\"previewiframe\" class=\"pagepreview\" src=\"./index.php?style=$style\" class=\"stylepreview\"></iframe>
 		<form action=\"admin.php\" method=\"get\" >
 			<input type=\"hidden\" name=\"page\" value=\"sitestyle\" />
 			<label for=\"stylepreviewselect\">Style:
@@ -70,14 +70,16 @@
 			//
 			// check if the style really exists
 			//
-			if($entry != "." && $entry != ".." && file_exists("./styles/".$entry."/mainpage.php")) {
+			if($entry != "." && $entry != ".." && file_exists("./styles/".$entry."/config.php")) {
+				$config = array();
+				include("./styles/".$entry."/config.php");
 				//
 				// mark the selected style as selected in the list
 				//
 				if($entry == $style)
-					$out .= "\t\t\t\t\t<option value=\"".$entry."\" selected=\"selected\">".$entry."</option>\r\n";	
+					$out .= "\t\t\t\t\t<option value=\"".$entry."\" selected=\"selected\">".$config['longname']."</option>\r\n";	
 				else
-					$out .= "\t\t\t\t\t<option value=\"".$entry."\">".$entry."</option>\r\n";
+					$out .= "\t\t\t\t\t<option value=\"".$entry."\">".$config['longname']."</option>\r\n";
 			}
 		}
 		$styleFolder->close();

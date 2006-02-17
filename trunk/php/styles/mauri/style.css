@@ -190,12 +190,13 @@ p {
  padding-left: 4px;
  padding-right: 4px;
  padding-bottom: 2px;
- width: 75px;
+ min-width: 75px;
  height: 18px;
  text-align: center;
  vertical-align: middle;
  border-collapse: collapse;
  white-space: nowrap;
+ overflow: none;
 }
 
 #menu {
@@ -248,7 +249,8 @@ p {
 #inlinemenu {
  font-size: 1.6em;
  float: left;
- width: 200px;
+ width: 220px;
+
 }
 
 #inlinemenu  div {

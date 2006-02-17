@@ -59,7 +59,7 @@
 		 * @access public
 		 * @var integer
 		 */
-		var $PageID;
+		var $PageID = -1;
 		
 		/**
 		 * @access private
@@ -67,6 +67,7 @@
 		 */
 		var $_SqlConnection;
 		
+		var $Language = 'en';
 		/**
 		 * @access public
 		 * @return void
@@ -78,7 +79,7 @@
 		/**
 		 * @return void
 		 */
-		function SetText($text, $compiled = true) {
+		/*function SetText($text, $compiled = true) {
 			if(empty($text)) {
 				$text = '';
 				$compiled = true;
@@ -87,29 +88,29 @@
 				$this->Text = $text;
 			else
 				$this->Text = convertToPreHtml($text);	
-		}
+		}*/
 		
 		/**
 		 * @return void
 		 */
-		function ReplaceTagInTemplate($tag, $replace) {
+		/*function ReplaceTagInTemplate($tag, $replace) {
 			$this->Template = str_replace("[$tag]", $replace, $this->Template);
-		}
+		}*/
 		
 		/**
 		 * @return void
 		 */
-		function ReplaceTagInText($tag, $replace) {
+		/*function ReplaceTagInText($tag, $replace) {
 			$this->Text = str_replace("[$tag]", $replace, $this->Text);
-		}
+		}*/
 		
 		/**
-		 * @return void
+		 * @return string
 		 */	
-		function PositionOfPage($page_id , $between = ' > ', $link=true) {
+		function PositionOfPage($pageID = 0, $between = ' > ', $link = true) {
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages
-				WHERE page_id=$page_id";
+				WHERE page_id=$pageID";
 			$actual_result = $this->_SqlConnection->SqlQuery($sql);
 			$actual = mysql_fetch_object($actual_result);
 			$parent_id = $actual->page_parent_id;
@@ -134,43 +135,43 @@
 		}
 		
 		/**
-		 * @return string
+		 * @return array
 		 */
-		function GenerateMenu($menuid = 1, $PageID = -1) {
-			include($this->Templatefolder . '/menu.php');
-			$menu_out = '';
+		function GenerateMenu($menuid = 1) {
+			//include($this->Templatefolder . '/menu.php');
+			$menu = array();
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "menu
 				WHERE menu_menuid='$menuid'
 				ORDER BY menu_orderid ASC";
-			$menu_result = $this->_SqlConnection->SqlQuery($sql);
-			while($menu_data = mysql_fetch_object($menu_result)) {
-				if($menuid == 1) {
+			$menuResult = $this->_SqlConnection->SqlQuery($sql);
+			while($menuItem = mysql_fetch_object($menuResult)) {
+				/*if($menuid == 1) {
 						$menu_str = ($menu_data->menu_page_id == $PageID) ? $menu_actual_link : $menu_link;
 				}
 				else {
 						$menu_str = ($menu_data->menu_page_id == $PageID) ? $menu2_actual_link : $menu2_link;
-				}
+				}*/
 				
-				$menu_str = str_replace('[TEXT]', $menu_data->menu_text, $menu_str);
-				$link = $menu_data->menu_link;
+				//$menu_str = str_replace('[TEXT]', $menu_data->menu_text, $menu_str);
+				$link = $menuItem->menu_link;
 					if(substr($link, 0, 2) == 'l:')
-					$link = @$internal_page_root . 'index.php?page=' . substr($link, 2);
+						$link = 'index.php?page=' . substr($link, 2);
 					if(substr($link, 0, 2) == 'g:')
-						$link = @$internal_page_root . 'gallery.php?page=' . substr($link, 2);
+						$link = 'gallery.php?page=' . substr($link, 2);
 					if(substr($link, 0, 2) == 'a:')
-						$link = @$internal_page_root . 'admin.php?page=' . substr($link, 2);
+						$link = 'admin.php?page=' . substr($link, 2);
 						
-				$menu_str = str_replace('[LINK]', $link, $menu_str);
-				$new = $menu_data->menu_new;
+				//$menu_str = str_replace('[LINK]', $link, $menu_str);
+				/*$new = $menu_data->menu_new;
 					if($new == 'yes')
 					$new = 'target="_blank" ';
 					else
-					$new = '';
-				$menu_str = str_replace('[NEW]', $new, $menu_str);
-				$menu_out .= $menu_str . "\r\n";
+					$new = '';*/
+				//$menu_str = str_replace('[NEW]', $new, $menu_str);
+				$menu[] = array('LINK_TEXT' => $menuItem->menu_text, 'LINK' => $link, 'LINK_STYLE' => ($menuItem->menu_page_id == $this->PageID) ? ' class="actual"' : '');
 			}
-			return $menu_out;
+			return $menu;
 		}
 		
 		/**
@@ -238,6 +239,7 @@
 			$this->Title = $page_data->page_title;
 			$this->PositionOfPage($page_data->page_id);
 			$this->PageID = $page_data->page_id;
+			$this->Language = $page_data->page_lang;
 			if($page_data->page_type == 'text') {
 				include('./classes/textpage.php');
 				$textpage = new TextPage($page_data->page_id, $change);
@@ -255,19 +257,19 @@
 		/**
 		 * @return void
 		 */
-		function LoadTemplate($templatefolder) {
+		/*function LoadTemplate($templatefolder) {
 			if(empty($templatefolder))
 				$templatefolder = './styles/clear';
 			$this->Templatefolder = $templatefolder;
 			$template_file = fopen($templatefolder . '/mainpage.php', 'r');
 			$this->Template = fread($template_file, filesize($templatefolder . '/mainpage.php'));
 			fclose($template_file);
-		}
+		}*/
 		
 		/**
 		 * @return string
 		 */
-		function OutputHTML() {
+		/*function OutputHTML() {
 			global $config;
 			$default_page = $config->Get('default_page', '0');
 			if($this->PageID == $default_page)
@@ -290,6 +292,6 @@
 				$this->Template = str_replace('[MENU2]', $this->GenerateMenu(2, $this->PageID), $this->Template);;
 			$this->Template = str_replace('<p></p>', '', $this->Template);
 			return $this->Template;
-		}
+		}*/
 	}
 ?>

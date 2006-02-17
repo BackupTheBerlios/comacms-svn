@@ -36,7 +36,7 @@
 	include('classes/user.php');
 	include('classes/inlinemenu.php');
 	include('functions.php');
-	
+	include('lib/comalate/comalate.php');
 	$lib = new ComaLib();
 	
 	$extern_page = GetPostOrGet('page');	
@@ -48,17 +48,31 @@
 	$sqlConnection->Connect($d_base);
 	$config = new Config();
 	$config->LoadAll();
-	$page = new OutputPage($sqlConnection);
 	$user = new User();
-	$style_name = $config->Get('style', 'clear');
+	//$page = new OutputPage($sqlConnection);
+	$output = new ComaLate();
+	$styleName = $config->Get('style', 'default');
+	$headerStyleName = GetPostOrGet('style');
+	if(!empty($headerStyleName))
+		$styleName = $headerStyleName; 
+	$output->LoadTemplate('./styles/', $styleName);
+	$output->SetMeta('generator', 'ComaCMS 0.1');
+	$output->SetCondition('notinadmin', true);
+	
+	
+	//$Output->SetDoctype('')
+	/*$style_name = $config->Get('style', 'clear');
 	$style = GetPostOrGet('style');
 	if($style != '')
 		$style_name = $style; 
-	$page->LoadTemplate('./styles/' . $style_name);
+	$page->LoadTemplate('./styles/' . $style_name);*/
 	if(!isset($extern_page) && endsWith($_SERVER['PHP_SELF'], 'index.php'))
 		$extern_page = $config->Get('default_page', 'home');
 	elseif(!isset($extern_page))
 		$extern_page = '';
+		
+		
+		
 //	include_once("functions.php");
 	//include_once("counter.php");
 	//_start();
@@ -98,8 +112,13 @@
 		$pagePrefix = 'a:';
 	elseif(endsWith($_SERVER['PHP_SELF'], 'special.php'))
 		$pagePrefix = 's:';
+	else
+		$pagePrefix = '';
+	
 	
 	$user->SetPage($pagePrefix . $extern_page, $config);
+	
+	
 //	set_usercookies();
 	//
 	// TOOD : GET AUTHORISATION

@@ -58,7 +58,7 @@
 		$want = GetPostOrGet('want');
 		$title = 'Seite nicht gefunden.';
 		$text = "Die Seite mit dem Namen &quot;$want&quot; wurde leider nicht gefunden.<br />
-			Falls die Seite aber da sein m?sste, melden sie sich bitte beim Seitenbetreiber.";
+			Falls die Seite aber da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.";
 	}
 	elseif($extern_page == '410') {	//Gone/Deleted
 		$text = ' '; 
@@ -86,12 +86,13 @@
 		header('Location: index.php');
 		die();
 	}
-	$page->Title = $title;
-	$page->SetText($text);
-	$page->Template = str_replace("[INLINEMENU]", '', $page->Template);
-	$page->Template = str_replace("[POSITION]", "<a href=\"special.php?page=$extern_page\">$title</a>", $page->Template);
-	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
-	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
-	echo $page->OutputHTML();
+	$output->Title = $title;
+	$output->SetReplacement('TEXT', $text);
+	$output->SetReplacement('PATH', "<a href=\"special.php?page=$extern_page\">$title</a>");
+	$output->SetCondition('notathome', true);
+	$outputpage = new OutputPage($sqlConnection);
+	$output->SetReplacement('MENU' , $outputpage->GenerateMenu());
+	$output->SetReplacement('MENU2' , $outputpage->GenerateMenu(2));
+	$output->PrintOutput();
 	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sqlConnection->QueriesCount .' SQL queries -->';
 ?>

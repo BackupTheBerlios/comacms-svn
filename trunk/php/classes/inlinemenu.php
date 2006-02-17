@@ -24,30 +24,31 @@
 		 * @var Page 
 		 * @access public
 		 */
-		var $Page = null;
+		//var $Page = null;
 		
 		/**
-		 * @param Page Üage
+		 * @param Page Page
 		 * @return void
 		 */		 
-		function InlineMenu($Page) {
-			if(!empty($Page))
-				$this->Page = $Page;
-		}
+		/*function InlineMenu($PageID) {
+			//if(!empty($Page))
+				$this->PageID = $PageID;
+		}*/
 		
 		/**
-		 * @return string The html-code for the inlinemenu, based on the style files
+		 * @return array
 		 */
-		function LoadInlineMenu() {
+		function LoadInlineMenu($SqlConnection ,$PageID) {
 			$sql = "SELECT inlinemenu_html, inlinemenu_image, inlinemenu_image_thumb, inlinemenu_image_title
 				FROM " . DB_PREFIX . "inlinemenu
-				WHERE page_id = " . $this->Page->PageID;
-			$inlinemenu_result = db_result($sql);
-			$out = '';
+				WHERE page_id = $PageID";
+			$inlinemenu_result = $SqlConnection->SqlQuery($sql);
+			$replacements = array();
 			if($inlinemenu = mysql_fetch_object($inlinemenu_result)) {
 				if($inlinemenu->inlinemenu_html != ''  || $inlinemenu->inlinemenu_image_thumb!= '') {
-					include($this->Page->Templatefolder . '/menu.php');
-					$out = str_replace('[TEXT]', $inlinemenu->inlinemenu_html, $menu_inline);
+					//include($this->Page->Templatefolder . '/menu.php');
+					///$out = str_replace('[TEXT]', $inlinemenu->inlinemenu_html, $menu_inline);
+					$replacements['INLINEMENU_TEXT'] = $inlinemenu->inlinemenu_html;
 					$imageString = '';
 					if(file_exists($inlinemenu->inlinemenu_image_thumb)){
 						list($imageWidth, $imageHeight) = getimagesize($inlinemenu->inlinemenu_image_thumb);
@@ -62,11 +63,12 @@
 	</div>
 </div>";
 					}
-					$out = str_replace('[IMG]', $imageString, $out);
+					//$out = str_replace('[IMG]', $imageString, $out);
+					$replacements['INLINEMENU_IMAGE'] = $imageString;
 				}
 			}
 			
-			return $out;
+			return $replacements;
 		}
 	}
 ?>

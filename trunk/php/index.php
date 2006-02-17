@@ -31,63 +31,39 @@
 	 */
 	define("COMACMS_RUN", true);
 	include('common.php');
+	//$Output->SetReplacement('TEXT' , 'hallo');
+	$outputpage = new OutputPage($sqlConnection);
+	$outputpage->LoadPage($extern_page, $user);
 	
-	$page->LoadPage($extern_page, $user);
-	if($page->FindTag('INLINEMENU')) {
-		$inlinemenu = new InlineMenu($page);
-		$inlinemenu_html = $inlinemenu->LoadInlineMenu();
-		$page->ReplaceTagInTemplate('INLINEMENU', $inlinemenu_html);
-		if($inlinemenu_html != '')
-			$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "$1", $page->Template);
-		else
-			$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
+	$output->SetReplacement('MENU' , $outputpage->GenerateMenu());
+	$output->SetReplacement('MENU2' , $outputpage->GenerateMenu(2));
+	$output->SetReplacement('PATH' , $outputpage->Position);
+	$output->Title = $outputpage->Title;
+	$output->Language = $outputpage->Language;
+	$inlineMenu = InlineMenu::LoadInlineMenu($sqlConnection, $outputpage->PageID);
+	if(count($inlineMenu) > 0) {
+		$output->SetCondition('inlinemenu', true);
+		$output->SetReplacement($inlineMenu);
 	}
-	if($page->FindTagInText('articles-preview')){
+	if($outputpage->PageID != $config->Get('default_page', '1'))
+		$output->SetCondition('notathome', true);
+	
+	if(strpos($outputpage->Text, '[articles-preview]') !== false) {
 		$articlesDisplayCount = $config->Get('articles_display_count', 6);
 		if(!is_numeric($articlesDisplayCount))
 			$articlesDisplayCount = 6;
-		$page->ReplaceTagInText('articles-preview', articlesPreview($articlesDisplayCount));
+		$outputpage->Text = str_replace('[articles-preview]', articlesPreview($articlesDisplayCount), $outputpage->Text);
 	}
-	include('news.php');
-	
-	if($page->FindTagInText('news')) {
+	if(strpos($outputpage->Text, '[news]') !== false) {
+		include('news.php');
 		$news_display_count = $config->Get('news_display_count', 6);
 		if(!is_numeric($news_display_count))
 			$news_display_count = 6;
-		$page->ReplaceTagInText('news', getNews($news_display_count));
+		$outputpage->Text = str_replace('[news]', getNews($news_display_count), $outputpage->Text);
 	}
-	if($page->FindTagInText('dates'))
-		$page->ReplaceTagInText('dates', nextDates(10));
-	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
-	//else
-	//	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
-/*	$sql = "SELECT cont.*, inline.*
-		FROM ( " . DB_PREFIX. "pages_content cont
-		LEFT JOIN " . DB_PREFIX . "inlinemenu inline ON inline.inlinemenu_id = cont.page_inlinemenu )
-		WHERE cont.page_name='$extern_page' AND cont.page_type='text'";
-*///	$page_result = db_result($sql);
-//	if(!$page_result)
-//		die("bad error:  no pagedata found");
-//	if(!($page_data = mysql_fetch_object($page_result)))
-//		die("bad error:  no sitedata found");
-//	$title = $page_data->page_title;
-//	$text = $page_data->page_html;
-	//
-	// end
-	//
-	// textcompiler
-	//
-	/*
-	while(eregi("\[var:", $text)) {
-		$pos = strpos ($text, "[var:");
-		$pos2 = strpos ($text, "]",$pos);
-		$str = substr($text,$pos + 5,$pos2 - $pos - 5);
-		$str2 = "internal_".$str;
-		$text = str_replace("[var:".$str."]", @$$str2, $text);
-	}*/
-	//
-	// end
-	//
+	if(strpos($outputpage->Text, '[dates]') !== false)
+		$outputpage->Text = str_replace('[dates]', nextDates(10), $outputpage->Text);
+	
 /*	if (strpos ($page, "[gbook-")) {
 		include("gbook.php");
 		$page = str_replace("[gbook-input]", gbook_input(), $page);
@@ -99,11 +75,8 @@
 		$page = str_replace("[contact]", contact_formular(), $page);
 	}*/
 
-//	$page = str_replace("[dates]", nextDates(10), $page);
-	//
-	// end
-	//
 
-	echo $page->OutputHTML();
+	$output->SetReplacement('TEXT' , $outputpage->Text);
+	$output->PrintOutput();
 	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sqlConnection->QueriesCount .' SQL queries -->';
 ?>

@@ -212,7 +212,7 @@
 	function MakeSecure($handle) {
 		if($handle !== null) {
 			if(is_array($handle)) {
-				array_map('MakeSecure', $handle);
+				$handle = array_map('MakeSecure', $handle);
 			}
 			else {
 				if(get_magic_quotes_gpc())

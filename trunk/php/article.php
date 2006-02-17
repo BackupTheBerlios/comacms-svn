@@ -82,21 +82,19 @@
 		$text .= "\t\t\t</table>";
 	}
 	
-	if($page->FindTag('INLINEMENU')) {
-		$page->ReplaceTagInTemplate('INLINEMENU', '');
-		$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
-	}
-	$page->SetText($text);
-	$page->Title .= $title;
-	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '$1', $page->Template);
-		
+	$output->SetReplacement('TEXT', $text);
+	$output->Title .= $title;
+	$output->SetCondition('notathome', true);	
 	if(isset($position))
-		$page->Position = "<a href=\"article.php\">Artikel</a> -> <a href=\"article.php?id=$article_data->article_id\">$position</a>";
+		$output->SetReplacement('PATH', "<a href=\"article.php\">Artikel</a> -> <a href=\"article.php?id=$article_data->article_id\">$position</a>");
 	else
-		$page->Position = "<a href=\"article.php\">Artikel</a>";
+		$output->SetReplacement('PATH', "<a href=\"article.php\">Artikel</a>");
+	$outputpage = new OutputPage($sqlConnection);
+	$output->SetReplacement('MENU' , $outputpage->GenerateMenu());
+	$output->SetReplacement('MENU2' , $outputpage->GenerateMenu(2));
 	//
 	// end
 	//
-	echo $page->OutputHTML();
+	$output->PrintOutput();
 	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sqlConnection->QueriesCount .' SQL queries -->';
 ?>

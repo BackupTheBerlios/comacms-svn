@@ -156,31 +156,25 @@
 	/**
 	 * @ignore
 	 */
-	include($page->Templatefolder . '/menu.php');
-	$menu = '';
+	$menu = array();
+	
 	foreach($menu_array as $part) {
 		if($extern_page == $part[1])
-			$menu_str = $menu_actual_link;
+			$linkStyle = ' class="actual"';
 		else
-			$menu_str = $menu_link;
-		$menu_str = str_replace('[TEXT]', $part[0], $menu_str);
-		$menu_str = str_replace('[LINK]', 'admin.php?page=' . $part[1], $menu_str);
-		$menu_str = str_replace('[NEW]', '', $menu_str);
-		$menu .= $menu_str . "\r\n";
+			$linkStyle = '';
+		$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'admin.php?page=' . $part[1], 'LINK_STYLE' => $linkStyle);
 	}
+	$output->SetReplacement("MENU" , $menu);
+	$output->SetReplacement("TEXT" , $text);
+	$output->Title = $title;
+	$output->SetCondition('notathome', true);
+	$output->SetCondition('notinadmin', false);
 	$path = '';
 	if($extern_page != 'admincontrol')
 		$path = " -> <a href=\"admin.php?page=$extern_page\">$title</a>$path_add";
-	$page->Template = str_replace('[POSITION]', "<a href=\"admin.php?page=admincontrol\">Admin</a>$path", $page->Template);
-	$page->Template = str_replace('[MENU]', $menu, $page->Template);
-	$page->Title = $title;
-	$page->Template = str_replace('[MENU2]', '', $page->Template);
-	$page->Text = $text;
+	$output->SetReplacement('PATH', "<a href=\"admin.php?page=admincontrol\">Admin</a>$path");
 	
-	$page->Template = str_replace('[INLINEMENU]', '', $page->Template);
-	$page->Template = preg_replace("/\<forinlinemenu\>(.+?)\<\/forinlinemenu\>/s", "", $page->Template);
-	$page->Template = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", '', $page->Template);
-	
-	echo $page->OutputHTML();
+	$output->PrintOutput();
 	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sqlConnection->QueriesCount .' SQL queries -->';
 ?>

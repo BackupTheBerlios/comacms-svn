@@ -12,7 +12,9 @@ height: 100%;
  padding-left: 10px;
  margin-top: -1px;
 }
-
+#secondmenu li {
+ width: 75px;
+}
 .sitepreview, #previewiframe { /*FIXME: make only one classss*/
  width: 820px;
 }
@@ -65,4 +67,8 @@ textarea.edit {
 
 .full_width {
  width: 93%;
+}
+
+#top {
+	margin-top:-1em;
 }

@@ -31,7 +31,6 @@
 	 */
 	define("COMACMS_RUN", true);
 	include('common.php');
-	//$Output->SetReplacement('TEXT' , 'hallo');
 	$outputpage = new OutputPage($sqlConnection);
 	$outputpage->LoadPage($extern_page, $user);
 	
@@ -41,7 +40,26 @@
 	$output->Title = $outputpage->Title;
 	$output->Language = $outputpage->Language;
 	$inlineMenu = InlineMenu::LoadInlineMenu($sqlConnection, $outputpage->PageID);
-	if(count($inlineMenu) > 0) {
+	$modules = array();
+	if(preg_match_all("/{(:([A-Za-z0-9_.-]+)(\?(.+?))?)}/s", $outputpage->Text, $moduleMatches)) {
+		foreach($moduleMatches[2] as $key => $moduleName) {
+			if(file_exists('./modules/' . $moduleName . '/' . $moduleName . '_module.php')) {
+				$modules[] = array('moduleName' => $moduleName, 'moduleParameter' => $moduleMatches[4][$key], 'identifer' => $moduleMatches[0][$key]);
+			}
+		}
+		//print_r($modules);
+	}
+	foreach($modules as $module) {
+		$moduleName = $module['moduleName'];
+		$moduleParameter = $module['moduleParameter'];
+		include('./modules/' . $moduleName . '/' . $moduleName . '_module.php');
+		if(!isset($$moduleName)) {
+			$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');
+			$$moduleName = $newClass($sqlConnection, $user, $admin_lang, $config, $output, $lib);
+		}
+		$outputpage->Text = str_replace($module['identifer'], $$moduleName->UseModule($module['identifer'], str_replace('&amp;', '&', $moduleParameter)), $outputpage->Text);
+	}
+	/*if(count($inlineMenu) > 0) {
 		$output->SetCondition('inlinemenu', true);
 		$output->SetReplacement($inlineMenu);
 	}
@@ -63,7 +81,7 @@
 	}
 	if(strpos($outputpage->Text, '[dates]') !== false)
 		$outputpage->Text = str_replace('[dates]', nextDates(10), $outputpage->Text);
-	
+	*/
 /*	if (strpos ($page, "[gbook-")) {
 		include("gbook.php");
 		$page = str_replace("[gbook-input]", gbook_input(), $page);
@@ -77,6 +95,7 @@
 
 
 	$output->SetReplacement('TEXT' , $outputpage->Text);
-	$output->PrintOutput();
+	$output->GenerateOutput();
+	echo $output->GeneratedOutput;
 	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sqlConnection->QueriesCount .' SQL queries -->';
 ?>

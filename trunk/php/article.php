@@ -95,6 +95,7 @@
 	//
 	// end
 	//
-	$output->PrintOutput();
+	$output->GenerateOutput();
+	echo $output->GeneratedOutput;
 	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sqlConnection->QueriesCount .' SQL queries -->';
 ?>

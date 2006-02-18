@@ -175,6 +175,7 @@
 		$path = " -> <a href=\"admin.php?page=$extern_page\">$title</a>$path_add";
 	$output->SetReplacement('PATH', "<a href=\"admin.php?page=admincontrol\">Admin</a>$path");
 	
-	$output->PrintOutput();
+	$output->GenerateOutput();
+	echo $output->GeneratedOutput;
 	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sqlConnection->QueriesCount .' SQL queries -->';
 ?>

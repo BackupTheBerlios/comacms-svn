@@ -1,6 +1,7 @@
 <?php
 /**
- * @package ComaLate
+ * @package ComaCMS
+ * @subpackage ComaLate
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
@@ -24,20 +25,22 @@
 	/**
 	 * ComaLate Template Engine
 	 * @package ComaLate
+	 * @subpackage ComaLate
 	 */
  	class ComaLate {
  		
+ 		var $Language = 'en';
+ 		var $Title = '';
+ 		var $Charset = 'UTF-8';
+ 		var $Template = '';
+ 		var $GeneratedOutput = '';
  		
  		var $_Meta = array(); 
  		var $_Replacements = array();
  		var $_ReplacementsArrays = array();
  		var $_Conditions = array();
  		var $_Doctype = '';	
- 		var $Language = 'en';
- 		var $Title = '';
- 		var $Charset = 'UTF-8';
-		var $_CssFiles = '';
-		var $Template = '';
+ 		var $_CssFiles = '';
 		var $_Config;
 		
  		function ComaLate() {
@@ -157,9 +160,10 @@
  		}
  		
  		function _Replace($Match) {
+ 			
  			if(array_key_exists($Match, $this->_Replacements))
  				return $this->_Replacements[$Match];
- 			return "{$Match}";
+ 			return "\{$Match}";
  		}
  		
  		function _RepeatReplace($Match, $Replacement) {
@@ -194,12 +198,12 @@
  			}
  		}
  		
- 		function PrintOutput() {
- 			echo $this->_Doctype;
- 			echo "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"$this->Language\" lang=\"$this->Language\">\r\n\t<head>\r\n\t\t<title>$this->Title</title>\r\n\t\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$this->Charset\" />\r\n";
+ 		function GenerateOutput() {
+ 			$document = $this->_Doctype;
+ 			$document .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"$this->Language\" lang=\"$this->Language\">\r\n\t<head>\r\n\t\t<title>$this->Title</title>\r\n\t\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$this->Charset\" />\r\n";
  			if (count($this->_Meta) > 0) {
  				foreach($this->_Meta as $metaName => $metaValue) {
- 					echo "\t\t<meta name=\"$metaName\" content=\"$metaValue\" />\r\n";
+ 					$document .= "\t\t<meta name=\"$metaName\" content=\"$metaValue\" />\r\n";
  				}
  			}
  			
@@ -216,14 +220,16 @@
 					}
 				}
 			}
-			
-			$this->Template = preg_replace("/<([A-Za-z0-9_]+)\:loop>(.+?)<\/\\1>/es", "\$this->_RepeatReplace('\\1', '\\2')", $this->Template);
 			$this->Template = preg_replace( '/{(.+?)}/e', "\$this->_Replace('\\1')", $this->Template);
+			$this->Template = preg_replace( '/{(.+?)}/e', "\$this->_Replace('\\1')", $this->Template);
+			$this->Template = preg_replace("/<([A-Za-z0-9_]+)\:loop>(.+?)<\/\\1>/es", "\$this->_RepeatReplace('\\1', '\\2')", $this->Template);
+			
 			$this->Template = str_replace('<p></p>', '', $this->Template);
-			echo $this->_CssFiles;
-			echo "\t</head>\r\n\t<body>\r\n";
-			echo $this->Template;
- 			echo "\t</body>\r\n</html>";
+			$document .= $this->_CssFiles;
+			$document .= "\t</head>\r\n\t<body>\r\n";
+			$document .= $this->Template;
+ 			$document .= "\t</body>\r\n</html>";
+ 			$this->GeneratedOutput = $document;
  		}
  	}
 ?>

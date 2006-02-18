@@ -35,8 +35,9 @@
 	include('classes/config.php');
 	include('classes/user.php');
 	include('classes/inlinemenu.php');
+	include('classes/module.php');
 	include('functions.php');
-	include('lib/comalate/comalate.php');
+	include('lib/comalate/comalate.class.php');
 	$lib = new ComaLib();
 	
 	$extern_page = GetPostOrGet('page');	
@@ -48,7 +49,6 @@
 	$config = new Config();
 	$config->LoadAll();
 	$user = new User();
-	//$page = new OutputPage($sqlConnection);
 	$output = new ComaLate();
 	$styleName = $config->Get('style', 'default');
 	$headerStyleName = GetPostOrGet('style');

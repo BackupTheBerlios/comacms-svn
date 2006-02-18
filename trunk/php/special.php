@@ -93,6 +93,7 @@
 	$outputpage = new OutputPage($sqlConnection);
 	$output->SetReplacement('MENU' , $outputpage->GenerateMenu());
 	$output->SetReplacement('MENU2' , $outputpage->GenerateMenu(2));
-	$output->PrintOutput();
+	$output->GenerateOutput();
+	echo $output->GeneratedOutput;
 	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sqlConnection->QueriesCount .' SQL queries -->';
 ?>

@@ -207,7 +207,7 @@
 		 	$out .= "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"" . $adminLang['generate_mainmenu'] . "\" />
 			</form>
 			<script type=\"text/javascript\" language=\"JavaScript\">
-				SetHover('span', 'structure_row', 'structure_row_hover', function additional() {document.getElementById(\"menu\").className = \"\";});
+				SetHover('span', 'structure_row', 'structure_row_hover', function additional() {document.getElementById('menu').className = '';});
 			</script>";
 			return $out;
 		 }
@@ -1229,7 +1229,7 @@
 						<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>";
 					$out .= $this->_showStructure($page->page_id);
 					$out .= "<script type=\"text/javascript\" language=\"JavaScript\">
-						SetHover('span', 'structure_row', 'structure_row_hover', function additional() {document.getElementById(\"menu\").className = \"\";});
+						SetHover('span', 'structure_row', 'structure_row_hover', function additional() {document.getElementById('menu').className = '';});
 						</script>\r\n";
 				}
 				$sql = "SELECT *

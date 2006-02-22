@@ -1,22 +1,37 @@
 html, body {
-height: 100%;
+ height: 100%;
 }
+
+#top {
+ margin-top:-1em;
+ overflow: visible;
+}
+
 #title {
- margin-bottom: 0;
- padding-bottom:0;
- padding-top: 13px;
+ width:70%;
+ height:50px;
+ margin: 0;
+ margin-left:auto;
+ margin-right: auto;
+ overflow: hidden;
+ text-overflow:clip;
+ position: absolute;
+ left: 16%;
 }
 
 #position {
  margin-left: 142px;
  padding-left: 10px;
- margin-top: -1px;
+ margin-top: 119px;
+ margin-bottom: 0px;
 }
+
 #secondmenu li {
  width: 75px;
 }
-.sitepreview, #previewiframe { /*FIXME: make only one classss*/
- width: 820px;
+
+.pagepreview {
+ width: 84%;
 }
 
 div.tcenter {
@@ -38,11 +53,12 @@ table.dates, table.articles, table.page_commits, table.tablestyle {
 a.button {
  padding-left: 50px;
  padding-right: 50px;
-
 }
+
 input.checkbox {
  border:none;
 }
+
 input.article_input {
  width:99.5%;
 }
@@ -69,6 +85,7 @@ textarea.edit {
  width: 93%;
 }
 
-#top {
-	margin-top:-1em;
+#menupart {
+ left: 0;
+ top: 138px;
 }

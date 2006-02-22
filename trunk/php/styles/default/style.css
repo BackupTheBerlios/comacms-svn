@@ -2,7 +2,6 @@ body {
  margin: 1em;
  padding: 0;
  font-family: arial, verdana, helvetica, sans-serif;
-
  background-color: #FFFFFF;
  color: #000000;
 }
@@ -52,7 +51,6 @@ h3 {
  margin-top: 0.5em;
 }
 
-
 h4 {
  margin-top: 0.5em;
  padding-left: 2em;
@@ -88,7 +86,6 @@ input[type="checkbox"], input[type="radio"], input[type="button"], input[type="s
 fieldset {
  margin:0.1em;
  padding: 1em;
-
 }
 
 fieldset .noform {
@@ -112,7 +109,7 @@ table {
  width : auto;
 }
 
-li.actual{
+li.actual {
  text-decoration: underline overline;
 }
 
@@ -120,7 +117,7 @@ p {
  margin-bottom: 1em;
 }
 
-span.info, span.error{
+span.info, span.error {
  line-height: 1.3em;
  font-size: 0.75em;
  width: 20em;
@@ -142,12 +139,11 @@ span.error {
  margin-bottom: 0.4em;
 }
 
-a.button , input.button, button{
+a.button , input.button, button {
  color: #000000;
  text-decoration: none;
  font-weight: bold;
  border: 1px dashed #000000;
- /*background-color: #FF0000;*/
  font-size: 0.8em;
  padding: 1px;
  padding-left: 7px;
@@ -193,7 +189,7 @@ table.text_table {
  border-collapse: collapse;
 }
 
-table.text_table td, table.text_table th{
+table.text_table td, table.text_table th {
  border: 1px solid #000000;
  padding: 0.1em;
 }
@@ -251,30 +247,30 @@ h3 a {
  border-bottom:1px dashed #000000;
 }
 
-th img{
+th img {
  vertical-align: middle;
  margin: 1px;
 }
 
-.inline_download a{
+.inline_download a {
  padding-left: 18px;
  background-image: url("../../img/download.png");
  background-repeat: no-repeat;
 }
 
-.inline_link a{
+.inline_link a {
  padding-left: 18px;
  background-image: url("../../img/extern.png");
  background-repeat: no-repeat;
 }
 
-.inline_intern a{
+.inline_intern a {
  padding-left: 18px;
  background-image: url("../../img/view.png");
  background-repeat: no-repeat;
  
 }
-.structure_row:hover, .structure_row_hover  {
+.structure_row:hover, .structure_row_hover {
  background-color: #87C6E9;
  border: none;
 }
@@ -328,11 +324,11 @@ div.thumb div div.description, #inlinemenu div.thumb div.description {
  margin-left: auto;
 }
 
-div.thumb div img, #inlinemenu div.thumb img{
+div.thumb div img, #inlinemenu div.thumb img {
  border: 1px solid #000000;
 }
 
-div.thumb div.magnify a{
+div.thumb div.magnify a {
  cursor: pointer;
  margin: 0;
  padding: 0;
@@ -351,7 +347,7 @@ div.thumb div.magnify {
  width: 16px;
 }
 
-div.tbox div.magnify{
+div.tbox div.magnify {
  float: right;
  margin-right: 0;
 }
@@ -374,9 +370,9 @@ table.input_table {
 }
 
 .code {
- margin-left:2em;
- margin-right:3em;
- border:1px dashed #000000;
+ margin-left: 2em;
+ margin-right: 3em;
+ border: 1px dashed #000000;
 }
 
 td.articles {
@@ -388,6 +384,7 @@ td.article_image {
 text-align: center;
 float: none;
 }
+
 .imageblock, .gallery_image {
  width: 120px;
  min-height: 140px;
@@ -401,7 +398,7 @@ float: none;
  border: none;
 }
 
-.imageblock a img{
+.imageblock a img {
  display: block;
  margin: 0;
  margin-left: auto!important;
@@ -429,7 +426,6 @@ float: none;
  border: 1px dashed #C0C0C0;
  margin: 4px;
  padding: 5px;
-
  position: relative;
  clear: both;
  text-align: left;
@@ -449,7 +445,7 @@ float: none;
 .article-date, .news-date {
  font-weight: normal;
  margin-left: 0.7em;
- font-size:0.8em;
+ font-size: 0.8em;
  float: right;
 }
 
@@ -461,7 +457,7 @@ float: none;
  padding-left: 8px;
 }
 
-.article_image{
+.article_image {
  margin : 2px;
  margin-left: 0;
  float: left;
@@ -472,4 +468,24 @@ float: none;
  font-size: 0.7em;
  font-weight: normal;
  text-align: right;
+}
+
+.column {
+
+clear: none !important;
+padding-left: .6em;
+padding-right: .6em;
+float: left;
+}
+
+.ctwo {
+width: 46.5%;
+}
+
+.ctree {
+width: 30.2%;
+}
+
+p.after_column {
+clear: both;
 }

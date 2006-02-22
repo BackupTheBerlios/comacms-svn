@@ -21,8 +21,7 @@
 	 * download.php?file_id=14
 	 */
 	/**
-	 * Set a global to make sure that common.php is executet in the
-	 * only right context
+	 * @ignore
 	 */
 	define('COMACMS_RUN', true);
 	// Do the things which are necessary

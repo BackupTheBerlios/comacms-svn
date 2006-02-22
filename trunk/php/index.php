@@ -37,8 +37,15 @@
 	$output->SetReplacement('MENU' , $outputpage->GenerateMenu());
 	$output->SetReplacement('MENU2' , $outputpage->GenerateMenu(2));
 	$output->SetReplacement('PATH' , $outputpage->Position);
+	if($config->Get('default_page', '0') != $outputpage->PageID)
+		$output->SetCondition('notathome' , true);
 	$output->Title = $outputpage->Title;
 	$output->Language = $outputpage->Language;
+	if($user->IsAdmin) {
+		$content = GetPostOrGet('content');
+		if($content != '')
+			$outputpage->Text = stripcslashes($content);
+	}
 	$inlineMenu = InlineMenu::LoadInlineMenu($sqlConnection, $outputpage->PageID);
 	$modules = array();
 	if(preg_match_all("/{(:([A-Za-z0-9_.-]+)(\?(.+?))?)}/s", $outputpage->Text, $moduleMatches)) {
@@ -47,17 +54,19 @@
 				$modules[] = array('moduleName' => $moduleName, 'moduleParameter' => $moduleMatches[4][$key], 'identifer' => $moduleMatches[0][$key]);
 			}
 		}
-		//print_r($modules);
 	}
 	foreach($modules as $module) {
 		$moduleName = $module['moduleName'];
 		$moduleParameter = $module['moduleParameter'];
 		include('./modules/' . $moduleName . '/' . $moduleName . '_module.php');
 		if(!isset($$moduleName)) {
-			$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');
-			$$moduleName = $newClass($sqlConnection, $user, $admin_lang, $config, $output, $lib);
+			if(class_exists('Module_' . $moduleName)) {
+				$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');
+				$$moduleName = $newClass($sqlConnection, $user, $admin_lang, $config, $output, $lib);
+			}
 		}
-		$outputpage->Text = str_replace($module['identifer'], $$moduleName->UseModule($module['identifer'], str_replace('&amp;', '&', $moduleParameter)), $outputpage->Text);
+		if(isset($$moduleName))
+			$outputpage->Text = str_replace($module['identifer'], $$moduleName->UseModule($module['identifer'], str_replace('&amp;', '&', $moduleParameter)), $outputpage->Text);
 	}
 	/*if(count($inlineMenu) > 0) {
 		$output->SetCondition('inlinemenu', true);

@@ -15,8 +15,14 @@
  # the Free Software Foundation; either version 2 of the License, or	#
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
-
+	/**
+	 * @ignore
+	 */
 	require_once('modules/news/news.class.php');
+	/**
+	 * @package ComaCMS
+	 * @subpackage News 
+	 */
 	class Module_News extends Module{
 		
 		function Module_News(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
@@ -30,7 +36,7 @@
  		
  		function UseModule($Identifer, $Parameters) {
  			$Parameters = explode('&', $Parameters);
- 			$count = -1;
+ 			$count = 6;
  			$block = false;
  			foreach($Parameters as $parameter){
  				$parameter = explode('=', $parameter, 2);

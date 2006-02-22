@@ -59,35 +59,16 @@
 	function getUserIDByName($name) {
 		global $lib;
 		return $lib->GetUserIDByName($name);
-		/*$sql = "SELECT user_id
-			FROM " . DB_PREFIX . "users
-			WHERE user_name='$name'";
-		$result = db_result($sql);
-		$row = mysql_fetch_object($result);
-		return $row->user_id;*/
 	}
 
 	function getUserByID($id) {
 		global $lib;
 		return $lib->GetUserByID($id);
-		/*$sql = "SELECT user_showname
-			FROM " . DB_PREFIX . "users
-			WHERE user_id = '$id'";
-		$result = db_result($sql);
-		$row = mysql_fetch_object($result);
-		return $row->user_showname;*/
 	}
 	
 	function getGroupByID($id) {
 		global $lib;
 		return $lib->GetGroupByID($id);
-		/*
-		$sql = "SELECT group_name
-			FROM " . DB_PREFIX . "groups
-			WHERE group_id = '$id'";
-		$result = db_result($sql);
-		$row = mysql_fetch_object($result);
-		return $row->group_name;*/
 	}
 
 	function replace_smilies($textdata) {

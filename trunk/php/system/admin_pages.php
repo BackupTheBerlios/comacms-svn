@@ -2,6 +2,7 @@
 /**
  * @package ComaCMS
  * @copyright (C) 2005-2006 The ComaCMS-Team
+ * This file contains (nearly) all subsites in the admin-interface
  */
  #----------------------------------------------------------------------#
  # file			: admin_pages.php				#
@@ -15,16 +16,10 @@
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
 
+	
 	/**
-	 * This file contains (nearly) all subsites in the admin-interface
+	 * @return string The sitepreview-page where you can see the 'real' site in a iframe
 	 */
-
-/*****************************************************************************
- *
- *  string page_sitepreview()
- *  returns the Sitepreview-page where you can see the 'real' site in a iframe
- *
- *****************************************************************************/
 
 	function page_sitepreview() {
 		global $admin_lang;
@@ -33,12 +28,9 @@
 		return $out;
 	}
 
-/*****************************************************************************
- *
- * string page_sitesytle()
- * returns the sitestyle(changer)-page with a preview-iframe and a form which make it able o change the style
- *
- *****************************************************************************/
+	/**
+ 	 * @return string the sitestyle(changer)-page with a preview-iframe and a form which make it able o change the style 
+ 	 */
 	function page_sitestyle() {
 		global $internal_style, $extern_save, $extern_style, $config;
 		
@@ -50,15 +42,11 @@
 	
 		if(!empty($save)) {
 			if(file_exists("./styles/$style/mainpage.php")) {
-				/*$sql = "UPDATE " . DB_PREFIX . "config
-					SET config_value= '$style'
-					WHERE config_name='style'";
-				db_result($sql);*/
 				$config->Save('style', $style);
 			}
 		}
 	
-		$out .= "<iframe id=\"previewiframe\" class=\"pagepreview\" src=\"./index.php?style=$style\" class=\"stylepreview\"></iframe>
+		$out .= "<iframe id=\"previewiframe\" class=\"pagepreview\" src=\"./index.php?style=$style\"></iframe>
 		<form action=\"admin.php\" method=\"get\" >
 			<input type=\"hidden\" name=\"page\" value=\"sitestyle\" />
 			<label for=\"stylepreviewselect\">Style:
@@ -95,14 +83,10 @@
 		return $out;
 	}
 
-/*****************************************************************************
- *
- * string page_news()
- * returns the news-admin-page where you can write,change and delete news-entries
- *
- *****************************************************************************/
- 
-	function page_news() {
+	/**
+	 * @return string the news-admin-page where you can write,change and delete news-entries
+	 */
+ 	function page_news() {
 		global $_GET, $_POST, $actual_user_showname, $actual_user_id, $user;
 		
 		$out = "";

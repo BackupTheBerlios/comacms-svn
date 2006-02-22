@@ -16,23 +16,51 @@
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
  
-   	
+   	/** Document type for XHTML strict */
   	define('DOCTYPE_XHTML_STRICT', 'xhtml strict');
+  	/** Document type for XHTML transitional */
   	define('DOCTYPE_XHTML_TRANSITIONAL', 'xhtmltramsitional');
-  	//define('DOCTYPE_XHTML_FRAMESET', 'xhtml frameset');
+  	/**
+  	 * Default document type
+  	 * The same like DOCTYPE_XHTML_STRICT
+  	 */
   	define('DOCTYPE_DEFAULT', DOCTYPE_XHTML_STRICT);
   	
 	/**
 	 * ComaLate Template Engine
-	 * @package ComaLate
+	 * @package ComaCMS
 	 * @subpackage ComaLate
 	 */
  	class ComaLate {
  		
+ 		/**
+ 		 * @var string The output language of the generated page
+ 		 * @access public
+ 		 */
  		var $Language = 'en';
+ 		
+ 		/**
+ 		 * @var string The title of the page
+ 		 * @access public
+ 		 */
  		var $Title = '';
+ 		
+ 		/**
+ 		 * @var string The charset of not-generatet part of ComaLate
+ 		 * @access public
+ 		 */
  		var $Charset = 'UTF-8';
+ 		
+ 		/**
+ 		 * @var string The template which is loaded from the templatefile
+ 		 * @access public
+ 		 */
  		var $Template = '';
+ 		
+ 		/**
+ 		 * @var string The finished HTML-code which should be 'browseable'
+ 		 * @access public
+ 		 */
  		var $GeneratedOutput = '';
  		
  		var $_Meta = array(); 
@@ -43,10 +71,17 @@
  		var $_CssFiles = '';
 		var $_Config;
 		
+		/**
+		 * Initializes the class
+		 * and sets the default XHTML-doctype
+		 */
  		function ComaLate() {
  			$this->SetDoctype(DOCTYPE_DEFAULT);
  		}
  		
+ 		/**
+ 		 * With this function it is possible to change the Doctype
+ 		 */
  		function SetDoctype($Doctype) {
  			switch ($Doctype) {
 				case DOCTYPE_XHTML_TRANSITIONAL:
@@ -59,11 +94,26 @@
 			}
  		}
  		
- 		 		
+ 		/**
+ 		 * Adds or changes (if the meta-tag already exists) a meta-tag by name
+ 		 * @param string Name The name of the meta-tag
+ 		 * @param string Value The value of the meta-tag
+  		 * @return void
+ 		 */		
  		function SetMeta($Name, $Value) {
  			$this->_Meta[$Name] = $Value;
 		}
  		
+ 		/**
+ 		 * Adds or changes (if the condition already exists) a condition by name
+ 		 * A condition in the template looks like this:
+ 		 * <NameOfTheCondition:condition>
+ 		 * Content of the condition
+ 		 * </NameOfTheCondition>
+ 		 * @param string Name The name of the condition
+ 		 * @param boolean Value If this value is true, the content of the condition will be displayed
+ 		 * @return void
+ 		 */
  		function SetCondition($Name, $Value) {
  			if($Value)
  				$this->_Conditions[$Name]= true;
@@ -197,7 +247,7 @@
  				}
  			}
  		}
- 		
+		
  		function GenerateOutput() {
  			$document = $this->_Doctype;
  			$document .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"$this->Language\" lang=\"$this->Language\">\r\n\t<head>\r\n\t\t<title>$this->Title</title>\r\n\t\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$this->Charset\" />\r\n";
@@ -206,8 +256,7 @@
  					$document .= "\t\t<meta name=\"$metaName\" content=\"$metaValue\" />\r\n";
  				}
  			}
- 			
-			
+ 						
 			if(preg_match_all("/<([A-Za-z0-9_]+)\:condition>(.+?)<\/\\1>/s", $this->Template, $conditionMatches)) {
 				foreach($conditionMatches[1] as $condition) {
 					if(!array_key_exists($condition, $this->_Conditions))

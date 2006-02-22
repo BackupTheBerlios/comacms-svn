@@ -1,62 +1,65 @@
- body {
-   font-family:  arial, verdana, helvetica, sans-serif;
-   font-size: 62.5%;
+body {
+ font-family:  arial, verdana, helvetica, sans-serif;
+ font-size: 62.5%;
  background-color: #7C7EC6;
-color: #000000;
-}
- * {
-   margin: 0;
-   padding: 0;
-   font-size: 1em;
-font-weight: normal;
+ color: #000000;
 }
 
-strong{
-font-weight: bold;
+input, select, option {
+ background-color: #FFFFFF!important;
 }
 
-ul,ol {
+.button {
+ background-color: #FFFFFF!important;	
+}
+
+strong {
+ font-weight: bold;
+}
+
+ul, ol {
  margin-left: 2em;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
  text-align: center;
-   font-weight: bold;
+ font-weight: bold;
 }
 
 h1 {
-  font-size: 2em;
+ font-size: 2em;
 }
 
 h2 {
-  font-size: 1.5em;
+ font-size: 1.5em;
+ border-bottom: 0.2ex solid #000000;
+ margin-left: 0;
+ margin-right: 0;
 }
 h3 {
-  font-size: 1.17em;
-  border-bottom: 0.2ex solid #000000;
-  margin-left: -.5em;
-  margin-right: -.5em;
+ font-size: 1.17em;
 }
-a{
+
+a {
  text-decoration: none;
  font-weight: bold;
  color: #000000;
 }
 
 #top, #menu, #content{
-font-size: 1.6em;
+ font-size: 1.6em;
 }
 
 #top {
-background-repeat: no-repeat;
-background-image: url("comacms_logo.png");
-padding-bottom:9ex; 
+ background-repeat: no-repeat;
+ background-image: url("comacms_logo.png");
+ padding-bottom:9ex; 
 }
 
 #menu {
-	text-align: center;
-	padding-left: 4em;
-	padding-right: 4em;
+ text-align: center;
+ padding-left: 4em;
+ padding-right: 4em;
 }
 
 #menu li {
@@ -65,40 +68,53 @@ padding-bottom:9ex;
  margin: .5ex;
 }
 
-#content {
-background-color: #A7C2C6;	
+#content * {
+ background-color: #A7C2C6;
 }
+
+#content * {
+ clear: both;	
+}
+
 #bottom {
-	margin-top: 1em;
-text-align: center;
+ margin-top: 1em;
+ text-align: center;
 }
+
 #inlinemenu {
-float: left;
-width: 13em;
-padding: .5em;
-
+ float: left;
+ width: 13em;
+ padding: .5em;
 }
+
 #text {
-padding: .5em;
-clear: ;
+ padding: .5em;
 }
 
-hr{
-display: none;
+hr {
+ display: none;
 }
+
 .articles-block,.news-block {
-margin: auto;
- width: 60%;
+ float: none;
+ margin-left: auto;
+ margin-right: auto;
+ width: 75%;
+ padding: 1em;
 }
 
-a img{
-	border: none;
+.imageblock, .gallery_image {
+ clear: none !important;
+}
+
+a img {
+ border: none;
 }
 
 .article, .news {
  width: 99%;
  border: 0.1ex dashed #808080;
- margin: 4px;
+ margin: 5px;
  padding: 5px;
  min-heigth: 1200px;
  position: relative;
@@ -127,40 +143,40 @@ a img{
  padding-left: 8px;
 }
 
-.article_image{
+.article_image {
  margin : 2px;
  margin-left: 0;
  float: left;
 }
 
 .stylepreview, .sitepreview{
- width:100%;
- height:19em;
+ width: 100%;
+ height: 19em;
 }
 
 #editor {
- width:97%;
- height:16em;
+ width: 97%;
+ height: 16em;
 }
 
-.inline_download a{
+.inline_download a {
  padding-left: 18px;
  background-image: url("../../img/download.png");
  background-repeat: no-repeat;
 }
 
 .strike {
- text-decoration:line-through;
+ text-decoration: line-through;
 }
 
 table.text_table {
  border-spacing: 0px;
  border-collapse: collapse;
- margin-left:auto;
- margin-right:auto;
+ margin-left: auto;
+ margin-right: auto;
 }
 
-table.text_table td, table.text_table th{
+table.text_table td, table.text_table th {
  border: 1px solid #000000;
  padding: 0.1em;
 }
@@ -171,353 +187,28 @@ table.text_table th {
 
 .page_lang {
  position: absolute;
- right: 15em;
+ right: 9em;
 }
 
 .page_actions {
- width: 12em;
+ width: 7em;
  position: absolute;
- right: 0.3%;
+ right: 1em;
 }
 
 .structure_row {
- width:98%;
- display:block;
+ width: 100%;
+ display: block;
 }
 
 .structure_row:hover {
- background-color: #7C7EC6;
-}
-	
-
-img.img_img, img.img_left, img.img_center, img.img_right{
- margin: 2ex;
- margin-top: 1ex;
- 
-}
-img.img_left {
- float: left;
- margin-left: 1ex;
-}
-
-img.img_right {
- float: right;
- margin-right: 1ex;
-}
-
-img.img_center {
- display: block;
- margin-left: auto;
- margin-right: auto;
+ background-color: #7C7EC6 !imortant;
 }
 
 .strike img {
  margin-left: 20px;
 }
 
-th img{
- vertical-align: middle;
- margin: 1px;
+li.page_type_text, li.page_type_gallery {
+ margin-left: 1em;	
 }
-
-label.row {
- float: left;
- display: inline;
- padding-right: 1em;
- width: 17em;
-}
-
-div.row {
- clear: both;
-}
-
-/*
-#top{
- background-color: #7C7EC6;
-
-}
-
-#inlinemenu {
-  float: left;
-   width: 25%;
-
-   text-align: center;
-    
-}
-#text{
- float: right;
-   width: 100%;
-   padding: -3em;
-
-}
-
-
-#content {
-font-size: 1.6em;
-float:right;	
-width:85%;
-background-color: #A7C2C6;
-}
-
- #nav {
- font-size: 1.6em;
-   float: left;
-   width: 15%;
-   
- }
-  #content, #nav, #inlinemenu, #text {
-   padding-bottom: 32767px;  Beschränkung durch Safari, der keinen größeren Wert zulässt. 
-   margin-bottom: -32767px;
-}
- #all {
-  overflow: hidden;
-   position: relative;
-    width: 90%;
-   margin: auto;
-   
-}
-#bottom {
-
- background-color: #707883;
-    clear: both;
-     position: relative;
-    z-index: 1;
-}
-
-
-
-
-
-
-
-}
-#all #content #text * {
-
-} 
-
- @media all and (min-width: 0px) {
-   #content, #nav, #inlinemenu, #text {
-      padding-bottom:0;
-      margin-bottom: 0;
-   }
-
-   #content:after, #nav:after, #inlinemenu:after, #text:after {
-      padding-top:32767px;
-      margin-bottom: -32767px;
-      content: 'Opera 8 Fix';
-      display:block;
-      background: inherit;
-      height: 0;
-   }
-}
-
-
-/*
-html, body {
- margin: 0;
- padding: 0;
- font-family: arial, verdana, helvetica, sans-serif;
- background-color: #7C7EC6;
-
-}
-
-
-h1,h2,h3,h4,h5,h6 {
- text-align: center;
-}
-
-a {
- text-decoration: none;
- font-weight: bold;
- color: #000000;
-}
-
-
-
-img {
- border: none;
-}
-
-hr{
-background-color: #000000;
-border: none;
-height: 0.1ex;
-margin-left:-1ex;
-margin-right:-1ex;
-}
-
-input,textarea {
- border: 0.1ex solid #000000;
- padding: 0.3ex;
-}
-
-.sitepreview, #previewiframe { FIXME: make only one classss
- border: none;
- width: 100%;
- height: 34ex;
-}
-
-.button{
-background-color: #FFFFFF;
-border: 0.1ex solid #000000;
-padding: 0.3ex;
-font-weight: normal;
-font-size: 1.5ex;
-cursor: pointer;
-margin-left: 0.2ex;
-margin-right: 0.2ex;
-}
-a.button{
- padding-top: 0.39ex;
- padding-bottom: 0.39ex;
-}
-.button:hover {
- border-bottom: 0.1ex solid #000000;
-}
-
-
-#title {
- margin-top:0;
- padding-top:1ex;
-}
-
-#top {
- background-color: #7C7EC6;
- border-bottom: 0.1ex solid #FFFFFF;
- background-image: url("comacms_logo.png");
- background-repeat: no-repeat;
- background-position: 0 0.5ex;
-}
-
-
-#menu {
- text-align: center;
- padding:0;
- padding-left: 200px;
- padding-right: 200px; 
-}
-
-#menu li {
- list-style-type: none;
- display:inline;
- margin:1ex;
-}
-#menu li a:hover{
- color: #3F3F3F;
-
-}
-
-#text {
- padding-left: 3ex;
- padding-right: 3ex;
- padding-top: 2ex;
- padding-bottom: 1ex;
- min-height: 39ex;
-
- background-color: #A7C2C6;
-}
-
-#bottom {
- height:4.7ex;
- background-color: #7C7EC6;
- border-top: 0.1ex solid #FFFFFF;
- padding-top: 2ex;
- padding-bottom: 2ex;
- text-align: center;
- font-size: 1.3ex;
-}
-
-.icon {
- height: 1em;
- width: 1em;
- margin-bottom: -0.4ex;
-}
-
-.news, .article {
- border: 0.1ex solid #FFFFFF;
- margin: 1ex;
- padding: 0.3ex;
-}
-
-.news-date ,.article-date{
- float: right;
- font-size: 1.3ex;
- font-weight: normal;
-}
-
-.news-title , .article-title{
- margin-left: 0.3ex;
- font-weight: bold;
-}
-
-.news-author, .article-author {
- margin-right: 0.6ex;
- font-size: 1.2ex;
- display:block;
- text-align: right;
-}
-
-fieldset {
-border: 0.1ex solid #FFFFFF;
-background-color: #7C7EC6;
-}
-legend {
-border: 0.1ex solid #FFFFFF;
-background-color: #7C7EC6;
-border-bottom: none;
-font-weight: bold;
-}
-
-textarea.edit {
- width: 100%;
- height: 17em;
- font-family: arial, verdana, helvetica, sans-serif;
-}
-
-span.info{
- display: block;
- font-size: 1.3ex;
- font-style: italic;
- width: 40ex;
- margin-left:3ex;
- text-indent: 1ex;
- border: 0.1ex solid #FFFFFF;
- padding: 0.6ex;
- text-align: justify;
- background-color: #A7C2C6;
-}
-
-.imageblock, .gallery_image {
- width: 120px;
- height: 130px;
- margin: 5px;
- text-align: center;
- float: left;
-}
-
-.imagesblock {
- overflow: auto;
- display: table-cell;
-}
-.pagestructure_sendbutton {
- list-style: none;
-}
-.strike {
-text-decoration: line-through;
-}
-table.dates, table.articles ,table.page_commits{
- width: 100%;
-}
-
-.dates thead td, .articles thead td, .page_commits thead td{
- border: none;
-}
-
-.dates td, .articles td,.page_commits td {
- border-bottom: 0.1ex dashed #FFFFFF;
- vertical-align: top;
-}
-
-#inlinemenu {
-	float:left;
-}*/

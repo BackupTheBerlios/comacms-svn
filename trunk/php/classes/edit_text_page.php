@@ -229,9 +229,13 @@
 				<input type=\"submit\" value=\"Vorschau\" name=\"pagePreview\" class=\"button\" />
 				<input type=\"submit\" value=\"Abbrechen\" name=\"pageAbort\" class=\"button\"/>
 			</form></fieldset>\r\n";
-				if($show_preview)
-					$out .= "<fieldset><legend>Vorschau</legend>"
-						 . convertToPreHtml($page_text) ."</fieldset>";
+				if($show_preview) {
+					$page_text = convertToPreHtml($page_text);
+					$out .= "<fieldset>
+						<legend>Vorschau</legend>
+						<iframe class=\"pagepreview\" src=\"index.php?content=" . urlencode($page_text) . "\"></iframe>
+					</fieldset>";
+				}
 				
 			}
 			return $out;

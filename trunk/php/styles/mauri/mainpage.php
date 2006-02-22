@@ -1,11 +1,12 @@
 ﻿		<div id="top">
-			<img id="logo" src="{STYLE_PATH}/logo.jpg" alt="Ein Bild der St. Mauritius-Kirche von der Seite"/>
+			<img id="logo" src="{STYLE_PATH}/mauri_logo.jpg" alt="Ein Bild der Stankt Mauritius-Kirche"/>
+			<img id="logo2" src="{STYLE_PATH}/michael_logo.jpg" alt="Ein Bild der Stankt Michel-Kirche"/>
 			<ul id="secondmenu">
 <MENU2:loop>
 	<li><a href="{LINK}">{LINK_TEXT}</a></li>
 </MENU2>
 			</ul>
-						<h1 id="title">Seelsorgeeinheit<br /> Sankt Mauritius und Sankt Michael</h1><notathome:condition>
+						<h1 id="title">Katholische Kirchengemeinden <span class="subtitle">Sankt Mauritius Hildesheim und Sankt Michael Hildesheim-Neuhof</span></h1><notathome:condition>
 						<span id="position">Pfad: {PATH}</span></notathome>
 		</div>
 		<div id="menupart">

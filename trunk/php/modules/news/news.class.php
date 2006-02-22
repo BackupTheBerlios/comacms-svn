@@ -15,6 +15,10 @@
  # the Free Software Foundation; either version 2 of the License, or	#
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
+	/**
+	 * @package ComaCMS
+	 * @subpackage News 
+	 */
 	class News {
 
 		var $_SqlConnection;
@@ -46,7 +50,7 @@
 				if($displayAuthor)
 					$newsAuthor = $this->_ComaLib->GetUserByID($entrie->userid);
 				$entries[] = array(	'NEWS_DATE' => date($dateFormat, $entrie->date),
-							'NEWS_TEXT' => $entrie->text,
+							'NEWS_TEXT' => nl2br($entrie->text),
 							'NEWS_AUTHOR' => $newsAuthor,
 							'NEWS_TITLE' => $entrie->title);
     			}

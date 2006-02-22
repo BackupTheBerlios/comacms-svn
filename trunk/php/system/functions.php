@@ -263,10 +263,13 @@
 		$text = preg_replace("#===\ (.+?)\ ===#s", "\n\n<h3>$1</h3>\n", $text);
 		// convert == text == to a header <h4>
 		$text = preg_replace("#==\ (.+?)\ ==#s", "\n\n<h4>$1</h4>\n", $text);
-		// convert == text == to a header <h4>
+		// convert <center>text</center> to <div class="center">text</div>
 		$text = preg_replace("#&lt;center&gt;(.+?)&lt;/center&gt;#s", "\n\n<div class=\"center\">$1</div>\n", $text);
-		// convert "/n" to "<br />" (more or less ;-))
-		//$text = nl2br($text);
+		// convert ({text}{text}) to two colums
+		$text = preg_replace("#\(\{(.+?)\}\{(.+?)\}\{(.+?)\}\)#s", "\n\n<div class=\"column ctree\">$1</div>\n<div class=\"column ctree\">$2</div><div class=\"column ctree\">$3</div><p class=\"after_column\">\n", $text);
+		// convert ({text}{text}{text}) to tree colums
+		$text = preg_replace("#\(\{(.+?)\}\{(.+?)\}\)#s", "\n\n<div class=\"column ctwo\">$1</div>\n<div class=\"column ctwo\">$2</div>\n<div class=\"column ctree\">$3</div><p class=\"after_column\"/>\n", $text);
+		
 		// paste links into the text
 		foreach($link_list as $link_nr => $link) {
 			if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))				

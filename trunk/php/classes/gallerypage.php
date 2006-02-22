@@ -42,17 +42,19 @@
 				ORDER BY gallery.gallery_orderid";
 			$images = db_result($sql);
 			$imgmax = 100;
+			$this->HTML .= "<div class=\"imagesblock\">";
 			while($image = mysql_fetch_object($images)) {
 				
 				
 				$sizes = getimagesize($image->gallery_image_thumbnail);
 				$margin_top = round(($imgmax - $sizes[1]) / 2);
 				$margin_bottom = $imgmax - $sizes[1] - $margin_top;
-				$this->HTML .= "\t\t\t\t<div class=\"imageblock\">" .
-					"\t\t\t\t\t<a href=\"special.php?page=image&amp;id=" . $image->gallery_file_id . "\">" .
-					"\t\t\t\t\t<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" /></a><br />" .
-					"\t\t\t\t</div>";
+				$this->HTML .= "\t\t\t\t<div class=\"imageblock\">
+					<a href=\"special.php?page=image&amp;id=" . $image->gallery_file_id . "\">
+					<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" /></a><br />
+				</div>\r\n";
 			}
+			$this->HTML .= "</div>";
 		}
 	}
 ?>

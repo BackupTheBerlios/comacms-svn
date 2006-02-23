@@ -90,7 +90,7 @@
 				<tr><th>" . $this->admin_lang['database size'] . ":</th><td>" . kbormb($data_size) . "</td></tr>
 			</table>
 			<h2>Letzte Ver&auml;nderungen</h2>
-			<table class=\"text_table\">
+			<table class=\"text_table full_width\">
 				<thead>
 					<tr>
 						<th>" . $this->admin_lang['date'] . "</th><th>" . $this->admin_lang['page'] . "</th><th>" . $this->admin_lang['user'] . "</th><th>" . $this->admin_lang['comment'] . "</th>
@@ -117,7 +117,7 @@
 			$count = 0;
 			foreach ($pages as $date => $page) {
    				$out .= "<tr>
-						<td>" . date("d.m.Y H:i:s", $date) . "</td>
+						<td class=\"small_width\">" . date("d.m.Y H:i:s", $date) . "</td>
 						<td><a href=\"index.php?page=" . $page[0] . "\">" . $page[1] . "</a> (" . $page[0] . ")</td>
 						<td>" . getUserById($page[2]) . "</td>
 						<td>" . $page[3] . "</td>

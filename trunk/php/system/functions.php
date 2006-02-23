@@ -266,9 +266,9 @@
 		// convert <center>text</center> to <div class="center">text</div>
 		$text = preg_replace("#&lt;center&gt;(.+?)&lt;/center&gt;#s", "\n\n<div class=\"center\">$1</div>\n", $text);
 		// convert ({text}{text}) to two colums
-		$text = preg_replace("#\(\{(.+?)\}\{(.+?)\}\{(.+?)\}\)#s", "\n\n<div class=\"column ctree\">$1</div>\n<div class=\"column ctree\">$2</div><div class=\"column ctree\">$3</div><p class=\"after_column\">\n", $text);
+		$text = preg_replace("#\(\{(.+?)[\r\n ]+\}\{(.+?)[\r\n ]+\}\{(.+?)[\r\n ]+\}\)#s", 	"\n<div class=\"column ctree\">\n$1\n</p></div>\n<div class=\"column ctree\"><p>\n$2\n</p></div><div class=\"column ctree\"><p>\n$3\n</p></div>\n<p class=\"after_column\">\n", $text);
 		// convert ({text}{text}{text}) to tree colums
-		$text = preg_replace("#\(\{(.+?)\}\{(.+?)\}\)#s", "\n\n<div class=\"column ctwo\">$1</div>\n<div class=\"column ctwo\">$2</div>\n<div class=\"column ctree\">$3</div><p class=\"after_column\"/>\n", $text);
+		$text = preg_replace("#\(\{(.+?)[\r\n ]+\}\{(.+?)[\r\n ]+\}\)#s", 			"\n<div class=\"column ctwo\">\n$1\n</div>\n<div class=\"column ctwo\">\n$2\n</div>\n<p class=\"after_column\"/>\n", $text);
 		
 		// paste links into the text
 		foreach($link_list as $link_nr => $link) {
@@ -437,7 +437,8 @@
 		$text = $new_text;
 		// remove the spaces which are not necessary
 		$text = preg_replace('/\ \ +/', ' ', $text);
-
+		$text = preg_replace('#<p>[\n\r ]+</p>#s', ' ', $text);
+		$text = preg_replace('#<p>[\n\r ]+<p>#s', '<p>', $text);
 		$text = str_replace(' -- ', ' &ndash; ', $text);
 		
 		$text = str_replace(' --- ', ' &mdash; ', $text);

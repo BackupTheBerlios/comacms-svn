@@ -47,6 +47,10 @@
 			$outputpage->Text = stripcslashes($content);
 	}
 	$inlineMenu = InlineMenu::LoadInlineMenu($sqlConnection, $outputpage->PageID);
+	if(count($inlineMenu) > 0){
+		$output->SetReplacement($inlineMenu);
+		$output->SetCondition('inlinemenu', true);
+	}
 	$modules = array();
 	if(preg_match_all("/{(:([A-Za-z0-9_.-]+)(\?(.+?))?)}/s", $outputpage->Text, $moduleMatches)) {
 		foreach($moduleMatches[2] as $key => $moduleName) {

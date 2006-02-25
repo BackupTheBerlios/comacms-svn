@@ -979,7 +979,7 @@
 				<legend>" . $adminLang['inlinemenu_image'] . "</legend>
 				<div class=\"row\"><div class=\"imagesblock\">";
 			while($image = mysql_fetch_object($images_result)) {
-				$thumbnail = resizteImageToMaximum($image->file_path, $inlinemenu_folder ,$imgmax);
+				$thumbnail = resizeImageToMaximum($image->file_path, $inlinemenu_folder ,$imgmax);
 				if($thumbnail !== false) {
 					list($originalWidth, $originalHeight) = getimagesize($thumbnail);
 					
@@ -1010,7 +1010,7 @@
 			else {
 				$imgmax2 = 200;
 				$inlinemenuFolder = 'data/thumbnails/';
-				$thumbnail = resizteImageToWidth($imagePath, $inlinemenuFolder, $imgmax2);
+				$thumbnail = resizeImageToWidth($imagePath, $inlinemenuFolder, $imgmax2);
 				if($thumbnail !== false){
 					$image = "<img src=\"" . generateUrl($thumbnail) . "\"/>";
 				}

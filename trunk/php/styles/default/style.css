@@ -218,6 +218,13 @@ div.row label {
  width: 17em;
  padding-bottom: 1em;
 }
+div.row label.simple {
+ float: none;
+ display: inline;
+ padding-right: auto;
+ width: auto;
+ padding-bottom: auto;
+}
 
 div.row {
  clear: both;
@@ -252,11 +259,25 @@ th img {
  margin: 1px;
 }
 
-.inline_download a {
+.inline_download {
+ display: block;
  padding-left: 18px;
+ white-space:normal;
+}
+.inline_text {
+  padding-left: 18px;
+}
+.inline_download a {
+ margin-left: -18px;
+ padding-left: 18px;
+ display: block;
  background-image: url("../../img/download.png");
  background-repeat: no-repeat;
 }
+
+.inline_download span.filesize {
+ font-style: italic;
+ }
 
 .inline_link a {
  padding-left: 18px;
@@ -358,7 +379,7 @@ div.tbox div.magnify {
 }
 
 .article_input {
- width: 100%;
+ width: 63%;
 }
 
 table.input_table {

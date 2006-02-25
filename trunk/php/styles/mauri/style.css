@@ -162,12 +162,13 @@ a.button , input.button, button{
 
 #inlinemenu {
  font-size: 1.6em;
- float: left;
- width: 220px;
+ left: 145px;
+ position: absolute;
+ width: 13em;
 }
 
 #inlinemenu  div {
- margin-left: 1em;
+ margin-left: 0.5em;
 }
 
 table.dates, table.articles ,table.page_commits, table.tablestyle{

@@ -80,12 +80,18 @@
 //	elseif(!isset($extern_page))
 //		$extern_page = '';
 	
-	if(startsWith($extern_page, 'a:'))
+	if(startsWith($extern_page, 'a:')) {
  		header('Location: admin.php?page='.substr($extern_page, 2));
- 	elseif(startsWith($extern_page, 's:'))
+ 		die();
+	}
+ 	elseif(startsWith($extern_page, 's:')) {
  		header('Location: special.php?page='.substr($extern_page, 2));
- 	elseif(startsWith($extern_page, 'l:'))
+ 		die();
+	}
+ 	elseif(startsWith($extern_page, 'l:')) {
  		header('Location: index.php?page='.substr($extern_page, 2));
+ 		die();
+	}
  	
  	$pagePrefix = 'l:';
 	if(endsWith($_SERVER['PHP_SELF'], 'admin.php'))

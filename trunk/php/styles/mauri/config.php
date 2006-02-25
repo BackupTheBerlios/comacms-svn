@@ -11,6 +11,6 @@
  $config['withoutDefault'] = false;
  $config['conditional-css']['inlinemenu']['all'] = '#text{margin-left: 355px;}';
  $config['conditional-css']['inlinemenu']['print'] = '#text{margin-left: 205px;}';
- $config['conditional-css']['notathome']['iefix']['lt IE 7'] = '#title {margin-bottom: 33px;} #position{border-bottom:none;}';
+ //$config['conditional-css']['notathome']['iefix']['lt IE 7'] = '#title {margin-bottom: 33px;} #position{border-bottom:none;}';
   
 ?>

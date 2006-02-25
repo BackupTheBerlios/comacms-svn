@@ -171,35 +171,38 @@
 	 			<form method=\"post\" action=\"admin.php\">
 				<input type=\"hidden\" name=\"page\" value=\"articles\" />
 				<input type=\"hidden\" name=\"action\" value=\"add\" />
-				<table class=\"input_table\">
-					<tr>
-						<td>Titel: <span class=\"info\">Hier den Titel des Artikels eingeben</span></td>
-						<td class=\"article_input\"><input type=\"text\" name=\"article_title\" maxlength=\"100\" value=\"\" class=\"article_input\" /></td>
-					</tr>
-					<tr>
-						<td>Beschreibung: <span class=\"info\">Hier eine Zusammenfassung oder Vorschau eingeben.(maximal 200 Zeichen)</span></td>
-						<td><textarea rows=\"4\" cols=\"60\" name=\"article_description\" class=\"article_input\"></textarea></td>
-					</tr>
-					<tr>
-						<td>Text: <span class=\"info\">Hier den gesammten Text des Artikels eingeben.</span></td>
-						<td>
+				<fieldset>
+					<div class=\"row\">
+						<label>Titel: <span class=\"info\">Hier den Titel des Artikels eingeben</span></label>
+						<input type=\"text\" name=\"article_title\" maxlength=\"100\" value=\"\" class=\"article_input\" />
+					</div>
+					<div class=\"row\">
+						<label>Beschreibung: <span class=\"info\">Hier eine Zusammenfassung oder Vorschau eingeben.(maximal 200 Zeichen)</span></label>
+						<textarea rows=\"4\" cols=\"60\" name=\"article_description\" class=\"article_input\"></textarea>
+					</div>
+					<div class=\"row\">
+						<label>Text: <span class=\"info\">Hier den gesammten Text des Artikels eingeben.</span></label>
+						
 							<script type=\"text/javascript\" language=\"javascript\">
 								writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 								writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
 								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als �berschrift\",\"=== \",\" ===\",\"?berschrift\",\"h\");
 							</script>
-							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\"></textarea></td>
-					</tr>
-					<tr>
-						<td>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></td>
-						<td><input type=\"checkbox\" name=\"add_image\" id=\"add_image_checkbox\" checked=\"checked\"/ value=\"add\"><label for=\"add_image_checkbox\">Nach dem Eintragen des Arikels noch ein Bild ausw�hlen<br/>
-							(ein Bild kann auch sp�ter noch �ber die Bearbeiten-Funktion hinzugef�gt/ver�ndert werden)</label></td>
-					</tr>
-					<tr>
-						<td>Eingelogt als $user->Showname</td><td><input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" /></td>
-					</tr>
-				</table>
+							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\"></textarea>
+					</div>
+					<div class=\"row\">
+						<label>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></label>
+						<input type=\"checkbox\" name=\"add_image\" id=\"add_image_checkbox\" checked=\"checked\" value=\"add\"/><label class=\"simple\" for=\"add_image_checkbox\">Nach dem Eintragen des Arikels noch ein Bild ausw&auml;hlen<br/>
+							(ein Bild kann auch sp&auml;ter noch &uuml;ber die Bearbeiten-Funktion hinzugef&uuml;gt/ver&auml;ndert werden)</label>
+					</div>
+					<div class=\"row\">
+						Eingelogt als $user->Showname
+					</div>
+					<div class=\"row\">
+					<input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" />
+					</div>
+				</fieldset>
 				<br /> 
 			</form>\r\n";
 	 		return $out;

@@ -265,10 +265,10 @@
 		$text = preg_replace("#==\ (.+?)\ ==#s", "\n\n<h4>$1</h4>\n", $text);
 		// convert <center>text</center> to <div class="center">text</div>
 		$text = preg_replace("#&lt;center&gt;(.+?)&lt;/center&gt;#s", "\n\n<div class=\"center\">$1</div>\n", $text);
-		// convert ({text}{text}) to two colums
-		$text = preg_replace("#\(\{(.+?)[\r\n ]+\}\{(.+?)[\r\n ]+\}\{(.+?)[\r\n ]+\}\)#s", 	"\n<div class=\"column ctree\">\n$1\n</p></div>\n<div class=\"column ctree\"><p>\n$2\n</p></div><div class=\"column ctree\"><p>\n$3\n</p></div>\n<p class=\"after_column\">\n", $text);
 		// convert ({text}{text}{text}) to tree colums
-		$text = preg_replace("#\(\{(.+?)[\r\n ]+\}\{(.+?)[\r\n ]+\}\)#s", 			"\n<div class=\"column ctwo\">\n$1\n</div>\n<div class=\"column ctwo\">\n$2\n</div>\n<p class=\"after_column\"/>\n", $text);
+		$text = preg_replace("#\(\{(.+?)[\r\n ]*\}\{(.+?)[\r\n ]*\}\{(.+?)[\r\n ]*\}\)#s", "\n<div class=\"column ctree\">\n$1\n</p></div>\n<div class=\"column ctree\"><p>\n$2\n</p></div><div class=\"column ctree\"><p>\n$3\n</p></div>\n<p class=\"after_column\">\n", $text);
+		// convert ({text}{text}) to two colums
+		$text = preg_replace("#\(\{(.+?)[\r\n ]*\}\{(.+?)[\r\n ]*\}\)#s", "\n<div class=\"column ctwo\">\n$1\n</div>\n<div class=\"column ctwo\">\n$2\n</div>\n<p class=\"after_column\"/>\n", $text);
 		
 		// paste links into the text
 		foreach($link_list as $link_nr => $link) {
@@ -463,9 +463,9 @@
 	
 	/** special_start_with
 	 * 
-	 * Diese Funktion schaut, ob ein String mit einer bestimmten Zeichenkette anf�ngt und ignoriert dabei einige Zeichen,
-	 * so k�nnen grunds�tzlich noch Lehrzeichen und Tabs vor der Zeichenkette sein, nach der gesucht wird und dennoch
-	 * wird zur�ckgegeben, dass der String mit der gesuchten Zeichenkette beginnt. 
+	 * Diese Funktion schaut, ob ein String mit einer bestimmten Zeichenkette anfaengt und ignoriert dabei einige Zeichen,
+	 * so k�nnen grundsaetzlich noch Lehrzeichen und Tabs vor der Zeichenkette sein, nach der gesucht wird und dennoch
+	 * wird zurueckgegeben, dass der String mit der gesuchten Zeichenkette beginnt. 
 	 * 
 	 * @return bool
 	 * @param string search
@@ -487,7 +487,7 @@
 	//
 	// TODO: language-compatibilty
 	//
-	function menue_edit_view($menue_id = 1) {
+	/*function menue_edit_view($menue_id = 1) {
 		global $d_pre;
 		$out = '';
 		$menue_result = db_result("SELECT * FROM " . $d_pre . "menue WHERE menue_id='" . $menue_id . "' ORDER BY orderid ASC");
@@ -510,18 +510,19 @@
 					</tr>\r\n";
 		}
 		return $out;
-	}
+	}*/
 	/* string kbormb(int $bytes)
 	 * this function convertes a size given in bytes to kilobytes or to megabytes
 	 * if its possible
 	 */
-	function kbormb($bytes) {
+	function kbormb($bytes, $space = true) {
+		$space = ($space) ? ' ' : '&nbsp;';
 		if($bytes < 1024)
-			return $bytes . " B";
+			return $bytes . $space .'B';
 		elseif($bytes < 1048576)
-			return round($bytes/1024, 1) . " KB";
+			return round($bytes/1024, 1) . $space . 'KB';
 		else
-			return round($bytes/1048576, 1) . " MB";
+			return round($bytes/1048576, 1) . $space . 'MB';
 	}
 	
 	function generatePagesTree($parentid, $tabs = "", $lang = "", $show_deleted = false, $show_hidden = false, $type = 'text') {
@@ -635,7 +636,7 @@
 	/**
 	 * @return string filename of the thumbnail
 	 */
-	function resizteImageToMaximum($InputFile, $OutputDir, $Maximum) {
+	function resizeImageToMaximum($InputFile, $OutputDir, $Maximum) {
 		list($originalWidth, $originalHeight) = getimagesize($InputFile);
 		$width = ($originalWidth > $originalHeight) ? round($Maximum, 0) : round($originalWidth / ($originalHeight / $Maximum), 0);
 		$height = ($originalHeight > $originalWidth) ? round($Maximum, 0) : round($originalHeight / ($originalWidth / $Maximum), 0);
@@ -647,7 +648,7 @@
 	/**
 	 * @return string filename of the thumbnail
 	 */
-	function resizteImageToWidth($InputFile, $OutputDir, $Width) {
+	function resizeImageToWidth($InputFile, $OutputDir, $Width) {
 		if(!file_exists($InputFile))
 			return false;
 		list($originalWidth, $originalHeight) = getimagesize($InputFile);

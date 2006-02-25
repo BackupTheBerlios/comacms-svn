@@ -371,11 +371,11 @@
 			$inlieMenuHtml = '';
 			while($inlieMenuEntry = mysql_fetch_object($inlieMenuEntriesResult)) {
 				if($inlieMenuEntry->inlineentry_type == 'text')
-					$inlieMenuHtml .= "<div class=\"inline_text\">" . nl2br($inlieMenuEntry->inlineentry_text) . "</div>";
+					$inlieMenuHtml .= "<div class=\"inline_text\">" . nl2br($inlieMenuEntry->inlineentry_text) . "</div>\r\n";
 				elseif($inlieMenuEntry->inlineentry_type == 'link')
-					$inlieMenuHtml .= "<div class=\"inline_link\"><a href=\"$inlieMenuEntry->inlineentry_link\">$inlieMenuEntry->inlineentry_text</a></div>";
+					$inlieMenuHtml .= "<div class=\"inline_link\"><a href=\"$inlieMenuEntry->inlineentry_link\">$inlieMenuEntry->inlineentry_text</a></div>\r\n";
 				elseif($inlieMenuEntry->inlineentry_type == 'intern')
-					$inlieMenuHtml .= "<div class=\"inline_intern\"><a href=\"$inlieMenuEntry->inlineentry_link\">$inlieMenuEntry->inlineentry_text</a></div>";
+					$inlieMenuHtml .= "<div class=\"inline_intern\"><a href=\"$inlieMenuEntry->inlineentry_link\">$inlieMenuEntry->inlineentry_text</a></div>\r\n";
 				elseif($inlieMenuEntry->inlineentry_type == 'download') {
 						$sql = "SELECT *
 						FROM " . DB_PREFIX . "files
@@ -384,8 +384,8 @@
 					$fileResult = $this->_SqlConnection->SqlQuery($sql);
 					if($file = mysql_fetch_object($fileResult)) {
 						if(file_exists($file->file_path)) {
-							$size = kbormb(filesize($file->file_path));
-							$inlieMenuHtml .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$inlieMenuEntry->inlineentry_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Gr&ouml;&szlig;e von $size\">$inlieMenuEntry->inlineentry_text</a> ($size)</div>";
+							$size = kbormb(filesize($file->file_path), false);
+							$inlieMenuHtml .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$inlieMenuEntry->inlineentry_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Gr&ouml;&szlig;e von $size\">$inlieMenuEntry->inlineentry_text</a> (<span class=\"filesize\">$size</span>)</div>\r\n";
 						}
 					}
 				}
@@ -405,6 +405,7 @@
 			$entriesResult = $this->_SqlConnection->SqlQuery($sql);
 			
 			$this->_InlineMenuEntriesSwitchSortIDs($entriesResult);
+			$this->GenerateInlineMenu($PageID);
  		}
  		
  		function InlineMenuEntryMoveDown ($InlineMenuEntrySortID, $PageID) {
@@ -416,6 +417,7 @@
 			$entriesResult = $this->_SqlConnection->SqlQuery($sql);
 			
 			$this->_InlineMenuEntriesSwitchSortIDs($entriesResult);
+			$this->GenerateInlineMenu($PageID);
  		}
  		
  		function _InlineMenuEntriesSwitchSortIDs ($InlineMenuEntriesResult) {

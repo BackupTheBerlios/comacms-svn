@@ -117,7 +117,7 @@
 			$count = 0;
 			foreach ($pages as $date => $page) {
    				$out .= "<tr>
-						<td style=\"width:9.5em;\">" . date("d.m.Y H:i:s", $date) . "</td>
+						<td class=\"table_date_width\">" . date("d.m.Y H:i:s", $date) . "</td>
 						<td><a href=\"index.php?page=" . $page[0] . "\">" . $page[1] . "</a> (" . $page[0] . ")</td>
 						<td>" . getUserById($page[2]) . "</td>
 						<td>" . $page[3] . "</td>

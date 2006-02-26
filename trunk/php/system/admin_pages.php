@@ -148,7 +148,7 @@
 			//
 			elseif($action == "new") {
 				if($text != "" && $title != "")
-					db_result("INSERT INTO ".DB_PREFIX."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$user->id')");
+					db_result("INSERT INTO ".DB_PREFIX."news (title, text, date, userid) VALUES ('".$title."', '".$text."', '".mktime()."', '$user->Id')");
 			}
 			//
 			// update the selected entrie
@@ -306,7 +306,7 @@
 					else
 						$user_admin = "user_admin= 'n', ";
 					$user_icq = str_replace("-", "", $user_icq);
-					if($user_id == $user->id) {
+					if($user_id == $user->Id) {
 						if($user_password_confirm != "")
 							$actual_user_passwd_md5 = md5($user_password_confirm);
 						$actual_user_name = $user_name;
@@ -325,7 +325,7 @@
 					else
 						$sure = $_POST['sure'];
 					
-					if($sure == 1 && $user_id != $user->id) {
+					if($sure == 1 && $user_id != $user->Id) {
 						$sql = "SELECT *
 							FROM " . DB_PREFIX . "users
 							WHERE user_id=$user_id";

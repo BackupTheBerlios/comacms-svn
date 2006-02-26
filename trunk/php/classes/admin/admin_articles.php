@@ -150,7 +150,7 @@
 	 		if($title !== null && $description !== null && $text !== null) {
 				$sql = "INSERT INTO " . DB_PREFIX . "articles
 					(article_title, article_description, article_text, article_html, article_creator, article_date)
-					VALUES ('$title', '$description', '$text', '" . convertToPreHtml($text) . "', '$user->id', '" . mktime() . "')";
+					VALUES ('$title', '$description', '$text', '" . convertToPreHtml($text) . "', '$user->Id', '" . mktime() . "')";
 				db_result($sql);
 			}
 			if(GetPostOrGet('add_image') == 'add') {
@@ -295,15 +295,15 @@
 	 		$thumbnailfoler = $config->Get('thumbnailfolder', 'data/thumbnails/');
 	 		$imgmax = 100; 
 	 		$out = "<a href=\"admin.php?page=articles&amp;action=new\" class=\"button\">Neuen Artikel schreiben</a><br /> 
-	 			<table class=\"articles\">
+	 			<table class=\"text_table full_width\">
 					<thead>
 						<tr>
-							<td>" . $admin_lang['date'] . "</td>
-							<td>Titel</td>
-							<td>Bild</td>
-							<td>Beschreibung</td>
-							<td>" . $admin_lang['creator'] . "</td>
-							<td>" . $admin_lang['actions'] . "</td>
+							<th class=\"table_date_width\">" . $admin_lang['date'] . "</th>
+							<th>Titel</th>
+							<th>Bild</th>
+							<th>Beschreibung</th>
+							<th>" . $admin_lang['creator'] . "</th>
+							<th class=\"actions\">" . $admin_lang['actions'] . "</th>
 						</tr>
 					</thead>\r\n";
 			$sql = "SELECT *
@@ -312,9 +312,9 @@
 			$articles_result = db_result($sql);
 			while($article = mysql_fetch_object($articles_result)) {
 				$out .= "<tr>
-						<td>" . date('d.m.Y H:i', $article->article_date) . "</td>
+						<td class=\"table_date_width\">" . date('d.m.Y H:i', $article->article_date) . "</td>
 						<td>$article->article_title</td>
-						<td class=\"article_image\">" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '') . "</td>
+						<td class=\"article_image\">" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img alt=\"A Logo\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '') . "</td>
 						<td class=\"articles\">" . nl2br($article->article_description) . "</td>
 						<td>" . getUserByID($article->article_creator) . "</td>
 						<td>

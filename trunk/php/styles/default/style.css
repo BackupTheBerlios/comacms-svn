@@ -199,6 +199,10 @@ table.text_table th {
  font-weight: bold;
 }
 
+td.table_date_width, th.table_date_width{
+ width: 9.5em;
+}
+
 .margin_center {
  margin-left:auto;
  margin-right: auto;
@@ -397,13 +401,13 @@ table.input_table {
 }
 
 td.articles {
- width: 50%;
- padding-right: 5px;
+ width: 17em;
 }
 
-td.article_image {
+table td.article_image {
 text-align: center;
 float: none;
+width: 6.5em
 }
 
 .imageblock, .gallery_image {

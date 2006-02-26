@@ -462,7 +462,7 @@
 						db_result($sql);
 						$history_id = mysql_insert_id();
 						$sql = "UPDATE " . DB_PREFIX . "pages
-							SET page_creator=$user->id, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment', page_access='$page_access', page_type='$page_type', page_parent_id='$page_parent_id'
+							SET page_creator=$user->Id, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment', page_access='$page_access', page_type='$page_type', page_parent_id='$page_parent_id'
 							WHERE page_id=$exists->page_id";
 						db_result($sql);
 						$lastid = $exists->page_id;

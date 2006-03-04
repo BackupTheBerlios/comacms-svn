@@ -44,6 +44,7 @@
 	$menu_array[] = array($admin_lang['admincontrol'], 'admincontrol',);
 	$menu_array[] = array($admin_lang['sitepreview'], 'sitepreview');
 	$menu_array[] = array($admin_lang['preferences'], 'preferences');
+	$menu_array[] = array($admin_lang['modules'], 'modules');
 	$menu_array[] = array($admin_lang['pagestructure'], 'pagestructure');
 	$menu_array[] = array($admin_lang['menu-editor'], 'menueditor');
 //	$menu_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
@@ -148,6 +149,12 @@
 		$title = $admin_lang['menu-editor'];
 		include('classes/admin/admin_menu.php');
 		$admin_page = new Admin_Menu($sqlConnection, $admin_lang);
+		$text = $admin_page->GetPage($extern_action);
+	}
+	elseif($extern_page == 'modules') {
+		$title = $admin_lang['modules'];
+		include('classes/admin/admin_modules.php');
+		$admin_page = new Admin_Modules($sqlConnection, $admin_lang, $config);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	//

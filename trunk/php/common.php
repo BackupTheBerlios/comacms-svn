@@ -122,26 +122,4 @@
 //	counter_set($pagePrefix . $extern_page);
 	
 //	actual_online();
-	
-//	if(!isset($internal_style))
-//		$internal_style = "clear";
-	
-//	if(isset($extern_style) && $actual_user_is_admin && (!endsWith($_SERVER['PHP_SELF'], 'admin.php') || isset($extern_save)))
-//		$internal_style = $extern_style;
-//	$page = new page();
-//	$page->loadTemplate('./styles/' . $internal_style);
-//	if(!isset($internal_default_page))
-//		$internal_default_page = '';
-
-//	if($extern_page == $internal_default_page)
-//		$page = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", "", $page);
-//	else
-//		$page = preg_replace("/\<notathome\>(.+?)\<\/notathome\>/s", "$1", $page);
-//	if($pagePrefix == 'a:')
-//		$page = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", "", $page);
-//	else
-//		$page = preg_replace("/\<notinadmin\>(.+?)\<\/notinadmin\>/s", "$1", $page);
-//	if(!isset($internal_pagename))
-//		$internal_pagename = '';
-//	$page = str_replace("[pagename]", $internal_pagename, $page);
 ?>

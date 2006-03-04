@@ -33,7 +33,7 @@
 	include('common.php');
 	$outputpage = new OutputPage($sqlConnection);
 	$outputpage->LoadPage($extern_page, $user);
-	
+	include('./lang/' . $user->Language . '/admin_lang.php');
 	$output->SetReplacement('MENU' , $outputpage->GenerateMenu());
 	$output->SetReplacement('MENU2' , $outputpage->GenerateMenu(2));
 	$output->SetReplacement('PATH' , $outputpage->Position);
@@ -59,6 +59,7 @@
 			}
 		}
 	}
+	
 	foreach($modules as $module) {
 		$moduleName = $module['moduleName'];
 		$moduleParameter = $module['moduleParameter'];

@@ -35,17 +35,22 @@
  		}
  		
  		function UseModule($Identifer, $Parameters) {
- 			$Parameters = explode('&', $Parameters);
+ 			// default parameter
  			$count = 6;
  			$block = false;
+ 			// try to recive the given parameters
+ 			$Parameters = explode('&', $Parameters);
  			foreach($Parameters as $parameter){
  				$parameter = explode('=', $parameter, 2);
  				if(empty($parameter[1]))
  					$parameter[1] = true;
  				$$parameter[0] = $parameter[1];
  			}
+ 			// get the title for all news
  			$newsTitle =  $this->_Config->Get('news_title', '');
+ 			// and if it isn't empty
  			if($newsTitle != '')
+ 				// make a better html
 				$newsTitle = '<h3>' . $newsTitle . '</h3>';
 			$this->_ComaLate->SetReplacement('NEWS_BIG_TITLE', $newsTitle);	
 			$news = new News($this->_SqlConnection, $this->_ComaLib, $this->_User, $this->_Config);
@@ -56,7 +61,7 @@
  						<NEWS:loop>
  						<div class="news">					
 							<div class="news-title">
-							<span class="news-date">{NEWS_DATE}</span>{NEWS_TITLE}
+							<span class="news-date">{NEWS_DATE}</span><strong>{NEWS_TITLE}</strong>
 							</div>
 							{NEWS_TEXT}
 							<div class="news-author">{NEWS_AUTHOR}</div>

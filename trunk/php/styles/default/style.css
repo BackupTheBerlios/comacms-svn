@@ -222,12 +222,11 @@ div.row label {
  width: 17em;
  padding-bottom: 1em;
 }
+
 div.row label.simple {
  float: none;
  display: inline;
- padding-right: auto;
  width: auto;
- padding-bottom: auto;
 }
 
 div.row {

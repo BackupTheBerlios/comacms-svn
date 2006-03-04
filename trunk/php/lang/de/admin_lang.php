@@ -121,4 +121,8 @@
 	$admin_lang['modules'] = 'Module';
 	$admin_lang['manage_modules'] = 'Module verwalten';
 	$admin_lang['unknown'] = 'unbekannt';
+	$admin_lang['deactivate'] = 'Deaktivieren';
+	$admin_lang['activate'] = 'Aktivieren';
+	$admin_lang['activate module %modulename%'] = 'Modul &quot;%s&quot; Aktivieren';
+	$admin_lang['deactivate module %modulename%'] = 'Modul &quot;%s&quot; Deaktivieren';
 ?>

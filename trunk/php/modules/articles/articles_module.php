@@ -96,9 +96,9 @@
  				<div class="article">
 				<div class="article-title">
 					<span class="article-date">{ARTICLE_DATE}</span>
-					{ARTICLE_TITLE}
+					<strong>{ARTICLE_TITLE}</strong>
 				</div><div class="article_inside"{ARTICLE_STYLE}>
-				{ARTICLE_THUMBNAIL}{ARTICLE_DESCRIPTION}<a href="article.php?id={ARTICLE_ID}" title="Den vollst&auml;ndigen Artikel \'{ARTICLE_TITLE}\' lesen">mehr...</a></div>
+				{ARTICLE_THUMBNAIL}{ARTICLE_DESCRIPTION} <a href="article.php?id={ARTICLE_ID}" title="Den vollst&auml;ndigen Artikel \'{ARTICLE_TITLE}\' lesen">mehr...</a></div>
 				<div class="article-author">{ARTICLE_AUTHOR}</div>
 			</div>	
  			</ARTICLESPREVIEW>

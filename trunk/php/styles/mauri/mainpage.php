@@ -16,7 +16,7 @@
 				</MENU>
 							
 			</ul><notinadmin:condition>
-			<a href="http://www.wjt2005.de" target="_blank" title="Homepage des Weltjugendtages 2005">
+			<a href="http://www.wjt2005.de" title="Homepage des Weltjugendtages 2005">
 				<img id="footerimage" alt="Das ist das Logo des Weltjugendtages 2005" src="{STYLE_PATH}/wjt2005_logo_deu.gif"/>
 			</a></notinadmin>
 		</div>

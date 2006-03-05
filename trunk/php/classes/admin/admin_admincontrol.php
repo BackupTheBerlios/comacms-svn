@@ -19,6 +19,7 @@
 	 * @ignore
 	 */
 	require_once('./classes/admin/admin.php');
+	
 	/**
 	 * @package ComaCMS
 	 */

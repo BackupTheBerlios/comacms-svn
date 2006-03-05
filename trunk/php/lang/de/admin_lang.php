@@ -115,14 +115,23 @@
 	$admin_lang['menu_entry_link'] = 'Men&uuml;eintragsziel';
 	$admin_lang['name/contraction'] = 'Name/K&uuml;rzel';
 	$admin_lang['title'] = 'Titel';
+	$admin_lang['text'] = 'Text';
 	$admin_lang['Do you really want to delete the menuentry %menuEntryTitle%?'] = 'Wollen sie den Men&uuml;eintrag &quot;%s&quot; wirklich l&ouml;schen?';
 	$admin_lang['edit_inlinemenu_of_%page_title%'] = 'Das Zusatzmen&uuml; der Seite &quot;%s&quot; bearbeiten';
 	$admin_lang['delete_page_%page_title%'] = 'L&ouml;schen der Seite &quot;%s&quot;';
 	$admin_lang['modules'] = 'Module';
+	$admin_lang['module'] = 'Modul';
 	$admin_lang['manage_modules'] = 'Module verwalten';
 	$admin_lang['unknown'] = 'unbekannt';
 	$admin_lang['deactivate'] = 'Deaktivieren';
 	$admin_lang['activate'] = 'Aktivieren';
-	$admin_lang['activate module %modulename%'] = 'Modul &quot;%s&quot; Aktivieren';
-	$admin_lang['deactivate module %modulename%'] = 'Modul &quot;%s&quot; Deaktivieren';
+	$admin_lang['activate_module_%modulename%'] = 'Modul &quot;%s&quot; Aktivieren';
+	$admin_lang['deactivate_module_%modulename%'] = 'Modul &quot;%s&quot; Deaktivieren';
+	$admin_lang['write_a_new_news_message'] = 'Neue News-Meldung schreiben';
+	$admin_lang['new_news_message'] = 'Neue News-Meldung';
+	$admin_lang['news_overview'] = 'News-&Uuml;bersicht';
+	$admin_lang['edit_the_news_message_%news_title%_from_the_%date%'] = 'Die News-Meldung &quot;%s&quot; vom %s bearbeiten';
+	$admin_lang['delete_the_news_message_%news_title%_from_the_%date%'] = 'Die News-Meldung &quot;%s&quot; vom %s l&ouml;schen';
+	$admin_lang['delete_news_message'] = 'News-Meldung l&ouml;schen';
+	$admin_lang['do_you_really_want_to_delete_the_news_message_%news_title%_from_the_%date%?'] = 'M&ouml;chten Sie die News-Meldung &quot;%s&quot; vom %s wirklich l&ouml;schen?';
 ?>

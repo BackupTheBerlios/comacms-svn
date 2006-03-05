@@ -18,7 +18,8 @@
  	/**
  	 * @ignore
  	 */
- 	 require_once('./classes/admin/admin.php');
+ 	require_once('./classes/admin/admin.php');
+ 	
  	/**
 	 * @package ComaCMS
 	 */
@@ -169,8 +170,8 @@
 						<td>" .
 						// Show the activate or the deactivate function for the module
 						((!in_array($moduleDirectory, $modulesActivated)) ?
-						 "<a href=\"admin.php?page=modules&amp;action=activate&amp;name=$moduleDirectory\" title=\"" . sprintf($this->_AdminLang['activate module %modulename%'], $moduleName) . "\"><img alt=\"{$this->_AdminLang['activate']}\" src=\"img/add.png\"/></a>" :
-						 "<a href=\"admin.php?page=modules&amp;action=deactivate&amp;name=$moduleDirectory\" title=\"" . sprintf($this->_AdminLang['deactivate module %modulename%'], $moduleName) . "\"><img alt=\"{$this->_AdminLang['deactivate']}\" src=\"img/del.png\"/></a>") .
+						 "<a href=\"admin.php?page=modules&amp;action=activate&amp;name=$moduleDirectory\" title=\"" . sprintf($this->_AdminLang['activate_module_%modulename%'], $moduleName) . "\"><img alt=\"{$this->_AdminLang['activate']}\" src=\"img/add.png\"/></a>" :
+						 "<a href=\"admin.php?page=modules&amp;action=deactivate&amp;name=$moduleDirectory\" title=\"" . sprintf($this->_AdminLang['deactivate_module_%modulename%'], $moduleName) . "\"><img alt=\"{$this->_AdminLang['deactivate']}\" src=\"img/del.png\"/></a>") .
 						" $moduleActivated</td>
 						<td>$moduleAutorun</td>
 						<td>						

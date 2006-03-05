@@ -74,7 +74,7 @@ input, select, textarea, fieldset {
 }
 
 input, select, textarea {
- width: 15em;
+ width: 49%;
  background-color: #FFFFFF;
  font-family: arial, verdana, helvetica, sans-serif;
 }

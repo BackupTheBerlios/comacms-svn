@@ -40,25 +40,55 @@
 	 */
 	include('./lang/' . $user->Language . '/admin_lang.php');
 	include('./system/admin_pages.php');
-	$menu_array = array();
-	$menu_array[] = array($admin_lang['admincontrol'], 'admincontrol',);
-	$menu_array[] = array($admin_lang['sitepreview'], 'sitepreview');
-	$menu_array[] = array($admin_lang['preferences'], 'preferences');
-	$menu_array[] = array($admin_lang['modules'], 'modules');
-	$menu_array[] = array($admin_lang['pagestructure'], 'pagestructure');
-	$menu_array[] = array($admin_lang['menu-editor'], 'menueditor');
+	// add the menu-entries for the admin menu (Link-Text, $page)
+	$menuArray = array();
+	$menuArray[] = array($admin_lang['admincontrol'], 'admincontrol',);
+	$menuArray[] = array($admin_lang['sitepreview'], 'sitepreview');
+	$menuArray[] = array($admin_lang['preferences'], 'preferences');
+	$menuArray[] = array($admin_lang['modules'], 'modules');
+	$menuArray[] = array($admin_lang['pagestructure'], 'pagestructure');
+	$menuArray[] = array($admin_lang['menu-editor'], 'menueditor');
 //	$menu_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
 //	$menu_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
 //	$menu_array[] = array($admin_lang['inlinemenu'], 'admin.php?page=inlinemenu');
-	$menu_array[] = array($admin_lang['news'], 'news');
-	$menu_array[] = array($admin_lang['dates'], 'dates');
-	$menu_array[] = array($admin_lang['articles'], 'articles');
-	$menu_array[] = array($admin_lang['sitestyle'], 'sitestyle');
-	$menu_array[] = array($admin_lang['users'], 'users');
-	$menu_array[] = array($admin_lang['groups'], 'groups');
-	$menu_array[] = array($admin_lang['rights'], 'rights');
-	$menu_array[] = array($admin_lang['files'], 'files');
-	$menu_array[] = array($admin_lang['logout'], 'logout');
+//	$menuArray[] = array($admin_lang['news'], 'news');
+	$menuArray[] = array($admin_lang['dates'], 'dates');
+	$menuArray[] = array($admin_lang['articles'], 'articles');
+	$menuArray[] = array($admin_lang['sitestyle'], 'sitestyle');
+	$menuArray[] = array($admin_lang['users'], 'users');
+	$menuArray[] = array($admin_lang['groups'], 'groups');
+	$menuArray[] = array($admin_lang['rights'], 'rights');
+	$menuArray[] = array($admin_lang['files'], 'files');
+	
+	// add menu entries for activated modules
+	
+	// get the activated modules
+	$modulesActivated = unserialize ($config->Get('modules_activated'));
+	// if no data is saved...
+	if(!is_array($modulesActivated))
+		// create the array to make arrayfunctions possible
+		$modulesActivated = array();
+	// sort the entries, its a bit better to hold a order in the menu-entries
+	sort($modulesActivated);
+	foreach($modulesActivated as $moduleActivated) {
+		// check if the module has an admin-interface and if it has an info-file
+		if(file_exists("./modules/$moduleActivated/{$moduleActivated}_admin.php") && file_exists("./modules/$moduleActivated/{$moduleActivated}_info.php")) {
+		
+			$module =  array();
+			// load the info-file for the module
+			/**
+			 * @ignore
+			 */
+			include("./modules/$moduleActivated/{$moduleActivated}_info.php");
+			// try to get the 'well-formed' name of the module	
+			// if it isn't possible display the internal name of the module
+			$moduleName =  (array_key_exists('name', $module)) ? $module['name'] : $moduleActivated;
+			// ad the menu entrie for the module
+			$menuArray[] = array($moduleName . '-' . $admin_lang['module'], 'module_'. $moduleActivated);
+		}
+	}
+	
+	$menuArray[] = array($admin_lang['logout'], 'logout');
 	
 	// FIXME: add path links to make the usability much better! 
 	$path_add = '';
@@ -82,10 +112,6 @@
 		$title = $admin_lang['sitepreview'];
 		$text = page_sitepreview();
 	}
-/*	elseif($extern_page == 'menueeditor') {
-		$title = $admin_lang['menueeditor'];
-		$text = page_menueeditor();
-	}*/
 	elseif($extern_page == 'sitestyle') {
 		$title = $admin_lang['sitestyle'];
 		$text = page_sitestyle();
@@ -157,6 +183,28 @@
 		$admin_page = new Admin_Modules($sqlConnection, $admin_lang, $config);
 		$text = $admin_page->GetPage($extern_action);
 	}
+	elseif(substr($extern_page, 0, 7) == 'module_')
+	{
+		// get the name of the module which's  admin-interface should be shown
+		$moduleName = substr($extern_page, 7);
+		// is the module really activated? (yes, I'm paranoid... :-P )
+		if(in_array($moduleName, $modulesActivated)) {
+			/**
+			 * @ignore
+			 */
+			include("./modules/$moduleName/{$moduleName}_admin.php");
+			if(class_exists('Admin_Module_' . $moduleName)) {
+				// create a link to the initialisation-function for the module-class
+				$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Admin_Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');
+				// create the module-class
+				$moduleAdminInterface = $newClass($sqlConnection, $user, $admin_lang, $config, $output, $lib);
+				if(isset($moduleAdminInterface)) {
+					$text = $moduleAdminInterface->GetPage($extern_action);
+					$title = $moduleAdminInterface->GetTitle();
+				}
+			} 
+		}
+	}
 	//
 	// end of the 'functions'
 	//
@@ -165,15 +213,15 @@
 	 */
 	$menu = array();
 	
-	foreach($menu_array as $part) {
+	foreach($menuArray as $part) {
 		if($extern_page == $part[1])
 			$linkStyle = ' class="actual"';
 		else
 			$linkStyle = '';
 		$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'admin.php?page=' . $part[1], 'LINK_STYLE' => $linkStyle);
 	}
-	$output->SetReplacement("MENU" , $menu);
-	$output->SetReplacement("TEXT" , $text);
+	$output->SetReplacement('MENU' , $menu);
+	$output->SetReplacement('TEXT' , $text);
 	$output->Title = $title;
 	$output->SetCondition('notathome', true);
 	$output->SetCondition('notinadmin', false);

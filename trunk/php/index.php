@@ -26,8 +26,7 @@
  #----------------------------------------------------------------------#
 
 	/**
-	 * Set a global to make sure that common.php is executet in the
-	 * only right context
+	 * Set a global to make sure that common.php is executet only in the right context
 	 */
 	define("COMACMS_RUN", true);
 	// run common.php to have all ordinary things done, which every page needs
@@ -36,6 +35,9 @@
 	// load the page
 	$outputpage->LoadPage($extern_page, $user);
 	// get the language strings
+	/**
+	 * @ignore
+	 */
 	include('./lang/' . $user->Language . '/admin_lang.php');
 	$output->SetReplacement('MENU' , $outputpage->GenerateMenu());
 	$output->SetReplacement('MENU2' , $outputpage->GenerateMenu(2));
@@ -84,6 +86,9 @@
 		// get the transmitted parameters
 		$moduleParameter = $module['moduleParameter'];
 		// load the module file
+		/**
+		 * @ignore
+		 */
 		include_once('./modules/' . $moduleName . '/' . $moduleName . '_module.php');
 		// check if the module-class is already created
 		if(!isset($$moduleName)) {

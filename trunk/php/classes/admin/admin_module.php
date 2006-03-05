@@ -4,8 +4,8 @@
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
- # file			: module.php					#
- # created		: 2006-02-18					#
+ # file			: admin_module.php				#
+ # created		: 2006-03-04					#
  # copyright		: (C) 2005-2006 The ComaCMS-Team		#
  # email		: comacms@williblau.de				#
  #----------------------------------------------------------------------#
@@ -15,47 +15,42 @@
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
  	/**
-	 * @ignore
-	 */
-	require_once('./classes/admin/admin.php');
-	
-	/**
 	 * @package ComaCMS
 	 */
- 	class Module {
+ 	class Admin_Module extends Admin{
  		/**
- 		 * @var Sql
  		 * @access private
+ 		 * @var Sql
  		 */
  		var $_SqlConnection;
  		
  		/**
- 		 * @var User
  		 * @access private
+ 		 * @var User
  		 */
  		var $_User;
  		
  		/**
- 		 * @var Config
  		 * @access private
+ 		 * @var Config
  		 */
  		var $_Config;
  		
  		/**
- 		 * @var array
  		 * @access private
+ 		 * @var array
  		 */
  		var $_Lang;
  		
  		/**
- 		 * @var ComaLate
  		 * @access private
+ 		 * @var ComaLate
  		 */
  		var $_ComaLate;
  		
  		/**
- 		 * @var ComaLib
  		 * @access private
+ 		 * @var ComaLib
  		 */
  		var $_ComaLib;
  		
@@ -67,7 +62,7 @@
  		 * @param ComaLate ComaLate
  		 * @param ComaLib ComaLib
  		 */
- 		function Module(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
+ 		function Admin_Module(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
  			$this->_SqlConnection = &$SqlConnection;
  			$this->_User = &$User;	
  			$this->_Lang = &$Lang;
@@ -76,7 +71,9 @@
  			$this->_ComaLib = &$ComaLib;
  		}
  		
- 		function UseModule($Parameters) {
+ 		
+ 		
+ 		function GetTitle() {
  			return '';
  		}
  	}

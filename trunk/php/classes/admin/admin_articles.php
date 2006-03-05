@@ -126,9 +126,9 @@
 					WHERE article_id=$id";
 				$article_result = db_result($sql);
 				if($row = mysql_fetch_object($article_result)) {
-					$out = "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich l�schen?<br />
-			<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=" . $id . "&amp;sure=1\" title=\"Wirklich L�schen\" class=\"button\">Ja</a>
-			<a href=\"admin.php?page=articles\" title=\"Nicht L�schen\" class=\"button\">Nein</a>";
+					$out = "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich l&ouml;schen?<br />
+			<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=" . $id . "&amp;sure=1\" title=\"Wirklich L&ouml;schen\" class=\"button\">Ja</a>
+			<a href=\"admin.php?page=articles\" title=\"Nicht L&ouml;schen\" class=\"button\">Nein</a>";
 			
 					return $out;
 				}

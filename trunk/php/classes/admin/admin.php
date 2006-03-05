@@ -34,9 +34,10 @@
  		
  		/**
  		 * @return string
- 		 * @param Action string
+ 		 * @param string Action
  		 */
 		function GetPage($Action = '') {
+			return '';
 		}
  	}
 ?>

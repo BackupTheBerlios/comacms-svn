@@ -98,7 +98,7 @@
 	$admin_lang['edit_right'] = 'Edit-Right';
 	$admin_lang['delete_right'] = 'Delete-Right';
 	$admin_lang['add_new_subpage_right'] = '&quot;Add-New-Subpage&quot;-Right';
-	$admin_lang['todo'] = '!this is to do!';
+	$admin_lang['todo'] = '!this is already to do!';
 	$admin_lang['deleted'] = 'Deleted';
 	$admin_lang['hidden'] = 'Hidden';
 	$admin_lang['public'] = 'Public';
@@ -116,14 +116,23 @@
 	$admin_lang['menu_entry_link'] = 'Menuentrylink';
 	$admin_lang['name/contraction'] = 'Name/Contraction';
 	$admin_lang['title'] = 'Title';
+	$admin_lang['text'] = 'Text';
 	$admin_lang['Do you really want to delete the menuentry %menuEntryTitle%?'] = 'Do you really want to delete the menuentry &quot;%s&quot;?';
 	$admin_lang['edit_inlinemenu_of_%page_title%'] = 'Edit the inlinemenu of &quot;%s&quot;';
 	$admin_lang['delete_page_%page_title%'] = 'Delete page &quot;%s&quot;';
 	$admin_lang['modules'] = 'Modules';
+	$admin_lang['module'] = 'Module';
 	$admin_lang['manage_modules'] = 'Manage Modules';
 	$admin_lang['unknown'] = 'unknown';
 	$admin_lang['deactivate'] = 'Deactivate';
 	$admin_lang['activate'] = 'Activate';
-	$admin_lang['activate module %modulename%'] = 'Activate module &quot;%s&quot;';
-	$admin_lang['deactivate module %modulename%'] = 'Deactivate module &quot;%s&quot;';
+	$admin_lang['activate_module_%modulename%'] = 'Activate module &quot;%s&quot;';
+	$admin_lang['deactivate_module_%modulename%'] = 'Deactivate module &quot;%s&quot;';
+	$admin_lang['write_a_new_news_message'] = 'Write a new News-Message';
+	$admin_lang['new_news_message'] = 'New News-Message';
+	$admin_lang['news_overview'] = 'News-Overview';
+	$admin_lang['edit_the_news_message_%news_title%_from_the_%date%'] = 'Edit the News-Message &quot;%s&quot; from the %s';
+	$admin_lang['delete_the_news_message_%news_title%_from_the_%date%'] = 'Delete the News-Message &quot;%s&quot; from the %s';
+	$admin_lang['delete_news_message'] = 'Delete News-Message';
+	$admin_lang['do_you_really_want_to_delete_the_news_message_%news_title%_from_the_%date%?'] = 'Do you really want to delete the News-Message &quot;%s&quot; from the %s?';
 ?>

@@ -15,10 +15,12 @@
  # the Free Software Foundation; either version 2 of the License, or	#
  # (at your option) any later version.					#
  #----------------------------------------------------------------------#
+	
 	/**
 	 * @ignore
 	 */
 	require_once('modules/news/news.class.php');
+	
 	/**
 	 * @package ComaCMS
 	 * @subpackage News 

@@ -116,10 +116,10 @@
 		$title = $admin_lang['sitestyle'];
 		$text = page_sitestyle();
 	}
-	elseif($extern_page == 'news') {
+/*	elseif($extern_page == 'news') {
 		$title = $admin_lang['news'];
 		$text = page_news();
-	}
+	}*/
 	elseif($extern_page == 'dates') {
 		$title = $admin_lang['dates'];
 		include('classes/admin/admin_dates.php');

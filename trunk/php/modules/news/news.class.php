@@ -61,8 +61,27 @@
     		}
     		
     		/**
+    		 * Update a News-Message
+    		 * @param integer NewsID
+    		 * @param string Title
+    		 * @param string Text
+    		 * @return void
+    		 * @access public
+    		 */
+    		function UpdateMessage($NewsID, $Title, $Text) {
+    			// is there some content and is the value of $NewsID plausible?
+    			if(is_numeric($NewsID) && $Title != '' && $Text != '') {
+    				$sql = "UPDATE " . DB_PREFIX . "news
+    					SET title= '$Title', text= '$Text' WHERE id=$NewsID";
+    				$this->_SqlConnection->SqlQuery($sql);
+    			}
+    		}
+    		
+    		/**
     		 * Adds a new News-Message
     		 * @access public
+    		 * @param string Title
+    		 * @param string Text
     		 * @return void
     		 */
     		function AddMessage($Title, $Text) {

@@ -83,10 +83,10 @@
 		return $out;
 	}
 
-	/**
+	/*
 	 * @return string the news-admin-page where you can write,change and delete news-entries
 	 */
- 	function page_news() {
+ /*	function page_news() {
 		global $_GET, $_POST, $actual_user_showname, $actual_user_id, $user;
 		
 		$out = "";
@@ -245,7 +245,7 @@
 	
 		return $out;
 	}
-
+*/
 /*****************************************************************************
  *
  * string page_users()

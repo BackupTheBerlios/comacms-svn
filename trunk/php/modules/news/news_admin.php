@@ -29,6 +29,7 @@
 	class Admin_Module_News extends Admin_Module{
 		
 		/**
+		 * @access public
  		 * @param Sql SqlConnection
  		 * @param User User
  		 * @param array Lang

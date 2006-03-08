@@ -640,6 +640,8 @@
 		list($originalWidth, $originalHeight) = getimagesize($InputFile);
 		$width = ($originalWidth > $originalHeight) ? round($Maximum, 0) : round($originalWidth / ($originalHeight / $Maximum), 0);
 		$height = ($originalHeight > $originalWidth) ? round($Maximum, 0) : round($originalHeight / ($originalWidth / $Maximum), 0);
+		if($width >= $originalWidth || $height >= $originalHeight)
+			return $InputFile;
 		$outputFile = (substr($OutputDir, -1) == '/') ? $OutputDir :  $OutputDir . '/';
 		$outputFile .= $width . 'x' . $height . '_'. basename($InputFile);
 		return resizeImage($InputFile, $outputFile, $width, $height);

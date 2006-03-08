@@ -495,21 +495,30 @@ width: 6.5em
 }
 
 .column {
-
-clear: none !important;
-padding-left: .6em;
-padding-right: .6em;
-float: left;
+ clear: none !important;
+ padding-left: .6em;
+ padding-right: .6em;
+ float: left;
 }
 
 .ctwo {
-width: 46.5%;
+ width: 46.5%;
 }
 
 .ctree {
-width: 30.2%;
+ width: 30.2%;
 }
 
 p.after_column {
-clear: both;
+ clear: both;
+}
+
+.imagebox {
+ position: relative;
+ text-align: center;
+}
+
+.imagebox .imagelinks .imagemove {
+ margin-left: .5em;
+ margin-right: .5em;
 }

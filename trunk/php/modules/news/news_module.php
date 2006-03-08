@@ -44,7 +44,7 @@
  			$Parameters = explode('&', $Parameters);
  			foreach($Parameters as $parameter){
  				$parameter = explode('=', $parameter, 2);
- 				if(empty($parameter[1]))
+ 				if(!isset($parameter[1]))
  					$parameter[1] = true;
  				$$parameter[0] = $parameter[1];
  			}

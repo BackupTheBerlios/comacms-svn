@@ -47,11 +47,12 @@
 		$title = "Login";
 		$text = "<form method=\"post\" action=\"admin.php\">
 			<input type=\"hidden\" name=\"page\" value=\"admincontrol\" />$text_error
-			<table>
-				<tr><td>Loginname:</td><td><input type=\"text\" name=\"login_name\" /></td></tr>
-				<tr><td>Passwort:</td><td><input type=\"password\" name=\"login_password\" /></td></tr>
-				<tr><td colspan=\"2\"><input type=\"submit\" value=\"Login\" class=\"button\"/></td></tr>
-			</table>
+			<fieldset>
+				<legend>Login</legend>
+				<div class=\"row\"><label>Loginname:</label><input type=\"text\" name=\"login_name\" /></div>
+				<div class=\"row\"><label>Passwort:</label><input type=\"password\" name=\"login_password\" /></div>
+				<div class=\"row\"><input type=\"submit\" value=\"Login\" class=\"button\"/></div>
+			</fieldset>
 		</form>";
 	}
 	elseif($extern_page == '404') {	

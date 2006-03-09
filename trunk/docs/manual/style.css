@@ -53,8 +53,6 @@ div.tcenter * {
 div.thumb div {
  border: 1px solid #000000;
  padding: 3px !important;
- padding-left: auto !important;
- padding-right: auto !important;
  background-color: #9B9FBF;
  font-size: 94%;
  text-align: center;

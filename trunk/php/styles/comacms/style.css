@@ -116,7 +116,7 @@ a img {
  border: 0.1ex dashed #808080;
  margin: 5px;
  padding: 5px;
- min-heigth: 1200px;
+ min-height: 120px;
  position: relative;
  clear: both;
 }
@@ -181,10 +181,6 @@ table.text_table td, table.text_table th {
  padding: 0.1em;
 }
 
-table.text_table th {
- background-color: #7C7EC6;
-}
-
 .page_lang {
  position: absolute;
  right: 9em;
@@ -201,8 +197,12 @@ table.text_table th {
  display: block;
 }
 
-.structure_row:hover {
- background-color: #7C7EC6 !imortant;
+.structure_row:hover, .structure_row:hover * {
+ background-color: #7C7EC6 !important;
+}
+
+.structure_row input.checkbox {
+ margin-bottom: 3px;
 }
 
 .strike img {
@@ -211,4 +211,9 @@ table.text_table th {
 
 li.page_type_text, li.page_type_gallery {
  margin-left: 1em;	
+}
+
+table.text_table th {
+ background-color: #7C7EC6 !important;
+	
 }

@@ -1,19 +1,19 @@
-<?php
+﻿<?php
 /**
  * @package ComaCMS
  * @copyright (C) 2005 The ComaCMS-Team
  */
- #----------------------------------------------------------------------#
- # file			: install.php					#
- # created		: 2005-06-17					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
- # email		: comacms@williblau.de				#
- #----------------------------------------------------------------------#
- # This program is free software; you can redistribute it and/or modify	#
- # it under the terms of the GNU General Public License as published by	#
- # the Free Software Foundation; either version 2 of the License, or	#
- # (at your option) any later version.					#
- #----------------------------------------------------------------------#
+ #----------------------------------------------------------------------
+ # file                 : install.php
+ # created              : 2005-06-1
+ # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # email                : comacms@williblau.de
+ #----------------------------------------------------------------------
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #----------------------------------------------------------------------
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
@@ -25,6 +25,18 @@
 
 <body>
 <?
+	
+	include('../functions.php');	
+	$db_prefix = GetPostOrGet('db_prefix');
+	$admin_name = GetPostOrGet('admin_name');
+	$admin_showname = GetPostOrGet('admin_showname');
+	$admin_password = GetPostOrGet('admin_password');
+	$admin_password2 = GetPostOrGet('admin_password2');
+	$db_server = GetPostOrGet('db_server');	
+	$db_user = GetPostOrGet('db_user');
+	$db_password = GetPostOrGet('db_password');
+	$db_database = GetPostOrGet('db_database');
+	$db_prefix = GetPostOrGet('db_prefix');
 
 	$create = "DROP TABLE IF EXISTS " . $db_prefix . "articles;
 		CREATE TABLE " . $db_prefix . "articles (
@@ -262,10 +274,11 @@
 		INSERT INTO " . $db_prefix . "menu (menu_link, menu_text, menu_new, menu_orderid, menu_menuid, menu_page_id)
 		VALUES ('l:home', 'Home', 'no', 0, 1, 1);";
 		//TODO: make sure that the id of the default page is everytime the right one 
+	
 
 	if($admin_name == "" || $admin_showname == "" || $admin_password == "")
-		die("Die Angaben zum Adminaccount sind unvollständig..");
-
+		die("Die Angaben zum Adminaccount sind unvollst&auml;ndig..");
+	
 	if($admin_password != $admin_password2)
 		die("Das Passwort wurde nicht korrekt wiederholt");
 

@@ -2,19 +2,19 @@
 
 	[_]- Manual
 	[ ]- Multi-Site-System(one installation with different sites, with a master- and a per-site-admin-interface
-	[ ]- Rights(per user, per group)
+	[_]- Rights(per user, per group)
 	[ ]- Make authorisation over HTTP-AUTH (there will be a problem HTTP-AUTH is not supported in the CGI version of PHP)
 	[_]- Userfriendly Installation
 	[_]- Translations
-	[ ]- Pluginsystem
+	[_]- Modulesystem
 	[ ]- Admin-Interface
 		[_]- Preferences
 		[_]- AdminControl(statistics etc.)
 		[X]- Stylemanagement(change, preview)
 		[_]- Usermanagement
-		[ ]- Rightsmanagement
-		[ ]- Groupmanagement
-		[ ]- Menu-editor
+		[_]- Rightsmanagement
+		[_]- Groupmanagement
+		[_]- Menu-editor
 		[X]- Inlinemenu-editor
 	[ ]- 'User'-Interface
 		[ ]- Page-editor
@@ -29,8 +29,7 @@
 	[_]- 'Full XHTML support'
 	[_]- Gallery-viewer
 	[ ]- Styles
-		[_]- Mauri-style
-		[ ]- Default-style
+		[_]- Default-style
 	[ ]- Search
 	[ ]- Guestbook
 	[ ]- Forum
@@ -45,8 +44,8 @@
 	[ ]- Newsletter
 	[ ]- Administration can dedect elements which are configurable in the style
 	[ ]- Sitemap
-	[ ]- Downloads
+	[_]- Downloads
 	[ ]- GUI-Generator
 	[ ]- XHTML-PageGenerator
 	[ ]- BUGS!!
-		[ ]-If you delete a page all subpages will be hidden by page-structure editor
+		[X]-If you delete a page all subpages will be hidden by page-structure editor

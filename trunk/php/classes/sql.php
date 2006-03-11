@@ -49,7 +49,7 @@
  		
  		/**
  		 * The number of all done MySQL-queries in this session
- 		 * @acces public
+ 		 * @access public
  		 * @var integer 
  		 */
  		var $QueriesCount = 0;
@@ -89,9 +89,9 @@
  		
  		/**
  		 * Sends a MySQL-Query to the Server and incements a counter which counts the MySQL-queries 
- 		 * @acces public
+ 		 * @access public
  		 * @param string Query A MySQL-Query 
- 		 * @result resource
+ 		 * @return resource
  		 */
  		function SqlQuery($Query) {
  			global $sqlConnection;

@@ -1,11 +1,12 @@
 <?php
 /**
  * @package ComaCMS
+ * @subpackage Dates
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
- # file                 : adticles_info.php
- # created              : 2006-03-03
+ # file                 : dates_info.php
+ # created              : 2006-03-10
  # copyright            : (C) 2005-2006 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
@@ -14,7 +15,7 @@
  # the Free Software Foundation; either version 2 of the License, or
  # (at your option) any later version.
  #----------------------------------------------------------------------
-	
-	$module['name'] = 'Articles';
+ 
+ 	$module['name'] = 'Dates';
 	$module['version'] = '0.1';
 ?>

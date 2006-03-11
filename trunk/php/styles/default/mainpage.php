@@ -4,7 +4,7 @@
 			</div>
 			<ul id="menu">
 				<MENU:loop>
-				<li{LINK_STYLE}><a href="{LINK}">{LINK_TEXT}</a></li>
+				<li type="square"{LINK_STYLE}><a href="{LINK}">{LINK_TEXT}</a></li>
 				</MENU>		
 					</ul>
 			<div id="content">

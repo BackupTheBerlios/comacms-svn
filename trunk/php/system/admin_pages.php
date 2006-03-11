@@ -246,12 +246,12 @@
 		return $out;
 	}
 */
-/*****************************************************************************
+/*
  *
  * string page_users()
  * returns the user-admin-page where you can add, change and delete users
  *
- *****************************************************************************/
+ */
 	function page_users() {
 		global $_GET, $_POST, $PHP_SELF, $admin_lang, $actual_user_id, $actual_user_passwd_md5,$actual_user_online_id, $actual_user_online_id, $_SERVER, $user;
 	
@@ -537,12 +537,12 @@
 		return $out;
 	}
 	
-/*****************************************************************************
+/*
  *
  * string page_preferences()
  * returns the preferences-admin-page where you can change or add some entries
  *
- *****************************************************************************/
+ */
 	function page_preferences() {
 		global $setting, $_SERVER, $admin_lang, $extern_action, $_GET, $_POST, $config;
 		/**

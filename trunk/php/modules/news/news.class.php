@@ -144,7 +144,7 @@
     		 * @param boolean DisplayAutor Put the author into the array? if it's 'false' the value of the config is decisive if not the name will be shown
     		 * @return array A ComaLate ready Array
     		 */
-    		function FillArray($Maximum = 6, $ParserDate = true, $DisplayAuthor = false) {
+    		function FillArray($Maximum = 6, $ConvertTimestamp = true, $DisplayAuthor = false) {
     			$entries = array();
     			$sql = "SELECT *
 				FROM " . DB_PREFIX . "news
@@ -163,7 +163,7 @@
 				$displayAuthor = true;
 			$dateFormat = '';
 			// get the date-format-string if the date should be human-readable
-			if($ParserDate) {
+			if($ConvertTimestamp) {
 				$dateFormat = $this->_Config->Get('news_date_format', 'd.m.Y');
 				$dateFormat .= ' ' . $this->_Config->Get('news_time_format', 'H:i:s');
 			}
@@ -174,7 +174,7 @@
 				if($displayAuthor)
 					$newsAuthor = $this->_ComaLib->GetUserByID($entrie->userid);
 				
-				$entries[] = array(	'NEWS_DATE' => ($ParserDate) ? date($dateFormat, $entrie->date) : $entrie->date, // a real date-string or the timestamp?
+				$entries[] = array(	'NEWS_DATE' => ($ConvertTimestamp) ? date($dateFormat, $entrie->date) : $entrie->date, // a real date-string or the timestamp?
 							'NEWS_TEXT' => nl2br($entrie->text),
 							'NEWS_AUTHOR' => $newsAuthor,
 							'NEWS_TITLE' => $entrie->title,

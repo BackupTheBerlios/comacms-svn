@@ -242,7 +242,7 @@
 	 	/**
 	 	 * DateSelecter
 	 	 * 
-	 	 * Creates a 'control' to select a date without tiping something in by keyboard
+	 	 * Creates a 'control' to select a date without typing something in by keyboard
 	 	 * 
 	 	 * @access public
 	 	 * @param timestamp selected_date

@@ -393,12 +393,12 @@
 			while($entry = $files->read()) {
   				if(is_file($upload_path.$entry))
   					if(!in_array(md5_file($upload_path . $entry),$md5s))
-  						$out .= "<input type=\"checkbox\" name=\"change[]\" value=\"" . generateUrl(utf8_encode($upload_path . $entry)) ."\" checked=\"checked\" /><strong>Zur Datenbank hinzuf�gen</strong> " . utf8_encode($entry) . "<br />\r\n";
+  						$out .= "<input type=\"checkbox\" name=\"change[]\" value=\"" . generateUrl(utf8_encode($upload_path . $entry)) ."\" checked=\"checked\" /><strong>Zur Datenbank hinzuf&uum;gen</strong> " . utf8_encode($entry) . "<br />\r\n";
   						
   				//echo $upload_path.$entry . '-' . md5_file($upload_path.$entry) . "<br>";
 			}
 			$files->close();
-			$out .= "<input type=\"submit\" class=\"button\" value=\"Ausf�hren\"/>" .
+			$out .= "<input type=\"submit\" class=\"button\" value=\"Ausf&uuml;hren\"/>" .
 				"</form>\n\r";
 			return $out;
 			//print_r($md5s);

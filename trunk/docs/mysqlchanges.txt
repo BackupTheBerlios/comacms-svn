@@ -353,7 +353,7 @@ ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlinieentrie_type` `inlinieentrie_
 ALTER TABLE `cms_inlinemenu` ADD `inlinemenu_image_title` VARCHAR( 100 ) NOT NULL ;
 ALTER TABLE `cms_inlinemenu` ADD `inlinemenu_image_thumb` VARCHAR( 255 ) NOT NULL AFTER `inlinemenu_image` ;
 
-#216
+#r216
 #renamed 'inlineentrie' to 'inlineentry'
 ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlineentrie_id` `inlineentry_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
 CHANGE `inlineentrie_sortid` `inlineentry_sortid` INT( 10 ) NOT NULL DEFAULT '0',
@@ -361,3 +361,7 @@ CHANGE `inlineentrie_page_id` `inlineentry_page_id` INT( 10 ) NOT NULL DEFAULT '
 CHANGE `inlinieentrie_type` `inlineentry_type` ENUM( 'link', 'download', 'text', 'intern' ) NOT NULL DEFAULT 'link',
 CHANGE `inlineentrie_text` `inlineentry_text` TEXT NOT NULL ,
 CHANGE `inlineentrie_link` `inlineentry_link` VARCHAR( 255 ) NOT NULL ;
+
+#r244
+#renamed place to location
+ALTER TABLE `cms_dates` CHANGE `date_place` `date_location` VARCHAR( 60 ) NOT NULL ;

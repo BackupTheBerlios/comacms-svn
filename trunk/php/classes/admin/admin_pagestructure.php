@@ -35,16 +35,19 @@
 		/**
 		 * PageStructure functions
 		 * @var PageStructure
+		 * @access private
 		 */
  		var $_PageStructure;
  		/**
  		 * The current User
  		 * @var User;
+ 		 * @access private
  		 */
  		var $_User;
  		/**
  		 * A Config-link
  		 * @var Config
+ 		 * @access private
  		 */
  		var $_Config;
  		
@@ -94,6 +97,7 @@
 		 }
 		 
 		 /**
+		  * @access private
 		  * @return string
 		  */
 		 function _generate_menu() {
@@ -106,6 +110,10 @@
 		 	return $this->GetPage('internHome');
 		 }
 		 
+		 /**
+		  * @access private
+		  * @return string
+		  */
 		 function _deletePage() {
 		 	$adminLang = &$this->_AdminLang;
 		 	$confirmation = GetPostOrGet('confirmation');
@@ -185,6 +193,11 @@
 		 		return $this->GetPage('internHome');
 		 }
 		 
+		 /**
+		  * @access private
+		  * @return void
+		  */
+		 
 		 function _getMenuPageIDs() {
 		 	$this->MenuPageIDs = array();
 		 	$sql = "SELECT menu_page_id
@@ -195,6 +208,10 @@
 		 		$this->MenuPageIDs[] = $id->menu_page_id;
 		 }
 		 
+		 /**
+		  * @access private
+		  * @return string
+		  */
 		 function _homePage() {
 		 	$adminLang = &$this->_AdminLang;
 		 	$this->_getMenuPageIDs();
@@ -212,6 +229,10 @@
 			return $out;
 		 }
 		 
+		 /**
+		  * @access private
+		  * @return string
+		  */
 		 function _newPage() {
 		 	$adminLang = &$this->_AdminLang;
 		 	$this->_PageStructure->LoadParentIDs();
@@ -300,6 +321,10 @@
 		 	return $out;
 		 }
 		 
+		 /**
+		  * @access private
+		  * @return string
+		  */
 		 function _structurePullDown($topnode = 0, $deep = 0, $topnumber = '', $without = -1, $selected = -1) {
 		 	$out = '';
 			$sql = "SELECT *
@@ -320,6 +345,10 @@
 		 	return $out;
 		 }
 		 
+		 /**
+		  * @access private
+		  * @return string
+		  */
 		 function _Structure($TopNodeID = 0) {
 		 	$adminLang = $this->_AdminLang;
 		 	$out = '';
@@ -351,12 +380,20 @@
 		 	return $out;
 		 }
 		 
+		 /**
+		  * @access private
+		  * @return string
+		  */
 		 function _showStructure($TopNodeID = 0) {
 			$this->_PageStructure->LoadParentIDs();
 	 		$out = $this->_Structure($TopNodeID);
 			return $out;
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _editPage() {
 			$page_id = GetPostOrGet('pageID');
 			$out = '';
@@ -385,6 +422,10 @@
 			}
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _savePage() {
 			$pageID = GetPostOrGet('pageID');
 			$out = '';
@@ -410,6 +451,10 @@
 			}
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _addPage() {
 			
 			$user = &$this->_User;
@@ -487,6 +532,10 @@
 	
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _pagePath($PageID = 0) {
 			$out = '';
 			$sql = "SELECT *
@@ -510,6 +559,7 @@
 		/**
 		 * inlineMenu
 		 * inlinemenu-management
+		 * @access private
 		 */
 		function _inlineMenu() {
 			$adminLang = &$this->_AdminLang;
@@ -565,6 +615,10 @@
 			return $out;
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _InlineMenuEditEntryPage($PageID) {
 			$adminLang = &$this->_AdminLang;
 			$entryID = GetPostOrGet('entryID');
@@ -684,6 +738,10 @@
 			return $this->_InlineMenuHomePage($PageID); 
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _InlineMenuRemoveEntryPage ($PageID) {
 			$entryID = GetPostOrGet('entryID');
 			$confirmation = GetPostOrGet('confirmation');
@@ -708,6 +766,7 @@
 		/**
 		 * @param integer PageID
 		 * @return string
+		 * @access private
 		 */
 		function _InlineMenuSetImagePage ($PageID) {
 			// Get data from header
@@ -730,6 +789,7 @@
 		/**
 		 * @param integer PageID
 		 * @return string
+		 * @access private
 		 */
 		function _InlineMenuSaveEntryPage ($PageID) {
 			$entryID = GetPostOrGet('entryID');
@@ -755,6 +815,7 @@
 		/**
 		 * @param integer PageID
 		 * @return string
+		 * @access private
 		 */
 		function _InlineMenuAddNewEntryPage ($PageID) {
 			$text = GetPostOrGet('text');
@@ -779,6 +840,7 @@
 		/**
 		 * @param integer PageID
 		 * @return string
+		 * @access private
 		 */
 		function _InlineMenuAddNewEntryDialogPage($PageID) {
 			$adminLang = &$this->_AdminLang;
@@ -936,29 +998,49 @@
 			return $out;
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _InlineMenuMoveUpPage($PageID) {
 			$entrySortID = GetPostOrGet('entrySortID');
 			$this->_PageStructure->InlineMenuEntryMoveUp($entrySortID, $PageID);
 			return $this->_InlineMenuHomePage($PageID);
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _InlineMenuMoveDownPage($PageID) {
 			$entrySortID = GetPostOrGet('entrySortID');
 			$this->_PageStructure->InlineMenuEntryMoveDown($entrySortID, $PageID);
 			return $this->_InlineMenuHomePage($PageID);
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _InlineMenuSetImageTitlePage($PageID) {
 			$imageTitle = GetPostOrGet('imageTitle');
 			$this->_PageStructure->SetInlineMenuImageTitle($PageID, $imageTitle);
 			return $this->_InlineMenuHomePage($PageID);
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _InlineMenuRemoveImagePage($PageID) {
 			$this->_PageStructure->RemoveInlineMenuImage($PageID);
 			return $this->_InlineMenuHomePage($PageID);
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _InlineMenuSelectImage($PageID) {
 			$imagePath = $this->_PageStructure->GetInlineMenuData($PageID, 'image');
 			$adminLang = $this->_AdminLang;
@@ -997,6 +1079,10 @@
 			return $out;
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _InlineMenuHomePage($PageID) {
 			
 			$adminLang = $this->_AdminLang;
@@ -1085,6 +1171,10 @@
 			return $out;
 		}
 		
+		/**
+		 * @access private
+		 * @return string
+		 */
 		function _infoPage() {
 			global $admin_lang, $user;
 			
@@ -1272,12 +1362,9 @@
 				</tr>\r\n";
 					$changes_count--;
 				}
-				
 				$out .= "\t\t\t</table>";
-				
 			}
 			
 			return $out;
 		}
-		
  	}

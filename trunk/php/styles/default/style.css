@@ -105,7 +105,7 @@ table {
  margin: 1em;
 }
 
-#date_day, #date_month, #date_year, #date_hour, #date_minute {
+#dateDay, #dateMonth, #dateYear, #dateHour, #dateMinute {
  width : auto;
 }
 

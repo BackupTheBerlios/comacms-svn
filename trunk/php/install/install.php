@@ -25,7 +25,9 @@
 
 <body>
 <?
-	
+	/**
+	 * 
+	 */
 	include('../functions.php');	
 	$db_prefix = GetPostOrGet('db_prefix');
 	$admin_name = GetPostOrGet('admin_name');

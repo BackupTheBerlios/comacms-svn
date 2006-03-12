@@ -104,7 +104,7 @@
  		 * @param integer MaxCount
  		 * @return array
  		 */
- 		function FillArray($MaxCount = 6, $ConvertTimestamp) {
+ 		function FillArray($MaxCount = 6, $ConvertTimestamp = true) {
  			$datesArray = array();
  			
  			if(!is_numeric($MaxCount))
@@ -122,7 +122,7 @@
  			while($dateEntry = mysql_fetch_object($datesResult)) {
  				$datesArray[] = array('DATE_ID' => $dateEntry->date_id,
  							'DATE_DATE' => ($ConvertTimestamp) ? date('d.m.Y H:i', $dateEntry->date_date) : $dateEntry->date_date,
- 							'DATE_TOPIC' => $dateEntry->date_topic,
+ 							'DATE_TOPIC' => nl2br($dateEntry->date_topic),
  							'DATE_LOCATION' => $dateEntry->date_location,
  							'DATE_CREATOR' => $dateEntry->date_creator
  						);

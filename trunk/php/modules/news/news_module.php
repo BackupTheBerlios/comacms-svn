@@ -19,6 +19,7 @@
 	/**
 	 * @ignore
 	 */
+	require_once('classes/module.php');
 	require_once('modules/news/news.class.php');
 	
 	/**

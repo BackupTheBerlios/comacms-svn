@@ -236,7 +236,7 @@
 							{$dateEntry['DATE_LOCATION']}
 						</td>
 						<td>
-							" . nl2br($dateEntry['DATE_TOPIC']) . "
+							{$dateEntry['DATE_TOPIC']}
 						</td>
 						<td>
 							" . getUserByID($dateEntry['DATE_CREATOR']) . "

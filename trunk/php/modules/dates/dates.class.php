@@ -61,6 +61,46 @@
  		
  		/**
  		 * @access public
+ 		 * @param integer DateID
+ 		 * @return void
+ 		 */
+ 		function DeleteDate($DateID = -1) {
+ 			if(is_numeric($DateID)) {
+ 				$sql = "DELETE FROM " . DB_PREFIX . "dates
+	 				WHERE date_id=$DateID
+	 				LIMIT 1";
+ 				$this->_SqlConnection->SqlQuery($sql);
+ 			}
+ 		}
+ 		
+ 		/**
+ 		 * @access public
+ 		 * @return array
+ 		 * @param integer DateID
+ 		 */
+ 		function GetDate($DateID = -1) {
+ 			if(is_numeric($DateID)) {
+ 				$sql = "SELECT date_id, date_date, date_topic, date_location, date_creator
+					FROM " . DB_PREFIX . "dates
+					WHERE date_id=$DateID
+					LIMIT 1";
+				$dateResult = $this->_SqlConnection->SqlQuery($sql);
+				if($dateEntry = mysql_fetch_object($dateResult)) {
+					$dateArray =  array('DATE_ID' => $dateEntry->date_id,
+ 							'DATE_DATE' => $dateEntry->date_date,
+ 							'DATE_TOPIC' => $dateEntry->date_topic,
+ 							'DATE_LOCATION' => $dateEntry->date_location,
+ 							'DATE_CREATOR' => $dateEntry->date_creator
+ 							);
+					return $dateArray;
+				}
+				else
+					return array();
+ 			}
+ 		}
+ 		
+ 		/**
+ 		 * @access public
  		 * @param integer MaxCount
  		 * @return array
  		 */
@@ -72,7 +112,7 @@
  			$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
  				FROM " . DB_PREFIX . "dates
  				ORDER BY date_date ASC
- 				LIMIT 0, $MaxCount";
+ 				LIMIT $MaxCount";
  			if($MaxCount < 0)
  				$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
  				FROM " . DB_PREFIX . "dates
@@ -93,7 +133,13 @@
  		/** AddDate
  		 * Adds a Date into the datelist
  		 * @access public
- 		 * @param 
+ 		 * @param integer Year
+ 		 * @param integer Month
+ 		 * @param integer Day
+ 		 * @param integer Hour
+ 		 * @param integer Minute
+ 		 * @param string Topic
+ 		 * @param string Location
  		 * @return void
  		 */
  		function AddDate($Year, $Month, $Day, $Hour, $Minute, $Topic, $Location) {
@@ -102,6 +148,31 @@
  				$date = mktime($Hour, $Minute, 0, $Month, $Day, $Year);
  				$sql = "INSERT INTO " . DB_PREFIX . "dates (date_topic, date_location, date_date, date_creator)
 					VALUES ('$Topic', '$Location', '$date', '{$this->_User->ID}')";
+				$this->_SqlConnection->SqlQuery($sql);
+ 			}
+ 		}
+ 		
+ 		/** UpdateDate
+ 		 * @access public
+ 		 * @param integer DateID
+ 		 * @param integer Year
+ 		 * @param integer Month
+ 		 * @param integer Day
+ 		 * @param integer Hour
+ 		 * @param integer Minute
+ 		 * @param string Topic
+ 		 * @param string Location
+ 		 * @return void
+ 		 */
+ 		function UpdateDate($DateID, $Year, $Month, $Day, $Hour, $Minute, $Topic, $Location) {
+ 			if(is_numeric($DateID) && is_numeric($Year) && is_numeric($Month) && is_numeric($Day) && is_numeric($Hour) && is_numeric($Minute) && $Location != '' && $Topic != '') {
+ 				
+ 				$date = mktime($Hour, $Minute, 0, $Month, $Day, $Year);
+				$sql = "UPDATE " . DB_PREFIX . "dates
+					SET date_topic= '$Topic',
+					date_location= '$Location',
+					date_date='$date'
+					WHERE date_id=$DateID";
 				$this->_SqlConnection->SqlQuery($sql);
  			}
  		}

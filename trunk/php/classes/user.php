@@ -219,7 +219,7 @@
 				$ip = getenv ('REMOTE_ADDR');
 				// add the online-record for the user
 				$sql = "INSERT INTO " . DB_PREFIX . "online (online_id, ip, lastaction, page, userid, lang, host)
-				VALUES ('$this->OnlineID', '$ip', '" . mktime() . "', '$page', $this->ID, '$this->Language', '" . gethostbyaddr($ip). "')";
+				VALUES ('$this->OnlineID', '$ip', '" . mktime() . "', '$page', $this->ID, '$this->Language', '" . gethostbyaddr($ip) . "')";
 				db_result($sql);
 				$counter_all++;
 			}

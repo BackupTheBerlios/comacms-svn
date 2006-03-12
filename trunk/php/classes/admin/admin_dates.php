@@ -24,7 +24,7 @@
 	/**
 	 * @package ComaCMS
 	 */
-	 class Admin_Dates extends Admin{
+	/* class Admin_Dates extends Admin{
 	 	
 	 	/**
 	 	 * @access public
@@ -32,7 +32,7 @@
 	 	 * @param array admin_lang
 	 	 * @return string
 	 	 */
-	 	function GetPage($action, $admin_lang) {
+/*	 	function GetPage($action, $admin_lang) {
 			$out = "\t\t\t<h3>" . $admin_lang['dates'] . "</h3><hr />\r\n";
 		 	$action = strtolower($action);
 		 	switch ($action) {
@@ -56,7 +56,7 @@
 	 	 * @param array admin_lang
 	 	 * @return string
 	 	 */
-	 	function _homePage($admin_lang) {
+/*	 	function _homePage($admin_lang) {
 	 		$out = '';
 	 		$out .= "<a href=\"admin.php?page=dates&amp;action=new\" class=\"button\">" . $admin_lang['add_a_new_date'] . "</a>
 				<table class=\"text_table full_width\">
@@ -105,7 +105,7 @@
 	 	 * @param array admin_lang
 	 	 * @return string
 	 	 */
-	 	function _editDate($admin_lang) {
+/*	 	function _editDate($admin_lang) {
 	 		$date_id = GetPostOrGet('date_id');
 	 		$sql = "SELECT *
 	 			FROM " . DB_PREFIX ."dates
@@ -141,7 +141,7 @@
 	 	 * @param array admin_lang
 	 	 * @return string
 	 	 */
-	 	function _saveDate($admin_lang) {
+/*	 	function _saveDate($admin_lang) {
 	 		
 	 		
 	 		$date_id = GetPostOrGet('date_id');
@@ -164,7 +164,7 @@
 	 	 * @param array admin_lang
 	 	 * @return string
 	 	 */
-	 	function _newDate($admin_lang) {
+/*	 	function _newDate($admin_lang) {
 	 		global $user;
 	 		$out = "\t\t\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">
 				<input type=\"hidden\" name=\"page\" value=\"dates\" />
@@ -195,7 +195,7 @@
 	 	 * @param array admin_lang
 	 	 * @return string
 	 	 */
-	 	function _addDate($admin_lang) {
+/*	 	function _addDate($admin_lang) {
 	 		global $user;
 	 		$date_topic = GetPostOrGet('date_topic');
 	 		$date_place = GetPostOrGet('date_place');
@@ -215,7 +215,7 @@
 	 	 * @param array admin_lang
 	 	 * @return string
 	 	 */
-	 	function _deleteDate($admin_lang) {
+/*	 	function _deleteDate($admin_lang) {
 	 		$sure = GetPostOrGet('sure');
 	 		$date_id = GetPostOrGet('date_id');
 	 		if($sure == 1 && is_numeric($date_id)) {
@@ -251,7 +251,7 @@
 	 	 * @param integer years
 	 	 * @return string
 	 	 */
-	 	function DateSelecter($selected_date, $startdate, $prefix = 'date', $years = 10) {
+/*	 	function DateSelecter($selected_date, $startdate, $prefix = 'date', $years = 10) {
 	 		$selected_year = date('Y', $selected_date);
 	 		$endyear = date('Y', $startdate) + $years;
 	 		$selected_day = date('j', $selected_date);
@@ -301,5 +301,5 @@
 	 		$out .= "</select>";
 	 		return $out;
 	 	}
-	 }
+	 }*/
 ?>

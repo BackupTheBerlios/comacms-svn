@@ -137,4 +137,5 @@
 	$admin_lang['do_you_really_want_to_delete_the_news_message_%news_title%_from_the_%date%?'] = 'Do you really want to delete the News-Message &quot;%s&quot; from the %s?';
 	$admin_lang['edit_a_news_message'] = 'Edit a News-Message';
 	$admin_lang['news_message'] = 'News-Message';
+	$admin_lang['Do_you_really_want_to_delete_the_Date_%date_topic%_for_the_%date%_at_%time%_o_clock'] = 'Do you really want to delete the date &quot;%s&quot; for the %s at %s o\'clock?'; 
 ?>

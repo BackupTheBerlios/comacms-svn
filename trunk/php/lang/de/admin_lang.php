@@ -136,4 +136,6 @@
 	$admin_lang['do_you_really_want_to_delete_the_news_message_%news_title%_from_the_%date%?'] = 'M&ouml;chten Sie die News-Meldung &quot;%s&quot; vom %s wirklich l&ouml;schen?';
 	$admin_lang['edit_a_news_message'] = 'News-Meldung bearbeiten';
 	$admin_lang['news_message'] = 'News-Meldung';
+	$admin_lang['Do_you_really_want_to_delete_the_date_%date_topic%_for_the_%date%_at_%time%_o_clock'] = 'M&ouml;chten sie den Termin &quot;%s&quot; f&uuml;r den %s um %s wirklich l&ouml;schen?';
+	$admin_lang['delete_date'] = 'Termin L&ouml;schen'; 
 ?>

@@ -52,7 +52,7 @@
 //	$menu_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
 //	$menu_array[] = array($admin_lang['inlinemenu'], 'admin.php?page=inlinemenu');
 //	$menuArray[] = array($admin_lang['news'], 'news');
-	$menuArray[] = array($admin_lang['dates'], 'dates');
+//	$menuArray[] = array($admin_lang['dates'], 'dates');
 	$menuArray[] = array($admin_lang['articles'], 'articles');
 	$menuArray[] = array($admin_lang['sitestyle'], 'sitestyle');
 	$menuArray[] = array($admin_lang['users'], 'users');
@@ -120,12 +120,12 @@
 		$title = $admin_lang['news'];
 		$text = page_news();
 	}*/
-	elseif($extern_page == 'dates') {
+/*	elseif($extern_page == 'dates') {
 		$title = $admin_lang['dates'];
 		include('classes/admin/admin_dates.php');
 		$admin_dates = new Admin_Dates();
 		$text = $admin_dates->GetPage($extern_action, $admin_lang);
-	}
+	}*/
 	elseif($extern_page == 'articles') {
 		$title = $admin_lang['articles'];
 		include('classes/admin/admin_articles.php');

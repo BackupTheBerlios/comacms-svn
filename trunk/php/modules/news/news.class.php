@@ -116,7 +116,7 @@
     		 */
     		function GetMessage($NewsID = -1) {
     			if(is_numeric($NewsID)) {
-    				$sql = "SELECT *
+    				$sql = "SELECT date, text, userid, titile, id
     					FROM " . DB_PREFIX ."news
     					WHERE id=$NewsID
     					LIMIT 0,1";

@@ -57,6 +57,12 @@
  						break;
  				case 'add':	$out .= $this->_addPage();
  						break;
+ 				case 'delete':	$out .= $this->_deletePage();
+ 						break;
+ 				case 'edit':	$out .= $this->_editPage();
+ 						break;
+ 				case 'save':	$out .= $this->_savePage();
+ 						break;
  				default:	$out .= $this->_homePage();
  						break;
  			}
@@ -70,6 +76,28 @@
 		 */
 		function GetTitle() {
 			return 'Dates-Module';
+		}
+			
+		/**
+		 * @access private
+		 * @return string
+		 */
+		function _savePage() {
+			
+			$dateYear = GetPostOrGet('dateYear');
+			$dateMonth = GetPostOrGet('dateMonth');
+			$dateDay = GetPostOrGet('dateDay');
+			$dateHour = GetPostOrGet('dateHour');
+			$dateMinute = GetPostOrGet('dateMinute');
+			$dateTopic = GetPostOrGet('dateTopic');
+			$dateLocation = GetPostOrGet('dateLocation');
+			$dateID = GetPostOrGet('dateID');
+
+			if(is_numeric($dateID) && is_numeric($dateYear) && is_numeric($dateMonth) && is_numeric($dateDay) && is_numeric($dateHour) && is_numeric($dateMinute) && $dateTopic != '' && $dateLocation != '') {
+				$dates = new Dates($this->_SqlConnection, $this->_ComaLib, $this->_User, $this->_Config);
+				$dates->UpdateDate($dateID, $dateYear, $dateMonth, $dateDay, $dateHour, $dateMinute, $dateTopic, $dateLocation);
+			}
+			return $this->_HomePage();
 		}
 		
 		/**
@@ -133,6 +161,51 @@
 			return $out;
  		}
 		
+		/**
+	 	 * @access private
+	 	 * @param array admin_lang
+	 	 * @return string
+	 	 */
+	 	function _editPage() {
+	 		$dateID = GetPostOrGet('dateID');
+	 		if(is_numeric($dateID)) {
+	 			$dates = new Dates($this->_SqlConnection, $this->_ComaLib, $this->_User, $this->_Config);
+	 			$dateEntry = $dates->GetDate($dateID);
+	 			if(count($dateEntry) > 0) {
+	 				$out = "<h2>Termin bearbeiten</h2>
+	 			<form method=\"post\" action=\"admin.php\">
+	 			<input type=\"hidden\" name=\"page\" value=\"module_dates\"/>
+	 			<input type=\"hidden\" name=\"action\" value=\"save\"/>
+	 			<input type=\"hidden\" name=\"dateID\" value=\"$dateID\"/>
+	 			<fieldset>
+	 				<legend>Termin bearbeiten</legend>
+	 				<div class=\"row\">
+	 					<label><strong>{$this->_Lang['date']}:</strong> <span class=\"info\">Dies ist das Datum, an dem die Veranstaltung stattfindet</span></label>
+	 					" . Dates::DateSelecter($dateEntry['DATE_DATE'], mktime()) . "
+	 				</div>
+	 				<div class=\"row\">
+	 					<label><strong>{$this->_Lang['location']}:</strong> <span class=\"info\">Gemeint ist hier der Ort an welchem die Veranstaltung stattfindet.</span></label>
+	 					<input type=\"text\" name=\"dateLocation\" value=\"{$dateEntry['DATE_LOCATION']}\"/>
+	 				</div>
+	 				<div class=\"row\">
+	 					<label>
+	 						<strong>{$this->_Lang['topic']}:</strong>
+	 						<span class=\"info\">Dies ist die Beschreibung des Termins</span>
+	 					</label>
+	 					<input type=\"text\" name=\"dateTopic\" value=\"{$dateEntry['DATE_TOPIC']}\"/>
+	 				</div>
+	 				<div class=\"row\">
+	 					<input type=\"submit\" class=\"button\" value=\"{$this->_Lang['save']}\" />
+	 					<input type=\"reset\" class=\"button\" value=\"{$this->_Lang['reset']}\" />
+	 				</div>
+	 			</fieldset>
+	 			</form>";
+	 			return $out;
+	 			}
+	 		}
+	 		return $this->_homePage();
+	 	}
+		
  		/**
  		 * @access private
  		 * @return string
@@ -140,8 +213,8 @@
  		function _homePage() {
  			$dates = new Dates($this->_SqlConnection, $this->_ComaLib, $this->_User, $this->_Config);
  			$datesArray = $dates->FillArray(-1, false);
- 			$out = '';
-	 		$out .= "<a href=\"admin.php?page=module_dates&amp;action=new\" class=\"button\">{$this->_Lang['add_a_new_date']}</a>
+ 			$out = "<h2>{$this->_Lang['dates']}</h2>
+ 				<a href=\"admin.php?page=module_dates&amp;action=new\" class=\"button\">{$this->_Lang['add_a_new_date']}</a>
 				<table class=\"text_table full_width\">
 					<thead>
 						<tr>
@@ -154,7 +227,6 @@
 					</thead>
 					<tbody>\r\n";
 
-			
 			foreach($datesArray as $dateEntry) {
 				$out .= "\t\t\t\t\t<tr ID=\"dateid{$dateEntry['DATE_ID']}\">
 						<td>
@@ -180,5 +252,30 @@
 				</table>"; 
 			return $out;
  		}
+ 		
+ 		/**
+ 		 * @access private
+ 		 * @return string
+ 		 */
+ 		function _deletePage() {
+	 		$confirmation = GetPostOrGet('confirmation');
+	 		$dateID = GetPostOrGet('dateID');
+	 		$dates = new Dates($this->_SqlConnection, $this->_ComaLib, $this->_User, $this->_Config);
+	 		// has the user confirmed that he is sure to delete the date?
+	 		if($confirmation == 1 && is_numeric($dateID))
+	 			$dates->DeleteDate($dateID);
+			else if(is_numeric($dateID)) {
+				$dateEntry = $dates->GetDate($dateID);
+				if(count($dateEntry) > 0) {
+					$out = "<h2>{$this->_Lang['delete_date']}</h2>\r\n";
+					$out .= sprintf($this->_Lang['Do_you_really_want_to_delete_the_date_%date_topic%_for_the_%date%_at_%time%_o_clock'], $dateEntry['DATE_TOPIC'], date("d.m.Y", $dateEntry['DATE_DATE']),  date("H:i", $dateEntry['DATE_DATE']));
+					$out .= "<br />
+			<a class=\"button\" href=\"admin.php?page=module_dates&amp;action=delete&amp;dateID=$dateID&amp;confirmation=1\" title=\"Wirklich L&ouml;schen\">{$this->_Lang['yes']}</a>
+			<a class=\"button\" href=\"admin.php?page=module_dates\" title=\"Nicht L&ouml;schen\">{$this->_Lang['no']}</a>";
+					return $out;
+				}
+			}
+			return $this->_homePage();
+	 	}
  	}
 ?>

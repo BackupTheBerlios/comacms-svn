@@ -114,6 +114,7 @@
 	$admin_lang['menu_entry_title'] = 'Menuentry title';
 	$admin_lang['belongs_to_menu'] = 'Belongs to menu';
 	$admin_lang['menu_entry_link'] = 'Menuentrylink';
+	$admin_lang['add_menu_entry'] = 'add new menuentry';
 	$admin_lang['name/contraction'] = 'Name/Contraction';
 	$admin_lang['title'] = 'Title';
 	$admin_lang['text'] = 'Text';
@@ -137,5 +138,9 @@
 	$admin_lang['do_you_really_want_to_delete_the_news_message_%news_title%_from_the_%date%?'] = 'Do you really want to delete the News-Message &quot;%s&quot; from the %s?';
 	$admin_lang['edit_a_news_message'] = 'Edit a News-Message';
 	$admin_lang['news_message'] = 'News-Message';
-	$admin_lang['Do_you_really_want_to_delete_the_Date_%date_topic%_for_the_%date%_at_%time%_o_clock'] = 'Do you really want to delete the date &quot;%s&quot; for the %s at %s o\'clock?'; 
+	$admin_lang['Do_you_really_want_to_delete_the_Date_%date_topic%_for_the_%date%_at_%time%_o_clock'] = 'Do you really want to delete the date &quot;%s&quot; for the %s at %s o\'clock?';
+	$admin_lang['delete_date'] = 'Delete date';
+	$admin_lang['picture'] = 'Picture';
+	$admin_lang['description'] = 'Description';
+	$admin_lang['write_new_article'] = 'Write a new article'
 ?>

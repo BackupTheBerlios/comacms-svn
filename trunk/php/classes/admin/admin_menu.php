@@ -41,9 +41,14 @@
 	 		
 	 		$out = "\t\t\t<h2>" . $adminLang['menu-editor'] . "</h2>\r\n";
 	 		switch ($Action) {
+	 			case 'new':		$out .= $this->_AddMenuEntry(GetPostOrGet('menuMenuID'));
+	 						break;
+	 			case 'addEntry':	$this->_Menu->AddMenuEntry(GetPostOrGet('menuID'), GetPostOrGet('menuMenuID'), GetPostOrGet('menuText'), GetPostOrGet('menuLink'));
+	 						$out .= $this->_HomePage();
+	 						break;
 	 			case 'edit':		$out .= $this->_EditMenuEntry(GetPostOrGet('menuID'));
 	 						break;
-	 			case 'updateEntry':	$this->_Menu->UpdateMenuEntry(GetPostOrGet('menuID'), GetPostOrGet('menu_MenuID'), GetPostOrGet('menu_MenuText'), GetPostOrGet('menu_MenuLink'));
+	 			case 'updateEntry':	$this->_Menu->UpdateMenuEntry(GetPostOrGet('menuID'), GetPostOrGet('menuMenuID'), GetPostOrGet('menuText'), GetPostOrGet('menuLink'));
 	 						$out .= $this->_HomePage();
 	 						break;
 	 			case 'up':		$out .= $this->_Menu->ItemMoveUp(GetPostOrGet('menu_orderid'), GetPostOrGet('menu_id'));
@@ -52,9 +57,9 @@
 	 			case 'down':		$out .= $this->_Menu->ItemMoveDown(GetPostOrGet('menu_orderid'), GetPostOrGet('menu_id'));
 	 						$out .= $this->_HomePage();
 	 						break;
-	 			case 'delete':		$out .= $this->_DeleteMenuEntry(GetPostOrGet('menuID'));
+	 			case 'delete':		$out .= $this->_DeleteMenuEntry(GetPostOrGet('menuID'), GetPostOrGet('menuMenuID'));
 	 						break;
-	 			case 'deleteSure':	$out .= $this->_Menu->DeleteMenuEntry(GetPostOrGet('menuID'));
+	 			case 'deleteSure':	$this->_Menu->DeleteMenuEntry(GetPostOrGet('menuID'));
 	 						$out .= $this->_HomePage();
 	 						break;
 	 			default:		$out .= $this->_HomePage();
@@ -64,14 +69,15 @@
 	 	
 	 	function _HomePage() {
 	 		$adminLang = $this->_AdminLang;
-	 		$menuID = GetPostOrGet('menu_id');
-	 		$menuID = ($menuID != 2) ? 1 : 2;
+	 		$menuMenuID = GetPostOrGet('menuMenuID');
+	 		$menuMenuID = ($menuMenuID != 2) ? 1 : 2;
 	 		$out = '';
 	 		
-	 		$out .= "\t\t\t<a href=\"admin.php?page=menueditor&amp;menu_id=1\" class=\"button" . (($menuID == 1) ? ' actual' : '') . "\">" . $adminLang['mainmenu'] . "</a>\r\n";
-	 		$out .= "\t\t\t<a href=\"admin.php?page=menueditor&amp;menu_id=2\" class=\"button" . (($menuID == 2) ? ' actual' : '') . "\">" . $adminLang['secondmenu'] . "</a><br /><br />\r\n";
+	 		$out .= "\t\t\t<a href=\"admin.php?page=menueditor&amp;menuMenuID=$menuMenuID&amp;action=new\" class=\"button\">" . $adminLang['add_menu_entry'] . "</a>\r\n";
+	 		$out .= "\t\t\t<a href=\"admin.php?page=menueditor&amp;menuMenuID=1\" class=\"button" . (($menuMenuID == 1) ? ' actual' : '') . "\">" . $adminLang['mainmenu'] . "</a>\r\n";
+	 		$out .= "\t\t\t<a href=\"admin.php?page=menueditor&amp;menuMenuID=2\" class=\"button" . (($menuMenuID == 2) ? ' actual' : '') . "\">" . $adminLang['secondmenu'] . "</a><br /><br />\r\n";
 	 		
-	 		$out .= $this->_ShowMenu($menuID);
+	 		$out .= $this->_ShowMenu($menuMenuID);
 	 		
 	 		return $out;
 	 	}
@@ -98,13 +104,52 @@
 	 						<a href=\"admin.php?page=menueditor&amp;action=edit&amp;menuID=" . $menuEntry->menu_id . "\"><img src=\"./img/edit.png\" class=\"icon\" alt=\"" . $adminLang['edit']. "\" title=\"" . $adminLang['edit'] . "\" height=\"16\" width=\"16\" /></a>
 	 						<a href=\"admin.php?page=menueditor&amp;action=up&amp;menu_orderid=" . $menuEntry->menu_orderid . "&amp;menu_id=" . $menuEntry->menu_menuid . "\"><img src=\"./img/up.png\" class=\"icon\" alt=\"" . $adminLang['move_up'] . "\" title=\"" . $adminLang['move_up'] . "\" height=\"16\" width=\"16\" /></a>
 	 						<a href=\"admin.php?page=menueditor&amp;action=down&amp;menu_orderid=" . $menuEntry->menu_orderid . "&amp;menu_id=" . $menuEntry->menu_menuid . "\"><img src=\"./img/down.png\" class=\"icon\" alt=\"" . $adminLang['move_down'] . "\" title=\"" . $adminLang['move_down'] . "\" height=\"16\" width=\"16\" /></a>
-	 						<a href=\"admin.php?page=menueditor&amp;action=delete&amp;menuID=" . $menuEntry->menu_id . "\"><img src=\"./img/del.png\" class=\"icon\" alt=\"" . $adminLang['delete'] . "\" title=\"" . $adminLang['delete'] . "\" height=\"16\" width=\"16\" /></a>
+	 						<a href=\"admin.php?page=menueditor&amp;action=delete&amp;menuID=" . $menuEntry->menu_id . "&amp;menuMenuID=" . $menuEntry->menu_menuid . "\"><img src=\"./img/del.png\" class=\"icon\" alt=\"" . $adminLang['delete'] . "\" title=\"" . $adminLang['delete'] . "\" height=\"16\" width=\"16\" /></a>
 	 					</span>
 	 				</span>
 	 			</li>\r\n";
 	 		}
 	 		if($numRows > 0)
 	 			$out .= "\t\t\t</ol>";
+	 		
+	 		return $out;
+	 	}
+	 	
+	 	function _AddMenuEntry($MenuID) {
+	 		$out = '';
+	 		$adminLang = $this->_AdminLang;
+	 		$pageStructure = new Pagestructure($this->_SqlConnection, null);
+	 		$pageStructure->LoadParentIDs();
+	 		
+	 		$out .= "\t\t\t<fieldset>
+				<legend>" . $adminLang['add_menu_entry'] . "</legend>
+				<form action=\"admin.php\" method=\"post\">
+					<input type=\"hidden\" name=\"menuID\" value=\"$MenuID\" />
+					<input type=\"hidden\" name=\"page\" value=\"menueditor\" />
+					<input type=\"hidden\" name=\"action\" value=\"addEntry\" />
+					<div class=\"row\">
+						<label for=\"MenuID\">" . $adminLang['belongs_to_menu'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
+						<select id=\"MenuID\" name=\"menuMenuID\">
+							<option value=\"1\"" . (($MenuID == 1) ? ' selected="selected"' : '') . ">" . $adminLang['mainmenu'] . "</option>
+							<option value=\"2\"" . (($MenuID == 2) ? ' selected="selected"' : '') . ">" . $adminLang['secondmenu'] . "</option>
+						</select>
+					</div>
+					<div class=\"row\">
+						<label for=\"menuEntryTitle\">" . $adminLang['menu_entry_title'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
+						<input type=\"text\" id=\"menuEntryTitle\" name=\"menuText\" />
+					</div>
+					<div class=\"row\">
+						<label for=\"menuEntryLink\">" . $adminLang['menu_entry_link'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
+						<select id=\"menuEntryLink\" name=\"menuLink\">
+							" . $pageStructure->PageStructurePulldown(0, 0, '',  -1) . "
+						</select>
+					</div>
+					<div class=\"row\">
+						<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\" />&nbsp;
+						<input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\" />
+					</div>
+				</form>
+			</fieldset>";
 	 		
 	 		return $out;
 	 	}
@@ -129,18 +174,18 @@
 					<input type=\"hidden\" name=\"action\" value=\"updateEntry\" />
 					<div class=\"row\">
 						<label for=\"MenuID\">" . $adminLang['belongs_to_menu'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
-						<select id=\"MenuID\" name=\"menu_MenuID\">
+						<select id=\"MenuID\" name=\"menuMenuID\">
 							<option value=\"1\"" . (($menuEntry->menu_menuid == 1) ? ' selected="selected"' : '') . ">" . $adminLang['mainmenu'] . "</option>
 							<option value=\"2\"" . (($menuEntry->menu_menuid == 2) ? ' selected="selected"' : '') . ">" . $adminLang['secondmenu'] . "</option>
 						</select>
 					</div>
 					<div class=\"row\">
 						<label for=\"menuEntryTitle\">" . $adminLang['menu_entry_title'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
-						<input type=\"text\" id=\"menuEntryTitle\" name=\"menu_MenuText\" value=\"" . $menuEntry->menu_text . "\" />
+						<input type=\"text\" id=\"menuEntryTitle\" name=\"menuText\" value=\"" . $menuEntry->menu_text . "\" />
 					</div>
 					<div class=\"row\">
 						<label for=\"menuEntryLink\">" . $adminLang['menu_entry_link'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
-						<select id=\"menuEntryLink\" name=\"menu_MenuLink\">
+						<select id=\"menuEntryLink\" name=\"menuLink\">
 							" . $pageStructure->PageStructurePulldown(0, 0, '',  -1, $menuEntry->menu_page_id) . "
 						</select>
 					</div>
@@ -154,7 +199,7 @@
 	 		return $out;
 	 	}
 	 	
-	 	function _DeleteMenuEntry($MenuID) {
+	 	function _DeleteMenuEntry($MenuID, $MenuMenuID) {
 	 		$out = '';
 	 		$adminLang = $this->_AdminLang;
 	 		
@@ -165,7 +210,7 @@
 	 		$menuEntry = mysql_fetch_object($menuResult);
 	 		
 	 		$out .= "\t\t\t" . sprintf($adminLang['Do you really want to delete the menuentry %menuEntryTitle%?'], $menuEntry->menu_text) . "<br />
-			<a href=\"admin.php?page=menueditor&amp;action=deleteSure&amp;menuID=$MenuID\" class=\"button\">" . $adminLang['yes'] . "</a>
+			<a href=\"admin.php?page=menueditor&amp;action=deleteSure&amp;menuID=$MenuID&amp;menuMenuID=$MenuMenuID\" class=\"button\">" . $adminLang['yes'] . "</a>
 		 	<a href=\"admin.php?page=menueditor\" class=\"button\">" . $adminLang['no'] . "</a>";
 	 		
 	 		return $out;

@@ -115,6 +115,42 @@
  			return $out;
  		}
  		
+ 		function AddMenuEntry($MenuID, $MenuMenuID, $MenuText, $MenuLink) {
+ 			$sql = "SELECT *
+ 				FROM " . DB_PREFIX . "pages
+ 				WHERE page_id=$MenuLink";
+ 			$pageResult = $this->_SqlConnection->SqlQuery($sql);
+ 			$numRows = mysql_num_rows($pageResult);
+ 			$out = '';
+ 			
+ 			if($numRows = 1) {
+ 				$page = mysql_fetch_object($pageResult);
+ 				$link = "l:" . $page->page_name;
+ 				
+ 				$sql = "SELECT *
+ 					FROM " . DB_PREFIX . "menu
+ 					WHERE menu_menuid=$MenuMenuID
+ 					ORDER BY menu_orderid DESC
+ 					LIMIT 1";
+ 				$menuResult = $this->_SqlConnection->SqlQuery($sql);
+ 				if($menuEntry = mysql_fetch_object($menuResult)) {
+ 					$menuOrderID = $menuEntry->menu_orderid + 1;
+ 				}
+ 				else {
+ 					$menuOrderID = 0;
+ 				}
+ 				
+ 				$sql = "INSERT INTO " . DB_PREFIX . "menu
+					(menu_text, menu_link, menu_new, menu_orderid, menu_menuid, menu_page_id)
+					VALUES ('$MenuText', '$link', 'no', $menuOrderID, $MenuMenuID, $page->page_id)";
+				$this->_SqlConnection->SqlQuery($sql);
+ 				
+ 				$out .= 'erfolgreich bearbeitet.';
+ 			}
+ 			
+ 			return $out;
+ 		}
+ 		
  		function DeleteMenuEntry ($MenuID) {
  			$sql = "DELETE
  				FROM " . DB_PREFIX . "menu

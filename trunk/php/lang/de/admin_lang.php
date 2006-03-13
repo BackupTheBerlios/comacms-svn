@@ -113,6 +113,7 @@
 	$admin_lang['belongs_to_menu'] = 'Geh&ouml;hrt zu Menu';
 	$admin_lang['menu_entry_title'] = 'Men&uuml;eintragstitel';
 	$admin_lang['menu_entry_link'] = 'Men&uuml;eintragsziel';
+	$admin_lang['add_menu_entry'] = 'Men&uuml;eintrag hinzuf&uuml;gen';
 	$admin_lang['name/contraction'] = 'Name/K&uuml;rzel';
 	$admin_lang['title'] = 'Titel';
 	$admin_lang['text'] = 'Text';
@@ -138,4 +139,7 @@
 	$admin_lang['news_message'] = 'News-Meldung';
 	$admin_lang['Do_you_really_want_to_delete_the_date_%date_topic%_for_the_%date%_at_%time%_o_clock'] = 'M&ouml;chten sie den Termin &quot;%s&quot; f&uuml;r den %s um %s wirklich l&ouml;schen?';
 	$admin_lang['delete_date'] = 'Termin L&ouml;schen'; 
+	$admin_lang['picture'] = 'Bild';
+	$admin_lang['description'] = 'Beschreibung';
+	$admin_lang['write_new_article'] = 'einen neuen Artikel schreiben';
 ?>

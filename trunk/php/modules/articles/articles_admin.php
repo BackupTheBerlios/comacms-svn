@@ -52,7 +52,7 @@
  		function GetPage($Action = '') {
  			$out = '';
  			switch ($Action) {
- 				case 'add':	$out .= $this->_addPage();
+ 				case 'new':	$out .= $this->_newPage();
  						break;
  				default:	$out .= $this->_homePage();
  						break;
@@ -61,20 +61,67 @@
  		}
  		
  		/**
+	 	 * @return string
+	 	 * @var array admin_lang
+	 	 */
+	 	function _newArticle() {
+	 		global $user;
+	 		$out = "\t\t\t<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
+	 			<form method=\"post\" action=\"admin.php\">
+				<input type=\"hidden\" name=\"page\" value=\"articles\" />
+				<input type=\"hidden\" name=\"action\" value=\"add\" />
+				<fieldset>
+					<div class=\"row\">
+						<label>Titel: <span class=\"info\">Hier den Titel des Artikels eingeben</span></label>
+						<input type=\"text\" name=\"article_title\" maxlength=\"100\" value=\"\" class=\"article_input\" />
+					</div>
+					<div class=\"row\">
+						<label>Beschreibung: <span class=\"info\">Hier eine Zusammenfassung oder Vorschau eingeben.(maximal 200 Zeichen)</span></label>
+						<textarea rows=\"4\" cols=\"60\" name=\"article_description\" class=\"article_input\"></textarea>
+					</div>
+					<div class=\"row\">
+						<label>Text: <span class=\"info\">Hier den gesammten Text des Artikels eingeben.</span></label>
+						
+							<script type=\"text/javascript\" language=\"javascript\">
+								writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
+								writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
+								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
+								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als �berschrift\",\"=== \",\" ===\",\"?berschrift\",\"h\");
+							</script>
+							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\"></textarea>
+					</div>
+					<div class=\"row\">
+						<label>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></label>
+						<input type=\"checkbox\" name=\"add_image\" id=\"add_image_checkbox\" checked=\"checked\" value=\"add\"/><label class=\"simple\" for=\"add_image_checkbox\">Nach dem Eintragen des Arikels noch ein Bild ausw&auml;hlen<br/>
+							(ein Bild kann auch sp&auml;ter noch &uuml;ber die Bearbeiten-Funktion hinzugef&uuml;gt/ver&auml;ndert werden)</label>
+					</div>
+					<div class=\"row\">
+						Eingelogt als $user->Showname
+					</div>
+					<div class=\"row\">
+					<input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" />
+					</div>
+				</fieldset>
+				<br /> 
+			</form>\r\n";
+	 		return $out;
+	 	}
+	 	
+ 		/**
 		 * @access private
 		 * @return string
 		 */
 		function _homePage() {	
 	 		$thumbnailfoler = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
 	 		$imgmax = 100; 
-	 		$out = "<a href=\"admin.php?page=articles&amp;action=new\" class=\"button\">Neuen Artikel schreiben</a><br /> 
+	 		$out = "<a href=\"admin.php?page=articles&amp;action=new\" class=\"button\">{$this->_Lang['write_new_article']}</a><br /> 
 	 			<table class=\"text_table full_width\">
 					<thead>
 						<tr>
 							<th class=\"table_date_width\">{$this->_Lang['date']}</th>
-							<th>Titel</th>
-							<th>Bild</th>
-							<th>Beschreibung</th>
+							<th>{$this->_Lang['title']}</th>
+							<th>{$this->_Lang['picture']}</th>
+							<th>{$this->_Lang['description']}</th>
 							<th>{$this->_Lang['creator']}</th>
 							<th class=\"actions\">{$this->_Lang['actions']}</th>
 						</tr>

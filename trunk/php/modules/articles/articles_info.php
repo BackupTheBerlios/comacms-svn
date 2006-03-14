@@ -4,7 +4,7 @@
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
- # file                 : adticles_info.php
+ # file                 : articles_info.php
  # created              : 2006-03-03
  # copyright            : (C) 2005-2006 The ComaCMS-Team
  # email                : comacms@williblau.de

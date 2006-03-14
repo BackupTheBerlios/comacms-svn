@@ -5,8 +5,8 @@
  * @copyright (C) 2005-2006 The ComaCMS-Teams
  */
  #----------------------------------------------------------------------
- # file                 : news.class.php
- # created              : 2006-02-18
+ # file                 : articles.class.php
+ # created              : 2006-03-08
  # copyright            : (C) 2005-2006 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------

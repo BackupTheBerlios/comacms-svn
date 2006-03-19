@@ -202,15 +202,20 @@
 					$page_edit_comment = $admin_lang['edited'] . '...';
 					$show_preview = false;
 				}
-				$page_text = str_replace('ï¿½', '&auml;', $page_text);
-				$page_text = str_replace('ï¿½', '&Auml;', $page_text);
-				$page_text = str_replace('ï¿½', '&uuml;', $page_text);
-				$page_text = str_replace('ï¿½', '&Uuml;', $page_text);
-				$page_text = str_replace('ï¿½', '&ouml;', $page_text);
-				$page_text = str_replace('ï¿½', '&Ouml;', $page_text);
+				$page_text = str_replace('&', '&amp;', $page_text);
+				// FIXME: doesn't solve the problem with umlauts
+				/*$page_text = str_replace('ä', '&auml;', $page_text);
+				$page_text = str_replace('Ä', '&Auml;', $page_text);
+				$page_text = str_replace('ü', '&uuml;', $page_text);
+				$page_text = str_replace('Ü', '&Uuml;', $page_text);
+				$page_text = str_replace('ö', '&ouml;', $page_text);
+				$page_text = str_replace('Ö', '&Ouml;', $page_text);
+				$page_text = str_replace('ß', '&szlig;', $page_text);
+				**/
 				$page_text = str_replace('<', '&lt;', $page_text);
 				$page_text = str_replace('>', '&gt;', $page_text);
-				$page_text = str_replace('ï¿½', '&szlig;', $page_text);
+				
+				
 				$out .= "\t\t\t<fieldset><legend>Seite Bearbeiten</legend><form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"savePage\" />
@@ -221,7 +226,7 @@
 					writeButton(\"img/button_fett.png\",\"Formatiert Text fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 					writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 					writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als &Uuml;berschrift\",\"==== \",\" ====\",\"ï¿½berschrift\",\"h\");
+					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als &Uuml;berschrift\",\"==== \",\" ====\",\"&Uuml;berschrift\",\"h\");
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"pageText\">$page_text</textarea>
 				" . $admin_lang['comment_on_change'] . ": <input name=\"pageEditComment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $page_edit_comment)) . "\" maxlength=\"100\" type=\"text\"/><br />

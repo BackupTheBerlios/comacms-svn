@@ -129,7 +129,7 @@
 			}
 			$out .= "</table>
 			<h2>Aktuelle Besucher</h2>
-			<table class=\"text_table\">
+			<table class=\"text_table full_width\">
 				<thead>
 					<tr>
 						<th>".$this->admin_lang['name']."</th>

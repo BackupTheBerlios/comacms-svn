@@ -2,6 +2,7 @@
 /**
  * @package ComaCMS
  * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @subpackage Articles
  */
  #----------------------------------------------------------------------
  # file                 : articles_info.php

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package ComaCMS
- * @subpackage News
+ * @subpackage Articles
  * @copyright (C) 2005-2006 The ComaCMS-Teams
  */
  #----------------------------------------------------------------------
@@ -18,7 +18,7 @@
  
  	/**
  	 * @package ComaCMS
- 	 * @subpackage articles
+ 	 * @subpackage Articles
  	 */
  	class Articles {
  		

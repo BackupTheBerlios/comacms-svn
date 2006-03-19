@@ -51,10 +51,10 @@
 	 			case 'updateEntry':	$this->_Menu->UpdateMenuEntry(GetPostOrGet('menuID'), GetPostOrGet('menuMenuID'), GetPostOrGet('menuText'), GetPostOrGet('menuLink'));
 	 						$out .= $this->_HomePage();
 	 						break;
-	 			case 'up':		$out .= $this->_Menu->ItemMoveUp(GetPostOrGet('menu_orderid'), GetPostOrGet('menu_id'));
+	 			case 'up':		$out .= $this->_Menu->ItemMoveUp(GetPostOrGet('menuOrderid'), GetPostOrGet('menuMenuID'));
 	 						$out .= $this->_HomePage();
 	 						break;
-	 			case 'down':		$out .= $this->_Menu->ItemMoveDown(GetPostOrGet('menu_orderid'), GetPostOrGet('menu_id'));
+	 			case 'down':		$out .= $this->_Menu->ItemMoveDown(GetPostOrGet('menuOrderid'), GetPostOrGet('menuMenuID'));
 	 						$out .= $this->_HomePage();
 	 						break;
 	 			case 'delete':		$out .= $this->_DeleteMenuEntry(GetPostOrGet('menuID'), GetPostOrGet('menuMenuID'));
@@ -101,10 +101,10 @@
 					<span class=\"structure_row\">
 						<strong>" . $menuEntry->menu_text . "</strong>	 			
 	 					<span class=\"page_actions\">
-	 						<a href=\"admin.php?page=menueditor&amp;action=edit&amp;menuID=" . $menuEntry->menu_id . "\"><img src=\"./img/edit.png\" class=\"icon\" alt=\"" . $adminLang['edit']. "\" title=\"" . $adminLang['edit'] . "\" height=\"16\" width=\"16\" /></a>
-	 						<a href=\"admin.php?page=menueditor&amp;action=up&amp;menu_orderid=" . $menuEntry->menu_orderid . "&amp;menu_id=" . $menuEntry->menu_menuid . "\"><img src=\"./img/up.png\" class=\"icon\" alt=\"" . $adminLang['move_up'] . "\" title=\"" . $adminLang['move_up'] . "\" height=\"16\" width=\"16\" /></a>
-	 						<a href=\"admin.php?page=menueditor&amp;action=down&amp;menu_orderid=" . $menuEntry->menu_orderid . "&amp;menu_id=" . $menuEntry->menu_menuid . "\"><img src=\"./img/down.png\" class=\"icon\" alt=\"" . $adminLang['move_down'] . "\" title=\"" . $adminLang['move_down'] . "\" height=\"16\" width=\"16\" /></a>
-	 						<a href=\"admin.php?page=menueditor&amp;action=delete&amp;menuID=" . $menuEntry->menu_id . "&amp;menuMenuID=" . $menuEntry->menu_menuid . "\"><img src=\"./img/del.png\" class=\"icon\" alt=\"" . $adminLang['delete'] . "\" title=\"" . $adminLang['delete'] . "\" height=\"16\" width=\"16\" /></a>
+	 						<a href=\"admin.php?page=menueditor&amp;action=edit&amp;menuID={$menuEntry->menu_id}\"><img src=\"./img/edit.png\" class=\"icon\" alt=\"{$adminLang['edit']}\" title=\"{$adminLang['edit']}\" height=\"16\" width=\"16\" /></a>
+	 						<a href=\"admin.php?page=menueditor&amp;action=up&amp;menuOrderid={$menuEntry->menu_orderid}&amp;menuMenuID={$menuEntry->menu_menuid}\"><img src=\"./img/up.png\" class=\"icon\" alt=\"{$adminLang['move_up']}\" title=\"{$adminLang['move_up']}\" height=\"16\" width=\"16\" /></a>
+	 						<a href=\"admin.php?page=menueditor&amp;action=down&amp;menuOrderid={$menuEntry->menu_orderid}&amp;menuMenuID={$menuEntry->menu_menuid}\"><img src=\"./img/down.png\" class=\"icon\" alt=\"{$adminLang['move_down']}\" title=\"{$adminLang['move_down']}\" height=\"16\" width=\"16\" /></a>
+	 						<a href=\"admin.php?page=menueditor&amp;action=delete&amp;menuID={$menuEntry->menu_id}&amp;menuMenuID={$menuEntry->menu_menuid}\"><img src=\"./img/del.png\" class=\"icon\" alt=\"{$adminLang['delete']}\" title=\"{$adminLang['delete']}\" height=\"16\" width=\"16\" /></a>
 	 					</span>
 	 				</span>
 	 			</li>\r\n";
@@ -128,25 +128,25 @@
 					<input type=\"hidden\" name=\"page\" value=\"menueditor\" />
 					<input type=\"hidden\" name=\"action\" value=\"addEntry\" />
 					<div class=\"row\">
-						<label for=\"MenuID\">" . $adminLang['belongs_to_menu'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
+						<label for=\"MenuID\"><strong>{$adminLang['belongs_to_menu']}:</strong> <span class=\"info\">" . $adminLang['todo'] . "</span></label>
 						<select id=\"MenuID\" name=\"menuMenuID\">
 							<option value=\"1\"" . (($MenuID == 1) ? ' selected="selected"' : '') . ">" . $adminLang['mainmenu'] . "</option>
 							<option value=\"2\"" . (($MenuID == 2) ? ' selected="selected"' : '') . ">" . $adminLang['secondmenu'] . "</option>
 						</select>
 					</div>
 					<div class=\"row\">
-						<label for=\"menuEntryTitle\">" . $adminLang['menu_entry_title'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
+						<label for=\"menuEntryTitle\"><strong>{$adminLang['menu_entry_title']}:</strong> <span class=\"info\">" . $adminLang['todo'] . "</span></label>
 						<input type=\"text\" id=\"menuEntryTitle\" name=\"menuText\" />
 					</div>
 					<div class=\"row\">
-						<label for=\"menuEntryLink\">" . $adminLang['menu_entry_link'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
+						<label for=\"menuEntryLink\"><strong>{$adminLang['menu_entry_link']}:</strong> <span class=\"info\">" . $adminLang['todo'] . "</span></label>
 						<select id=\"menuEntryLink\" name=\"menuLink\">
 							" . $pageStructure->PageStructurePulldown(0, 0, '',  -1) . "
 						</select>
 					</div>
 					<div class=\"row\">
-						<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\" />&nbsp;
-						<input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\" />
+						<input type=\"reset\" class=\"button\" value=\"{$adminLang['reset']}\" />&nbsp;
+						<input type=\"submit\" class=\"button\" value=\"{$adminLang['save']}\" />
 					</div>
 				</form>
 			</fieldset>";
@@ -173,18 +173,18 @@
 					<input type=\"hidden\" name=\"page\" value=\"menueditor\" />
 					<input type=\"hidden\" name=\"action\" value=\"updateEntry\" />
 					<div class=\"row\">
-						<label for=\"MenuID\">" . $adminLang['belongs_to_menu'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
+						<label for=\"MenuID\"><strong>{$adminLang['belongs_to_menu']}:</strong> <span class=\"info\">" . $adminLang['todo'] . "</span></label>
 						<select id=\"MenuID\" name=\"menuMenuID\">
 							<option value=\"1\"" . (($menuEntry->menu_menuid == 1) ? ' selected="selected"' : '') . ">" . $adminLang['mainmenu'] . "</option>
 							<option value=\"2\"" . (($menuEntry->menu_menuid == 2) ? ' selected="selected"' : '') . ">" . $adminLang['secondmenu'] . "</option>
 						</select>
 					</div>
 					<div class=\"row\">
-						<label for=\"menuEntryTitle\">" . $adminLang['menu_entry_title'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
+						<label for=\"menuEntryTitle\"><strong>{$adminLang['menu_entry_title']}:</strong> <span class=\"info\">" . $adminLang['todo'] . "</span></label>
 						<input type=\"text\" id=\"menuEntryTitle\" name=\"menuText\" value=\"" . $menuEntry->menu_text . "\" />
 					</div>
 					<div class=\"row\">
-						<label for=\"menuEntryLink\">" . $adminLang['menu_entry_link'] . ": <span class=\"info\">" . $adminLang['todo'] . "</span></label>
+						<label for=\"menuEntryLink\"><strong>{$adminLang['menu_entry_link']}:</strong> <span class=\"info\">" . $adminLang['todo'] . "</span></label>
 						<select id=\"menuEntryLink\" name=\"menuLink\">
 							" . $pageStructure->PageStructurePulldown(0, 0, '',  -1, $menuEntry->menu_page_id) . "
 						</select>

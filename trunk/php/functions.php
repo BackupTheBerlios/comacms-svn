@@ -374,16 +374,24 @@
 			return $mime[$ext];
 		return 'application/unknown';
 	}
-	
+	/**
+	 * Encodes a URI that it is ready for XHTML-output
+	 * @param string Uri
+	 * @return string
+	 */
 	function encodeUri($Uri) {
+		// convert the URI into different parts
 		$urlData = parse_url($Uri);
 		if(isset($urlData['scheme']) && isset($urlData['host'])) {
 			// FIXME: here is a bug with non ASCII characters, it generates no-standard-URIs
 			$encoded = $urlData['scheme'] . '://' . rawurlencode($urlData['host']);
 			if(isset($urlData['path'])) // TODO: Try to fast me up!
 				$encoded .= preg_replace( "|([\/]{0,1})(.+?)([\/]{0,1})|e", "'\\1' . rawurlencode('\\2') . '\\3'", $urlData['path'] );
-			if(isset($urlData['query'])) // TODO: Try to fast me up!
-				$encoded .= '?' . preg_replace( "|([&=]{0,1})(.+?)([&=]{0,1})|e", "'\\1' . rawurlencode('\\2') . '\\3'", $urlData['query'] ); 
+			if(isset($urlData['query'])) { // TODO: Try to fast me up!
+				$urlData['query'] = str_replace('&amp;amp;', '&', $urlData['query']);
+				$urlData['query'] = str_replace('&amp;', '&', $urlData['query']);
+				$encoded .= '?' . preg_replace( "|([&=]{0,1})(.+?)([&=]{0,1})|e", "'\\1' . rawurlencode('\\2') . '\\3'", $urlData['query'] );
+			} 
 			if(isset($urlData['fragment']))
 				$encoded .= "#" . rawurlencode($urlData['fragment']);
 			return $encoded;

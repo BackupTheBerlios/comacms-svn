@@ -368,14 +368,14 @@
 				WHERE inlineentry_page_id=$PageID
 				ORDER BY inlineentry_sortid ASC";
 			$inlieMenuEntriesResult = $this->_SqlConnection->SqlQuery($sql);
-			$inlieMenuHtml = '';
+			$inlieMenuHtml = "<ul>\r\n";
 			while($inlieMenuEntry = mysql_fetch_object($inlieMenuEntriesResult)) {
 				if($inlieMenuEntry->inlineentry_type == 'text')
-					$inlieMenuHtml .= "<div class=\"inline_text\">" . nl2br($inlieMenuEntry->inlineentry_text) . "</div>\r\n";
+					$inlieMenuHtml .= "\t<li class=\"inline_text\">" . nl2br($inlieMenuEntry->inlineentry_text) . "</li>\r\n";
 				elseif($inlieMenuEntry->inlineentry_type == 'link')
-					$inlieMenuHtml .= "<div class=\"inline_link\"><a href=\"$inlieMenuEntry->inlineentry_link\">$inlieMenuEntry->inlineentry_text</a></div>\r\n";
+					$inlieMenuHtml .= "\<li class=\"inline_link\"><a href=\"$inlieMenuEntry->inlineentry_link\">$inlieMenuEntry->inlineentry_text</a></li>\r\n";
 				elseif($inlieMenuEntry->inlineentry_type == 'intern')
-					$inlieMenuHtml .= "<div class=\"inline_intern\"><a href=\"$inlieMenuEntry->inlineentry_link\">$inlieMenuEntry->inlineentry_text</a></div>\r\n";
+					$inlieMenuHtml .= "\t<li class=\"inline_intern\"><a href=\"$inlieMenuEntry->inlineentry_link\">$inlieMenuEntry->inlineentry_text</a></li>\r\n";
 				elseif($inlieMenuEntry->inlineentry_type == 'download') {
 						$sql = "SELECT *
 						FROM " . DB_PREFIX . "files
@@ -385,11 +385,14 @@
 					if($file = mysql_fetch_object($fileResult)) {
 						if(file_exists($file->file_path)) {
 							$size = kbormb(filesize($file->file_path), false);
-							$inlieMenuHtml .= "<div class=\"inline_download\"><a href=\"download.php?file_id=$inlieMenuEntry->inlineentry_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Gr&ouml;&szlig;e von $size\">$inlieMenuEntry->inlineentry_text</a> (<span class=\"filesize\">$size</span>)</div>\r\n";
+							$inlieMenuHtml .= "\t<li class=\"inline_download\"><a href=\"download.php?file_id=$inlieMenuEntry->inlineentry_link\" title=\"Download von &quot;$file->file_name&quot; bei einer Gr&ouml;&szlig;e von $size\">$inlieMenuEntry->inlineentry_text</a> (<span class=\"filesize\">$size</span>)</li>\r\n";
 						}
 					}
 				}
 			}
+			$inlieMenuHtml .= "</ul>\r\n";
+			if($inlieMenuHtml == "<ul>\r\n</ul>\r\n")
+				$inlieMenuHtml = '';
 			$sql = "UPDATE " . DB_PREFIX . "inlinemenu
 				SET inlinemenu_html='$inlieMenuHtml'
 				WHERE page_id='$PageID'";

@@ -141,22 +141,22 @@
 					</tr>
 				</thead>\r\n";
 			// output all visitors surfing on the site
-			$sql = "SELECT userid, page, lastaction, lang, ip, host
+			$sql = "SELECT online_userid, online_page, online_lastaction, online_lang, online_ip, online_host
 				FROM " . DB_PREFIX . "online
-				WHERE lastaction >= " . (mktime() - 300);
+				WHERE online_lastaction >= " . (mktime() - 300);
 			$users_online_result = db_result($sql);
 			while($users_online = mysql_fetch_object($users_online_result)) {
-				if($users_online->userid == 0)
+				if($users_online->online_userid == 0)
 					$username  = $this->admin_lang['not registered'];
 				else
-					$username = getUserById($users_online->userid);
+					$username = getUserById($users_online->online_userid);
 				$out .= "\t\t\t\t<tr>
 					<td>".$username."</td>
-					<td><a href=\"index.php?page=" . $users_online->page . "\">" . $users_online->page . "</a></td>
-					<td>" . date("d.m.Y H:i:s", $users_online->lastaction) . "</td>
-					<td>" . $this->admin_lang[$users_online->lang] . "</td>
-					<td>" . $users_online->ip . "</td>
-					<td>" . $users_online->host . "</td>
+					<td><a href=\"index.php?page=" . $users_online->online_page . "\">" . $users_online->online_page . "</a></td>
+					<td>" . date("d.m.Y H:i:s", $users_online->online_lastaction) . "</td>
+					<td>" . $this->admin_lang[$users_online->online_lang] . "</td>
+					<td>" . $users_online->online_ip . "</td>
+					<td>" . $users_online->online_host . "</td>
 				</tr>\r\n";
 			}
 			$out .= "\t\t\t</table>";

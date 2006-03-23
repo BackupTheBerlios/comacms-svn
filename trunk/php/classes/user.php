@@ -85,11 +85,18 @@
 		var $AccessRghts;
 		
 		/**
+		 * @access private
+		 * @var Sql
+		 */
+		var $_SqlConnection;
+		
+		/**
+		 * @param Sql SqlConnection
 		 * @return void
 		 */
-		function User() {
+		function User(&$SqlConnection) {
 			global $_COOKIE;
-			
+			$this->_SqlConnection = &$SqlConnection;
 			$extern_login_name = GetPostOrGet('login_name');
 			$extern_login_password = GetPostOrGet('login_password');
 			$extern_lang = strtolower(GetPostOrGet('lang'));
@@ -127,10 +134,10 @@
 		
 			// Tells the cookie: "the user is logged in!"?
 			if(isset($_COOKIE['ComaCMS_user'])) {
-				$data = explode('|', $_COOKIE['ComaCMS_user']);
-				$this->OnlineID = @$data[0];
-				$this->Name = @$data[1];
-				$this->PasswordMd5 = @$data[2];
+				//$data = explode('|', $_COOKIE['ComaCMS_user']);
+				$this->OnlineID = $_COOKIE['ComaCMS_user'];
+				//$this->Name = @$data[1];
+				//$this->PasswordMd5 = @$data[2];
 			}
 			// Tries somebody to log in?
 			if(!empty($extern_login_name) && !empty($extern_login_password)) {
@@ -138,16 +145,21 @@
 				$this->PasswordMd5 = md5($extern_login_password);
 			}
 			// Has the user no OnlineId? Generate one!
-			if($this->OnlineID == '')
+			$newOnlineID = false;
+			if($this->OnlineID == '') {
 				$this->OnlineID =  md5(uniqid(rand()));
+				$newOnlineID = true;
+			}
+				
 			if($extern_login_name === '' && $extern_login_password === '')
 				$this->LoginError = 3;
 			elseif($extern_login_name === '' && $extern_login_password !== '')
 				$this->LoginError = 1;
 			elseif($extern_login_name !== '' && $extern_login_password === '')
 				$this->LoginError = 2;
-			// Check: is the user really logged in? Or had he typed in the right name and password?
+			// Check: had the user typed in the right name and password?
 			elseif($this->Name != '' && $this->PasswordMd5 != '') {
+
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "users
 					WHERE user_name='$this->Name' AND user_password='$this->PasswordMd5'
@@ -169,14 +181,44 @@
 					$this->LoginError = 4;
 				}
 			}
+			// Is he logged on? check the data behind his OnlineID!
+			elseif($this->OnlineID != '' && !$newOnlineID) {
+				$sql  = "SELECT user.user_showname, user.user_admin, user.user_name, user.user_id, online.online_loggedon, online.online_ip
+					FROM (
+						". DB_PREFIX . "users user LEFT JOIN " . DB_PREFIX . "online online
+						ON online.online_userid = user.user_id
+					)
+					WHERE online.online_id = '{$this->OnlineID}'
+					LIMIT 1";		
+				$onlineUserResult = $this->_SqlConnection->SqlQuery($sql);
+				if($onlineUser = mysql_fetch_object($onlineUserResult)) {
+					$ip = getenv ('REMOTE_ADDR');
+					// the user has the same ip and is saved as logged on? Give him his rights!
+					if($ip == $onlineUser->online_ip && $onlineUser->online_loggedon == 'yes') {
+						$this->IsLoggedIn = true;
+						$this->Showname = $onlineUser->user_showname;
+						$this->ID = $onlineUser->user_id;
+						if($onlineUser->user_admin == 'y')
+							$this->IsAdmin = true;
+						$this->LoginError = 0;
+					}
+					else {
+						$this->IsAdmin = false;
+						$this->IsLoggedIn = false;
+						$this->Name = '';
+						$this->PasswordMd5 = '';
+						$this->LoginError = 4;
+					}
+				}		
+			}
 			$this->accessRghts = new Auth_All($this->ID);
 			if(!$this->IsAdmin) 
 				$this->accessRghts->Load();
 			else
 				$this->accessRghts->setAdmin();
 			
-			// Set the cookie (for the next 4 hours) 
-			setcookie('ComaCMS_user', $this->OnlineID . '|' . $this->Name . '|' . $this->PasswordMd5, time() + 14400);
+			// Set the cookie (for the next 1 hour/3600 seconds) 
+			setcookie('ComaCMS_user', $this->OnlineID, time() + 3600);
 			
 		}
 		
@@ -210,7 +252,7 @@
 			$result_new = db_result($sql);
 			if($row3 = mysql_fetch_object($result_new)) {
 				$sql = "UPDATE " . DB_PREFIX . "online
-					SET lastaction='" . mktime() . "', userid=$this->ID, lang='$this->Language', page='$page'
+					SET online_lastaction='" . mktime() . "', online_userid=$this->ID, online_lang='$this->Language', online_page='$page', online_loggedon = '" . (($this->IsLoggedIn) ? 'yes' : 'no' ) . "'
 					WHERE online_id='$this->OnlineID'";
 				db_result($sql);
 			}
@@ -218,8 +260,8 @@
 				// get the ip of the user
 				$ip = getenv ('REMOTE_ADDR');
 				// add the online-record for the user
-				$sql = "INSERT INTO " . DB_PREFIX . "online (online_id, ip, lastaction, page, userid, lang, host)
-				VALUES ('$this->OnlineID', '$ip', '" . mktime() . "', '$page', $this->ID, '$this->Language', '" . gethostbyaddr($ip) . "')";
+				$sql = "INSERT INTO " . DB_PREFIX . "online (online_id, online_ip, online_lastaction, online_page, online_userid, online_lang, online_host, online_loggedon)
+				VALUES ('$this->OnlineID', '$ip', '" . mktime() . "', '$page', $this->ID, '$this->Language', '" . gethostbyaddr($ip) . "', '" . (($this->IsLoggedIn) ? 'yes' : 'no' ) . "')";
 				db_result($sql);
 				$counter_all++;
 			}
@@ -230,9 +272,18 @@
 			
 			// delete all enries with a last action which is more than 20 minutes passed
 			$sql = "DELETE FROM " . DB_PREFIX . "online
-				WHERE lastaction < '" . (mktime() - 1200) . "'";
+				WHERE online_lastaction < '" . (mktime() - 1200) . "'";
 			db_result($sql);
 			
+		}
+		
+		function Logout() {
+			if($this->IsLoggedIn) {
+				$sql = $sql = "UPDATE " . DB_PREFIX . "online
+					SET online_loggedon = 'no'
+					WHERE online_id='$this->OnlineID'";
+				$this->_SqlConnection->SqlQuery($sql);
+			}
 		}
 	}
 ?>

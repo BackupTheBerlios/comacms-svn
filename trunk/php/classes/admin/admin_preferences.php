@@ -88,7 +88,8 @@
  					// Load the current config and if it isn't available use the default
  					$setting['default'] = $this->_Config->Get($setting['name'], $setting['default']);
  					$out .= "<div class=\"row\">
- 							<label class=\"row\" for=\"setting_" . $setting['name'] . "\">" . $setting['display'] . "<span class=\"info\">" . $setting['description'] . "</span></label>";
+ 							<label class=\"row\" for=\"setting_{$setting['name']}\"><strong>{$setting['display']}:</strong>
+ 								<span class=\"info\">" . $setting['description'] . "</span></label>";
  						// Make it possible to define simpla options lists
  						if(substr($setting['datatype'], 0, 6) == 'array(') {
  							$setting['data'] = explode(',', substr($setting['datatype'], 6, -1));

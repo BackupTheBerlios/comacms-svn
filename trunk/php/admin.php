@@ -138,8 +138,11 @@
 		$text = page_users();
 	}
 	elseif($extern_page == 'logout') {
-		include('./system/user_pages.php');
-		page_logout();
+		//include('./system/user_pages.php');
+		//page_logout();
+		$user->Logout();
+		header("Location: index.php");
+		die();
 	}
 	elseif($extern_page == 'preferences') {
 		include('classes/admin/admin_preferences.php');

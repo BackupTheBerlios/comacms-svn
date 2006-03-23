@@ -348,7 +348,7 @@ CREATE TABLE `cms_group_users` (
 #fixed a small bug in cms_inlinemenu_entries
 ALTER TABLE `cms_inlinemenu_entries` CHANGE `inlinieentrie_type` `inlinieentrie_type` ENUM( 'link', 'download', 'text', 'intern' ) NOT NULL DEFAULT 'link';
 
-#202
+#r202
 #added the fields for the thumbnaild and a title of the thumbnail
 ALTER TABLE `cms_inlinemenu` ADD `inlinemenu_image_title` VARCHAR( 100 ) NOT NULL ;
 ALTER TABLE `cms_inlinemenu` ADD `inlinemenu_image_thumb` VARCHAR( 255 ) NOT NULL AFTER `inlinemenu_image` ;
@@ -365,3 +365,17 @@ CHANGE `inlineentrie_link` `inlineentry_link` VARCHAR( 255 ) NOT NULL ;
 #r244
 #renamed place to location
 ALTER TABLE `cms_dates` CHANGE `date_place` `date_location` VARCHAR( 60 ) NOT NULL ;
+
+#r254
+#renamed the online tablefields
+ALTER TABLE `cms_online` CHANGE `online_id` `online_id` VARCHAR( 100 ) NOT NULL ,
+CHANGE `ip` `online_ip` VARCHAR( 16 ) NULL DEFAULT '0.0.0.0',
+CHANGE `lastaction` `online_lastaction` VARCHAR( 20 ) NULL DEFAULT '0',
+CHANGE `page` `online_page` VARCHAR( 30 ) NULL DEFAULT NULL ,
+CHANGE `lang` `online_lang` VARCHAR( 5 ) NULL DEFAULT NULL ,
+CHANGE `userid` `online_userid` INT( 10 ) NOT NULL DEFAULT '0',
+CHANGE `host` `online_host` VARCHAR( 110 )  NOT NULL ;
+
+#r254
+#added field to save if a user is logged on
+ALTER TABLE `cms_online` ADD `online_loggedon` ENUM( 'yes', 'no' ) DEFAULT 'no' NOT NULL ;

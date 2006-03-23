@@ -48,7 +48,7 @@
 	$sqlConnection->Connect($d_base);
 	$config = new Config();
 	$config->LoadAll();
-	$user = new User();
+	$user = new User($sqlConnection);
 	$output = new ComaLate();
 	$styleName = $config->Get('style', 'default');
 	$headerStyleName = GetPostOrGet('style');

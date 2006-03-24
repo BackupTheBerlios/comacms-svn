@@ -203,20 +203,23 @@
 						$this->LoginError = 0;
 					}
 					else {
+						$this->ID = $onlineUser->user_id;
 						$this->IsAdmin = false;
 						$this->IsLoggedIn = false;
 						$this->Name = '';
 						$this->PasswordMd5 = '';
-						$this->LoginError = 4;
+						$this->LoginError = -1;
 					}
 				}		
 			}
-			$this->accessRghts = new Auth_All($this->ID);
+			if($this->IsLoggedIn) {
+				$this->accessRghts = new Auth_All($this->ID);
+				
 			if(!$this->IsAdmin) 
 				$this->accessRghts->Load();
 			else
 				$this->accessRghts->setAdmin();
-			
+			}
 			// Set the cookie (for the next 1 hour/3600 seconds) 
 			setcookie('ComaCMS_user', $this->OnlineID, time() + 3600);
 			

@@ -138,7 +138,7 @@
 	 		}
  		}
  		
- 		function _AddCssFiles($cssFiles,$TemplatesFolder, $TemplateName = 'default') {
+ 		function _AddCssFiles($cssFiles, $TemplatesFolder, $TemplateName = 'default') {
  			if(!empty($cssFiles)) {
  					foreach($cssFiles as $key => $cssFile) {
  						foreach($cssFile as $cssKey => $Value) {
@@ -239,6 +239,9 @@
  						$value = current($output);
  						$this->_CssFiles .= "\t\t<!--[if $ieCondition]><style type=\"text/css\">$value</style><![endif]-->\r\n";
  							
+ 					}
+ 					else if($outputType == 'operafix') {
+ 						$this->_CssFiles .= "\t\t<style type=\"text\/css\">/*/*/@import url(". substr($output, 0,-2) . "\ss) screen;/* */</style>\r\n";
  					}
  					else {
  						$this->_CssFiles .= "\t\t<style type=\"text/css\" media=\"$outputType\">$output</style>\r\n";

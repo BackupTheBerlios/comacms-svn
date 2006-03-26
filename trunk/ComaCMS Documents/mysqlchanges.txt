@@ -379,3 +379,7 @@ CHANGE `host` `online_host` VARCHAR( 110 )  NOT NULL ;
 #r254
 #added field to save if a user is logged on
 ALTER TABLE `cms_online` ADD `online_loggedon` ENUM( 'yes', 'no' ) DEFAULT 'no' NOT NULL ;
+
+#r258
+#set the length of page_name to maximum
+ALTER TABLE `cms_pages` CHANGE `page_name` `page_name` VARCHAR( 255 ) NOT NULL;

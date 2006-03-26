@@ -119,7 +119,7 @@
 			foreach ($pages as $date => $page) {
    				$out .= "<tr>
 						<td class=\"table_date_width\">" . date("d.m.Y H:i:s", $date) . "</td>
-						<td><a href=\"index.php?page=" . $page[0] . "\">" . $page[1] . "</a> (" . $page[0] . ")</td>
+						<td><a href=\"index.php?page=" . $page[0] . "\">" . $page[1] . "</a> (" . rawurldecode($page[0]) . ")</td>
 						<td>" . getUserById($page[2]) . "</td>
 						<td>" . $page[3] . "</td>
 					</tr>\r\n";
@@ -132,12 +132,12 @@
 			<table class=\"text_table full_width\">
 				<thead>
 					<tr>
-						<th>".$this->admin_lang['name']."</th>
-						<th>".$this->admin_lang['page']."</th>
-						<th>".$this->admin_lang['last action']."</th>
-						<th>".$this->admin_lang['language']."</th>
-						<th>".$this->admin_lang['ip']."</th>
-						<th>".$this->admin_lang['host']."</th>
+						<th>{$this->admin_lang['name']}</th>
+						<th>{$this->admin_lang['page']}</th>
+						<th>{$this->admin_lang['last action']}</th>
+						<th>{$this->admin_lang['language']}</th>
+						<th>{$this->admin_lang['ip']}</th>
+						<th>{$this->admin_lang['host']}</th>
 					</tr>
 				</thead>\r\n";
 			// output all visitors surfing on the site

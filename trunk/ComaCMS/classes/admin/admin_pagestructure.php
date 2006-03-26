@@ -321,11 +321,11 @@
 		 	return $out;
 		 }
 		 
-		 /**
+		 /*
 		  * @access private
 		  * @return string
 		  */
-		 function _structurePullDown($topnode = 0, $deep = 0, $topnumber = '', $without = -1, $selected = -1) {
+		 /*function _structurePullDown($topnode = 0, $deep = 0, $topnumber = '', $without = -1, $selected = -1) {
 		 	$out = '';
 			$sql = "SELECT *
 		 		FROM " . DB_PREFIX . "pages
@@ -336,14 +336,14 @@
 		 		$number = 1;
 		 		while($page = mysql_fetch_object($pages_result)) {
 		 			if($page->page_id != $without) {
-		 				$out .= "<option style=\"padding-left:" . ($deep * 1.5) . "em;\" value=\"$page->page_id\"" . (($page->page_id == $selected) ? ' selected="selected"' : '') . ">$topnumber$number. $page->page_title ($page->page_name)</option>\r\n";
+		 				$out .= "<option style=\"padding-left:" . ($deep * 1.5) . "em;\" value=\"$page->page_id\"" . (($page->page_id == $selected) ? ' selected="selected"' : '') . ">$topnumber$number. $page->page_title (" . rawurlencode($page->page_name) . ")</option>\r\n";
 		 				$out .= $this->_structurePullDown($page->page_id, $deep + 1, $topnumber . $number. "." ,$without, $selected);
 		 				$number++;
 		 			}
 		 		}
 		 	}
 		 	return $out;
-		 }
+		 }*/
 		 
 		 /**
 		  * @access private
@@ -356,8 +356,9 @@
 		 		return;
 		 	$out .= "\r\n\t\t\t<ol>\r\n";
 		 	foreach($this->_PageStructure->_ParentIDPages[$TopNodeID] as $page) {
+	 			if($page['access'] != 'deleted') {
 	 			$out .= "\t\t\t\t<li class=\"page_type_". $page['type'] . (($page['access'] == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">" . (($TopNodeID == 0) ?  "<input type=\"checkbox\" name=\"mainMenuPages[]\"" . ((in_array($page['id'], $this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page['access'] != 'public') ? ' disabled="disabled"'  : '') . " value=\"" . $page['id'] . "\" class=\"checkbox\"/>\t" : '' );
-	 			$out .= "<strong>" . $page['title'] . "</strong> (" . $page['name'] . ")";
+	 			$out .= "<strong>" . $page['title'] . "</strong> (" . rawurldecode($page['name']) . ")";
 		 			$out .= "<span class=\"page_lang\">[" . $adminLang[$page['lang']] . "]</span><span class=\"page_actions\">";
 		 			// edit:
 		 			if($page['access'] != 'deleted')
@@ -375,6 +376,7 @@
 		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($adminLang['delete_page_%page_title%'], $page['title']) . "\" title=\"" . sprintf($adminLang['delete_page_%page_title%'], $page['title']) . "\"/></a>";
 		 			$out .= '</span></span>' . $this->_Structure($page['id']);
 		 			$out .= "\t\t\t\t</li>\r\n";
+	 			}
 		 	}
 		 	$out .= "\r\n\t\t\t</ol>\r\n\r\n";
 		 	return $out;
@@ -466,65 +468,8 @@
 			$page_parent_id = GetPostOrGet('pageParentID');
 			$page_title = GetPostOrGet('pageTitle');
 			$page_type = GetPostOrGet('pageType');
-						
-			$page_edit_comment = htmlspecialchars($page_edit_comment);
-			$edit = null;
-			$out = '';
-			$id = -1;
-			// create new page_type-data-page
-			switch($page_type) {
-				case 'text':		include('classes/edit_text_page.php');
-							$edit = new Edit_Text_Page();
-							break;
-				case 'gallery':		include('classes/edit_gallery_page.php');
-							$edit = new Edit_Gallery_Page();
-							break;
-				case 'link':		include('classes/edit_link_page.php');
-							$edit = new Edit_Link_Page();
-							break;
-				default:		$out .= "Der Seitentyp <strong>$page_type</strong> l�sst sich noch nicht bearbeiten.";
-							return $out;
-			}
-			if($edit !== null) {
-				
-				$a_access = array('public', 'private', 'hidden');
-				if(!in_array($page_access, $a_access))
-					$page_access = $a_access[0];
-				$page_name = strtolower($page_name);
-				$page_name = str_replace(' ', '_', $page_name);
-				
-				// check if the page exists
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "pages
-					WHERE page_name = '$page_name' AND page_lang = '$page_lang'
-					LIMIT 0,1";
-				$exists_result = db_result($sql);
-				if($exists = mysql_fetch_object($exists_result)) { // exists
-					if($exists->page_access == 'deleted') { // the page is deleted so we can overwrite it
-						
-						$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
-							VALUES($exists->page_id, '$exists->page_type', '$exists->page_name', '$exists->page_title', $exists->page_parent_id, '$exists->page_lang', $exists->page_creator, $exists->page_date, '$exists->page_edit_comment')";
-						db_result($sql);
-						$history_id = mysql_insert_id();
-						$sql = "UPDATE " . DB_PREFIX . "pages
-							SET page_creator=$user->Id, page_date=" . mktime() . ", page_title='$page_title', page_edit_comment='$page_edit_comment', page_access='$page_access', page_type='$page_type', page_parent_id='$page_parent_id'
-							WHERE page_id=$exists->page_id";
-						db_result($sql);
-						$lastid = $exists->page_id;
-						$edit->NewPage($exists->page_id, $history_id);
-					}
-					else {
-						return sprintf("a page with the name %s exists already", $exists->page_name);
-					}
-				}
-				else {// dont extist
-					$sql = "INSERT INTO " . DB_PREFIX . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)
-						VALUES('$page_lang', '$page_access', '$page_name', '$page_title', $page_parent_id, $user->ID, '$page_type', " . mktime() . ", '$page_edit_comment')";
-					db_result($sql);
-					$lastid = mysql_insert_id();
-					$edit->NewPage($lastid);
-				}
-			}
+			$lastid = $this->_PageStructure->AddNewPage($page_name, $page_title, $page_lang, $page_access, $page_type, $page_parent_id, $page_edit_comment);
+		
 			if($page_edit != '')
 				header("Location: admin.php?page=pagestructure&action=editPage&pageID=$lastid");
 			else
@@ -544,9 +489,9 @@
 			$page_result = db_result($sql);
 			while($page = mysql_fetch_object($page_result)) {
 				if($PageID == $page->page_id)
-					$out = " <span title=\"$page->page_title\">$page->page_name</span>";
+					$out = " <span title=\"$page->page_title\">" . rawurldecode($page->page_name) . "</span>";
 				else
-					$out = "<a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id\" title=\"$page->page_title\">$page->page_name</a>" . $out;
+					$out = "<a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id\" title=\"$page->page_title\">" . rawurldecode($page->page_name) ."</a>" . $out;
 				if($page->page_parent_id != 0)
 					$out = '<strong>/</strong>' . $out;
 				$sql = "SELECT *
@@ -1234,7 +1179,7 @@
 				</tr>
 				<tr>
 					<th>Name</th>
-					<td>$page->page_name</td>
+					<td>" . rawurldecode($page->page_name) . "</td>
 				</tr>
 				<tr>
 					<th>Typ</th>
@@ -1279,7 +1224,8 @@
 							<input type=\"hidden\" name=\"pageParentIDOld\" value=\"$page->page_parent_id\" />
 							<select name=\"pageParentID\">
 								<option value=\"0\">Keiner</option>\r\n";
-					$out .= $this->_structurePullDown(0, 0, '', $page->page_id, $page->page_parent_id);
+					$this->_PageStructure->LoadParentIDs();
+					$out .= $this->_PageStructure->PageStructurePulldown(0, 0, '', $page->page_id, $page->page_parent_id);
 					$out .= "\t\t\t\t\t\t\t</select><input type=\"submit\" value=\"" . $admin_lang['save'] . "\" class=\"button\" /></form>";
 				}
 				else
@@ -1329,19 +1275,19 @@
 				$result = db_result($sql);
 				$changes_count = mysql_num_rows($result);
 				$out .="\t\t\t<h2>Ver&auml;nderungen($changes_count)</h2>
-			<table class=\"page_commits\">
+			<table class=\"text_table full_width\">
 				<thead>
 					<tr>
-						<td>Datum</td>
-						<td>Ver&auml;nderer</td>
-						<td>Titel</td>
-						<td>Kommentar</td>
-						<td>Aktionen</td>
+						<th>Datum</th>
+						<th>Ver&auml;nderer</th>
+						<th>Titel</th>
+						<th>Kommentar</th>
+						<th>Aktionen</th>
 					</tr>
 				</thead>
 				<tr>
 					<td>" . date("d.m.Y H:i:s",$page->page_date) . "</td>
-					<td>".getUserById($page->page_creator) . "</td>
+					<td>" . getUserById($page->page_creator) . "</td>
 					<td>$page->page_title</td>
 					<td>$page->page_edit_comment&nbsp;</td>
 					<td>

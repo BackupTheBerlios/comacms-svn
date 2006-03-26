@@ -32,6 +32,7 @@
 	// run common.php to have all ordinary things done, which every page needs
 	include('common.php');
 	$outputpage = new OutputPage($sqlConnection);
+	$extern_page = rawurlencode($extern_page);
 	// load the page
 	$outputpage->LoadPage($extern_page, $user);
 	// get the language strings

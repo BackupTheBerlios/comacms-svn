@@ -116,9 +116,9 @@
  		 */
  		function SetCondition($Name, $Value) {
  			if($Value)
- 				$this->_Conditions[$Name]= true;
+ 				$this->_Conditions[$Name] = true;
  			else	
- 				$this->_Conditions[$Name]= false;
+ 				$this->_Conditions[$Name] = false;
  		}
  		
  		function SetReplacement($Name, $Value = '') {

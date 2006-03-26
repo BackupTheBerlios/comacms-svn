@@ -35,6 +35,71 @@
 			$this->_User = &$User;
 		}
 		
+		function AddNewPage($Name, $Title, $Lang, $Access, $Type, $ParentPageID, $Comment) {
+			if($Name == '' || $Title == '' || $Lang == '' || $Access == '' || $Type == '' || !is_numeric($ParentPageID) || $Comment == '')
+				return false;			
+			
+			// convert the name into an url-acceptable format
+			$Name = str_replace(' ', '_', $Name);
+			$Name = rawurlencode($Name);
+			//die($Name);
+			$pageContentEditor = null;
+			// Load the page-type-specific module to crate the 'real' page
+			switch($Type) {
+				case 'text':		include(__ROOT__ . '/classes/edit_text_page.php');
+							$pageContentEditor = new Edit_Text_Page();
+							break;
+				case 'gallery':		include(__ROOT__ . '/classes/edit_gallery_page.php');
+							$pageContentEditor = new Edit_Gallery_Page();
+							break;
+				
+			}
+			
+			if(!is_object($pageContentEditor))
+				return false;
+				
+			$accessPossibilities = array('public', 'private', 'hidden');
+				if(!in_array($Access, $accessPossibilities))
+					$Access = $accessPossibilities[0];	
+				
+			// check if the page exists
+			$sql = "SELECT *
+				FROM " . DB_PREFIX . "pages
+				WHERE page_name = '$Name' AND page_lang = '$Lang'
+				LIMIT 0,1";	
+			$existsPageResult = $this->_SqlConnection->SqlQuery($sql);
+			
+			if($existsPage = mysql_fetch_object($existsPageResult)) { // the page exists!
+				if($existsPage->page_access != 'deleted')
+					// the page exists and isn't deleted we can't do anything
+					return false;
+
+				// the page is marked as deleted, we are allowed to overwrite the page
+				// save the old things into the history
+				$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
+					VALUES($existsPage->page_id, '$existsPage->page_type', '$existsPage->page_name', '$existsPage->page_title', $existsPage->page_parent_id, '$existsPage->page_lang', $existsPage->page_creator, $existsPage->page_date, '$existsPage->page_edit_comment')";
+				$this->_SqlConnection->SqlQuery($sql);
+				$historyID = mysql_insert_id();
+				// now we can overwrite!
+				$sql = "UPDATE " . DB_PREFIX . "pages
+					SET page_creator={$this->_User->ID}, page_date=" . mktime() . ", page_title='$Title', page_edit_comment='$Comment', page_access='$Access', page_type='$Type', page_parent_id='$ParentPageID'
+					WHERE page_id=$existsPage->page_id";
+				$this->_SqlConnection->SqlQuery($sql);
+				$lastID = $existsPage->page_id;
+				$pageContentEditor->NewPage($existsPage->page_id, $historyID);
+				return $lastID;				
+			}
+			else {
+				$sql = "INSERT INTO " . DB_PREFIX . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)
+						VALUES('$Lang', '$Access', '$Name', '$Title', $ParentPageID, {$this->_User->ID}, '$Type', " . mktime() . ", '$Comment')";
+				$this->_SqlConnection->SqlQuery($sql);
+				$lastID = mysql_insert_id();
+				$pageContentEditor->NewPage($lastID);
+				return $lastID;
+			}
+			
+		}
+		
 		/**
 		 * @param integer PageID
 		 * @param string PageAccess
@@ -196,7 +261,7 @@
 		 	$number = 1;
 		 	foreach($this->_ParentIDPages[$Topnode] as $page) {
 		 		if($page['id'] != $Without) {
-		 			$out .= "<option style=\"padding-left:" . ($Deep * 1.5) . "em;\" value=\"" . $page['id'] . "\"" . (($page['id'] == $Selected) ? ' selected="selected"' : '') . ">$Topnumber$number. " . $page['title'] . " (" . $page['name'] . ")</option>\r\n";
+		 			$out .= "<option style=\"padding-left:" . ($Deep * 1.5) . "em;\" value=\"" . $page['id'] . "\"" . (($page['id'] == $Selected) ? ' selected="selected"' : '') . ">$Topnumber$number. " . $page['title'] . " (" . rawurldecode($page['name']) . ")</option>\r\n";
 		 			$out .= $this->PageStructurePulldown($page['id'], $Deep + 1, $Topnumber . $number. "." ,$Without, $Selected);
 		 			$number++;
 		 		}

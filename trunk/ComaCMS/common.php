@@ -28,7 +28,7 @@
 		else
 			header('location: install/install.html');
 	}
-	
+	define('__ROOT__', dirname(__FILE__));
 	include('classes/sql.php');
 	include('classes/comalib.php');
 	include('classes/outputpage.php');

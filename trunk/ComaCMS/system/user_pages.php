@@ -22,7 +22,7 @@
 		$extern_file_id = GetPostOrGet('file_id');
 		$extern_sure = GetPostOrGet('sure'); 
 		
-		$out = "<h3>Files</h3><hr />";
+		$out = "<h2>Files</h2>";
 		$upload_path = './data/upload/';
 		if($extern_action == 'upload') {
 			foreach($_FILES as $name => $file) {
@@ -155,16 +155,20 @@
 				}
 			}
 		}
-		$out .= "<form enctype=\"multipart/form-data\" action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
+		$out .= "<fieldset><legend>Upload</legend>
+				<form enctype=\"multipart/form-data\" action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
+			
 			<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1600000\" />
 			<input type=\"hidden\" name=\"page\" value=\"files\" />
 			<input type=\"hidden\" name=\"action\" value=\"upload\" />
-			<input name=\"uploadfile0\" type=\"file\" />
-			<input type=\"submit\" class=\"button\" value=\"Hochladen\"/>
+			<div class=\"row\"><input name=\"uploadfile0\" type=\"file\" /></div>
+			<div class=\"row\"><input type=\"submit\" class=\"button\" value=\"Hochladen\"/></div>
+			
 		</form>";
 		$out .= "
-		<a href=\"admin.php?page=files&amp;action=check_new\"  class=\"button\">Auf Ver&auml;nderungen &uuml;berpr&uuml;fen</a><br /><br />
-		<table class=\"text_table\">
+		<div class=\"row\"><a href=\"admin.php?page=files&amp;action=check_new\"  class=\"button\">Auf Ver&auml;nderungen &uuml;berpr&uuml;fen</a></div>
+		</fieldset>
+		<table class=\"text_table full_width\">
 		<tr><th>id</th><th>Name</th><th>Gr&ouml;&szlig;e</th><th>Hochgeladen am</th><th>Typ</th><th>Aktionen</th></tr>";
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "files

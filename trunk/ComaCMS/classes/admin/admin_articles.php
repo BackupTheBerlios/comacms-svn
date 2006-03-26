@@ -31,7 +31,7 @@
 	 	 * @return string
 	 	 */
 	 	function GetPage($action, $admin_lang) {
-	 		$out = "\t\t\t<h3>" . $admin_lang['articles'] . "</h3><hr />\r\n";
+	 		$out = "\t\t\t<h2>" . $admin_lang['articles'] . "</h2>\r\n";
 		 	$action = strtolower($action);
 		 	switch ($action) {
 		 		case 'new':		$out .= $this->_newArticle($admin_lang);
@@ -243,13 +243,13 @@
 								writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 								writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als �berschrift\",\"=== \",\" ===\",\"�berschrift\",\"h\");
+								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als &Uuml;berschrift\",\"=== \",\" ===\",\"&Uuml;berschrift\",\"h\");
 							</script>
 							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\">$article->article_text</textarea></td>
 					</tr>
 					<tr>
 						<td>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></td>
-						<td>" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img style=\"float:left\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '<b>noch kein Bild festgelegt</b><br />') . "Wenn das Bild gesetzt oder ver�ndert wird, gehen alle ungespeicherten Ver�nderungen an den Texten verloren!<br /><a class=\"button\" href=\"admin.php?page=articles&amp;action=setimage&amp;article_id=$id\">Bild setzen/ver�ndern</a></td>
+						<td>" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img style=\"float:left\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '<b>noch kein Bild festgelegt</b><br />') . "Wenn das Bild gesetzt oder ver&auml;ndert wird, gehen alle ungespeicherten Ver&auml;nderungen an den Texten verloren!<br /><a class=\"button\" href=\"admin.php?page=articles&amp;action=setimage&amp;article_id=$id\">Bild setzen/ver&auml;ndern</a></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td><td><input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" /><input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" /></td>

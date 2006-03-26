@@ -44,21 +44,11 @@
 	$menuArray = array();
 	$menuArray[] = array($admin_lang['admincontrol'], 'admincontrol',);
 	$menuArray[] = array($admin_lang['sitepreview'], 'sitepreview');
-	$menuArray[] = array($admin_lang['preferences'], 'preferences');
-	$menuArray[] = array($admin_lang['modules'], 'modules');
 	$menuArray[] = array($admin_lang['pagestructure'], 'pagestructure');
 	$menuArray[] = array($admin_lang['menu-editor'], 'menueditor');
-//	$menu_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
-//	$menu_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
-//	$menu_array[] = array($admin_lang['inlinemenu'], 'admin.php?page=inlinemenu');
-//	$menuArray[] = array($admin_lang['news'], 'news');
-//	$menuArray[] = array($admin_lang['dates'], 'dates');
-	$menuArray[] = array($admin_lang['articles'], 'articles');
-	$menuArray[] = array($admin_lang['sitestyle'], 'sitestyle');
-	$menuArray[] = array($admin_lang['users'], 'users');
-	$menuArray[] = array($admin_lang['groups'], 'groups');
-	$menuArray[] = array($admin_lang['rights'], 'rights');
-	$menuArray[] = array($admin_lang['files'], 'files');
+	$menuArray[] = array($admin_lang['preferences'], 'preferences');
+	$menuArray[] = array($admin_lang['modules'], 'modules');
+
 	
 	// add menu entries for activated modules
 	
@@ -87,7 +77,18 @@
 			$menuArray[] = array($moduleName . '-' . $admin_lang['module'], 'module_'. $moduleActivated);
 		}
 	}
-	
+		
+//	$menu_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
+//	$menu_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
+//	$menu_array[] = array($admin_lang['inlinemenu'], 'admin.php?page=inlinemenu');
+//	$menuArray[] = array($admin_lang['news'], 'news');
+//	$menuArray[] = array($admin_lang['dates'], 'dates');
+	$menuArray[] = array($admin_lang['articles'], 'articles');
+	$menuArray[] = array($admin_lang['sitestyle'], 'sitestyle');
+	$menuArray[] = array($admin_lang['users'], 'users');
+	$menuArray[] = array($admin_lang['groups'], 'groups');
+	$menuArray[] = array($admin_lang['rights'], 'rights');
+	$menuArray[] = array($admin_lang['files'], 'files');
 	$menuArray[] = array($admin_lang['logout'], 'logout');
 	
 	// FIXME: add path links to make the usability much better! 

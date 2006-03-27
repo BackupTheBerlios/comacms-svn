@@ -98,7 +98,7 @@
 		return 0 === strpos($string, $search);
 	}
 
-	function nextDates($count = 5) {
+	/*function nextDates($count = 5) {
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "dates
 			WHERE date_date >= " . mktime() . "
@@ -120,9 +120,9 @@
 		}
 		$out .= "</table>";
 		return $out;
-	}
+	}*/
 
-	function articlesPreview($count = 5) {
+	/*function articlesPreview($count = 5) {
 		global $config;
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "articles
@@ -166,7 +166,7 @@
 		}
 		$out .= '</div><p>';
 		return $out;
-	}
+	}*/
 
 	/**
 	 * GetPostOrGet
@@ -187,6 +187,7 @@
 		$value = MakeSecure($value);
 		return $value;
 	}
+	
 	/**
 	 * @return mixed
 	 */
@@ -374,6 +375,7 @@
 			return $mime[$ext];
 		return 'application/unknown';
 	}
+	
 	/**
 	 * Encodes a URI that it is ready for XHTML-output
 	 * @param string Uri
@@ -385,22 +387,21 @@
 		if(isset($urlData['scheme']) && isset($urlData['host'])) {
 			// FIXME: here is a bug with non ASCII characters, it generates no-standard-URIs
 			$encoded = $urlData['scheme'] . '://' . rawurlencode($urlData['host']);
-			if(isset($urlData['path'])) // TODO: Try to fast me up!
+			if(isset($urlData['path'])) { // TODO: Try to fast me up!
+				$urlData['path']= rawurldecode($urlData['path']);
 				$encoded .= preg_replace( "|([\/]{0,1})(.+?)([\/]{0,1})|e", "'\\1' . rawurlencode('\\2') . '\\3'", $urlData['path'] );
+			}
 			if(isset($urlData['query'])) { // TODO: Try to fast me up!
+				$urlData['query']= rawurldecode($urlData['query']);
 				$urlData['query'] = str_replace('&amp;amp;', '&', $urlData['query']);
 				$urlData['query'] = str_replace('&amp;', '&', $urlData['query']);
 				$encoded .= '?' . preg_replace( "|([&=]{0,1})(.+?)([&=]{0,1})|e", "'\\1' . rawurlencode('\\2') . '\\3'", $urlData['query'] );
 			} 
 			if(isset($urlData['fragment']))
-				$encoded .= "#" . rawurlencode($urlData['fragment']);
+				$encoded .= "#" . rawurlencode(rawurldecode($urlData['fragment']));
 			return $encoded;
-			
 		}
 		else
 			return  rawurlencode($Uri);
-		
-			
 	}
-
 ?>

@@ -718,11 +718,4 @@
 		$string = preg_replace("~^\ *(.+?)\ *$~", "$1", $string);
 		return str_replace(" ", "%20", $string);
 	}
-	
-	function isUTF8($string)
-	{
-   		if(strpos(utf8_encode($string), "?", 0) !== false ) // "?" is ALT+159
-         		return true;  // the original string was utf8
-   		return false; // no utf8
-	}
 ?>

@@ -142,4 +142,12 @@
 	$admin_lang['picture'] = 'Bild';
 	$admin_lang['description'] = 'Beschreibung';
 	$admin_lang['write_new_article'] = 'einen neuen Artikel schreiben';
+	$admin_lang['filename'] = 'Dateiname';
+	$admin_lang['filesize'] = 'Dateigr&ouml;&szlig;e';
+	$admin_lang['uploaded_on'] = 'Hochgeladen am';
+	$admin_lang['download'] = 'Download';
+	$admin_lang['filetype'] = 'Datei-Typ';
+	$admin_lang['file'] = 'Datei';
+	$admin_lang['id'] = 'ID';
+	$admin_lang['altogether'] = 'Insgesamt';
 ?>

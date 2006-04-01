@@ -20,6 +20,7 @@
 	 * @package ComaCMS 
 	 */
  	class Admin {
+ 	
  		/**
  		 * @var Sql
  		 * @access private

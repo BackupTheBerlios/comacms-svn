@@ -153,9 +153,10 @@
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'files') {
-		include('system/user_pages.php');
 		$title = $admin_lang['files'];
-		$text = page_files();
+		include('classes/admin/admin_files.php');
+		$admin_page = new Admin_Files($sqlConnection, $admin_lang, $user, $config);
+		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'pagestructure') {
 		$title = $admin_lang['pagestructure'];

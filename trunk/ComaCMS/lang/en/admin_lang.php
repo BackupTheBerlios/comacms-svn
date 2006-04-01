@@ -142,5 +142,13 @@
 	$admin_lang['delete_date'] = 'Delete date';
 	$admin_lang['picture'] = 'Picture';
 	$admin_lang['description'] = 'Description';
-	$admin_lang['write_new_article'] = 'Write a new article'
+	$admin_lang['write_new_article'] = 'Write a new article';
+	$admin_lang['filename'] = 'Filename';
+	$admin_lang['filesize'] = 'Filesize';
+	$admin_lang['uploaded_on'] = 'Uploaded on';
+	$admin_lang['download'] = 'Download';
+	$admin_lang['filetype'] = 'Filetype';
+	$admin_lang['file'] = 'File';
+	$admin_lang['id'] = 'ID';
+	$admin_lang['altogether'] = 'altogether';
 ?>

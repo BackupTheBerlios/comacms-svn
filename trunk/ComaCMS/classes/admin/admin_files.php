@@ -377,23 +377,67 @@
 					<a href=\"admin.php?page=files&amp;action=check_new_files\" class=\"button\">{$this->_AdminLang['check_for_changes']}</a>
 				</div>
 			</fieldset>
-			<table class=\"text_table full_width\">
+			<table id=\"files\" class=\"text_table full_width\">
 				<thead>
 					<tr>
-						<th>{$this->_AdminLang['filename']}</th>
-						<th>{$this->_AdminLang['filesize']}</th>
-						<th class=\"table_date_width\">{$this->_AdminLang['uploaded_on']}</th>
-						<th class=\"small_Width\">{$this->_AdminLang['filetype']}</th>
-						<th>{$this->_AdminLang['downloads']}</th>
+						<th>
+							<a href=\"admin.php?page=files&amp;sort=filename#files\" title=\"" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filename']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filename']) . "]\" src=\"img/up.png\"/></a>
+							{$this->_AdminLang['filename']}
+							<a href=\"admin.php?page=files&amp;sort=filename&amp;desc=1#files\" title=\"" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filename']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filename']) . "]\" src=\"img/down.png\"/></a>
+						</th>
+						<th class=\"small_width\">
+							<a href=\"admin.php?page=files&amp;sort=filesize#files\" title=\"" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filesize']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filesize']) . "]\" src=\"img/up.png\"/></a>
+							{$this->_AdminLang['filesize']}
+							<a href=\"admin.php?page=files&amp;sort=filesize&amp;desc=1#files\" title=\"" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filesize']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filesize']) . "]\" src=\"img/down.png\"/></a>
+						</th>
+						<th class=\"table_date_width_plus\">
+							<a href=\"admin.php?page=files&amp;sort=filedate#files\" title=\"" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['date']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['date']) . "]\" src=\"img/up.png\"/></a>
+							{$this->_AdminLang['uploaded_on']}
+							<a href=\"admin.php?page=files&amp;sort=filedate&amp;desc=1#files\" title=\"" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['date']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['date']) . "]\" src=\"img/down.png\"/></a>
+						</th>
+						<th class=\"small_width\">
+							<a href=\"admin.php?page=files&amp;sort=filetype#files\" title=\"" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filetype']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filetype']) . "]\" src=\"img/up.png\"/></a>
+							{$this->_AdminLang['filetype']}
+							<a href=\"admin.php?page=files&amp;sort=filetype&amp;desc=1#files\" title=\"" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filetype']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filetype']) . "]\" src=\"img/down.png\"/></a>
+						</th>
+						<th class=\"table_mini_width\">
+							<a href=\"admin.php?page=files&amp;sort=filedownloads#files\" title=\"" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['downloads']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['downloads']) . "]\" src=\"img/up.png\"/></a>
+							<abbr title=\"{$this->_AdminLang['downloads']}\">{$this->_AdminLang['downl']}</abbr>
+							<a href=\"admin.php?page=files&amp;sort=filedownloads&amp;desc=1#files\" title=\"" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['downloads']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['downloads']) . "]\" src=\"img/down.png\"/></a>
+						</th>
 						<th class=\"actions\">{$this->_AdminLang['actions']}</th>
 					</tr>
 				</thead>\r\n";
 			// get all files from the database/ which are registered in the database
 			$sql = "SELECT file_type, file_path, file_name, file_id, file_downloads, file_date, file_size
 				FROM " . DB_PREFIX . "files
-				ORDER BY file_name ASC";
+				ORDER BY ";
+			$sort = GetPostOrGet('sort');
+			$desc = GetPostOrGet('desc');
+			// sorting by what?
+			switch ($sort) {
+				case 'filename':	$sql .= 'file_name';	
+							break;
+				case 'filesize':	$sql .= 'file_size';
+							break;
+				case 'filedate':	$sql .= 'file_date';
+							break;
+				case 'filetype':	$sql .= 'file_type';
+							break;
+				case 'filedownloads':	$sql .= 'file_downloads';
+							break;
+				default:		$sql .= 'file_name';
+							break;
+			}
+			// descending or ascending?
+			if($desc == 1)
+				$sql .= ' DESC';
+			else
+				$sql .= ' ASC';
+
 			$files_result = $this->_SqlConnection->SqlQuery($sql);
 			$completeSize = 0;
+			// show all files
 			while($file = mysql_fetch_object($files_result)) {
 				$out .= "\t\t\t\t<tr>
 					<td><span title=\"" . utf8_encode($file->file_path) . "\">" . utf8_encode($file->file_name) . "</span></td>

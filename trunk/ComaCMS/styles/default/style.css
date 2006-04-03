@@ -157,56 +157,63 @@ a.button {
 }
 
 textarea.edit {
- width: 100%;
- height: 17em;
- font-family: Courier New, Lucida Console, Courier, Monaco;
+	width: 100%;
+	height: 17em;
+	font-family: Courier New, Lucida Console, Courier, Monaco;
 }
 
-table th.small_width {
- width: 10em;
+th.small_width {
+	width: 10em;
+}
+
+th.table_mini_width {
+	width: 7em;
 }
 
 table th.actions {
- width: 5em;
+	width: 5em;
 }
 
 table.text_table {
- border-spacing: 0px;
- border-collapse: collapse;
+	border-spacing: 0px;
+	border-collapse: collapse;
 }
 
 table.text_table td, table.text_table th {
- border: 1px solid #000000;
- padding: 0.1em;
+	border: 1px solid #000000;
+	padding: 0.1em;
 }
 
 table.text_table th {
- background-color: #9B9FBF;
- font-weight: bold;
+	background-color: #9B9FBF;
+	font-weight: bold;
 }
 
 td.table_date_width, th.table_date_width{
- width: 9.5em;
+	width: 9.5em;
+}
+
+td.table_date_width_plus, th.table_date_width_plus {
+	width: 11.5em;
 }
 
 .margin_center {
- margin-left:auto;
- margin-right: auto;
+	margin-left:auto;
+	margin-right: auto;
 }
 
 .full_width {
- width: 96%;
+	width: 96%;
 }
 li.page_type_text, li.page_type_gallery {
- margin-left: 1.5em;
+	margin-left: 1.5em;
 }
 
 div.row label {
- float: left;
- display: inline;
- padding-right: 1em;
- width: 17em;
- padding-bottom: 1em;
+	float: left;
+	display: inline;
+	padding-right: 1em;
+	width: 17em;
 }
 
 div.row label.simple {

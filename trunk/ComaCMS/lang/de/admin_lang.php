@@ -180,4 +180,9 @@
 	$admin_lang['upload'] = 'Upload';
 	$admin_lang['upload_files'] = 'Dateien hochladen';
 	$admin_lang['check_for_changes'] = 'Auf Ver&auml;nderungen &uuml;berpr&uuml;fen';
+	$admin_lang['sort_ascending_by_%name%'] = 'Aufw&auml;rts sortieren durch %s';
+	$admin_lang['sort_descending_by_%name%'] = 'Abw&auml;rts sortieren durch %s';
+	$admin_lang['downl'] = 'Downl.';
+	
+	
 ?>

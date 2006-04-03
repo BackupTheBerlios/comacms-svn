@@ -157,7 +157,6 @@
 	$admin_lang['delete_file_%file%'] = 'Delete file &quot;%s&quot;';
 	$admin_lang['dont_delete_file_%file%'] = 'Don\'t delete file &quot;%s&quot;';
 	$admin_lang['download_file_%file%'] = 'Download file &quot;%s&quot;';
-	
 	$admin_lang['changes'] = 'Changes';
 	$admin_lang['remove_database_entry'] = 'Remove database-entry';
 	$admin_lang['this_file_doesnt_exist_any_longer'] = 'This file doesn\'t exist any longer.';
@@ -182,4 +181,7 @@
 	$admin_lang['upload'] = 'Upload';
 	$admin_lang['upload_files'] = 'Upload files';
 	$admin_lang['check_for_changes'] = 'Check for changes';
+	$admin_lang['sort_ascending_by_%name%'] = 'Sort ascending by %s';
+	$admin_lang['sort_descending_by_%name%'] = 'Sort descending by %s';
+	$admin_lang['downl'] = 'Downl.';
 ?>

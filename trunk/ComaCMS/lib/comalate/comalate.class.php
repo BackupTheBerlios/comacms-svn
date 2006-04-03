@@ -280,7 +280,7 @@
 			$document .= $this->_CssFiles;
 			$document .= "\t</head>\r\n\t<body>\r\n";
 			$document .= $this->Template;
- 			$document .= "\t</body>\r\n</html>";
+ 			$document .= "\r\n\t</body>\r\n</html>";
  			$this->GeneratedOutput = $document;
  		}
  	}

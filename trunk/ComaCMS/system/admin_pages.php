@@ -85,7 +85,7 @@
 
 
 
-/*
+/**
  *
  * string page_users()
  * returns the user-admin-page where you can add, change and delete users

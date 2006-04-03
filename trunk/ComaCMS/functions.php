@@ -335,6 +335,7 @@
 			'.stp' => 'application/STEP',
 			'.sv4cpio' => 'application/x-sv4cpio',
 			'.sv4crc' => 'application/x-sv4crc',
+			'.svg' => 'image/svg+xml',
 			'.swf' => 'application/x-shockwave-flash',
 			'.t' => 'application/x-troff',
 			'.tar' => 'application/x-tar',

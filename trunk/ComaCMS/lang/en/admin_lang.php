@@ -151,4 +151,35 @@
 	$admin_lang['file'] = 'File';
 	$admin_lang['id'] = 'ID';
 	$admin_lang['altogether'] = 'altogether';
+	$admin_lang['downloads'] = 'Downloads';
+	$admin_lang['do_you_really_want_to_delete_the_file_%filename%_irrevocablly'] = 'Do you really want to delete the file &quot;%s&quot; irrevocablly?';
+	$admin_lang['this_file_was_uploaded_on_%date%_at%_%time%_oclock_by_%username%'] = 'This file was uploaded on %s at %s o\'clock by &quot;%s&quot;.';
+	$admin_lang['delete_file_%file%'] = 'Delete file &quot;%s&quot;';
+	$admin_lang['dont_delete_file_%file%'] = 'Don\'t delete file &quot;%s&quot;';
+	$admin_lang['download_file_%file%'] = 'Download file &quot;%s&quot;';
+	
+	$admin_lang['changes'] = 'Changes';
+	$admin_lang['remove_database_entry'] = 'Remove database-entry';
+	$admin_lang['this_file_doesnt_exist_any_longer'] = 'This file doesn\'t exist any longer.';
+	$admin_lang['add_to_database'] = 'Add to database';
+	$admin_lang['this_file_isnt_registered_in_the_database'] = 'This file isn\'t registered in the database.';
+	$admin_lang['refresh_database_entry'] = 'Refresh database-entry';
+	$admin_lang['this_insnt_the_file_which_is_registered_as_a_database_entry_under_this_name'] = 'This isn\'t the file which is registered as a database-entry under this name.';
+	$admin_lang['warning'] = 'Warning';
+	$admin_lang['this_page_shows_all_files_which_are_changed_without_the_admin_interface'] = 'This page shows all files which are changed whithout the admin-interface.';
+	$admin_lang['to_apply_these_changes_select_the_files_which_should_be_updated'] = 'To apply these changes select the files which shoult be updated.';
+	$admin_lang['this_page_cant_recover_deleted_files'] = 'This page can\'t recover deleted files!';
+	$admin_lang['there_are_no_changes'] = 'There are no changes.';
+	$admin_lang['the_file_%file%_is already_uploaded'] = 'The file &quot;%s&quot; is already uploaded!';
+	$admin_lang['the_file_has_a_different_name_%file%'] = 'The file has a different name: &quot;%s&quot;';
+	$admin_lang['error'] = 'Error';
+	$admin_lang['the_file_%file%_was_uploaded'] = 'The file &quot;%s&quot; was uploaded.';
+	$admin_lang['the_file_%file%_is_bigger_than_the_maximum_upload_size_of_the_server'] = 'The file &quot;%s&quot; is bigger than the maximum-upload-size of the server.';
+	$admin_lang['the_file_%file%_is_bigger_than_the_maximum_upload_size_of_%maximumsize%'] = 'The file &quot;%s&quot; is bigger than the maximum-upload-size of %s.';
+	$admin_lang['the_file_was_only_partly_transmitted'] = 'The file was only partly transmitted.';
+	$admin_lang['there_was_no_file_transmitted'] = 'There wa no file transmitted.';
+	$admin_lang['wasnt_able_to_transmit_the_file'] = 'Wasn\'table to transmit the file.';
+	$admin_lang['upload'] = 'Upload';
+	$admin_lang['upload_files'] = 'Upload files';
+	$admin_lang['check_for_changes'] = 'Check for changes';
 ?>

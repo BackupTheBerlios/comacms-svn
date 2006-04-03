@@ -383,3 +383,7 @@ ALTER TABLE `cms_online` ADD `online_loggedon` ENUM( 'yes', 'no' ) DEFAULT 'no' 
 #r258
 #set the length of page_name to maximum
 ALTER TABLE `cms_pages` CHANGE `page_name` `page_name` VARCHAR( 255 ) NOT NULL;
+
+#r263
+#Added field to identify the person(useraccount) who uploaded a file
+ALTER TABLE `cms_files` ADD `file_creator` INT( 10 ) DEFAULT '0' NOT NULL ;

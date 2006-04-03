@@ -155,7 +155,7 @@
 	elseif($extern_page == 'files') {
 		$title = $admin_lang['files'];
 		include('classes/admin/admin_files.php');
-		$admin_page = new Admin_Files($sqlConnection, $admin_lang, $user, $config);
+		$admin_page = new Admin_Files($sqlConnection, $admin_lang, $user, $config, $lib);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'pagestructure') {

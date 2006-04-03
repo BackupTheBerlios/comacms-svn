@@ -1,6 +1,7 @@
 <?php
 /**
  * @package ComaCMS
+ * @subpackage AdminInterface
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------#
@@ -34,6 +35,7 @@
  		var $_AdminLang;
  		
  		/**
+ 		 * Returns a page which is selected by <var>$Action</var>
  		 * @return string
  		 * @param string Action
  		 */

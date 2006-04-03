@@ -22,31 +22,46 @@
 	
 	
 	/**
+	 * Admin-Interface-Page to mangage Files
 	 * @package ComaCMS
 	 */
 	class Admin_Files extends Admin{
 		
 		/**
+		 * @access private
+		 * @var ComaLib
+		 */
+		var $_ComaLib;
+		
+		/**
+		 * Initializes the Admin_Files class
  		 * @param SqlConnection SqlConnection
  		 * @param array AdminLang
  		 * @param User User
  		 * @param Config Config
  		 * @return void
  		 */
- 		function Admin_Files(&$SqlConnection, &$AdminLang, &$User, &$Config) {
+ 		function Admin_Files(&$SqlConnection, &$AdminLang, &$User, &$Config, &$ComaLib) {
 			$this->_SqlConnection = &$SqlConnection;
 			$this->_AdminLang = &$AdminLang;
 			$this->_User = &$User;
 			$this->_Config = &$Config;
+			$this->_ComaLib = &$ComaLib;
 		}
  		
-		
-		function GetPage($action) {
+		/**
+		 * Available actions (value of <var>$Action</var>):
+		 *  - delete
+		 *  - update_database
+		 *  - check_new_files
+		 *  - upload
+		 * @access public
+		 * @param string Action text
+		 */
+		function GetPage($Action) {
 			$out = "\t\t\t<h2>{$this->_AdminLang['files']}</h2>\r\n";
-		 	$action = strtolower($action);
-		 	switch ($action) {
-/*		 		case 'save':		$out .= $this->_saveDate($admin_lang);
-		 					break;*/
+		 	$Action = strtolower($Action);
+		 	switch ($Action) {
 		 		case 'delete':		$out .= $this->_deletePage();
 		 					break;
 		 		case 'update_database':	$out .= $this->_updateDatabasePage();
@@ -60,220 +75,344 @@
 			return $out;
 	 	}
 	 	
+	 	/**
+	 	 * Shows a dialog, which makes it possible to confirm the deleting of a file or to delete the file if it's confirmed
+	 	 * @access private
+	 	 */
 	 	function _deletePage() {
+	 		// get the fileID of the file
 	 		$fileID = GetPostOrGet('file_id');
+	 		// try to get the confirmation
 	 		$confirmation = GetPostOrGet('confirmation'); 
-	 		
+	 		// is the fileID something numeric? if not, stop the
 	 		if(!is_numeric($fileID))
 	 			return $this->_homePage();
-	 		
+	 		// try to get the file-information from database
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "files
 				WHERE file_id = $fileID
 				LIMIT 1";
 			$fileResult = $this->_SqlConnection->SqlQuery($sql);
 			if($file = mysql_fetch_object($fileResult)) {
+				// the confirmation is given: delete this file!
 				if($confirmation == 1) {
+					// delete the database-entry
 					$sql = "DELETE FROM " . DB_PREFIX . "files
 						WHERE file_id = $fileID
 						LIMIT 1";
 					$this->_SqlConnection->SqlQuery($sql);
+					// delete the file
 					unlink($file->file_path);
 				}
 				else {
-					$out = "Sind sie sicher, dass sie die Datei &quot;$file->file_name&quot; unwiederruflich l&ouml;schen wollen?<br />
-					Die Datei wurde am " . date('d.m.Y', $file->file_date) . " um " . date('H:i:s', $file->file_date) ." hochgeladen.<br />
-					<a href=\"admin.php?page=files&amp;action=delete&amp;file_id=" . $fileID . "&amp;confirmation=1\" title=\"Wirklich L&ouml;schen\"  class=\"button\">{$this->_AdminLang['yes']}</a>
-					<a href=\"admin.php?page=files\" title=\"Nicht L&ouml;schen\" class=\"button\">{$this->_AdminLang['no']}</a>";
+					// ask for the confirmation
+					$out = sprintf($this->_AdminLang['do_you_really_want_to_delete_the_file_%filename%_irrevocablly'], utf8_encode($file->file_name)). "<br />\r\n";
+					$out .= sprintf($this->_AdminLang['this_file_was_uploaded_on_%date%_at%_%time%_oclock_by_%username%'], date('d.m.Y', $file->file_date), date('H:i:s', $file->file_date), $this->_ComaLib->GetUserByID($file->file_creator)). "<br />\r\n";
+					$out .= "<a href=\"admin.php?page=files&amp;action=delete&amp;file_id=$fileID&amp;confirmation=1\" title=\"" . sprintf($this->_AdminLang['delete_file_%file%'], utf8_encode($file->file_name)) . "\"  class=\"button\">{$this->_AdminLang['yes']}</a>
+					<a href=\"admin.php?page=files\" title=\"" . sprintf($this->_AdminLang['dont_delete_file_%file%'], utf8_encode($file->file_name)) . "\" class=\"button\">{$this->_AdminLang['no']}</a>";
 					return $out;
-			}
-			}
-			return $this->_homePage();
-	 	}
-	 	
-	 	function _updateDatabasePage() {
-	 		$changes = GetPostOrGet('change');
-			if(count($changes) > 0) {
-				foreach($changes as $change) {
-					
-					$change = rawurldecode($change);
-					$change = utf8_decode($change);
-					$sql = "SELECT *
-						FROM " . DB_PREFIX . "files
-						WHERE file_path = '$change'
-						LIMIT 0,1";
-					$file_result = db_result($sql);
-					if(($file = mysql_fetch_object($file_result)) && !file_exists($change)) {
-						$sql = "DELETE FROM " . DB_PREFIX . "files
-							WHERE file_id=$file->file_id";
-						db_result($sql);
-						//echo 'not:' . $change .'<br/>';
-					}
-					elseif(file_exists($change)) {
-						$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date)
-							VALUES('" . basename($change) . "', '" . GetMimeContentType($change) . "', '$change', '" . filesize($change) . "', '" . md5_file($change) . "', " . mktime() . ")";
-						db_result($sql);
-						//echo 'yes:' . $change. '<br/>';
-					}
-					
-						//echo 'why:' . $change. '<br/>';
 				}
 			}
 			return $this->_homePage();
 	 	}
 	 	
+	 	/**
+	 	 * Updates the file-table (but only the selected files):
+	 	 *  - if a file is deleted manualy (not with ComaCMS) it removes the database-entry
+	 	 *  - if a file is there but it isn't in the database it will be added
+	 	 * @access private
+	 	 */
+	 	function _updateDatabasePage() {
+	 		// get the selected files
+	 		$changes = GetPostOrGet('change');
+			// are files selected? no?
+			if(count($changes) <= 0)
+				// 'go home!' 
+				return $this->_homePage();
+			// for each selcted file
+			foreach($changes as $change) {
+				
+				// 'repair' the filepath
+				$change = rawurldecode($change);
+				$change = utf8_decode($change);
+
+				// is the file in the table?
+				$sql = "SELECT file_id, file_path
+					FROM " . DB_PREFIX . "files
+					WHERE file_path = '$change'
+					LIMIT 1";
+				$file_result = $this->_SqlConnection->SqlQuery($sql);
+				// is the file in the database?
+				if(($file = mysql_fetch_object($file_result))) {
+ 					// the file doesn't exist?
+ 					if(!file_exists($change)) {
+						// remove the database entry
+						$sql = "DELETE FROM " . DB_PREFIX . "files
+							WHERE file_id = $file->file_id
+							LIMIT 1";
+						$this->_SqlConnection->SqlQuery($sql);
+ 					}
+ 					// the file exists!
+ 					else {
+ 						// update the values, which could be changed
+ 						$sql = "UPDATE " . DB_PREFIX . "files
+ 							SET file_size = " . filesize($file->file_path) . ",
+ 							file_md5 = '" . md5_file($file->file_path) . "'
+							WHERE file_id =$file->file_id
+							LIMIT 1";
+						$this->_SqlConnection->SqlQuery($sql);
+ 					}
+				}
+				// the file exists and has no entry in the database?
+				elseif(file_exists($change)) {
+					// create him a database-entry
+					$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date, file_creator)
+						VALUES('" . basename($change) . "', '" . GetMimeContentType($change) . "', '$change', '" . filesize($change) . "', '" . md5_file($change) . "', " . mktime() . ", {$this->_User->ID})";
+					$this->_SqlConnection->SqlQuery($sql);
+				}
+			}
+			// 'go home!' 
+			return $this->_homePage();
+	 	}
+	 	
+	 	/**
+	 	 * Shows a page where you are can check if the file-database is up-to-date and if not select the files which should be updated
+	 	 * @access private
+	 	 */
 	 	function _checkNewFilesPage() {
-	 		$upload_path = './data/upload/';
+	 		// TODO: make it configurable
+	 		$uploadPath = './data/upload/';
+	 		// basicly we think: "there are no changes" ;-)
 	 		$changes = false;
+	 		
+	 		$md5s = array();
+			
 	 		$out = '';
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "files
-				ORDER BY file_date DESC";
-			$files_result = db_result($sql);
-			$md5s = array();
-			$newmd5s = array();
+			// get all files
+			$sql = "SELECT file_path, file_md5, file_name
+				FROM " . DB_PREFIX . "files";
+			$files_result = $this->_SqlConnection->SqlQuery($sql);
+			
 			while($file = mysql_fetch_object($files_result)) {
+				// the file still exists 
 				if(file_exists($file->file_path))
 					$md5s[$file->file_path] = $file->file_md5;
+				// the file doesn't exist
 				else {
-					$out .= "<input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($file->file_path)) ."\" checked=\"checked\" /><strong>Aus der Datenbank entfernen</strong> " . utf8_encode($file->file_name) ."<br />\r\n";
+					$out .= "<div class=\"row\"><label><strong>{$this->_AdminLang['remove_database_entry']}:</strong> <span class=\"info\">{$this->_AdminLang['this_file_doesnt_exist_any_longer']}</span></label><input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($file->file_path)) ."\" checked=\"checked\" /> &quot;" . utf8_encode($file->file_name) ."&quot;</div>\r\n";
 				}
 			}
-			$files = dir($upload_path);
-
+			// get all files in the upload-directory
+			$files = dir($uploadPath);
 			while($entry = $files->read()) {
-  				if(is_file($upload_path . $entry))
-  					if(!in_array(md5_file($upload_path . $entry),$md5s))
-  						$out .= "<input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($upload_path . $entry)) ."\" checked=\"checked\" /><strong>Zur Datenbank hinzuf&uuml;gen</strong> " . utf8_encode($entry) . "<br />\r\n";
+  				if(is_file($uploadPath . $entry))
+  					// exitsts this file in the database?
+  					if(array_key_exists($uploadPath . $entry, $md5s)) {
+  						// is it the same file we found?
+  						if(md5_file($uploadPath . $entry) != $md5s[$uploadPath . $entry])
+  							$out .= "<div class=\"row\"><label><strong>{$this->_AdminLang['refresh_database_entry']}:</strong> <span class=\"info\">{$this->_AdminLang['this_insnt_the_file_which_is_registered_as_a_database_entry_under_this_name']}</span></label><input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($uploadPath . $entry)) ."\" checked=\"checked\" /> &quot;" . utf8_encode($entry) . "&quot;</div>\r\n";
+  					}
+  					// the file doesn't exist in the database
+  					else
+  						$out .= "<div class=\"row\"><label><strong>{$this->_AdminLang['add_to_database']}:</strong> <span class=\"info\">{$this->_AdminLang['this_file_isnt_registered_in_the_database']}</span></label><input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($uploadPath . $entry)) ."\" checked=\"checked\" /> &quot;" . utf8_encode($entry) . "&quot;</div>\r\n";
+  			
   						
-  				//echo $upload_path.$entry . '-' . md5_file($upload_path.$entry) . "<br>";
+
 			}
 			$files->close();
+			// is the output not empty? then there are some changes
 			if($out != '')
 				$changes = true;
-			$out = "Hier werden alle Dateien angezeigt, die nicht &uuml;ber das Admin-Interface Ver&auml;ndert worden sind, um diese Ver&auml;nderungen in die Datenbank zu &uuml;bernehmen haken sie alle die Dateien an, die sie aktualisieren m&ouml;chten.<br /><br />\r\n" .
-					"\t<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\r\n" .
-					"\t\t<input type=\"hidden\" name=\"page\" value=\"files\"/>" .
-					"\t\t<input type=\"hidden\" name=\"action\" value=\"update_database\"/>"
-					. $out;
-			if($changes == true)
-				$out .= "<input type=\"submit\" class=\"button\" value=\"Ausf&uuml;hren\"/>" .
-					"</form>\n\r";
-			else
-				$out .= 'there_are_no_changes' . 'back';
+				/*this_page_shows_all_files_which_are_changed_without_the_admin_interface
+				to_apply_these_changes_select_the_files_which_should_be_updated
+				warning:
+				this_page_cant_recover_deleted_files*/
+			$out = "{$this->_AdminLang['this_page_shows_all_files_which_are_changed_without_the_admin_interface']}<br />
+				{$this->_AdminLang['to_apply_these_changes_select_the_files_which_should_be_updated']}
+				<div class=\"warning\"><strong>{$this->_AdminLang['warning']}:</strong> {$this->_AdminLang['this_page_cant_recover_deleted_files']}</div> 
+				<fieldset>
+					<legend>{$this->_AdminLang['changes']}</legend>
+					<form method=\"post\" action=\"admin.php\">
+						<input type=\"hidden\" name=\"page\" value=\"files\"/>
+						<input type=\"hidden\" name=\"action\" value=\"update_database\"/>\r\n"
+				. $out
+				. "<div class=\"row\">\r\n";
+			// there are no changes : show this result to the user
+			if(!$changes)
+				$out .= "{$this->_AdminLang['there_are_no_changes']}</div>\r\n<div class=\"row\">";
+			// back button
+			$out .= "<a class=\"button\" href=\"admin.php?page=files\" title=\"{$this->_AdminLang['back']}\">{$this->_AdminLang['back']}</a>\r\n";
+
+			// there are changes: add a 'appyl-button'
+			if($changes)
+				$out .= "<input type=\"submit\" class=\"button\" value=\"{$this->_AdminLang['apply']}\"/>\r\n";
+				
+			$out .= "</div>
+					</form>
+				</fieldset>\n\r";
 			return $out;
 	 	}
 	 	
+	 	/**
+	 	 * uploads files...
+	 	 * @access private
+	 	 */
 	 	function _uploadPage() {
-	 		global $_SERVER, $_FILES, $admin_lang;
-			//$extern_action = GetPostOrGet('action');
-			//$extern_file_id = GetPostOrGet('file_id');
-			//$extern_sure = GetPostOrGet('sure'); 
+	 		// TODO: make it configurable
+			$uploadPath = './data/upload/';
 			
-			$out = "";
-			$upload_path = './data/upload/';
+			$out = '';
+			// foreach file that is 'posted' with this request
 			foreach($_FILES as $name => $file) {
-				if(startsWith($name, 'uploadfile') && $file['size'] > 0) {
-					$nr = substr($name, -1);
+				// has it a trusted name? and has it some content 
+				if(startsWith($name, 'uploadfile') && $file['error'] != 4) {
+					// get the 'number of the upload'
+					$nr = substr($name, 10);
+					// alow to upload max. 5 files in one action
 					if($nr < 5) {
-						$save_path = $upload_path . $file['name'];
-						if(file_exists($save_path))
-							$save_path = uniqid($upload_path) . $file['name'];
+						// genereate the new location of the file
+						$savePath = $uploadPath . $file['name'];
+						// if there exists a file try to rename the file that it is possible to save both
+						if(file_exists($savePath))
+							$savePath = uniqid($uploadPath) . $file['name'];
+						// maximum filesize: ~1.5MB
+						// TODO: make it configutable
 						if($file['size'] > 1600000)
 							$file['error'] = 2;
+						// no upload errors?
 						if($file['error'] == 0) {
-							//
-							// TODO: dont allow an upload if a file with the same md5 exists
-							//
+							// dont allow an upload if a file with the same md5 exists
 							$file_md5 = md5_file($file['tmp_name']);
-						
 							$sql = "SELECT file_name
 								FROM " . DB_PREFIX . "files
-								WHERE file_md5='$file_md5'";
-							$md5exists_result = db_result($sql);
-							if($md5exists = mysql_fetch_object($md5exists_result))
-								$out .= "Die Datei &quot;<strong>" . $file['name'] . "</strong>&quot; ist bereits hochgeladen worden" . (($md5exists->file_name != $file['name']) ? " (sie hat nur einen anderen Namen: &quot;<strong>$md5exists->file_name</strong>&quot;)." : '.');
+								WHERE file_md5 = '$file_md5'
+								LIMIT 1";
+							$md5ExistsResult = $this->_SqlConnection->SqlQuery($sql);
+							// is there a file with the same md5?
+							if($md5Exists = mysql_fetch_object($md5ExistsResult)) {
+								// show the user that the same file is already uploaded
+								$out .= "<div class=\"error\"><strong>{$this->_AdminLang['error']}:</strong> ". sprintf($this->_AdminLang['the_file_%file%_is already_uploaded'], $file['name']); 
+									
+									/*Die Datei &quot;<strong>" . $file['name'] . "</strong>&quot; ist bereits hochgeladen worden" . " .*/
+								if($md5Exists->file_name != $file['name'])
+									$out .= ' ' . sprintf($this->_AdminLang['the_file_has_a_different_name_%file%'], $md5Exists->file_name);
+									//$out .= "(Sie hat nur einen anderen Namen: &quot;<strong>$md5exists->file_name</strong>&quot;).";
+								$out .= "</div>\r\n";
+							}
 							else {
-								move_uploaded_file($file['tmp_name'], $save_path);
-								
-								$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date)
-									VALUES('" . $file['name'] . "', '" . $file['type'] . "', '$save_path', '" . filesize($save_path) . "', '" . md5_file($save_path) . "', " . mktime() . ")";
-								db_result($sql);
+								// move the file into the uploadfolder
+								if(move_uploaded_file($file['tmp_name'], $savePath)) {
+								// add the database-entry for the file
+									$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date, file_creator)
+										VALUES('{$file['name']}', '{$file['type']}', '$savePath', '" . filesize($savePath) . "', '" . md5_file($savePath) . "', " . mktime() . ", {$this->_User->ID})";
+									$this->_SqlConnection->SqlQuery($sql);
+									$out .= "<div><strong>{$this->_AdminLang['ok']}:</strong> " . sprintf($this->_AdminLang['the_file_%file%_was_uploaded'], $file['name']) . "</div>\r\n";
+								}
 							}
 						}
+						// there are some errors... show them!
 						else {
+							
+							$out .= "<div class=\"error\"><strong>{$this->_AdminLang['error']}:</strong> ";
 							switch ($file['error']) {
-								case 1:		$out .= "Die Datei &uuml;berschreitet die vom Server vorgegebene Maximalgr&ouml;�e f�r einen Upload.";
+								// file is to big (php.ini)
+								case 1:		$out .= sprintf($this->_AdminLang['the_file_%file%_is_bigger_than_the_maximum_upload_size_of_the_server'], $file['name']);
 										break;
-								case 2:		$out .= "Die Datei &uuml;berschreitet vorgegebene Maximalgr&ouml;�e von 1,5MB f&uuml;r einen Upload.";
+								// file is to big (MAX_FILE_SIZE)
+								case 2:		$out .= sprintf($this->_AdminLang['the_file_%file%_is_bigger_than_the_maximum_upload_size_of_%maximumsize%'], $file['name'], '1.5MB' );
 										break;
-								case 3:		$out .= "Die Datei ist nur teilweise hochgeladen worden.";
+								// file isn't completly transmitted
+								case 3:		$out .= $this->_AdminLang['the_file_was_only_partly_transmitted'];
 										break;
-								case 4:		$out .= "Es wurde keine Datei hochgeladen.";
-										break;							
-								default:	$out .= "Die Datei konnte nicht hochgeladen werden";
+								// no upload
+								case 4:		$out .= $this->_AdminLang['there_was_no_file_transmitted'];
+										break;
+								// unknown error -> say it wasn't possible to upload							
+								default:	$out .= $this->_AdminLang['wasnt_able_to_transmit_the_file'];
 										break;
 							}
+							$out .= "</div>\r\n";
 						}
-					}
+					}	
 				}
 			}
-				
+			// 'go home'
 			return $out . $this->_homePage();
 			
  		}
 	 	
 	 	/**
+	 	 * mainpage with an overview over all files and a form to select 3 files for an upload
 	 	 * @access private
 	 	 */
 	 	function _homePage() {
-	 		$out = "<fieldset><legend>Upload</legend>
-				<form enctype=\"multipart/form-data\" action=\"admin.php\" method=\"post\">
-			
-			<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1600000\" />
-			<input type=\"hidden\" name=\"page\" value=\"files\" />
-			<input type=\"hidden\" name=\"action\" value=\"upload\" />
-			<div class=\"row\"><label><strong>{$this->_AdminLang['file']} 1:</strong></label><input name=\"uploadfile0\" type=\"file\" /></div>
-			<div class=\"row\"><label><strong>{$this->_AdminLang['file']} 2:</strong></label><input name=\"uploadfile1\" type=\"file\" /></div>
-			<div class=\"row\"><label><strong>{$this->_AdminLang['file']} 3:</strong></label><input name=\"uploadfile2\" type=\"file\" /></div>
-			<div class=\"row\"><input type=\"submit\" class=\"button\" value=\"Hochladen\"/></div>
-			
-		</form>";
-		$out .= "
-		<div class=\"row\"><a href=\"admin.php?page=files&amp;action=check_new_files\"  class=\"button\">Auf Ver&auml;nderungen &uuml;berpr&uuml;fen</a></div>
-		</fieldset>
-		<table class=\"text_table full_width\">
-			<thead>
-				<tr>
-					<th>{$this->_AdminLang['filename']}</th>
-					<th>{$this->_AdminLang['filesize']}</th>
-					<th>{$this->_AdminLang['uploaded_on']}</th>
-					<th>{$this->_AdminLang['filetype']}</th>
-					<th>{$this->_AdminLang['actions']}</th>
-				</tr>
-			</thead>";
-		$sql = "SELECT *
-			FROM " . DB_PREFIX . "files
-			ORDER BY file_name ASC";
-		$files_result = db_result($sql);
-		$completesize = 0;
-		while($file = mysql_fetch_object($files_result)) {
-			$out .= "<tr>
-				<td>" . utf8_encode($file->file_name) . "</td>
-				<td>" . kbormb($file->file_size) . "</td>
-				<td>" . date('d.m.Y H:i:s', $file->file_date) . "</td>
-				<td>$file->file_type</td>
-				<td>
-					<a href=\"download.php?file_id=$file->file_id\" ><img src=\"./img/download.png\" height=\"16\" width=\"16\" alt=\"" . $this->_AdminLang['download'] . "\" title=\"" . $this->_AdminLang['download'] . "\"/></a>
-					<a href=\"admin.php?page=files&amp;action=delete&amp;file_id=$file->file_id\" ><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $this->_AdminLang['delete'] . "\" title=\"" . $this->_AdminLang['delete'] . "\"/></a>
-				</td>
-			</tr>\r\n";
-			$completesize += $file->file_size;
-		}
-		$out .= "</table>";
-		$out .= $this->_AdminLang['altogether'] . kbormb($completesize);
+	 		$out = "\t\t\t<fieldset>
+	 			<legend>{$this->_AdminLang['upload']}</legend>
+				<form enctype=\"multipart/form-data\" action=\"admin.php?page=files\" method=\"post\">
+					<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1600000\" />
+					<input type=\"hidden\" name=\"action\" value=\"upload\" />
+					<div class=\"row\">
+						<label>
+							<strong>{$this->_AdminLang['file']} 1:</strong>
+						</label>
+						<input name=\"uploadfile0\" type=\"file\" />
+					</div>
+					<div class=\"row\">
+						<label>
+							<strong>{$this->_AdminLang['file']} 2:</strong>
+						</label>
+						<input name=\"uploadfile1\" type=\"file\" />
+					</div>
+					<div class=\"row\">
+						<label>
+							<strong>{$this->_AdminLang['file']} 3:</strong>
+						</label>
+						<input name=\"uploadfile2\" type=\"file\" />
+					</div>
+					<div class=\"row\">
+						<input type=\"submit\" class=\"button\" value=\"{$this->_AdminLang['upload_files']}\"/>
+					</div>
+				</form>
+				<div class=\"row\">
+					<a href=\"admin.php?page=files&amp;action=check_new_files\" class=\"button\">{$this->_AdminLang['check_for_changes']}</a>
+				</div>
+			</fieldset>
+			<table class=\"text_table full_width\">
+				<thead>
+					<tr>
+						<th>{$this->_AdminLang['filename']}</th>
+						<th>{$this->_AdminLang['filesize']}</th>
+						<th class=\"table_date_width\">{$this->_AdminLang['uploaded_on']}</th>
+						<th class=\"small_Width\">{$this->_AdminLang['filetype']}</th>
+						<th>{$this->_AdminLang['downloads']}</th>
+						<th class=\"actions\">{$this->_AdminLang['actions']}</th>
+					</tr>
+				</thead>\r\n";
+			// get all files from the database/ which are registered in the database
+			$sql = "SELECT file_type, file_path, file_name, file_id, file_downloads, file_date, file_size
+				FROM " . DB_PREFIX . "files
+				ORDER BY file_name ASC";
+			$files_result = $this->_SqlConnection->SqlQuery($sql);
+			$completeSize = 0;
+			while($file = mysql_fetch_object($files_result)) {
+				$out .= "\t\t\t\t<tr>
+					<td><span title=\"" . utf8_encode($file->file_path) . "\">" . utf8_encode($file->file_name) . "</span></td>
+					<td>" . kbormb($file->file_size) . "</td>
+					<td>" . date('d.m.Y H:i:s', $file->file_date) . "</td>
+					<td>$file->file_type</td>
+					<td>$file->file_downloads</td>
+					<td>
+						<a href=\"download.php?file_id=$file->file_id\" ><img src=\"./img/download.png\" height=\"16\" width=\"16\" alt=\"[" . sprintf($this->_AdminLang['download_file_%file%'], utf8_encode($file->file_name)) . "]\" title=\"" . sprintf($this->_AdminLang['download_file_%file%'], utf8_encode($file->file_name)) . "\"/></a>
+						<a href=\"admin.php?page=files&amp;action=delete&amp;file_id=$file->file_id\" ><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\" [" . sprintf($this->_AdminLang['delete_file_%file%'], utf8_encode($file->file_name)) . "]\" title=\"" . sprintf($this->_AdminLang['delete_file_%file%'], utf8_encode($file->file_name)) . "\"/></a>
+					</td>
+				</tr>\r\n";
+				// count the size of all files together
+				$completeSize += $file->file_size;
+			}
+			$out .= "\t\t\t</table>\r\n";
+			$out .= "\t\t\t" . $this->_AdminLang['altogether'] . ' ' . kbormb($completeSize);
 
-		return $out;
+			return $out;
 	 	}
 	}
 ?>

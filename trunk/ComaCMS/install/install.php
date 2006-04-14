@@ -63,7 +63,7 @@
 			date_id int(10) unsigned NOT NULL auto_increment,
 			date_date int(20) unsigned default NULL,
 			date_topic varchar(150) NOT NULL default '',
-			date_place varchar(60) NOT NULL default '',
+			date_location varchar(60) NOT NULL default '',
 			date_creator int(10) unsigned default NULL,
 			PRIMARY KEY  (date_id)
 		);
@@ -77,6 +77,7 @@
 			file_md5 varchar(150) NOT NULL default '',
 			file_type varchar(100) NOT NULL default '',
 			file_date int(25) NOT NULL default '0',
+			file_creator INT( 10 ) DEFAULT '0' NOT NULL,
 			PRIMARY KEY  (file_id)
 		);
 		DROP TABLE IF EXISTS " . $db_prefix . "guestbook;
@@ -135,18 +136,19 @@
 		DROP TABLE IF EXISTS " . $db_prefix . "online;
 		CREATE TABLE " . $db_prefix . "online (
 			online_id varchar(100) NOT NULL default '',
-			ip varchar(16) default '0.0.0.0',
-			lastaction varchar(20) default '0',
-			page varchar(30) default NULL,
-			lang varchar(5) default NULL,
-			userid int(10) NOT NULL default '0',
-			host varchar(110) NOT NULL default '',
+			online_ip varchar(16) default '0.0.0.0',
+			online_lastaction varchar(20) default '0',
+			online_page varchar(30) default NULL,
+			online_lang varchar(5) default NULL,
+			online_userid int(10) NOT NULL default '0',
+			online_host varchar(110) NOT NULL default '',
+			online_loggedon ENUM( 'yes', 'no' ) DEFAULT 'no' NOT NULL,
 			PRIMARY KEY  (online_id)
 		);
 		DROP TABLE IF EXISTS " . $db_prefix . "pages;
 		CREATE TABLE " . $db_prefix . "pages (
 			page_id int(10) unsigned NOT NULL auto_increment,
-			page_name varchar(50) NOT NULL default '',
+			page_name varchar(250) NOT NULL default '',
 			page_type enum('text','gallery') NOT NULL default 'text',
 			page_title varchar(120) NOT NULL default '',
 			page_parent_id int(10) NOT NULL default '0',
@@ -252,7 +254,7 @@
 			PRIMARY KEY  (group_id),
 			UNIQUE KEY group_name (group_name)
 		);
-		DROP TABLE IF EXISTS " . $db_prefix . "roup_users;
+		DROP TABLE IF EXISTS " . $db_prefix . "group_users;
 		CREATE TABLE " . $db_prefix . "group_users (
 			group_id INT( 20 ) NOT NULL ,
 			user_id INT( 20 ) NOT NULL

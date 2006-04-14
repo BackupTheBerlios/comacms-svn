@@ -387,3 +387,7 @@ ALTER TABLE `cms_pages` CHANGE `page_name` `page_name` VARCHAR( 255 ) NOT NULL;
 #r263
 #Added field to identify the person(useraccount) who uploaded a file
 ALTER TABLE `cms_files` ADD `file_creator` INT( 10 ) DEFAULT '0' NOT NULL ;
+
+#r265
+#Added field to describe pictures in the gallery
+ALTER TABLE `cms_gallery` ADD `gallery_descriptiont` TEXT NOT NULL ;

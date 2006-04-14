@@ -429,6 +429,14 @@ width: 6.5em
  margin: 0;
 }
 
+.imageblock div.actions {
+	padding-top: 1em;
+}
+
+.imageblock div.actions * {
+	display: inline;
+}
+
 .imagesblock {
  overflow: auto;
  display: table-cell;

@@ -224,7 +224,8 @@
 			gallery_file_id MEDIUMINT( 10 ) NOT NULL ,
 			gallery_orderid INT( 10 ) DEFAULT '0' NOT NULL ,
 			gallery_image_thumbnail VARCHAR( 255 ) NOT NULL ,
-			gallery_image VARCHAR( 255 ) NOT NULL
+			gallery_image VARCHAR( 255 ) NOT NULL,
+			gallery_description TEXT NOT NULL
 		);
 		DROP TABLE IF EXISTS " . $db_prefix . "smilies;
 		CREATE TABLE " . $db_prefix . "smilies (

@@ -184,4 +184,6 @@
 	$admin_lang['sort_ascending_by_%name%'] = 'Sort ascending by %s';
 	$admin_lang['sort_descending_by_%name%'] = 'Sort descending by %s';
 	$admin_lang['downl'] = 'Downl.';
+	$admin_lang['modify_image_description'] = 'Modify image description';
+	$admin_lang['image_description'] = 'Image description';
 ?>

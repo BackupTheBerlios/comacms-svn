@@ -183,6 +183,6 @@
 	$admin_lang['sort_ascending_by_%name%'] = 'Aufw&auml;rts sortieren durch %s';
 	$admin_lang['sort_descending_by_%name%'] = 'Abw&auml;rts sortieren durch %s';
 	$admin_lang['downl'] = 'Downl.';
-	
-	
+	$admin_lang['modify_image_description'] = 'Bildbeschreibung bearbeiten';
+	$admin_lang['image_description'] = 'Bildbeschreibung';
 ?>

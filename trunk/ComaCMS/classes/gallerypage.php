@@ -59,7 +59,8 @@
 					// is the actual image the image we are looking for?
 					if($galleryImageID == $imageID) {
 						// get the image
-						$imageHTML = "<img alt=\"\" src=\"" . generateUrl(resizeImageToMaximum($galleryImage->gallery_image, $thumbnailfoler, 600)) . "\"/>";
+						$imageHTML = "<div class=\"gallery_image_detail\"><img alt=\"$galleryImage->gallery_description\" title=\"$galleryImage->gallery_description\" src=\"" . generateUrl(resizeImageToMaximum($galleryImage->gallery_image, $thumbnailfoler, 600)) . "\"/>
+								<div class=\"gallery_image_detail_description\">$galleryImage->gallery_description</div></div>";
 						// isn't it the first image?
 						if($lastImageID != -1)
 							// add a link to the pervious image

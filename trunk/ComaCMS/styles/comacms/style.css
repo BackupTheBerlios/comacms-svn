@@ -1,49 +1,50 @@
 body {
- font-family:  arial, verdana, helvetica, sans-serif;
- font-size: 62.5%;
- background-color: #7C7EC6;
- color: #000000;
+	font-family:  arial, verdana, helvetica, sans-serif;
+	font-size: 62.5%;
+	background-color: #7C7EC6;
+	color: #000000;
 }
 
 input, select, option {
- background-color: #FFFFFF!important;
+	background-color: #FFFFFF!important;
 }
 
 .button {
- background-color: #FFFFFF!important;	
+	background-color: #FFFFFF!important;	
 }
 
 strong {
- font-weight: bold;
+	font-weight: bold;
 }
 
 ul, ol {
- margin-left: 2em;
+	margin-left: 2em;
 }
 
 h1, h2, h3, h4, h5, h6 {
- text-align: center;
- font-weight: bold;
+	text-align: center;
+	font-weight: bold;
 }
 
 h1 {
- font-size: 2em;
+	font-size: 2em;
 }
 
 h2 {
- font-size: 1.5em;
- border-bottom: 0.2ex solid #000000;
- margin-left: 0;
- margin-right: 0;
+	font-size: 1.5em;
+	border-bottom: 0.2ex solid #000000;
+	margin-left: 0;
+	margin-right: 0;
 }
+
 h3 {
- font-size: 1.17em;
+	font-size: 1.17em;
 }
 
 a {
- text-decoration: none;
- font-weight: bold;
- color: #000000;
+	text-decoration: none;
+	font-weight: bold;
+	color: #000000;
 }
 
 #top, #menu, #content{

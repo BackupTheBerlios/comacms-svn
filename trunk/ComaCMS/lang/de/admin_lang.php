@@ -3,17 +3,17 @@
  * @package ComaCMS
  * @copyright (C) 2005 The ComaCMS-Team
  */
- #----------------------------------------------------------------------#
- # file			: admin_lang.php				#
- # created		: 2005-07-12					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
- # email		: comacms@williblau.de				#
- #----------------------------------------------------------------------#
- # This program is free software; you can redistribute it and/or modify	#
- # it under the terms of the GNU General Public License as published by	#
- # the Free Software Foundation; either version 2 of the License, or	#
- # (at your option) any later version.					#
- #----------------------------------------------------------------------#
+ #----------------------------------------------------------------------
+ # file                 : admin_lang.php
+ # created              : 2005-07-12
+ # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # email                : comacms@williblau.de
+ #----------------------------------------------------------------------
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #----------------------------------------------------------------------
 
 	$admin_lang = array();
 	$admin_lang['yes'] = 'Ja';
@@ -185,4 +185,32 @@
 	$admin_lang['downl'] = 'Downl.';
 	$admin_lang['modify_image_description'] = 'Bildbeschreibung bearbeiten';
 	$admin_lang['image_description'] = 'Bildbeschreibung';
+	$admin_lang['license'] = 'Lizenz';
+	$admin_lang['requirements'] = 'Anforderungen';
+	$admin_lang['database_settings'] = 'Datenbankeinstellungen';
+	$admin_lang['create_administrator'] = 'Administrator erstellen';
+	$admin_lang['installation'] = 'Installation';
+	$admin_lang['step'] = 'Schritt';
+	$admin_lang['please_select_your_language'] = 'Bitte die gew&uuml;nschte Sprache ausw&auml;hlen.';
+	$admin_lang['next'] = 'Weiter';
+	$admin_lang['is_the_file_%file%_writeable'] = 'Ist die Datei &quot;%s&quot; beschreibbar?';
+	$admin_lang['is_the_directory_%directory%_writeable'] = 'Ist der Ordner &quot;%s&quot; beschreibbar?';
+	$admin_lang['php_version'] = 'PHP-Version';
+	$admin_lang['please_try_to fix_these_problems_to_finish_the_installation'] = 'Um die Installation fortzusezten zu k&ouml;nnen m&uuml;ssen die oben genannten Probleme beseitigt werden.';
+	$admin_lang['reload'] = 'Neu laden';
+	$admin_lang['i_agree'] = 'Ich stimme zu!';
+	$admin_lang['do_you_agee_with_this_conditions'] = 'Stimmen Sie diesen Bedinungen zu?';
+	$admin_lang['database_server'] = 'Datenbankserver';
+	$admin_lang['database_name'] = 'Name der Datenbank';
+	$admin_lang['database_username'] = 'Benutzername f&uuml;r die Datenbank';
+	$admin_lang['database_password'] = 'Passwort f&uuml;r die Datenbank';
+	$admin_lang['prefix_for_tables'] = 'Tabellenprefix';
+	$admin_lang['loginname'] = 'Loginname';
+	$admin_lang['password'] = 'Passwort';
+	$admin_lang['password_repetition'] = 'Passwort (Wiederholung)';
+	$admin_lang['homepage'] = 'Hauptseite';
+	$admin_lang['welcome_to_this_homepage'] = 'Willkommen auf dieser Homepage.';
+	$admin_lang['installation_complete'] = 'Installation abgeschlossen!';
+	$admin_lang['the_form_was_not_filled_in_completely'] = 'Das Formular ist nicht vollst&auml;ndig ausgef&uuml;llt worden.';
+	$admin_lang['the_repetition_of_the_password_was_incorrect'] = 'Die Wiederholung des Passwortes ist falsch.';
 ?>

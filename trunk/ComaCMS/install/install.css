@@ -1,0 +1,19 @@
+* {
+	font-family: sans-serif;
+}
+
+h1 {
+	text-align: center;
+}
+
+#list {
+position: absolute;
+}
+
+#text {
+padding-left: 16em;
+}
+
+#license {
+	width: 100%;
+}

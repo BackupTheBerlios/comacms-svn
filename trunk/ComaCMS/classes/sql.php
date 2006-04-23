@@ -53,7 +53,6 @@
  		 * @var integer 
  		 */
  		var $QueriesCount = 0;
-
  		/**
  		 * @access private
  		 * @var resource
@@ -104,6 +103,41 @@
 			if(!$result)
 				echo 'Error: ' . $Query . ':' . mysql_error () . ';';
 			return $result;
+ 		}
+ 		
+ 		/**
+ 		 * Executes a Sql-File
+ 		 * @access public
+ 		 * @param srting Filename
+ 		 * @return boolean
+ 		 */
+ 		function SqlExecFile($Filename) {
+ 			if(!file_exists($Filename))
+ 				return false;
+ 			$fileHandle = fopen($Filename, "r");
+			// Read the whole file
+	  		$queries = fread($fileHandle, filesize($Filename));
+		  	// Close the handle
+	  		fclose($fileHandle);
+	  		return $this->SqlExecMultipe($queries);
+	  		
+ 		}
+ 		
+ 		/**
+ 		 * Executes many sql-queries at once
+ 		 * @access public
+ 		 * @param srting Queries
+ 		 * @return boolean
+ 		 */
+ 		function SqlExecMultiple($Queries) {
+ 			$Queries = explode(';', $Queries);
+			foreach($Queries as $query){
+				if($query != ''){
+					if(!$this->SqlQuery($query))
+						return false;
+				}
+			}
+			return true;
  		}
  	}
 ?>

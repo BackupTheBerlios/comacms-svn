@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * @package ComaCMS
  * @copyright (C) 2005 The ComaCMS-Team
@@ -14,311 +14,334 @@
  # the Free Software Foundation; either version 2 of the License, or
  # (at your option) any later version.
  #----------------------------------------------------------------------
-
-?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
-<html>
-<head>
-	<title>Installation</title>
-
-</head>
-
-<body>
-<?
-	/**
-	 * 
-	 */
-	include('../functions.php');	
-	$db_prefix = GetPostOrGet('db_prefix');
-	$admin_name = GetPostOrGet('admin_name');
-	$admin_showname = GetPostOrGet('admin_showname');
-	$admin_password = GetPostOrGet('admin_password');
-	$admin_password2 = GetPostOrGet('admin_password2');
-	$db_server = GetPostOrGet('db_server');	
-	$db_user = GetPostOrGet('db_user');
-	$db_password = GetPostOrGet('db_password');
-	$db_database = GetPostOrGet('db_database');
-	$db_prefix = GetPostOrGet('db_prefix');
-
-	$create = "DROP TABLE IF EXISTS " . $db_prefix . "articles;
-		CREATE TABLE " . $db_prefix . "articles (
-			article_id int(20) unsigned NOT NULL auto_increment,
-			article_title varchar(100) NOT NULL default '',
-			article_description varchar(200) NOT NULL default '',
-			article_image varchar(200) NOT NULL default '',
-			article_text text NOT NULL,
-			article_html text,
-			article_creator int(10) NOT NULL default '0',
-			article_date int(20) unsigned default NULL,
-			PRIMARY KEY  (article_id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "config;
-		CREATE TABLE " . $db_prefix . "config (
-			config_name varchar(255) NOT NULL default '',
-			config_value varchar(255) NOT NULL default '',
-			PRIMARY KEY  (config_name)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "dates;
-		CREATE TABLE " . $db_prefix . "dates (
-			date_id int(10) unsigned NOT NULL auto_increment,
-			date_date int(20) unsigned default NULL,
-			date_topic varchar(150) NOT NULL default '',
-			date_location varchar(60) NOT NULL default '',
-			date_creator int(10) unsigned default NULL,
-			PRIMARY KEY  (date_id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "files;
-		CREATE TABLE " . $db_prefix . "files (
-			file_id int(10) unsigned NOT NULL auto_increment,
-			file_name varchar(255) NOT NULL default '',
-			file_path varchar(255) NOT NULL default '',
-			file_downloads int(10) NOT NULL default '0',
-			file_size int(20) NOT NULL default '0',
-			file_md5 varchar(150) NOT NULL default '',
-			file_type varchar(100) NOT NULL default '',
-			file_date int(25) NOT NULL default '0',
-			file_creator INT( 10 ) DEFAULT '0' NOT NULL,
-			PRIMARY KEY  (file_id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "guestbook;
-		CREATE TABLE " . $db_prefix . "guestbook (
-			id int(10) NOT NULL auto_increment,
-			name varchar(20) default '0',
-			mail varchar(50) default NULL,
-			icq varchar(13) default NULL,
-			homepage varchar(100) default NULL,
-			message text,
-			`date` varchar(20) default '0',
-			ip varchar(16) default '0.0.0.0',
-			host varchar(30) default '0',
-			PRIMARY KEY  (id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "inlinemenu;
-		CREATE TABLE " . $db_prefix . "inlinemenu (
-			page_id int(10) unsigned NOT NULL default '0',
-			inlinemenu_image varchar(150) NOT NULL default '',
-			inlinemenu_image_thumb varchar(255) NOT NULL default '',
-			inlinemenu_html text NOT NULL,
-			inlinemenu_image_title varchar(100) NOT NULL default '',
-			PRIMARY KEY  (page_id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "inlinemenu_entries;
-		CREATE TABLE " . $db_prefix . "inlinemenu_entries (
-			inlineentry_id int(10) unsigned NOT NULL auto_increment,
-			inlineentry_sortid int(10) NOT NULL default '0',
-			inlineentry_page_id int(10) NOT NULL default '0',
-			inlineentry_type enum('link','download','text','intern') NOT NULL default 'link',
-			inlineentry_text text NOT NULL,
-			inlineentry_link varchar(255) NOT NULL default '',
-  			PRIMARY KEY  (inlineentry_id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "menu;
-		CREATE TABLE " . $db_prefix . "menu (
-			menu_id int(10) unsigned NOT NULL auto_increment,
-			menu_link varchar(255) NOT NULL default '',
-  			menu_text varchar(30) NOT NULL default '',
-  			menu_new enum('yes','no') NOT NULL default 'no',
-			menu_orderid int(10) unsigned default NULL,
-			menu_menuid int(10) NOT NULL default '1',
-			menu_page_id int(10) NOT NULL default '0',
-			PRIMARY KEY  (menu_id),
-			KEY `menu_page_id` (menu_page_id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "news;
-		CREATE TABLE " . $db_prefix . "news (
-			id int(10) unsigned NOT NULL auto_increment,
-			userid int(10) unsigned NOT NULL default '0',
-			`date` int(20) NOT NULL default '0',
-			title varchar(60) NOT NULL default '',
-			`text` text NOT NULL,
-			PRIMARY KEY  (id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "online;
-		CREATE TABLE " . $db_prefix . "online (
-			online_id varchar(100) NOT NULL default '',
-			online_ip varchar(16) default '0.0.0.0',
-			online_lastaction varchar(20) default '0',
-			online_page varchar(30) default NULL,
-			online_lang varchar(5) default NULL,
-			online_userid int(10) NOT NULL default '0',
-			online_host varchar(110) NOT NULL default '',
-			online_loggedon ENUM( 'yes', 'no' ) DEFAULT 'no' NOT NULL,
-			PRIMARY KEY  (online_id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "pages;
-		CREATE TABLE " . $db_prefix . "pages (
-			page_id int(10) unsigned NOT NULL auto_increment,
-			page_name varchar(250) NOT NULL default '',
-			page_type enum('text','gallery') NOT NULL default 'text',
-			page_title varchar(120) NOT NULL default '',
-			page_parent_id int(10) NOT NULL default '0',
-			page_creator int(15) NOT NULL default '0',
-			page_date int(20) NOT NULL default '0',
-			page_access enum('public','private','hidden','deleted') NOT NULL default 'public',
-			page_lang varchar(5) NOT NULL default '',
-			page_edit_comment varchar(100) NOT NULL default '',
-			PRIMARY KEY  (page_id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "pages_text;
-		CREATE TABLE " . $db_prefix . "pages_text (
-			page_id int(10) NOT NULL default '0',
-			text_page_text text NOT NULL,
-			text_page_html text NOT NULL,
-			PRIMARY KEY  (page_id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "pages_history;
-		CREATE TABLE " . $db_prefix . "pages_history (
-  			id int(10) NOT NULL auto_increment,
-  			page_id int(10) NOT NULL default '0',
-			page_type longtext NOT NULL,
-			page_name varchar(20) NOT NULL default '',
-			page_title varchar(100) NOT NULL default '',
-			page_parent_id int(10) NOT NULL default '0',
-			page_lang varchar(5) NOT NULL default '',
-			page_creator int(10) NOT NULL default '0',
-			page_date int(20) NOT NULL default '0',
-			page_edit_comment varchar(100) NOT NULL default '',
-			PRIMARY KEY  (id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "pages_text_history;
-		CREATE TABLE " . $db_prefix . "pages_text_history (
-			id int(10) NOT NULL auto_increment,
-			page_id int(10) NOT NULL default '0',
-			text_page_text text NOT NULL,
-			PRIMARY KEY  (id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "sitedata_history;
-		CREATE TABLE " . $db_prefix . "sitedata_history (
-			id int(10) NOT NULL auto_increment,
-			`type` varchar(15) NOT NULL default '',
-			name varchar(20) NOT NULL default '',
-			title varchar(100) NOT NULL default '',
-			`text` text NOT NULL,
-			lang varchar(5) NOT NULL default '',
-			creator int(10) NOT NULL default '0',
-			`date` varchar(20) NOT NULL default '0',
-			PRIMARY KEY  (id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "users;
-		CREATE TABLE " . $db_prefix . "users (
-			user_id int(10) NOT NULL auto_increment,
-			user_name varchar(30) NOT NULL default '',
-			user_showname varchar(40) NOT NULL default '',
-			user_password varchar(100) NOT NULL default '',
-			user_registerdate varchar(20) default '0',
-			user_admin enum('y','n') default 'n',
-			user_icq varchar(12) default '0',
-			user_email varchar(200) NOT NULL default '',
-			PRIMARY KEY  (user_id)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "pages_gallery;
-		CREATE TABLE " . $db_prefix . "pages_gallery (
-			page_id INT( 10 ) NOT NULL ,
-			gallery_id INT( 10 ) NOT NULL AUTO_INCREMENT ,
-			PRIMARY KEY ( gallery_id ) ,
-			INDEX ( page_id )
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "gallery;
-		CREATE TABLE " . $db_prefix . "gallery (
-			gallery_id INT( 10 ) NOT NULL ,
-			gallery_file_id MEDIUMINT( 10 ) NOT NULL ,
-			gallery_orderid INT( 10 ) DEFAULT '0' NOT NULL ,
-			gallery_image_thumbnail VARCHAR( 255 ) NOT NULL ,
-			gallery_image VARCHAR( 255 ) NOT NULL,
-			gallery_description TEXT NOT NULL
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "smilies;
-		CREATE TABLE " . $db_prefix . "smilies (
-			smilie_id int(10) NOT NULL auto_increment,
-			smilie_path varchar(250) NOT NULL default '',
-			smilie_text varchar(100) NOT NULL default '',
-			smilie_title varchar(250) NOT NULL default '',
-			PRIMARY KEY  (smilie_id),
-			UNIQUE KEY smilie_text (smilie_text)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "auth;
-        	CREATE TABLE " . $db_prefix . "auth (
-			auth_group_id INT( 20 ) ,
-			auth_user_id INT( 20 ) ,
-			auth_page_id INT( 20 ) DEFAULT '0' NOT NULL ,
-			auth_view TINYINT( 1 ) DEFAULT '1' NOT NULL ,
-			auth_edit TINYINT( 1 ) DEFAULT '0' NOT NULL ,
-			auth_delete TINYINT( 1 ) DEFAULT '0' NOT NULL ,
-			auth_new_sub TINYINT( 1 ) DEFAULT '0' NOT NULL
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "groups;
-		CREATE TABLE " . $db_prefix . "groups (
-			group_id int(20) NOT NULL auto_increment,
-			group_name varchar(40) NOT NULL default '',
-			group_description text NOT NULL,
-			group_manager int(20) NOT NULL default '0',
-			PRIMARY KEY  (group_id),
-			UNIQUE KEY group_name (group_name)
-		);
-		DROP TABLE IF EXISTS " . $db_prefix . "group_users;
-		CREATE TABLE " . $db_prefix . "group_users (
-			group_id INT( 20 ) NOT NULL ,
-			user_id INT( 20 ) NOT NULL
-		);			
-		INSERT INTO " . $db_prefix . "users (user_name, user_showname, user_password, user_registerdate, user_admin, user_icq)
-		VALUES ('$admin_name', '$admin_showname', '" . md5($admin_password) . "', '" . mktime() . "', 'y', '');
-		INSERT INTO " . $db_prefix . "config (config_name, config_value)
-		VALUES ('style', 'clear');
-		INSERT INTO " . $db_prefix . "config (config_name, config_value)
-		VALUES ('default_page', '1');
-		INSERT INTO " . $db_prefix . "config (config_name, config_value)
-		VALUES ('install_date', '" . mktime() . "');
-		INSERT INTO " . $db_prefix . "config (config_name, config_value)
-		VALUES ('pagename', 'ComaCMS');
-		INSERT INTO " . $db_prefix . "config (config_name, config_value)
-		VALUES ('news_date_format', 'd.m.Y');
-		INSERT INTO " . $db_prefix . "config (config_name, config_value)
-		VALUES ('news_time_format', 'H:i:s');
-		INSERT INTO " . $db_prefix . "config (config_name, config_value)
-		VALUES ('news_display_count', '6');
-		INSERT INTO " . $db_prefix . "menu (menu_link, menu_text, menu_new, menu_orderid, menu_menuid, menu_page_id)
-		VALUES ('l:home', 'Home', 'no', 0, 1, 1);";
-		//TODO: make sure that the id of the default page is everytime the right one 
 	
-
-	if($admin_name == "" || $admin_showname == "" || $admin_password == "")
-		die("Die Angaben zum Adminaccount sind unvollst&auml;ndig..");
-	
-	if($admin_password != $admin_password2)
-		die("Das Passwort wurde nicht korrekt wiederholt");
-
-	$connection = mysql_connect($db_server, $db_user, $db_password) or die(mysql_error());
-	mysql_select_db($db_database, $connection) or die(mysql_error());
-	$queries = explode(";",$create);
-	foreach($queries as $query){
-		if($query != ""){
-			mysql_query($query, $connection) or die(mysql_error());
+	error_reporting(E_ALL);
+	require_once '../functions.php';
+	$language = '';
+	// try to get the language-setting from the language-cookie
+	if(isset($_COOKIE['ComaCMS_user_lang'])) {
+		// check if the language-file is available
+		if(file_exists("../lang/{$_COOKIE['ComaCMS_user_lang']}/admin_lang.php"))
+			$language = $_COOKIE['ComaCMS_user_lang'];
+	}
+	if($language == '') {
+		// there was no (valid) language-setting in the cookie try to get the default language of the browser/user
+		if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+			$langs = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+			// remove all unneeded things in the information
+			$langs = preg_replace("#\;q=[0-9\.]+#i" , '' , $langs);
+			$langs = explode(',' , $langs);
+			$language = $languages[0];
+			// finde a matching language
+			foreach($langs as $lang) {
+				if(file_exists("../lang/{$lang}/admin_lang.php")) {
+					$language = $lang;
+					break;
+				}
+			}
 		}
 	}
+	// tries someone to set the language 'by hand'?
+	$external_lang = GetPostOrGet('lang');
+	if($external_lang != '')
+		if(file_exists("../lang/{$external_lang}/admin_lang.php"))
+			$language = $external_lang;
+	// if there is no language use english ;-)
+	if($language == '')
+		$language == 'en';
+	// Set the cookie (for the next 93(= 3x31) days)
+	setcookie('ComaCMS_user_lang', $language, time() + 8035200);
+	include "../lang/{$language}/admin_lang.php";
+	$step = 1;
+	$content = '';
+	$step = GetPostOrGet('step');
+	$confirmation = GetPostOrGet('confirmation');
+	if(!is_numeric($step))
+		$step = 1;
+	if($step == 1) { // Language check
+		$content = "<input type=\"hidden\" name=\"step\" value=\"2\" />
+				<legend>{$admin_lang['language']}</legend>
+				<div class=\"row\">
+					<label>
+						<strong>{$admin_lang['language']}:</strong>
+						<span class=\"info\">{$admin_lang['please_select_your_language']}</span>
+					</label>
+					<select name=\"lang\">\r\n";
+		$languageFolder = dir("../lang/");
+		// read the available language-files
+		while($folder = $languageFolder->read()) {
+			// check if the language-file really exists
+			if($folder != "." && $folder != ".." && file_exists("../lang/{$folder}/admin_lang.php")) {
+				if($language == $folder)
+					$content .= "<option selected=\"selected\" value=\"{$folder}\">";
+				else
+					$content .= "<option value=\"{$folder}\">";
+				// try to 'translate' the language
+				if(array_key_exists($folder, $admin_lang))
+					$content .= "{$admin_lang[$folder]}</option>";
+				else
+					$content .= "{$folder}</option>";
+			}
+		}
+		$content .=	"</select>
+				</div>
+				<div class=\"row\">
+					<input type=\"submit\" value=\"{$admin_lang['next']}\"/>
+				</div>";
+		
+	}
+	elseif($step == 2) { // requirements check
+		$phpversion_min = '4.3.0';
+		$content = "<input type=\"hidden\" name=\"step\" value=\"3\" />
+				<input  type=\"hidden\" name=\"lang\" value=\"{$language}\" />
+				<legend>{$admin_lang['requirements']}</legend>
+				<div class=\"row\">" . sprintf($admin_lang['is_the_file_%file%_writeable'], '/config.php') . ": <strong>";
+		$ok = true;
+		if(is_writable('../config.php'))
+			$content .= $admin_lang['yes']; 
+		else {
+			$content .= $admin_lang['no'];
+			$ok = false;
+		}	
+		$content .= "</strong></div>
+			<div class=\"row\">" . sprintf($admin_lang['is_the_directory_%directory%_writeable'], '/data/') . ": <strong>";
+		$ok = true;
+		if(is_writable('../data/'))
+			$content .= $admin_lang['yes']; 
+		else {
+			$content .= $admin_lang['no'];
+			$ok = false;
+		}	
+		$content .= "</strong></div>
+			<div class=\"row\">{$admin_lang['php_version']} > {$phpversion_min}?: <strong>";
+		if(version_compare($phpversion_min, phpversion(), '<=') == 1)
+			$content .= $admin_lang['yes']; 
+		else {
+			$content .= $admin_lang['no'];
+			$ok = false;
+		}
+		$content .= "</strong></div>\r\n";
+		if($ok)
+			$content .= "<div class=\"row\">
+				<input type=\"submit\" value=\"{$admin_lang['next']}\"/>
+			</div>";
+		else
+			$content .= "<div class=\"row\">{$admin_lang['please_try_to fix_these_problems_to_finish_the_installation']}<br /><a class=\"button\" href=\"install.php?step=2&amp;lang={$language}\">{$admin_lang['reload']}</a></div>";
+	}
+	elseif($step == 3) {
+		$content = "<input type=\"hidden\" name=\"step\" value=\"4\" />
+				<input  type=\"hidden\" name=\"lang\" value=\"{$language}\" />
+				<legend>{$admin_lang['license']}</legend>
+				<div class=\"row\">
+				<textarea readonly=\"readonly\" id=\"license\" rows=\"17\">" . file_get_contents('license.txt') . "</textarea>
+			</div>
+			<div class=\"row\">
+				<label for=\"confirmation\">
+					<strong>{$admin_lang['i_agree']}:</strong>
+					<span class=\"info\">{$admin_lang['do_you_agee_with_this_conditions']}</span>
+				</label>
+				<input type=\"checkbox\" value=\"yes\" name=\"confirmation\" id=\"confirmation\" />
+			</div>
+			<div class=\"row\">
+				<input type=\"submit\" value=\"{$admin_lang['next']}\"/>
+			</div>";
+	}
+	elseif($step == 4 && $confirmation == 'yes') {
+		$content = "<input type=\"hidden\" name=\"step\" value=\"5\" />
+				<input  type=\"hidden\" name=\"lang\" value=\"{$language}\" />
+				<input  type=\"hidden\" name=\"confirmation\" value=\"yes\" />
+				<legend>{$admin_lang['database_settings']}</legend>
+				<div class=\"row\">
+					<label for=\"database_server\">
+						<strong>{$admin_lang['database_server']}:</strong>
+						<span class=\"info\">{$admin_lang['todo']}</span>
+					</label>
+					<input type=\"text\" name=\"database_server\" id=\"database_server\" value=\"localhost\"/>
+				</div>
+				<div class=\"row\">
+					<label for=\"database_name\">
+						<strong>{$admin_lang['database_name']}:</strong>
+						<span class=\"info\">{$admin_lang['todo']}</span>
+					</label>
+					<input type=\"text\" name=\"database_name\" id=\"database_name\"/>
+				</div>
+				<div class=\"row\">
+					<label for=\"database_username\">
+						<strong>{$admin_lang['database_username']}:</strong>
+						<span class=\"info\">{$admin_lang['todo']}</span>
+					</label>
+					<input type=\"text\" name=\"database_username\" id=\"database_username\"/>
+				</div>
+				<div class=\"row\">
+					<label for=\"database_password\">
+						<strong>{$admin_lang['database_password']}:</strong>
+						<span class=\"info\">{$admin_lang['todo']}</span>
+					</label>
+					<input type=\"password\" name=\"database_password\" id=\"database_password\"/>
+				</div>
+				<div class=\"row\">
+					<label for=\"database_prefix\">
+						<strong>{$admin_lang['prefix_for_tables']}:</strong>
+						<span class=\"info\">{$admin_lang['todo']}</span>
+					</label>
+					<input type=\"text\" name=\"database_prefix\" id=\"database_prefix\" value=\"comacms_\"/>
+				</div>
+			<div class=\"row\">
+				<input type=\"submit\" value=\"{$admin_lang['next']}\"/>
+			</div>
+		";
+	}
+	elseif($step == 4 && $confirmation != 'yes') {
+		$content = "<a class=\"button\" href=\"install.php?lang={$language}&step=3\">{$admin_lang['back']}</a>";
+	}
+	elseif($step == 5 && $confirmation == 'yes') {
+		require_once '../classes/sql.php';
+		$database_server = GetPostOrGet('database_server');
+		$database_name = GetPostOrGet('database_name');
+		$database_username = GetPostOrGet('database_username');
+		$database_password = GetPostOrGet('database_password');
+		$database_prefix = GetPostOrGet('database_prefix');
+		$file = 'sql/install.sql';
+		
+		$sqlConnection = new Sql($database_username, $database_password, $database_server);
+		$sqlConnection->Connect($database_name);
+		$fileHandle = fopen($file, "r");
+		// Read the whole file
+	  	$queries = str_replace('{DB_PREFIX}', $database_prefix, fread($fileHandle, filesize($file)));
+		// Close the handle
+	  	fclose($fileHandle);
+		$sqlConnection->SqlExecMultiple($queries);
+		
+		
+		$config_data = "<?php\n";
+		$config_data .= '$d_server = \'' . $database_server.'\';' . "\r\n";
+		$config_data .= '$d_user   = \'' . $database_username . '\';' . "\r\n";
+		$config_data .= '$d_pw     = \'' . $database_password . '\';' . " \r\n";
+		$config_data .= '$d_base   = \'' . $database_name . '\';' . "\r\n";
+		$config_data .= '$d_pre = \'' . $database_prefix . '\';' . " \r\n\r\n";
+		$config_data .= 'define(\'COMACMS_INSTALLED\', true);' . "\r\n";
+		$config_data .= '?>';
+		$fp = @fopen('../bconfig.php', 'w');
+		$result = @fputs($fp, $config_data, strlen($config_data));
+		@fclose($fp);
+		$content = "<input type=\"hidden\" name=\"step\" value=\"6\" />
+				<input  type=\"hidden\" name=\"lang\" value=\"{$language}\" />
+				<input  type=\"hidden\" name=\"confirmation\" value=\"yes\" />
+				<legend>{$admin_lang['create_administrator']}</legend>
+				<div class=\"row\">
+					<label for=\"admin_showname\">
+						<strong>{$admin_lang['name']}:</strong>
+						<span class=\"info\">{$admin_lang['todo']}</span>
+					</label>
+					<input type=\"text\" name=\"admin_showname\" id=\"admin_showname\"/>
+				</div>
+				<div class=\"row\">
+					<label for=\"admin_name\">
+						<strong>{$admin_lang['loginname']}:</strong>
+						<span class=\"info\">{$admin_lang['todo']}</span>
+					</label>
+					<input type=\"text\" name=\"admin_name\" id=\"admin_name\"/>
+				</div>
+				<div class=\"row\">
+					<label for=\"admin_password\">
+						<strong>{$admin_lang['password']}:</strong>
+						<span class=\"info\">{$admin_lang['todo']}</span>
+					</label>
+					<input type=\"password\" name=\"admin_password\" id=\"admin_password\"/>
+				</div>
+				<div class=\"row\">
+					<label for=\"admin_password2\">
+						<strong>{$admin_lang['password_repetition']}:</strong>
+						<span class=\"info\">{$admin_lang['todo']}</span>
+					</label>
+					<input type=\"password\" name=\"admin_password2\" id=\"admin_password2\"/>
+				</div>
+				
+				<div class=\"row\">
+					<input type=\"submit\" value=\"{$admin_lang['next']}\"/>
+				</div>
+		";
+	}
+	elseif($step == 6 && $confirmation == 'yes') {
+		$admin_name = GetPostOrGet('admin_name');
+		$admin_showname = GetPostOrGet('admin_showname');
+		$admin_password = GetPostOrGet('admin_password');
+		$admin_password2 = GetPostOrGet('admin_password2');
+		include '../bconfig.php';
+		require_once '../classes/sql.php';
+		$sql = "INSERT INTO {$d_pre}users (user_name, user_showname, user_password, user_registerdate, user_admin, user_icq)
+		VALUES ('$admin_name', '$admin_showname', '" . md5($admin_password) . "', '" . mktime() . "', 'y', '');
+		INSERT INTO {$d_pre}config (config_name, config_value)
+		VALUES ('install_date', '" . mktime() . "');
+		INSERT INTO {$d_pre}pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)
+		VALUES('de', 'public', 'home', '{$admin_lang['homepage']}', 0, 1, 'text', " . mktime() . ", 'Installed the Homepage');";
+		
+		
+		
+		//TODO: make sure that the id of the default page is everytime the right one 
 	
-	$sql = "INSERT INTO " . $db_prefix . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)
-		VALUES('de', 'public', 'home', 'Hauptseite', 0, 1, 'text', " . mktime() . ", 'Installed Home-page')";
-	mysql_query($sql, $connection) or die(mysql_error());
-	$lastid =  mysql_insert_id();
-	$sql = "INSERT INTO " . $db_prefix . "pages_text (page_id, text_page_text,text_page_html)
-		VALUES ($lastid, 'Willkommen auf der Hauptseite', 'Willkommen auf der Hauptseite')";
-	mysql_query($sql, $connection) or die(mysql_error());
-	$sql = "INSERT INTO " . $db_prefix . "menu (menu_link, menu_text, menu_new, menu_orderid, menu_menuid)
-		VALUES ('l:home', 'Home', 'no', 0, 1);";
-
-	mysql_close($connection);
-	$config_data = "<?php\n";
-	$config_data .= '$d_server = \'' . $db_server.'\';' . "\r\n";
-	$config_data .= '$d_user   = \'' . $db_user . '\';' . "\r\n";
-	$config_data .= '$d_pw     = \'' . $db_password . '\';' . " \r\n";
-	$config_data .= '$d_base   = \'' . $db_database . '\';' . "\r\n";
-	$config_data .= '$d_pre = \'' . $db_prefix . '\';' . " \r\n\r\n";
-	$config_data .= 'define(\'COMACMS_INSTALLED\', true);' . "\r\n";
-	$config_data .= '?>';
-
-	$fp = @fopen("../config.php", 'w');
-	$result = @fputs($fp, $config_data, strlen($config_data));
-	@fclose($fp);
+		$ok = true;
+		if($admin_name == "" || $admin_showname == "" || $admin_password == "") {
+			$content = $admin_lang['the_form_was_not_filled_in_completely']; "Die Angaben zum Adminaccount sind unvollst&auml;ndig.";
+			$content .= "<a class=\"button\" href=\"install.php?lang={$language}&step=3\">{$admin_lang['back']}</a>";
+			$ok = false;
+		}
+	
+		if($admin_password != $admin_password2) {
+			$content = $admin_lang['the_repetition_of_the_password_was_incorrect']; //"Das Passwort wurde nicht korrekt wiederholt";
+			$content .= "<a class=\"button\" href=\"install.php?lang={$language}&step=3\">{$admin_lang['back']}</a>";
+			$ok = false;
+		}
+		if($ok) {	
+			$sqlConnection = new Sql($d_user, $d_pw, $d_server);
+			$sqlConnection->Connect($d_base);
+			$sqlConnection->SqlExecMultiple($sql);
+			$lastid =  mysql_insert_id();
+			$sql = "INSERT INTO {$d_pre}pages_text (page_id, text_page_text,text_page_html)
+				VALUES ($lastid, '{$admin_lang['welcome_to_this_homepage']}', '{$admin_lang['welcome_to_this_homepage']}')";
+			$sqlConnection->SqlQuery($sql);
+			$content  = $admin_lang['installation_complete'];
+		}
+	}
 ?>
-</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<title><?php echo $admin_lang['installation'] . ': ' . $admin_lang['step'] . ' ' . $step; ?></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" href="./install.css" type="text/css" media="all" />
+		<link rel="stylesheet" href="./style.css" type="text/css" media="all" />
+	</head>
+	<body>
+	<h1><?php echo $admin_lang['installation'] . ': ' . $admin_lang['step'] . ' ' . $step; ?></h1>
+	<div id="list">
+	<ol>
+<?php
+		$pages = array(
+			1 => $admin_lang['language'],
+			2 => $admin_lang['requirements'],
+			3 => $admin_lang['license'],
+			4 => $admin_lang['database_settings'],
+			5 => $admin_lang['create_administrator']
+			);
+		foreach($pages as $stepnr => $name) {
+			if($stepnr == $step)
+				echo "<li class=\"actual\"><a href=\"install.php?step={$stepnr}&amp;confirmation={$confirmation}\">{$name}</a></li>\r\n";
+			elseif($stepnr < $step)
+				echo "<li><a href=\"install.php?step={$stepnr}&amp;confirmation={$confirmation}\">{$name}</a></li>\r\n";
+			else
+				echo "<li>{$name}</li>\r\n";
+		}
+		
+?>
+	</ol>
+	</div>
+	<div id="text">
+		<form action="install.php">
+			<fieldset>
+				<?php echo $content; ?>
+			</fieldset>
+		</form>
+	</div>
+	</body>
 </html>

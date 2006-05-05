@@ -31,7 +31,7 @@
 			// remove all unneeded things in the information
 			$langs = preg_replace("#\;q=[0-9\.]+#i" , '' , $langs);
 			$langs = explode(',' , $langs);
-			$language = $languages[0];
+			//$language = $languages[0];
 			// finde a matching language
 			foreach($langs as $lang) {
 				if(file_exists("../lang/{$lang}/admin_lang.php")) {

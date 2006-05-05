@@ -21,6 +21,6 @@
 			</div>
 			<div id="bottom">
 				<a href="http://developer.berlios.de" title="BerliOS Developer"> <img src="http://developer.berlios.de/bslogo.php?group_id=5648" width="124" height="32" border="0" alt="BerliOS Developer Logo" /></a><br />
-				<a href="http://developer.berlios.de/projects/comacms" title="Coma Content Management System">&copy;2005 The ComaCMS-Team</a>
+				<a href="http://developer.berlios.de/projects/comacms" title="Coma Content Management System">&copy;2005-2006 The ComaCMS-Team</a>
 			</div>
 		</div>

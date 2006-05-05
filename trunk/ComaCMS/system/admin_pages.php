@@ -41,9 +41,9 @@
 			$style = $config->Get('style');
 	
 		if(!empty($save)) {
-			if(file_exists("./styles/$style/mainpage.php")) {
+			//if(file_exists("./styles/$style/mainpage.php")) {
 				$config->Save('style', $style);
-			}
+			//}
 		}
 	
 		$out .= "<iframe id=\"previewiframe\" class=\"pagepreview\" src=\"./index.php?style=$style\"></iframe>

@@ -102,6 +102,7 @@
  		/**
  		 * @access public
  		 * @param integer MaxCount
+ 		 * @param boolean ConvertTimestamp
  		 * @return array
  		 */
  		function FillArray($MaxCount = 6, $ConvertTimestamp = true) {
@@ -116,6 +117,40 @@
  			if($MaxCount < 0)
  				$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
  				FROM " . DB_PREFIX . "dates
+ 				ORDER BY date_date ASC";
+ 			
+ 			$datesResult = $this->_SqlConnection->SqlQuery($sql);
+ 			while($dateEntry = mysql_fetch_object($datesResult)) {
+ 				$datesArray[] = array('DATE_ID' => $dateEntry->date_id,
+ 							'DATE_DATE' => ($ConvertTimestamp) ? date('d.m.Y H:i', $dateEntry->date_date) : $dateEntry->date_date,
+ 							'DATE_TOPIC' => nl2br($dateEntry->date_topic),
+ 							'DATE_LOCATION' => $dateEntry->date_location,
+ 							'DATE_CREATOR' => $dateEntry->date_creator
+ 						);
+ 			}
+ 			return $datesArray;
+ 		}
+ 		/**
+ 		 * @access public
+ 		 * @param string Location
+ 		 * @param integer MaxCount
+ 		 * @param boolean ConvertTimestamp
+ 		 * @return array
+ 		 */
+ 		function ExtendedFillArray($Location, $MaxCount = 6, $ConvertTimestamp = true) {
+ 			$datesArray = array();
+ 			
+ 			if(!is_numeric($MaxCount))
+ 				$MaxCount =  6;
+ 			$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
+ 				FROM " . DB_PREFIX . "dates
+ 				WHERE date_location LIKE '$Location'
+ 				ORDER BY date_date ASC
+ 				LIMIT $MaxCount";
+ 			if($MaxCount < 0)
+ 				$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
+ 				FROM " . DB_PREFIX . "dates
+ 				WHERE date_location LIKE '$Location'
  				ORDER BY date_date ASC";
  			
  			$datesResult = $this->_SqlConnection->SqlQuery($sql);

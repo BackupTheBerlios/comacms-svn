@@ -41,6 +41,7 @@
  			$Parameters = explode('&', $Parameters);
  			$all= false;
  			$count = 6;
+ 			$location='%';
  			foreach($Parameters as $parameter){
  				$parameter = explode('=', $parameter, 2);
  				if(empty($parameter[1]))
@@ -50,7 +51,11 @@
  			$dates = new Dates($this->_SqlConnection, $this->_ComaLib, $this->_User, $this->_Config);
  			if($all)
  				$count = -1;
- 			$datesArray = $dates->FillArray($count);
+ 			$datesArray = array();
+ 			if($location != '%')
+ 				$datesArray = $dates->ExtendedFillArray($location, $count);
+ 			else
+ 				$datesArray = $dates->FillArray($count);
  			$this->_ComaLate->SetReplacement('DATES', $datesArray);
  			return "</p><table class=\"text_table full_width\">
 				<thead>

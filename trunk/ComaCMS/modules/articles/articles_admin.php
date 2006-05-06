@@ -43,6 +43,8 @@
  			$this->_Config = &$Config;
  			$this->_ComaLate = &$ComaLate;
  			$this->_ComaLib = &$ComaLib;
+ 			
+ 			$this->_Articles = new Articles(&$this->_SqlConnection, &$this->_ComaLib, &$this->_User, &$this->_Config);
  		}
  		
  		/**
@@ -53,10 +55,37 @@
  		function GetPage($Action = '') {
  			$out = '';
  			switch ($Action) {
- 				case 'new':	$out .= $this->_newPage();
- 						break;
- 				default:	$out .= $this->_homePage();
- 						break;
+ 				case 'new':		$out .= $this->_newArticle();
+ 							break;
+				case 'add':		$nextpage = $this->_Articles->_addArticle();
+							if ($nextpage == "addImage") {
+								$id = $this->_Articles->_getLastID();
+								$out .= $this->_setImage($id);
+							}
+							else {
+								$out .= $this->_homePage();
+							}
+							break;
+ 				case 'edit':		$out .= $this->_editArticle();
+ 							break;
+ 				case 'save':		$out .= $this->_Articles->_saveArticle();
+ 							$out .= $this->_homePage();
+ 							break;
+ 				case 'delete':		$sure = $this->_Articles->_deleteArticle();
+							if($sure != '') {
+								$out .= $sure;
+							}
+							else {
+								$out .= $this->_homePage();
+							}
+							break;
+				case 'setImage':	$out .= $this->_setImage();
+							break;
+				case 'saveImage':	$out .= $this->_Articles->_saveImage();
+							$out .= $this->_homePage();
+							break;
+ 				default:		$out .= $this->_homePage();
+ 							break;
  			}
  			return $out;
  		}
@@ -66,10 +95,9 @@
 	 	 * @var array admin_lang
 	 	 */
 	 	function _newArticle() {
-	 		global $user;
 	 		$out = "\t\t\t<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
 	 			<form method=\"post\" action=\"admin.php\">
-				<input type=\"hidden\" name=\"page\" value=\"articles\" />
+				<input type=\"hidden\" name=\"page\" value=\"module_articles\" />
 				<input type=\"hidden\" name=\"action\" value=\"add\" />
 				<fieldset>
 					<div class=\"row\">
@@ -97,15 +125,67 @@
 							(ein Bild kann auch sp&auml;ter noch &uuml;ber die Bearbeiten-Funktion hinzugef&uuml;gt/ver&auml;ndert werden)</label>
 					</div>
 					<div class=\"row\">
-						Eingelogt als $user->Showname
+						Eingelogt als {$this->_User->Showname}
 					</div>
 					<div class=\"row\">
-					<input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" />
+						<input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" />
 					</div>
 				</fieldset>
 				<br /> 
 			</form>\r\n";
 	 		return $out;
+	 	}
+	 	
+	 	/**
+	 	 * @access private
+	 	 * @return sring
+	 	 */
+	 	 
+	 	function _editArticle() {
+	 		$id = GetPostOrGet('article_id');
+	 		$sql = "SELECT *
+	 			FROM " . DB_PREFIX . "articles
+	 			WHERE article_id=$id";
+	 		$article_result = db_result($sql);
+	 		if($article = mysql_fetch_object($article_result)) {
+	 			$thumbnailfoler = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
+	 			$imgmax = 100; 
+	 			$out = "\t\t\t<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
+	 			<form method=\"post\" action=\"admin.php\">
+				<input type=\"hidden\" name=\"page\" value=\"module_articles\" />
+				<input type=\"hidden\" name=\"action\" value=\"save\" />
+				<input type=\"hidden\" name=\"article_id\" value=\"$id\" />
+				<fieldset>
+					<div class=\"row\">
+						<label>Titel: <span class=\"info\">Hier den Titel des Artikels eingeben</span></label>
+						<input type=\"text\" name=\"article_title\" maxlength=\"100\" value=\"$article->article_title\" class=\"article_input\" />
+					</div>
+					<div class=\"row\">
+						<label>Beschreibung: <span class=\"info\">Hier eine Zusammenfassung oder Vorschau eingeben.(maximal 200 Zeichen)</span></label>
+						<textarea name=\"article_description\" rows=\"4\" cols=\"60\" class=\"article_input\">$article->article_description</textarea>
+					</div>
+					<div class=\"row\">
+						<label>Text: <span class=\"info\">Hier den gesammten Text des Artikels eingeben.</span></label>
+						<script type=\"text/javascript\" language=\"javascript\">
+							writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
+							writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
+							writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
+							writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als &Uuml;berschrift\",\"=== \",\" ===\",\"&Uuml;berschrift\",\"h\");
+						</script>
+						<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\">$article->article_text</textarea>
+					</div>
+					<div class=\"row\">
+						<label>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></label>
+						" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img style=\"float:left\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '<b>noch kein Bild festgelegt</b><br />') . "Wenn das Bild gesetzt oder ver&auml;ndert wird, gehen alle ungespeicherten Ver&auml;nderungen an den Texten verloren!<br /><a class=\"button\" href=\"admin.php?page=articles&amp;action=setimage&amp;article_id=$id\">Bild setzen/ver&auml;ndern</a>
+					</div>
+					<div class=\"row\">
+						<input type=\"submit\" class=\"button\" value=\"{$this->_Lang['save']}\" /><input type=\"reset\" class=\"button\" value=\"{$this->_Lang['reset']}\" />
+					</div>
+				</fieldset>
+				<br />
+			</form>\r\n";
+	 			return $out;
+	 		}
 	 	}
 	 	
  		/**
@@ -114,8 +194,9 @@
 		 */
 		function _homePage() {	
 	 		$thumbnailfoler = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
-	 		$imgmax = 100; 
-	 		$out = "<a href=\"admin.php?page=articles&amp;action=new\" class=\"button\">{$this->_Lang['write_new_article']}</a><br /> 
+	 		$imgmax = 100;
+	 		$out = "<h2>{$this->_Lang['articles_module']}</h2>"; 
+	 		$out .= "<a href=\"admin.php?page=module_articles&amp;action=new\" class=\"button\">{$this->_Lang['write_new_article']}</a><br /> 
 	 			<table class=\"text_table full_width\">
 					<thead>
 						<tr>
@@ -141,13 +222,69 @@
 						<td>
 							<a href=\"article.php?id=$article->article_id\" title=\"Anschauen\"><img src=\"./img/view.png\" alt=\"Anschauen\" title=\"Anschauen\" /></a> 
 							<!--<img scr=\"./img/info.png\"  alt=\"Infos\" title=\"Infos\" />-->
-							<a href=\"admin.php?page=articles&amp;action=edit&amp;article_id=$article->article_id\" title=\"Bearbeiten\"><img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
-							<a href=\"admin.php?page=articles&amp;action=delete&amp;article_id=$article->article_id\" title=\"L?schen\"><img src=\"./img/del.png\" alt=\"L?schen\" title=\"L?schen\" /></a>
+							<a href=\"admin.php?page=module_articles&amp;action=edit&amp;article_id=$article->article_id\" title=\"Bearbeiten\"><img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
+							<a href=\"admin.php?page=module_articles&amp;action=delete&amp;article_id=$article->article_id\" title=\"L&ouml;schen\"><img src=\"./img/del.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>
 						</td>
 					</tr>";
 			}
 			$out .= "</table>";
 			return $out;
 	 	}
+	 	
+	 	/**
+	 	 * @access private
+	 	 * @return sring
+	 	 */
+	 	function _setImage($article_id) {
+	 		if(!is_numeric($article_id))
+	 			$article_id = GetPostOrGet('article_id');
+	 		$sql = "SELECT *
+				FROM " . DB_PREFIX . "articles
+				WHERE article_id=$article_id";
+			$article_result = db_result($sql);
+			if($article = mysql_fetch_object($article_result)) {
+	 			$out = '';
+	 			$sql = "SELECT *
+					FROM " . DB_PREFIX . "files
+					WHERE file_type LIKE 'image/%'
+					ORDER BY file_name ASC";
+				$images_result = db_result($sql);
+				$imgmax = 100;
+				$imgmax2 = 300;
+				$inlinemenu_folder = 'data/thumbnails/';
+				$out .= "<form action=\"admin.php\" method=\"post\"><div class=\"imagesblock\">
+				<input type=\"hidden\" name=\"page\" value=\"module_articles\"/>
+				<input type=\"hidden\" name=\"action\" value=\"saveImage\"/>
+				<input type=\"hidden\" name=\"article_id\" value=\"$article_id\"/>";
+				while($image = mysql_fetch_object($images_result)) {
+					$thumb = basename($image->file_path);
+					preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
+					if(strtolower($ext[2]) == 'gif')
+						$thumb .= '.png';
+					$orig_sizes = getimagesize($image->file_path);
+					$succes = true;
+					if(!file_exists($inlinemenu_folder . $imgmax . '_' . $thumb))
+						$succes = generateThumb($image->file_path, $inlinemenu_folder . $imgmax . '_', $imgmax);
+					if((file_exists($inlinemenu_folder . $imgmax . '_' . $thumb) || $succes) && $orig_sizes[0] >= $imgmax2) {
+						$sizes = getimagesize($inlinemenu_folder . $imgmax . '_' . $thumb);
+						$margin_top = round(($imgmax - $sizes[1]) / 2);
+						$margin_bottom = $imgmax - $sizes[1] - $margin_top;
+						$out .= "<div class=\"imageblock\">
+					<a href=\"" . generateUrl($image->file_path) . "\">
+					<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($inlinemenu_folder . $imgmax . '_' .$thumb) . "\" alt=\"$thumb\" /></a><br />
+					<input type=\"radio\" name=\"image_path\" " .(($article->article_image  == $image->file_path) ? 'checked="checked" ' : '') . " value=\"$image->file_path\"/></div>";
+					}
+				}
+				$out .= "</div><input type=\"submit\" value=\"{$this->_Lang['apply']}\" class=\"button\"/><a href=\"admin.php?page=module_articles&amp;action=edit&amp;article_id=$article_id\" class=\"button\">{$this->_Lang['back']}</a></form>";
+				return $out;
+			}
+	 	}
+	 	
+	 	/**
+	 	 * @access public
+	 	 */
+	 	 function GetTitle() {
+	 	 	return $this->_Lang['articles_module'];
+	 	 }
  	}
 ?>

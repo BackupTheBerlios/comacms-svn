@@ -17,6 +17,11 @@
  #----------------------------------------------------------------------
  
  	/**
+ 	 * @ignore
+ 	 */
+ 	require_once('system/functions.php');
+ 	
+ 	/**
  	 * @package ComaCMS
  	 * @subpackage Articles
  	 */
@@ -110,6 +115,105 @@
 							'NEWS_ID' => $entrie->id);
     			}
     			return $entries;
+		}
+		
+		/**
+		 * @access public
+		 * @return string
+		 */
+		 
+		function _addArticle() {
+	 		$title =  GetPostOrGet('article_title');
+	 		$description =  GetPostOrGet('article_description');
+	 		$text = GetPostOrGet('article_text');
+	 		if(strlen($description) > 200)
+	 			$description = substr($description, 0, 200);
+	 		if($title !== null && $description !== null && $text !== null) {
+				$sql = "INSERT INTO " . DB_PREFIX . "articles
+					(article_title, article_description, article_text, article_html, article_creator, article_date)
+					VALUES ('$title', '$description', '$text', '" . convertToPreHtml($text) . "', '{$this->_User->ID}', '" . mktime() . "')";
+				db_result($sql);
+			}
+			if(GetPostOrGet('add_image') == 'add') 
+				return "addImage";
+			else
+				return "home";	
+	 	}
+	 	
+	 	/**
+	 	 * @access public
+	 	 * @return string
+	 	 */
+	 	function _saveArticle() {
+	 		$id = GetPostOrGet('article_id');
+	 		$title =  GetPostOrGet('article_title');
+	 		$description =  GetPostOrGet('article_description');
+	 		$text = GetPostOrGet('article_text');
+	 		if(strlen($description) > 200)
+	 			$description = substr($description, 0, 200);
+	 		if($title !== null && $description !== null && $text !== null && is_numeric($id)) {
+				$sql = "UPDATE ".DB_PREFIX."articles SET 
+					article_title= '$title', 
+					article_description= '$description', 
+					article_text= '$text',
+					article_html= '" . convertToPreHtml($text) . "'
+					WHERE article_id=$id";
+				db_result($sql);
+			}
+	 	}
+	 	
+	 	function _getLastID() {
+	 		$sql = "SELECT *
+	 			FROM " . DB_PREFIX . "articles
+				ORDER BY article_id DESC
+				LIMIT 1";
+			$result = db_result($sql);
+			$article = mysql_fetch_object($result);
+			return $article->article_id;
+	 	}
+	 	
+	 	/**
+	 	 * @access public
+	 	 * @return string
+	 	 */
+	 	
+	 	function _deleteArticle () {
+	 		$out = '';
+	 		$id = GetPostOrGet('article_id');
+			if(GetPostOrGet('sure') == 1) {
+				$sql = "DELETE FROM " . DB_PREFIX . "articles
+					WHERE article_id=$id";
+				db_result($sql);
+				return $out;
+			}
+			else {
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "articles
+					WHERE article_id=$id";
+				$article_result = db_result($sql);
+				if($row = mysql_fetch_object($article_result)) {
+					$out = "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich l&ouml;schen?<br />
+			<a href=\"admin.php?page=module_articles&amp;action=delete&amp;article_id=" . $id . "&amp;sure=1\" title=\"Wirklich L&ouml;schen\" class=\"button\">Ja</a>
+			<a href=\"admin.php?page=module_articles\" title=\"Nicht L&ouml;schen\" class=\"button\">Nein</a>";
+			
+					return $out;
+				}
+			}
+		}
+		
+		/**
+		 * @access public
+		 * @return string
+		 */
+		function _saveImage() {
+			$file_path = GetPostOrGet('image_path');
+	 		$article_id = GetPostOrGet('article_id');
+	 		if(file_exists($file_path)) {
+	 			$sql = "UPDATE ".DB_PREFIX."articles SET 
+					article_image= '$file_path'
+					WHERE article_id=$article_id";
+				db_result($sql);
+			}
 		}
  	}
 ?>

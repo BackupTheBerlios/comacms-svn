@@ -62,7 +62,6 @@
 	$admin_lang['topic'] = 'Termin';
 	$admin_lang['actions'] = 'Aktionen';
 	$admin_lang['creator'] = 'Autor';
-	$admin_lang['articles'] = 'Artikel';
 	$admin_lang['inlinemenu'] = 'Zusatzmen&uuml;';
 	$admin_lang['pagestructure'] = 'Seiten-Struktur';
 	$admin_lang['generate_mainmenu'] = 'Hauptmen&uuml; erstellen';
@@ -141,7 +140,6 @@
 	$admin_lang['delete_date'] = 'Termin L&ouml;schen'; 
 	$admin_lang['picture'] = 'Bild';
 	$admin_lang['description'] = 'Beschreibung';
-	$admin_lang['write_new_article'] = 'einen neuen Artikel schreiben';
 	$admin_lang['filename'] = 'Dateiname';
 	$admin_lang['filesize'] = 'Dateigr&ouml;&szlig;e';
 	$admin_lang['uploaded_on'] = 'Hochgeladen am';
@@ -213,4 +211,8 @@
 	$admin_lang['installation_complete'] = 'Installation abgeschlossen!';
 	$admin_lang['the_form_was_not_filled_in_completely'] = 'Das Formular ist nicht vollst&auml;ndig ausgef&uuml;llt worden.';
 	$admin_lang['the_repetition_of_the_password_was_incorrect'] = 'Die Wiederholung des Passwortes ist falsch.';
+	//article module
+	$admin_lang['articles'] = 'Artikel';
+	$admin_lang['articles_module'] = 'Artikelmodul';
+	$admin_lang['write_new_article'] = 'einen neuen Artikel schreiben';
 ?>

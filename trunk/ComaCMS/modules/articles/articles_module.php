@@ -47,11 +47,11 @@
  				$$parameter[0] = $parameter[1];
  			}
  			if($preview) {
- 				return $this->_ArtuckesPreview($count); 
+ 				return $this->_ArticlesPreview($count); 
  			}	
  		}
  		
- 		function _ArtuckesPreview($count = 6){
+ 		function _ArticlesPreview($count = 6){
  			$sql = "SELECT *
 				FROM " . DB_PREFIX . "articles
 				ORDER BY article_date DESC

@@ -64,7 +64,6 @@
 	$admin_lang['topic'] = 'Topic';
 	$admin_lang['actions'] = 'Actions';
 	$admin_lang['creator'] = 'Creator';
-	$admin_lang['articles'] = 'Articles';
 	$admin_lang['inlinemenu'] = 'Inlinemenu';
 	$admin_lang['pagestructure'] = 'PageStructure';
 	$admin_lang['generate_mainmenu'] = 'generate Mainmenu';
@@ -142,7 +141,6 @@
 	$admin_lang['delete_date'] = 'Delete date';
 	$admin_lang['picture'] = 'Picture';
 	$admin_lang['description'] = 'Description';
-	$admin_lang['write_new_article'] = 'Write a new article';
 	$admin_lang['filename'] = 'Filename';
 	$admin_lang['filesize'] = 'Filesize';
 	$admin_lang['uploaded_on'] = 'Uploaded on';
@@ -213,4 +211,8 @@
 	$admin_lang['installation_complete'] = 'Installation complete!';
 	$admin_lang['the_form_was_not_filled_in_completely'] = 'The form was not filled in completely.';
 	$admin_lang['the_repetition_of_the_password_was_incorrect'] = 'The repetition of the password was incorrect.';
+	//article module
+	$admin_lang['articles'] = 'Articles';
+	$admin_lang['articles_module'] = 'Articlesmodule';
+	$admin_lang['write_new_article'] = 'Write a new article';
 ?>

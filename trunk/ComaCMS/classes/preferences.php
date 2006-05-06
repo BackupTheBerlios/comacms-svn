@@ -26,11 +26,6 @@
 		 */
 		var $Settings;
 		
-		/**
-		 * @access public
-		 * @var bool
-		 */
-		var $HasLoaded = false;
 		
 		/**
 		 * @access public
@@ -47,10 +42,7 @@
 		 * @return void
 		 */
 		function Load($PreferencesFile) {
-			if(!$this->HasLoaded) {	
-				include($PreferencesFile);
-				$this->HasLoaded = true;
-			}
+			include($PreferencesFile);
 		}
 		
 		/** SetSetting
@@ -67,7 +59,7 @@
 	 	 * @return void
 		 */
 		function SetSetting($Name, $Display, $Description, $Group,  $Default = '', $DataType = 'string') {
-			$this->Settings[$Group][] = array('name' => $Name, 'display' => $Display, 'description' => $Description, 'default' => $Default, 'datatype' => $DataType);
+			$this->Settings[$Group][$Name] = array('name' => $Name, 'display' => $Display, 'description' => $Description, 'default' => $Default, 'datatype' => $DataType);
 		}
 	}
 	

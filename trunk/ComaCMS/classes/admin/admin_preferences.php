@@ -136,8 +136,26 @@
  		function _HomePage() {
  			$adminLang = $this->_AdminLang;
  			$out = "<h2>" . $adminLang['preferences'] . "</h2>";
- 			// Load the preferences file
+ 			// Load the main-preferences file
  			$this->_Preferences->Load('system/settings.php');
+ 			
+ 			// Load the preferences files of the modules (if there are some)
+			
+			// get the activated modules
+			$modulesActivated = unserialize ($this->_Config->Get('modules_activated'));
+			// some data aviailable?
+			if(is_array($modulesActivated)) {
+				if(count($modulesActivated) >= 0) {
+					foreach($modulesActivated as $moduleName) {
+						$settingsFile = "modules/$moduleName/{$moduleName}_settings.php";
+						if(file_exists($settingsFile))
+							// Load the config file of this module
+							$this->_Preferences->Load($settingsFile);
+					}
+				}
+			}
+ 			
+ 			
  			// Show all Preferences
  			$out .= $this->_ShowPreferences();
  			return $out;
@@ -148,8 +166,25 @@
  		 * @return string
  		 */
  		function _SavePage() {
- 			// Load the preferences file
+
+			// Load the main-preferences file
 			$this->_Preferences->Load('system/settings.php');
+			// Load the preferences files of the modules (if there are some)
+			
+			// get the activated modules
+			$modulesActivated = unserialize ($this->_Config->Get('modules_activated'));
+			// some data aviailable?
+			if(is_array($modulesActivated)) {
+				if(count($modulesActivated) >= 0) {
+					foreach($modulesActivated as $moduleName) {
+						$settingsFile = "modules/$moduleName/{$moduleName}_settings.php";
+						if(file_exists($settingsFile))
+							// Load the config file of this module
+							$this->_Preferences->Load($settingsFile);
+					}
+				}
+			}
+			 
 			if(count($this->_Preferences->Settings) <= 0)
  				return $this->GetPage('');
  			// Go through all preferences entries

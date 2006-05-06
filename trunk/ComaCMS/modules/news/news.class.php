@@ -116,10 +116,10 @@
     		 */
     		function GetMessage($NewsID = -1) {
     			if(is_numeric($NewsID)) {
-    				$sql = "SELECT date, text, userid, titile, id
+    				$sql = "SELECT date, text, userid, title, id
     					FROM " . DB_PREFIX ."news
     					WHERE id=$NewsID
-    					LIMIT 0,1";
+    					LIMIT 1";
     				$messageResult = $this->_SqlConnection->SqlQuery($sql);
     				// check if there is a record in the mysql table if not return an empty array
     				if($message = mysql_fetch_object($messageResult)) {

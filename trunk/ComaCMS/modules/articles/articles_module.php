@@ -39,7 +39,6 @@
  		function UseModule($Identifer, $Parameters) {
  			$Parameters = explode('&', $Parameters);
  			$preview= false;
- 			$count = 6;
  			foreach($Parameters as $parameter){
  				$parameter = explode('=', $parameter, 2);
  				if(empty($parameter[1]))
@@ -47,11 +46,12 @@
  				$$parameter[0] = $parameter[1];
  			}
  			if($preview) {
- 				return $this->_ArticlesPreview($count); 
+ 				return $this->_ArticlesPreview(); 
  			}	
  		}
  		
- 		function _ArticlesPreview($count = 6){
+ 		function _ArticlesPreview(){
+			$count = $this->_Config->Get('articles_display_count', 6);
  			$sql = "SELECT *
 				FROM " . DB_PREFIX . "articles
 				ORDER BY article_date DESC

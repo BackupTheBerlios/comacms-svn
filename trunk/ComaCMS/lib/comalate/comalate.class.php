@@ -119,6 +119,7 @@
  				$this->_Conditions[$Name] = true;
  			else	
  				$this->_Conditions[$Name] = false;
+ 			$this->_AddConditionalInlineCss($Name);
  		}
  		
  		function SetReplacement($Name, $Value = '') {
@@ -248,6 +249,7 @@
  						
  					}
  				}
+ 				unset($this->_Config['conditional-css'][$condition]);
  			}
  		}
 		

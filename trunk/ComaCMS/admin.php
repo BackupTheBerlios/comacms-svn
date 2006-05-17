@@ -229,6 +229,7 @@
 	$output->SetReplacement('TEXT' , $text);
 	$output->Title = $title;
 	$output->SetCondition('notathome', true);
+	$output->SetCondition('notinindex', true);
 	$output->SetCondition('notinadmin', false);
 	$path = '';
 	if($extern_page != 'admincontrol')

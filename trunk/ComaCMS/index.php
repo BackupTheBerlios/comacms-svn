@@ -106,6 +106,43 @@
 			// replace the module-call with the output of the module
 			$outputpage->Text = str_replace($module['identifer'], $$moduleName->UseModule($module['identifer'], str_replace('&amp;', '&', $moduleParameter)), $outputpage->Text);
 	}
+	
+	if(preg_match_all("/{(:([A-Za-z0-9_.-]+)(\?(.+?))?)}/s", $output->Template, $moduleMatches)) {
+		foreach($moduleMatches[2] as $key => $moduleName) {
+			// if module is available and activated
+			if(file_exists('./modules/' . $moduleName . '/' . $moduleName . '_module.php') && in_array($moduleName, $modulesActivated)) {
+				// paste it to the list with all module-calls
+				$modules[] = array('moduleName' => $moduleName, 'moduleParameter' => $moduleMatches[4][$key], 'identifer' => $moduleMatches[0][$key]);
+			}
+		}
+	}
+	// work through all module-calls
+	foreach($modules as $module) {
+		// get the directory-name of the module
+		$moduleName = $module['moduleName'];
+		// get the transmitted parameters
+		$moduleParameter = $module['moduleParameter'];
+		// load the module file
+		/**
+		 * @ignore
+		 */
+		include_once('./modules/' . $moduleName . '/' . $moduleName . '_module.php');
+		// check if the module-class is already created
+		if(!isset($$moduleName)) {
+			// is the module-class available?
+			if(class_exists('Module_' . $moduleName)) {
+				// create a link to the initialisation-function for the module-class
+				$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');
+				// create the module-class
+				$$moduleName = $newClass($sqlConnection, $user, $admin_lang, $config, $output, $lib);
+			}
+		}
+		// check again if the module-class is available (it should be so)
+		if(isset($$moduleName))
+			// replace the module-call with the output of the module
+			$output->Template = str_replace($module['identifer'], $$moduleName->UseModule($module['identifer'], str_replace('&amp;', '&', $moduleParameter)), $output->Template);
+	}
+	
 	/*
 	if(strpos($outputpage->Text, '[dates]') !== false)
 		$outputpage->Text = str_replace('[dates]', nextDates(10), $outputpage->Text);

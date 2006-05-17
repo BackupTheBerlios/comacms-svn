@@ -119,7 +119,6 @@
  				$this->_Conditions[$Name] = true;
  			else	
  				$this->_Conditions[$Name] = false;
- 			$this->_AddConditionalInlineCss($Name);
  		}
  		
  		function SetReplacement($Name, $Value = '') {
@@ -202,6 +201,11 @@
  			}
  			$this->SetReplacement('STYLE_PATH', $TemplatesFolder . $TemplateName);
  			
+ 		/*	foreach($config['conditional-css'] as $conditionName => $conditionValue) {
+ 				$this->_Conditions[$conditionName] = false;
+ 				echo "<!--\t" . $conditionName . "\t-->\r\n";
+ 			}*/
+ 			
  			if(file_exists($config['template'])) {
  				$template_file = fopen($config['template'], 'r');
 				$this->Template = fread($template_file, filesize($config['template']));
@@ -273,6 +277,11 @@
 						$this->_AddConditionalInlineCss($condition);
 					}
 				}
+			}
+			foreach($this->_Config['conditional-css'] as $conditionName => $cssValue) {
+				if(array_key_exists($conditionName, $this->_Conditions))
+					if($this->_Conditions[$conditionName]) 
+						$this->_AddConditionalInlineCss($conditionName);
 			}
 			$this->Template = preg_replace( '/{(.+?)}/e', "\$this->_Replace('\\1')", $this->Template);
 			$this->Template = preg_replace( '/{(.+?)}/e', "\$this->_Replace('\\1')", $this->Template);

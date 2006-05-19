@@ -78,12 +78,6 @@
 		}
 	}
 		
-//	$menu_array[] = array($admin_lang['menueeditor'], 'admin.php?page=menueeditor');
-//	$menu_array[] = array($admin_lang['pageeditor'], 'admin.php?page=pageeditor');
-//	$menu_array[] = array($admin_lang['inlinemenu'], 'admin.php?page=inlinemenu');
-//	$menuArray[] = array($admin_lang['news'], 'news');
-//	$menuArray[] = array($admin_lang['dates'], 'dates');
-	$menuArray[] = array($admin_lang['articles'], 'articles');
 	$menuArray[] = array($admin_lang['sitestyle'], 'sitestyle');
 	$menuArray[] = array($admin_lang['users'], 'users');
 	$menuArray[] = array($admin_lang['groups'], 'groups');
@@ -116,23 +110,6 @@
 	elseif($extern_page == 'sitestyle') {
 		$title = $admin_lang['sitestyle'];
 		$text = page_sitestyle();
-	}
-/*	elseif($extern_page == 'news') {
-		$title = $admin_lang['news'];
-		$text = page_news();
-	}*/
-/*	elseif($extern_page == 'dates') {
-		$title = $admin_lang['dates'];
-		include('classes/admin/admin_dates.php');
-		$admin_dates = new Admin_Dates();
-		$text = $admin_dates->GetPage($extern_action, $admin_lang);
-	}*/
-	elseif($extern_page == 'articles') {
-		$title = $admin_lang['articles'];
-		include('classes/admin/admin_articles.php');
-		$admin_articles = new Admin_Articles();
-		$text = $admin_articles->GetPage($extern_action, $admin_lang);
-		//$text = page_articles();
 	}
 	elseif($extern_page == 'users') {
 		$title = $admin_lang['users'];

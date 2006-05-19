@@ -287,9 +287,30 @@ li.inline_intern{
 	margin-left: 6ex;	
 }
 
+.structure_row {
+ width:99.5%;
+ display:block;
+ border: none;
+}
+
 .structure_row:hover, .structure_row_hover {
  background-color: #87C6E9;
  border: none;
+}
+
+.page_lang {
+ position: absolute;
+ right: 9em;
+}
+
+.page_actions {
+ width: 12em;
+ position: absolute;
+ right: 0.3%;
+ text-align: right;
+ margin-right: 1em;
+ margin-top: 2px;
+ margin-bottom: 2px;
 }
 
 div.thumb {

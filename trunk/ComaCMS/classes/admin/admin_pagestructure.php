@@ -698,10 +698,10 @@
 			else {
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "inlinemenu_entries
-					WHERE inlineentrie_id=$entryID";
+					WHERE inlineentry_id=$entryID";
  				$entryResult = $this->_SqlConnection->SqlQuery($sql);
  				if($entry = mysql_fetch_object($entryResult)) {
-					return "Sind sie sicher, dass sie das Element &quot;$entry->inlineentrie_text&quot; unwiederruflich l&ouml;schen m&ouml;chten?<br />
+					return "Sind sie sicher, dass sie das Element &quot;$entry->inlineentry_text&quot; unwiederruflich l&ouml;schen m&ouml;chten?<br />
 						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;entryID=$entryID&amp;action2=removeEntry&amp;confirmation=1&amp;pageID=$PageID\" class=\"button\">" . $adminLang['yes'] . "</a >
 						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID\"class=\"button\">" . $adminLang['no'] . "</a >";
  				}

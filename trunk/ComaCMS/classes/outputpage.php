@@ -223,12 +223,11 @@
 					die();
 				}
 			}
-			if(!$load_old && $page_data->page_access == 'deleted' && !$user->accessRghts->delete) {
+			if(!$load_old && $page_data->page_access == 'deleted' && !$user->AccessRghts->delete) {
 				header("Location: special.php?page=410&want=$pagename"); //HTTP 410 Gone
 				die();
 			}
 			
-			/*if(!$load_old) {
 				if($page_data->page_access == 'deleted')
 					die('deleted');
 				if($page_data->page_access == 'hidden')

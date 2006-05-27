@@ -278,10 +278,13 @@
 					}
 				}
 			}
-			foreach($this->_Config['conditional-css'] as $conditionName => $cssValue) {
-				if(array_key_exists($conditionName, $this->_Conditions))
-					if($this->_Conditions[$conditionName]) 
-						$this->_AddConditionalInlineCss($conditionName);
+			
+			if(array_key_exists('conditional-css', $this->_Config)) {
+				foreach($this->_Config['conditional-css'] as $conditionName => $cssValue) {
+					if(array_key_exists($conditionName, $this->_Conditions))
+						if($this->_Conditions[$conditionName]) 
+							$this->_AddConditionalInlineCss($conditionName);
+				}
 			}
 			$this->Template = preg_replace( '/{(.+?)}/e', "\$this->_Replace('\\1')", $this->Template);
 			$this->Template = preg_replace( '/{(.+?)}/e', "\$this->_Replace('\\1')", $this->Template);

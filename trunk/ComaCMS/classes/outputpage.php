@@ -228,12 +228,7 @@
 				die();
 			}
 			
-				if($page_data->page_access == 'deleted')
-					die('deleted');
-				if($page_data->page_access == 'hidden')
-					if(!$user->IsLoggedIn)	
-						header("Location: special.php?page=login&want=$page_data->page_id");
-			}*/
+			
 			//TODO: generate a warning if an 'old' page is shown
 			$this->Title = $page_data->page_title;
 			$this->PositionOfPage($page_data->page_id);

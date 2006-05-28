@@ -25,6 +25,7 @@
 		var $_User;
 		var $_Pages = array();
 		var $_ParentIDPages = array();
+		var $_ParentIDPagesNonDeleted = array();
 		var $_NextSortID = array();
 		/**
 		 * @param SqlConnection SqlConnection
@@ -269,6 +270,22 @@
 		 	}
 		 	return $out;
 		}
+		/**
+		 * @return array
+		 */
+		function RemoveAcessDeletedPages() {
+			if(count($this->_ParentIDPagesNonDeleted) < 1) {
+				$pageArray = array();
+				foreach($this->_ParentIDPages as $parentID => $pages) {
+					foreach($pages as $page) {
+						if($page['access'] != 'deleted')
+							$pageArray[$parentID][] = $page;
+					}
+				}
+				$this->_ParentIDPagesNonDeleted = $pageArray;
+			}
+			return $this->_ParentIDPagesNonDeleted;
+		}
 		
 		function LoadInlineMenuData($PageID) {
 			if(empty($this->_InlineMenus[$PageID])) {
@@ -421,7 +438,7 @@
 		
 		function AddInlineMenuDownload($Text, $Link, $PageID) {
 			$sortID = $this->LoadNextInlineMenuSortID($PageID);
-			$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentry_sortid, inlineentry_page_id, inlineentry_type, inlineentry_ext, inlineentry_link)
+			$sql = "INSERT INTO " . DB_PREFIX . "inlinemenu_entries (inlineentry_sortid, inlineentry_page_id, inlineentry_type, inlineentry_text, inlineentry_link)
 				VALUES ($sortID, $PageID, 'download', '$Text','$Link')";
 			$this->_SqlConnection->SqlQuery($sql);
 			$this->GenerateInlineMenu($PageID);

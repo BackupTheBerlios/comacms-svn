@@ -350,12 +350,16 @@
 		  * @return string
 		  */
 		 function _Structure($TopNodeID = 0) {
+		 	$pages = $this->_PageStructure->RemoveAcessDeletedPages();
+		 	if(!array_key_exists($TopNodeID, $pages))
+		 		return;
+		 	$pages = $pages[$TopNodeID];
 		 	$adminLang = $this->_AdminLang;
 		 	$out = '';
-		 	if(empty($this->_PageStructure->_ParentIDPages[$TopNodeID]))
+		 	if(empty($pages))
 		 		return;
 		 	$out .= "\r\n\t\t\t<ol>\r\n";
-		 	foreach($this->_PageStructure->_ParentIDPages[$TopNodeID] as $page) {
+		 	foreach($pages as $page) {
 	 			if($page['access'] != 'deleted') {
 	 			$out .= "\t\t\t\t<li class=\"page_type_". $page['type'] . (($page['access'] == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">" . (($TopNodeID == 0) ?  "<input type=\"checkbox\" name=\"mainMenuPages[]\"" . ((in_array($page['id'], $this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page['access'] != 'public') ? ' disabled="disabled"'  : '') . " value=\"" . $page['id'] . "\" class=\"checkbox\"/>\t" : '' );
 	 			$out .= "<strong>" . $page['title'] . "</strong> (" . rawurldecode($page['name']) . ")";
@@ -1037,13 +1041,13 @@
 			$imageTitle = $this->_PageStructure->GetInlineMenuData($PageID, 'imageTitle');
 			
 			if(file_exists($thumbPath))
-				$image = "<img src=\"" . generateUrl($thumbPath) . "\"/>";
+				$image = "<img alt=\"{$imageTitle}\" src=\"" . generateUrl($thumbPath) . "\"/>";
 			else {
 				$imgmax2 = 200;
 				$inlinemenuFolder = 'data/thumbnails/';
 				$thumbnail = resizeImageToWidth($imagePath, $inlinemenuFolder, $imgmax2);
 				if($thumbnail !== false){
-					$image = "<img src=\"" . generateUrl($thumbnail) . "\"/>";
+					$image = "<img alt=\"{$imageTitle}\" src=\"" . generateUrl($thumbnail) . "\"/>";
 				}
 			}	
 			$out = "

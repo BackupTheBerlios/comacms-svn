@@ -20,4 +20,5 @@
 	Preferences::SetSetting("default_page", "Startseite", "Auf diese Seite wird jeder Besucher geleitet, der keine Seite angegeben hat.", "Main", '1', 'page_select');
 	Preferences::SetSetting("pagename", "Seitenname", "Hier wird der Name der Seite definiert.", "Main", "ComaCMS");
 	Preferences::SetSetting("thumbnailfolder", "Verzeichnis f&uuml;r erstellte Bilder", "In dem hier angegebenen Verzeichnis werden die automatisch erstellten Bilder gespeichert. (F&uuml;r diesen Ordner sind Schreibrechte notwendig)", "Main", "data/thumbnails/");
+	Preferences::SetSetting("show_inlinemenu_entries", "Inlinemenueinträge anzeigen", "Sollen Inlinemenueinträge im Menüeditor angezeigt werden?", "Main", "0", "bool");
 ?>

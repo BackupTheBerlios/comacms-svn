@@ -51,7 +51,7 @@
 			header("Content-Type: application/octet-stream");
 			header("Content-Disposition: attachment; filename=\"$file->file_name\"");
 			$fileSize = filesize($file->file_path);
-			if (is_numeric($filesize))
+			if (is_numeric($fileSize))
 				header("Content-Length: $fileSize");
 			readfile($file->file_path);
 			die();	

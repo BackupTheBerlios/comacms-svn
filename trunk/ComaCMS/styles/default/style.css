@@ -543,3 +543,9 @@ p.after_column {
 	margin-left: 0.5em;
 	margin-right: 0.5em;
 }
+
+.pureimage{
+	margin-left:auto;
+	margin-right: auto;
+	display: block;
+}

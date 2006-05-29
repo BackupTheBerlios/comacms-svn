@@ -1,130 +1,130 @@
 * {
- margin: 0;
- padding: 0;
- font-size: 1em;
- font-weight: normal;
+	margin: 0;
+	padding: 0;
+	font-size: 1em;
+	font-weight: normal;
 }
 
 html {
- margin: 0;
- padding: 0;
- font-family: arial, verdana, helvetica, sans-serif;
- font-size: 62.5%;
- background-color: #FFFFFF;
- color: #000000;
+	margin: 0;
+	padding: 0;
+	font-family: arial, verdana, helvetica, sans-serif;
+	font-size: 62.5%;
+	background-color: #FFFFFF;
+	color: #000;
 }
 
 body {
- font-size: 1.6em;
+	font-size: 1.6em;
 }
 
 strong {
- font-weight: bold;
+	font-weight: bold;
 }
 
 li ,ol, ul, dd{
- margin-left: 1em;
+	margin-left: 1em;
 }
 
 
 dt {
- font-weight: bold;
+	font-weight: bold;
 }
 
 h1, h2, h3, h4, h5 {
- font-weight: bold;
+	font-weight: bold;
 }
 
 h1 acronym {
- font-weight: bold;
+	font-weight: bold;
 }
 
 h1 {
- font-size: 2em;
- text-align: center;
- padding: 0;
- margin: 0;
+	font-size: 2em;
+	text-align: center;
+	padding: 0;
+	margin: 0;
 }
 
 h2 {
- font-size: 1.5em;
- border-bottom: 1px solid black;
- margin-bottom: 1em;
- margin-top: 0.5em;
+	font-size: 1.5em;
+	border-bottom: 1px solid black;
+	margin-bottom: 1em;
+	margin-top: 0.5em;
 }
 
 h3 {
- font-size: 1.17em;
- padding-left: 1.5em;
- margin-bottom: 1em;
- margin-top: 0.5em;
+	font-size: 1.17em;
+	padding-left: 1.5em;
+	margin-bottom: 1em;
+	margin-top: 0.5em;
 }
 
 h4 {
- margin-top: 0.5em;
- padding-left: 2em;
- margin-bottom: 1em;
+	margin-top: 0.5em;
+	padding-left: 2em;
+	margin-bottom: 1em;
 }
 
 abbr, acronym {
- border-bottom: 1px dotted #3C528B;
- cursor: help;
+	border-bottom: 1px dotted #3C528B;
+	cursor: help;
 }
 
 a {
- color: #000000;
- text-decoration: none;
- font-weight: bold;
+	color: #000000;
+	text-decoration: none;
+	font-weight: bold;
 }
 
 a:hover {
- color: red;
+	color: red;
 }
 
 img {
-border: none;
+	border: none;
 }
 
 #menu {
- background-color: #FFFFFF;
- list-style-type: upper-roman;
- float: right;
- margin: 2em;
- padding: 3em;
- padding-top: 1em;
- padding-bottom: 1em;
- padding-right: 2em;
- border: 1px solid #000000;
+	background-color: #FFFFFF;
+	list-style-type: upper-roman;
+	float: right;
+	margin: 2em;
+	padding: 3em;
+	padding-top: 1em;
+	padding-bottom: 1em;
+	padding-right: 2em;
+	border: 1px solid #000000;
 }
 		
 .code {
- border:1px solid #3C528B;
- border-bottom:1px solid #3C528B;
- padding: 0.3em;
- display: block;
- width: 100%;
- margin: 0.3em;
- margin-left: 1em;
- margin-bottom: 1em;
- margin-top: 1em;
- overflow: scroll;
- overflow-y: hidden;
- clear: both;
+	border:1px solid #3C528B;
+	border-bottom:1px solid #3C528B;
+	padding: 0.3em;
+	display: block;
+	width: 100%;
+	margin: 0.3em;
+	margin-left: 1em;
+	margin-bottom: 1em;
+	margin-top: 1em;
+	overflow: scroll;
+	overflow-y: hidden;
+	clear: both;
 }
 
 p, div.block {
- padding: 0.3em;	
+	padding: 0.3em;	
 }
 
 .note {
- text-indent: 0;
- border: 1px dashed #3C528B;
- padding: 0.3em;
+	text-indent: 0;
+	border: 1px dashed #3C528B;
+	padding: 0.3em;
 }
 
 .block {
- margin: 1.2em;
- margin-top: 0.25em;
- margin-bottom: 0.25em;
- text-align: left;
+	margin: 1.2em;
+	margin-top: 0.25em;
+	margin-bottom: 0.25em;
+	text-align: left;
 }

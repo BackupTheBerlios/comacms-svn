@@ -306,6 +306,8 @@
 									$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date, file_creator)
 										VALUES('{$file['name']}', '{$file['type']}', '$savePath', '" . filesize($savePath) . "', '" . md5_file($savePath) . "', " . mktime() . ", {$this->_User->ID})";
 									$this->_SqlConnection->SqlQuery($sql);
+									// prevent uploads, which aren't dowloadable(read-/writeable) by another user(ftp-access etc.)
+									chmod($savePath, 0755);
 									$out .= "<div><strong>{$this->_AdminLang['ok']}:</strong> " . sprintf($this->_AdminLang['the_file_%file%_was_uploaded'], $file['name']) . "</div>\r\n";
 								}
 							}

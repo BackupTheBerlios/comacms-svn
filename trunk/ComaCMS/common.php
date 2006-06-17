@@ -18,7 +18,7 @@
 	/**
 	 * @ignore
 	 */
-	include_once("config.php");
+	@include_once("./config.php");
 	$starttime = microtime();
 	if(!defined('COMACMS_RUN'))
 		die("");
@@ -26,7 +26,7 @@
 		if(defined("COMACMS_INSTALLED"))
 			die("Please remove the install-folder it would be better.");
 		else
-			header('location: install/install.html');
+			header('location: install/install.php');
 	}
 	define('__ROOT__', dirname(__FILE__));
 	include('classes/sql.php');

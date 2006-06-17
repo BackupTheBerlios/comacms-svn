@@ -97,6 +97,14 @@
 				<legend>{$admin_lang['requirements']}</legend>
 				<div class=\"row\">" . sprintf($admin_lang['is_the_file_%file%_writeable'], '/config.php') . ": <strong>";
 		$ok = true;
+		if(!file_exists('../config.php')) {
+			$writeHandle = @fopen ('../config.php', 'w');
+			if($writeHandle !== false) {
+				@fwrite($writeHandle, "<?php\r\n//empty config will call the installation-scrip\r\n?>");
+				@fclose($writeHandle);
+			}
+		}
+			
 		if(is_writable('../config.php'))
 			$content .= $admin_lang['yes']; 
 		else {
@@ -221,7 +229,7 @@
 		$config_data .= '$d_pre = \'' . $database_prefix . '\';' . " \r\n\r\n";
 		$config_data .= 'define(\'COMACMS_INSTALLED\', true);' . "\r\n";
 		$config_data .= '?>';
-		$fp = @fopen('../bconfig.php', 'w');
+		$fp = @fopen('../config.php', 'w');
 		$result = @fputs($fp, $config_data, strlen($config_data));
 		@fclose($fp);
 		$content = "<input type=\"hidden\" name=\"step\" value=\"6\" />

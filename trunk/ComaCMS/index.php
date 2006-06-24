@@ -106,7 +106,8 @@
 			// replace the module-call with the output of the module
 			$outputpage->Text = str_replace($module['identifer'], $$moduleName->UseModule($module['identifer'], str_replace('&amp;', '&', $moduleParameter)), $outputpage->Text);
 	}
-	
+	// prevent unnecesary runs
+	$modules = array();
 	if(preg_match_all("/{(:([A-Za-z0-9_.-]+)(\?(.+?))?)}/s", $output->Template, $moduleMatches)) {
 		foreach($moduleMatches[2] as $key => $moduleName) {
 			// if module is available and activated

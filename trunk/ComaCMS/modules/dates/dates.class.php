@@ -5,7 +5,7 @@
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
- # file                 : dates_module.php
+ # file                 : dates.class.php
  # created              : 2006-03-10
  # copyright            : (C) 2005-2006 The ComaCMS-Team
  # email                : comacms@williblau.de

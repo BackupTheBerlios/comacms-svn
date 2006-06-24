@@ -138,6 +138,10 @@
 	 		}
  		}
  		
+ 		function AddCssFile($File, $Media = 'all') {
+ 			$this->_CssFiles .= "\t\t<link rel=\"stylesheet\" href=\"{$File}\" type=\"text/css\" media=\"{$Media}\"/>\r\n";
+ 		}
+ 		
  		function _AddCssFiles($cssFiles, $TemplatesFolder, $TemplateName = 'default') {
  			if(!empty($cssFiles)) {
  					foreach($cssFiles as $key => $cssFile) {

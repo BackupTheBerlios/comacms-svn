@@ -275,7 +275,7 @@
 		$admin_showname = GetPostOrGet('admin_showname');
 		$admin_password = GetPostOrGet('admin_password');
 		$admin_password2 = GetPostOrGet('admin_password2');
-		include '../bconfig.php';
+		include '../config.php';
 		require_once '../classes/sql.php';
 		$sql = "INSERT INTO {$d_pre}users (user_name, user_showname, user_password, user_registerdate, user_admin, user_icq)
 		VALUES ('$admin_name', '$admin_showname', '" . md5($admin_password) . "', '" . mktime() . "', 'y', '');

@@ -22,7 +22,7 @@
 	$starttime = microtime();
 	if(!defined('COMACMS_RUN'))
 		die("");
-	if(file_exists("./install/") && !file_exists("./.svn/")) {
+	if(file_exists("./install/") && !file_exists("./.svn/") && !file_exists("./_svn/")) {
 		if(defined("COMACMS_INSTALLED"))
 			die("Please remove the install-folder it would be better.");
 		else

@@ -138,6 +138,13 @@
 	 		}
  		}
  		
+ 		/**
+ 		 * Adds a link to the specified CSS-File 
+ 		 * @access public
+ 		 * @return void
+ 		 * @param string File
+ 		 * @param string Media
+ 		 */
  		function AddCssFile($File, $Media = 'all') {
  			$this->_CssFiles .= "\t\t<link rel=\"stylesheet\" href=\"{$File}\" type=\"text/css\" media=\"{$Media}\"/>\r\n";
  		}
@@ -231,7 +238,7 @@
  				foreach($this->_ReplacementsArrays[$Match] as $repeat) {
 					$toReplaceString = $Replacement;
 					foreach($repeat as $subName => $subValue) {
-						$toReplaceString = str_replace('{' . $subName . '}', $subValue, $toReplaceString);
+						$toReplaceString = str_replace("\{$subName}", $subValue, $toReplaceString);
 					}
 					$output .= $toReplaceString;
 				}

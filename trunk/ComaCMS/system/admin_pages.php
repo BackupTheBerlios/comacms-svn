@@ -5,15 +5,15 @@
  * This file contains (nearly) all subsites in the admin-interface
  */
  #----------------------------------------------------------------------#
- # file			: admin_pages.php				#
- # created		: 2005-07-12					#
- # copyright		: (C) 2005-2006 The ComaCMS-Team		#
- # email		: comacms@williblau.de				#
+ # file			: admin_pages.php
+ # created		: 2005-07-12
+ # copyright		: (C) 2005-2006 The ComaCMS-Team
+ # email		: comacms@williblau.de
  #----------------------------------------------------------------------#
- # This program is free software; you can redistribute it and/or modify	#
- # it under the terms of the GNU General Public License as published by	#
- # the Free Software Foundation; either version 2 of the License, or	#
- # (at your option) any later version.					#
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
  #----------------------------------------------------------------------#
 
 	
@@ -145,7 +145,7 @@
 					else
 						$user_admin = "user_admin= 'n', ";
 					$user_icq = str_replace("-", "", $user_icq);
-					if($user_id == $user->Id) {
+					if($user_id == $user->ID) {
 						if($user_password_confirm != "")
 							$actual_user_passwd_md5 = md5($user_password_confirm);
 						$actual_user_name = $user_name;
@@ -164,7 +164,7 @@
 					else
 						$sure = $_POST['sure'];
 					
-					if($sure == 1 && $user_id != $user->Id) {
+					if($sure == 1 && $user_id != $user->ID) {
 						$sql = "SELECT *
 							FROM " . DB_PREFIX . "users
 							WHERE user_id=$user_id";
@@ -230,7 +230,7 @@
 							Nick:\r\n";
 					if($action == "add-error" || $action == "save-error" && $user_name == "")
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Nick muss angegeben werden.</span>\r\n";		
-					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umst�nden komplizierten Namen,der angezeigt wird, eingeben muss. (Notwendig)</span>
+					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umst&auml;nden komplizierten Namen,der angezeigt wird, eingeben muss. (Notwendig)</span>
 						</td>
 						<td>
 							<input type=\"text\" name=\"user_name\" value=\"".$user_name."\" />

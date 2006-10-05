@@ -391,3 +391,21 @@ ALTER TABLE `cms_files` ADD `file_creator` INT( 10 ) DEFAULT '0' NOT NULL ;
 #r265
 #Added field to describe pictures in the gallery
 ALTER TABLE `cms_gallery` ADD `gallery_descriptiont` TEXT NOT NULL ;
+
+#r294
+CREATE TABLE `comacms_menu_entries` (
+`menu_entries_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`menu_entries_link` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
+`menu_entries_text` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
+`menu_entries_new` ENUM( 'yes', 'no' ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL DEFAULT 'no',
+`menu_entries_orderid` INT( 10 ) UNSIGNED NULL ,
+`menu_entries_menuid` INT( 10 ) NOT NULL DEFAULT '1'
+) ENGINE = MYISAM ;
+ALTER TABLE `comacms_menu_entries` ADD `menu_entries_css_class` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ,
+ADD `menu_entries_css_id` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL ;
+ALTER TABLE `comacms_menu` CHANGE `menu_link` `menu_title` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL;  
+ALTER TABLE `comacms_menu` CHANGE `menu_text` `menu_css_class` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL;
+ALTER TABLE `comacms_menu` CHANGE `menu_new` `menu_css_id` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL DEFAULT ''; 
+ALTER TABLE `comacms_menu` DROP `menu_orderid` ,
+DROP `menu_menuid` ,
+DROP `menu_page_id` ;

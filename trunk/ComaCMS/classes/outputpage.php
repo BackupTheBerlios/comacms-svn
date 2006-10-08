@@ -169,7 +169,7 @@
 					else
 					$new = '';*/
 				//$menu_str = str_replace('[NEW]', $new, $menu_str);
-				$menu[] = array('LINK_TEXT' => $menuItem->menu_entries_text, 'LINK' => $link, 'CSS_ID' => ($menuItem->menu_entries_css_id != '') ? ' id="' . $menuItem->menu_entries_css_id . '"' : '', 'LINK_STYLE' => ($menuItem->menu_entries_page_id == $this->PageID) ? ' class="actual"' : '');
+				$menu[] = array('LINK_TEXT' => $menuItem->menu_entries_title, 'LINK' => $link, 'CSS_ID' => ($menuItem->menu_entries_css_id != '') ? ' id="' . $menuItem->menu_entries_css_id . '"' : '', 'LINK_STYLE' => ($menuItem->menu_entries_page_id == $this->PageID) ? ' class="actual"' : '');
 			}
 			return $menu;
 		}

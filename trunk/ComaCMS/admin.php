@@ -200,9 +200,9 @@
 			$linkStyle = ' class="actual"';
 		else
 			$linkStyle = '';
-		$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'admin.php?page=' . $part[1], 'LINK_STYLE' => $linkStyle);
+		$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'admin.php?page=' . $part[1], 'CSS_ID' => '', 'LINK_STYLE' => $linkStyle);
 	}
-	$output->SetReplacement('MENU' , $menu);
+	$output->SetReplacement('MENU_DEFAULT' , $menu);
 	$output->SetReplacement('TEXT' , $text);
 	$output->Title = $title;
 	$output->SetCondition('notathome', true);

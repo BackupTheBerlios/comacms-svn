@@ -92,8 +92,13 @@
 	$output->SetReplacement('PATH', "<a href=\"special.php?page=$extern_page\">$title</a>");
 	$output->SetCondition('notathome', true);
 	$outputpage = new OutputPage($sqlConnection);
-	$output->SetReplacement('MENU' , $outputpage->GenerateMenu());
-	$output->SetReplacement('MENU2' , $outputpage->GenerateMenu(2));
+	
+	$sql = "SELECT *
+		FROM " . DB_PREFIX . "menu";
+	$menus = $sqlConnection->SqlQuery($sql);
+	while ($menu = mysql_fetch_object($menus)) {
+		$output->SetReplacement('MENU_' . $menu->menu_name, $outputpage->GenerateMenu($menu->menu_id));
+	}
 	
 	$modules = array();
 	// get the activated modules

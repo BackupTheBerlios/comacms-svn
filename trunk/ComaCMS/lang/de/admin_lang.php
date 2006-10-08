@@ -112,6 +112,8 @@
 	$admin_lang['belongs_to_menu'] = 'Geh&ouml;hrt zu Menu';
 	$admin_lang['menu_entry_title'] = 'Men&uuml;eintragstitel';
 	$admin_lang['menu_entry_link'] = 'Men&uuml;eintragsziel';
+	$admin_lang['menu_entry_extern'] = 'Externes Men&uuml;eintragsziel';
+	$admin_lang['menu_entry_css'] = 'CSS id des Men&uuml;eintrags';
 	$admin_lang['add_menu_entry'] = 'Men&uuml;eintrag hinzuf&uuml;gen';
 	$admin_lang['name/contraction'] = 'Name/K&uuml;rzel';
 	$admin_lang['title'] = 'Titel';

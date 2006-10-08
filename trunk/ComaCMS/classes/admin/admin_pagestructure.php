@@ -200,12 +200,12 @@
 		 
 		 function _getMenuPageIDs() {
 		 	$this->MenuPageIDs = array();
-		 	$sql = "SELECT menu_page_id
-		 		FROM " . DB_PREFIX . "menu
-		 		WHERE menu_menuid=1";
+		 	$sql = "SELECT menu_entries_page_id
+		 		FROM " . DB_PREFIX . "menu_entries
+		 		WHERE menu_entries_menuid=1";
 		 	$ids_result = db_result($sql);
 		 	while($id = mysql_fetch_object($ids_result))
-		 		$this->MenuPageIDs[] = $id->menu_page_id;
+		 		$this->MenuPageIDs[] = $id->menu_entries_page_id;
 		 }
 		 
 		 /**

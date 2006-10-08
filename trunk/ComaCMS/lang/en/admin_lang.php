@@ -113,6 +113,8 @@
 	$admin_lang['menu_entry_title'] = 'Menuentry title';
 	$admin_lang['belongs_to_menu'] = 'Belongs to menu';
 	$admin_lang['menu_entry_link'] = 'Menuentrylink';
+	$admin_lang['menu_entry_extern'] = 'Extern Menuentryslink';
+	$admin_lang['menu_entry_css'] = 'CSS id for the menuentry';
 	$admin_lang['add_menu_entry'] = 'add new menuentry';
 	$admin_lang['name/contraction'] = 'Name/Contraction';
 	$admin_lang['title'] = 'Title';

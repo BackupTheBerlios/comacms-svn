@@ -409,3 +409,10 @@ ALTER TABLE `comacms_menu` CHANGE `menu_new` `menu_css_id` VARCHAR( 50 ) CHARACT
 ALTER TABLE `comacms_menu` DROP `menu_orderid` ,
 DROP `menu_menuid` ,
 DROP `menu_page_id` ;
+
+#r295
+ALTER TABLE `comacms_menu` CHANGE `menu_title` `menu_name` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL;
+ALTER TABLE `comacms_menu` DROP `menu_css_class` ,
+DROP `menu_css_id` ;
+ALTER TABLE `comacms_menu_entries` DROP `menu_entries_css_class` ;
+ALTER TABLE `comacms_menu_entries` CHANGE `menu_entries_text` `menu_entries_title` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL;

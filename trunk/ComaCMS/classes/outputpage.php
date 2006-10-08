@@ -135,15 +135,15 @@
 		}
 		
 		/**
-		 * @return array
+		 * @return array Menuentries
 		 */
 		function GenerateMenu($menuid = 1) {
 			//include($this->Templatefolder . '/menu.php');
 			$menu = array();
 			$sql = "SELECT *
-				FROM " . DB_PREFIX . "menu
-				WHERE menu_menuid='$menuid'
-				ORDER BY menu_orderid ASC";
+				FROM " . DB_PREFIX . "menu_entries
+				WHERE menu_entries_menuid='$menuid'
+				ORDER BY menu_entries_orderid ASC";
 			$menuResult = $this->_SqlConnection->SqlQuery($sql);
 			while($menuItem = mysql_fetch_object($menuResult)) {
 				/*if($menuid == 1) {
@@ -154,11 +154,11 @@
 				}*/
 				
 				//$menu_str = str_replace('[TEXT]', $menu_data->menu_text, $menu_str);
-				$link = $menuItem->menu_link;
+				$link = $menuItem->menu_entries_link;
 					if(substr($link, 0, 2) == 'l:')
 						$link = 'index.php?page=' . substr($link, 2);
-					if(substr($link, 0, 2) == 'g:')
-						$link = 'gallery.php?page=' . substr($link, 2);
+					if(substr($link, 0, 2) == 's:')
+						$link = 'special.php?page=' . substr($link, 2);
 					if(substr($link, 0, 2) == 'a:')
 						$link = 'admin.php?page=' . substr($link, 2);
 						
@@ -169,7 +169,7 @@
 					else
 					$new = '';*/
 				//$menu_str = str_replace('[NEW]', $new, $menu_str);
-				$menu[] = array('LINK_TEXT' => $menuItem->menu_text, 'LINK' => $link, 'LINK_STYLE' => ($menuItem->menu_page_id == $this->PageID) ? ' class="actual"' : '');
+				$menu[] = array('LINK_TEXT' => $menuItem->menu_entries_text, 'LINK' => $link, 'CSS_ID' => ($menuItem->menu_entries_css_id != '') ? ' id="' . $menuItem->menu_entries_css_id . '"' : '', 'LINK_STYLE' => ($menuItem->menu_entries_page_id == $this->PageID) ? ' class="actual"' : '');
 			}
 			return $menu;
 		}

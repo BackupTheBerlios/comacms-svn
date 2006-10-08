@@ -40,8 +40,14 @@
 	 * @ignore
 	 */
 	include('./lang/' . $user->Language . '/admin_lang.php');
-	$output->SetReplacement('MENU' , $outputpage->GenerateMenu());
-	$output->SetReplacement('MENU2' , $outputpage->GenerateMenu(2));
+	
+	$sql = "SELECT *
+		FROM " . DB_PREFIX . "menu";
+	$menus = $sqlConnection->SqlQuery($sql);
+	while ($menu = mysql_fetch_object($menus)) {
+		$output->SetReplacement('MENU_' . $menu->menu_name, $outputpage->GenerateMenu($menu->menu_id));
+	}
+	
 	$output->SetReplacement('PATH' , $outputpage->Position);
 	// is the actual page the default page?
 	if($config->Get('default_page', '1') != $outputpage->PageID)

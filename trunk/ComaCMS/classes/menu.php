@@ -23,6 +23,7 @@
  	class Menu {
  		
  		/**
+ 		 * Connection to the MySqlDatabase
  		 * @access private
  		 * @var Sql
  		 */
@@ -39,42 +40,42 @@
  		
  		/**
  		 * Moves a MenuItem above the previous MenuItem
- 		 * @param integer MenuItemSortID
- 		 * @param integer MenuID
+ 		 * @param integer Menu_entry_orderid
+ 		 * @param integer Menu_entry_id
  		 */
- 		function ItemMoveUp ($MenuItemSortID, $MenuID = 1) {
+ 		function ItemMoveUp ($Menu_entry_orderid, $Menu_entry_id = 1) {
  			// are these paremeters really numbers?
- 			if(is_numeric($MenuItemSortID) && is_numeric($MenuID)) {
+ 			if(is_numeric($Menu_entry_orderid) && is_numeric($Menu_entry_id)) {
  				// this query should return two 'rows' 
  				$sql = "SELECT *
-					FROM " . DB_PREFIX . "menu
-					WHERE menu_orderid <= $MenuItemSortID AND menu_menuid = $MenuID
-					ORDER BY menu_orderid DESC
+					FROM " . DB_PREFIX . "menu_entries
+					WHERE menu_entries_orderid <= $Menu_entry_orderid AND menu_entries_menuid = $Menu_entry_id
+					ORDER BY menu_entries_orderid DESC
 					LIMIT 0 , 2";
 				$menuResult = $this->_SqlConnection->SqlQuery($sql);
 				// try to switch the orderID between these 'rows'
-				$this->_SwitchSortIDs($menuResult);
+				$this->_SwitchOrderIDs($menuResult);
  			}
  		}
  		
  		/**
  		 * Moves a MenuItem unter the following MenuItem
- 		 * @param integer MenuItemSortID
- 		 * @param integer MenuID
+ 		 * @param integer Menu_entry_orderid
+ 		 * @param integer Menu_entry_id
  		 * @return void
  		 * @access public
  		 */
- 		function ItemMoveDown ($MenuItemSortID, $MenuID = 1) {
+ 		function ItemMoveDown ($Menu_entry_orderid, $Menu_entry_id = 1) {
  			// are these paremeters really numbers?
- 			if(is_numeric($MenuItemSortID) && is_numeric($MenuID)) {
+ 			if(is_numeric($Menu_entry_orderid) && is_numeric($Menu_entry_id)) {
  				$sql = "SELECT *
-					FROM " . DB_PREFIX . "menu
-					WHERE menu_orderid >= $MenuItemSortID AND menu_menuid = $MenuID
-					ORDER BY menu_orderid ASC
+					FROM " . DB_PREFIX . "menu_entries
+					WHERE menu_entries_orderid >= $Menu_entry_orderid AND menu_entries_menuid = $Menu_entry_id
+					ORDER BY menu_entries_orderid ASC
 					LIMIT 0 , 2";
 				$menuResult = $this->_SqlConnection->SqlQuery($sql);
 			
-				$this->_SwitchSortIDs($menuResult);
+				$this->_SwitchOrderIDs($menuResult);
  			}
  		}
  		
@@ -83,23 +84,23 @@
  		 * @return void
  		 * @param resource MenuResult
  		 */
- 		function _SwitchSortIDs ($MenuResult) {
+ 		function _SwitchOrderIDs ($MenuResult) {
  			if ($menuItem = mysql_fetch_object($MenuResult)) {
-				$menuItemID1 = $menuItem->menu_id;
-				$MenuItemSortID1 = $menuItem->menu_orderid;
+				$menuItemID1 = $menuItem->menu_entries_id;
+				$MenuItemOrderID1 = $menuItem->menu_entries_orderid;
 				
 				if ($menuItem = mysql_fetch_object($MenuResult)) {
-					$menuItemID2 = $menuItem->menu_id;
-					$MenuItemSortID2 = $menuItem->menu_orderid;
+					$menuItemID2 = $menuItem->menu_entries_id;
+					$MenuItemOrderID2 = $menuItem->menu_entries_orderid;
 					
-					$sql = "UPDATE " . DB_PREFIX . "menu
-						SET menu_orderid=$MenuItemSortID2
-						WHERE menu_id=$menuItemID1";
+					$sql = "UPDATE " . DB_PREFIX . "menu_entries
+						SET menu_entries_orderid=$MenuItemOrderID2
+						WHERE menu_entries_id=$menuItemID1";
 					$this->_SqlConnection->SqlQuery($sql);
 						 
-					$sql = "UPDATE " . DB_PREFIX . "menu
-						SET menu_orderid=$MenuItemSortID1
-						WHERE menu_id=$menuItemID2";
+					$sql = "UPDATE " . DB_PREFIX . "menu_entries
+						SET menu_entries_orderid=$MenuItemOrderID1
+						WHERE menu_entries_id=$menuItemID2";
 					$this->_SqlConnection->SqlQuery($sql);
 				}
 			}
@@ -108,20 +109,21 @@
  		/**
  		 * Saves a new 'version' of a MenuEntry by it's ID and MenuID without changing the SortIDs
  		 * @access public
- 		 * @param integer MenuID The ID of the MenuEntry
- 		 * @param integer MenuMenuID The ID of the Menu (in most cases 1 or 2)
- 		 * @param string MenuText The Text the MenuEntry displays
- 		 * @param string MenuLink The Link to the page which the MenuEntry refers to
+ 		 * @param integer Menu_entry_id The ID of the MenuEntry
+ 		 * @param integer Menu_entry_menu_id The ID of the Menu
+ 		 * @param string Menu_entry_menuid The Title of the MenuEntry
+ 		 * @param string Menu_entry_link The Link to the page which the MenuEntry refers to
+ 		 * @param string Menu_entry_css_id The css id for the menuentry
  		 * @return void
  		 */
- 		function UpdateMenuEntry($MenuID, $MenuMenuID, $MenuText, $MenuLink) {
+ 		function UpdateMenuEntry($Menu_entry_id, $Menu_entry_menuid, $Menu_entry_text, $Menu_entry_link, $Menu_entry_css_id) {
 			
-			if(is_numeric($MenuID) && is_numeric($MenuMenuID) && $MenuText != '' && $MenuLink != '') {
+			if(is_numeric($Menu_entry_id) && is_numeric($Menu_entry_menuid) && $Menu_entry_text != '' && $Menu_entry_link != '') {
  				// Is it possible that this is an ID of a Page?
- 				if(is_numeric($MenuLink)) {
+ 				if(is_numeric($Menu_entry_link)) {
  					$sql = "SELECT *
 		 				FROM " . DB_PREFIX . "pages
- 						WHERE page_id=$MenuLink";
+ 						WHERE page_id=$Menu_entry_link";
  					$pageResult = $this->_SqlConnection->SqlQuery($sql);
  	
  					// is there some result?								
@@ -130,30 +132,30 @@
  						$link = "l:" . $page->page_name;
 	 				
  						$sql = "SELECT *
-	 						FROM " . DB_PREFIX . "menu
- 							WHERE menu_id=$MenuID";
+	 						FROM " . DB_PREFIX . "menu_entries
+ 							WHERE menu_entries_id=$Menu_entry_id";
  						$menuResult = $this->_SqlConnection->SqlQuery($sql);
  						$menuEntry = mysql_fetch_object($menuResult);
- 						$menuOrderID = $menuEntry->menu_orderid;
+ 						$menu_entry_orderid = $menuEntry->menu_entries_orderid;
 	 				
- 						if($MenuMenuID != $menuEntry->menu_menuid) {
+ 						if($Menu_entry_menuid != $menuEntry->menu_entries_menuid) {
 	 						$sql = "SELECT *
- 								FROM " . DB_PREFIX . "menu
- 								WHERE menu_menuid=$MenuMenuID
- 								ORDER BY menu_orderid DESC
+ 								FROM " . DB_PREFIX . "menu_entries
+ 								WHERE menu_entries_menuid=$Menu_entry_menuid
+ 								ORDER BY menu_entries_orderid DESC
  								LIMIT 1";
  							$menuResult = $this->_SqlConnection->SqlQuery($sql);
  							if($menuEntry = mysql_fetch_object($menuResult)) {
-	 							$menuOrderID = $menuEntry->menu_orderid + 1;
+	 							$menu_entry_orderid = $menuEntry->menu_entries_orderid + 1;
  							}
  							else {
-	 							$menuOrderID = 0;
+	 							$menu_entry_orderid = 0;
  							}
  						}
 		 				
- 						$sql = "UPDATE " . DB_PREFIX . "menu
-	 						SET menu_menuid='$MenuMenuID', menu_text='$MenuText', menu_link='$link', menu_page_id='$MenuLink', menu_orderid='$menuOrderID'
- 							WHERE menu_id='$MenuID'";
+ 						$sql = "UPDATE " . DB_PREFIX . "menu_entries
+	 						SET menu_entries_menuid='$Menu_entry_menuid', menu_entries_title='$Menu_entry_text', menu_entries_link='$link', menu_entries_page_id='{$page->page_id}', menu_entries_orderid='$menu_entry_orderid', menu_entries_css_id='$Menu_entry_css_id'
+ 							WHERE menu_entries_id='$Menu_entry_id'";
  						$menuResult = $this->_SqlConnection->SqlQuery($sql);
  					}
  				}
@@ -163,40 +165,40 @@
 	 	/**
 	 	 * Creates a new MenuEntry
 	 	 * @access public
-	 	 * @param integer MenuID
-	 	 * @param integer MenuMenuID
-	 	 * @param string MenuText
-	 	 * @param string MenuLink
+	 	 * @param integer Menu_entry_menu_id The ID of the Menu
+	 	 * @param string Menu_entry_title The Title of the MenuEntry
+	 	 * @param string Menu_entry_link The Link to the page which the MenuEntry refers to
+	 	 * @param string Menu_entry_css_id The css id for the menuentry
 	 	 * @return void
 	 	 */
-		function AddMenuEntry($MenuID, $MenuMenuID, $MenuText, $MenuLink) {
- 			if(is_numeric($MenuID) && is_numeric($MenuMenuID) && $MenuText != '' && $MenuLink != '') {
+		function AddMenuEntry($Menu_entry_menuid,  $Menu_entry_title, $Menu_entry_link, $Menu_entry_css_id) {
+ 			if(is_numeric($Menu_entry_menuid) && $Menu_entry_title != '' && $Menu_entry_link != '') {
  				$sql = "SELECT *
 	 				FROM " . DB_PREFIX . "pages
- 					WHERE page_id=$MenuLink";
+ 					WHERE page_id=$Menu_entry_link";
  				$pageResult = $this->_SqlConnection->SqlQuery($sql);
  				$numRows = mysql_num_rows($pageResult);
  							
  				if($numRows = 1) {
-	 					$page = mysql_fetch_object($pageResult);
+	 				$page = mysql_fetch_object($pageResult);
  					$link = "l:" . $page->page_name;
 	 				
  					$sql = "SELECT *
-	 					FROM " . DB_PREFIX . "menu
- 						WHERE menu_menuid=$MenuMenuID
- 						ORDER BY menu_orderid DESC
+	 					FROM " . DB_PREFIX . "menu_entries
+ 						WHERE menu_entries_menuid=$Menu_entry_menuid
+ 						ORDER BY menu_entries_orderid DESC
 	 					LIMIT 1";
  					$menuResult = $this->_SqlConnection->SqlQuery($sql);
 	 				if($menuEntry = mysql_fetch_object($menuResult)) {
- 						$menuOrderID = $menuEntry->menu_orderid + 1;
+ 						$menu_entry_orderid = $menuEntry->menu_entries_orderid + 1;
  					}
  					else {
-	 					$menuOrderID = 0;
+	 					$menu_entry_orderid = 0;
  					}
 	 				
- 					$sql = "INSERT INTO " . DB_PREFIX . "menu
-						(menu_text, menu_link, menu_new, menu_orderid, menu_menuid, menu_page_id)
-						VALUES ('$MenuText', '$link', 'no', $menuOrderID, $MenuMenuID, $page->page_id)";
+ 					$sql = "INSERT INTO " . DB_PREFIX . "menu_entries
+						(menu_entries_title, menu_entries_link, menu_entries_orderid, menu_entries_menuid, menu_entries_page_id" . (($Menu_entry_css_id != '') ? ', menu_entries_css_id' : '') . ")
+						VALUES ('$Menu_entry_title', '$link', $menu_entry_orderid, $Menu_entry_menuid, {$page->page_id}" . (($Menu_entry_css_id != '') ? ', \'' . $Menu_entry_css_id . '\'': '') . ")";
 					$this->_SqlConnection->SqlQuery($sql);
  				}
  			}
@@ -205,15 +207,15 @@
  		
  		/**
  		 * Deletes a MenuEntry by it's ID
- 		 * @param integer MenuID
+ 		 * @param integer Menu_entry_id The id of the Entry that should be deleted
  		 * @return void
  		 * @access public
  		 */
- 		function DeleteMenuEntry ($MenuID) {
- 			if(is_numeric($MenuID)) {
+ 		function DeleteMenuEntry ($Menu_entry_id) {
+ 			if(is_numeric($Menu_entry_id)) {
  				$sql = "DELETE
-	 				FROM " . DB_PREFIX . "menu
- 					WHERE menu_id=$MenuID";
+	 				FROM " . DB_PREFIX . "menu_entries
+ 					WHERE menu_entries_id=$Menu_entry_id";
  				$menuResult = $this->_SqlConnection->SqlQuery($sql);
  			}
  		}

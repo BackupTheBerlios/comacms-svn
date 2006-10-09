@@ -28,14 +28,47 @@
 	 
 	class Admin_Menu extends Admin{
 	 	
+	 	/**
+	 	 * Connection to the MySqlDatabase
+	 	 * @access private
+	 	 * @var Sql 
+	 	 */
+	 	var $_SqlConnection;
+	 	
+	 	/**
+	 	 * Menufunktions
+	 	 * @access private
+	 	 * @var Menu MenuClass
+	 	 */
 	 	var $_Menu;
 	 	
+	 	/**
+	 	 * Link to the Adminlanguagearray
+	 	 * @access private
+	 	 * @var AdminLang Language Array for the Adminpages
+	 	 */
+	 	var $_AdminLang;
+	 	
+	 	/**
+	 	 * Initializes the AdminMenu class
+	 	 * @access public
+	 	 * @param Sql SqlConnection Connection to the MySqlDatabase
+	 	 * @param AdminLang AdminLang Language Array for the Adminpages
+	 	 * @package ComaCMS
+	 	 * @return void part of the Adminmenu
+	 	 */
 	 	function Admin_Menu($SqlConnection, $AdminLang) {
 	 		$this->_SqlConnection = $SqlConnection;
 	 		$this->_AdminLang = $AdminLang;
 	 		$this->_Menu = new Menu($this->_SqlConnection);
 	 	}
 	 	
+	 	/**
+	 	 * Gets HTML out from the different parts of the Menuengine
+	 	 * @access public
+	 	 * @param string Action parts name of the Menuengine
+	 	 * @return string HTML Code of the menu part
+	 	 */
 	 	function GetPage($Action = '') {
 	 		$adminLang = $this->_AdminLang;
 	 		
@@ -64,24 +97,36 @@
 	 						break;
 	 			case 'newMenu':		$out .= $this->_AddMenu();
 	 						break;
-	 			case 'addMenu':		$out .= $this->_Menu->AddMenu();
-	 						$out .= $this->_HomePage(GetPostOrGet('menu_menuid'));
+	 			case 'addMenu':		$out .= $this->_Menu->AddMenu(GetPostOrGet('menu_title'));
+	 						$out .= $this->_HomePage();
 	 						break;
-	 			case 'editMenu':	$out .= $this->_EditMenu(GetPostOrGet('enu_menuid'));
+	 			case 'editMenu':	$out .= $this->_EditMenu(GetPostOrGet('menu_menuid'));
+	 						break;
+	 			case 'updateMenu':	$out .= $this->_Menu->UpdateMenu(GetPostOrGet('menu_menuid'), GetPostOrGet('menu_title'));
+	 						$out .= $this->_HomePage();
 	 						break;
 	 			case 'deleteMenu':	$out .= $this->_DeleteMenu(GetPostOrGet('menu_menuid'));
+	 						break;
+	 			case 'deleteMenuSure':	$out .= $this->_Menu->DeleteMenu(GetPostOrGet('menu_menuid'));
+	 						$out .= $this->_HomePage();
 	 						break;
 	 			default:		$out .= $this->_HomePage(GetPostOrGet('menu_id'));
 	 		}
 	 		return $out; 
 	 	}
 	 	
-	 	function _HomePage($Menu_menu_id = 1) {
+	 	/**
+	 	 * Returs the HomePage of the menueditor
+	 	 * @access private
+	 	 * @param integer Menu_menuid Gives the actual menu_id to the function
+	 	 * @return string The ready HTML Code of the menu HomePage
+	 	 */
+	 	function _HomePage($Menu_menuid = 1) {
 	 		$adminLang = $this->_AdminLang;
 	 		$menu_name = '';
 	 		
-	 		if (!is_numeric($Menu_menu_id))
-	 			$Menu_menu_id = 1;
+	 		if (!is_numeric($Menu_menuid))
+	 			$Menu_menuid = 1;
 	 		
 	 		$out = '';
 	 		
@@ -97,9 +142,11 @@
  			$sql = "SELECT *
  				FROM " . DB_PREFIX . "menu";
  			$menuResult = $this->_SqlConnection->SqlQuery($sql);
+ 			$zaehler = 0;
  			while ($menu = mysql_fetch_object($menuResult)) {
- 				$out .= "\r\n\t\t\t\t\t\t\t<option value=\"" . $menu->menu_id . "\"" . (($menu->menu_id == $Menu_menu_id) ? ' selected="selected"' : '') . ">" . $menu->menu_id . ". " . $menu->menu_name . "</option>";
- 				if ($menu->menu_id == $Menu_menu_id) {
+ 				$zaehler += 1;
+ 				$out .= "\r\n\t\t\t\t\t\t\t<option value=\"" . $menu->menu_id . "\"" . (($menu->menu_id == $Menu_menuid) ? ' selected="selected"' : '') . ">$zaehler. {$menu->menu_name}</option>";
+ 				if ($menu->menu_id == $Menu_menuid) {
  					$menu_name = $menu->menu_name;
  				}
  			}
@@ -111,41 +158,48 @@
  						</label>
  						<input type=\"submit\" value=\"Ausw&auml;hlen\" class=\"button\" name=\"select_button\" />
  					</div>
- 				</form>";
- 			if ($Menu_menu_id != 1) { 
- 				$out .= "\t\t\t\t<div class=\"row\">
- 					<label class=\"row\" for=\"delete_menu_button\"><strong>Men&uuml; l&ouml;schen:</strong>
- 						<span class=\"info\">Hier k&ouml;nnen Sie das aktuell ausgew&auml;hlte Men&uuml; l&ouml;schen.</span>
- 					</label>
- 					<a href=\"admin.php?page=menueditor&amp;action=deleteMenu&amp;menu_menuid=$Menu_menu_id\" class=\"button\">Men&uuml; l&ouml;schen</a>
- 				</div>
- 				<div class=\"row\">
- 					<label class=\"row\" for=\"edit_menu_button\"><strong>Men&uuml; umbenennen:</strong>
- 						<span class=\"info\">Hier k&ouml;nnen Sie das aktuelle Men&uuml; umbenennen.</span>
- 					</label>
- 					<a href=\"admin.php?page=menueditor&amp;action=editMenu&amp;menu_menuid=$Menu_menu_id\" class=\"button\">Men&uuml; umbenennen</a>
- 				</div>";
- 			}
- 			$out .= "\t\t\t\t
+ 				</form>
  				<div class=\"row\">
  					<label class=\"row\" for=\"new_menu_button\"><strong>neues Men&uuml;:</strong>
  						<span class=\"info\">Hier k&ouml;nnen Sie neue Men&uuml;s erstellen.</span>
  					</label>
  					<a href=\"admin.php?page=menueditor&amp;action=newMenu\" class=\"button\">Neu erstellen</a>
+ 				</div>";
+ 			if ($Menu_menuid != 1) { 
+ 				$out .= "\t\t\t\t<div class=\"row\">
+ 					<label class=\"row\" for=\"edit_menu_button\"><strong>Men&uuml; umbenennen:</strong>
+ 						<span class=\"info\">Hier k&ouml;nnen Sie das aktuelle Men&uuml; umbenennen.</span>
+ 					</label>
+ 					<a href=\"admin.php?page=menueditor&amp;action=editMenu&amp;menu_menuid=$Menu_menuid\" class=\"button\">Men&uuml; umbenennen</a>
  				</div>
+ 				<div class=\"row\">
+ 					<label class=\"row\" for=\"delete_menu_button\"><strong>Men&uuml; l&ouml;schen:</strong>
+ 						<span class=\"info\">Hier k&ouml;nnen Sie das aktuell ausgew&auml;hlte Men&uuml; l&ouml;schen.</span>
+ 					</label>
+ 					<a href=\"admin.php?page=menueditor&amp;action=deleteMenu&amp;menu_menuid=$Menu_menuid\" class=\"button\">Men&uuml; l&ouml;schen</a>
+ 				</div>";
+ 			}
+ 			$out .= "\t\t\t\t
  				<div class=\"row\">
  					<label class=\"row\" for=\"new_menu_entrie\"><strong>neuen Men&uuml;eintrag:</strong>
  						<span class=\"info\">Hier klicken, um dem aktuellen Men&uuml; einen neuen Eintrag zuzuf&uuml;gen.</span>
  					</label>
- 					<a href=\"admin.php?page=menueditor&amp;menu_menuid=$Menu_menu_id&amp;action=newEntry\" class=\"button\">" . $adminLang['add_menu_entry'] . "</a>
+ 					<a href=\"admin.php?page=menueditor&amp;menu_menuid=$Menu_menuid&amp;action=newEntry\" class=\"button\">" . $adminLang['add_menu_entry'] . "</a>
  				</div>
  			</fieldset>";
 	 		
-	 		$out .= $this->_ShowMenu($Menu_menu_id, $menu_name);
+	 		$out .= $this->_ShowMenu($Menu_menuid, $menu_name);
 	 		
 	 		return $out;
 	 	}
 	 	
+	 	/**
+	 	 * Returns the entries of the selected Menu
+	 	 * @access private
+	 	 * @param integer Menu_menuid The id of the selected Menu
+	 	 * @param string Menu_name The name of the selected Menu
+	 	 * @return string HTML list of the entries defined in the selected Menu
+	 	 */
 	 	function _ShowMenu($Menu_entry_id, $Menu_name) {
 	 		$out = '';
 	 		$adminLang = $this->_AdminLang;
@@ -182,6 +236,12 @@
 	 		return $out;
 	 	}
 	 	
+	 	/**
+	 	 * Returns a form to add a new Menuentry to the selected Menu
+	 	 * @access private
+	 	 * @param integer Menu_menuid The id of the selected Menu
+	 	 * @return string HTML code of an addForm
+	 	 */
 	 	function _AddMenuEntry($Menu_menuid) {
 	 		$out = '';
 	 		$adminLang = $this->_AdminLang;
@@ -249,6 +309,12 @@
 	 		return $out;
 	 	}
 	 	
+	 	/**
+	 	 * Returns a form to edit a menuentry
+	 	 * @access private
+	 	 * @param integer Menu_entry_id The id of the menuentry to edit
+	 	 * @return string HTML code of the form
+	 	 */
 	 	function _EditMenuEntry($Menu_entry_id) {
 	 		$out = '';
 	 		$adminLang = $this->_AdminLang;
@@ -316,6 +382,13 @@
 	 		return $out;
 	 	}
 	 	
+	 	/**
+	 	 * Make sure, that the menuentry should really be deleted
+	 	 * @access private
+	 	 * @param integer Menu_entry_id id of the menuentry that should be deleted
+	 	 * @param integer Menu_entry_menuid id of the actual selected Menu to go back there afterwards
+	 	 * @return string HTML code
+	 	 */
 	 	function _DeleteMenuEntry($Menu_entry_id, $Menu_entry_menuid = 1) {
 	 		$out = '';
 	 		$adminLang = $this->_AdminLang;
@@ -331,6 +404,111 @@
 		 	<a href=\"admin.php?page=menueditor&amp;menu_id=$Menu_entry_menuid\" class=\"button\">" . $adminLang['no'] . "</a>";
 	 		
 	 		return $out;
+	 	}
+	 	
+	 	/**
+	 	 * Form to add a new Menu
+	 	 * @access private
+	 	 * @return string HTML code of the form
+	 	 */
+	 	function _AddMenu() {
+	 		$out = '';
+	 		$adminLang = $this->_AdminLang;
+	 		
+	 		$out .= "\r\n\t\t\t<fieldset>
+				<legend>Ein neues Men&uuml; hinzuf&uuml;gen</legend>
+				<form action=\"admin.php\" method=\"post\">
+					<input type=\"hidden\" name=\"page\" value=\"menueditor\" />		
+					<input type=\"hidden\" name=\"action\" value=\"addMenu\" />
+					<div class=\"row\">
+						<label for=\"menu_title\">
+							<strong>Men&uuml;titel:</strong>
+							<span class=\"info\">" . $adminLang['todo'] . "</span>
+						</label>
+						<input type=\"text\" id=\"menu_title\" name=\"menu_title\" />
+					</div>
+					<div class=\"row\">
+						<input type=\"reset\" class=\"button\" value=\"{$adminLang['reset']}\" />&nbsp;
+						<input type=\"submit\" class=\"button\" value=\"{$adminLang['save']}\" />
+					</div>
+				</form>
+			</fieldset>";
+			
+			return $out;
+	 	}
+	 	
+	 	/**
+	 	 * Form to edit a new Menu
+	 	 * @access private
+	 	 * @param integer Menu_menuid The id of the menu to edit
+	 	 * @return string HTML code of the form
+	 	 * @todo Information about DEFAULT menu
+	 	 */
+	 	function _editMenu($Menu_menuid) {
+	 		$out = '';
+	 		$adminLang = $this->_AdminLang;
+	 		
+	 		$sql = "SELECT *
+	 			FROM " . DB_PREFIX . "menu
+	 			WHERE menu_id=$Menu_menuid";
+	 		$menuResult = $this->_SqlConnection->SqlQuery($sql);
+	 		
+	 		if ($menu = mysql_fetch_object($menuResult)) {
+	 			$out .= "\r\n\t\t\t<fieldset>
+				<legend>Ein neues Men&uuml; hinzuf&uuml;gen</legend>
+				<form action=\"admin.php\" method=\"post\">
+					<input type=\"hidden\" name=\"page\" value=\"menueditor\" />		
+					<input type=\"hidden\" name=\"action\" value=\"updateMenu\" />
+					<input type=\"hidden\" name=\"menu_menuid\" value=\"$Menu_menuid\" />		
+					<div class=\"row\">
+						<label for=\"menu_title\">
+							<strong>Men&uuml;titel:</strong>
+							<span class=\"info\">" . $adminLang['todo'] . "</span>
+						</label>
+						<input type=\"text\"" . (($Menu_menuid == 1) ? ' disabled="disabled"' : '') . " id=\"menu_title\" name=\"menu_title\" value=\"{$menu->menu_name}\" />
+					</div>
+					<div class=\"row\">
+						<input type=\"reset\" class=\"button\" value=\"{$adminLang['reset']}\" />&nbsp;
+						<input type=\"submit\" class=\"button\" value=\"{$adminLang['save']}\" />
+					</div>
+				</form>
+			</fieldset>";
+	 		}
+	 		
+			return $out;
+	 	}
+	 	
+	 	/**
+	 	 * Question if a menu should really be deleted
+	 	 * @access private
+	 	 * @param integer Menu_menuid The id of the menu that should be deleted
+	 	 * @return string HTML code
+	 	 */
+	 	function _deleteMenu($Menu_menuid) {
+	 		$out = '';
+	 		$adminLang = $this->_AdminLang;
+	 		
+	 		if (is_numeric($Menu_menuid) && $Menu_menuid != 1) {
+	 			$sql = "SELECT *
+	 				FROM " . DB_PREFIX . "menu
+	 				WHERE menu_id='$Menu_menuid'";
+	 			$menuResult = $this->_SqlConnection->SqlQuery($sql);
+	 			
+	 			if ($menu = mysql_fetch_object($menuResult)) {
+	 				$out .= "\r\n\t\t\tSoll das Men&uuml; {$menu->menu_name} wirklich gel&oumlscht werden?<br />
+			<a href=\"admin.php?page=menueditor&amp;action=deleteMenuSure&amp;menu_menuid=$Menu_menuid\" class=\"button\">{$adminLang['yes']}</a>
+			<a href=\"admin.php?page=menueditor&amp;menu_id=$Menu_menuid\" class=\"button\">{$adminLang['no']}</a>";
+	 			}
+	 			else {
+	 				$out .= "Men&uuml; konnte nicht gefunden werden. <br /> <a href=\"admin.php?page=menueditor&amp;menu_id=1\" class=\"button\">{$adminLang['back']}</a>";
+	 			}
+	 		}
+	 		elseif  ($Menu_menuid == 1) {
+	 			$out .= "Das DEFAULT Men&uuml; kann aus technischen Gr&uuml;nden nicht gel&ouml;scht werden. <br />
+					<a href=\"admin.php?page=menueditor&amp;menu_id=1\" class=\"button\">{$adminLang['back']}</a>";
+	 		} 
+			
+			return $out;
 	 	}
 	 }
 ?>

@@ -107,7 +107,7 @@
  		}
  		
  		/**
- 		 * Saves a new 'version' of a MenuEntry by it's ID and MenuID without changing the SortIDs
+ 		 * Saves a new 'version' of a MenuEntry by it's ID and MenuID without changing the OrderIDs
  		 * @access public
  		 * @param integer Menu_entry_id The ID of the MenuEntry
  		 * @param integer Menu_entry_menu_id The ID of the Menu
@@ -206,10 +206,41 @@
  		}
  		
  		/**
+ 		 * Creates a new Menu
+ 		 * @access public
+ 		 * @param string Menu_title The title of the new Menu
+ 		 * @return void
+ 		 */
+ 		function AddMenu($Menu_title) {
+ 			if ($Menu_title != '') {
+ 				$sql = "INSERT INTO " . DB_PREFIX . "menu
+ 					(menu_name)
+ 					VALUES ('$Menu_title')";
+ 				$this->_SqlConnection->SqlQuery($sql);
+ 			}
+ 		}
+ 		
+ 		/**
+ 		 * Saves a new 'version' of a Menu by it's ID 
+ 		 * @access public
+ 		 * @param integer Menu_menuid The id of the menu to update
+ 		 * @param string Menu_title The title of the Menu
+ 		 * @return void
+ 		 */
+ 		function UpdateMenu($Menu_menuid, $Menu_title) {
+ 			if (is_numeric($Menu_menuid) && $Menu_title != '' && $Menu_title != '1') {
+ 				$sql = "UPDATE " . DB_PREFIX . "menu
+ 					SET menu_name='$Menu_title'
+ 					WHERE menu_id='$Menu_menuid'";
+ 				$this->_SqlConnection->SqlQuery($sql);
+ 			}
+ 		}
+ 		
+ 		/**
  		 * Deletes a MenuEntry by it's ID
+ 		 * @access public
  		 * @param integer Menu_entry_id The id of the Entry that should be deleted
  		 * @return void
- 		 * @access public
  		 */
  		function DeleteMenuEntry ($Menu_entry_id) {
  			if(is_numeric($Menu_entry_id)) {
@@ -217,6 +248,21 @@
 	 				FROM " . DB_PREFIX . "menu_entries
  					WHERE menu_entries_id=$Menu_entry_id";
  				$menuResult = $this->_SqlConnection->SqlQuery($sql);
+ 			}
+ 		}
+ 		
+ 		/**
+ 		 * Deletes a Menu by it's ID
+ 		 * @access public
+ 		 * @param integer Menu_menuid The id of the Menu that should be deleted
+ 		 * @return void
+ 		 */
+ 		function DeleteMenu ($Menu_menuid) {
+ 			if (is_numeric($Menu_menuid) && $Menu_menuid != 1) {
+ 				$sql = "DELETE
+ 					FROM " . DB_PREFIX . "menu
+ 					WHERE menu_id='$Menu_menuid'";
+ 				$this->_SqlConnection->SqlQuery($sql);
  			}
  		}
  	}

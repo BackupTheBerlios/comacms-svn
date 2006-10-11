@@ -131,12 +131,12 @@
 	 		$out = '';
 	 		
 	 		$out .= "\t\t\t<fieldset>
-				<legend>Optionen</legend>
+				<legend>{$adminLang['options']}</legend>
 				<form action=\"admin.php\" method=\"post\">
 					<input type=\"hidden\" name=\"page\" value=\"menueditor\" />
 					<div class=\"row\">
-						<label class=\"row\" for=\"menu_selector\"><strong>Menu:</strong>
- 							<span class=\"info\">Hier k&ouml;nnen sie ein Men&uuml; zum bearbeiten w&auml;hlen.</span>
+						<label class=\"row\" for=\"menu_selector\"><strong>{$adminLang['menu']}:</strong>
+ 							<span class=\"info\">{$adminLang['here_you_can_choose_a_menu_to_edit']}.</span>
  						</label>
  						<select id=\"menu_selector\" name=\"menu_id\">";
  			$sql = "SELECT *
@@ -153,38 +153,38 @@
  			$out .= "\r\n\t\t\t\t\t\t</select>
  					</div>
  					<div class=\"row\">
- 						<label class=\"row\" for=\"select_button\"><strong>Menu ausw&auml;hlen:</strong>
- 							<span class=\"info\">Hier klicken, um das selectierte Men&uuml; zu bearbeiten.</span>
+ 						<label class=\"row\" for=\"select_button\"><strong>{$adminLang['choose_menu']}:</strong>
+ 							<span class=\"info\">{$adminLang['click_here_to_edit_the_actual_menu']}.</span>
  						</label>
- 						<input type=\"submit\" value=\"Ausw&auml;hlen\" class=\"button\" name=\"select_button\" />
+ 						<input type=\"submit\" value=\"{$adminLang['choose_menu']}\" class=\"button\" name=\"select_button\" />
  					</div>
  				</form>
  				<div class=\"row\">
- 					<label class=\"row\" for=\"new_menu_button\"><strong>neues Men&uuml;:</strong>
- 						<span class=\"info\">Hier k&ouml;nnen Sie neue Men&uuml;s erstellen.</span>
+ 					<label class=\"row\" for=\"new_menu_button\"><strong>{$adminLang['new_menu']}:</strong>
+ 						<span class=\"info\">{$adminLang['here_you_can_create_a_new_menu']}.</span>
  					</label>
- 					<a href=\"admin.php?page=menueditor&amp;action=newMenu\" class=\"button\">Neu erstellen</a>
+ 					<a href=\"admin.php?page=menueditor&amp;action=newMenu\" class=\"button\">{$adminLang['create_new']}</a>
  				</div>";
  			if ($Menu_menuid != 1) { 
  				$out .= "\t\t\t\t<div class=\"row\">
- 					<label class=\"row\" for=\"edit_menu_button\"><strong>Men&uuml; umbenennen:</strong>
- 						<span class=\"info\">Hier k&ouml;nnen Sie das aktuelle Men&uuml; umbenennen.</span>
+ 					<label class=\"row\" for=\"edit_menu_button\"><strong>{$adminLang['edit_menu']}:</strong>
+ 						<span class=\"info\">{$adminLang['here_you_can_edit_the_actual_menu']}.</span>
  					</label>
- 					<a href=\"admin.php?page=menueditor&amp;action=editMenu&amp;menu_menuid=$Menu_menuid\" class=\"button\">Men&uuml; umbenennen</a>
+ 					<a href=\"admin.php?page=menueditor&amp;action=editMenu&amp;menu_menuid=$Menu_menuid\" class=\"button\">{$adminLang['edit_menu']}</a>
  				</div>
  				<div class=\"row\">
- 					<label class=\"row\" for=\"delete_menu_button\"><strong>Men&uuml; l&ouml;schen:</strong>
- 						<span class=\"info\">Hier k&ouml;nnen Sie das aktuell ausgew&auml;hlte Men&uuml; l&ouml;schen.</span>
+ 					<label class=\"row\" for=\"delete_menu_button\"><strong>{$adminLang['delete_menu']}:</strong>
+ 						<span class=\"info\">{$adminLang['here_you_can_delete_the_actual_menu']}.</span>
  					</label>
- 					<a href=\"admin.php?page=menueditor&amp;action=deleteMenu&amp;menu_menuid=$Menu_menuid\" class=\"button\">Men&uuml; l&ouml;schen</a>
+ 					<a href=\"admin.php?page=menueditor&amp;action=deleteMenu&amp;menu_menuid=$Menu_menuid\" class=\"button\">{$adminLang['delete_menu']}</a>
  				</div>";
  			}
  			$out .= "\t\t\t\t
  				<div class=\"row\">
- 					<label class=\"row\" for=\"new_menu_entrie\"><strong>neuen Men&uuml;eintrag:</strong>
- 						<span class=\"info\">Hier klicken, um dem aktuellen Men&uuml; einen neuen Eintrag zuzuf&uuml;gen.</span>
+ 					<label class=\"row\" for=\"new_menu_entrie\"><strong>{$adminLang['add_menu_entry']}:</strong>
+ 						<span class=\"info\">{$adminLang['here_you_can_add_a_new_menu_entry_to_the_actual_menu']}.</span>
  					</label>
- 					<a href=\"admin.php?page=menueditor&amp;menu_menuid=$Menu_menuid&amp;action=newEntry\" class=\"button\">" . $adminLang['add_menu_entry'] . "</a>
+ 					<a href=\"admin.php?page=menueditor&amp;menu_menuid=$Menu_menuid&amp;action=newEntry\" class=\"button\">{$adminLang['add_menu_entry']}</a>
  				</div>
  			</fieldset>";
 	 		
@@ -213,7 +213,7 @@
 	 		$numRows = mysql_num_rows($menuResult);
 	 		if($numRows > 0)
 	 			$out .= "\r\n\t\t\t<fieldset>
-	 			<legend>Aktuelles Men&uuml;: $Menu_name</legend>
+	 			<legend>{$adminLang['menu_actual']}: $Menu_name</legend>
 				<ol>";
 	 		
 	 		while ($menuEntry = mysql_fetch_object($menuResult)) {
@@ -256,7 +256,7 @@
 					<div class=\"row\">
 						<label for=\"menu_entry_id\">
 							<strong>{$adminLang['belongs_to_menu']}:</strong>
-							<span class=\"info\">" . $adminLang['todo'] . "</span>
+							<span class=\"info\">{$adminLang['this_is_the_menu_the_new_entry_should_be_added_to']}.</span>
 						</label>
 						<select id=\"menu_entry_id\" name=\"menu_entry_menuid\">";
 			$sql = "SELECT *
@@ -271,31 +271,23 @@
 					<div class=\"row\">
 						<label for=\"menu_entry_title\">
 							<strong>{$adminLang['menu_entry_title']}:</strong>
-							<span class=\"info\">" . $adminLang['todo'] . "</span>
+							<span class=\"info\">{$adminLang['this_is_the_title_of_the_menuentry_that_will_be_shown_in_the_menu']}.</span>
 						</label>
 						<input type=\"text\" id=\"menu_entry_title\" name=\"menu_entry_title\" />
 					</div>
 					<div class=\"row\">
 						<label for=\"menu_entry_link\">
 							<strong>{$adminLang['menu_entry_link']}:</strong>
-							<span class=\"info\">" . $adminLang['todo'] . "</span>
+							<span class=\"info\">{$adminLang['choose_here_the_page_to_which_the_link_should_refer']}</span>
 						</label>
 						<select id=\"menu_entry_link\" name=\"menu_entry_link\">
-							<!--<option value=\"0\" selected=\"selected\">externes Ziel</option>-->
 							" . $pageStructure->PageStructurePulldown(0, 0, '',  -1) . "
 						</select>
 					</div>
-					<!--<div class=\"row\">
-						<label for=\"menu_entry_extern_link\">
-							<strong>{$adminLang['menu_entry_extern']}:</strong>
-							<span class=\"info\">" . $adminLang['todo'] . "</span>
-						</label>
-						<input type=\"text\" id=\"menu_entry_extern_link\" name=\"menu_entry_extern_link\" />
-					</div>-->
 					<div class=\"row\">
 						<label for=\"menu_entry_css_id\">
 							<strong>{$adminLang['menu_entry_css']}:</strong>
-							<span class=\"info\">" . $adminLang['todo'] . "</span>
+							<span class=\"info\">{$adminLang['type_in_here_the_css_id_for_the_menuentry_if_you_need_one_for_it']}</span>
 						</label>
 						<input type=\"text\" id=\"menu_entry_css_id\" name=\"menu_entry_css_id\" />
 					</div>
@@ -336,7 +328,7 @@
 					<div class=\"row\">
 						<label for=\"menu_entry_menuid\">
 							<strong>{$adminLang['belongs_to_menu']}:</strong>
-							<span class=\"info\">" . $adminLang['todo'] . "</span>
+							<span class=\"info\">{$adminLang['this_is_the_title_of_the_menuentry_that_will_be_shown_in_the_menu']}</span>
 						</label>
 						<select id=\"menu_entry_menuid\" name=\"menu_entry_menuid\">";
 			
@@ -352,14 +344,14 @@
 					<div class=\"row\">
 						<label for=\"menu_entry_title\">
 							<strong>{$adminLang['menu_entry_title']}:</strong>
-							<span class=\"info\">" . $adminLang['todo'] . "</span>
+							<span class=\"info\">{$adminLang['this_is_the_title_of_the_menuentry_that_will_be_shown_in_the_menu']}</span>
 						</label>
 						<input type=\"text\" id=\"menu_entry_title\" name=\"menu_entry_title\" value=\"" . $menuEntry->menu_entries_title . "\" />
 					</div>
 					<div class=\"row\">
 						<label for=\"menu_entry_link\">
 							<strong>{$adminLang['menu_entry_link']}:</strong>
-							<span class=\"info\">" . $adminLang['todo'] . "</span>
+							<span class=\"info\">{$adminLang['choose_here_the_page_to_which_the_link_should_refer']}</span>
 						</label>
 						<select id=\"menu_entry_link\" name=\"menu_entry_link\">
 							" . $pageStructure->PageStructurePulldown(0, 0, '',  -1, $menuEntry->menu_entries_page_id) . "
@@ -368,7 +360,7 @@
 					<div class=\"row\">
 						<label for=\"menu_entry_css_id\">
 							<strong>{$adminLang['menu_entry_css']}:</strong>
-							<span class=\"info\">" . $adminLang['todo'] . "</span>
+							<span class=\"info\">{$adminLang['type_in_here_the_css_id_for_the_menuentry_if_you_need_one_for_it']}</span>
 						</label>
 						<input type=\"text\" id=\"menu_entry_css_id\" name=\"menu_entry_css_id\" value=\"" . $menuEntry->menu_entries_css_id . "\" />
 					</div>
@@ -422,8 +414,8 @@
 					<input type=\"hidden\" name=\"action\" value=\"addMenu\" />
 					<div class=\"row\">
 						<label for=\"menu_title\">
-							<strong>Men&uuml;titel:</strong>
-							<span class=\"info\">" . $adminLang['todo'] . "</span>
+							<strong>{$adminLang['menu_title']}:</strong>
+							<span class=\"info\">{$adminLang['type_here_the_title_of_the_menu']}.</span>
 						</label>
 						<input type=\"text\" id=\"menu_title\" name=\"menu_title\" />
 					</div>
@@ -463,7 +455,7 @@
 					<div class=\"row\">
 						<label for=\"menu_title\">
 							<strong>Men&uuml;titel:</strong>
-							<span class=\"info\">" . $adminLang['todo'] . "</span>
+							<span class=\"info\">{$adminLang['type_here_the_title_of_the_menu']}.</span>
 						</label>
 						<input type=\"text\"" . (($Menu_menuid == 1) ? ' disabled="disabled"' : '') . " id=\"menu_title\" name=\"menu_title\" value=\"{$menu->menu_name}\" />
 					</div>
@@ -495,7 +487,7 @@
 	 			$menuResult = $this->_SqlConnection->SqlQuery($sql);
 	 			
 	 			if ($menu = mysql_fetch_object($menuResult)) {
-	 				$out .= "\r\n\t\t\tSoll das Men&uuml; {$menu->menu_name} wirklich gel&oumlscht werden?<br />
+	 				$out .= "\r\n\t\t\t" . sprintf($adminLang['shall_the_menu_%menutitle%_really_be_deleted?'], $menu->menu_name) . "<br />
 			<a href=\"admin.php?page=menueditor&amp;action=deleteMenuSure&amp;menu_menuid=$Menu_menuid\" class=\"button\">{$adminLang['yes']}</a>
 			<a href=\"admin.php?page=menueditor&amp;menu_id=$Menu_menuid\" class=\"button\">{$adminLang['no']}</a>";
 	 			}

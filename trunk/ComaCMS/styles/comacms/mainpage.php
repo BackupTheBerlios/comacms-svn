@@ -3,9 +3,9 @@
 				<h1 id="title">ComaCMS</h1>
 			</div>
 			<ul id="menu">
-				<MENU:loop>
+				<MENU_DEFAULT:loop>
 				<li{LINK_STYLE}><a href="{LINK}">{LINK_TEXT}</a></li>
-				</MENU>		
+				</MENU_DEFAULT>		
 					</ul>
 			<div id="content">
 				<inlinemenu:condition>

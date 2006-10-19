@@ -390,7 +390,7 @@ ALTER TABLE `cms_files` ADD `file_creator` INT( 10 ) DEFAULT '0' NOT NULL ;
 
 #r265
 #Added field to describe pictures in the gallery
-ALTER TABLE `cms_gallery` ADD `gallery_descriptiont` TEXT NOT NULL ;
+ALTER TABLE `cms_gallery` ADD `gallery_description` TEXT NOT NULL ;
 
 #r294
 CREATE TABLE `comacms_menu_entries` (
@@ -416,3 +416,7 @@ ALTER TABLE `comacms_menu` DROP `menu_css_class` ,
 DROP `menu_css_id` ;
 ALTER TABLE `comacms_menu_entries` DROP `menu_entries_css_class` ;
 ALTER TABLE `comacms_menu_entries` CHANGE `menu_entries_text` `menu_entries_title` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL;
+
+#r300
+#Added field containing the page_id
+ALTER TABLE `comacms_menu_entries` ADD `menu_entries_page_id` INT( 10 ) UNSIGNED NULL ;

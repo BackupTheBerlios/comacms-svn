@@ -1,19 +1,19 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
- #----------------------------------------------------------------------#
- # file			: admin_lang.php				#
- # created		: 2005-07-12					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
- # email		: comacms@williblau.de				#
- #----------------------------------------------------------------------#
- # This program is free software; you can redistribute it and/or modify	#
- # it under the terms of the GNU General Public License as published by	#
- # the Free Software Foundation; either version 2 of the License, or	#
- # (at your option) any later version.					#
- #----------------------------------------------------------------------#
+ #----------------------------------------------------------------------
+ # file                 : admin_lang.php
+ # created              : 2005-07-12
+ # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # email                : comacms@williblau.de
+ #----------------------------------------------------------------------
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #----------------------------------------------------------------------
 
 	$admin_lang = array();
 	$admin_lang['yes'] = 'Yes';
@@ -234,6 +234,7 @@
 	$admin_lang['installation_complete'] = 'Installation complete!';
 	$admin_lang['the_form_was_not_filled_in_completely'] = 'The form was not filled in completely.';
 	$admin_lang['the_repetition_of_the_password_was_incorrect'] = 'The repetition of the password was incorrect.';
+	$admin_lang['administration'] = 'Administration';
 	//article module
 	$admin_lang['articles'] = 'Articles';
 	$admin_lang['articles_module'] = 'Articlesmodule';

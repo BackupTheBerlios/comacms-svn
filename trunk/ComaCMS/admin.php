@@ -1,19 +1,19 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
- # file			: admin.php	
- # created		: 2005-07-11					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
- # email		: comacms@williblau.de				#
- #----------------------------------------------------------------------#
- # This program is free software; you can redistribute it and/or modify	#
- # it under the terms of the GNU General Public License as published by	#
- # the Free Software Foundation; either version 2 of the License, or	#
- # (at your option) any later version.					#
- #----------------------------------------------------------------------#
+ # file                 : admin.php	
+ # created              : 2005-07-11
+ # copyright            : (C) 2005-2006 The ComaCMS-Team	
+ # email                : comacms@williblau.de
+ #----------------------------------------------------------------------
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #----------------------------------------------------------------------
 
  	
   	/**
@@ -53,7 +53,7 @@
 	// add menu entries for activated modules
 	
 	// get the activated modules
-	$modulesActivated = unserialize ($config->Get('modules_activated'));
+	$modulesActivated = unserialize($config->Get('modules_activated'));
 	// if no data is saved...
 	if(!is_array($modulesActivated))
 		// create the array to make arrayfunctions possible
@@ -204,7 +204,7 @@
 	}
 	$output->SetReplacement('MENU_DEFAULT' , $menu);
 	$output->SetReplacement('TEXT' , $text);
-	$output->Title = $title;
+	$output->Title = $admin_lang['administration'] . ' - ' . $title;
 	$output->SetCondition('notathome', true);
 	$output->SetCondition('notinindex', true);
 	$output->SetCondition('notinadmin', false);

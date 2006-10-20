@@ -1,7 +1,7 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : index.php
@@ -56,7 +56,8 @@
 	// is the actual page the default page?
 	if($config->Get('default_page', '1') != $outputpage->PageID)
 		$output->SetCondition('notathome' , true);
-	$output->Title = $outputpage->Title;
+	$output->Title = $config->Get('pagename') . ' - ' . $outputpage->Title;
+	$output->SetMeta('keywords', $config->Get('keywords'));
 	$output->Language = $outputpage->Language;
 	// is the user an admin
 	if($user->IsAdmin) {
@@ -154,23 +155,6 @@
 			$output->Template = str_replace($module['identifer'], $$moduleName->UseModule($module['identifer'], str_replace('&amp;', '&', $moduleParameter)), $output->Template);
 	}
 	
-	/*
-	if(strpos($outputpage->Text, '[dates]') !== false)
-		$outputpage->Text = str_replace('[dates]', nextDates(10), $outputpage->Text);
-	
-	if (strpos ($page, "[gbook-")) {
-		include("gbook.php");
-		$page = str_replace("[gbook-input]", gbook_input(), $page);
-		$page = str_replace("[gbook-pages]", gbook_pages(), $page);
-		$page = str_replace("[gbook-content]", gbook_content(), $page);
-	}
-	
-	if (strpos ($page, "[contact]")) {
-		include("contact.php");
-		$page = str_replace("[contact]", contact_formular(), $page);
-	}
-	*/
-
 	// paste the text to the template-generator
 	$output->SetReplacement('TEXT' , $outputpage->Text);
 	$output->GenerateOutput();

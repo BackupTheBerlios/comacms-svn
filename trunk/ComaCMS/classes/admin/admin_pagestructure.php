@@ -1,19 +1,19 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
- #----------------------------------------------------------------------#
- # file			: admin_pagestructure.php			#
- # created		: 2005-09-04					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
- # email		: comacms@williblau.de				#
- #----------------------------------------------------------------------#
- # This program is free software; you can redistribute it and/or modify	#
- # it under the terms of the GNU General Public License as published by	#
- # the Free Software Foundation; either version 2 of the License, or	#
- # (at your option) any later version.					#
- #----------------------------------------------------------------------#
+ #----------------------------------------------------------------------
+ # file                 : admin_pagestructure.php
+ # created              : 2005-09-04
+ # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # email                : comacms@williblau.de
+ #----------------------------------------------------------------------
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #----------------------------------------------------------------------
 
 	/**
  	 * @ignore
@@ -221,8 +221,8 @@
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"generateMenu\" />\r\n";
 		 	$out .= $this->_showStructure(0);
-		 	$out .= "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"" . $adminLang['generate_mainmenu'] . "\" />
-			</form>
+		 	//$out .= "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"" . $adminLang['generate_mainmenu'] . "\" />
+			$out .= "</form>
 			<script type=\"text/javascript\" language=\"JavaScript\">
 				SetHover('span', 'structure_row', 'structure_row_hover', function additional() {document.getElementById('menu').className = '';});
 			</script>";

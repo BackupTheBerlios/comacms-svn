@@ -1,7 +1,7 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : admin_lang.php
@@ -234,6 +234,7 @@
 	$admin_lang['installation_complete'] = 'Installation abgeschlossen!';
 	$admin_lang['the_form_was_not_filled_in_completely'] = 'Das Formular ist nicht vollst&auml;ndig ausgef&uuml;llt worden.';
 	$admin_lang['the_repetition_of_the_password_was_incorrect'] = 'Die Wiederholung des Passwortes ist falsch.';
+	$admin_lang['administration'] = 'Administration';
 	//article module
 	$admin_lang['articles'] = 'Artikel';
 	$admin_lang['articles_module'] = 'Artikelmodul';

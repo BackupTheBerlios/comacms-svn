@@ -1,13 +1,13 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
- # file			: common.php
- # created		: 2005-08-05
- # copyright		: (C) 2005 The ComaCMS-Team
- # email		: comacms@williblau.de
+ # file                 : common.php
+ # created              : 2005-08-05
+ # copyright            : (C) 2005 The ComaCMS-Team
+ # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
  # it under the terms of the GNU General Public License as published by

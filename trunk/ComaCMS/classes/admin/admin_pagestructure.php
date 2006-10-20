@@ -855,7 +855,8 @@
 						<legend>Erstelle neuen InlineMen&uuml;-Interner-Link:</legend>
 						<div class=\"row\"><label>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></label><input type=\"text\" name=\"text\" value=\"\" /></div>
 						<div class=\"row\"><label>Interne Seite<span class=\"info\">Das ist die interne Seite, auf die der Link sp&auml;ter f&uuml;hren soll.</span></label><select name=\"link\">";
-						$out .= $this->_structurePullDown(0);
+						$out .= $this->_PageStructure->LoadParentIDs();
+						$out .= $this->_PageStructure->PageStructurePulldown(0);
 				$out .= "</select></div>
 						<div class=\"row\">
 							<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\" />

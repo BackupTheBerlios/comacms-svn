@@ -41,6 +41,10 @@
 	 */
 	include('./lang/' . $user->Language . '/admin_lang.php');
 	
+	/*
+	 * wtf are we doin here?
+	 * this causes to much memory usage if we have some more menues...
+	 */
 	$sql = "SELECT *
 		FROM " . DB_PREFIX . "menu";
 	$menus = $sqlConnection->SqlQuery($sql);

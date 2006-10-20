@@ -3,17 +3,17 @@
  * @package ComaCMS
  * @copyright (C) 2005 The ComaCMS-Team
  */
- #----------------------------------------------------------------------#
- # file			: config.php					#
- # created		: 2005-09-03					#
- # copyright		: (C) 2005 The ComaCMS-Team			#
- # email		: comacms@williblau.de				#
- #----------------------------------------------------------------------#
- # This program is free software; you can redistribute it and/or modify	#
- # it under the terms of the GNU General Public License as published by	#
- # the Free Software Foundation; either version 2 of the License, or	#
- # (at your option) any later version.					#
- #----------------------------------------------------------------------#
+ #----------------------------------------------------------------------
+ # file                 : config.php
+ # created              : 2005-09-03
+ # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # email                : comacms@williblau.de
+ #----------------------------------------------------------------------
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #----------------------------------------------------------------------
 	/**
 	 * make sure that all used functions are available
 	 */

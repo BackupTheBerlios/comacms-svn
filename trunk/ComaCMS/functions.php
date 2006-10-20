@@ -3,17 +3,17 @@
  * @package ComaCMS
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
- #----------------------------------------------------------------------#
- # file 		: functions.php					#
- # created		: 2005-06-17					#
- # copyright		: (C) 2005-2006 The ComaCMS-Team		#
- # email		: comacms@williblau.de				#
- #----------------------------------------------------------------------#
- # This program is free software; you can redistribute it and/or modify	#
- # it under the terms of the GNU General Public License as published by	#
- # the Free Software Foundation; either version 2 of the License, or	#
- # (at your option) any later version.					#
- #----------------------------------------------------------------------#
+ #----------------------------------------------------------------------
+ # file                 : functions.php
+ # created              : 2005-06-17
+ # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # email                : comacms@williblau.de
+ #----------------------------------------------------------------------
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #----------------------------------------------------------------------
 
 	/**
 	 * @deprecated 27.01.2006
@@ -98,76 +98,7 @@
 		return 0 === strpos($string, $search);
 	}
 
-	/*function nextDates($count = 5) {
-		$sql = "SELECT *
-			FROM " . DB_PREFIX . "dates
-			WHERE date_date >= " . mktime() . "
-			ORDER BY date_date ASC
-			LIMIT 0, $count";
-		$result = db_result($sql);
-		$out = "<table class=\"dates\"><thead>
-				<tr>
-					<td>Datum</td>
-					<td>Ort</td>
-					<td>Veranstaltung</td>
-					</tr></thead>";
-		while($date = mysql_fetch_object($result)) {
-			$out .= "<tr>
-				<td>" . date("d.m.Y H:i",$date->date_date) . "</td>
-					<td>$date->date_place</td>
-					<td>$date->date_topic</td>
-				</tr>";
-		}
-		$out .= "</table>";
-		return $out;
-	}*/
-
-	/*function articlesPreview($count = 5) {
-		global $config;
-		$sql = "SELECT *
-			FROM " . DB_PREFIX . "articles
-			ORDER BY article_date DESC
-			LIMIT 0, $count";
-		$result = db_result($sql);
-		$articlesTitle =  $config->Get('articles_title', '');
-		if($articlesTitle != '')
-			$articlesTitle = '<h3>' . $articlesTitle . '</h3>';
-		$out = '</p><div class="articles-block">' . $articlesTitle;
-		$imgmax = 100;
-		$inlinemenu_folder = $config->Get('thumbnailfolder', 'data/thumbnails/');
-		$dateFormat = $config->Get('articles_date_format', 'd.m.Y');
-		$dateFormat .= ' ' . $config->Get('articles_time_format', 'H:i:s'); 
-		while($data = mysql_fetch_object($result)) {
-			$thumb = '';
-			$size = '';
-			$showAuthor = $config->Get('articles_display_author', 1);
-			if($data->article_image != '') {
-				$filename = basename($data->article_image);
-				if(file_exists($inlinemenu_folder . $imgmax . '_' . $filename)) {
-					//$size = getimagesize($inlinemenu_folder . $imgmax . '_' . $filename);
-					
-					$thumb = '<img class="article_image" title="' . $data->article_title . '" alt="' . $data->article_title . '" src="' . generateUrl($inlinemenu_folder . $imgmax . '_' . $filename) . '" />';
-					$size = getimagesize($inlinemenu_folder . $imgmax . '_' . $filename);
-					$size = ' style="min-height:' . ($size[1] - (13 * $showAuthor)) . 'px"';
-				}
-			}
-			
-			$out .= "\t\t\t<div class=\"article\">
-				<div class=\"article-title\">
-					<span class=\"article-date\">" . date($dateFormat, $data->article_date) . "</span>
-					$data->article_title
-				</div><div class=\"article_inside\"$size>
-				$thumb" . nl2br($data->article_description) . " <a href=\"article.php?id=$data->article_id\" title=\"Den vollst&auml;ndigen Artikel '$data->article_title' lesen\">mehr...</a></div>\r\n";
-					 
-			if($showAuthor == 1)	
-				$out .= "<div class=\"article-author\">" . getUserByID($data->article_creator) . "</div>\r\n";
-			$out .= "
-			</div>\r\n";
-		}
-		$out .= '</div><p>';
-		return $out;
-	}*/
-
+	
 	/**
 	 * GetPostOrGet
 	 *
@@ -390,13 +321,13 @@
 			$encoded = $urlData['scheme'] . '://' . rawurlencode($urlData['host']);
 			if(isset($urlData['path'])) { // TODO: Try to fast me up!
 				$urlData['path']= rawurldecode($urlData['path']);
-				$encoded .= preg_replace( "|([\/]{0,1})(.+?)([\/]{0,1})|e", "'\\1' . rawurlencode('\\2') . '\\3'", $urlData['path'] );
+				$encoded .= preg_replace( "|([\/]{0,1})(.+?)([\/]{1})|e", "'\\1' . rawurlencode('\\2') . '\\3'", $urlData['path'] );
 			}
 			if(isset($urlData['query'])) { // TODO: Try to fast me up!
 				$urlData['query']= rawurldecode($urlData['query']);
 				$urlData['query'] = str_replace('&amp;amp;', '&', $urlData['query']);
 				$urlData['query'] = str_replace('&amp;', '&', $urlData['query']);
-				$encoded .= '?' . preg_replace( "|([&=]{0,1})(.+?)([&=]{0,1})|e", "'\\1' . rawurlencode('\\2') . '\\3'", $urlData['query'] );
+				$encoded .= '?' . str_replace('&', '&amp;', preg_replace( "|([&=]{0,1})(.+?)([&=]{0,1})|e", "'\\1' . rawurlencode('\\2') . '\\3'", $urlData['query'] ));
 			} 
 			if(isset($urlData['fragment']))
 				$encoded .= "#" . rawurlencode(rawurldecode($urlData['fragment']));

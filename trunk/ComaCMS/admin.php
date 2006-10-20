@@ -3,8 +3,8 @@
  * @package ComaCMS
  * @copyright (C) 2005 The ComaCMS-Team
  */
- #----------------------------------------------------------------------#
- # file			: admin.php					#
+ #----------------------------------------------------------------------
+ # file			: admin.php	
  # created		: 2005-07-11					#
  # copyright		: (C) 2005 The ComaCMS-Team			#
  # email		: comacms@williblau.de				#

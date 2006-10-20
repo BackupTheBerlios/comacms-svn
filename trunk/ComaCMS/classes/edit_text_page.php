@@ -3,17 +3,17 @@
  * @package ComaCMS
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
- #----------------------------------------------------------------------#
- # file			: edit_text_page.php				#
- # created		: 2005-09-08					#
- # copyright		: (C) 2005-2006 The ComaCMS-Team		#
- # email		: comacms@williblau.de				#
- #----------------------------------------------------------------------#
- # This program is free software; you can redistribute it and/or modify	#
- # it under the terms of the GNU General Public License as published by	#
- # the Free Software Foundation; either version 2 of the License, or	#
- # (at your option) any later version.					#
- #----------------------------------------------------------------------#
+ #----------------------------------------------------------------------
+ # file                 : edit_text_page.php
+ # created              : 2005-09-08
+ # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # email                : comacms@williblau.de
+ #----------------------------------------------------------------------
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #----------------------------------------------------------------------
 
 	/**
 	 * @package ComaCMS
@@ -204,13 +204,13 @@
 				}
 				$page_text = str_replace('&', '&amp;', $page_text);
 				// FIXME: doesn't solve the problem with umlauts
-				/*$page_text = str_replace('ä', '&auml;', $page_text);
-				$page_text = str_replace('Ä', '&Auml;', $page_text);
-				$page_text = str_replace('ü', '&uuml;', $page_text);
-				$page_text = str_replace('Ü', '&Uuml;', $page_text);
-				$page_text = str_replace('ö', '&ouml;', $page_text);
-				$page_text = str_replace('Ö', '&Ouml;', $page_text);
-				$page_text = str_replace('ß', '&szlig;', $page_text);
+				/*$page_text = str_replace('ï¿½', '&auml;', $page_text);
+				$page_text = str_replace('ï¿½', '&Auml;', $page_text);
+				$page_text = str_replace('ï¿½', '&uuml;', $page_text);
+				$page_text = str_replace('ï¿½', '&Uuml;', $page_text);
+				$page_text = str_replace('ï¿½', '&ouml;', $page_text);
+				$page_text = str_replace('ï¿½', '&Ouml;', $page_text);
+				$page_text = str_replace('ï¿½', '&szlig;', $page_text);
 				**/
 				$page_text = str_replace('<', '&lt;', $page_text);
 				$page_text = str_replace('>', '&gt;', $page_text);

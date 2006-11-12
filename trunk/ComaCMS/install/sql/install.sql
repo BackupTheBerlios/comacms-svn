@@ -73,22 +73,28 @@ DROP TABLE IF EXISTS {DB_PREFIX}articles;
 		DROP TABLE IF EXISTS {DB_PREFIX}menu;
 		CREATE TABLE {DB_PREFIX}menu (
 			menu_id int(10) unsigned NOT NULL auto_increment,
-			menu_link varchar(255) NOT NULL default '',
-  			menu_text varchar(30) NOT NULL default '',
-  			menu_new enum('yes','no') NOT NULL default 'no',
-			menu_orderid int(10) unsigned default NULL,
-			menu_menuid int(10) NOT NULL default '1',
-			menu_page_id int(10) NOT NULL default '0',
-			PRIMARY KEY  (menu_id),
-			KEY `menu_page_id` (menu_page_id)
+			menu_name VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+			menu_title VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+			PRIMARY KEY  (menu_id)
+		);
+		DROP TABLE IF EXISTS {DB_PREFIX}menu_entries;
+		CREATE TABLE {DB_PREFIX}menu_entries (
+			menu_entries_id INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			menu_entries_link VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+			menu_entries_title VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+			menu_entries_new ENUM( 'yes', 'no' ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL DEFAULT 'no',
+			menu_entries_css_id VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+			menu_entries_orderid INT( 10 ) UNSIGNED NULL,
+			menu_entries_menuid INT( 10 ) NOT NULL DEFAULT '1',
+			menu_entries_page_id INT( 10 ) UNSIGNED NULL
 		);
 		DROP TABLE IF EXISTS {DB_PREFIX}news;
 		CREATE TABLE {DB_PREFIX}news (
 			id int(10) unsigned NOT NULL auto_increment,
 			userid int(10) unsigned NOT NULL default '0',
-			`date` int(20) NOT NULL default '0',
+			date int(20) NOT NULL default '0',
 			title varchar(60) NOT NULL default '',
-			`text` text NOT NULL,
+			text text NOT NULL,
 			PRIMARY KEY  (id)
 		);
 		DROP TABLE IF EXISTS {DB_PREFIX}online;
@@ -231,5 +237,7 @@ DROP TABLE IF EXISTS {DB_PREFIX}articles;
 		VALUES ('news_time_format', 'H:i:s');
 		INSERT INTO {DB_PREFIX}config (config_name, config_value)
 		VALUES ('news_display_count', '6');
-		INSERT INTO {DB_PREFIX}menu (menu_link, menu_text, menu_new, menu_orderid, menu_menuid, menu_page_id)
+		INSERT INTO {DB_PREFIX}menu (menu_name, menu_title)
+		VALUES ('DEFAULT', 'DEFAULT');
+		INSERT INTO {DB_PREFIX}menu_entries (menu_entries_link, menu_entries_title, menu_entries_new, menu_entries_orderid, menu_entries_menuid, menu_entries_page_id)
 		VALUES ('l:home', 'Home', 'no', 0, 1, 1);

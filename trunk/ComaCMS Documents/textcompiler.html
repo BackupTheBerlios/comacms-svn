@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<title>Features of the "Textcompiler"</title>
+		<meta name="AUTHOR" content="The ComaCMS-Team" />
+    
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    	<style type="text/css">
+   		/* <![CDATA[ */
+		h1 {
+		  text-align: center;
+		}
+		h2 {
+		  margin-left: 0.5em;
+		  clear: left;
+		}
+		h3 {
+		  margin-left: 1em;
+		}
+		h4 {
+		  margin-left: 3em;
+		}
+		pre {
+		  margin-left: 1em;
+		  margin-right: 1em;;
+		  border: 1px dashed grey;
+		  overflow-y: auto;
+		  overflow-x: auto;
+		}
+		div {
+		  border : 1px solid #000;
+		  width : 47%;
+		  margin : 0.5em;
+		  min-height: 16em;
+		  float: left;
+		}
+	    /* ]]> */
+	    </style>
+	</head>
+	<body>
+		<h1>Features of the "Textcompiler"</h1>
+		
+		<h2>Default Fomrmattings</h2>
+		<div>
+			<h3>Bold</h3>
+			<h4>Input:</h4>
+			<pre>**TEXT**</pre>
+			<h4>Output:</h4>
+			<pre>&lt;strong&gt;TEXT&lt;/strong&gt;</pre>
+		</div>
+		
+		<div>
+			<h3>Underline</h3>
+			<h4>Input:</h4>
+			<pre>__TEXT__</pre>
+			<h4>Output:</h4>
+			<pre>&lt;u&gt;TEXT&lt;/u&gt;</pre>
+		</div>
+		
+		<div>
+			<h3>Italic</h3>
+			<h4>Input:</h4>
+			<pre>//TEXT//</pre>
+			<h4>Output:</h4>
+			<pre>&lt;em&gt;TEXT&lt;/em&gt;</pre>
+		</div>
+		
+		<div>
+			<h3>Center</h3>
+			<h4>Input:</h4>
+			<pre>&lt;center&gt;TEXT&lt;center&gt;</pre>
+			<h4>Output:</h4>
+			<pre>&lt;div class="center"&gt;TEXT&lt;/div&gt;</pre>
+		</div>
+
+		<h2>Headers</h2>
+		
+		<div>
+			<h3>H2 (highest)</h3>
+			<h4>Input:</h4>
+			<pre>== TEXT ==</pre>
+			<h4>Output:</h4>
+			<pre>&lt;h2&gt;TEXT&lt;/h2&gt;</pre>
+		</div>
+		
+		<div>
+			<h3>H3 (middle)</h3>
+			<h4>Input:</h4>
+			<pre>=== TEXT ===</pre>
+			<h4>Output:</h4>
+			<pre>&lt;h3&gt;TEXT&lt;/h3&gt;</pre>
+		</div>
+		
+		<div>
+			<h3>H4 (lowest)</h3>
+			<h4>Input:</h4>
+			<pre>==== TEXT ====</pre>
+			<h4>Output:</h4>
+			<pre>&lt;h4&gt;TEXT&lt;/h4&gt;</pre>
+		</div>
+		<h2>Links</h2>
+		<div>
+			<h3>Link</h3>
+			<h4>Input:</h4>
+			<pre>www.example.com</pre>
+			<h4>Output:</h4>
+			<pre>&lt;a href="http://www.example.com" class="link_extern"&gt;
+www.example.com&lt;/a&gt;</pre>
+		</div>
+		
+		<div>
+			<h3>Link</h3>
+			<h4>Input:</h4>
+			<pre>[[www.example.com|Example]]</pre>
+			<h4>Output:</h4>
+			<pre>&lt;a href="http://www.example.com" class="link_extern"&gt;Example&lt;/a&gt;</pre>
+		</div>
+		
+		<div>
+			<h3>Link(intern)</h3>
+			<h4>Input:</h4>
+			<pre>[[intern|Example]]</pre>
+			<h4>Output:</h4>
+			<pre>&lt;a href="index.php?page=intern" class="link_intern"&gt;Example&lt;/a&gt;</pre>
+		</div>
+		
+		<div>
+			<h3>Email</h3>
+			<h4>Input:</h4>
+			<pre>&lt;name@example.com&gt;</pre>
+			<h4>Output:</h4>
+			<pre>&lt;a href="mailto:name [at] example [dot] com" class="link_email"&gt;
+name [at] example [dot] com&lt;/a&gt;</pre>
+		</div>
+		
+	<!-- <div>
+			<h3>Email</h3>
+			<h4>Input:</h4>
+			<pre>[[name@example.com|Mail]]</pre>
+			<h4>Output:</h4>
+			<pre>&lt;a href="mailto:name [at] example [dot] com" class="link_email"&gt;
+Mail&lt;/a&gt;</pre>
+		</div>
+		-->
+		<div>
+			<h3>Image</h3>
+		</div>
+		
+		<div>
+			<h3>List(ordered)</h3>
+		</div>
+		
+		<div>
+			<h3>List(unordered)</h3>
+		</div>
+		
+		<div>
+			<h3>Table</h3>
+			<h4>Input:</h4>
+			<pre>^TEXT^TEXT^TEXT^
+^TEXT|TEXT|TEXT|
+^TEXT|TEXT|TEXT|</pre>
+			<h4>Output:</h4>
+			<pre>&lt;table&gt;
+	&lt;tr&gt;
+		&lt;th&gt;
+			TEXT
+		&lt;/th&gt;
+		&lt;th&gt;
+			TEXT
+		&lt;/th&gt;
+		&lt;th&gt;
+			TEXT
+		&lt;/th&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;th&gt;
+			TEXT
+		&lt;/th&gt;
+		&lt;td&gt;
+			TEXT
+		&lt;/td&gt;
+		&lt;td&gt;
+			TEXT
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;th&gt;
+			TEXT
+		&lt;/th&gt;
+		&lt;td&gt;
+			TEXT
+		&lt;/td&gt;
+		&lt;td&gt;
+			TEXT
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;</pre>
+		</div>
+	</body>
+</html>

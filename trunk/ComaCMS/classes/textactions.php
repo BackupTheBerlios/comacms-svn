@@ -24,6 +24,7 @@
  	define('EMAIL_DEFAULT', 0);
  	define('EMAIL_ANTISPAM_TEXT', 1);
  	define('EMAIL_ANTISPAM_ASCII', 2);
+ 	
  	/** TextActions
  	 * This class contains the functions which are used to convert plain text into a html-sourcecode
  	 * 
@@ -39,7 +40,7 @@
 		 */
 		function ConvertToPreHTML($Text) {
 
-			$Text = stripslashes($Text);
+			$Text = stripslashes($Text) . " ";
 			// make all EOL-sings equal
 			$Text = preg_replace("!(\r\n)|(\r)!","\n",$Text);
 			
@@ -55,7 +56,7 @@
 			$Text = str_replace('&lt;', '<', $Text);
 
 			// remove comments
-			$Text = preg_replace("/<!--(.+?)-->/s",'',$Text);
+			$Text = preg_replace("/<!--(.+?)-->/s", '', $Text);
 			
 			// extract all text we won't convert <plain>...TEXT...</plain>
 			preg_match_all("/<plain>(.+?)<\/plain>/s", $Text, $matches);
@@ -93,7 +94,7 @@
 			$Text = preg_replace("#(?<!\[\[)($protos):\/\/(.+?)(\ |\\n)#s",'[[$1://$2|$2]]$3', $Text);
 			$Text = preg_replace("#\[\[($protos):\/\/([a-z0-9\-\.]+)\]\]#s",'[[$1://$2|$2]]', $Text);
 			// convert catched emails into the link format [[email@example.com]]
-			$antibot = EMAIL_ANTISPAM_ASCII;
+			$antibot = EMAIL_ANTISPAM_TEXT;
 			foreach($emails[0] as $key => $email) {
 				if($antibot == EMAIL_ANTISPAM_TEXT){
 					$tmpMail = str_replace('.', ' [dot] ', $emails[1][$key] . ' [at] ' . $emails[2][$key]);
@@ -340,10 +341,10 @@
 		 * @return string
 	 	 */
 		function MakeLink($Link) {
-			$antibot = EMAIL_ANTISPAM_ASCII;
+			$antibot = EMAIL_ANTISPAM_TEXT;
 			$encodedLink = encodeUri($Link);
 			// identify mail-adresses
-			if(preg_match("/^[a-z0-9\[\]-_\.]+(\[at\]\ |@)[a-z0-9\[\]-_\.]+(\ \[dot\]\ |\.)[a-z]{2,4}$/i", $Link) || (EMAIL_ANTISPAM_ASCII == $antibot &&preg_match("/^(&#[0-9]+;)+$/i", $Link)))
+			if(preg_match("/^[a-z0-9\[\]-_\.]+(\ \[at\]\ |@)[a-z0-9\[\]-_\.]+(\ \[dot\]\ |\.)[a-z]{2,4}$/i", $Link) || (EMAIL_ANTISPAM_ASCII == $antibot && preg_match("/^(&#[0-9]+;)+$/i", $Link)))
 				return "mailto:$Link\" class=\"link_email";
 			else if(substr($encodedLink, 0, 6) == 'http:/' || substr($encodedLink, 0, 5) == 'ftp:/' || substr($encodedLink, 0, 7) == 'https:/' )
 				return "$encodedLink\" class=\"link_extern";

@@ -134,7 +134,7 @@ www.example.com&lt;/a&gt;</pre>
 name [at] example [dot] com&lt;/a&gt;</pre>
 		</div>
 		
-	<!-- <div>
+	 <div>
 			<h3>Email</h3>
 			<h4>Input:</h4>
 			<pre>[[name@example.com|Mail]]</pre>
@@ -142,17 +142,43 @@ name [at] example [dot] com&lt;/a&gt;</pre>
 			<pre>&lt;a href="mailto:name [at] example [dot] com" class="link_email"&gt;
 Mail&lt;/a&gt;</pre>
 		</div>
-		-->
+		
 		<div>
 			<h3>Image</h3>
 		</div>
 		
 		<div>
 			<h3>List(ordered)</h3>
+			<h4>Input:</h4>
+			<pre># TEXT
+# TEXT
+# # TEXT</pre>
+			<h4>Output:</h4>
+			<pre>&lt;ol&gt;
+	&lt;li&gt;TEXT &lt;/li&gt;
+    &lt;li&gt;TEXT
+&lt;ol&gt;
+    &lt;li&gt;TEXT &lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</pre>
 		</div>
 		
 		<div>
 			<h3>List(unordered)</h3>
+			<h4>Input:</h4>
+			<pre>* TEXT
+* TEXT
+* * TEXT</pre>
+			<h4>Output:</h4>
+			<pre>&lt;ul&gt;
+    &lt;li&gt;TEXT
+    &lt;li&gt;TEXT &lt;/li&gt;
+&lt;ul&gt;
+    &lt;li&gt;TEXT &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</pre>
 		</div>
 		
 		<div>
@@ -197,6 +223,16 @@ Mail&lt;/a&gt;</pre>
 		&lt;/td&gt;
 	&lt;/tr&gt;
 &lt;/table&gt;</pre>
+		</div>
+		<div>
+			<h3>Block</h3>
+			<h4>Input:</h4>
+			<pre>&lt;block&gt;TEXT&lt;/block&gt;</pre>
+			<h4>Output:</h4>
+			<pre>&lt;p&gt;
+    TEXT 
+
+&lt;/p&gt;</pre>
 		</div>
 	</body>
 </html>

@@ -25,6 +25,17 @@
  	define('EMAIL_ANTISPAM_TEXT', 1);
  	define('EMAIL_ANTISPAM_ASCII', 2);
  	
+ 	// Constants for image aligns
+	define('IMG_ALIGN_NORMAL', 'normal');
+	define('IMG_ALIGN_LEFT', 'left');
+	define('IMG_ALIGN_CENTER', 'center');
+	define('IMG_ALIGN_RIGHT', 'right');
+	// Constants for image layouts
+	define('IMG_DISPLAY_PICTURE', 'picture');
+	define('IMG_DISPLAY_BOX', 'box');
+	define('IMG_DISPLAY_BOX_ONLY', 'box_only');
+ 	
+ 	
  	/** TextActions
  	 * This class contains the functions which are used to convert plain text into a html-sourcecode
  	 * 
@@ -86,31 +97,24 @@
 			$Text = preg_replace("!(\r\n)|(\r)!", "\n", $Text);
 			$Text = preg_replace("#\\\\(\ |\\r|\\n)#s", "\n<br />\n", $Text);
 			
-			// catch all email-adresses which should be convertet to links ( <email@domain.com>)
+			// catch all email-adresses which should be convertet to links (<email@domain.com>)
 			preg_match_all("#\&lt\;([a-z0-9\._-]+?)\@([\w\-]+\.[a-z0-9\-\.]+\.*[\w]+)\&gt\;#s", $Text, $emails);
+			// catch all images
+			preg_match_all("#\{\{(.+?)\}\}#s", $Text, $images);
 			// allowed auto-link protocols
 			$protos = "http|ftp|https";
 			// convert urls to links http://www.domain.com to [[http://www.domain.com|www.domain.com]]
 			$Text = preg_replace("#(?<!\[\[)($protos):\/\/(.+?)(\ |\\n)#s",'[[$1://$2|$2]]$3', $Text);
 			$Text = preg_replace("#\[\[($protos):\/\/([a-z0-9\-\.]+)\]\]#s",'[[$1://$2|$2]]', $Text);
+			
 			// convert catched emails into the link format [[email@example.com]]
-			$antibot = EMAIL_ANTISPAM_TEXT;
 			foreach($emails[0] as $key => $email) {
-				if($antibot == EMAIL_ANTISPAM_TEXT){
-					$tmpMail = str_replace('.', ' [dot] ', $emails[1][$key] . ' [at] ' . $emails[2][$key]);
-					$Text = str_replace('&lt;' . $emails[1][$key] . '@' . $emails[2][$key] . '&gt;', '[[' . $tmpMail . '|' . $tmpMail . ']]', $Text);					
-				}
-				else if($antibot == EMAIL_ANTISPAM_ASCII){
-					$tmpMail = ''; //str_replace('.', ' [dot] ', $emails[1][$key] . ' [at] ' . $emails[2][$key]);
-					$email = $emails[1][$key] . '@' . $emails[2][$key];
-					$length = strlen($email);
-					for($chr = 0; $chr < $length;$chr++) {
-						$tmpMail .= '&#'.ord($email[$chr]).';';
-					}
-					$Text = str_replace('&lt;' . $emails[1][$key] . '@' . $emails[2][$key] . '&gt;', '[[' . $tmpMail . '|' . $tmpMail . ']]', $Text);
-				}
-				else
-					$Text = str_replace('&lt;' . $emails[1][$key] . '@' . $emails[2][$key] .'&gt;', '[[' . $emails[1][$key] . '@' . $emails[2][$key] . '|' . $emails[1][$key] . '@' . $emails[2][$key] . ']]', $Text);
+				$Text = str_replace('&lt;' . $emails[1][$key] . '@' . $emails[2][$key] .'&gt;', '[[' . $emails[1][$key] . '@' . $emails[2][$key] . '|' . $emails[1][$key] . '@' . $emails[2][$key] . ']]', $Text);
+			}
+			
+			foreach($images[1] as $image) {
+				$Text = str_replace('{{' . $image . '}}', TextActions::MakeImage($image), $Text);
+				
 			}
 				
 			// catch all links
@@ -165,7 +169,7 @@
 				else if(TextActions::StartsWith('^', $line) || TextActions::StartsWith('|', $line))
 					$state = LINE_STATE_TABLE;
 				// EOF
-				else if ($line == "\n")
+				else if ($line == "\n" || $line == "")
 					$state = LINE_STATE_NONE;
 				// Everything else is text!
 				else
@@ -222,6 +226,7 @@
 	 	* @param string search
 	 	* @param string input
 	 	* @param array allowedchars
+	 	* 
 	 	*/	
 		function StartsWith($search, $input, $allowedchars = array(' ', "\t")) {
 			
@@ -239,7 +244,9 @@
 		
 		function ConvertText($textpart) {
 			$textpart = str_replace("\n\n","\n</p>\n<p>\n", $textpart);
-			//$textpart = "\n<p>\n" . $textpart . "\n</p>\n";
+			$textpart = "\n<p>\n" . $textpart . "\n</p>";
+			$textpart = str_replace("[block]","\n</p>[block]", $textpart);
+			$textpart = str_replace("[/block]","[/block]<p>\n", $textpart);
 			$textpart = preg_replace("#<p>[\r\n\t\ ]{0,}</p>#i",'',$textpart);
 			return $textpart;
 		}
@@ -341,15 +348,37 @@
 		 * @return string
 	 	 */
 		function MakeLink($Link) {
-			$antibot = EMAIL_ANTISPAM_TEXT;
+			$antibot = EMAIL_ANTISPAM_LINK;
 			$encodedLink = encodeUri($Link);
 			// identify mail-adresses
-			if(preg_match("/^[a-z0-9\[\]-_\.]+(\ \[at\]\ |@)[a-z0-9\[\]-_\.]+(\ \[dot\]\ |\.)[a-z]{2,4}$/i", $Link) || (EMAIL_ANTISPAM_ASCII == $antibot && preg_match("/^(&#[0-9]+;)+$/i", $Link)))
+			if(preg_match("/^[a-z0-9-_\.]+@[a-z0-9\[\]-_\.]+\.[a-z]{2,4}$/i", $Link)) {
+				// only a replacement of "dots" and the "at"
+				if($antibot == EMAIL_ANTISPAM_TEXT) {
+					$Link = str_replace('.', ' [dot] ', $Link);
+					$Link = str_replace('@', ' [at] ', $Link);
+				}
+				// replace all characters with the HTML-ASCII codes
+				else if($antibot == EMAIL_ANTISPAM_ASCII){
+					$tmpMail = '';
+					$length = strlen($Link);
+					for($chr = 0; $chr < $length; $chr++) {
+						$tmpMail .= '&#'.ord($Link[$chr]).';';
+					}
+					$Link = $tmpMail;
+				}
 				return "mailto:$Link\" class=\"link_email";
+			}
 			else if(substr($encodedLink, 0, 6) == 'http:/' || substr($encodedLink, 0, 5) == 'ftp:/' || substr($encodedLink, 0, 7) == 'https:/' )
 				return "$encodedLink\" class=\"link_extern";
 			// TODO: load the title of the page into the link title and set an other css-class if the page does not exists
 			return "index.php?page=$encodedLink\" class=\"link_intern";
 		}
+		
+		function MakeImage() {
+			return "bild";	
+					
+		
+		}
+			
 	}	
 ?>

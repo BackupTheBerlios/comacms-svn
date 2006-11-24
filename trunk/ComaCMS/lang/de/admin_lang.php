@@ -19,6 +19,7 @@
 	$admin_lang['yes'] = 'Ja';
 	$admin_lang['no'] = 'Nein';
 	$admin_lang['ok'] = 'OK';
+	$admin_lang['email'] = 'Email';
 	$admin_lang['admincontrol'] = 'AdminControl';
 	$admin_lang['preferences'] = 'Einstellungen';
 	$admin_lang['menu-editor'] = 'Men&uuml;-Editor';
@@ -235,6 +236,17 @@
 	$admin_lang['the_form_was_not_filled_in_completely'] = 'Das Formular ist nicht vollst&auml;ndig ausgef&uuml;llt worden.';
 	$admin_lang['the_repetition_of_the_password_was_incorrect'] = 'Die Wiederholung des Passwortes ist falsch.';
 	$admin_lang['administration'] = 'Administration';
+	$admin_lang['the_name_that_is_displayed_if_the_user_writes_a_news_for_example'] = 'Der Name wird immer angezeigt, wenn der Benutzer z.B. einen News-Eintrag geschrieben hat. (Notwendig)';
+	$admin_lang['with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'] = 'Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umst&auml;nden komplizierten Namen,der angezeigt wird, eingeben muss. (Notwendig)';
+	$admin_lang['with_this_password_the_user_can_login_to_restricted_areas'] = 'Mit diesem Passwort kann sich der Benutzer in die gesch&auml;tzten Bereiche einloggen. (Notwendig)';
+	$admin_lang['it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'] = 'Durch eine Wiederholung wird sichergestellt, dass man sich bei der Eingabe nicht vertippt hat. (Notwendig)';
+	$admin_lang['using_the_email_address_the_user_is_contacted_by_the_system'] = 'Durch die Emailadresse wird der Benutzer vom System contaktiert. (Notwendig)';
+	$admin_lang['the_name_must_be_indicated'] = 'Der Name muss angegeben werden!';
+	$admin_lang['the_nickname_must_be_indicated'] = 'Der Loginname muss angegeben werden!';
+	$admin_lang['the_email_address_must_be_inicated'] = 'Die Emailadresse muss angegeben werden!';
+	$admin_lang['this_is_not_a_valid_email_address'] = 'Dies ist keine g&uuml;ltige Emailadresse!';
+	$admin_lang['none_of_the_passwordfields_must_not_be_empty'] = 'Keins der Passwordfelder darf leer sein!';
+	$admin_lang['the_password_and_its_repetition_are_unequal'] = 'Das Password und seine Wiederholung sind ungleich!';
 	//article module
 	$admin_lang['articles'] = 'Artikel';
 	$admin_lang['articles_module'] = 'Artikelmodul';

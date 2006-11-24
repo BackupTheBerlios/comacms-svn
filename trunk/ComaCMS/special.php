@@ -26,6 +26,7 @@
 	 * @ignore
 	 */
 	include('./lang/' . $user->Language  . '/admin_lang.php');
+	include('./classes/registration.php');
 	
 	if(!isset($extern_page))
 		header('Locaction: index.php');
@@ -54,6 +55,11 @@
 				<div class=\"row\"><input type=\"submit\" value=\"Login\" class=\"button\"/></div>
 			</fieldset>
 		</form>";
+	}
+	elseif($extern_page == 'register') {
+		$Registration = new Registration($sqlConnection, $admin_lang, $config);
+		$title = 'Registration';
+		$text = $Registration->GetPage(GetPostOrGet('action'));
 	}
 	elseif($extern_page == '404') {	
 		$want = GetPostOrGet('want');

@@ -113,8 +113,31 @@
 		}	
 		$content .= "</strong></div>
 			<div class=\"row\">" . sprintf($admin_lang['is_the_directory_%directory%_writeable'], '/data/') . ": <strong>";
-		$ok = true;
 		if(is_writable('../data/'))
+			$content .= $admin_lang['yes']; 
+		else {
+			$content .= $admin_lang['no'];
+			$ok = false;
+		}	
+		$content .= "</strong></div>
+			<div class=\"row\">" . sprintf($admin_lang['is_the_directory_%directory%_writeable'], '/data/smilies/') . ": <strong>";
+		if(is_writable('../data/smilies/'))
+			$content .= $admin_lang['yes']; 
+		else {
+			$content .= $admin_lang['no'];
+			$ok = false;
+		}
+		$content .= "</strong></div>
+			<div class=\"row\">" . sprintf($admin_lang['is_the_directory_%directory%_writeable'], '/data/thumbnails/') . ": <strong>";
+		if(is_writable('../data/thumbnails/'))
+			$content .= $admin_lang['yes']; 
+		else {
+			$content .= $admin_lang['no'];
+			$ok = false;
+		}
+		$content .= "</strong></div>
+			<div class=\"row\">" . sprintf($admin_lang['is_the_directory_%directory%_writeable'], '/data/upload/') . ": <strong>";
+		if(is_writable('../data/upload/'))
 			$content .= $admin_lang['yes']; 
 		else {
 			$content .= $admin_lang['no'];

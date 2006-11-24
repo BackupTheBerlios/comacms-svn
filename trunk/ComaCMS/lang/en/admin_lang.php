@@ -19,6 +19,7 @@
 	$admin_lang['yes'] = 'Yes';
 	$admin_lang['no'] = 'No';
 	$admin_lang['ok'] = 'OK';
+	$admin_lang['email'] = 'Email';
 	$admin_lang['admincontrol'] = 'AdminControl';
 	$admin_lang['sitepreview'] = 'Sitepreview';
 	$admin_lang['preferences'] = 'Preferences';
@@ -235,6 +236,17 @@
 	$admin_lang['the_form_was_not_filled_in_completely'] = 'The form was not filled in completely.';
 	$admin_lang['the_repetition_of_the_password_was_incorrect'] = 'The repetition of the password was incorrect.';
 	$admin_lang['administration'] = 'Administration';
+	$admin_lang['the_name_that_is_displayed_if_the_user_writes_a_news_for_example'] = 'The name that is displayed if the user writes a news for example. (Necessary)';
+	$admin_lang['with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'] = 'With this Nick the user can login so he must not fill in his long name. (Necessary)';
+	$admin_lang['with_this_password_the_user_can_login_to_restricted_areas'] = 'With this password the user can login to restricted areas. (Necessary)';
+	$admin_lang['it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'] = 'It is guaranteed by a repetition that the user did not mistype during the input. (Necessary)';
+	$admin_lang['using_the_email_address_the_user_is_contacted_by_the_system'] = 'Using the email address the user is contacted by the system. (Neccessary)';
+	$admin_lang['the_name_must_be_indicated'] = 'The name must be indicated!';
+	$admin_lang['the_nickname_must_be_indicated'] = 'The nickname must be indicated!';
+	$admin_lang['the_email_address_must_be_inicated'] = 'The email address must be indicated!';
+	$admin_lang['this_is_not_a_valid_email_address'] = 'This is not a valid email address!';
+	$admin_lang['none_of_the_passwordfields_must_not_be_empty'] = 'None of the passwordfields must not be empty!';
+	$admin_lang['the_password_and_its_repetition_are_unequal'] = 'The password and its repetitionare unequal!';
 	//article module
 	$admin_lang['articles'] = 'Articles';
 	$admin_lang['articles_module'] = 'Articlesmodule';

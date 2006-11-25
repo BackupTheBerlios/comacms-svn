@@ -4,10 +4,10 @@
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
- # file			: functions.php
- # created		: 2005-06-17
- # copyright		: (C) 2005-2006 The ComaCMS-Team
- # email		: comacms@williblau.de
+ # file                 : functions.php
+ # created              : 2005-06-17
+ # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
  # it under the terms of the GNU General Public License as published by

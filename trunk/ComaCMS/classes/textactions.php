@@ -15,7 +15,9 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
  	
- 	require __ROOT__.'/functions.php';
+ 	require_once __ROOT__ . '/functions.php';
+ 	require_once __ROOT__ . '/classes/imageconverter.php';
+ 	
  	define('LINE_STATE_NONE', 0);
  	define('LINE_STATE_TEXT', 1);
  	define('LINE_STATE_ULIST', 2);
@@ -101,6 +103,14 @@
 			preg_match_all("#\&lt\;([a-z0-9\._-]+?)\@([\w\-]+\.[a-z0-9\-\.]+\.*[\w]+)\&gt\;#s", $Text, $emails);
 			// catch all images
 			preg_match_all("#\{\{(.+?)\}\}#s", $Text, $images);
+			
+			$imagesData = array();
+			foreach($images[1] as $key => $image) {
+				$imagesData[$key] = TextActions::MakeImage($image);			
+				$Text = str_replace('{{' . $image . '}}', '[img]%' . $key . '%[/img]', $Text);
+			}
+			
+			
 			// allowed auto-link protocols
 			$protos = "http|ftp|https";
 			// convert urls to links http://www.domain.com to [[http://www.domain.com|www.domain.com]]
@@ -112,10 +122,8 @@
 				$Text = str_replace('&lt;' . $emails[1][$key] . '@' . $emails[2][$key] .'&gt;', '[[' . $emails[1][$key] . '@' . $emails[2][$key] . '|' . $emails[1][$key] . '@' . $emails[2][$key] . ']]', $Text);
 			}
 			
-			foreach($images[1] as $image) {
-				$Text = str_replace('{{' . $image . '}}', TextActions::MakeImage($image), $Text);
-				
-			}
+			
+			
 				
 			// catch all links
 			preg_match_all("#\[\[(.+?)\]\]#s", $Text, $links);
@@ -189,13 +197,19 @@
 						$outputText .= TextActions::Converttable($tempText);	
 					$tempText = "\t".$line."\n";
 				}
+				
+			
+				
+				
 			}
 			foreach($blocks as $key => $match)
 				$outputText = str_replace('[block]%' . $key . '%[/block]', TextActions::ConvertToPreHTML($match), $outputText);
 			// paste plain-parts back
 			foreach($plains as $key => $match)
 				$outputText = str_replace('[plain]%' . $key . '%[/plain]', $match, $outputText);
-			
+			foreach($imagesData as $key => $imgHtml)
+				$outputText = str_replace('[img]%' . $key . '%[/img]', $imgHtml, $outputText);
+				
 			// remove the spaces which are not necessary
 			$outputText = preg_replace('/\ \ +/', ' ', $outputText);
 			
@@ -374,10 +388,137 @@
 			return "index.php?page=$encodedLink\" class=\"link_intern";
 		}
 		
-		function MakeImage() {
-			return "bild";	
+		function MakeImage($Image) {
+			#[size] {[int_x]X[int_y],[int_maxsize], w[int_maxwidth], thumb=>w180, original=>[orig_x]X[orig_y], big=>800}
+			#[format] {box, box_only, picture}
+			#[Url]|[Title] => [Url]|box|thumb|[Title]
+			#[Url]|[size]|[Title] = [Url]|box|[size]|[Title]
+			#[Url]|[display]|[size]|[Title]
+			
+			// Defaults
+			$ImageAlign = IMG_ALIGN_NORMAL;
+			$imageDisplay = IMG_DISPLAY_BOX;
+			$imageSize = "w180";
+			$imageWidth = 180;
+			$imageHeight = 180;
+			
+			$leftSpace = false;
+			$rightSpace = false;
+			if(substr($Image, 0, 1) == ' ')
+				$leftSpace = true;
+			if(substr($Image, -1, 1) == ' ')
+				$rightSpace = true;
+			if($leftSpace && $rightSpace)
+				$ImageAlign = IMG_ALIGN_CENTER;
+			else if($leftSpace)
+				$ImageAlign = IMG_ALIGN_LEFT;
+			else if($rightSpace)
+				$ImageAlign = IMG_ALIGN_RIGHT;
+			
+			// remove spaces at the begin and end of the string
+			$Image = preg_replace("~^\ *(.+?)\ *$~", '$1', $Image);
+			
+			// Split into all Parameters
+			$parameters = explode('|', $Image);
+				
+			// set the path to the local media dir
+			$imageUrl = preg_replace("~^\media:\ *(.+?)$~", 'data/upload/' . '$1', $parameters[0]);
 					
+			//remove first entry (we don't have to check it)
+			unset($parameters[0]);
+			
+			// go through each parameter
+			foreach($parameters as $key => $value) {
+				// extract the image layout
+				if(preg_match('~^(' . IMG_DISPLAY_BOX_ONLY .'|' . IMG_DISPLAY_BOX . '|' . IMG_DISPLAY_PICTURE . ')$~', $value))
+					$imageDisplay = $value;
+				// extract the size for the image
+				else if(preg_match('~^(thumb|original|big|[0-9]+[Xx][0-9]+|[0-9]+|\w[0-9]+)$~', $value))
+					$imageSize = $value;
+				else // its the Title of the picture (it is the last unused parameter)
+					$imageTitle = $value;
+			}
+			// TODO:
+			// check if the image isn't saved "local", if it is, download it!
+			// extern_{$filename}_timestamp.png
+			
+			// Resize the image
+			$image = new ImageConverter($imageUrl);
+			
+			// convert the 'name-sizes' to 'pixel-sizes' 
+			if($imageSize == 'thumb') 
+				$imageSize = 'w180'; //width: 180px
+			else if ($imageSize == 'big')
+				$imageSize = '800'; // maximal width/length: 800px
+			else if ($imageSize == 'original') {
+				// took the original sizes
+				$imageWidth = $image->Size[0] ;
+				$imageHeight = $image->Size[1];
+			}
+			
+			// 'width-format''
+			if(preg_match('~^w[0-9]+$~', $imageSize)) {
+				$imageWidth = substr($imageSize, 1);
+				// calculate the proporitonal height 
+				$imageHeight = round($image->Size[1] / $image->Size[0] *  $imageWidth, 0);
+			}
+			// 'maximal-format'
+			else if(preg_match('~^[0-9]+$~', $imageSize)) {
+				// look for the longer side and resize it to te given size,
+				// short the other side proportional to the longer side
+				$imageWidth = ($image->Size[0] > $image->Size[1]) ? round($imageSize, 0) : round($image->Size[0] / ($image->Size[1] / $imageSize), 0);
+				$imageHeight = ($image->Size[1] > $image->Size[0]) ? round($imageSize, 0) : round($image->Size[1] / ($image->Size[0] / $imageSize), 0);
+			}
+			// 'exacact-size'
+			else if(preg_match('~^([0-9]+)[Xx]([0-9]+)$~', $imageSize, $maches)) {
+				// took the given sizes
+				$imageWidth = ($maches[1] < $image->Size[0]) ? $maches[1] : $image->Size[0];
+				$imageHeight = ($maches[2] < $image->Size[1]) ? $maches[2] : $image->Size[1];
+			
+			}
+			
+			// check if the image exists already
+			$thumbnailfolder = "folder/";//$config->Get('thumbnailfolder', 'data/thumbnails/'); TODO: usenondefault
+			if (file_exists($thumbnailfolder . '/' .  $imageWidth . 'x' . $imageHeight . '_' . basename($imageUrl)))
+				$imageUrl = $thumbnailfolder . '/' .  $imageWidth . 'x' . $imageHeight . '_' . basename($imageUrl);
+			else if(($image->Size[0] >= $imageWidth && $image->Size[1] > $imageHeight) || ($image->Size[0] > $imageWidth && $image->Size[1] >= $imageHeight)) {
+				$imageUrl = $image->SaveResizedTo($imageWidth, $imageHeight, $thumbnailfolder, $imageWidth . 'x' . $imageHeight . '_');
+				if($imageUrl === false)
+				 return "Not enough memory available!(resize your image!)";
+				
+			}
+			else {
+				$imageWidth = $image->Size[0];
+				$imageHeight = $image->Size[1];
+			}
+
 		
+			if($imageDisplay == IMG_DISPLAY_BOX) {
+				$imageString = "\n\n<div class=\"thumb t" . $ImageAlign . "\">
+						<div style=\"width:" . ($imageWidth + 4) . "px\">
+							<img width=\"{$imageWidth}\" height=\"{$imageHeight}\" src=\"{$imageUrl}\" title=\"$imageTitle\" alt=\"$imageTitle\" />
+							<div class=\"description\" title=\"$imageTitle\"><div class=\"magnify\"><a href=\"special.php?page=image&amp;file=$originalUrl\" title=\"vergr&ouml;&szlig;ern\"><img src=\"img/magnify.png\" title=\"vergr&ouml;&szlig;ern\" alt=\"vergr&ouml;&szlig;ern\"/></a></div>$imageTitle</div>
+						</div>
+					</div>\n";
+			}
+			// HTMLcode for the box style without a title
+			else if($imageDisplay == IMG_DISPLAY_BOX_ONLY) {
+				$imageString = "\n\n<div class=\"thumb tbox t" . $ImageAlign . "\">
+						<div style=\"width:" . ($imageWidth + 4) . "px\">
+							<img width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />
+							<div class=\"magnify\"><a href=\"special.php?page=image&amp;file=$originalUrl\" title=\"vergr&ouml;&szlig;ern\"><img src=\"img/magnify.png\" title=\"vergr&ouml;&szlig;ern\" alt=\"vergr&ouml;&szlig;ern\"/></a></div>
+						</div>
+					</div>\n";
+			}
+			// HTMLcode for the picture only
+			else if($imageDisplay == IMG_DISPLAY_PICTURE) {
+				$imageString = "\n\n<div class=\"thumb tbox t" . $ImageAlign . "\">
+					<img width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />
+					</div>";
+			}
+		
+			return "$imageString";	
+
 		}
 			
 	}	

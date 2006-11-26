@@ -242,11 +242,74 @@
 	$admin_lang['it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'] = 'It is guaranteed by a repetition that the user did not mistype during the input. (Necessary)';
 	$admin_lang['using_the_email_address_the_user_is_contacted_by_the_system'] = 'Using the email address the user is contacted by the system. (Neccessary)';
 	$admin_lang['the_name_must_be_indicated'] = 'The name must be indicated!';
+	$admin_lang['the_name_is_already_assigned'] = 'The name is already assigned!';
 	$admin_lang['the_nickname_must_be_indicated'] = 'The nickname must be indicated!';
+	$admin_lang['the_nickname_is_already_assigned'] = 'The nickname is already assigned!';
 	$admin_lang['the_email_address_must_be_inicated'] = 'The email address must be indicated!';
 	$admin_lang['this_is_not_a_valid_email_address'] = 'This is not a valid email address!';
+	$admin_lang['the_email_is_already_assigned_to_another_user'] = 'The emailaddress is already assigned to another user!';
 	$admin_lang['none_of_the_passwordfields_must_not_be_empty'] = 'None of the passwordfields must not be empty!';
 	$admin_lang['the_password_and_its_repetition_are_unequal'] = 'The password and its repetitionare unequal!';
+	$admin_lang['activation_of_your_new_accout_at'] = 'Activation of your new account at ';
+	$admin_lang['your_account_has_been_successfully_activated'] = 'Your account has been successfully activated.';
+	$admin_lang['activation_only_by_an_administrator_possible'] = 'Activation only by an administrator possible.';
+	$admin_lang['this_is_your_nickname_not_your_showname'] = 'This is your &quot;nickname&quot;, not your &quot;showname&quot;!';
+	$admin_lang['the_login_was_not_typed_in'] = 'The login was not typed in.';
+	$admin_lang['the_password_was_not_typed_in'] = 'The password was not typed in.';
+	$admin_lang['this_is_your_loginpassword'] = 'This is your loginpassword';
+	$admin_lang['you_did_not_make_any_inputs'] = 'You did not make any inputs.';
+	$admin_lang['the_user_and(or)_the_password_are_wrong'] = 'The username and(or) the password are(is) wrong.';
+	$admin_lang['the_user_is_not_activated'] = 'The user is not activated.';
+	$admin_lang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email'] = 'Welcome to "%s"
+
+Please keep this email for your records. Your account informaiton is as follows:
+
+----------------------------
+Username: "%s"
+Password: "%s"
+----------------------------
+
+Please do not forget your password as it has been encrypted in our database and we cannot retrieve it for you. However, should you forget your password you can request a new one using your emailaddress "%s" and activate it with a controllmail.
+
+Thank you for registering.
+
+--
+The Administration';
+		$admin_lang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_activation_throw_admin'] = 'Welcome to "%s"
+
+Please keep this email for your records. Your account informaiton is as follows:
+
+----------------------------
+Username: "%s"
+Password: "%s"
+----------------------------
+
+Please do not forget your password as it has been encrypted in our database and we cannot retrieve it for you. However, should you forget your password you can request a new one using your emailaddress "%s" and activate it with a controllmail.
+
+Your account will be enabled by an administrator soon so that you can login then.
+
+Thank you for registering.
+
+--
+The Administration';
+	$admin_lang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_%5\$s:ActivationCode'] = 'Welcome to "%s"
+
+Please keep this email for your records. Your account informaiton is as follows:
+
+----------------------------
+Username: "%s"
+Password: "%s"
+----------------------------
+
+Please do not forget your password as it has been encrypted in our database and we cannot retrieve it for you. However, should you forget your password you can request a new one using your emailaddress "%s" and activate it with a controllmail.
+
+Go to this page to activate your new account:
+%s?page=register&action=activateRegistration&code=%s
+
+Thank you for registering.
+
+--
+The Administration';
 	//article module
 	$admin_lang['articles'] = 'Articles';
 	$admin_lang['articles_module'] = 'Articlesmodule';

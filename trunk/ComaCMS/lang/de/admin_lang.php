@@ -242,11 +242,74 @@
 	$admin_lang['it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'] = 'Durch eine Wiederholung wird sichergestellt, dass man sich bei der Eingabe nicht vertippt hat. (Notwendig)';
 	$admin_lang['using_the_email_address_the_user_is_contacted_by_the_system'] = 'Durch die Emailadresse wird der Benutzer vom System contaktiert. (Notwendig)';
 	$admin_lang['the_name_must_be_indicated'] = 'Der Name muss angegeben werden!';
+	$admin_lang['the_name_is_already_assigned'] = 'Der Name ist bereits vergeben!';
 	$admin_lang['the_nickname_must_be_indicated'] = 'Der Loginname muss angegeben werden!';
+	$admin_lang['the_nickname_is_already_assigned'] = 'Der Loginname ist bereits vergeben!';
 	$admin_lang['the_email_address_must_be_inicated'] = 'Die Emailadresse muss angegeben werden!';
 	$admin_lang['this_is_not_a_valid_email_address'] = 'Dies ist keine g&uuml;ltige Emailadresse!';
+	$admin_lang['the_email_is_already_assigned_to_another_user'] = 'Die Emailadresse ist bereits an einen anderen Benutzer vergeben!';
 	$admin_lang['none_of_the_passwordfields_must_not_be_empty'] = 'Keins der Passwordfelder darf leer sein!';
 	$admin_lang['the_password_and_its_repetition_are_unequal'] = 'Das Password und seine Wiederholung sind ungleich!';
+	$admin_lang['activation_of_your_new_accout_at'] = 'Aktivierung deines Accounts auf ';
+	$admin_lang['your_account_has_been_successfully_activated'] = 'Ihr Account wurde erfolgreich aktiviert.';
+	$admin_lang['activation_only_by_an_administrator_possible'] = 'Ein Account kann nur durch einen Administrator aktiviert werden.';
+	$admin_lang['this_is_your_nickname_not_your_showname'] = 'Dies ist Ihr &quot;Nickname&quot;, nicht Ihr &quot;Anzeigename&quot;!'; 
+	$admin_lang['the_login_was_not_typed_in'] = 'Der Login wurde nicht angegeben.';
+	$admin_lang['the_password_was_not_typed_in'] = 'Das Password wurde nicht angegeben.';
+	$admin_lang['this_is_your_loginpassword'] = 'Dies ist Ihr Loginpassword.';
+	$admin_lang['you_did_not_make_any_inputs'] = 'Es wurden keine Eingaben gemacht.';
+	$admin_lang['the_user_and(or)_the_password_are_wrong'] = 'Der Benutzername und(oder) das Password sind(ist) falsch.';
+	$admin_lang['the_user_is_not_activated'] = 'Der Benutzer ist nicht aktiviert.';
+	$admin_lang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email'] = 'Willkommen auf "%s"
+
+Bitte bewahren Sie diese Email für Ihre Aufzeichnungen. Ihre Accountdaten sind:
+
+----------------------------
+Benutzername: "%s"
+Password: "%s"
+----------------------------
+
+Bitte vergessen Sie Ihr Password nicht! Es ist verschlüsselt in unserer Datenbank gepeichert, sodass wir es nicht für sie wiederherstellen können. Sollten Sie doch einmal Ihr Password vergessen haben können Sie mit Hilfe Ihrer Emailadresse "%s" ein neues beantragen und activieren.
+
+Danke für Ihre Registration
+
+--
+Die Administratoren';
+	$admin_lang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_activation_throw_admin'] = 'Willkommen auf "%s"
+
+Bitte bewahren Sie diese Email für Ihre Aufzeichnungen. Ihre Accountdaten sind:
+
+----------------------------
+Benutzername: "%s"
+Password: "%s"
+----------------------------
+
+Bitte vergessen Sie Ihr Password nicht! Es ist verschlüsselt in unserer Datenbank gepeichert, sodass wir es nicht für sie wiederherstellen können. Sollten Sie doch einmal Ihr Password vergessen haben können Sie mit Hilfe Ihrer Emailadresse "%s" ein neues beantragen und activieren.
+
+Ihr Account wird demnächst von einem Administrator aktiviert werden, sodass sie sich anmelden können.
+
+Danke für Ihre Registration
+
+--
+Die Administratoren';
+		$admin_lang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_%5\$s:ActivationCode'] = 'Willkommen auf "%s"
+
+Bitte bewahren Sie diese Email für Ihre Aufzeichnungen. Ihre Accountdaten sind:
+
+----------------------------
+Benutzername: "%s"
+Password: "%s"
+----------------------------
+
+Bitte vergessen Sie Ihr Password nicht! Es ist verschlüsselt in unserer Datenbank gepeichert, sodass wir es nicht für sie wiederherstellen können. Sollten Sie doch einmal Ihr Password vergessen haben k&ouml;nnen Sie mit Hilfe Ihrer Emailadresse "%s" ein neues beantragen und aktivieren.
+
+Rufen sie bitte diese Seite auf, um Ihren neuen Account zu aktivieren:
+%s?page=register&action=activateRegistration&code=%s
+
+Danke für Ihre Registration
+
+--
+Die Administratoren';
 	//article module
 	$admin_lang['articles'] = 'Artikel';
 	$admin_lang['articles_module'] = 'Artikelmodul';

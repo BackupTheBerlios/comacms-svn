@@ -34,7 +34,6 @@
  		/**
  		 * @access private
  		 * @var AdminLang
- 		 * @
  		 */
  		var $_AdminLang;
  		
@@ -74,7 +73,7 @@
 		 	switch ($Action) {
 		 		case 'checkRegistration':	$out .= $this->_checkRegistration(GetPostOrGet('showname'), GetPostOrGet('name'), GetPostOrGet('email'), GetPostOrGet('password'), GetPostOrGet('password_repetition'));
 		 						break;
-		 		case 'activateRegistration':	$out .= $this->_activateRegistration();
+		 		case 'activateRegistration':	$out .= $this->_activateRegistration(GetPostOrGet('code'));
 		 						break;
 		 		default:			$out .= $this->_register();
 		 	}
@@ -96,6 +95,13 @@
 	 	/**
 	 	 * Shows registration Form
 	 	 * @access private
+	 	 * @param string Showname The name of the new user to display for corrections
+	 	 * @param string Name The nickname of the new user to display for corrections
+	 	 * @param string Email The emailaddress of the new user to display for corrections
+	 	 * @param string ShownameError Any errors in name of the user to display
+	 	 * @param string NameError Any errors in nickname of the user to display
+	 	 * @param string EmailError Any errors in the emailaddress of the new user to display
+	 	 * @param string PasswordError Any errors with the password and its repetition to display
 	 	 * @return string RegistrationForm
 	 	 */
 	 	function _registerVar($Showname, $Name, $Email, $ShownameError, $NameError, $EmailError, $PasswordError) {
@@ -152,32 +158,78 @@
 	 	/**
 	 	 * Checks the registration form, returns a new one if there are any mistakes, and saves the new user if everything is correct
 	 	 * @access private
+	 	 * @param string Showname The name for the new user
+	 	 * @param string Name The nickname for the new user
+	 	 * @param string Email The Emailaddress for the new user
+	 	 * @param string Password The Password for the new user
+	 	 * @param string Password_repetition The Passwordrepetition to exclude typing errors
 	 	 * @return string PageData
 	 	 */
 		function _checkRegistration($Showname, $Name, $Email, $Password, $Password_repetition) {
 			$out = '';
 			$fehlerfrei = true;
 			
+			//Set all errors to '' to prevent errors with clear variables
 			$ShownameError = '';
 			$NameError = '';
 			$EmailError = '';
 			$PasswordError = '';
 			
+			// Check the registrationfields for common errors and write them to the error variables
 			if ($Showname == '') {
 				$ShownameError = $this->_AdminLang['the_name_must_be_indicated'];
 				$fehlerfrei = false;
+			}
+			else {
+				// If showname is not empty check wether it is used already
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "users
+					WHERE user_showname='$Showname'
+					LIMIT 0 , 1";
+				$result = $this->_SqlConnection->SqlQuery($sql);
+				if (mysql_num_rows($result) == 1) {
+					$ShownameError = $this->_AdminLang['the_name_is_already_assigned'];
+					$fehlerfrei = false;
+				}
 			}
 			if ($Name == '') {
 				$NameError = $this->_AdminLang['the_nickname_must_be_indicated'];
 				$fehlerfrei = false;
 			}
+			else {
+				// If nickname is not empty check wether it is used already
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "users
+					WHERE user_name='$Name'
+					LIMIT 0 , 1";
+				$result = $this->_SqlConnection->SqlQuery($sql);
+				if (mysql_num_rows($result) == 1) {
+					$NameError = $this->_AdminLang['the_nickname_is_already_assigned'];
+					$fehlerfrei = false;
+				}
+			}
 			if ($Email == '') {
 				$EmailError = $this->_AdminLang['the_email_address_must_be_inicated'];
 				$fehlerfrei = false;
 			}
-			elseif (!isEmailAddress($Email)) {
-				$EmailError = $this->_AdminLang['this_is_not_a_valid_email_address'];
-				$fehlerfrei = false;
+			else {
+				// If Emailaddress is not empty check wether it is a real emailaddress and if check wether it is used already
+				if (isEmailAddress($Email)) {
+					$sql = "SELECT *
+						FROM " . DB_PREFIX . "users
+						WHERE user_email='$Email'
+						LIMIT 0 , 1";
+					$result = $this->_SqlConnection->SqlQuery($sql);
+					if (mysql_num_rows($result) == 1) {
+						$EmailError = $this->_AdminLang['the_email_is_already_assigned_to_another_user'];
+						$fehlerfrei = false;
+					}
+				}
+				else {
+					// If its not a real emailaddress throw exception
+					$EmailError = $this->_AdminLang['this_is_not_a_valid_email_address'];
+					$fehlerfrei = false;
+				}
 			}
 			if ($Password == '' || $Password_repetition == '') {
 				$PasswordError = $this->_AdminLang['none_of_the_passwordfields_must_not_be_empty'];
@@ -189,10 +241,75 @@
 			}
 			
 			if (!$fehlerfrei) {
+				// Show registrationform again and display all existing errors
 				$out .= $this->_registerVar($Showname, $Name, $Email, $ShownameError, $NameError, $EmailError, $PasswordError);
+			}
+			// If there are no errors left put user into database
+			else {
+				$registrationTime = time();
+				$activated = false;
+				$activationCode = '';
+				
+				// If a validation of the emailaddress is required make a registration code and send email to the user
+				if ($this->_Config->Get('validate_email', '1')) {
+					$activationCode = md5($Showname . $registrationTime . $Email);
+					
+					// Send mail with registrationcode and logindata to the user
+					$betreff = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
+					$nachricht = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_%5\$s:ActivationCode'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email, $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'], $activationCode);
+					$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" .'Reply-To: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" . 'X-Mailer: PHP/' . phpversion();
+					mail($Email, $betreff, $nachricht, $header);
+				}
+				else {
+					if ($this->_Config->Get('activate_throw_admin', '0')) {
+						// Send mail with logindata to the user, activation throw administrator
+						$betreff = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
+						$nachricht = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_activation_throw_admin'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email);
+						$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" . 'Reply-To: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" . 'X-Mailer: PHP/' . phpversion();
+						mail($Email, $betreff, $nachricht, $header);
+					}
+					else {
+						// Activate the useraccount
+						$activated = true;
+						
+						// Send mail with logindata to the user
+						$betreff = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
+						$nachricht = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email);
+						$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" . 'Reply-To: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" . 'X-Mailer: PHP/' . phpversion();
+						mail($Email, $betreff, $nachricht, $header);
+					}
+				}
+				
+				// Insert User into database
+				$sql = "INSERT INTO " . DB_PREFIX . "users
+					(user_name, user_showname, user_password, user_registerdate, user_email, user_activated" . (($activationCode != '') ? ", user_activationcode" : '') . ")
+					VALUES ('$Name', '$Showname', '" . md5($Password) . "', '$registrationTime', '$Email', " . (($activated) ? '1' : '0') . (($activationCode != '') ? ", '$activationCode'" : '') . ")";
+				$this->_SqlConnection->SqlQuery($sql);
+				
+				$out .= $this->_AdminLang['your_account_has_been_successfully_activated'];
 			}
 			
 			return $out;
+	 	 }
+	 	 
+	 	 /**
+	 	  * Activates a new account
+	 	  * @access private
+	 	  * @param string ActivationCode An md5 code for the new user to identify him without his username
+	 	  * @return string Page
+	 	  */
+	 	 function _activateRegistration($ActivationCode) {
+	 	 	$out = '';
+	 	 	if ($this->_Config->Get('activate_throw_admin', '0')) {
+	 	 		$out .= $this->_AdminLang['activation_only_by_an_administrator_possible'];
+	 	 	}
+	 	 	else {
+	 	 		$sql = "UPDATE " . DB_PREFIX . "users
+					SET user_activated=1
+					WHERE user_activationcode='$ActivationCode'";
+				$this->_SqlConnection->SqlQuery($sql);
+	 	 	}
+	 	 	return $out;
 	 	 }
  	}
 ?>

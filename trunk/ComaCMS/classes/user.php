@@ -162,18 +162,41 @@
 
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "users
-					WHERE user_name='$this->Name' AND user_password='$this->PasswordMd5'
+					WHERE user_name='$this->Name'
 					LIMIT 0,1";
-				$original_user_result = db_result($sql);
+				$original_user_result = $this->_SqlConnection->SqlQuery($sql);
 				if($original_user = mysql_fetch_object($original_user_result)) {
-					$this->IsLoggedIn = true;
-					$this->Showname = $original_user->user_showname;
-					$this->ID = $original_user->user_id;
-					if($original_user->user_admin == 'y')
-						$this->IsAdmin = true;
-					$this->LoginError = 0;
+					// If the user was found check if it is activated
+					if ($original_user->user_activated == '1') {
+						// If the user is activated check if the typed passord is right
+						if ($original_user->user_password === $this->PasswordMd5) {
+							$this->IsLoggedIn = true;
+							$this->Showname = $original_user->user_showname;
+							$this->ID = $original_user->user_id;
+							if($original_user->user_admin == 'y')
+								$this->IsAdmin = true;
+							$this->LoginError = 0;
+						}
+						// else set user back to login
+						else {
+							$this->IsAdmin = false;
+							$this->IsLoggedIn = false;
+							$this->Name = '';
+							$this->PasswordMd5 = '';
+							$this->LoginError = 4;
+						}
+					}
+					else {
+						// If the user is not activated set him back to login and throw exception
+						$this->IsAdmin = false;
+						$this->IsLoggedIn = false;
+						$this->Name = '';
+						$this->PasswordMd5 = '';
+						$this->LoginError = 5;
+					}
 				}
 				else {
+					// If the user was not found set him back to login
 					$this->IsAdmin = false;
 					$this->IsLoggedIn = false;
 					$this->Name = '';

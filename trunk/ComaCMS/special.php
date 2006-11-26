@@ -34,25 +34,30 @@
 	$title = '';
 	if($extern_page == 'login') {
 		$error = GetPostOrGet('error');
-		$text_error = '';
-		if($error == '1')
-			$text_error = 'Der Login wurde nicht angegeben.';
-		if($error == '2')
-			$text_error = 'Das Passwort wurde nicht angegeben.';
-		if($error == '3')
-			$text_error = 'Es wurden keine Eingaben gemacht.';
-		if($error == '4')
-			$text_error = 'Der Benutzer und(oder) das Passwort sind falsch.';
-		if($text_error != '')
-			$text_error = "\r\n<strong>" . $text_error . '</strong>';
+		if($error == '5')
+			$text_error = 'Der Benutzer ist nicht aktiviert.';
 		$title = "Login";
 		$text = "<form method=\"post\" action=\"admin.php\">
-			<input type=\"hidden\" name=\"page\" value=\"admincontrol\" />$text_error
+			<input type=\"hidden\" name=\"page\" value=\"admincontrol\" />
 			<fieldset>
 				<legend>Login</legend>
-				<div class=\"row\"><label>Loginname:</label><input type=\"text\" name=\"login_name\" /></div>
-				<div class=\"row\"><label>Passwort:</label><input type=\"password\" name=\"login_password\" /></div>
-				<div class=\"row\"><input type=\"submit\" value=\"Login\" class=\"button\"/></div>
+				<div class=\"row\">
+					<label for=\"login_name\">
+						<strong>{$admin_lang['loginname']}:</stong>" . (($error == '1') ? "\r\n\t\t\t\t\t\t<span class=\"error\">{$admin_lang['the_login_was_not_typed_in']}</span>\r\n\t\t\t\t\t\t" : '') . (($error == '3') ? "\r\n\t\t\t\t\t\t<span class=\"error\">{$admin_lang['you_did_not_make_any_inputs']}</span>\r\n\t\t\t\t\t\t" : '') . (($error == '4') ? "\r\n\t\t\t\t\t\t<span class=\"error\">{$admin_lang['the_user_and(or)_the_password_are_wrong']}</span>\r\n\t\t\t\t\t\t" : '') . (($error == '5') ? "\r\n\t\t\t\t\t\t<span class=\"error\">{$admin_lang['the_user_is_not_activated']}</span>\r\n\t\t\t\t\t\t" : '') . "
+						<span class=\"info\">{$admin_lang['this_is_your_nickname_not_your_showname']}</span>
+					</label>
+					<input type=\"text\" name=\"login_name\" id=\"login_name\" />
+				</div>
+				<div class=\"row\">
+					<label for=\"login_password\">
+						<strong>{$admin_lang['password']}</strong>" . (($error == '2') ? "\r\n\t\t\t\t\t\t<span class=\"error\">{$admin_lang['the_password_was_not_typed_in']}</span>\r\n\t\t\t\t\t\t" : '') . "
+						<span class=\"info\">{$admin_lang['this_is_your_loginpassword']}</span>
+					</label>
+					<input type=\"password\" name=\"login_password\" id=\"login_password\" />
+				</div>
+				<div class=\"row\">
+					<input type=\"submit\" value=\"Login\" class=\"button\"/>
+				</div>
 			</fieldset>
 		</form>";
 	}

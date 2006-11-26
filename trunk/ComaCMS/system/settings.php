@@ -17,11 +17,14 @@
 	
 	global $admin_lang;
 	
+	//Preferences::SetSetting('einstellungsname', 'angezeigte Option', 'info zu der Optionin <span class="info">info</span>', 'Einstellungsgruppe', 'Defaultwert', 'Typ');
 	Preferences::SetSetting("default_page", "Startseite", "Auf diese Seite wird jeder Besucher geleitet, der keine Seite angegeben hat.", "Main", '1', 'page_select');
 	Preferences::SetSetting("pagename", "Seitenname", "Hier wird der Name der Seite definiert.", "Main", "ComaCMS");
 	Preferences::SetSetting('keywords', 'Keywords', 'Insert here keywords relating to the content of your page. (Separated with commas)', 'Main', 'ComaCms,Content Management System,Open Source');
 	Preferences::SetSetting("thumbnailfolder", "Verzeichnis f&uuml;r erstellte Bilder", "In dem hier angegebenen Verzeichnis werden die automatisch erstellten Bilder gespeichert. (F&uuml;r diesen Ordner sind Schreibrechte notwendig)", "Main", "data/thumbnails/");
 	//Preferences::SetSetting('advanced_menueditor', 'Use advanced Menueditor', 'Do you want to use an advanced Menuedior?', 'Menueditor', 0, 'bool');
-	Preferences::SetSetting("show_inlinemenu_entries", "Zusatzmen&uuml; anzeigen", "Sollen Zusatzmen&uuml;einträge im Menüeditor angezeigt werden?", "Menueditor", "0", "bool");
-	
+	//Preferences::SetSetting("show_inlinemenu_entries", "Zusatzmen&uuml; anzeigen", "Sollen Zusatzmen&uuml;einträge im Menüeditor angezeigt werden?", "Menueditor", "0", "bool");
+	Preferences::SetSetting('administrator_emailaddress', 'Administrator Emailadresse', 'Die Emailadresse des Administrators wird für alle Emails des Systems als Absender benutzt.', 'Email', 'administrator@comacms');
+	Preferences::SetSetting('validate_email', 'Email &uuml;berpr&uuml;fen', 'Soll die Email eines neuen Benutzers durch eine Kontrollmail &uuml;berpr&uuml;ft werden, bevor ein neuer Account aktiviert wird?', 'Registration', '1', 'bool');
+	Preferences::SetSetting('activate_throw_admin', 'Aktivierung nur durch Administrator', 'Soll ein neuer Benutzer nur durch einen Administrator aktiviert werden können?', 'Registration', '0', 'bool');
 ?>

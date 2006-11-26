@@ -61,7 +61,7 @@ input, select, textarea, fieldset {
 input, select, textarea {
 	width: 49%;
 	background-color: #fff;
-	font-family: arial, verdana, helvetica, sans-serif;
+	font-family:  sans-serif, arial, verdana, helvetica;
 }
 
 input[type="checkbox"], input[type="radio"], input[type="button"], input[type="submit"], input[type="reset"],input[type="file"] {
@@ -122,6 +122,8 @@ span.error {
 	border: 1px dashed #FF0000;
 	font-weight: bold;
 	margin-bottom: 0.4em;
+	font-size: 0.90em;
+	text-indent: .5em;
 }
 
 a.button , input.button, button {
@@ -159,6 +161,8 @@ textarea.edit {
 	width: 100%;
 	height: 17em;
 	font-family: Courier New, Lucida Console, Courier, Monaco;
+	font-size: 1.1em;
+	color: #000;
 }
 
 th.small_width {

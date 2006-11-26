@@ -18,14 +18,14 @@
 	 *
 	 */
 	// Constants for image aligns
-	define('IMG_ALIGN_NORMAL', 'normal');
+	/*define('IMG_ALIGN_NORMAL', 'normal');
 	define('IMG_ALIGN_LEFT', 'left');
 	define('IMG_ALIGN_CENTER', 'center');
 	define('IMG_ALIGN_RIGHT', 'right');
 	// Constants for image layouts
 	define('IMG_DISPLAY_PICTURE', 'picture');
 	define('IMG_DISPLAY_BOX', 'box');
-	define('IMG_DISPLAY_BOX_ONLY', 'box_only');
+	define('IMG_DISPLAY_BOX_ONLY', 'box_only');*/
 	
 	/**
 	 * @return string

@@ -27,6 +27,8 @@
 		
 		function ImageConverter($File) {
 			// get the original sizes
+			if(!file_exists($File))
+				return null;
 			list($this->Size[0], $this->Size[1]) = getimagesize($File);
 			$this->_file = $File;
 		}

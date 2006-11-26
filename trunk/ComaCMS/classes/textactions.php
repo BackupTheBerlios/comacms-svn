@@ -141,15 +141,22 @@
 			$Text = preg_replace("/\/\/(.+?)\/\//s", "<em>$1</em>", $Text);
 			// convert all __text__ to <u>text</u> => Underline
 			$Text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $Text);
-			// convert ==== text ==== to a header <h2>
-			$Text = preg_replace("#==\ (.+?)\ ==#s", "\n\n<h2>$1</h2>\n", $Text);
-			// convert === text === to a header <h3>
-			$Text = preg_replace("#===\ (.+?)\ ===#s", "\n\n<h3>$1</h3>\n", $Text);
 			// convert == text == to a header <h4>
 			$Text = preg_replace("#====\ (.+?)\ ====#s", "\n\n<h4>$1</h4>\n", $Text);
+			// convert === text === to a header <h3>
+			$Text = preg_replace("#===\ (.+?)\ ===#s", "\n\n<h3>$1</h3>\n", $Text);
+			// convert ==== text ==== to a header <h2>
+			$Text = preg_replace("#==\ (.+?)\ ==#s", "\n\n<h2>$1</h2>\n", $Text);
+			
+			
 			// convert <center>text</center> to <div class="center">text</div>
 			$Text = preg_replace("#&lt;center&gt;(.+?)&lt;/center&gt;#s", "\n\n<div class=\"center\">$1</div>\n", $Text);
-			
+		
+			// convert ({text}{text}{text}) to tree colums
+			$Text = preg_replace("#\(\{(.+?)[\r\n ]*\}\{(.+?)[\r\n ]*\}\{(.+?)[\r\n ]*\}\)#s", "\n<div class=\"column ctree\">\n$1\n</p></div>\n<div class=\"column ctree\"><p>\n$2\n</p></div><div class=\"column ctree\"><p>\n$3\n</p></div>\n<p class=\"after_column\">\n", $Text);
+			// convert ({text}{text}) to two colums
+			$Text = preg_replace("#\(\{(.+?)[\r\n ]*\}\{(.+?)[\r\n ]*\}\)#s", "\n<div class=\"column ctwo\">\n$1\n</div>\n<div class=\"column ctwo\">\n$2\n</div>\n<p class=\"after_column\"/>\n", $Text);
+		
 			
 			// paste links into the text
 			foreach($link_list as $link_nr => $link) {
@@ -362,7 +369,7 @@
 		 * @return string
 	 	 */
 		function MakeLink($Link) {
-			$antibot = EMAIL_ANTISPAM_LINK;
+			$antibot = EMAIL_ANTISPAM_TEXT;
 			$encodedLink = encodeUri($Link);
 			// identify mail-adresses
 			if(preg_match("/^[a-z0-9-_\.]+@[a-z0-9\[\]-_\.]+\.[a-z]{2,4}$/i", $Link)) {
@@ -398,9 +405,11 @@
 			// Defaults
 			$ImageAlign = IMG_ALIGN_NORMAL;
 			$imageDisplay = IMG_DISPLAY_BOX;
-			$imageSize = "w180";
+			$imageSize = 'w180';
 			$imageWidth = 180;
 			$imageHeight = 180;
+			$imageTitle = '';
+			$imageUrl = '';
 			
 			$leftSpace = false;
 			$rightSpace = false;
@@ -423,7 +432,7 @@
 				
 			// set the path to the local media dir
 			$imageUrl = preg_replace("~^\media:\ *(.+?)$~", 'data/upload/' . '$1', $parameters[0]);
-					
+			$imageTitle = $parameters[0];		
 			//remove first entry (we don't have to check it)
 			unset($parameters[0]);
 			
@@ -441,6 +450,9 @@
 			// TODO:
 			// check if the image isn't saved "local", if it is, download it!
 			// extern_{$filename}_timestamp.png
+			
+			if(!file_exists($imageUrl))
+				return "<strong>Bild nicht gefunden.</strong>";
 			
 			// Resize the image
 			$image = new ImageConverter($imageUrl);
@@ -474,11 +486,12 @@
 				// took the given sizes
 				$imageWidth = ($maches[1] < $image->Size[0]) ? $maches[1] : $image->Size[0];
 				$imageHeight = ($maches[2] < $image->Size[1]) ? $maches[2] : $image->Size[1];
-			
 			}
-			
+			$originalUrl = encodeUri($imageUrl); // str_replace(' ', '%20', basename($imageUrl));
+			// TODO: don't use the global
+			global $config;
 			// check if the image exists already
-			$thumbnailfolder = "folder/";//$config->Get('thumbnailfolder', 'data/thumbnails/'); TODO: usenondefault
+			$thumbnailfolder = $config->Get('thumbnailfolder', 'data/thumbnails/'); 
 			if (file_exists($thumbnailfolder . '/' .  $imageWidth . 'x' . $imageHeight . '_' . basename($imageUrl)))
 				$imageUrl = $thumbnailfolder . '/' .  $imageWidth . 'x' . $imageHeight . '_' . basename($imageUrl);
 			else if(($image->Size[0] >= $imageWidth && $image->Size[1] > $imageHeight) || ($image->Size[0] > $imageWidth && $image->Size[1] >= $imageHeight)) {

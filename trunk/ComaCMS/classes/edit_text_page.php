@@ -14,7 +14,8 @@
  # the Free Software Foundation; either version 2 of the License, or
  # (at your option) any later version.
  #----------------------------------------------------------------------
-
+	
+	require __ROOT__ . '/classes/textactions.php';
 	/**
 	 * @package ComaCMS
 	 */
@@ -75,7 +76,7 @@
 								VALUES ($lastid, '$old->text_page_text')";
 							db_result($sql);
 						}
-						$html = convertToPreHtml($page_text);
+						$html =  TextActions::ConvertToPreHTML($page_text);
 						$sql = "UPDATE " . DB_PREFIX . "pages_text
 							SET text_page_text='$page_text', text_page_html='$html'
 							WHERE page_id='$old->page_id'";
@@ -126,7 +127,7 @@
 							$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, text_page_text)
 								VALUES ($lastid, '$actual->text_page_text')";
 							db_result($sql);
-							$html = convertToPreHtml($old->text_page_text);
+							$html = TextActions::ConvertToPreHTML($old->text_page_text);
 							$sql = "UPDATE " . DB_PREFIX . "pages_text
 								SET text_page_text='$old->text_page_text', text_page_html='$html'
 								WHERE page_id='$page_id'";
@@ -235,7 +236,7 @@
 				<input type=\"submit\" value=\"Abbrechen\" name=\"pageAbort\" class=\"button\"/>
 			</form></fieldset>\r\n";
 				if($show_preview) {
-					$page_text = convertToPreHtml($page_text);
+					$page_text = TextActions::ConvertToPreHTML($page_text);
 					$out .= "<fieldset>
 						<legend>Vorschau</legend>
 						<iframe class=\"pagepreview\" src=\"index.php?content=" . urlencode($page_text) . "\"></iframe>

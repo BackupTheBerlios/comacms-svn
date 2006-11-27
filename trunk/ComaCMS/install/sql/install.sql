@@ -173,6 +173,8 @@ DROP TABLE IF EXISTS {DB_PREFIX}articles;
 			user_admin enum('y','n') default 'n',
 			user_icq varchar(12) default '0',
 			user_email varchar(200) NOT NULL default '',
+			user_activated bool NULL default '1',
+			user_activationcode varchar(32) NULL,
 			PRIMARY KEY  (user_id)
 		);
 		DROP TABLE IF EXISTS {DB_PREFIX}pages_gallery;

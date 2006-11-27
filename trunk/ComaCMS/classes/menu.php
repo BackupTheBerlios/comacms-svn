@@ -227,8 +227,8 @@
  		 * @param string Menu_title The title of the Menu
  		 * @return void
  		 */
- 		function UpdateMenu($Menu_menuid, $Menu_title) {
- 			if (is_numeric($Menu_menuid) && $Menu_title != '' && $Menu_title != '1') {
+ 		function UpdateMenu($Menu_menuid, $Menu_title, $Menu_name) {
+ 			if (is_numeric($Menu_menuid) && $Menu_title != '' && $Menu_name != 'DEFAULT') {
  				$sql = "UPDATE " . DB_PREFIX . "menu
  					SET menu_name='$Menu_title'
  					WHERE menu_id='$Menu_menuid'";
@@ -257,12 +257,16 @@
  		 * @param integer Menu_menuid The id of the Menu that should be deleted
  		 * @return void
  		 */
- 		function DeleteMenu ($Menu_menuid) {
- 			if (is_numeric($Menu_menuid) && $Menu_menuid != 1) {
+ 		function DeleteMenu ($Menu_menuid, $Menu_name) {
+ 			if (is_numeric($Menu_menuid) && $Menu_name != 'DEFAULT') {
  				$sql = "DELETE
  					FROM " . DB_PREFIX . "menu
  					WHERE menu_id='$Menu_menuid'";
  				$this->_SqlConnection->SqlQuery($sql);
+ 				$sql = "DELETE
+					FROM " . DB_PREFIX . "menu_entries
+					WHERE menu_entries_menuid='$Menu_menuid'";
+				$this->_SqlConnection->SqlQuery($sql);
  			}
  		}
  	}

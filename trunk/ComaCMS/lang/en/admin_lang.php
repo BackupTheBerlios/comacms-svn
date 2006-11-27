@@ -125,6 +125,7 @@
 	$admin_lang['create_new'] = 'Create new';
 	$admin_lang['delete_menu'] = 'Delete menu';
 	$admin_lang['edit_menu'] = 'Edit menu';
+	$admin_lang['edit_menuitems'] = 'Edit menuitems';
 	$admin_lang['here_you_can_choose_a_menu_to_edit'] = 'Here you can choose a menu to edit';
 	$admin_lang['click_here_to_edit_the_actual_menu'] = 'Click here to edit the actual menu';
 	$admin_lang['here_you_can_create_a_new_menu'] = 'Here you can create a new menu';
@@ -260,6 +261,7 @@
 	$admin_lang['you_did_not_make_any_inputs'] = 'You did not make any inputs.';
 	$admin_lang['the_user_and(or)_the_password_are_wrong'] = 'The username and(or) the password are(is) wrong.';
 	$admin_lang['the_user_is_not_activated'] = 'The user is not activated.';
+	$admin_lang['you_have_been_successfully_registred_please_check_your_emails_for_your_logininformation'] = 'You have been successfully registred. Please check your emails for your logininformation.';
 	$admin_lang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email'] = 'Welcome to "%s"
 
 Please keep this email for your records. Your account informaiton is as follows:

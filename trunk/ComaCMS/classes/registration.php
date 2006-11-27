@@ -286,7 +286,7 @@
 					VALUES ('$Name', '$Showname', '" . md5($Password) . "', '$registrationTime', '$Email', " . (($activated) ? '1' : '0') . (($activationCode != '') ? ", '$activationCode'" : '') . ")";
 				$this->_SqlConnection->SqlQuery($sql);
 				
-				$out .= $this->_AdminLang['your_account_has_been_successfully_activated'];
+				$out .= $this->_AdminLang['you_have_been_successfully_registred_please_check_your_emails_for_your_logininformation'];
 			}
 			
 			return $out;
@@ -305,9 +305,10 @@
 	 	 	}
 	 	 	else {
 	 	 		$sql = "UPDATE " . DB_PREFIX . "users
-					SET user_activated=1
+					SET user_activated=1, user_activationcode=''
 					WHERE user_activationcode='$ActivationCode'";
 				$this->_SqlConnection->SqlQuery($sql);
+				$out .= $this->_AdminLang['your_account_has_been_successfully_activated'];
 	 	 	}
 	 	 	return $out;
 	 	 }

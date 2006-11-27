@@ -123,6 +123,7 @@
 	$admin_lang['choose_menu'] = 'Men&uuml; ausw&auml;hlen';
 	$admin_lang['create_new'] = 'Neu erstellen';
 	$admin_lang['edit_menu'] = 'Men&uuml; bearbeiten';
+	$admin_lang['edit_menuitems'] = 'Men&uuml;eintr&auml;ge bearbeiten';
 	$admin_lang['delete_menu'] = 'Men&uuml; l&ouml;schen';
 	$admin_lang['here_you_can_choose_a_menu_to_edit'] = 'Hier k&ouml;nnen sie ein Men&uuml; zum bearbeiten w&auml;hlen';
 	$admin_lang['click_here_to_edit_the_actual_menu'] = 'Hier klicken, um das aktuelle Men&uuml; zu bearbeiten';
@@ -260,6 +261,7 @@
 	$admin_lang['you_did_not_make_any_inputs'] = 'Es wurden keine Eingaben gemacht.';
 	$admin_lang['the_user_and(or)_the_password_are_wrong'] = 'Der Benutzername und(oder) das Password sind(ist) falsch.';
 	$admin_lang['the_user_is_not_activated'] = 'Der Benutzer ist nicht aktiviert.';
+	$admin_lang['you_have_been_successfully_registred_please_check_your_emails_for_your_logininformation'] = 'Sie wurden erfolgreich registriert. Bitte &uuml;berpr&uuml;fen sie Ihre Emails f&uuml;r Ihre Logininformationen.';
 	$admin_lang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email'] = 'Willkommen auf "%s"
 
 Bitte bewahren Sie diese Email für Ihre Aufzeichnungen. Ihre Accountdaten sind:

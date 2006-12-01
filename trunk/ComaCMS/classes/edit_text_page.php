@@ -65,8 +65,9 @@
 				LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
 				WHERE struct.page_id='$page_id' AND struct.page_type='text'";
 				$old_result = db_result($sql);
+				$html =  TextActions::ConvertToPreHTML($page_text);
 				if($old = mysql_fetch_object($old_result)) { // exists the page?
-					if($old->page_title != $page_title || MakeSecure($old->text_page_text) != $page_text) {
+					if($old->page_title != $page_title || MakeSecure($old->text_page_html) != $html) {
 						if(!($page_title == $old->page_title && $old->text_page_text == '')) {					
 							$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
 								VALUES($old->page_id, '$old->page_type', '$old->page_name', '$old->page_title', $old->page_parent_id, '$old->page_lang', $old->page_creator, $old->page_date, '$old->page_edit_comment')";
@@ -76,7 +77,7 @@
 								VALUES ($lastid, '$old->text_page_text')";
 							db_result($sql);
 						}
-						$html =  TextActions::ConvertToPreHTML($page_text);
+						//$html =  TextActions::ConvertToPreHTML($page_text);
 						$sql = "UPDATE " . DB_PREFIX . "pages_text
 							SET text_page_text='$page_text', text_page_html='$html'
 							WHERE page_id='$old->page_id'";

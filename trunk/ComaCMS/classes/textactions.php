@@ -391,8 +391,23 @@
 			}
 			else if(substr($encodedLink, 0, 6) == 'http:/' || substr($encodedLink, 0, 5) == 'ftp:/' || substr($encodedLink, 0, 7) == 'https:/' )
 				return "$encodedLink\" class=\"link_extern";
-			// TODO: load the title of the page into the link title and set an other css-class if the page does not exists
-			return "index.php?page=$encodedLink\" class=\"link_intern";
+			return TextActions::GetInternUrl($encodedLink);
+		}
+		
+		function GetInternUrl($Pagename) {
+			// TODO: get the connection throug the parameters, not as a global
+			global $sqlConnection;
+			$link = rawurlencode($Pagename);
+			$sql = "SELECT page_title
+					FROM " . DB_PREFIX . "pages
+					WHERE page_name='{$link}' OR page_id='{$link}'
+					LIMIT 1";
+			$result = $sqlConnection->SqlQuery($sql);
+			if($pageTitleData = mysql_fetch_object($result)) {
+				return "index.php?page={$Pagename}\" title=\"{$pageTitleData->page_title}\" class=\"link_intern";
+			}
+			else
+				return "index.php?page={$Pagename}\" title=\"{$link}\" class=\"link_intern link_intern_missing";
 		}
 		
 		function MakeImage($Image) {

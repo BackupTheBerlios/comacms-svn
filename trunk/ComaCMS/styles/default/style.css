@@ -144,6 +144,10 @@ a.button , input.button, button {
 	line-height:2em;
 }
 
+a.link_intern_missing {
+  color: #F00;
+}
+
 a.button {
 	height: 1em;
 	padding-top: 4px;

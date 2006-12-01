@@ -121,19 +121,28 @@
 			foreach($emails[0] as $key => $email) {
 				$Text = str_replace('&lt;' . $emails[1][$key] . '@' . $emails[2][$key] .'&gt;', '[[' . $emails[1][$key] . '@' . $emails[2][$key] . '|' . $emails[1][$key] . '@' . $emails[2][$key] . ']]', $Text);
 			}
-			
-			
-			
-				
+
+
 			// catch all links
 			preg_match_all("#\[\[(.+?)\]\]#s", $Text, $links);
 			$link_list = array();
-			$link_nr = 1;
+//			$link_sources_list = array();
+//			$sourceNr = 1;
+			$linkNr = 1;
 			// replace all links with a short uniqe id to replace them later back
 			foreach($links[1] as $link) {
-				$link_list[$link_nr] = $link;
-				$Text = str_replace("[[$link]]", "[[%$link_nr%]]", $Text);
-				$link_nr++;
+/*				if(substr($link, 0, 7) == 'source:') {
+					$link_sources_list[$sourceNr] = substr($link, 7);
+					$Text = str_replace("[[$link]]", "[[s$sourceNr]]", $Text);
+					$sourceNr++;
+				}
+				else {*/
+					$link_list[$linkNr] = $link;
+					$Text = str_replace("[[$link]]", "[[%$linkNr%]]", $Text);
+					$linkNr++;
+//				}	
+				
+				
 			}
 			// convert all **text** to <strong>text</strong> => Bold
 			$Text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $Text);
@@ -159,13 +168,23 @@
 		
 			
 			// paste links into the text
-			foreach($link_list as $link_nr => $link) {
+			foreach($link_list as $linkNr => $link) {
 				if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))				
-					$Text = str_replace("[[%$link_nr%]]", "<a href=\"" . TextActions::MakeLink($link2[1]) . "\">" . $link2[2] . "</a>", $Text);
+					$Text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link2[1]) . "\">" . $link2[2] . "</a>", $Text);
 				else
-					$Text = str_replace("[[%$link_nr%]]", "<a href=\"" . TextActions::MakeLink($link) . "\">" . $link . "</a>", $Text);
+					$Text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link) . "\">" . $link . "</a>", $Text);
 			}
-						
+		/*	if(count($link_sources_list) > 0) {
+				$Text .= "<hr />\n<ol>"; 
+				foreach($link_sources_list as $sourceNr => $link) {
+					$Text = str_replace("[[s{$sourceNr}]]", "<a href=\"#source_{$sourceNr}\">[{$sourceNr}]</a>", $Text);
+					if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))
+						$Text .= "\n\t<li id=\"source_{$sourceNr}\"><a href=\"" . TextActions::MakeLink($link2[1]) . "\" >{$link2[1]}</a></li>";
+					else
+						$Text .= "\n\t<li id=\"source_{$sourceNr}\"><a href=\"" . TextActions::MakeLink($link) . "\" >$link</a></li>";
+				}
+				$Text .= "\n</ol>";
+			}*/
 			$lines = explode("\n", $Text);
 			$lines[] = "\n";
 			$tempText = '';
@@ -417,6 +436,9 @@
 			#[Url]|[size]|[Title] = [Url]|box|[size]|[Title]
 			#[Url]|[display]|[size]|[Title]
 			
+			// TODO: get the connection throug the parameters, not as a global
+			global $sqlConnection;
+			
 			// Defaults
 			$ImageAlign = IMG_ALIGN_NORMAL;
 			$imageDisplay = IMG_DISPLAY_BOX;
@@ -466,8 +488,23 @@
 			// check if the image isn't saved "local", if it is, download it!
 			// extern_{$filename}_timestamp.png
 			
+			
+			// if the file doesn't exists under the given path, try to find it in the database
 			if(!file_exists($imageUrl))
-				return "<strong>Bild nicht gefunden.</strong>";
+			{
+				$sql = "SELECT file_path
+						FROM " . DB_PREFIX . "files
+						WHERE LOWER(file_path) = '" . strtolower($imageUrl) . "'
+							OR LOWER(file_name) = '" . strtolower(basename($imageUrl)) . "'
+						LIMIT 1" ;
+				$result = $sqlConnection->SqlQuery($sql);
+				if($fileData = mysql_fetch_object($result))
+					$imageUrl = $fileData->file_path;
+				// check if the file from the database really exists
+				if(!file_exists($imageUrl))			
+					return "<strong>Bild (&quot;<em>$imageUrl</em>&quot;) nicht gefunden.</strong>";
+			}
+				
 			
 			// Resize the image
 			$image = new ImageConverter($imageUrl);

@@ -26,11 +26,11 @@
 		var $_file = '';
 		
 		function ImageConverter($File) {
-			// get the original sizes
+			$this->_file = $File;
 			if(!file_exists($File))
 				return null;
+			// get the original sizes
 			list($this->Size[0], $this->Size[1]) = getimagesize($File);
-			$this->_file = $File;
 		}
 		/**
 		 * @param int Width
@@ -39,6 +39,8 @@
 		 * @param string Prefix
 		 */
 		function SaveResizedTo($Width, $Height, $DestinationFolder, $Prefix = '') {
+			if(!file_exists($this->_file))
+				return null;
 			// get the extension of the file
 			preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $this->_file, $ext);
 			
@@ -46,19 +48,22 @@
 			// and don't suport memory_get_usage() and are able to handle bigger data
 		 	// (it is not bad for us)
 		 	$memory_limit = ini_get("memory_limit");
+		 	
 			if(substr($memory_limit, -1) == 'M')
 				$memory_limit = substr($memory_limit, 0, -1) * 1048576;
-			$needspace = ($this->Size[0] * $this->Size[1] + $Width * $Height) * 5;
+		 	
+			$needspace = ($this->Size[0] * $this->Size[1] + $Width * $Height) * 6.88;// was 5
+			
 			if(function_exists('memory_get_usage'))
 				$free_memory = $memory_limit - memory_get_usage();
 			else
 				$free_memory = 0;
-				
+			
 			// if there is not enough free memory available return false
 			if($needspace > $free_memory && $free_memory > 0)
 				return false;
 			$newImage = ImageCreateTrueColor($Width, $Height);
-			
+
 			switch (strtolower($ext[2])) {
 				case 'jpg' :
 				case 'jpeg': $source  = imagecreatefromjpeg($this->_file);
@@ -90,6 +95,8 @@
 		 * Calculate the width and height of the loaded picture, with a given maximum
 		 */
 		function CalcSizeByMax($Maximum) {
+			if(!file_exists($this->_file))
+				return null;
 			$size = array();
 			$size[0] = ($this->Size[0] > $this->Size[1]) ? round($Maximum, 0) : round($this->Size[0] / ($this->Size[1] / $Maximum), 0);
 			$size[1] = ($this->Size[1] > $this->Size[0]) ? round($Maximum, 0) : round($this->Size[1] / ($this->Size[0] / $Maximum), 0);

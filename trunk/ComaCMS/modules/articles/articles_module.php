@@ -190,23 +190,31 @@
 			$dateFormat = $this->_Config->Get('articles_date_format', 'd.m.Y');
 			$dateFormat .= ' ' . $this->_Config->Get('articles_time_format', 'H:i:s');
 			$showAuthor = $this->_Config->Get('articles_display_author', 1);
- 			while($article = mysql_fetch_object($articlesResult)) {
+ 			$articlesArray = array();
+			while($article = mysql_fetch_object($articlesResult)) {
+				
 				$thumbnail = '';
 				if($article->article_image != '') {
-					$image = new ImageConverter($article->article_image);
-					$size = $image->Size; 
-					if($size[0] > $imgMax && $size[1] > $imgMax)
-						$size = $image->CalcSizeByMax($imgMax);
-					$resizedFileName = $thumbnailFolder . '/' . $size[0] . 'x' . $size[1] . '_' . basename($article->article_image);
-					if(!file_exists($resizedFileName))
-						$image->SaveResizedTo($size[0], $size[1],$thumbnailFolder, $size[0] . 'x' . $size[1] . '_');
-					if(file_exists($resizedFileName))
-						$thumbnail = '<img class="article_image" title="' . $article->article_title . '" alt="' . $article->article_title . '" src="' . generateUrl($resizedFileName) . '" />';
+					if(file_exists($article->article_image)) {
+						$image = new ImageConverter($article->article_image);
+
+						$size = $image->Size; 
+						if($size[0] > $imgMax && $size[1] > $imgMax)
+							$size = $image->CalcSizeByMax($imgMax);
+
+						$resizedFileName = $thumbnailFolder . $size[0] . 'x' . $size[1] . '_' . basename($article->article_image);
+						if(!file_exists($resizedFileName))
+							$image->SaveResizedTo($size[0], $size[1],$thumbnailFolder, $size[0] . 'x' . $size[1] . '_');
+
+						if(file_exists($resizedFileName))
+							$thumbnail = '<img class="article_image" title="' . $article->article_title . '" alt="' . $article->article_title . '" src="' . generateUrl($resizedFileName) . '" />';
+					}
 				}	
 				$author = '';
 				if($showAuthor) {
 					$author = $this->_ComaLib->GetUserByID($article->article_creator);
 				}
+
 				$articlesArray[] = array(	'ARTICLE_ID' => $article->article_id,
 								'ARTICLE_TITLE' => $article->article_title,
 								'ARTICLE_THUMBNAIL' => $thumbnail,

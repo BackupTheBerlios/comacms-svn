@@ -79,5 +79,13 @@
  		function UseModule($Parameters) {
  			return '';
  		}
+ 		
+ 		function GetPage($Action) {
+ 			return '';
+ 		}
+ 		
+ 		function GetTitle() {
+ 			return '';
+ 		}
  	}
 ?>

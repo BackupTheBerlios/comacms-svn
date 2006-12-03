@@ -174,7 +174,7 @@
 			/**
 			 * @ignore
 			 */
-			include("./modules/$moduleName/{$moduleName}_admin.php");
+			include_once("./modules/$moduleName/{$moduleName}_admin.php");
 			if(class_exists('Admin_Module_' . $moduleName)) {
 				// create a link to the initialisation-function for the module-class
 				$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Admin_Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');

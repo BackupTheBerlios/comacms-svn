@@ -21,6 +21,7 @@
 	define("COMACMS_RUN", true);
  
 	include('common.php');
+	$outputpage = new OutputPage($sqlConnection);
 	
 	/**
 	 * @ignore
@@ -30,6 +31,7 @@
 	
 	if(!isset($extern_page))
 		header('Locaction: index.php');
+		
 	$text = '';
 	$title = '';
 	if($extern_page == 'login') {
@@ -71,7 +73,9 @@
 			Falls die Seite aber da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.";
 	}
 	elseif($extern_page == '410') {	//Gone/Deleted
-		$text = ' '; 
+		$title = 'Seite gel&ouml;scht';
+		$text = 'Die Seite wurde leider gel&ouml;scht. <br />
+			Falls die Seite dennoch da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.'; 
 	}
 	elseif($extern_page == 'image') {
 		
@@ -92,15 +96,40 @@
 			}
 		}
 	}
+	elseif($extern_page == 'module') {
+		// Get the name of Module to show
+		$moduleName = GetPostOrGet('moduleName');
+		/**
+		 * @ignore
+		 */
+		include_once('./modules/' . $moduleName . '/' . $moduleName . '_module.php');
+		// If the menu is active its class should be created
+		// check if the module-class is already created
+		if(!isset($$moduleName)) {
+			// is the module-class available?
+			if(class_exists('Module_' . $moduleName)) {
+				// create a link to the initialisation-function for the module-class
+				$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');
+				// create the module-class
+				$$moduleName = $newClass($sqlConnection, $user, $admin_lang, $config, $output, $lib);
+			}
+		}
+		// check again if the module-class is available (it should be so)
+		if (isset($$moduleName)) {
+			// Get Text of the module
+			$text = $$moduleName->GetPage(GetPostOrGet('action'));
+			$title = $$moduleName->GetTitle();
+		}
+	}
 	if($text == '') {
 		header('Location: index.php');
 		die();
 	}
+	
 	$output->Title = $title;
 	$output->SetReplacement('TEXT', $text);
 	$output->SetReplacement('PATH', "<a href=\"special.php?page=$extern_page\">$title</a>");
 	$output->SetCondition('notathome', true);
-	$outputpage = new OutputPage($sqlConnection);
 	
 	$sql = "SELECT *
 		FROM " . DB_PREFIX . "menu";
@@ -188,6 +217,7 @@
 			// replace the module-call with the output of the module
 			$output->Template = str_replace($module['identifer'], $$moduleName->UseModule($module['identifer'], str_replace('&amp;', '&', $moduleParameter)), $output->Template);
 	}
+	
 	$output->GenerateOutput();
 	echo $output->GeneratedOutput;
 	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sqlConnection->QueriesCount .' SQL queries -->';

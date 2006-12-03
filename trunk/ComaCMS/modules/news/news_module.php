@@ -73,5 +73,13 @@
  					</div><p>';
  			return $newsSring;
  		}
+ 		
+ 		function GetPage($Action) {
+ 			return 'Newspage';
+ 		}
+ 		
+ 		function GetTitle() {
+ 			return 'Newspage';
+ 		}
 	}
 ?>

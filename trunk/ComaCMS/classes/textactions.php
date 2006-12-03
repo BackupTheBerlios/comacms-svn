@@ -23,6 +23,7 @@
  	define('LINE_STATE_ULIST', 2);
  	define('LINE_STATE_OLIST', 3);
  	define('LINE_STATE_TABLE', 4);
+ 	define('LINE_STATE_HEADER', 5);
  	define('EMAIL_DEFAULT', 0);
  	define('EMAIL_ANTISPAM_TEXT', 1);
  	define('EMAIL_ANTISPAM_ASCII', 2);
@@ -202,6 +203,8 @@
 				// Tables : ^ or |
 				else if(TextActions::StartsWith('^', $line) || TextActions::StartsWith('|', $line))
 					$state = LINE_STATE_TABLE;
+				else if(TextActions::StartsWith('<h', $line))
+					$state = LINE_STATE_HEADER;
 				// EOF
 				else if ($line == "\n" || $line == "")
 					$state = LINE_STATE_NONE;
@@ -220,7 +223,9 @@
 					else if ($lastState == LINE_STATE_OLIST)
 						$outputText .= TextActions::ConvertOList($tempText);
 					else if ($lastState == LINE_STATE_TABLE)
-						$outputText .= TextActions::Converttable($tempText);	
+						$outputText .= TextActions::Converttable($tempText);
+					else if ($lastState == LINE_STATE_HEADER)
+						$outputText .= $tempText;	
 					$tempText = "\t".$line."\n";
 				}
 				
@@ -283,11 +288,11 @@
 		
 		
 		function ConvertText($textpart) {
-			$textpart = str_replace("\n\n","\n</p>\n<p>\n", $textpart);
+			$textpart = str_replace("\n\n", "\n</p>\n<p>\n", $textpart);
 			$textpart = "\n<p>\n" . $textpart . "\n</p>";
-			$textpart = str_replace("[block]","\n</p>[block]", $textpart);
-			$textpart = str_replace("[/block]","[/block]<p>\n", $textpart);
-			$textpart = preg_replace("#<p>[\r\n\t\ ]{0,}</p>#i",'',$textpart);
+			$textpart = str_replace("[block]", "\n</p>[block]", $textpart);
+			$textpart = str_replace("[/block]", "[/block]<p>\n", $textpart);
+			$textpart = preg_replace("#<p>[\r\n\t\ ]{0,}</p>#i", '', $textpart);
 			return $textpart;
 		}
 		
@@ -559,27 +564,27 @@
 
 		
 			if($imageDisplay == IMG_DISPLAY_BOX) {
-				$imageString = "\n\n<div class=\"thumb t" . $ImageAlign . "\">
+				$imageString = "</p>\n\n<div class=\"thumb t" . $ImageAlign . "\">
 						<div style=\"width:" . ($imageWidth + 4) . "px\">
 							<img width=\"{$imageWidth}\" height=\"{$imageHeight}\" src=\"{$imageUrl}\" title=\"$imageTitle\" alt=\"$imageTitle\" />
 							<div class=\"description\" title=\"$imageTitle\"><div class=\"magnify\"><a href=\"special.php?page=image&amp;file=$originalUrl\" title=\"vergr&ouml;&szlig;ern\"><img src=\"img/magnify.png\" title=\"vergr&ouml;&szlig;ern\" alt=\"vergr&ouml;&szlig;ern\"/></a></div>$imageTitle</div>
 						</div>
-					</div>\n";
+					</div><p>\n";
 			}
 			// HTMLcode for the box style without a title
 			else if($imageDisplay == IMG_DISPLAY_BOX_ONLY) {
-				$imageString = "\n\n<div class=\"thumb tbox t" . $ImageAlign . "\">
+				$imageString = "</p>\n\n<div class=\"thumb tbox t" . $ImageAlign . "\">
 						<div style=\"width:" . ($imageWidth + 4) . "px\">
 							<img width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />
 							<div class=\"magnify\"><a href=\"special.php?page=image&amp;file=$originalUrl\" title=\"vergr&ouml;&szlig;ern\"><img src=\"img/magnify.png\" title=\"vergr&ouml;&szlig;ern\" alt=\"vergr&ouml;&szlig;ern\"/></a></div>
 						</div>
-					</div>\n";
+					</div>\n<p>";
 			}
 			// HTMLcode for the picture only
 			else if($imageDisplay == IMG_DISPLAY_PICTURE) {
-				$imageString = "\n\n<div class=\"thumb tbox t" . $ImageAlign . "\">
+				$imageString = "</p>\n\n<div class=\"thumb tbox t" . $ImageAlign . "\">
 					<img width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />
-					</div>";
+					</div><p>";
 			}
 		
 			return "$imageString";	

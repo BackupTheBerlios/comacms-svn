@@ -19,7 +19,7 @@
    	/** Document type for XHTML strict */
   	define('DOCTYPE_XHTML_STRICT', 'xhtml strict');
   	/** Document type for XHTML transitional */
-  	define('DOCTYPE_XHTML_TRANSITIONAL', 'xhtmltramsitional');
+  	define('DOCTYPE_XHTML_TRANSITIONAL', 'xhtml transitional');
   	/**
   	 * Default document type
   	 * The same like DOCTYPE_XHTML_STRICT

@@ -154,7 +154,7 @@
 			// replace the module-call with the output of the module
 			$output->Template = str_replace($module['identifer'], $$moduleName->UseModule($module['identifer'], str_replace('&amp;', '&', $moduleParameter)), $output->Template);
 	}
-	
+	$outputpage->Text = preg_replace("#<p>[\r\n\t\ ]{0,}</p>#i", '', $outputpage->Text);
 	// paste the text to the template-generator
 	$output->SetReplacement('TEXT' , $outputpage->Text);
 	$output->GenerateOutput();

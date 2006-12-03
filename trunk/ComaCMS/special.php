@@ -34,6 +34,7 @@
 		
 	$text = '';
 	$title = '';
+	$path = '';
 	if($extern_page == 'login') {
 		$error = GetPostOrGet('error');
 		$title = "Login";
@@ -99,11 +100,12 @@
 	elseif($extern_page == 'module') {
 		// Get the name of Module to show
 		$moduleName = GetPostOrGet('moduleName');
-		/**
-		 * @ignore
-		 */
-		include_once('./modules/' . $moduleName . '/' . $moduleName . '_module.php');
-		// If the menu is active its class should be created
+		if(file_exists('./modules/' . $moduleName . '/' . $moduleName . '_module.php'))
+			/**
+			 * @ignore
+			 */
+			include_once('./modules/' . $moduleName . '/' . $moduleName . '_module.php');
+		// If the menu is activated it's class should be created
 		// check if the module-class is already created
 		if(!isset($$moduleName)) {
 			// is the module-class available?
@@ -119,6 +121,7 @@
 			// Get Text of the module
 			$text = $$moduleName->GetPage(GetPostOrGet('action'));
 			$title = $$moduleName->GetTitle();
+			$path = "<a href=\"special.php?page={$extern_page}&amp;moduleName={$moduleName}\">{$title}</a>";
 		}
 	}
 	if($text == '') {
@@ -126,9 +129,12 @@
 		die();
 	}
 	
-	$output->Title = $title;
+	if($path == '')
+		$path = "<a href=\"special.php?page=$extern_page\">$title</a>";
+	
+	$output->Title = $config->Get('pagename') . ' - ' . $title;
 	$output->SetReplacement('TEXT', $text);
-	$output->SetReplacement('PATH', "<a href=\"special.php?page=$extern_page\">$title</a>");
+	$output->SetReplacement('PATH', $path);
 	$output->SetCondition('notathome', true);
 	
 	$sql = "SELECT *

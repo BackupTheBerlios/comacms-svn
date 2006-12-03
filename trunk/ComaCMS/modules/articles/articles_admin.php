@@ -231,7 +231,7 @@
 						<td class=\"articles\">" . nl2br($article->article_description) . "</td>
 						<td>" . $this->_ComaLib->GetUserByID($article->article_creator) . "</td>
 						<td>
-							<a href=\"article.php?id=$article->article_id\" title=\"Anschauen\"><img src=\"./img/view.png\" alt=\"Anschauen\" title=\"Anschauen\" /></a> 
+							<a href=\"special.php?page=module&amp;moduleName=articles&amp;action=show&amp;articleId=$article->article_id\" title=\"Anschauen\"><img src=\"./img/view.png\" alt=\"Anschauen\" title=\"Anschauen\" /></a> 
 							<!--<img scr=\"./img/info.png\"  alt=\"Infos\" title=\"Infos\" />-->
 							<a href=\"admin.php?page=module_articles&amp;action=edit&amp;article_id=$article->article_id\" title=\"Bearbeiten\"><img src=\"./img/edit.png\" alt=\"Bearbeiten\" title=\"Bearbeiten\" /></a>
 							<a href=\"admin.php?page=module_articles&amp;action=delete&amp;article_id=$article->article_id\" title=\"L&ouml;schen\"><img src=\"./img/del.png\" alt=\"L&ouml;schen\" title=\"L&ouml;schen\" /></a>

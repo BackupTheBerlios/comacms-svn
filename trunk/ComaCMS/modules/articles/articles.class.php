@@ -19,7 +19,8 @@
  	/**
  	 * @ignore
  	 */
- 	require_once('system/functions.php');
+ 	require_once __ROOT__ . '/system/functions.php';
+ 	require_once __ROOT__ . '/classes/textactions.php';
  	
  	/**
  	 * @package ComaCMS
@@ -62,26 +63,27 @@
  			$this->_ComaLib = &$ComaLib;
  			$this->_User = &$User;
  			$this->_Config = &$Config;
- 		} 		
- 		   		/**
-    		 * Fill an array with the data of Articles, which is ready to paste in a ComaLate-Template
-    		 * @access public
-    		 * @param integer Maximum The maximum count of Articles, which should be loaded, if it is -1 all Articles will be loaded
-    		 * @param boolean ParserDate Should the timsamp of each article parsed to a hunam-readable value?
-    		 * @param boolean DisplayAutor Put the author into the array? if it's 'false' the value of the config is decisive if not the name will be shown
-    		 * @return array A ComaLate ready Array
-    		 */
-    		function FillArray($Maximum = 6, $ParserDate = true, $DisplayAuthor = false) {
-    			$entries = array();
-    			
-    			$sql = "SELECT *
+ 		}
+ 			
+ 		/**
+    	 * Fill an array with the data of Articles, which is ready to paste in a ComaLate-Template
+    	 * @access public
+    	 * @param integer Maximum The maximum count of Articles, which should be loaded, if it is -1 all Articles will be loaded
+    	 * @param boolean ParserDate Should the timsamp of each article parsed to a hunam-readable value?
+    	 * @param boolean DisplayAutor Put the author into the array? if it's 'false' the value of the config is decisive if not the name will be shown
+    	 * @return array A ComaLate ready Array
+    	 */
+    	function FillArray($Maximum = 6, $ParserDate = true, $DisplayAuthor = false) {
+    		$entries = array();
+    		
+    		$sql = "SELECT *
 				FROM " . DB_PREFIX . "articles
 				ORDER BY article_date DESC
 				LIMIT 0, $Maximum";
     			
-    			// if $Maximum is -1 then show all entries
-    			if($Maximum == -1)
-    				$sql = "SELECT *
+    		// if $Maximum is -1 then show all entries
+    		if($Maximum == -1)
+    			$sql = "SELECT *
 					FROM " . DB_PREFIX . "news
 					ORDER BY date DESC";
 			
@@ -131,7 +133,7 @@
 	 		if($title !== null && $description !== null && $text !== null) {
 				$sql = "INSERT INTO " . DB_PREFIX . "articles
 					(article_title, article_description, article_text, article_html, article_creator, article_date)
-					VALUES ('$title', '$description', '$text', '" . convertToPreHtml($text) . "', '{$this->_User->ID}', '" . mktime() . "')";
+					VALUES ('$title', '$description', '$text', '" . TextActions::ConvertToPreHTML($text) . "', '{$this->_User->ID}', '" . mktime() . "')";
 				db_result($sql);
 			}
 			if(GetPostOrGet('add_image') == 'add') 
@@ -156,7 +158,7 @@
 					article_title= '$title', 
 					article_description= '$description', 
 					article_text= '$text',
-					article_html= '" . convertToPreHtml($text) . "'
+					article_html= '" . TextActions::ConvertToPreHTML($text) . "'
 					WHERE article_id=$id";
 				db_result($sql);
 			}

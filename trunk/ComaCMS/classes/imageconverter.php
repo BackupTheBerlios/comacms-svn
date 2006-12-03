@@ -32,7 +32,12 @@
 			list($this->Size[0], $this->Size[1]) = getimagesize($File);
 			$this->_file = $File;
 		}
-		
+		/**
+		 * @param int Width
+		 * @param int Height
+		 * @param string Destinationfolder
+		 * @param string Prefix
+		 */
 		function SaveResizedTo($Width, $Height, $DestinationFolder, $Prefix = '') {
 			// get the extension of the file
 			preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $this->_file, $ext);
@@ -75,9 +80,20 @@
 					break;
 				case 'png' : imagepng($newImage, $OutputFile);
 					break;
+				default	   : return false;
 			}
 
 			return $OutputFile;
+		}
+		
+		/**
+		 * Calculate the width and height of the loaded picture, with a given maximum
+		 */
+		function CalcSizeByMax($Maximum) {
+			$size = array();
+			$size[0] = ($this->Size[0] > $this->Size[1]) ? round($Maximum, 0) : round($this->Size[0] / ($this->Size[1] / $Maximum), 0);
+			$size[1] = ($this->Size[1] > $this->Size[0]) ? round($Maximum, 0) : round($this->Size[1] / ($this->Size[0] / $Maximum), 0);
+			return $size;
 		}
 	}
  

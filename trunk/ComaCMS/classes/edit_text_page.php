@@ -15,7 +15,7 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
 	
-	require __ROOT__ . '/classes/textactions.php';
+	require_once __ROOT__ . '/classes/textactions.php';
 	/**
 	 * @package ComaCMS
 	 */

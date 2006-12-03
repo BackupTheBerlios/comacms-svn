@@ -20,6 +20,7 @@
  	 */
  	require_once('classes/admin/admin_module.php');
  	require_once('modules/articles/articles.class.php');
+ 	require_once __ROOT__ . '/classes/imageconverter.php';
  	
  	/**
  	 * @package ComaCMS
@@ -54,7 +55,7 @@
  		 */
  		function GetPage($Action = '') {
  			$out = '';
- 			switch ($Action) {
+ 			switch (strToLower($Action)) {
  				case 'new':		$out .= $this->_newArticle();
  							break;
 				case 'add':		$nextpage = $this->_Articles->_addArticle();
@@ -79,9 +80,14 @@
 								$out .= $this->_homePage();
 							}
 							break;
-				case 'setImage':	$out .= $this->_setImage();
+				case 'setimage':
+								$id = GetPostOrGet("article_id");
+								if(is_numeric($id))
+									$out .= $this->_setImage($id);
+								else
+									$out .= $this->_homePage();
 							break;
-				case 'saveImage':	$out .= $this->_Articles->_saveImage();
+				case 'saveimage':	$out .= $this->_Articles->_saveImage();
 							$out .= $this->_homePage();
 							break;
  				default:		$out .= $this->_homePage();
@@ -115,7 +121,7 @@
 								writeButton(\"img/button_fett.png\",\"Formatiert Text Fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 								writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 								writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als �berschrift\",\"=== \",\" ===\",\"?berschrift\",\"h\");
+								writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als &Uuml;berschrift\",\"== \",\" ==\",\"?berschrift\",\"h\");
 							</script>
 							<textarea id=\"editor\" cols=\"60\" rows=\"6\" name=\"article_text\" class=\"article_input\"></textarea>
 					</div>
@@ -176,7 +182,7 @@
 					</div>
 					<div class=\"row\">
 						<label>Bild: <span class=\"info\">Das ist ein kleines Bild das zu dem Arikel angezeigt wird.</span></label>
-						" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img style=\"float:left\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '<b>noch kein Bild festgelegt</b><br />') . "Wenn das Bild gesetzt oder ver&auml;ndert wird, gehen alle ungespeicherten Ver&auml;nderungen an den Texten verloren!<br /><a class=\"button\" href=\"admin.php?page=articles&amp;action=setimage&amp;article_id=$id\">Bild setzen/ver&auml;ndern</a>
+						" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img style=\"float:left\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '<b>noch kein Bild festgelegt</b><br />') . "Wenn das Bild gesetzt oder ver&auml;ndert wird, gehen alle ungespeicherten Ver&auml;nderungen an den Texten verloren!<br /><a class=\"button\" href=\"admin.php?page=module_articles&amp;action=setimage&amp;article_id=$id\">Bild setzen/ver&auml;ndern</a>
 					</div>
 					<div class=\"row\">
 						<input type=\"submit\" class=\"button\" value=\"{$this->_Lang['save']}\" /><input type=\"reset\" class=\"button\" value=\"{$this->_Lang['reset']}\" />
@@ -193,7 +199,7 @@
 		 * @return string
 		 */
 		function _homePage() {	
-	 		$thumbnailfoler = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
+	 		$thumbnailfolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
 	 		$imgmax = 100;
 	 		$out = "<h2>{$this->_Lang['articles_module']}</h2>"; 
 	 		$out .= "<a href=\"admin.php?page=module_articles&amp;action=new\" class=\"button\">{$this->_Lang['write_new_article']}</a><br /> 
@@ -213,10 +219,15 @@
 				ORDER BY article_date DESC";
 			$articles_result = db_result($sql);
 			while($article = mysql_fetch_object($articles_result)) {
+				$image = new ImageConverter($article->article_image);
+				$size = $image->CalcSizeByMax($imgmax);
+				$resizedFileName = $thumbnailfolder . '/' . $size[0] . 'x' . $size[1] . '_' . basename($article->article_image);
+				if(!file_exists($resizedFileName))
+					$image->SaveResizedTo($size[0], $size[1],$thumbnailfolder, $size[0] . 'x' . $size[1] . '_');
 				$out .= "<tr>
 						<td class=\"table_date_width\">" . date('d.m.Y H:i', $article->article_date) . "</td>
 						<td>$article->article_title</td>
-						<td class=\"article_image\">" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img alt=\"A Logo\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '') . "</td>
+						<td class=\"article_image\">" . ((file_exists($resizedFileName)) ? "<img alt=\"Image for $article->article_title\" src=\"". generateUrl($resizedFileName) . "\"/>" : '') . "</td>
 						<td class=\"articles\">" . nl2br($article->article_description) . "</td>
 						<td>" . $this->_ComaLib->GetUserByID($article->article_creator) . "</td>
 						<td>
@@ -237,42 +248,43 @@
 	 	 */
 	 	function _setImage($article_id) {
 	 		if(!is_numeric($article_id))
-	 			$article_id = GetPostOrGet('article_id');
+	 			return $this->_homePage();
 	 		$sql = "SELECT *
 				FROM " . DB_PREFIX . "articles
 				WHERE article_id=$article_id";
 			$article_result = db_result($sql);
 			if($article = mysql_fetch_object($article_result)) {
 	 			$out = '';
-	 			$sql = "SELECT *
+	 			$sql = "SELECT file_path
 					FROM " . DB_PREFIX . "files
 					WHERE file_type LIKE 'image/%'
 					ORDER BY file_name ASC";
 				$images_result = db_result($sql);
 				$imgmax = 100;
-				$imgmax2 = 300;
-				$inlinemenu_folder = 'data/thumbnails/';
+				$imgmax2 = 100;
+				$thumbnailfolder = 'data/thumbnails/';
 				$out .= "<form action=\"admin.php\" method=\"post\"><div class=\"imagesblock\">
 				<input type=\"hidden\" name=\"page\" value=\"module_articles\"/>
 				<input type=\"hidden\" name=\"action\" value=\"saveImage\"/>
 				<input type=\"hidden\" name=\"article_id\" value=\"$article_id\"/>";
-				while($image = mysql_fetch_object($images_result)) {
-					$thumb = basename($image->file_path);
-					preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $thumb, $ext);
-					if(strtolower($ext[2]) == 'gif')
-						$thumb .= '.png';
-					$orig_sizes = getimagesize($image->file_path);
-					$succes = true;
-					if(!file_exists($inlinemenu_folder . $imgmax . '_' . $thumb))
-						$succes = generateThumb($image->file_path, $inlinemenu_folder . $imgmax . '_', $imgmax);
-					if((file_exists($inlinemenu_folder . $imgmax . '_' . $thumb) || $succes) && $orig_sizes[0] >= $imgmax2) {
-						$sizes = getimagesize($inlinemenu_folder . $imgmax . '_' . $thumb);
-						$margin_top = round(($imgmax - $sizes[1]) / 2);
-						$margin_bottom = $imgmax - $sizes[1] - $margin_top;
-						$out .= "<div class=\"imageblock\">
-					<a href=\"" . generateUrl($image->file_path) . "\">
-					<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $sizes[0] . "px;height:" . $sizes[1] . "px;\" src=\"" . generateUrl($inlinemenu_folder . $imgmax . '_' .$thumb) . "\" alt=\"$thumb\" /></a><br />
-					<input type=\"radio\" name=\"image_path\" " .(($article->article_image  == $image->file_path) ? 'checked="checked" ' : '') . " value=\"$image->file_path\"/></div>";
+				while($imageData = mysql_fetch_object($images_result)) {
+					$imageUrl = $imageData->file_path;
+					if(file_exists($imageUrl)) {
+						$image = new ImageConverter($imageUrl);
+						$size = $image->CalcSizeByMax($imgmax);
+						$resizedFileName = $thumbnailfolder . '/' . $size[0] . 'x' . $size[1] . '_' . basename($imageUrl); 
+						if(!file_exists($resizedFileName))
+							$resizedFileName = $image->SaveResizedTo($size[0], $size[1], $thumbnailfolder, $size[0] . 'x' . $size[1] . '_');
+		
+						if(file_exists($resizedFileName) && $resizedFileName !== false) {
+							$margin_top = round(($imgmax - $size[1]) / 2);
+							$margin_bottom = $imgmax - $size[1] - $margin_top;
+							$out .= "<div class=\"imageblock\">
+							<a href=\"" . generateUrl($resizedFileName) . "\">
+							<img style=\"margin-top:" . $margin_top . "px;margin-bottom:" . $margin_bottom . "px;width:" . $size[0] . "px;height:" . $size[1] . "px;\" src=\"" . generateUrl($resizedFileName) . "\" alt=\"". basename($imageData->file_path) . "\" /></a><br />
+						<input type=\"radio\" name=\"image_path\" " .(($article->article_image  == $imageData->file_path) ? 'checked="checked" ' : '') . " value=\"" . $imageData->file_path . "\"/></div>";
+						}
+						
 					}
 				}
 				$out .= "</div><input type=\"submit\" value=\"{$this->_Lang['apply']}\" class=\"button\"/><a href=\"admin.php?page=module_articles&amp;action=edit&amp;article_id=$article_id\" class=\"button\">{$this->_Lang['back']}</a></form>";

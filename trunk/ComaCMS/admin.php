@@ -22,6 +22,7 @@
 	define('COMACMS_RUN', true);
 	
 	include('common.php');
+	$outputpage = new OutputPage($sqlConnection);
 
 	if(!$user->IsLoggedIn)  {
 		header('Location: special.php?page=login' . (($user->LoginError != -1) ? ('&error=' . $user->LoginError) : ''));
@@ -202,8 +203,20 @@
 			$linkStyle = '';
 		$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'admin.php?page=' . $part[1], 'CSS_ID' => '', 'LINK_STYLE' => $linkStyle);
 	}
+	// Replace all menus except of DEFAULT with data of database 
+	$sql = "SELECT *
+		FROM " . DB_PREFIX . "menu";
+	$menus = $sqlConnection->SqlQuery($sql);
+	while ($database_menu = mysql_fetch_object($menus)) {
+		if ($database_menu->menu_name != 'DEFAULT') {
+			$output->SetReplacement('MENU_' . $database_menu->menu_name, $outputpage->GenerateMenu($database_menu->menu_id));
+		}
+	}
+	// Replace DEFAULT menu by admin menuarray
 	$output->SetReplacement('MENU_DEFAULT' , $menu);
+	// Replace outputtext
 	$output->SetReplacement('TEXT' , $text);
+	// Replace Title
 	$output->Title = $admin_lang['administration'] . ' - ' . $title;
 	$output->SetCondition('notathome', true);
 	$output->SetCondition('notinindex', true);

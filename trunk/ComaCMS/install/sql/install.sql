@@ -72,18 +72,18 @@ DROP TABLE IF EXISTS {DB_PREFIX}articles;
 		);
 		DROP TABLE IF EXISTS {DB_PREFIX}menu;
 		CREATE TABLE {DB_PREFIX}menu (
-			menu_id int(10) unsigned NOT NULL auto_increment,
-			menu_name VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-			menu_title VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+			menu_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+			menu_name VARCHAR( 255 ) NOT NULL DEFAULT '',
+			menu_title VARCHAR( 255 ) NOT NULL DEFAULT '',
 			PRIMARY KEY  (menu_id)
 		);
 		DROP TABLE IF EXISTS {DB_PREFIX}menu_entries;
 		CREATE TABLE {DB_PREFIX}menu_entries (
 			menu_entries_id INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-			menu_entries_link VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-			menu_entries_title VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
-			menu_entries_new ENUM( 'yes', 'no' ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL DEFAULT 'no',
-			menu_entries_css_id VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+			menu_entries_link VARCHAR( 255 ) NOT NULL DEFAULT '',
+			menu_entries_title VARCHAR( 30 ) NOT NULL DEFAULT '',
+			menu_entries_new ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no',
+			menu_entries_css_id VARCHAR( 50 ) NOT NULL DEFAULT '',
 			menu_entries_orderid INT( 10 ) UNSIGNED NULL,
 			menu_entries_menuid INT( 10 ) NOT NULL DEFAULT '1',
 			menu_entries_page_id INT( 10 ) UNSIGNED NULL

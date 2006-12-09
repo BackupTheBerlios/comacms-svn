@@ -319,14 +319,15 @@ The Administration';
 	$admin_lang['message'] = 'Message';
 	$admin_lang['send'] = 'Send';
 	$admin_lang['new_email_from_a_visitor_of_%homepage%'] = 'New email form a visitor of %s';
-	$admin_lang['contact_message_%from%_%message'] = '  Contact-Message
-  ---------------
+	$admin_lang['contact_message_%from%_%message'] = '    Contact-Message
+    ---------------
 
 From: %s
 Message:
 ----------------------------
 %s
 ----------------------------
+
 
 Please don\'t answer this email. This is a computer-generated message.';				
 	$admin_lang['your_message_was_sent_succesdfully'] = 'Your message was sent succesdfully!';

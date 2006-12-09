@@ -320,8 +320,9 @@ Die Administratoren';
 	$admin_lang['message'] = 'Nachricht';
 	$admin_lang['send'] = 'Abschicken';
 	$admin_lang['new_email_from_a_visitor_of_%homepage%'] = 'Eine neue Email von einem Besucher von %s';
-	$admin_lang['contact_message_%from%_%message'] = '  Kontakt-Nachricht
-  ---------------
+	$admin_lang['contact_message_%from%_%message'] = '    Kontakt-Nachricht
+    -----------------
+
 
 Von: %s
 Nachricht:

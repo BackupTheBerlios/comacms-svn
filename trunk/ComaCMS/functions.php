@@ -44,7 +44,7 @@
 	function sendmail($To, $From, $Title, $Content) {
 		
 		$header= "From:{$From}\n";
-		//$header .= 'Content-Type: text/html';
+		$header .= 'Content-Type: text/plain; charset="utf-8"';
 
 		return mail($To, $Title, $Content, $header);
 	}

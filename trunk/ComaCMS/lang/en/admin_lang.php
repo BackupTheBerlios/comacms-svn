@@ -246,8 +246,8 @@
 	$admin_lang['the_name_is_already_assigned'] = 'The name is already assigned!';
 	$admin_lang['the_nickname_must_be_indicated'] = 'The nickname must be indicated!';
 	$admin_lang['the_nickname_is_already_assigned'] = 'The nickname is already assigned!';
-	$admin_lang['the_email_address_must_be_inicated'] = 'The email address must be indicated!';
-	$admin_lang['this_is_not_a_valid_email_address'] = 'This is not a valid email address!';
+	$admin_lang['the_email_address_must_be_indicated'] = 'The email address must be indicated!';
+	$admin_lang['this_is_a_invalid_email_address'] = 'This is a invalid email address!';
 	$admin_lang['the_email_is_already_assigned_to_another_user'] = 'The emailaddress is already assigned to another user!';
 	$admin_lang['none_of_the_passwordfields_must_not_be_empty'] = 'None of the passwordfields must not be empty!';
 	$admin_lang['the_password_and_its_repetition_are_unequal'] = 'The password and its repetitionare unequal!';
@@ -312,6 +312,27 @@ Thank you for registering.
 
 --
 The Administration';
+
+	//contact module
+	$admin_lang['please_enter_your_message'] = 'Please enter your message!';
+	$admin_lang['contact'] = 'Contact';
+	$admin_lang['message'] = 'Message';
+	$admin_lang['send'] = 'Send';
+	$admin_lang['new_email_from_a_visitor_of_%homepage%'] = 'New email form a visitor of %s';
+	$admin_lang['contact_message_%from%_%message'] = '  Contact-Message
+  ---------------
+
+From: %s
+Message:
+----------------------------
+%s
+----------------------------
+
+Please don\'t answer this email. This is a computer-generated message.';				
+	$admin_lang['your_message_was_sent_succesdfully'] = 'Your message was sent succesdfully!';
+	$admin_lang['an_error_occured_on_sending_this_message'] = 'An error occured on sending this message!';
+	$admin_lang['no_valid_reciever_email_address'] = 'No Valid Reciever-Email-Address!';
+	
 	//article module
 	$admin_lang['articles'] = 'Articles';
 	$admin_lang['articles_module'] = 'Articlesmodule';

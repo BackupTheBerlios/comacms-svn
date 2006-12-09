@@ -242,12 +242,14 @@
 	$admin_lang['with_this_password_the_user_can_login_to_restricted_areas'] = 'Mit diesem Passwort kann sich der Benutzer in die gesch&auml;tzten Bereiche einloggen. (Notwendig)';
 	$admin_lang['it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'] = 'Durch eine Wiederholung wird sichergestellt, dass man sich bei der Eingabe nicht vertippt hat. (Notwendig)';
 	$admin_lang['using_the_email_address_the_user_is_contacted_by_the_system'] = 'Durch die Emailadresse wird der Benutzer vom System contaktiert. (Notwendig)';
+	// TODO: think about 'indicated'
 	$admin_lang['the_name_must_be_indicated'] = 'Der Name muss angegeben werden!';
 	$admin_lang['the_name_is_already_assigned'] = 'Der Name ist bereits vergeben!';
 	$admin_lang['the_nickname_must_be_indicated'] = 'Der Loginname muss angegeben werden!';
 	$admin_lang['the_nickname_is_already_assigned'] = 'Der Loginname ist bereits vergeben!';
-	$admin_lang['the_email_address_must_be_inicated'] = 'Die Emailadresse muss angegeben werden!';
-	$admin_lang['this_is_not_a_valid_email_address'] = 'Dies ist keine g&uuml;ltige Emailadresse!';
+	// TODO: think about 'indicated'
+	$admin_lang['the_email_address_must_be_indicated'] = 'Die Emailadresse muss angegeben werden!';
+	$admin_lang['this_is_a_invalid_email_address'] = 'Dies ist keine g&uuml;ltige Emailadresse!';
 	$admin_lang['the_email_is_already_assigned_to_another_user'] = 'Die Emailadresse ist bereits an einen anderen Benutzer vergeben!';
 	$admin_lang['none_of_the_passwordfields_must_not_be_empty'] = 'Keins der Passwordfelder darf leer sein!';
 	$admin_lang['the_password_and_its_repetition_are_unequal'] = 'Das Password und seine Wiederholung sind ungleich!';
@@ -273,7 +275,7 @@ Password: "%s"
 
 Bitte vergessen Sie Ihr Password nicht! Es ist verschlüsselt in unserer Datenbank gepeichert, sodass wir es nicht für sie wiederherstellen können. Sollten Sie doch einmal Ihr Password vergessen haben können Sie mit Hilfe Ihrer Emailadresse "%s" ein neues beantragen und activieren.
 
-Danke für Ihre Registration
+Vielen Dank für Ihre Registration
 
 --
 Die Administratoren';
@@ -290,7 +292,7 @@ Bitte vergessen Sie Ihr Password nicht! Es ist verschlüsselt in unserer Datenba
 
 Ihr Account wird demnächst von einem Administrator aktiviert werden, sodass sie sich anmelden können.
 
-Danke für Ihre Registration
+Vielen Dank für Ihre Registration
 
 --
 Die Administratoren';
@@ -308,12 +310,33 @@ Bitte vergessen Sie Ihr Password nicht! Es ist verschlüsselt in unserer Datenba
 Rufen sie bitte diese Seite auf, um Ihren neuen Account zu aktivieren:
 %s?page=register&action=activateRegistration&code=%s
 
-Danke für Ihre Registration
+Vielen Dank für Ihre Registration
 
 --
 Die Administratoren';
+	//contact module
+	$admin_lang['please_enter_your_message'] = 'Bitte geben Sie Ihre Nachricht ein!';
+	$admin_lang['contact'] = 'Kontakt';
+	$admin_lang['message'] = 'Nachricht';
+	$admin_lang['send'] = 'Abschicken';
+	$admin_lang['new_email_from_a_visitor_of_%homepage%'] = 'Eine neue Email von einem Besucher von %s';
+	$admin_lang['contact_message_%from%_%message'] = '  Kontakt-Nachricht
+  ---------------
+
+Von: %s
+Nachricht:
+----------------------------
+%s
+----------------------------
+
+Bitte antworten sie nicht auf diese Email. Sie wurde automatisch verschickt.';	
+	$admin_lang['your_message_was_sent_succesdfully'] = 'Ihre Nachricht wurde erfolgreich verschickt!';
+	$admin_lang['an_error_occured_on_sending_this_message'] = 'Beim senden der Email ist ein Fehler aufgetreten!';
+	$admin_lang['no_valid_reciever_email_address'] = 'Die Empf&auml;ngeremailadresse ist ung&uuml;ltig!';
+	
 	//article module
 	$admin_lang['articles'] = 'Artikel';
 	$admin_lang['articles_module'] = 'Artikelmodul';
 	$admin_lang['write_new_article'] = 'einen neuen Artikel schreiben';
+	
 ?>

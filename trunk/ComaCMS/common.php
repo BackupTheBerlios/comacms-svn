@@ -28,6 +28,7 @@
 		else
 			header('location: install/install.php');
 	}
+	header('Content-type: text/html; charset=utf-8');
 	define('__ROOT__', dirname(__FILE__));
 	include('classes/sql.php');
 	include('classes/comalib.php');

@@ -209,7 +209,7 @@
 				}
 			}
 			if ($Email == '') {
-				$EmailError = $this->_AdminLang['the_email_address_must_be_inicated'];
+				$EmailError = $this->_AdminLang['the_email_address_must_be_indicated'];
 				$fehlerfrei = false;
 			}
 			else {
@@ -220,14 +220,14 @@
 						WHERE user_email='$Email'
 						LIMIT 0 , 1";
 					$result = $this->_SqlConnection->SqlQuery($sql);
-					if (mysql_num_rows($result) == 1) {
+					if (mysql_num_rows($result) >= 1) {
 						$EmailError = $this->_AdminLang['the_email_is_already_assigned_to_another_user'];
 						$fehlerfrei = false;
 					}
 				}
 				else {
 					// If its not a real emailaddress throw exception
-					$EmailError = $this->_AdminLang['this_is_not_a_valid_email_address'];
+					$EmailError = $this->_AdminLang['this_is_a_invalid_email_address'];
 					$fehlerfrei = false;
 				}
 			}

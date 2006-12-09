@@ -34,14 +34,19 @@
 		}
 		return $out;
 	}
+	
+	/**
+	  * @param string To The email will be sended to this email address
+	  * @param string From The email shows this email address as the sender
+	  * @param string Title This is the Title of the Mail
+	  * @param string Content This is the content of the email 
+	  */
+	function sendmail($To, $From, $Title, $Content) {
+		
+		$header= "From:{$From}\n";
+		//$header .= 'Content-Type: text/html';
 
-	function sendmail($to, $from, $title, $text) {
-		$to = strtolower($to);
-		$from = strtolower($from);
-		$header="From:$from\n";
-		$header .= 'Content-Type: text/html';
-
-		return mail($to, $title, $text, $header);
+		return mail($To, $Title, $Content, $header);
 	}
 
 	function getmicrotime($mic_time) {

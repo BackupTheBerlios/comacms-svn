@@ -1,7 +1,7 @@
 <?php
 /**
  * @package ComaCMS
- * @subpackage News
+ * @subpackage Sitemap
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------

@@ -3,13 +3,12 @@
 	[_]- Manual
 	[ ]- Multi-Site-System(one installation with different sites, with a master- and a per-site-admin-interface
 	[_]- Rights(per user, per group)
-	[ ]- Make authorisation over HTTP-AUTH (there will be a problem HTTP-AUTH is not supported in the CGI version of PHP)
 	[_]- Userfriendly Installation
 	[_]- Translations
 	[_]- Modulesystem
 	[ ]- Admin-Interface
-		[_]- Preferences
-		[_]- AdminControl(statistics etc.)
+		[X]- Preferences
+		[X]- AdminControl(statistics etc.)
 		[X]- Stylemanagement(change, preview)
 		[_]- Usermanagement
 		[_]- Rightsmanagement
@@ -19,11 +18,11 @@
 	[ ]- 'User'-Interface
 		[ ]- Page-editor
 		[ ]- Own preferences
-		[ ]- Login
+		[_]- Login
 	[ ]- Admin-/User-Interface
 		[_]- Gallery-editor
-		[ ]- Page-editor
-			[ ]- Special-elements
+		[_]- Page-editor
+			[_]- Special-elements
 			[ ]- Spellcheck
 			[ ]- WYSIWYG (should we use TinyMCE from http://tinymce.moxiecode.com/? or use it as an reference and write our own.. |look at www.blogger.com for more infos we must write it totally on our own!!!it must run on every browser but only if it has activated java-script)
 	[_]- 'Full XHTML support'
@@ -39,7 +38,7 @@
 		[ ]- Connect with articles
 	[ ]- 'Timezone-option'
 	[ ]- Submenues
-	[ ]- Registerform by a "hidden" page with an unique id
+	[_]- Registerform by a "hidden" page with an unique id
 	[ ]- Database-size-reducer
 	[ ]- Newsletter
 	[ ]- Administration can dedect elements which are configurable in the style

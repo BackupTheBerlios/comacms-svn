@@ -82,7 +82,7 @@ legend {
 	color: #000;
 }
 
-thead td {
+thead td, th {
 	font-weight: bold;
 }
 
@@ -180,17 +180,17 @@ table th.actions {
 	width: 5em;
 }
 
-table.text_table {
+table {
 	border-spacing: 0px;
 	border-collapse: collapse;
 }
 
-table.text_table td, table.text_table th {
+table td, table th {
 	border: 1px solid #000;
 	padding: 0.1em;
 }
 
-table.text_table th {
+table th {
 	background-color: #9B9FBF;
 	font-weight: bold;
 }

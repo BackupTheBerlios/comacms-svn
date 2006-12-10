@@ -1,0 +1,46 @@
+  ComaCMS Changelog
+  =================
+
+ v0.2
+ -----------------
+ * [update]	Translations (de, en)
+ * [fix]	Some bugs
+ * [update]	The edit-box for textpages is now resizeable
+ * [new]	Contact-Module
+ * [fix]	The admin-interface hides menus (except the default-menu)
+ * [new]	Own page for module-output
+ * [fix]	Textconverter convertes images casesensitve
+ * [new]	Internal links get the title of it's destination
+ * [update]	New-textconverter
+ * [update]	Menueditor got a new layout
+ * [fix]	Installation wasn't check all folders for writing-permissions
+ * [new]	Registration of new users
+ * [fix]	PHP5 compatibility isn't given
+ * [update]	Installation
+ * [new]	Filemanager-sort-functions
+ * [fixed]	Downloads are no referrers anymore
+ * [new]	Module-support
+ * [new]	ComaLib as a template-engine
+ * [new]	download.php
+ * [update]	Gallery-pages
+ * [new]	HTTP-language detection
+ * [new]	Function to recieve $_POST and $_GET vars 
+ * [new]	Syncronisation of files in the upload folder
+ * [new]	History for text-pages
+ * [update]	(new) OOP-layout
+
+ v0.1
+ ----------------
+ * [update]	Translations (de, en)
+ * [fix]	Some bugs
+ * [new]	Inlinemenus
+ * [new]	Gallery-pages
+ * [new]	Preferences-manager
+ * [new]	Logout-function
+ * [new]	News-system
+ * [new]	Article-system
+ * [update]	Administration
+ * [new]	User-manager
+ * [new]	Installation
+ * [new]	Sytylepreview
+ * [new]	Startet with ComaCMS

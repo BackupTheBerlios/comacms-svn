@@ -6,7 +6,7 @@
  #----------------------------------------------------------------------
  # file                 : common.php
  # created              : 2005-08-05
- # copyright            : (C) 2005 The ComaCMS-Team
+ # copyright            : (C) 2005-2005 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -56,7 +56,7 @@
 	if(!empty($headerStyleName))
 		$styleName = $headerStyleName; 
 	$output->LoadTemplate('./styles/', $styleName);
-	$output->SetMeta('generator', 'ComaCMS 0.1 (http://comacms.berlios.de)');
+	$output->SetMeta('generator', 'ComaCMS v0.2 (http://comacms.berlios.de)');
 	$output->SetCondition('notinadmin', true);
 	
 	if(!isset($extern_page) && endsWith($_SERVER['PHP_SELF'], 'index.php'))
@@ -64,22 +64,6 @@
 	elseif(!isset($extern_page))
 		$extern_page = '';
 		
-		
-		
-//	include_once("functions.php");
-	//include_once("counter.php");
-
-	
-	
-	//
-	// if there is no sitename to load get the defaultssite
-	//
-//	if(!isset($extern_page) && isset($internal_default_page)&& endsWith($_SERVER['PHP_SELF'], "index.php"))
-//		$extern_page = $internal_default_page;
-//	elseif(!isset($extern_page) && endsWith($_SERVER['PHP_SELF'], "index.php"))
-//		$extern_page = 'home';
-//	elseif(!isset($extern_page))
-//		$extern_page = '';
 	
 	if(startsWith($extern_page, 'a:')) {
  		header('Location: admin.php?page='.substr($extern_page, 2));
@@ -102,25 +86,5 @@
 	else
 		$pagePrefix = '';
 	
-	
 	$user->SetPage($pagePrefix . $extern_page, $config);
-	
-	
-//	set_usercookies();
-	//
-	// TOOD : GET AUTHORISATION
-	//
-//	if(endsWith($_SERVER['PHP_SELF'], 'admin.php') && !$actual_user_is_admin && !$actual_user_is_logged_in)
-//		header('Location: special.php?page=login');
-//	$pagePrefix = 'l:';
-/*	if(endsWith($_SERVER['PHP_SELF'], 'admin.php'))
-		$pagePrefix = 'a:';
-	elseif(endsWith($_SERVER['PHP_SELF'], 'gallery.php'))
-		$pagePrefix = 'g:';
-	elseif(endsWith($_SERVER['PHP_SELF'], 'special.php'))
-		$pagePrefix = 's:';
-*/		
-//	counter_set($pagePrefix . $extern_page);
-	
-//	actual_online();
 ?>

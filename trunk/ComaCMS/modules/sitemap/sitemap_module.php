@@ -1,7 +1,7 @@
 <?php
 /**
  * @package ComaCMS
- * @subpackage News
+ * @subpackage Sitemap
  * @copyright (C) 2005-2006 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
@@ -75,7 +75,7 @@
  		}
  		
  		/**
- 		 * This function returns the text of the home page of the modul
+ 		 * This function returns the text of the home page of the module
  		 * @author ComaWStefan
  		 * @access private
  		 * @return string The text of the modul

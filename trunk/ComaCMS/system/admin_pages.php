@@ -4,17 +4,17 @@
  * @copyright (C) 2005-2006 The ComaCMS-Team
  * This file contains (nearly) all subsites in the admin-interface
  */
- #----------------------------------------------------------------------#
- # file			: admin_pages.php
- # created		: 2005-07-12
- # copyright		: (C) 2005-2006 The ComaCMS-Team
- # email		: comacms@williblau.de
- #----------------------------------------------------------------------#
+ #----------------------------------------------------------------------
+ # file                 : admin_pages.php
+ # created              : 2005-07-12
+ # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # email                : comacms@williblau.de
+ #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
  # it under the terms of the GNU General Public License as published by
  # the Free Software Foundation; either version 2 of the License, or
  # (at your option) any later version.
- #----------------------------------------------------------------------#
+ #----------------------------------------------------------------------
 
 	
 	/**
@@ -213,54 +213,41 @@
 					else
 						$out .= "\t\t\t\t<input type=\"hidden\" name=\"action\" value=\"save\"/>
 				<input type=\"hidden\" name=\"user_id\" value=\"".$user_id."\"/>\r\n";
-					$out.= "\t\t\t\t<table>
-					<tr>
-						<td>
-							Anzeigename:\r\n";
+					$out.= "\t\t\t\t<fieldset><legend>Benutzer</legend>
+					<div class=\"row\">
+						<label><strong>Anzeigename:</strong>";
 					if($action == "add-error" || $action == "save-error" && $user_showname == "")
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Anzeigename darf nicht leer sein.</span>\r\n";
 					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Der Name wird immer angezeigt, wenn der Benutzer z.B. einen News-Eintrag geschrieben hat.(Notwendig)</span>
-						</td>
-						<td>
+						</label>
 							<input type=\"text\" name=\"user_showname\" value=\"".$user_showname."\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Nick:\r\n";
+							</div>
+						<div class=\"row\">
+						<label><strong>Nick:</strong>\r\n";
 					if($action == "add-error" || $action == "save-error" && $user_name == "")
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Der Nick muss angegeben werden.</span>\r\n";		
 					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Mit dem Nick kann sich der Benutzer einloggen, so muss er nicht seinen unter Umst&auml;nden komplizierten Namen,der angezeigt wird, eingeben muss. (Notwendig)</span>
-						</td>
-						<td>
+						</label>
 							<input type=\"text\" name=\"user_name\" value=\"".$user_name."\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							E-Mail:\r\n";
+						</div>
+						<div class=\"row\">
+						<label><strong>E-Mail:</strong>\r\n";
 					if($action == "add-error" || $action == "save-error" && $user_email != "" && !isEMailAddress($user_email))
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene E-Mail-Adresse ist ung&uuml;ltig.</span>\r\n";		
 					$out .= "\t\t\t\t\t\t\t<span class=\"info\">&Uuml;ber die Egl-Mail-Adresse wird der Benutzer kontaktiert. Sie ist also notwendig.</span>
-						</td>
-						<td>
+						</label>
 							<input type=\"text\" name=\"user_email\" value=\"".$user_email."\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							ICQ:\r\n";
+						</div>
+						<div class=\"row\">
+						<label><strong>ICQ:</strong>\r\n";
 					if(($action == "add-error" || $action == "save-error") && ($user_icq != "" && !isIcqNumber($user_icq)))
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Die Angegebene ICQ-Nummer ist ung&uuml;ltig.</span>\r\n";		
 					$out .= "\t\t\t\t\t\t\t<span class=\"info\">Die ICQ Nummer kann angegben werden, ist aber nicht dirngend notwendig.</span>
-						</td>
-						<td>
+						</label>
 							<input type=\"text\" name=\"user_icq\" value=\"".$user_icq."\" maxlength=\"12\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Passwort:\r\n";
+						</div>
+						<div class=\"row\">
+						<label><strong>Passwort:</strong>\r\n";
 					if(($action == "add-error" || $action == "save-error") && $user_password != "" && $user_password_confirm != "" && $user_password != $user_password_confirm) {
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort und seine Wiederholung sind ungleich</span>\r\n";
 						$user_password = "";
@@ -282,14 +269,11 @@
 					elseif($action == "add-error" || $action == "new")
 						$out .= "Notwendig";
 					$out .= ")</span>
-						</td>
-						<td>
+						</label>
 							<input type=\"password\" name=\"user_password\" value=\""."\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Passwort wiederholen:\r\n";
+						</div>
+						<div class=\"row\">
+						<label><strong>Passwort wiederholen:</strong>\r\n";
 					if (($action == "add-error" || $action == "save-error") && $user_password == "" && $user_password_confirm == "rep-wrong") {
 						$out .= "\t\t\t\t\t\t\t<span class=\"error\">Das Passwort und seine Wiederholung sind ungleich</span>\r\n";
 						$user_password = "";
@@ -303,35 +287,27 @@
 					if($action == "add-error" || $action == "add")
 						$out .= "(Notwendig)";
 					$out .= "</span>
-						</td>
-						<td>
+						</label>
 							<input type=\"password\" name=\"user_password_confirm\" value=\""."\" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Administrator:
+						</div>
+						<div class=\"row\">
+						<label><strong>Administrator:</strong>
 							<span class=\"info\">Ist ein Benutzer Administrator so hat er keinerlei Einschr&auml;nkungen in seinem Handeln. <strong>Nur ausw&auml;hlen wenn es wirklich Notwendig ist.</strong></span>
-						</td>
-						<td>
+						</label>
 							<input type=\"checkbox\" name=\"user_admin\"";
 					if($user_admin == "y" || $user_admin == "on")
 						$out .= " checked=\"true\"";
 					$out .= "/>
-						</td>
-					</tr>
-					<tr>
-						<td colspan=\"2\">
-							<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />&nbsp;
+						</div>
+						<div class=\"row\">
 							<input type=\"submit\" class=\"button\" value=\"";
 							if($action == "new")
 								$out .= $admin_lang['create'];
 							else
 								$out .= $admin_lang['save'];
 						$out .= "\" />
-						</td>
-					</tr>
-				</table>
+						</div>
+				</fieldset>
 			</form>";
 						return $out;
 					}

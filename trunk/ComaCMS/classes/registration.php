@@ -255,28 +255,28 @@
 					$activationCode = md5($Showname . $registrationTime . $Email);
 					
 					// Send mail with registrationcode and logindata to the user
-					$betreff = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
-					$nachricht = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_%5\$s:ActivationCode'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email, $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'], $activationCode);
-					$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" .'Reply-To: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" . 'X-Mailer: PHP/' . phpversion();
-					mail($Email, $betreff, $nachricht, $header);
+					$title = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
+					$message = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_%5\$s:ActivationCode'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email, $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'], $activationCode);
+					$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\n";
+					mail($Email, $title, $message, $header);
 				}
 				else {
 					if ($this->_Config->Get('activate_throw_admin', '0')) {
 						// Send mail with logindata to the user, activation throw administrator
-						$betreff = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
-						$nachricht = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_activation_throw_admin'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email);
-						$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" . 'Reply-To: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" . 'X-Mailer: PHP/' . phpversion();
-						mail($Email, $betreff, $nachricht, $header);
+						$title = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
+						$message = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_activation_throw_admin'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email);
+						$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\n";
+						mail($Email, $title, $message, $header);
 					}
 					else {
 						// Activate the useraccount
 						$activated = true;
 						
 						// Send mail with logindata to the user
-						$betreff = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
-						$nachricht = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email);
-						$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" . 'Reply-To: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\r\n" . 'X-Mailer: PHP/' . phpversion();
-						mail($Email, $betreff, $nachricht, $header);
+						$title = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
+						$message = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email);
+						$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\n";
+						mail($Email, $title, $message, $header);
 					}
 				}
 				

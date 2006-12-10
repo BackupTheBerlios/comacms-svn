@@ -55,7 +55,54 @@ function HoverOut(ObjectToHover, ClassName) {
 		ObjectToHover.className = ClassName;
 }
 
+function preview_style()
+{
+	//das <select> element auswaehlen
+	data = document.getElementById('stylepreviewselect');
+	//den <iframe> auswaehlen
+	dframe = document.getElementById('previewiframe');
+	//das ausgewaehlte in den <iframe> ?bertragen
+	dframe.src = "index.php?style=" + data.value;
+}
 
+function resizeBox(add) {
+	var textarea = document.getElementById('editor');
+	var style = textarea.getAttribute('style');
+	style = (style != null) ? style : '';
+	if(style == '' && add > 0)
+		style = 'height:22em;';
+	else if(style != '') {
+		var startHeight = style.indexOf('height');
+		var endHeight = style.indexOf(';', startHeight);
+		var middleHeight = style.indexOf(':', startHeight);
+		var length = style.length;
+		var size = style.substr(middleHeight+1, endHeight - middleHeight - 1);
+		size = size.replace(/ /,'');
+		size = size.replace(/em/,'');
+		size = eval(size) + add;
+		if(size < 17)
+			size = 17;
+		size = 'height:' + size+ 'em;';
+		style = style.substr(0, startHeight) + size + style.substr(endHeight+1,length - endHeight);
+		
+	}
+	//var start_height = 
+	textarea.setAttribute('style', style);
+	//alert(textarea.rootElement.getPropertyValue('height'));
+}
+
+function writeButton(image, toolTip, tagOpen, tagClose, example, accessKey)
+{
+	document.write("<a ");
+	
+	if(accessKey)
+		document.write("accesskey=\"" + accessKey + "\" ");
+	document.write("href=\"javascript:formatText('" + tagOpen + "', '" + tagClose + "', '" + example + "')\" ");
+	document.write("title=\"" + toolTip + "\" ");
+	document.write(">");
+	document.write("<img src=\"" + image + "\" class=\"editbutton\" alt=\"" + toolTip + "\" title=\"" + toolTip + "\" width=\"25\" height=\"25\" />");
+	document.write("</a> ");
+}
  
 /* Der Quellcode ab hier stammt teilweise aus dem mediawiki
  *
@@ -75,28 +122,7 @@ if (clientPC.indexOf('opera')!=-1) {
 
 
 
-function preview_style()
-{
-	//das <select> element auswaehlen
-	data = document.getElementById('stylepreviewselect');
-	//den <iframe> auswaehlen
-	dframe = document.getElementById('previewiframe');
-	//das ausgewaehlte in den <iframe> ?bertragen
-	dframe.src = "index.php?style=" + data.value;
-}
 
-function writeButton(image, toolTip, tagOpen, tagClose, example, accessKey)
-{
-	document.write("<a ");
-	
-	if(accessKey)
-		document.write("accesskey=\"" + accessKey + "\" ");
-	document.write("href=\"javascript:formatText('" + tagOpen + "', '" + tagClose + "', '" + example + "')\" ");
-	document.write("title=\"" + toolTip + "\" ");
-	document.write(">");
-	document.write("<img src=\"" + image + "\" class=\"editbutton\" alt=\"" + toolTip + "\" title=\"" + toolTip + "\" width=\"25\" height=\"25\" />");
-	document.write("</a> ");
-}
 // aus mediawiki
 function formatText(tagOpen, tagClose, example)
 {

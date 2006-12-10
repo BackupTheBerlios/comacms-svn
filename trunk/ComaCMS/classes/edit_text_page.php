@@ -231,7 +231,13 @@
 					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als &Uuml;berschrift\",\"==== \",\" ====\",\"&Uuml;berschrift\",\"h\");
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"pageText\">$page_text</textarea>
-				" . $admin_lang['comment_on_change'] . ": <input name=\"pageEditComment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $page_edit_comment)) . "\" maxlength=\"100\" type=\"text\"/><br />
+				<script type=\"text/javascript\" language=\"javascript\">
+					document.write('<div style=\"float:right;\">');
+					document.write('<img onclick=\"resizeBox(-5)\" title=\"Eingabefeld verkleinern\" alt=\"Eingabefeld verkleinern\" class=\"resize\" src=\"img/up.png\" /> ');
+					document.write('<img onclick=\"resizeBox(5)\" title=\"Eingabefeld vergr&ouml;&szlig;ern\" alt=\"Eingabefeld vergr&ouml;&szlig;ern\" class=\"resize\" src=\"img/down.png\" /><br />');
+					document.write('</div>');	
+				</script>
+				{$admin_lang['comment_on_change']}: <input name=\"pageEditComment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $page_edit_comment)) . "\" maxlength=\"100\" type=\"text\"/><br />
 				<input type=\"submit\" value=\"Speichern\" class=\"button\" />
 				<input type=\"submit\" value=\"Vorschau\" name=\"pagePreview\" class=\"button\" />
 				<input type=\"submit\" value=\"Abbrechen\" name=\"pageAbort\" class=\"button\"/>

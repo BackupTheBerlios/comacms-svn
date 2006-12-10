@@ -121,7 +121,7 @@
  					$out .= "</div>";
  				}
  				$out .= "<div class=\"row\"><input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\"/>
- 				<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\"/></div>";
+ 				</div>";
  				
  				$out .= "</fieldset>";
  			}

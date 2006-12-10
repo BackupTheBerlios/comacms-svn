@@ -16,5 +16,5 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
 	global $admin_lang;
-	Preferences::SetSetting('contact_mail_to', 'Standard Kontakt Email Empf&auml;nger', 'Das ist die Emailadresse, an die alle Emails aus dem Kontaktformular gehen f&uuml; die keine Empf&auml;ngeradresse festgelegt ist.', $admin_lang['email'], '', 'email');
+	Preferences::SetSetting('contact_mail_to', 'Standard Kontakt Email Empf&auml;nger', 'Das ist die Emailadresse, an die alle Emails aus dem Kontaktformular gehen f&uuml;r die keine Empf&auml;ngeradresse festgelegt ist.', $admin_lang['email'], '', 'email');
 ?>

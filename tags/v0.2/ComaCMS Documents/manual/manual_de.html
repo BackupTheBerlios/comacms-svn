@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="uft-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        	<title>ComaCMS Howto</title>
+	       	<link rel="stylesheet" href="manual.css" type="text/css" />
+	       	<link rel="stylesheet" href="style.css" type="text/css" />
+        <!-- <style type="text/css">
+        	* {
+ margin: 0;
+ padding: 0;
+ font-size: 1em;
+ font-weight: normal;
+}
+li {
+ margin-left: 1em;
+}
+
+h1, h2, h3, h4, h5 {
+ font-weight: bold;
+}
+h1 {
+ font-size: 2em;
+ text-align: center;
+ padding: 0;
+ margin: 0;
+}
+img {
+ border: 0;
+}
+h2 {
+ font-size: 1.5em;
+ margin-bottom: 1em;
+ margin-top: 0.5em;
+}
+
+h3 {
+ font-size: 1.17em;
+ padding-left: 1.5em;
+ margin-bottom: 1em;
+ margin-top: 0.5em;
+}
+
+
+h4 {
+ margin-top: 0.5em;
+ padding-left: 2em;
+ margin-bottom: 1em;
+}
+        	html, body {
+ 		  font-family: arial, verdana, helvetica, sans-serif;
+		}
+		
+		.block {
+        	  margin: 1.2em;
+        	  margin-top: 0.25em;
+        	  margin-bottom: 0.25em;
+        	  text-align: left;
+        	}
+        	
+        	.title {
+        	  font-weight: bold;
+        	  margin-left: -1em;
+        	}
+        	
+        	p{
+        	  text-indent: 1em;
+        	  
+		 
+        	}
+        	
+        	a {
+        	  font-weight: bold;
+        	  text-decoration: none;
+        	  color:black;
+        	}
+        	
+        	a:hover {
+        	  color: red;
+        	}
+        	
+        	dt {
+        	  font-weight: bold;
+        	}
+        	dd {
+        	 margin-left: 1em;
+        	}
+        	abbr, acronym {
+		  border-bottom: 1px dotted #3C528B;
+		  cursor: help;
+		}
+		.note {
+		   text-indent: 0;
+		   border: 1px dashed #3C528B;
+		   padding: 0.3em;
+		}
+		
+		.menu {
+		  list-style-type: upper-roman;
+		  float: right;
+		  margin: 2em;
+		  padding: 3em;
+		  padding-top: 1em;
+		  padding-bottom: 1em;
+		  padding-right: 2em;
+		  border: 1px solid #000000;
+		}
+		
+		.code {
+        	  border:1px dashed #3C528B;
+	          padding: 0.5em;
+	          display: block;
+		  margin: 0.3em;
+	          margin-left: 1em;
+	          overflow-x: auto;
+		  overflow-y: auto;
+	        }
+	        
+	        table.text_table {
+		  border-spacing: 0px;
+		  border-collapse: collapse;
+		}
+
+		table.text_table td, table.text_table th{
+		  border: 1px solid #000000;
+		  padding: 0.1em;
+		}
+
+		table.text_table th {
+		  background-color: #9B9FBF;
+		}
+		
+		img.img_normal, img.img_left, img.img_center, img.img_right{
+		  margin: 2ex;
+		  margin-top: 2ex;
+		  margin-bottom: 0;
+ 
+		}
+		
+		img.img_left {
+		  float: left;
+		  margin-left: 1ex;
+		}
+
+		img.img_right {
+		  float: right;
+		  clear: right;
+		  margin-left: 1ex;
+		}
+
+		img.img_center {
+		  display: block;
+		  margin-left: auto;
+		  margin-right: auto;
+		}
+        	</style>-->
+    	</head>
+    	<body>
+  		<h1>ComaCMS <acronym title="How To(engl.) = Wie ist das zu machen?">HOWTO</acronym></h1>
+  		<ol id="menu">
+  			<li><a href="#I.">Vorwort</a></li>
+  			<li><a href="#II.">Installation</a></li>
+  			<li>
+  				<a href="#III.">Benutzerfunktionen</a>
+  				<ol>
+  					<li><a href="#III.1.">Anmelden</a></li>
+  					<li><a href="#III.1.">Abmelden</a></li>
+  				</ol>
+  			</li>
+  			<li>
+  				<a href="#IV.">Grundfunktionen verwenden</a>
+  				<ol>
+  					<li>
+  						<a href="#IV.1.">Texte</a>
+  						<ol>
+  							<li><a href="#IV.1.1.">Texte erstellen</a></li>
+  							<li><a href="#IV.1.2.">Texte bearbeiten</a></li>
+  							<li>
+  								<a href="#IV.1.3.">Texte formatieren</a>
+  								<ol>
+  									<li><a href="#IV.1.3.1">Schriftformatierung</a></li>
+  									<li><a href="#IV.1.3.2">Links</a></li>
+  									<li><a href="#IV.1.3.3">Listen</a></li>
+  									<li><a href="#IV.1.3.4">Tabellen</a></li>
+  									<li><a href="#IV.1.3.5">Bilder</a></li>
+  								</ol>
+  							
+  							</li>
+  							<li>Texte l&ouml;schen</li>
+  							
+  						</ol>
+  					</li>
+  					<li>
+  						Galerien
+  						<ol>
+  							<li>Galerien erstellen</li>
+  							<li>Galerien bearbeiten</li>
+  							<li>Galerien entfernen</li>
+  						</ol>	
+  					</li>
+  					<li>
+  						Artikel
+  					</li>
+  					<li>
+  						News
+  					</li>
+  					<li>
+ 						Einstellungen
+  					</li>
+  					<li>
+  						Design
+  					</li>
+  					<li>
+  						Benutzer
+  					</li>
+  					<li>
+  						Gruppen
+  					</li>
+  				</ol>
+  				
+  			</li>
+  		</ol>  		
+  		<!--<div id="-" class="block">
+			<div class="title">-</div>
+			TEXT
+		</div>-->
+		<div id="I." class="block">
+			<h2>I. Vorwort</h2>
+			<p>Als Programmierer hat man es immer schön einfach, man weiß was man gemacht hat und wie man es nutzen kann bzw. benutzen muss, das es richtig funktioniert. Doch was ist nun wenn jemand keine Ahnung hat wie das ganze aufgebaut ist? Der hat ein Problem und ist auf sich allein gestellt! So etwas muss aber nicht sein, denn alles lässt sich hoffentlich erklären. Aus diesem Grund versuchen wir als <em>freundliche</em> Programmierer den Übergang von Unwissenheit zur Kenntnis durch dieses <acronym title="How To(engl.) = Wie ist das zu machen?">HOWTO</acronym> so einfach  wie möglich gestalten.</p>
+		</div>
+		<div id="II." class="block">
+			<h2>II. Installation</h2>
+			<p>Die Installationsanleitung soll hier rein. Sie soll ;-)!</p>
+		</div>
+		<div id="III." class="block">
+			<h2>II. Benutzerfunktionen</h2>
+			<div id="III.1." class="block">
+				<h3>III. 1. Anmelden</h3>
+				<p>Um sich in das Admin-Interface einzuloggen, öffnet man die Unterseite /admin(<i>z.B.: www.server.de/ =&gt; www.server.de/admin/ oder www.server.de/comacms/ =&gt; www.server.de/comacms/admin/</i>). Dort gibt man seinen Loginnamen(den Nick, nicht den Anzeigenamen!) und sein Passwort ein und klickt anschließend auf Login. Wenn alle eingaben korrekt waren ist man nun im Admin-Interface.</p>
+			</div>
+			<div id="III.2." class="block">
+				<h3>III. 2. Abmelden</h3>
+				<p>Einfach den Men&uuml;punkt <strong>Logout</strong> (ganz unten im Admin-Interface) anklicken.</p>
+				<p>Nach vier Stunden wird man automatisch ausgeloggt.</p>
+			</div>
+		</div>
+		<div id="IV." class="block">
+			<h2>IV. Grundfunktionen verwenden</h2>
+			<div id="IV.1." class="block">
+				<h3>IV. 1. Texte</h3>
+				<div id="IV.1.1." class="block">
+					<h4>IV. 1. 1. Texte erstellen</h4>
+					<p>Den Menüpunkt <strong>Seiten-Struktur</strong> ausw&auml;hlen, dann auf den Button mit der Aufschrift &quot;<strong>Neue Seite erstellen</strong>&quot; klicken. Mit dem nun erschienen Dialog wird die neue Seite angelegt.</p>
+					<p>Durch das Klicken auf den Button mit der Aufschfift &quot;<strong>Erstellen</strong>&quot; wird die Seite erstellt.</p>
+					<h4>Erl&auml;uterung zu den Eingaben</h4>
+					<dl>
+						<dt>Name/Kürzel</dt>
+						<dd>Der Name/das Kürzel dient zum logischen und eindeutigen identifizieren der Seite. Mit ihm greift man auf die Seite zu.</dd>
+						<dt>Titel</dt>
+						<dd>Der Titel wird für gewöhnlich in der Titelleiste des Browsers angezeigt und hat eine Art Überschriftfunktion.</dd>
+						<dt>Seiten-Typ</dt>
+						<dd>Über den Seiten-Typ bestimmt man was für eine Seite erstellt wird. Um einen Text zu erstellen muss man natürlich hier die Eigenschaft &quot;Text&quot; auswählen.</dd>
+						<dt>Sprache</dt>
+						<dd>Die Sprache beschreibt in welcher Sprache der Text verfasst wird.<!-- und ist dann auch nur in der jeweiligen Sprachversion der Seite lesbar(Englische Seite = >englischer Text; Deutsche Seite => deutscher Text). Wenn nur eine Sprachversion zur verfügung steht wird diese angezeigt egal in welcher Sprache man auf die Seite zugreift--></dd>
+						<dt>Zugang</dt>
+						<dd>Über die Eigenschaft Zugang kann man bestimmen, wer später den Text lesen können soll.
+							<ul>
+								<li><strong>Öffentlich:</strong> Jeder kann den Text lesen</li>
+								<li><strong>Privat:</strong> Nur angemeldete Benutzer <!--aus selbst festgelegten Gruppen -->können den Text lesen</li>
+								<li><strong>Versteckt:</strong> Der Text ist nur eingetragen, aber noch nicht zum Lesezugriff freigegeben</li>
+							</ul>
+						</dd>
+						<dt>Unterseite von</dt>
+						<dd>Mit der Eigenschaft &quot;Unterseite von&quot; kann man den Text in die Seitenstruktur eingliedern um die Seite ein bisschen zu strukturisieren.</dd>
+						<dt>Kommentar</dt>
+						<dd>Der Kommentar gibt an was man gemacht hat und wird nachher bei der Versionsübersicht(Übersicht über alle Veränderungen) angezeigt um leichter zu erkennen um welche Version des Textes es sich handelt.</dd>
+						<dt>Bearbeiten</dt>
+						<dd>Wenn man dieses Kästchen ausgewählt hat wird man sofort zum Bearbeitungsdialog des Textes weitergeleitet, um die Seite <a href="#IV.1.2.">bearbeiten</a> zu können.</dd>
+					</dl>
+				</div>
+				<div id="IV.1.2." class="block">
+					<h4>IV. 1. 2. Texte bearbeiten</h4>
+					<p>In den Seiteneditor gelangt man entweder duch die Option &quot;<strong>Bearbeiten</strong>&quot; beim Erstellen der Seite oder indem man in der <strong>Seiten-Struktur</strong> auf das Bearbeiten-Symbol (weißes Papier mit Stift) der jeweiligen Seite klickt.</p>
+					<p class="note"><strong>Info:</strong> Der Seiten-Editor kann auf verschiedenen Rechnern unterschiedlich aussehen. Das liegt daran, dass der Seiteneditor im Java-Script erweitert wird, wenn es möglich ist. Wenn allerdings Javascript deaktiviert ist erscheinen grundsätzlich keine Formatierungs-Buttons.</p>
+				</div>
+				<div id="IV.1.3." class="block">
+					<h4>IV. 1. 3. Texte formatieren</h4>
+					<p>Um Texte zu formatieren ist in ComaCMS eine eigene Formatierungssprache implemetiert worden, mit der man Texte übersichtlicher gestalten kann, die Texte aber immer noch dem Grunddesign entsprechen.</p>
+					<p>In dieser Erklärung wird immer kurz gezeigt, wie die Formatierung aussieht und anschließend der dazugehörige Formatierungscode angezeigt.</p>
+					<div id="IV.1.3.1" class="block">
+						<h5>IV.1.3.1 Schriftformatierung</h5>
+						<p>Mit ComaCMS kann man <strong>fette</strong>, <em>kursive</em> und <u>untersrichene</u> Texte erstellen.<br />
+						Diese Formatierungen kann man natürlich auch <u><em><strong>kombinieren.</strong></em></u></p>
+						<pre class="code">
+Mit ComaCMS kann man **fette**, //kursive// und __untersrichene__ Texte erstellen.\\
+Diese Formatierungen kann man natürlich auch __//**kombinieren**//__
+</pre>
+					</div>
+					<div id="IV.1.3.2" class="block">
+						<h5>IV.1.3.2 Links</h5>
+						<p>Es gibt verschiedene Möglichkeiten Links zu integrieren, ein Teil der Links wird sogar automatisch erkannt und  &quot;klickbar&quot; gemacht.</p>
+						<!--<p>So werden zum Beispiel normale urls wie www.google.de oder https://berlios.de</p>-->
+						
+						<p>So werden zum Beispiel normale urls wie <a href="http://www.berlios.de" class="link_extern">www.berlios.de</a> oder <a href="https://developer.berlios.de" class="link_extern">developer.berlios.de</a> in Links umgewandelt.<br />
+						Man kann aber auch Links erzwingen indem man sie mit eckigen Klammern umgibt (<a href="http://www.berlios.de" class="link_extern">www.berlios.de</a>).<br />
+						Mit den eckigen Klammern kann man auch einen Link umbenennen: <a href="http://www.berlios.de" class="link_extern">Die Homepage von BerliOS</a>.<br />
+						Um auf interne Seiten zu verlinken nimmt man den Namen oder die ID der Seite und schreibt dann: <a href="index.php?page=interne_seite" class="link_intern">Link auf eine interne Seite</a>.<br />
+						Auch Emailadressen können in Links umgeformt werden, sie müssen dann in spitze Klammern geschrieben werden: <a href="mailto:comacms@williblau.de" class="link_email">comacms@williblau.de</a></p>
+						<pre class="code">
+So werden zum Beispiel normale urls wie www.berlios.de
+oder https://developer.berlios.de in Links umgewandelt.\\
+Man kann aber auch Links erzwingen,
+indem man sie mit eckigen Klammern umgibt ([[www.berlios.de]]).\\
+Mit den eckigen Klammern kann man auch einen Link umbenennen:
+[[www.berlios.de|Die Homepage von BerliOS]].
+Um auf interne Seiten zu verlinken nimmt man den Namen
+oder die ID der Seite und schreibt dann:
+[[interne_seite|Link auf eine interne Seite]].\\
+Auch Emailadressen können in Links umgeformt werden,
+ sie müssen dann in spitze Klammern geschrieben werden: &lt;comacms@williblau.de&gt;
+</pre>
+	
+
+						
+					</div>
+					<div id="IV.1.3.3" class="block">
+						<h5>IV.1.3.3 Listen</h5>
+						<p>Um bestimte Dinge übersichtlicher zu gestalten, kann man sie in Listen umwandeln.</p>
+						<ul>
+							<li>Dies ist ein Listenpunkt</li>
+							<li>Dies ist ein weiterer Listenpunkt</li>
+							<li>Dies ist ein Listenpunkt mit Unterpunkten
+								<ul>
+									<li>Ein Unterpunkt</li>
+									<li>Noch ein Unterpunkt</li>
+								</ul>
+							</li>
+							<li>Abschließend noch ein Listenpunkt in der ersten Ebene</li>
+						</ul>
+						<pre class="code">
+ * Dies ist ein Listenpunkt
+ * Dies ist ein weiterer Listenpunkt
+ * Dies ist ein ListenPunkt mit Unterpunkten
+ *+ Ein Untperunkt
+ *+ Noch ein Unterpunkt
+ * Abschließend noch ein Listenpunt in der ersten Ebene
+</pre>
+					</div>
+					<div id="IV.1.3.4" class="block">
+						<h5>IV.1.3.4 Tabellen</h5>
+						<p>Wenn man <abbr title="zum Beispiel">z.B.</abbr> Daten in eine tabellarische Form bringen möchte, so kann man dies auch machen.</p>
+						<table class="text_table">
+							<tr><th> Tabellenkopf 1   </th><th> Tabellenkopf 2    </th><th> Tabellenkopf 2   </th></tr>
+							<tr><td> Zeile 1 Spalte 1 </td><td>  Zeile 1 Spalte 2 </td><td> Zeile 1 Spalte 3 </td></tr>
+							<tr><td> Zeile 2 Spalte 1 </td><td>  Zeile 2 Spalte 2 </td><td> Zeile 2 Spalte 3 </td></tr>
+							<tr><td> Zeile 3 Spalte 1 </td><td>  Zeile 3 Spalte 2 </td><td> Zeile 3 Spalte 3 </td></tr>
+						</table>
+						<pre class="code">
+ ^ Tabellenkopf 1   ^ Tabellenkopf 2    ^ Tabellenkopf 2   ^
+ | Zeile 1 Spalte 1 |  Zeile 1 Spalte 2 | Zeile 1 Spalte 3 |
+ | Zeile 2 Spalte 1 |  Zeile 2 Spalte 2 | Zeile 2 Spalte 3 |
+ | Zeile 3 Spalte 1 |  Zeile 3 Spalte 2 | Zeile 3 Spalte 3 |
+</pre>
+ 						<p>Die Tabellenköpfe müssen sich nicht nur in der obersten Zeile befinden.</p>
+ 						<table class="text_table">
+ 							<tr><td>                </td><th> Tabellenkopf 1   </th><th> Tabellenkopf 2   </th><th> Tabellenkopf 3   </th></tr>
+ 							<tr><th> Tabellenkopf 4 </th><td> Zeile 1 Spalte 1 </td><td> Zeile 1 Spalte 2 </td><td> Zeile 1 Spalte 3 </td></tr>
+ 							<tr><th> Tabellenkopf 5 </th><td> Zeile 2 Spalte 1 </td><td> Zeile 2 Spalte 2 </td><td> Zeile 2 Spalte 3 </td></tr>
+ 							<tr><th> Tabellenkopf 6 </th><td> Zeile 3 Spalte 1 </td><td> Zeile 3 Spalte 2 </td><td> Zeile 3 Spalte 3 </td></tr>
+ 						</table>
+ 						<pre class="code">
+|                ^ Tabellenkopf 1   ^ Tabellenkopf 2    ^ Tabellenkopf 2   ^
+^ Tabellenkopf 4 | Zeile 1 Spalte 1 |  Zeile 1 Spalte 2 | Zeile 1 Spalte 3 |
+^ Tabellenkopf 5 | Zeile 2 Spalte 1 |  Zeile 2 Spalte 2 | Zeile 2 Spalte 3 |
+^ Tabellenkopf 6 | Zeile 3 Spalte 1 |  Zeile 3 Spalte 2 | Zeile 3 Spalte 3 |
+</pre>
+					</div>
+					<div id="IV.1.3.5" class="block">
+						<h5>IV.1.3.5 Bilder</h5>
+						<p>Wichtig ist natürlich auch die Möglichkeit zur Einbindung von Bildern in den Text.</p>
+						<p>Es gibt zwei verschiedene M&ouml;glichkeiten Bilder einzubinden.</p>
+						<ul>
+							<li>mit der URL zum Bild: </li>
+						</ul>
+						<div class="thumb tnormal">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="img/comacms_logo.png" alt="img/comacms_logo.png" />
+								<div class="description" title="img/comacms_logo.png">
+									<div class="magnify">
+										<a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a>
+									</div>
+									img/comacms_logo.png
+								</div>
+							</div>
+						</div>
+						<ul>
+							<li>mit einer relativen Angabe zum medienordner der Homepage: </li>
+						</ul>
+						<div class="thumb tnormal">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="media:comacms_logo.png" alt="media:comacms_logo.png" />
+								<div class="description" title="media:comacms_logo.png">
+									<div class="magnify">
+										<a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a>
+									</div>
+									media:comacms_logo.png
+								</div>
+							</div>
+						</div>
+						<pre class="code">
+Es gibt zwei verschiedene Möglichkeiten Bilder einzubinden.
+ * mit der URL zum Bild: {{img/comacms_logo.png}}
+ * mit einer relativen Angabe zum medienordner der Homepage: {{media:comacms_logo.png}}
+</pre>
+						<p>Da einfache Bilder im Text nicht immer sch&ouml;n aussehen gibt es die M&ouml;glichkeit,
+						Bilder mit einem Lehrzeichen hinter bzw. und/oder vor den geschweiften Klammern,
+						auszurichten.</p>
+						<div class="thumb tleft">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="media:comacms_logo.png" alt="media:comacms_logo.png" />
+								<div class="description" title="media:comacms_logo.png"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>media:comacms_logo.png</div>
+							</div>
+						</div>
+						<div class="thumb tright">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="media:comacms_logo.png" alt="media:comacms_logo.png" />
+								<div class="description" title="media:comacms_logo.png"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>media:comacms_logo.png</div>
+							</div>
+						</div>
+						<div class="thumb tcenter">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="media:comacms_logo.png" alt="media:comacms_logo.png" />
+								<div class="description" title="media:comacms_logo.png"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>media:comacms_logo.png</div>
+							</div>
+						</div>
+						<pre class="code">
+Da einfache Bilder im Text nicht immer schön aussehen gibt es die Möglichkeit,
+Bilder mit einem Lehrzeichen hinter bzw. und/oder vor den geschweiften Klammern,
+auszurichten.
+{{ media:comacms_logo.png}}
+{{media:comacms_logo.png }}
+{{ media:comacms_logo.png }}
+</pre>
+						<p>Zus&auml;tzlich kann man den Bildern einen Titel geben, der dann Angezeigt wird,
+						wenn man mit der Maus &uuml;ber das Bild f&auml;hrt oder Bilder abgeschaltet hat.</p>
+						<div class="thumb tcenter">
+							<div style="width:184px">
+								<img width="180" height="90" src="img/180x90_comacms_logo.png" title="Das ist das Logo von ComaCMS" alt="Das ist das Logo von ComaCMS" />
+								<div class="description" title="Das ist das Logo von ComaCMS"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>Das ist das Logo von ComaCMS</div>
+							</div>
+						</div>
+						<pre class="code">
+Zusätzlich kann man den Bildern einen Titel geben, der dann Angezeigt wird,
+wenn man mit der Maus über das Bild fährt oder Bilder abgeschaltet hat.
+{{ media:comacms_logo.png|Das ist das Logo von ComaCMS }}
+</pre>
+						<p>Das Aussehen der Bilder kann durch verschiedene Parameter ver&auml;ndert werden. Es gibt zwei verschiedene Typen an Parametern, einmal die Parameter f&uuml;r das Aussehen und einmal die Parameter f&uuml;r die Gr&ouml;&szlig;e der Bilder.</p>
+<ul>
+	<li><strong>Aussehen</strong>
+
+		<ul>
+			<li><strong>box</strong>: Das Bild steht in einem Kasten mit dem Titel als Bildunterschrift (<em>Standardeinstellung</em>)</li>
+			<li><strong>box_only</strong>: Das Bild steht in einem Kasten ohne Bildunterschrift</li>
+			<li><strong>picture</strong>: Das Bild steht f&uuml;r sich alleine</li>
+
+		</ul>
+	</li>
+</ul>
+<div class="thumb tbox tright">
+<div style="width:184px">
+<img width="180" height="90" src="img/180x90_comacms_logo.png" title="&quot;Nur Box&quot;" alt="&quot;Nur Box&quot;" />
+<div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>
+</div>
+</div>
+<div class="thumb tbox tleft">
+<img width="180" height="90" src="img/180x90_comacms_logo.png" title="Nur das Bild" alt="Nur das Bild" />
+</div><div class="thumb tcenter">
+<div style="width:184px">
+<img width="180" height="90" src="img/180x90_comacms_logo.png" title="Box mit Bildunterschrift" alt="Box mit Bildunterschrift" />
+<div class="description" title="Box mit Bildunterschrift"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>Box mit Bildunterschrift</div>
+</div>
+</div>
+						<pre class="code">
+{{media:comacms_logo.png|box_only|"Nur Box" }}
+{{ media:comacms_logo.png|picture|Nur das Bild}}
+{{ media:comacms_logo.png|box|Box mit Bildunterschrift }}
+</pre>
+<ul>
+
+	<li><strong>Gr&ouml;&szlig;e</strong>
+		<ul>
+			<li><strong>original</strong>: Stellt das Bild in der Originalg&ouml;&szlig;e dar</li>
+			<li><strong>thumb</strong>: Begrenzt die Breite des Bildes auf 180 Pixel (<em>Standardeinstellung</em>)</li>
+			<li><strong>w80</strong>: Begrenzt die Breite des Bildes auf die angegebene Breite (in diesem Fall auf 80 Pixel)</li>
+
+		</ul>
+	</li>
+</ul>
+<div class="thumb tright">
+<div style="width:204px">
+<img width="200" height="100" src="img/comacms_logo.png" title="Originalgr&ouml;&szlig;e" alt="Originalgr&ouml;&szlig;e" />
+<div class="description" title="Originalgr&ouml;&szlig;e"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>Originalgr&ouml;&szlig;e</div>
+</div>
+</div><div class="thumb tleft">
+<div style="width:84px">
+<img width="80" height="40" src="img/80x40_comacms_logo.png" title="80 Pixel Breit" alt="80 Pixel Breit" />
+<div class="description" title="80 Pixel Breit"><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div>80 Pixel Breit</div>
+</div>
+</div><div class="thumb tcenter">
+<div style="width:184px">
+<img width="180" height="90" src="img/180x90_comacms_logo.png" title="" alt="" />
+								<div class="description" title=""><div class="magnify"><a href="special.php?page=image&amp;file=comacms_logo.png" title="vergr&ouml;&szlig;ern"><img src="img/magnify.png" title="vergr&ouml;&szlig;ern" alt="vergr&ouml;&szlig;ern"/></a></div></div>
+							</div>
+						</div>
+						<pre class="code">
+{{media:comacms_logo.png|original|Originalgröße }}
+{{ media:comacms_logo.png|w80|80 Pixel Breit}}
+{{ media:comacms_logo.png|thumb| }}
+</pre>
+					</div>
+				</div>
+			</div>
+		</div>
+    	</body>
+</html>

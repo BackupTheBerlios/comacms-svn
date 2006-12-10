@@ -1,0 +1,7 @@
+<?php
+/*
+ * If you have something what could be interesting for everyone here, you
+ * can write it down here.
+ */
+ 
+?>

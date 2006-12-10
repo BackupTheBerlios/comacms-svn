@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <title>ComaCMS Coding-Style-Guidlines</title>
+    <meta name="AUTHOR" content="The ComaCMS-Team" />
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="manual.css" type="text/css" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <style type="text/css">
+    /* <![CDATA[ */
+    .code {
+     width: 95%;
+    }
+    /* ]]> */
+    </style>
+    
+  </head>
+  <body>
+    <h1>ComaCMS Coding-Style-Guidlines</h1>
+   
+      <ol id="menu">
+        <li><a href="#file_header">File Header</a></li>
+        <li><a href="#comments">Comments</a></li>
+        <li><a href="#tabs">Tabs and Spaces</a></li>
+        <li><a href="#if">If conditions</a></li>
+        <!--<li><a href="#loops">Loops</a></li>-->
+        <li><a href="#strings">Strings</a></li>
+        <!--<li><a href="#xhtml">XHTML &#038; CSS</a></li>-->
+      </ol>
+
+    <div class="block" id="file_header">
+      <h2>File Header</h2>
+      <p>This is the template of the header. You can find this template also in <a href="./php-template.txt">php-template.txt</a></p>
+      <pre class="code">/**
+ * @package ComaCMS
+ * @copyright (C) 2005-2006 The ComaCMS-Team
+ */
+ #----------------------------------------------------------------------
+ # file                 : filename.php
+ # created              : 2006-03-09
+ # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # email                : comacms@williblau.de
+ #----------------------------------------------------------------------
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 2 of the License, or
+ # (at your option) any later version.
+ #----------------------------------------------------------------------</pre>
+    </div>
+    <div class="block" id="comments">
+      <h2>Comments</h2>
+      <p>It is very good to comment the source code but we have to write it in one style.</p>
+      
+      <p>If you give a comment, which explain what the code does you should write it so:</p>
+      <pre class="code">
+	// This is a comment
+	echo 'hi im  the code, wich is explained';</pre>
+      
+      <p>If you describe a function it is good to comment the function with phpDocumentor Tags (Look at <a href="http://www.phpdoc.org/">www.phpdoc.org</a> for more information)</p>
+      <pre class="code">
+/**
+ * This comment discribes what the function does
+ * @access public
+ * @return string
+ * @param string text this is the description of the parameter text
+ * @param int integer the same for the parameter integer
+ */
+ 
+	function testfunction($text, $integer) {
+		// code which works with $text
+		return $text;
+	}</pre>
+    </div>
+    <div class="block" id="tabs">
+      <h2>Tabs and Spaces</h2>
+      <p>In this point we are a bit special because we prefer the 8 spaces = 1 tab configuration, but it in the most cases it isn't really important how much spaces a tab tooks.</p>
+    </div>
+    <div class="block" id="if">
+      <h2>If conditions</h2>
+      <pre class="code">
+	if($v > 5)
+		do_something();
+	else
+		do_something_else();</pre>
+      <pre class="code">
+	if($v > 5) {
+		do_something();
+		and_more();
+	}
+	elseif($v == 5) {
+		do_something_else();
+		and_more();
+	}
+	else
+		do_something_else();</pre>
+    </div>
+    <!--<div class="infoblock" id="loops">
+      <h3>Loops</h3>
+    </div>-->
+    <div class="block" id="strings">
+      <h2>Strings</h2>
+      <p>In PHP we have two different ways to declare strings either with single quotes or with double quotes. If your declaring a string with single quotes the compiler generates only a string. But if you declare a string with double quotes the compiler searches for variables and inserts their values into the string. Because we want a fast programm try to use single quotes so much as possible.</p>
+      <pre class="code">
+	// bad
+	$string = "A string with no variable and dosen't need to handled like one";
+	
+	// good
+	$string = 'A string with no variable and is handled like one';</pre>
+    </div>
+    <!--<div class="block" id="xhtml">
+      <h2>XHTML &#038; CSS</h2>
+    </div>-->
+  </body>
+</html>

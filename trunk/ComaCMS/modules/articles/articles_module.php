@@ -115,7 +115,7 @@
  			return $articlePreviewString;
  		}
  		
- 		function getPage($Action) {
+ 		function GetPage($Action) {
  			$output = ' ';
  			switch ($Action) {
 				case 'show':

@@ -362,25 +362,31 @@
 		 	$out .= "\r\n\t\t\t<ol>\r\n";
 		 	foreach($pages as $page) {
 	 			if($page['access'] != 'deleted') {
-	 			$out .= "\t\t\t\t<li class=\"page_type_". $page['type'] . (($page['access'] == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">" . (($TopNodeID == 0) ?  "<input type=\"checkbox\" name=\"mainMenuPages[]\"" . ((in_array($page['id'], $this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page['access'] != 'public') ? ' disabled="disabled"'  : '') . " value=\"" . $page['id'] . "\" class=\"checkbox\"/>\t" : '' );
-	 			$out .= "<strong>" . $page['title'] . "</strong> (" . rawurldecode($page['name']) . ")";
-		 			$out .= "<span class=\"page_lang\">[" . $adminLang[$page['lang']] . "]</span><span class=\"page_actions\">";
-		 			// edit:
-		 			if($page['access'] != 'deleted')
-		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['edit'] . "\" title=\"" . $adminLang['edit'] . "\"/></a>";
-		 			// info:
-		 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=" . $page['id'] . "\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['info'] . "\" title=\"" . $adminLang['info'] . "\"/></a>";
-		 			// view:
-		 			if($page['access'] != 'deleted')
-		 				$out .= " <a href=\"index.php?page=" . $page['name'] . "\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen " . $page['title'] . "\" title=\"Anschauen\"/></a>";
-		 			// inlinemenu:
-		 			if($page['access'] != 'deleted')
-		 					$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=" . $page['id'] . "\" title=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\"><img src=\"./img/inlinemenu.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\" title=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\"/></a>";
-		 			// delete:
-		 			if($page['access'] != 'deleted')
-		 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($adminLang['delete_page_%page_title%'], $page['title']) . "\" title=\"" . sprintf($adminLang['delete_page_%page_title%'], $page['title']) . "\"/></a>";
-		 			$out .= '</span></span>' . $this->_Structure($page['id']);
-		 			$out .= "\t\t\t\t</li>\r\n";
+	 				// block elements
+		 			$out .= "\r\n\t\t\t\t<li class=\"page_type_". $page['type'] . (($page['access'] == 'deleted') ? ' strike' : '' ). "\"><span class=\"structure_row\">";
+			 		// blockelement for pageactions
+			 		$out .= "<span class=\"page_actions\">";
+			 			// edit:
+			 			if($page['access'] != 'deleted')
+				 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['edit'] . "\" title=\"" . $adminLang['edit'] . "\"/></a>";
+			 			// info:
+			 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=" . $page['id'] . "\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['info'] . "\" title=\"" . $adminLang['info'] . "\"/></a>";
+				 		// view:
+			 			if($page['access'] != 'deleted')
+			 				$out .= " <a href=\"index.php?page=" . $page['name'] . "\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen " . $page['title'] . "\" title=\"Anschauen\"/></a>";
+				 		// inlinemenu:
+			 			if($page['access'] != 'deleted')
+			 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=" . $page['id'] . "\" title=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\"><img src=\"./img/inlinemenu.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\" title=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\"/></a>";
+		 				// delete:
+			 			if($page['access'] != 'deleted')
+			 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($adminLang['delete_page_%page_title%'], $page['title']) . "\" title=\"" . sprintf($adminLang['delete_page_%page_title%'], $page['title']) . "\"/></a>";
+			 		// end blockelement for pageactions
+			 		$out .= '</span>';
+			 		// lang:
+			 		$out .= "<span class=\"page_lang\">[" . $adminLang[$page['lang']] . "]</span>";
+			 		$out .= (($TopNodeID == 0) ?  "<input type=\"checkbox\" name=\"mainMenuPages[]\"" . ((in_array($page['id'], $this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page['access'] != 'public') ? ' disabled="disabled"'  : '') . " value=\"" . $page['id'] . "\" class=\"checkbox\"/>\t" : '' ) . "<strong>" . $page['title'] . "</strong> (" . rawurldecode($page['name']) . ")";
+			 		$out .= '</span>' . $this->_Structure($page['id']);
+			 		$out .= "\t\t\t\t</li>\r\n";
 	 			}
 		 	}
 		 	$out .= "\r\n\t\t\t</ol>\r\n\r\n";

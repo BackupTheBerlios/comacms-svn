@@ -213,6 +213,7 @@ td.table_date_width_plus, th.table_date_width_plus {
 }
 li.page_type_text, li.page_type_gallery {
 	margin-left: 1.5em;
+	clear: right;
 }
 
 div.row label {
@@ -305,18 +306,17 @@ li.inline_intern{
 }
 
 .page_lang {
-	position: absolute;
- 	right: 9em;
+	float: right;
+	margin-top: -1px;
+	margin-right: 5px;
 }
 
 .page_actions {
-	width: 12em;
-	position: absolute;
-	right: 0.3%;
-	text-align: right;
-	margin-right: 1em;
+	float: right;
 	margin-top: 2px;
 	margin-bottom: 2px;
+	margin-left: 5px;
+	margin-right: 5px;
 }
 
 div.thumb {

@@ -131,6 +131,7 @@
 	 			$Menu_menuid = 1;
 	 		
 	 		$out = '';
+	 		$out .= "\r\n\t\t\t<a href=\"admin.php?page=menueditor&amp;action=newMenu\" class=\"button\">{$adminLang['create_new']}</a>";
 	 		
  			$sql = "SELECT *
  				FROM " . DB_PREFIX . "menu";
@@ -144,12 +145,12 @@
  			while ($menu = mysql_fetch_object($menuResult)) {
  				$out .= "\r\n\t\t\t\t<li class=\"page_type_text\">
 					<span class=\"structure_row\">
-						<strong>{$menu->menu_name}</strong>
 						<span class=\"page_actions\">
 							" . (($menu->menu_name != 'DEFAULT') ? "<a href=\"admin.php?page=menueditor&amp;action=editMenu&amp;menu_menuid={$menu->menu_id}&amp;menu_name={$menu->menu_name}\"><img src=\"./img/edit.png\" class=\"icon\" alt=\"{$adminLang['edit_menu']}\" title=\"{$adminLang['edit_menu']}\" height=\"16\" width=\"16\" /></a>" : '') . "
 							<a href=\"admin.php?page=menueditor&amp;action=showMenu&amp;menu_entries_menuid={$menu->menu_id}&amp;menu_name={$menu->menu_name}\"><img src=\"./img/view.png\" class=\"icon\" alt=\"{$adminLang['edit_menuitems']}\" title=\"{$adminLang['edit_menuitems']}\" height=\"16\" width=\"16\" /></a>
 							" . (($menu->menu_name != 'DEFAULT') ? "<a href=\"admin.php?page=menueditor&amp;action=deleteMenu&amp;menu_menuid={$menu->menu_id}&amp;menu_name={$menu->menu_name}\"><img src=\"./img/del.png\" class=\"icon\" alt=\"{$adminLang['delete_menu']}\" title=\"{$adminLang['delete_menu']}\" height=\"16\" width=\"16\" /></a>" : '') . "
 						</span>
+						<strong>{$menu->menu_name}</strong>
 					</span>
 				</li>";
  			}
@@ -157,7 +158,6 @@
  			if ($numRows > 0) {
  				$out .= "\r\n\t\t\t</ol>";
  			}
-	 		$out .= "\r\n\t\t\t<a href=\"admin.php?page=menueditor&amp;action=newMenu\" class=\"button\">{$adminLang['create_new']}</a>";
 	 		
 	 		return $out;
 	 	}
@@ -188,13 +188,13 @@
 	 		while ($menuEntry = mysql_fetch_object($menuResult)) {
 	 			$out .= "\r\n\t\t\t\t\t<li class=\"page_type_text\">
 					<span class=\"structure_row\">
-						<strong>" . $menuEntry->menu_entries_title . "</strong>	 			
 	 					<span class=\"page_actions\">
 	 						<a href=\"admin.php?page=menueditor&amp;action=editEntry&amp;menu_entry_id={$menuEntry->menu_entries_id}&amp;menu_entry_menuid={$menuEntry->menu_entries_menuid}&amp;menu_name=$Menu_name\"><img src=\"./img/edit.png\" class=\"icon\" alt=\"{$adminLang['edit']}\" title=\"{$adminLang['edit']}\" height=\"16\" width=\"16\" /></a>
 	 						<a href=\"admin.php?page=menueditor&amp;action=up&amp;menu_entry_orderid={$menuEntry->menu_entries_orderid}&amp;menu_entry_menuid={$menuEntry->menu_entries_menuid}&amp;menu_name=$Menu_name\"><img src=\"./img/up.png\" class=\"icon\" alt=\"{$adminLang['move_up']}\" title=\"{$adminLang['move_up']}\" height=\"16\" width=\"16\" /></a>
 	 						<a href=\"admin.php?page=menueditor&amp;action=down&amp;menu_entry_orderid={$menuEntry->menu_entries_orderid}&amp;menu_entry_menuid={$menuEntry->menu_entries_menuid}&amp;menu_name=$Menu_name\"><img src=\"./img/down.png\" class=\"icon\" alt=\"{$adminLang['move_down']}\" title=\"{$adminLang['move_down']}\" height=\"16\" width=\"16\" /></a>
 	 						<a href=\"admin.php?page=menueditor&amp;action=deleteEntry&amp;menu_entry_id={$menuEntry->menu_entries_id}&amp;menu_entry_menuid={$menuEntry->menu_entries_menuid}&amp;menu_name=$Menu_name\"><img src=\"./img/del.png\" class=\"icon\" alt=\"{$adminLang['delete']}\" title=\"{$adminLang['delete']}\" height=\"16\" width=\"16\" /></a>
 	 					</span>
+	 					<strong>" . $menuEntry->menu_entries_title . "</strong>
 	 				</span>
 	 			</li>";
 	 		}

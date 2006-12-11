@@ -136,23 +136,23 @@
 		}
 		
 		function LoadParentIDs() {
-			if(count($this->_ParentIDPages) <= 0) {
-				// TODO: ORDER BY page_sortid
-				$sql = "SELECT *
-			 		FROM " . DB_PREFIX . "pages
+			$this->_ParentIDPages = array();
+			
+			// TODO: ORDER BY page_sortid
+			$sql = "SELECT *
+					FROM " . DB_PREFIX . "pages
 		 			ORDER BY page_parent_id";
-		 		$pageResult = $this->_SqlConnection->SqlQuery($sql);
-	 			while($page = mysql_fetch_object($pageResult)) {
-		 			$this->_ParentIDPages[$page->page_parent_id][] =
-	 						array('id' => $page->page_id,
-		 						'name' => $page->page_name,
-	 							'type' => $page->page_type,
-	 							'lang' => $page->page_lang,
-	 							'title' => $page->page_title,
-	 							'access' => $page->page_access);
-	 				$this->_Pages[$page->page_id] = array('name' => $page->page_name, 'title' => $page->page_title);
-	 			}
-			}
+	 		$pageResult = $this->_SqlConnection->SqlQuery($sql);
+ 			while($page = mysql_fetch_object($pageResult)) {
+	 			$this->_ParentIDPages[$page->page_parent_id][] =
+ 						array('id' => $page->page_id,
+	 						'name' => $page->page_name,
+ 							'type' => $page->page_type,
+ 							'lang' => $page->page_lang,
+ 							'title' => $page->page_title,
+ 							'access' => $page->page_access);
+ 				$this->_Pages[$page->page_id] = array('name' => $page->page_name, 'title' => $page->page_title);
+ 			}
 		}
 		
 		/**
@@ -261,7 +261,7 @@
 		 		return '';
 		 	$number = 1;
 		 	foreach($this->_ParentIDPages[$Topnode] as $page) {
-		 		if($page['id'] != $Without) {
+		 		if($page['id'] != $Without && $page['access'] != 'deleted') {
 		 			$out .= "<option style=\"padding-left:" . ($Deep * 1.5) . "em;\" value=\"" . $page['id'] . "\"" . (($page['id'] == $Selected) ? ' selected="selected"' : '') . ">$Topnumber$number. " . $page['title'] . " (" . rawurldecode($page['name']) . ")</option>\r\n";
 		 			$out .= $this->PageStructurePulldown($page['id'], $Deep + 1, $Topnumber . $number. "." ,$Without, $Selected);
 		 			$number++;

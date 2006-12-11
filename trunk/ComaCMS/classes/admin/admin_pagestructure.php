@@ -142,7 +142,7 @@
 		 		}
 		 		else {
 		 			$out = '';
-		 			if ($this->_PageStructure->PageHasSubPages($pageID, false)) {
+		 			if ($this->_PageStructure->PageHasSubPages($pageID, true)) {
 		 				$out .= "<fieldset>
 		 						<legend>Unterseiten vorhanden</legend>
 		 						<form action=\"admin.php\" method=\"post\">
@@ -168,7 +168,8 @@
 		 									<span class=\"info\">...</span>
 		 								</label>
 		 							<select id=\"newParentPageID\" name=\"newParentPageID\">";
-		 				$out .= $this->_structurePullDown(0, 0, '', $pageID, $pageID);
+		 				//$this->_PageStructure->LoadParentIDs();
+		 				$out .= $this->_PageStructure->PageStructurePulldown(0, 0, '', $pageID, $pageID);
 		 				$out .= "</select>
 		 							</div>
 		 							<div class=\"row error\">

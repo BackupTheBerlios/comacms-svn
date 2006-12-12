@@ -88,7 +88,7 @@
  		function GetPage($Action) {
  			$out = "<h2>Sitemap</h2>\r\n";
  			switch($Action) {
- 				default:		$out .= $this->_HomePage();
+ 				default:		$out .= $this->_HomePage(GetPostOrGet('TopNode'));
  							break;
  			}
  			return $out;

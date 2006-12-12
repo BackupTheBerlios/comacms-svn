@@ -55,6 +55,30 @@
  		}
  		
  		/**
+ 		 * This function returns the text for a template or a page
+ 		 * @author ComaWStefan
+ 		 * @access public
+ 		 * @param string Identifer
+ 		 * @param array Parameters Includes all Parameters for the modul
+ 		 * @return string Text for the template or page
+ 		 */
+ 		function UseModule($Identifer, $Parameters) {
+ 			$TopNode = 0;
+ 			// Split all parameters from parameter=value&parameter2=value2
+ 			$Parameters = explode('&', $Parameters);
+ 			// Split each parameter to name and value and save into variables using their name
+ 			foreach($Parameters as $parameter){
+ 				$parameter = explode('=', $parameter, 2);
+ 				if(empty($parameter[1]))
+ 					$parameter[1] = true;
+ 				$$parameter[0] = $parameter[1];
+ 			}
+ 			if(!is_int($TopNode)) 
+ 				$TopNode = 0;
+ 			return $this->_HomePage($TopNode);
+ 		}
+ 		
+ 		/**
  		 * This function returns the text of the actual modulpage
  		 * @author ComaWStefan
  		 * @access public
@@ -86,7 +110,7 @@
  		 * @access private
  		 * @return string The text of the modul
  		 */
- 		function _HomePage() {
+ 		function _HomePage($TopNode) {
  			$sql = "SELECT *
  				FROM " . DB_PREFIX . "pages";
  			$result = $this->_SqlConnection->SqlQuery($sql);
@@ -99,7 +123,7 @@
 										'access' => $page->page_access);
  			}
  			$out = '';
- 			$out .= $this->_ShowStructure(0);
+ 			$out .= $this->_ShowStructure($TopNode);
  			return $out;
  		}
  		
@@ -112,6 +136,8 @@
  		 */
  		 function _ShowStructure($TopNode = 0) {
  		 	$out = '';
+ 		 	if(empty($this->_PagesParentIDs))
+ 		 		return;
  		 	if(!array_key_exists($TopNode, $this->_PagesParentIDs))
  		 		return;
  		 	$pages = $this->_PagesParentIDs[$TopNode];

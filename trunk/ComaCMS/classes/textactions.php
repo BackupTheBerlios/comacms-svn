@@ -117,10 +117,11 @@
 			// convert urls to links http://www.domain.com to [[http://www.domain.com|www.domain.com]]
 			$Text = preg_replace("#(?<!\[\[)($protos):\/\/(.+?)(\ |\\n)#s",'[[$1://$2|$2]]$3', $Text);
 			$Text = preg_replace("#\[\[($protos):\/\/([a-z0-9\-\.]+)\]\]#s",'[[$1://$2|$2]]', $Text);
-			
+			// FIXME: make configurable
+			$antibot = EMAIL_ANTISPAM_TEXT;
 			// convert catched emails into the link format [[email@example.com]]
 			foreach($emails[0] as $key => $email) {
-				$Text = str_replace('&lt;' . $emails[1][$key] . '@' . $emails[2][$key] .'&gt;', '[[' . $emails[1][$key] . '@' . $emails[2][$key] . '|' . $emails[1][$key] . '@' . $emails[2][$key] . ']]', $Text);
+				$Text = str_replace('&lt;' . $emails[1][$key] . '@' . $emails[2][$key] .'&gt;', '[[' . $emails[1][$key] . '@' . $emails[2][$key] . '|' . TextActions::EmailAntispam($emails[1][$key] . '@' . $emails[2][$key], $antibot) . ']]', $Text);
 			}
 
 
@@ -388,6 +389,25 @@
 			return TextActions::ConvertList(true, $textpart);
 		}
 		
+		function EmailAntispam($Email, $AntispamType) {
+			switch($AntispamType) {
+				case EMAIL_ANTISPAM_TEXT:
+						// only a replacement of "dots" and the "at"
+						$Email = str_replace('.', ' [dot] ', $Email);
+						$Email = str_replace('@', ' [at] ', $Email);
+					break;
+				case EMAIL_ANTISPAM_ASCII:
+						// replace all characters with the HTML-ASCII codes
+						$tmpMail = '';
+						$length = strlen($Email);
+						for($chr = 0; $chr < $length; $chr++)
+							$tmpMail .= '&#' . ord($Email[$chr]) . ';';
+						$Email = $tmpMail;
+					break;
+			}
+			return $Email;
+		}
+		
 		/** MakeLink
 		 * @param string Link
 		 * @return string
@@ -396,21 +416,8 @@
 			$antibot = EMAIL_ANTISPAM_TEXT;
 			$encodedLink = encodeUri($Link);
 			// identify mail-adresses
-			if(preg_match("/^[a-z0-9-_\.]+@[a-z0-9\[\]-_\.]+\.[a-z]{2,4}$/i", $Link)) {
-				// only a replacement of "dots" and the "at"
-				if($antibot == EMAIL_ANTISPAM_TEXT) {
-					$Link = str_replace('.', ' [dot] ', $Link);
-					$Link = str_replace('@', ' [at] ', $Link);
-				}
-				// replace all characters with the HTML-ASCII codes
-				else if($antibot == EMAIL_ANTISPAM_ASCII){
-					$tmpMail = '';
-					$length = strlen($Link);
-					for($chr = 0; $chr < $length; $chr++) {
-						$tmpMail .= '&#'.ord($Link[$chr]).';';
-					}
-					$Link = $tmpMail;
-				}
+			if(preg_match("/^[a-z0-9-_\.]+@[a-z0-9\-_\.]+\.[a-z]{2,4}$/i", $Link)) {
+				$Link = TextActions::EmailAntispam($Link, $antibot);
 				return "mailto:$Link\" class=\"link_email";
 			}
 			else if(substr($encodedLink, 0, 6) == 'http:/' || substr($encodedLink, 0, 5) == 'ftp:/' || substr($encodedLink, 0, 7) == 'https:/' )

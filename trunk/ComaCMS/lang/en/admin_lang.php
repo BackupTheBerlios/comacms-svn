@@ -138,6 +138,8 @@
 	$admin_lang['type_in_here_the_css_id_for_the_menuentry_if_you_need_one_for_it'] = 'Type in here the CSS ID for the menuentry if you need one for it';
 	$admin_lang['menu_title'] = 'Menutitle';
 	$admin_lang['type_here_the_title_of_the_menu'] = 'Type here the title of the menu';
+	$admin_lang['menu_name'] = 'Menuname';
+	$admin_lang['type_here_the_name_of_the_menu'] = 'Type here the name of the menu';
 	$admin_lang['shall_the_menu_%menutitle%_really_be_deleted?'] = 'Shall the menu &quot;%s&quot; really be deleted?';
 	$admin_lang['name/contraction'] = 'Name/Contraction';
 	$admin_lang['title'] = 'Title';

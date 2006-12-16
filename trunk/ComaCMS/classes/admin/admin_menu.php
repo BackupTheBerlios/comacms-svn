@@ -18,9 +18,9 @@
  	/**
  	 * @ignore
  	 */
- 	require_once('./classes/admin/admin.php');
- 	require_once('./classes/menu.php');
- 	require_once('./classes/pagestructure.php');
+ 	require_once __ROOT__ . './classes/admin/admin.php';
+ 	require_once __ROOT__ . './classes/menu.php';
+ 	require_once __ROOT__ . './classes/pagestructure.php';
  	
 	/**
 	 * @package ComaCMS
@@ -70,49 +70,60 @@
 	 	 * @return string HTML Code of the menu part
 	 	 */
 	 	function GetPage($Action = '') {
-	 		$adminLang = $this->_AdminLang;
-	 		
-	 		$out = "\r\n\t\t\t<h2>" . $adminLang['menu-editor'] . "</h2>\r\n";
+	 		// Get all external parameters
+	 		$menuID = GetPostOrGet('menu_id');
+	 		$menuMenuID = GetPostOrGet('menu_menuid');
+	 		$menuName = GetPostOrGet('menu_name');
+	 		$menuTitle = GetPostOrGet('menu_title');
+	 		$menuEntryID = GetPostOrGet('menu_entry_id');
+	 		$menuEntryMenuID = GetPostOrGet('menu_entry_menuid');
+	 		$menuEntryTitle = GetPostOrGet('menu_entry_title');
+	 		$menuEntryLink = GetPostOrGet('menu_entry_link');
+	 		$menuEntryOrderID = GetPostOrGet('menu_entry_orderid');
+	 		$menuEntryCssId = GetPostOrGet('menu_entry_css_id');
+	 		// Set headline of the page
+	 		$out = "\r\n\t\t\t<h2>" . $this->_AdminLang['menu-editor'] . "</h2>\r\n";
+	 		// Switch between the subpages of the menueditor
 	 		switch ($Action) {
-	 			case 'newEntry':	$out .= $this->_AddMenuEntry(GetPostOrGet('menu_menuid'), GetPostOrGet('menu_name'));
+	 			case 'newEntry':	$out .= $this->_AddMenuEntry($menuMenuID, $menuName);
 	 						break;
-	 			case 'addEntry':	$out .= $this->_Menu->AddMenuEntry(GetPostOrGet('menu_entry_menuid'), GetPostOrGet('menu_entry_title'), GetPostOrGet('menu_entry_link'), GetPostOrGet('menu_entry_css_id'));
-	 						$out .= $this->_ShowMenu(GetPostOrGet('menu_entry_menuid'), GetPostOrGet('menu_name'));
+	 			case 'addEntry':	$out .= $this->_Menu->AddMenuEntry($menuEntryMenuID, $menuEntryTitle, $menuEntryLink, $menuEntryCssId);
+	 						$out .= $this->_ShowMenu($menuEntryMenuID, $menuName);
 	 						break;
-	 			case 'editEntry':	$out .= $this->_EditMenuEntry(GetPostOrGet('menu_entry_id'), GetPostOrGet('menu_entry_menuid'), GetPostOrGet('menu_name'));
+	 			case 'editEntry':	$out .= $this->_EditMenuEntry($menuEntryID, $menuEntryMenuID, $menuName);
 	 						break;
-	 			case 'updateEntry':	$out .= $this->_Menu->UpdateMenuEntry(GetPostOrGet('menu_entry_id'), GetPostOrGet('menu_entry_menuid'), GetPostOrGet('menu_entry_title'), GetPostOrGet('menu_entry_link'), GetPostOrGet('menu_entry_css_id'));
-	 						$out .= $this->_ShowMenu(GetPostOrGet('menu_entry_menuid'), GetPostOrGet('menu_name'));
+	 			case 'updateEntry':	$out .= $this->_Menu->UpdateMenuEntry($menuEntryID, $menuEntryMenuID, $menuEntryTitle, $menuEntryLink, $menuEntryCssId);
+	 						$out .= $this->_ShowMenu($menuEntryMenuID, $menuName);
 	 						break;
-	 			case 'up':		$out .= $this->_Menu->ItemMoveUp(GetPostOrGet('menu_entry_orderid'), GetPostOrGet('menu_entry_menuid'));
-	 						$out .= $this->_ShowMenu(GetPostOrGet('menu_entry_menuid'), GetPostOrGet('menu_name'));
+	 			case 'up':		$out .= $this->_Menu->ItemMoveUp($menuEntryOrderID, $menuEntryMenuID);
+	 						$out .= $this->_ShowMenu($menuEntryMenuID, $menuName);
 	 						break;
-	 			case 'down':		$out .= $this->_Menu->ItemMoveDown(GetPostOrGet('menu_entry_orderid'), GetPostOrGet('menu_entry_menuid'));
-	 						$out .= $this->_ShowMenu(GetPostOrGet('menu_entry_menuid'), GetPostOrGet('menu_name'));
+	 			case 'down':		$out .= $this->_Menu->ItemMoveDown($menuEntryOrderID, $menuEntryMenuID);
+	 						$out .= $this->_ShowMenu($menuEntryMenuID, $menuName);
 	 						break;
-	 			case 'deleteEntry':	$out .= $this->_DeleteMenuEntry(GetPostOrGet('menu_entry_id'), GetPostOrGet('menu_entry_menuid'), GetPostOrGet('menu_name'));
+	 			case 'deleteEntry':	$out .= $this->_DeleteMenuEntry($menuEntryID, $menuEntryMenuID, $menuName);
 	 						break;
-	 			case 'deleteEntrySure':	$out .= $this->_Menu->DeleteMenuEntry(GetPostOrGet('menu_entry_id'));
-	 						$out .= $this->_ShowMenu(GetPostOrGet('menu_entry_menuid'), GetPostOrGet('menu_name'));
+	 			case 'deleteEntrySure':	$out .= $this->_Menu->DeleteMenuEntry($menuEntryID);
+	 						$out .= $this->_ShowMenu($menuEntryMenuID, $menuName);
 	 						break;
 	 			case 'newMenu':		$out .= $this->_AddMenu();
 	 						break;
-	 			case 'addMenu':		$out .= $this->_Menu->AddMenu(GetPostOrGet('menu_title'));
+	 			case 'addMenu':		$out .= $this->_Menu->AddMenu($menuTitle, $menuName);
 	 						$out .= $this->_HomePage();
 	 						break;
-	 			case 'editMenu':	$out .= $this->_EditMenu(GetPostOrGet('menu_menuid'), GetPostOrGet('menu_name'));
+	 			case 'editMenu':	$out .= $this->_EditMenu($menuMenuID);
 	 						break;
-	 			case 'updateMenu':	$out .= $this->_Menu->UpdateMenu(GetPostOrGet('menu_menuid'), GetPostOrGet('menu_title'), GetPostOrGet('menu_name'));
+	 			case 'updateMenu':	$out .= $this->_Menu->UpdateMenu($menuMenuID, $menuTitle, $menuName);
 	 						$out .= $this->_HomePage();
 	 						break;
-	 			case 'deleteMenu':	$out .= $this->_DeleteMenu(GetPostOrGet('menu_menuid'), GetPostOrGet('menu_name'));
+	 			case 'deleteMenu':	$out .= $this->_DeleteMenu($menuMenuID, $menuName);
 	 						break;
-	 			case 'deleteMenuSure':	$out .= $this->_Menu->DeleteMenu(GetPostOrGet('menu_menuid'), GetPostOrGet('menu_name'));
+	 			case 'deleteMenuSure':	$out .= $this->_Menu->DeleteMenu($menuMenuID, $menuName);
 	 						$out .= $this->_HomePage();
 	 						break;
-	 			case 'showMenu':	$out .= $this->_ShowMenu(GetPostOrGet('menu_entries_menuid'), GetPostOrGet('menu_name'));
+	 			case 'showMenu':	$out .= $this->_ShowMenu($menuEntryMenuID, $menuName);
 	 						break;
-	 			default:		$out .= $this->_HomePage(GetPostOrGet('menu_id'));
+	 			default:		$out .= $this->_HomePage($menuID);
 	 		}
 	 		return $out; 
 	 	}
@@ -130,8 +141,7 @@
 	 		if (!is_numeric($Menu_menuid))
 	 			$Menu_menuid = 1;
 	 		
-	 		$out = '';
-	 		$out .= "\r\n\t\t\t<a href=\"admin.php?page=menueditor&amp;action=newMenu\" class=\"button\">{$adminLang['create_new']}</a>";
+	 		$out = "\r\n\t\t\t<a href=\"admin.php?page=menueditor&amp;action=newMenu\" class=\"button\">{$adminLang['create_new']}</a>";
 	 		
  			$sql = "SELECT *
  				FROM " . DB_PREFIX . "menu";
@@ -146,11 +156,11 @@
  				$out .= "\r\n\t\t\t\t<li class=\"page_type_text\">
 					<span class=\"structure_row\">
 						<span class=\"page_actions\">
-							" . (($menu->menu_name != 'DEFAULT') ? "<a href=\"admin.php?page=menueditor&amp;action=editMenu&amp;menu_menuid={$menu->menu_id}&amp;menu_name={$menu->menu_name}\"><img src=\"./img/edit.png\" class=\"icon\" alt=\"{$adminLang['edit_menu']}\" title=\"{$adminLang['edit_menu']}\" height=\"16\" width=\"16\" /></a>" : '') . "
-							<a href=\"admin.php?page=menueditor&amp;action=showMenu&amp;menu_entries_menuid={$menu->menu_id}&amp;menu_name={$menu->menu_name}\"><img src=\"./img/view.png\" class=\"icon\" alt=\"{$adminLang['edit_menuitems']}\" title=\"{$adminLang['edit_menuitems']}\" height=\"16\" width=\"16\" /></a>
+							" . (($menu->menu_name != 'DEFAULT') ? "<a href=\"admin.php?page=menueditor&amp;action=editMenu&amp;menu_menuid={$menu->menu_id}\"><img src=\"./img/edit.png\" class=\"icon\" alt=\"{$adminLang['edit_menu']}\" title=\"{$adminLang['edit_menu']}\" height=\"16\" width=\"16\" /></a>" : '') . "
+							<a href=\"admin.php?page=menueditor&amp;action=showMenu&amp;menu_entry_menuid={$menu->menu_id}&amp;menu_name={$menu->menu_name}\"><img src=\"./img/view.png\" class=\"icon\" alt=\"{$adminLang['edit_menuitems']}\" title=\"{$adminLang['edit_menuitems']}\" height=\"16\" width=\"16\" /></a>
 							" . (($menu->menu_name != 'DEFAULT') ? "<a href=\"admin.php?page=menueditor&amp;action=deleteMenu&amp;menu_menuid={$menu->menu_id}&amp;menu_name={$menu->menu_name}\"><img src=\"./img/del.png\" class=\"icon\" alt=\"{$adminLang['delete_menu']}\" title=\"{$adminLang['delete_menu']}\" height=\"16\" width=\"16\" /></a>" : '') . "
 						</span>
-						<strong>{$menu->menu_name}</strong>
+						<strong>{$menu->menu_title}</strong> ({$menu->menu_name})
 					</span>
 				</li>";
  			}
@@ -393,6 +403,13 @@
 						<input type=\"text\" id=\"menu_title\" name=\"menu_title\" />
 					</div>
 					<div class=\"row\">
+						<label for=\"menu_name\">
+							<strong>{$adminLang['menu_name']}:</strong>
+							<span class=\"info\">{$adminLang['type_here_the_name_of_the_menu']}.</span>	
+						</label>
+						<input type=\"text\" id=\"menu_name\" name=\"menu_name\" />
+					</div>
+					<div class=\"row\">
 						<input type=\"reset\" class=\"button\" value=\"{$adminLang['reset']}\" />&nbsp;
 						<input type=\"submit\" class=\"button\" value=\"{$adminLang['save']}\" />
 					</div>
@@ -409,7 +426,7 @@
 	 	 * @return string HTML code of the form
 	 	 * @todo Information about DEFAULT menu
 	 	 */
-	 	function _editMenu($Menu_menuid, $Menu_name) {
+	 	function _editMenu($Menu_menuid) {
 	 		$out = '';
 	 		$adminLang = $this->_AdminLang;
 	 		
@@ -425,16 +442,22 @@
 					<input type=\"hidden\" name=\"page\" value=\"menueditor\" />		
 					<input type=\"hidden\" name=\"action\" value=\"updateMenu\" />
 					<input type=\"hidden\" name=\"menu_menuid\" value=\"$Menu_menuid\" />
-					<input type=\"hidden\" name=\"menu_name\" value=\"$Menu_name\" />		
 					<div class=\"row\">
 						<label for=\"menu_title\">
-							<strong>Men&uuml;titel:</strong>
+							<strong>{$adminLang['menu_title']}:</strong>
 							<span class=\"info\">{$adminLang['type_here_the_title_of_the_menu']}.</span>
 						</label>
-						<input type=\"text\"" . (($menu->menu_name == 'DEFAULT') ? ' disabled="disabled"' : '') . " id=\"menu_title\" name=\"menu_title\" value=\"{$menu->menu_name}\" />
+						<input type=\"text\"" . (($menu->menu_name == 'DEFAULT') ? ' disabled="disabled"' : '') . " id=\"menu_title\" name=\"menu_title\" value=\"{$menu->menu_title}\" />
 					</div>
 					<div class=\"row\">
-						<input type=\"reset\" class=\"button\" value=\"{$adminLang['reset']}\" />&nbsp;
+						<label for=\"menu_name\">
+							<strong>{$adminLang['menu_name']}:</strong>
+							<span class=\"info\">{$adminLang['type_here_the_name_of_the_menu']}.</span>
+						</label>
+						<input type=\"text\"" . (($menu->menu_name == 'DEFAULT') ? ' disabled="disabled"' : '') . " id=\"menu_name\" name=\"menu_name\" value=\"{$menu->menu_name}\" />
+					</div>
+					<div class=\"row\">
+						<a class=\"button\" title=\"{$adminLang['back']}\" href=\"admin.php?page=menueditor\">{$adminLang['back']}</a>&nbsp;
 						<input type=\"submit\" class=\"button\" value=\"{$adminLang['save']}\" />
 					</div>
 				</form>

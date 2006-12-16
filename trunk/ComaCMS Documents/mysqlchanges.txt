@@ -425,3 +425,7 @@ ALTER TABLE `comacms_menu_entries` ADD `menu_entries_page_id` INT( 10 ) UNSIGNED
 #Added fields containing information about the activation for a new user
 ALTER TABLE `comacms_users` ADD `user_activated` BOOL NULL DEFAULT '1',
 ADD `user_activationcode` VARCHAR( 32 ) NULL ;
+
+#r340
+'Added menutitle field to menutabel
+ALTER TABLE `comacms_menu` ADD `menu_title` VARCHAR( 255 ) NOT NULL DEFAULT '';

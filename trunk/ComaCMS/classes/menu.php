@@ -211,11 +211,11 @@
  		 * @param string Menu_title The title of the new Menu
  		 * @return void
  		 */
- 		function AddMenu($Menu_title) {
- 			if ($Menu_title != '') {
+ 		function AddMenu($MenuTitle, $MenuName) {
+ 			if ($MenuTitle != '' && $MenuName != '') {
  				$sql = "INSERT INTO " . DB_PREFIX . "menu
- 					(menu_name)
- 					VALUES ('$Menu_title')";
+ 					(menuTitle, menu_name)
+ 					VALUES ('$MenuTitle', '$MenuName')";
  				$this->_SqlConnection->SqlQuery($sql);
  			}
  		}
@@ -224,14 +224,15 @@
  		 * Saves a new 'version' of a Menu by it's ID 
  		 * @access public
  		 * @param integer Menu_menuid The id of the menu to update
- 		 * @param string Menu_title The title of the Menu
+ 		 * @param string MenuTitle The title of the menu
+ 		 * @param string MenuName The name of the menu
  		 * @return void
  		 */
- 		function UpdateMenu($Menu_menuid, $Menu_title, $Menu_name) {
- 			if (is_numeric($Menu_menuid) && $Menu_title != '' && $Menu_name != 'DEFAULT') {
+ 		function UpdateMenu($MenuMenuID, $MenuTitle, $MenuName) {
+ 			if (is_numeric($MenuMenuID) && $MenuTitle != '' && $MenuName != 'DEFAULT') {
  				$sql = "UPDATE " . DB_PREFIX . "menu
- 					SET menu_name='$Menu_title'
- 					WHERE menu_id='$Menu_menuid'";
+ 					SET menu_name='$MenuName', menu_title='$MenuTitle'
+ 					WHERE menu_id='$MenuMenuID'";
  				$this->_SqlConnection->SqlQuery($sql);
  			}
  		}

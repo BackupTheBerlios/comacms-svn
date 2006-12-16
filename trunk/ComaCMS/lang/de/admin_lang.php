@@ -137,6 +137,8 @@
 	$admin_lang['type_in_here_the_css_id_for_the_menuentry_if_you_need_one_for_it'] = 'Geben Sie hier die CSS ID f&uuml;r den Men&uuml;eintrag ein wenn Sie eine ben&ouml;tigen';
 	$admin_lang['menu_title'] = 'Men&uuml;titel';
 	$admin_lang['type_here_the_title_of_the_menu'] = 'Geben sie hier den Titel des Men&uuml;s ein';
+	$admin_lang['menu_name'] = 'Men&uuml;name';
+	$admin_lang['type_here_the_name_of_the_menu'] = 'Geben sie hier den Namen des Me&uuml;s ein';
 	$admin_lang['shall_the_menu_%menutitle%_really_be_deleted?'] = 'Soll das Men&uuml; &quot;%s&quot; wirklich gel&ouml;scht werden?';
 	$admin_lang['name/contraction'] = 'Name/K&uuml;rzel';
 	$admin_lang['title'] = 'Titel';

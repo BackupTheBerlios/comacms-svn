@@ -299,8 +299,8 @@
 					}
 				}
 			}
-			$this->Template = preg_replace( '/{(.+?)}/e', "\$this->_Replace('\\1')", $this->Template);
-			$this->Template = preg_replace( '/{(.+?)}/e', "\$this->_Replace('\\1')", $this->Template);
+			$this->Template = preg_replace( '/\{(.+?)\}/e', "\$this->_Replace('\\1')", $this->Template);
+			$this->Template = preg_replace( '/\\\{(.+?)\}/e', "\$this->_Replace('\\1')", $this->Template);
 			$this->Template = preg_replace("/<([A-Za-z0-9_]+)\:loop>(.+?)<\/\\1>/es", "\$this->_RepeatReplace('\\1', '\\2')", $this->Template);
 			
 			$this->Template = str_replace('<p></p>', '', $this->Template);

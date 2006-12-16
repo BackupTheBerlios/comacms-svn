@@ -229,20 +229,21 @@
  			
  			if(array_key_exists($Match, $this->_Replacements))
  				return $this->_Replacements[$Match];
- 			return "\{$Match}";
+ 			return '{' . $Match . '}';
  		}
  		
  		function _RepeatReplace($Match, $Replacement) {
+ 			$Replacement = stripslashes($Replacement);
  			if(array_key_exists($Match, $this->_ReplacementsArrays)) {
  				$output = '';
  				foreach($this->_ReplacementsArrays[$Match] as $repeat) {
 					$toReplaceString = $Replacement;
 					foreach($repeat as $subName => $subValue) {
-						$toReplaceString = str_replace("\{$subName}", $subValue, $toReplaceString);
+						$toReplaceString = str_replace('{' . $subName . '}', $subValue, $toReplaceString);
 					}
 					$output .= $toReplaceString;
 				}
-				return stripslashes($output);
+				return $output;
  			}
  			return '';
  		}
@@ -299,9 +300,10 @@
 					}
 				}
 			}
-			$this->Template = preg_replace( '/\{(.+?)\}/e', "\$this->_Replace('\\1')", $this->Template);
-			$this->Template = preg_replace( '/\\\{(.+?)\}/e', "\$this->_Replace('\\1')", $this->Template);
-			$this->Template = preg_replace("/<([A-Za-z0-9_]+)\:loop>(.+?)<\/\\1>/es", "\$this->_RepeatReplace('\\1', '\\2')", $this->Template);
+			
+			$this->Template = preg_replace( '/\{(.+?)\}/e', "\$this->_Replace('$1')", $this->Template);
+			$this->Template = preg_replace( '/\{(.+?)\}/e', "\$this->_Replace('$1')", $this->Template);
+			$this->Template = preg_replace("/<([A-Za-z0-9_]+)\:loop>(.+?)<\/\\1>/es", "\$this->_RepeatReplace('$1', '$2')", $this->Template);
 			
 			$this->Template = str_replace('<p></p>', '', $this->Template);
 			$document .= $this->_CssFiles;

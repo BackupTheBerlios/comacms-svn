@@ -20,6 +20,7 @@
 	 * @ignore
 	 */
 	 require_once('classes/module.php');
+	 require_once('classes/pagestructure.php');
 	 
 	/**
 	 * @package ComaCMS
@@ -28,11 +29,13 @@
 	class Module_Sitemap extends Module{
 		
 		/**
-		 * This are all existing pages
+		 * This is the pagestructureclass to get access to pagedata
+		 * @author ComaWStefan
 		 * @access private
+		 * @var class
 		 */
-		 var $_PagesParentIDs;
-		 
+		var $_Pagestructure; 
+		
 		/**
 		 * This function initializes the Sitemapmoduleclass
 		 * @author ComaWStefan
@@ -52,6 +55,8 @@
  			$this->_Lang = &$Lang;
  			$this->_ComaLate = &$ComaLate;
  			$this->_ComaLib = &$ComaLib;
+ 			$this->_Pagestructure = new PageStructure(&$SqlConnection, &$User);
+ 			$this->_Pagestructure->LoadParentIDs();
  		}
  		
  		/**
@@ -73,9 +78,9 @@
  					$parameter[1] = true;
  				$$parameter[0] = $parameter[1];
  			}
- 			if(!is_int($TopNode)) 
+ 			if(!is_integer($TopNode)) 
  				$TopNode = 0;
- 			return $this->_HomePage($TopNode);
+ 			return $this->_ShowStructure($TopNode);
  		}
  		
  		/**
@@ -87,9 +92,12 @@
  		 */
  		function GetPage($Action) {
  			$out = "<h2>Sitemap</h2>\r\n";
+ 			$topNode = GetPostOrGet('TopNode');
+ 			if (!is_integer($topNode))
+ 				$topNode = 0;
  			switch($Action) {
- 				default:		$out .= $this->_HomePage(GetPostOrGet('TopNode'));
- 							break;
+ 				default:		$out .= $this->_ShowStructure($topNode);
+ 								break;
  			}
  			return $out;
  		}
@@ -105,62 +113,35 @@
  		}
  		
  		/**
- 		 * This function returns the homepage of the module with the structure beginning at topnode 0
- 		 * @author ComaWStefan
- 		 * @access private
- 		 * @return string The text of the modul
- 		 */
- 		function _HomePage($TopNode) {
- 			$sql = "SELECT *
- 				FROM " . DB_PREFIX . "pages";
- 			$result = $this->_SqlConnection->SqlQuery($sql);
- 			while ($page = mysql_fetch_object($result)) {
- 				$this->_PagesParentIDs[$page->page_parent_id][] = array('id' => $page->page_id, 
-										'name' => $page->page_name, 
-										'title' => $page->page_title, 
-										'type' => $page->page_type,
-										'lang' => $page->page_lang,
-										'access' => $page->page_access);
- 			}
- 			$out = '';
- 			$out .= $this->_ShowStructure($TopNode);
- 			return $out;
- 		}
- 		
- 		/**
- 		 * This function returns recursively the structure of the page beginnig at $TopNode
+ 		 * This function returns the structure of the page recursively beginnig at $TopNode
  		 * @author ComaWStefan
  		 * @access private
  		 * @param integer TopNode This is the id of the toppage
  		 * @return string The complete structure beginning at the toppage
  		 */
  		 function _ShowStructure($TopNode = 0) {
+ 		 	$pages = &$this->_Pagestructure->RemoveAcessDeletedPages();
  		 	$out = '';
- 		 	if(empty($this->_PagesParentIDs))
+ 		 	if(!array_key_exists($TopNode, $pages))
  		 		return;
- 		 	if(!array_key_exists($TopNode, $this->_PagesParentIDs))
+ 		 	if(empty($pages[$TopNode]))
  		 		return;
- 		 	$pages = $this->_PagesParentIDs[$TopNode];
- 		 	if(empty($pages))
- 		 		return;
- 		 	$out .= "\r\n\t\t\t<ol>";
- 		 	foreach($pages as $page) {
- 		 		if($page['access'] != 'deleted') {
- 		 			// blockelements
- 		 			$out .= "\r\n\t\t\t\t<li class=\"page_type_" . $page['type'] . "\"><span class=\"structure_row\">";
- 		 			// show language of the page if activated
- 		 			if ($this->_Config->Get('sitemap_show_language', '1')) {
- 		 				$out .= "<span class=\"page_lang\">[{$this->_Lang[$page['lang']]}]</span>";
- 		 			}
- 		 			// show pagename with link to index.php and pagetitle
- 		 			$out .= "<strong><a href=\"index.php?page={$page['name']}\">{$page['title']}</a></strong> (" . rawurldecode($page['name']) . ")</span>";
- 		 			// show all subpages
- 		 			$out .= $this->_ShowStructure($page['id']);
- 		 			// blockelement endings
- 		 			$out .= "\r\n\t\t\t\t</li>";
- 		 		}
+ 		 	$out .= "\r\n\t\t\t<ul>";
+ 		 	foreach($pages[$TopNode] as $page) {
+ 		 		// blockelements
+	 			$out .= "\r\n\t\t\t\t<li class=\"page_type_" . $page['type'] . "\"><span class=\"structure_row\">";
+	 			// show language of the page if activated
+	 			if ($this->_Config->Get('sitemap_show_language', '1')) {
+	 				$out .= "<span class=\"page_lang\">[{$this->_Lang[$page['lang']]}]</span>";
+	 			}
+	 			// show pagename with link to index.php and pagetitle
+	 			$out .= "<strong><a href=\"index.php?page={$page['name']}\">{$page['title']}</a></strong></span>";
+	 			// show all subpages
+	 			$out .= $this->_ShowStructure($page['id']);
+	 			// blockelement endings
+	 			$out .= "\r\n\t\t\t\t</li>";
  		 	}
- 		 	$out .= "\r\n\t\t\t</ol>";
+ 		 	$out .= "\r\n\t\t\t</ul>";
  		 	return $out;
  		 }
 	}

@@ -263,7 +263,7 @@
 		 	foreach($this->_ParentIDPages[$Topnode] as $page) {
 		 		if($page['id'] != $Without && $page['access'] != 'deleted') {
 		 			$out .= "<option style=\"padding-left:" . ($Deep * 1.5) . "em;\" value=\"" . $page['id'] . "\"" . (($page['id'] == $Selected) ? ' selected="selected"' : '') . ">$Topnumber$number. " . $page['title'] . " (" . rawurldecode($page['name']) . ")</option>\r\n";
-		 			$out .= $this->PageStructurePulldown($page['id'], $Deep + 1, $Topnumber . $number. "." ,$Without, $Selected);
+		 			$out .= $this->PageStructurePulldown($page['id'], $Deep + 1, $Topnumber . $number . '.' ,$Without, $Selected);
 		 			$number++;
 		 		}
 		 		
@@ -274,16 +274,14 @@
 		 * @return array
 		 */
 		function RemoveAcessDeletedPages() {
-			if(count($this->_ParentIDPagesNonDeleted) < 1) {
-				$pageArray = array();
-				foreach($this->_ParentIDPages as $parentID => $pages) {
-					foreach($pages as $page) {
-						if($page['access'] != 'deleted')
-							$pageArray[$parentID][] = $page;
-					}
+			$pageArray = array();
+			foreach($this->_ParentIDPages as $parentID => $pages) {
+				foreach($pages as $page) {
+					if($page['access'] != 'deleted')
+						$pageArray[$parentID][] = $page;
 				}
-				$this->_ParentIDPagesNonDeleted = $pageArray;
 			}
+			$this->_ParentIDPagesNonDeleted = $pageArray;
 			return $this->_ParentIDPagesNonDeleted;
 		}
 		

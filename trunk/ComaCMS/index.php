@@ -39,7 +39,7 @@
 	/**
 	 * @ignore
 	 */
-	include('./lang/' . $user->Language . '/admin_lang.php');
+	//include('./lang/' . $user->Language . '/admin_lang.php');
 	
 	/*
 	 * wtf are we doin here?

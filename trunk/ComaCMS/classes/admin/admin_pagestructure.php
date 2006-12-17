@@ -53,12 +53,11 @@
  		
  		/**
  		 * @param SqlConnection SqlConnection
- 		 * @param array AdminLang
  		 * @return void
  		 */
- 		function Admin_PageStructure(&$SqlConnection, &$AdminLang, &$User, &$Config) {
+ 		function Admin_PageStructure(&$SqlConnection, &$Translation, &$User, &$Config) {
 			$this->_SqlConnection = &$SqlConnection;
-			$this->_AdminLang = &$AdminLang;
+			$this->_Translation = &$Translation;
 			$this->_User = &$User;
 			$this->_Config = &$Config;
 			$this->_PageStructure = new PageStructure($this->_SqlConnection, $this->_User);
@@ -69,11 +68,11 @@
  		 * @param string Action
  		 */
 		 function GetPage($Action = '') {
-		 	$adminLang = &$this->_AdminLang;
+		 	//$adminLang = &$this->_AdminLang;
 		 	$out = '';
 			
 			if($Action != 'internHome')
-				$out .= "\t\t\t<h2>" . $adminLang['pagestructure'] . "</h2>\r\n";
+				$out .= "\t\t\t<h2>" . $this->_Translation->GetTranslation('pagestructure') . "</h2>\r\n";
 		 	switch ($Action) {
 		 		case 'deletePage':	$out .= $this->_deletePage();
 		 					break;
@@ -115,7 +114,7 @@
 		  * @return string
 		  */
 		 function _deletePage() {
-		 	$adminLang = &$this->_AdminLang;
+		 	//$adminLang = &$this->_AdminLang;
 		 	$confirmation = GetPostOrGet('confirmation');
 		 	$pageID = GetPostOrGet('pageID');
 		 	if(!is_numeric($pageID))
@@ -214,10 +213,10 @@
 		  * @return string
 		  */
 		 function _homePage() {
-		 	$adminLang = &$this->_AdminLang;
+		 	//$adminLang = &$this->_AdminLang;
 		 	$this->_getMenuPageIDs();
 		 	$out = "\t\t\t<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
-			<a href=\"admin.php?page=pagestructure&amp;action=newPage\" class=\"button\">" . $adminLang['create_new_page'] . "</a>
+			<a href=\"admin.php?page=pagestructure&amp;action=newPage\" class=\"button\">" . $this->_Translation->GetTranslation('create_new_page') . "</a>
 			<form method=\"post\" action=\"admin.php\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"generateMenu\" />\r\n";
@@ -235,24 +234,24 @@
 		  * @return string
 		  */
 		 function _newPage() {
-		 	$adminLang = &$this->_AdminLang;
+		 	//$adminLang = &$this->_AdminLang;
 		 	$this->_PageStructure->LoadParentIDs();
 				 	
 		 	$out = "\t\t\t<form method=\"post\" action=\"admin.php\">
 				<fieldset>
-					<legend>" . $adminLang['new_page'] . "</legend>
+					<legend>" . $this->_Translation->GetTranslation('new_page') . "</legend>
 					<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 					<input type=\"hidden\" name=\"action\" value=\"addNewPage\" />
 					<div class=\"row\">
 						<label>
-							" . $adminLang['name/contraction'] . ":
+							" . $this->_Translation->GetTranslation('name/contraction') . ":
 							<span class=\"info\">Mit diesem K&uuml;rzel wird auf die Seite zugegriffen und dient es zur eindeutigen Identifizierung der Seite.</span>
 						</label>
 						<input type=\"text\" name=\"pageName\" maxlength=\"20\" />
 					</div>
 					<div class=\"row\">
 						<label>
-							" . $adminLang['title'] . ":
+							" . $this->_Translation->GetTranslation('title') . ":
 							<span class=\"info\">Der Titel wird sp&auml;ter in der Titelleiste des Browsers angezeigt.</span>
 						</label>
 						<input type=\"text\" name=\"pageTitle\" maxlength=\"100\" />
@@ -264,12 +263,12 @@
 						</label>
 						<select name=\"pageType\">
 							<option value=\"text\">Text</option>
-							<option value=\"gallery\">" . $adminLang['gallery'] ."</option>
+							<option value=\"gallery\">" . $this->_Translation->GetTranslation('gallery') ."</option>
 						</select>
 					</div>
 					<div class=\"row\">
 						<label>
-							" . $adminLang['language'] . ":
+							" . $this->_Translation->GetTranslation('language') . ":
 							<span class=\"info\">Der Text soll in der gew&auml;hlten Sprache geschrieben werden.</span>
 						</label>
 						<select name=\"pageLang\">
@@ -304,7 +303,7 @@
 							Kommentar
 							<span class=\"info\">Eine kurze Beschreibung, was hier gemacht wurde.</span>
 						</label>
-						<input type=\"text\" name=\"pageEditComment\" maxlength=\"100\" value=\"" . $adminLang['created_new_page'] . "\"/>
+						<input type=\"text\" name=\"pageEditComment\" maxlength=\"100\" value=\"" . $this->_Translation->GetTranslation('created_new_page') . "\"/>
 					</div>
 					<div class=\"row\">
 						<label>
@@ -314,8 +313,7 @@
 						<input type=\"checkbox\" name=\"pageEdit\" value=\"edit\" checked=\"true\" class=\"checkbox\"/>
 					</div>
 					<div class=\"row\">
-						<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\" />&nbsp;
-						<input type=\"submit\" class=\"button\" value=\"" . $adminLang['create'] . "\" />
+						<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('create') . "\" />
 					</div>
 				</fieldset>
 			</form>";
@@ -355,7 +353,6 @@
 		 	if(!array_key_exists($TopNodeID, $pages))
 		 		return;
 		 	$pages = $pages[$TopNodeID];
-		 	$adminLang = $this->_AdminLang;
 		 	$out = '';
 		 	if(empty($pages))
 		 		return;
@@ -368,22 +365,22 @@
 			 		$out .= "<span class=\"page_actions\">";
 			 			// edit:
 			 			if($page['access'] != 'deleted')
-				 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['edit'] . "\" title=\"" . $adminLang['edit'] . "\"/></a>";
+				 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>";
 			 			// info:
-			 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=" . $page['id'] . "\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $adminLang['info'] . "\" title=\"" . $adminLang['info'] . "\"/></a>";
+			 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=" . $page['id'] . "\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('info') . "\" title=\"" . $this->_Translation->GetTranslation('info') . "\"/></a>";
 				 		// view:
 			 			if($page['access'] != 'deleted')
 			 				$out .= " <a href=\"index.php?page=" . $page['name'] . "\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen " . $page['title'] . "\" title=\"Anschauen\"/></a>";
 				 		// inlinemenu:
 			 			if($page['access'] != 'deleted')
-			 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=" . $page['id'] . "\" title=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\"><img src=\"./img/inlinemenu.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\" title=\"" . sprintf($adminLang['edit_inlinemenu_of_%page_title%'], $page['title']) . "\"/></a>";
+			 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=" . $page['id'] . "\" title=\"" . sprintf($this->_Translation->GetTranslation('edit_inlinemenu_of_%page_title%'), $page['title']) . "\"><img src=\"./img/inlinemenu.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($this->_Translation->GetTranslation('edit_inlinemenu_of_%page_title%'), $page['title']) . "\" title=\"" . sprintf($this->_Translation->GetTranslation('edit_inlinemenu_of_%page_title%'), $page['title']) . "\"/></a>";
 		 				// delete:
 			 			if($page['access'] != 'deleted')
-			 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($adminLang['delete_page_%page_title%'], $page['title']) . "\" title=\"" . sprintf($adminLang['delete_page_%page_title%'], $page['title']) . "\"/></a>";
+			 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($this->_Translation->GetTranslation('delete_page_%page_title%'), $page['title']) . "\" title=\"" . sprintf($this->_Translation->GetTranslation('delete_page_%page_title%'), $page['title']) . "\"/></a>";
 			 		// end blockelement for pageactions
 			 		$out .= '</span>';
 			 		// lang:
-			 		$out .= "<span class=\"page_lang\">[" . $adminLang[$page['lang']] . "]</span>";
+			 		$out .= "<span class=\"page_lang\">[" . $this->_Translation->GetTranslation($page['lang']) . "]</span>";
 			 		$out .= (($TopNodeID == 0) ?  "<input type=\"checkbox\" name=\"mainMenuPages[]\"" . ((in_array($page['id'], $this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page['access'] != 'public') ? ' disabled="disabled"'  : '') . " value=\"" . $page['id'] . "\" class=\"checkbox\"/>\t" : '' ) . "<strong>" . $page['title'] . "</strong> (" . rawurldecode($page['name']) . ")";
 			 		$out .= '</span>' . $this->_Structure($page['id']);
 			 		$out .= "\t\t\t\t</li>\r\n";
@@ -426,7 +423,7 @@
 					case 'link':		include('classes/edit_link_page.php');
 								$edit = new Edit_Link_Page();
 								break;			
-					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> l�sst sich noch nicht bearbeiten.";
+					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> l&auml;sst sich noch nicht bearbeiten.";
 								break;
 				}
 				if($edit !== null)
@@ -455,7 +452,7 @@
 					case 'gallery':		include('classes/edit_gallery_page.php');
 								$edit = new Edit_Gallery_Page();
 								break;				
-					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> l�sst sich noch nicht bearbeiten.";
+					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> l&auuml;sst sich noch nicht bearbeiten.";
 								break;
 				}
 				if($edit !== null)

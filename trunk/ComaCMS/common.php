@@ -30,15 +30,16 @@
 	}
 	header('Content-type: text/html; charset=utf-8');
 	define('__ROOT__', dirname(__FILE__));
-	include('classes/sql.php');
-	include('classes/comalib.php');
-	include('classes/outputpage.php');
-	include('classes/config.php');
-	include('classes/user.php');
-	include('classes/inlinemenu.php');
-	include('classes/module.php');
-	include('functions.php');
-	include('lib/comalate/comalate.class.php');
+	require_once(__ROOT__ . '/classes/sql.php');
+	require_once(__ROOT__ . '/classes/comalib.php');
+	require_once(__ROOT__ . '/classes/outputpage.php');
+	require_once(__ROOT__ . '/classes/config.php');
+	require_once(__ROOT__ . '/classes/user.php');
+	require_once(__ROOT__ . '/classes/inlinemenu.php');
+	require_once(__ROOT__ . '/classes/module.php');
+	require_once(__ROOT__ . '/classes/language.php');
+	require_once(__ROOT__ . '/functions.php');
+	require_once(__ROOT__ . '/lib/comalate/comalate.class.php');
 	$lib = new ComaLib();
 	
 	$extern_page = GetPostOrGet('page');	
@@ -50,6 +51,8 @@
 	$config = new Config();
 	$config->LoadAll();
 	$user = new User($sqlConnection);
+	$translation = new Language($user->Language);
+	$translation->AddSources(__ROOT__  . '/lang/');
 	$output = new ComaLate();
 	$styleName = $config->Get('style', 'default');
 	$headerStyleName = GetPostOrGet('style');

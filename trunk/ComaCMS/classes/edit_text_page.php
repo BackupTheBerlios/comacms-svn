@@ -232,10 +232,14 @@
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"pageText\">$page_text</textarea>
 				<script type=\"text/javascript\" language=\"javascript\">
+					
+					//<![CDATA[
 					document.write('<div style=\"float:right;\">');
 					document.write('<img onclick=\"resizeBox(-5)\" title=\"Eingabefeld verkleinern\" alt=\"Eingabefeld verkleinern\" class=\"resize\" src=\"img/up.png\" /> ');
 					document.write('<img onclick=\"resizeBox(5)\" title=\"Eingabefeld vergr&ouml;&szlig;ern\" alt=\"Eingabefeld vergr&ouml;&szlig;ern\" class=\"resize\" src=\"img/down.png\" /><br />');
-					document.write('</div>');	
+					document.write('</div>');
+					//]]>
+						
 				</script>
 				{$admin_lang['comment_on_change']}: <input name=\"pageEditComment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $page_edit_comment)) . "\" maxlength=\"100\" type=\"text\"/><br />
 				<input type=\"submit\" value=\"Speichern\" class=\"button\" />

@@ -39,16 +39,16 @@
 	/**
 	 * @ignore
 	 */
-	include('./lang/' . $user->Language . '/admin_lang.php');
+	//include('./lang/' . $user->Language . '/admin_lang.php');
 	include('./system/admin_pages.php');
 	// add the menu-entries for the admin menu (Link-Text, $page)
 	$menuArray = array();
-	$menuArray[] = array($admin_lang['admincontrol'], 'admincontrol',);
-	$menuArray[] = array($admin_lang['sitepreview'], 'sitepreview');
-	$menuArray[] = array($admin_lang['pagestructure'], 'pagestructure');
-	$menuArray[] = array($admin_lang['menu-editor'], 'menueditor');
-	$menuArray[] = array($admin_lang['preferences'], 'preferences');
-	$menuArray[] = array($admin_lang['modules'], 'modules');
+	$menuArray[] = array($translation->GetTranslation('admincontrol'), 'admincontrol',);
+	$menuArray[] = array($translation->GetTranslation('sitepreview'), 'sitepreview');
+	$menuArray[] = array($translation->GetTranslation('pagestructure'), 'pagestructure');
+	$menuArray[] = array($translation->GetTranslation('menu-editor'), 'menueditor');
+	$menuArray[] = array($translation->GetTranslation('preferences'), 'preferences');
+	$menuArray[] = array($translation->GetTranslation('modules'), 'modules');
 
 	
 	// add menu entries for activated modules
@@ -75,16 +75,16 @@
 			// if it isn't possible display the internal name of the module
 			$moduleName =  (array_key_exists('name', $module)) ? $module['name'] : $moduleActivated;
 			// ad the menu entrie for the module
-			$menuArray[] = array($moduleName . '-' . $admin_lang['module'], 'module_'. $moduleActivated);
+			$menuArray[] = array($moduleName . '-' . $translation->GetTranslation('module'), 'module_'. $moduleActivated);
 		}
 	}
 		
-	$menuArray[] = array($admin_lang['sitestyle'], 'sitestyle');
-	$menuArray[] = array($admin_lang['users'], 'users');
-	$menuArray[] = array($admin_lang['groups'], 'groups');
-	$menuArray[] = array($admin_lang['rights'], 'rights');
-	$menuArray[] = array($admin_lang['files'], 'files');
-	$menuArray[] = array($admin_lang['logout'], 'logout');
+	$menuArray[] = array($translation->GetTranslation('sitestyle'), 'sitestyle');
+	$menuArray[] = array($translation->GetTranslation('users'), 'users');
+	$menuArray[] = array($translation->GetTranslation('groups'), 'groups');
+	$menuArray[] = array($translation->GetTranslation('rights'), 'rights');
+	$menuArray[] = array($translation->GetTranslation('files'), 'files');
+	$menuArray[] = array($translation->GetTranslation('logout'), 'logout');
 	
 	// FIXME: add path links to make the usability much better! 
 	$path_add = '';
@@ -99,21 +99,26 @@
 //	counter_set("a:$extern_page");
 	
 	if($extern_page == 'admincontrol') {
-		$title = $admin_lang['admincontrol'];
-		include('classes/admin/admin_admincontrol.php');
-		$admin_admincontrol = new Admin_AdminControl($admin_lang, $config);
-		$text = $admin_admincontrol->GetPage($extern_action);
+		// Get the admin-controll-class
+		include_once('classes/admin/admin_admincontrol.php');
+		$title = $translation->GetTranslation('admincontrol');
+		
+		$admin_admincontrol = new Admin_AdminControl($sqlConnection, $translation, $config, $user, $lib, $output);
+		//print_r($output);
+		$text = $admin_admincontrol->GetPage();
+		//print_r($output);
+		//die();
 	}
 	elseif($extern_page == 'sitepreview') {
-		$title = $admin_lang['sitepreview'];
+		$title = $translation->GetTranslation('sitepreview');
 		$text = page_sitepreview();
 	}
 	elseif($extern_page == 'sitestyle') {
-		$title = $admin_lang['sitestyle'];
+		$title = $translation->GetTranslation('sitestyle');
 		$text = page_sitestyle();
 	}
 	elseif($extern_page == 'users') {
-		$title = $admin_lang['users'];
+		$title = $translation->GetTranslation('users');
 		$text = page_users();
 	}
 	elseif($extern_page == 'logout') {
@@ -125,45 +130,45 @@
 	}
 	elseif($extern_page == 'preferences') {
 		include('classes/admin/admin_preferences.php');
-		$title = $admin_lang['preferences'];
+		$title = $translation->GetTranslation('preferences');
 		//$text = page_preferences();
-		$admin_page = new Admin_Preferences($sqlConnection, $admin_lang, $config);
+		$admin_page = new Admin_Preferences($sqlConnection, $translation, $config);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'files') {
-		$title = $admin_lang['files'];
+		$title = $translation->GetTranslation('files');
 		include('classes/admin/admin_files.php');
-		$admin_page = new Admin_Files($sqlConnection, $admin_lang, $user, $config, $lib);
+		$admin_page = new Admin_Files($sqlConnection, $translation, $user, $config, $lib);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'pagestructure') {
-		$title = $admin_lang['pagestructure'];
+		$title = $translation->GetTranslation('pagestructure');
 		include('classes/admin/admin_pagestructure.php');
-		$admin_page = new Admin_PageStructure($sqlConnection, $admin_lang, $user, $config);
+		$admin_page = new Admin_PageStructure($sqlConnection, $translation, $user, $config);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'groups') {
 		$title = $admin_lang['groups'];
 		include('classes/admin/admin_groups.php');
 		$admin_page = new Admin_Groups();
-		$text = $admin_page->GetPage($extern_action, $admin_lang);
+		$text = $admin_page->GetPage($extern_action, $translation);
 	}
 	elseif($extern_page == 'rights') {
-		$title = $admin_lang['rights'];
+		$title = $translation->GetTranslation('rights');
 		include('classes/admin/admin_rights.php');
 		$admin_page = new Admin_Rights();
-		$text = $admin_page->GetPage($extern_action, $admin_lang);
+		$text = $admin_page->GetPage($extern_action, $translation);
 	}
 	elseif($extern_page == 'menueditor') {
-		$title = $admin_lang['menu-editor'];
+		$title = $translation->GetTranslation('menu-editor');
 		include('classes/admin/admin_menu.php');
-		$admin_page = new Admin_Menu($sqlConnection, $admin_lang);
+		$admin_page = new Admin_Menu($sqlConnection, $translation);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'modules') {
-		$title = $admin_lang['modules'];
+		$title = $translation->GetTranslation('modules');
 		include('classes/admin/admin_modules.php');
-		$admin_page = new Admin_Modules($sqlConnection, $admin_lang, $config);
+		$admin_page = new Admin_Modules($sqlConnection, $translation, $config);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif(substr($extern_page, 0, 7) == 'module_')
@@ -180,7 +185,7 @@
 				// create a link to the initialisation-function for the module-class
 				$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Admin_Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');
 				// create the module-class
-				$moduleAdminInterface = $newClass($sqlConnection, $user, $admin_lang, $config, $output, $lib);
+				$moduleAdminInterface = $newClass($sqlConnection, $user, $translation, $config, $output, $lib);
 				if(isset($moduleAdminInterface)) {
 					$text = $moduleAdminInterface->GetPage($extern_action);
 					$title = $moduleAdminInterface->GetTitle();
@@ -217,7 +222,7 @@
 	// Replace outputtext
 	$output->SetReplacement('TEXT' , $text);
 	// Replace Title
-	$output->Title = $admin_lang['administration'] . ' - ' . $title;
+	$output->Title = $translation->GetTranslation('administration') . ' - ' . $title;
 	$output->SetCondition('notathome', true);
 	$output->SetCondition('notinindex', true);
 	$output->SetCondition('notinadmin', false);

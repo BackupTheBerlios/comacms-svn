@@ -18,149 +18,205 @@
 	/**
 	 * @ignore
 	 */
-	require_once('./classes/admin/admin.php');
+	require_once __ROOT__ . '/classes/admin/admin.php';
 	
 	/**
 	 * @package ComaCMS
 	 */
-	class Admin_AdminControl extends Admin{
-		
+	class Admin_AdminControl extends Admin {
+
 		/**
-		 * @access private
-		 * @var array
-		 */
-		var $admin_lang;
-		
-		/**
-		 * @access private
-		 * @var Config
-		 */
-		var $config;
-		
-		/**
-	 	 * @param array admin_lang
-	 	 * @param Config config
-	 	 */
-	 	function Admin_AdminControl($admin_lang, $config) {
-	 		$this->admin_lang = $admin_lang;
-	 		$this->config = $config;
+ 		 * @access public
+ 		 * @param Sql SqlConnection The connection-class for connecting the database
+ 		 * @param Language Translation The language-class for translations
+ 		 * @param Config Config The config-class for config-requests
+ 		 * @param User User The user-class, handling the current user
+ 		 * @param ComaLib ComaLib The ComaLib-class containing systemrelated functions
+ 		 * @param ComaLate ComaLate The ComaLate-class to handle
+ 		 */
+	 	function Admin_AdminControl(&$SqlConnection, &$Translation, &$Config, &$User, &$ComaLib, &$ComaLate) {
+ 			$this->_SqlConnection = &$SqlConnection;
+ 			$this->_Translation = &$Translation;
+ 			$this->_Config = &$Config;
+ 			$this->_User = &$User;
+ 			$this->_Comalib = &$ComaLib;
+ 			$this->_ComaLate = &$ComaLate;
 	 	}
 	 	 
 		/**
 	 	 * @access public
 	 	 * @param string action
-	 	 * @param array admin_lang
-	 	 * @param Config config
-	 	 * @return string
+		 * @return string
 	 	 */
-		function GetPage($action) {
+		function GetPage($Action = '') {
 		
-			// get the coutnt of all pages
+			// get the number of pages whicht aren't deleted
 			$sql = "SELECT page_id
-				FROM " . DB_PREFIX . "pages";
-			$sitedata_result = db_result($sql);
-			$page_count = mysql_num_rows($sitedata_result);
-			$sql = "SELECT page_id
-				FROM " . DB_PREFIX . "pages_history";
-			$history_sitedata_result = db_result($sql);
-			$history_page_count = mysql_num_rows($history_sitedata_result);
+					FROM " . DB_PREFIX . "pages
+					WHERE page_access != 'deleted'";
 			
-			// get the count of all registered users
+			$pagesResult = $this->_SqlConnection->SqlQuery($sql);
+			$pagesCount = mysql_num_rows($pagesResult);
+			
+			// get the number of all pages saved in the history
+			$sql = "SELECT page_id
+					FROM " . DB_PREFIX . "pages_history";
+			$historyPagesResult = $this->_SqlConnection->SqlQuery($sql);
+			$historyPagesCount = mysql_num_rows($historyPagesResult);
+			
+			// get the number of all registered users
 			$sql = "SELECT user_id
-				FROM " . DB_PREFIX . "users";
-			$users_result = db_result($sql);
-			$users_count = mysql_num_rows($users_result);
+					FROM " . DB_PREFIX . "users";
+			$usersResult = $this->_SqlConnection->SqlQuery($sql);
+			$usersCount = mysql_num_rows($usersResult);
+			
 			// get the size of all tables with the prefix DB_PREFIX
-			$table_infos_result = db_result("SHOW TABLE STATUS");
-			$data_size = 0;
-			while($table_infos = mysql_fetch_object($table_infos_result)) {
-				if(substr($table_infos->Name, 0, strlen(DB_PREFIX)) == DB_PREFIX)
-					$data_size += $table_infos->Data_length + $table_infos->Index_length;
+			$sql = "SHOW TABLE STATUS";
+			$tableInfoResult = $this->_SqlConnection->SqlQuery($sql);
+			$dataSize = 0;
+			while($tableInfo = mysql_fetch_object($tableInfoResult)) {
+				if(substr($tableInfo->Name, 0, strlen(DB_PREFIX)) == DB_PREFIX)
+					$dataSize += $tableInfo->Data_length + $tableInfo->Index_length;
 			}
-			$installdate = $this->config->Get('install_date');
-			if($installdate == '') {
-				$config->Save('install_date', mktime());
-				$installdate = mktime();
-			}	
-			$out = "\t\t\t<h2>AdminControl</h2>
-			<table class=\"text_table\">
-				<tr><th>" . $this->admin_lang['online since'] . ":</th><td>". date("d.m.Y",$installdate) . "</td></tr>
-				<tr><th>" . $this->admin_lang['registered users'] . ":</th><td>$users_count</td></tr>
-				<tr><th>" . $this->admin_lang['created pages'] . ":</th><td>$page_count</td></tr>
-				<tr><th>" . $this->admin_lang['saved_page_modifications'] . ":</th><td>$history_page_count</td></tr>
-				<tr><th>" . $this->admin_lang['database size'] . ":</th><td>" . kbormb($data_size) . "</td></tr>
-			</table>
-			<h2>Letzte Ver&auml;nderungen</h2>
-			<table class=\"text_table full_width\">
-				<thead>
-					<tr>
-						<th>" . $this->admin_lang['date'] . "</th><th>" . $this->admin_lang['page'] . "</th><th>" . $this->admin_lang['user'] . "</th><th>" . $this->admin_lang['comment'] . "</th>
-					</tr>
-				</thead>";
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "pages
-				ORDER BY page_date DESC
-				LIMIT 0,6";
-			$pages_result = db_result($sql);
+			// get the date of the installation or set one
+			$installDate = $this->_Config->Get('install_date');
+			if($installDate == '') {
+				$this->_Config->Save('install_date', mktime());
+				$installDate = mktime();
+			}
+			// set replacements for translations
+			$this->_ComaLate->SetReplacement('ADMIN_CONTROL_TITLE', $this->_Translation->GetTranslation('admincontrol'));
+			$this->_ComaLate->SetReplacement('LOG_TITLE_DATE', $this->_Translation->GetTranslation('date'));
+			$this->_ComaLate->SetReplacement('LOG_TITLE_PAGE', $this->_Translation->GetTranslation('page'));
+			$this->_ComaLate->SetReplacement('LOG_TITLE_USER', $this->_Translation->GetTranslation('user'));
+			$this->_ComaLate->SetReplacement('LOG_TITLE_COMMENT', $this->_Translation->GetTranslation('comment'));
+			$this->_ComaLate->SetReplacement('ADMIN_CONTROL_LAST_CHANGES', $this->_Translation->GetTranslation('last_changes'));
+			$this->_ComaLate->SetReplacement('USER_TITLE_NAME', $this->_Translation->GetTranslation('name'));
+			$this->_ComaLate->SetReplacement('USER_TITLE_PAGE', $this->_Translation->GetTranslation('page'));
+			$this->_ComaLate->SetReplacement('USER_TITLE_LAST_ACTION', $this->_Translation->GetTranslation('last_action'));
+			$this->_ComaLate->SetReplacement('USER_TITLE_LANGUAGE', $this->_Translation->GetTranslation('language'));
+			$this->_ComaLate->SetReplacement('USER_TITLE_IP', $this->_Translation->GetTranslation('ip'));
+			$this->_ComaLate->SetReplacement('USER_TITLE_HOST', $this->_Translation->GetTranslation('host'));
+			$this->_ComaLate->SetReplacement('ADMIN_CONTROL_USERS', $this->_Translation->GetTranslation('visitors'));
+			
+			// fill the table with some statistical data 
+			$adminControlStats = array();
+			$adminControlStats[] = array('STATS_NAME' => $this->_Translation->GetTranslation('online_since'),
+										 'STATS_VALUE' => date("d.m.Y",$installDate));
+			$adminControlStats[] = array('STATS_NAME' => $this->_Translation->GetTranslation('registered_users'),
+										 'STATS_VALUE' => $usersCount);
+			$adminControlStats[] = array('STATS_NAME' => $this->_Translation->GetTranslation('created_pages'),
+										 'STATS_VALUE' => $pagesCount);
+			$adminControlStats[] = array('STATS_NAME' => $this->_Translation->GetTranslation('saved_page_modifications'),
+										 'STATS_VALUE' => $historyPagesCount);
+			$adminControlStats[] = array('STATS_NAME' => $this->_Translation->GetTranslation('database_size'),
+										 'STATS_VALUE' => $pagesCount);
+			$this->_ComaLate->SetReplacement('ADMIN_CONTROL_STATS', $adminControlStats);
+			
+			// load the six "last-changed" pages
+			$sql = "SELECT page_name, page_title, page_creator, page_edit_comment, page_date
+					FROM " . DB_PREFIX . "pages
+					ORDER BY page_date DESC
+					LIMIT 6";
+			$pagesResult = $this->_SqlConnection->SqlQuery($sql);
 			$pages = array();
-			while($page = mysql_fetch_object($pages_result)) {
+			while($page = mysql_fetch_object($pagesResult)) {
 				$pages[$page->page_date] = array($page->page_name, $page->page_title, $page->page_creator, $page->page_edit_comment);
 			}
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "pages_history
-				ORDER BY page_date DESC
-				LIMIT 0,6";
-			$pages_result = db_result($sql);
-			while($page = mysql_fetch_object($pages_result)) {
+			$sql = "SELECT page_name, page_title, page_creator, page_edit_comment, page_date
+					FROM " . DB_PREFIX . "pages_history
+					ORDER BY page_date DESC
+					LIMIT 6";
+			$pagesResult = $this->_SqlConnection->SqlQuery($sql);
+			while($page = mysql_fetch_object($pagesResult)) {
 				$pages[$page->page_date] = array($page->page_name, $page->page_title, $page->page_creator, $page->page_edit_comment);
 			}
 			krsort($pages);
+			//array_splice($pages, 6);
+			$logData = array();
 			$count = 0;
 			foreach ($pages as $date => $page) {
-   				$out .= "<tr>
-						<td class=\"table_date_width\">" . date("d.m.Y H:i:s", $date) . "</td>
-						<td><a href=\"index.php?page=" . $page[0] . "\">" . $page[1] . "</a> (" . rawurldecode($page[0]) . ")</td>
-						<td>" . getUserById($page[2]) . "</td>
-						<td>" . $page[3] . "</td>
-					</tr>\r\n";
-   				$count++;
-   				if($count > 5)
-   					break;
+   				$logData[] = array('LOG_DATE' => date("d.m.Y H:i:s", $date),
+						'LOG_PAGE_URL'  =>  $page[0],
+						'LOG_PAGE_TITLE' => $page[1],
+						'LOG_PAGE_NAME' => rawurldecode($page[0]),
+						'LOG_USER' => getUserById($page[2]),
+						'LOG_COMMENT' => $page[3]);
+				if($count++ == 6)
+					break;	
 			}
-			$out .= "</table>
-			<h2>Aktuelle Besucher</h2>
-			<table class=\"text_table full_width\">
-				<thead>
-					<tr>
-						<th>{$this->admin_lang['name']}</th>
-						<th>{$this->admin_lang['page']}</th>
-						<th>{$this->admin_lang['last action']}</th>
-						<th>{$this->admin_lang['language']}</th>
-						<th>{$this->admin_lang['ip']}</th>
-						<th>{$this->admin_lang['host']}</th>
-					</tr>
-				</thead>\r\n";
-			// output all visitors surfing on the site
+			$this->_ComaLate->SetReplacement('ADMIN_CONTROL_LOG', $logData);
+			
+			// get all visitors of the page which moved in the last 5 minutes			
 			$sql = "SELECT online_userid, online_page, online_lastaction, online_lang, online_ip, online_host
-				FROM " . DB_PREFIX . "online
-				WHERE online_lastaction >= " . (mktime() - 300);
-			$users_online_result = db_result($sql);
-			while($users_online = mysql_fetch_object($users_online_result)) {
-				if($users_online->online_userid == 0)
-					$username  = $this->admin_lang['not registered'];
+					FROM " . DB_PREFIX . "online
+					WHERE online_lastaction >= " . (mktime() - 300)."
+					ORDER BY online_userid";
+			$usersOnlineResult = $this->_SqlConnection->SqlQuery($sql);
+			$usersData = array();
+			while($userOnline = mysql_fetch_object($usersOnlineResult)) {
+				if($userOnline->online_userid == 0)
+					$username  = $this->_Translation->GetTranslation('not_registered');
 				else
-					$username = getUserById($users_online->online_userid);
-				$out .= "\t\t\t\t<tr>
-					<td>".$username."</td>
-					<td><a href=\"index.php?page=" . $users_online->online_page . "\">" . $users_online->online_page . "</a></td>
-					<td>" . date("d.m.Y H:i:s", $users_online->online_lastaction) . "</td>
-					<td>" . $this->admin_lang[$users_online->online_lang] . "</td>
-					<td>" . $users_online->online_ip . "</td>
-					<td>" . $users_online->online_host . "</td>
-				</tr>\r\n";
+					$username = getUserById($userOnline->online_userid);
+				$usersData[] = array('USER_NAME' => $username,
+									'USER_PAGE'  =>  $userOnline->online_page,
+									'USER_LAST_ACTION' => date("d.m.Y H:i:s", $userOnline->online_lastaction),
+									'USER_LANGUAGE' => $this->_Translation->GetTranslation($userOnline->online_lang),
+									'USER_IP' => $userOnline->online_ip,
+									'USER_HOST' => $userOnline->online_host);
 			}
-			$out .= "\t\t\t</table>";
-			return $out;
+			$this->_ComaLate->SetReplacement('ADMIN_CONTROL_USERS', $usersData);
+	
+			// throw out the temlate-data 
+			$template = '<h2>{ADMIN_CONTROL_TITLE}</h2>
+					<table>
+					<ADMIN_CONTROL_STATS:loop>
+						<tr>
+							<th>{STATS_NAME}</th>
+							<td>{STATS_VALUE}</td>
+						</tr>
+					</ADMIN_CONTROL_STATS>
+					</table>
+					<h2>{ADMIN_CONTROL_LAST_CHANGES}</h2>
+					<table class="full_width">
+						<tr>
+							<th>{LOG_TITLE_DATE}</th>
+							<th>{LOG_TITLE_PAGE}</th>
+							<th>{LOG_TITLE_USER}</th>
+							<th>{LOG_TITLE_COMMENT}</th>
+						</tr>
+					<ADMIN_CONTROL_LOG:loop>
+						<tr>
+							<td>{LOG_DATE}</td>
+							<td><a href="index.php?page={LOG_PAGE_URL}">{LOG_PAGE_TITLE}</a>({LOG_PAGE_NAME})</td>
+							<td>{LOG_USER}</td>
+							<td>{LOG_COMMENT}</td>
+						</tr>
+					</ADMIN_CONTROL_LOG>
+					</table>
+					<h2>{ADMIN_CONTROL_USERS}</h2>
+					<table class="full_width">
+						<tr>
+						<th>{USER_TITLE_NAME}</th>
+						<th>{USER_TITLE_PAGE}</th>
+						<th>{USER_TITLE_LAST_ACTION}</th>
+						<th>{USER_TITLE_LANGUAGE}</th>
+						<th>{USER_TITLE_IP}</th>
+						<th>{USER_TITLE_HOST}</th>
+						</tr>
+						<ADMIN_CONTROL_USERS:loop>
+						<tr>
+						<td>{USER_NAME}</td>
+						<td><a href="index.php?page={USER_PAGE}">{USER_PAGE}</a></td>
+						<td>{USER_LAST_ACTION}</td>
+						<td>{USER_LANGUAGE}</td>
+						<td>{USER_IP}</td>
+						<td>{USER_HOST}</td>
+						</tr>
+						</ADMIN_CONTROL_USERS>
+					</table>'; 
+			return $template;			
 		}
 	}
 ?>

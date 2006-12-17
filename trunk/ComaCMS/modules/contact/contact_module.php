@@ -37,6 +37,7 @@
  		}
  		
  		function UseModule($Identifer, $Parameters) {
+ 			
  			// default parameter
  			$mailTo = $this->_Config->Get('contact_mail_to','');
  			

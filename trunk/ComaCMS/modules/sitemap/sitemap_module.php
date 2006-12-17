@@ -128,18 +128,20 @@
  		 		return;
  		 	$out .= "\r\n\t\t\t<ul>";
  		 	foreach($pages[$TopNode] as $page) {
- 		 		// blockelements
-	 			$out .= "\r\n\t\t\t\t<li class=\"page_type_" . $page['type'] . "\"><span class=\"structure_row\">";
-	 			// show language of the page if activated
-	 			if ($this->_Config->Get('sitemap_show_language', '1')) {
-	 				$out .= "<span class=\"page_lang\">[{$this->_Lang[$page['lang']]}]</span>";
-	 			}
-	 			// show pagename with link to index.php and pagetitle
-	 			$out .= "<strong><a href=\"index.php?page={$page['name']}\">{$page['title']}</a></strong></span>";
-	 			// show all subpages
-	 			$out .= $this->_ShowStructure($page['id']);
-	 			// blockelement endings
-	 			$out .= "\r\n\t\t\t\t</li>";
+ 		 		if ($page['access'] == 'public') {
+	 		 		// blockelements
+		 			$out .= "\r\n\t\t\t\t<li class=\"page_type_" . $page['type'] . "\"><span class=\"structure_row\">";
+		 			// show language of the page if activated
+		 			if ($this->_Config->Get('sitemap_show_language', '1')) {
+		 				$out .= "<span class=\"page_lang\">[{$this->_Lang[$page['lang']]}]</span>";
+		 			}
+		 			// show pagename with link to index.php and pagetitle
+		 			$out .= "<strong><a href=\"index.php?page={$page['name']}\">{$page['title']}</a></strong></span>";
+		 			// show all subpages
+		 			$out .= $this->_ShowStructure($page['id']);
+		 			// blockelement endings
+		 			$out .= "\r\n\t\t\t\t</li>";
+ 		 		}
  		 	}
  		 	$out .= "\r\n\t\t\t</ul>";
  		 	return $out;

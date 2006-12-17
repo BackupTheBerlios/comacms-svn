@@ -261,7 +261,7 @@
 					mail($Email, $title, $message, $header);
 				}
 				else {
-					if ($this->_Config->Get('activate_throw_admin', '0')) {
+					if ($this->_Config->Get('activate_through_admin', '0')) {
 						// Send mail with logindata to the user, activation throw administrator
 						$title = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
 						$message = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_activation_throw_admin'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email);

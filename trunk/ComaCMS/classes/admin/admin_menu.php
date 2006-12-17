@@ -18,9 +18,9 @@
  	/**
  	 * @ignore
  	 */
- 	require_once __ROOT__ . './classes/admin/admin.php';
- 	require_once __ROOT__ . './classes/menu.php';
- 	require_once __ROOT__ . './classes/pagestructure.php';
+ 	require_once __ROOT__ . '/classes/admin/admin.php';
+ 	require_once __ROOT__ . '/classes/menu.php';
+ 	require_once __ROOT__ . '/classes/pagestructure.php';
  	
 	/**
 	 * @package ComaCMS

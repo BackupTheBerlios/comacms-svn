@@ -79,7 +79,7 @@
  			$this->_Translation = &$Translation;
  			$this->_Config = &$Config;
  			$this->_User = &$User;
- 			$this->_Comalib = &$ComaLib;
+ 			$this->_ComaLib = &$ComaLib;
  			$this->_ComaLate = &$ComaLate;
  		}
  		

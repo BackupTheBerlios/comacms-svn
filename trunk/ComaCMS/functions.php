@@ -61,7 +61,7 @@
 		fclose ($handle);
 	}
 
-	function getUserIDByName($name) {
+	/*function getUserIDByName($name) {
 		global $lib;
 		return $lib->GetUserIDByName($name);
 	}
@@ -74,7 +74,7 @@
 	function getGroupByID($id) {
 		global $lib;
 		return $lib->GetGroupByID($id);
-	}
+	}*/
 
 	function replace_smilies($textdata) {
 		$sql = "SELECT *

@@ -37,7 +37,7 @@
 	$langString['sitepreview'] = 'Seitenvorschau';
 	$langString['registered_users'] = 'Angemeldete Benutzer';
 	$langString['online_since'] = 'Aktiv seit';
-	$langString['created pages'] = 'Erstellte Seiten';
+	$langString['created_pages'] = 'Erstellte Seiten';
 	$langString['name'] = 'Name';
 	$langString['language'] = 'Sprache';
 	$langString['page'] = 'Seite';
@@ -51,8 +51,8 @@
 	$langString['info'] = 'Info';
 	$langString['edit'] = 'Bearbeiten';
 	$langString['delete'] = 'L&ouml;schen';
-	$langString['show deleted'] = 'Gel&ouml;schte anzeigen';
-	$langString['show hidden'] = 'Versteckte anzeigen';
+	$langString['show_deleted'] = 'Gel&ouml;schte anzeigen';
+	$langString['show_hidden'] = 'Versteckte anzeigen';
 	$langString['show'] = 'Anzeigen';
 	$langString['create'] = 'Erstellen';
 	$langString['reset'] = 'Zur&uuml;cksetzen';

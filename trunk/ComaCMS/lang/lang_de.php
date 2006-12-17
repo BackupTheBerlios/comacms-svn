@@ -137,6 +137,8 @@
 	$langString['type_in_here_the_css_id_for_the_menuentry_if_you_need_one_for_it'] = 'Geben Sie hier die CSS ID f&uuml;r den Men&uuml;eintrag ein wenn Sie eine ben&ouml;tigen';
 	$langString['menu_title'] = 'Men&uuml;titel';
 	$langString['type_here_the_title_of_the_menu'] = 'Geben sie hier den Titel des Men&uuml;s ein';
+	$langString['menu_name'] = 'Men&uuml;name';
+	$langString['type_here_the_name_of_the_menu'] = 'Geben sie hier den Namen des Me&uuml;s ein';
 	$langString['shall_the_menu_%menutitle%_really_be_deleted?'] = 'Soll das Men&uuml; &quot;%s&quot; wirklich gel&ouml;scht werden?';
 	$langString['name/contraction'] = 'Name/K&uuml;rzel';
 	$langString['title'] = 'Titel';

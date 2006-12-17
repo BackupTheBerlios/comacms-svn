@@ -79,7 +79,7 @@
 		}
 	}
 		
-	$menuArray[] = array($translation->GetTranslation('sitestyle'), 'sitestyle');
+	$menuArray[] = array($translation->GetTranslation('sitestyle'), 'style');
 	$menuArray[] = array($translation->GetTranslation('users'), 'users');
 	$menuArray[] = array($translation->GetTranslation('groups'), 'groups');
 	$menuArray[] = array($translation->GetTranslation('rights'), 'rights');
@@ -104,18 +104,23 @@
 		$title = $translation->GetTranslation('admincontrol');
 		
 		$admin_admincontrol = new Admin_AdminControl($sqlConnection, $translation, $config, $user, $lib, $output);
-		//print_r($output);
 		$text = $admin_admincontrol->GetPage();
-		//print_r($output);
-		//die();
 	}
 	elseif($extern_page == 'sitepreview') {
+		// Get the admin-sitepreview-class
+		include_once('classes/admin/admin_pagepreview.php');
 		$title = $translation->GetTranslation('sitepreview');
-		$text = page_sitepreview();
+		
+		$admin_PagePreview = new Admin_PagePreview($sqlConnection, $translation, $config, $user, $lib, $output);
+		$text = $admin_PagePreview->GetPage();
 	}
-	elseif($extern_page == 'sitestyle') {
+	elseif($extern_page == 'style') {
+		// Get the admin-sitepreview-class
+		include_once('classes/admin/admin_pagepreview.php');
 		$title = $translation->GetTranslation('sitestyle');
-		$text = page_sitestyle();
+		
+		$admin_PagePreview = new Admin_PagePreview($sqlConnection, $translation, $config, $user, $lib, $output);
+		$text = $admin_PagePreview->GetPage('style');
 	}
 	elseif($extern_page == 'users') {
 		$title = $translation->GetTranslation('users');

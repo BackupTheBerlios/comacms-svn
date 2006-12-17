@@ -19,6 +19,7 @@
  	 * @package ComaCMS
  	 */
 	class Preferences {
+		
 		/**
 		 * @access public
 		 * @var array
@@ -26,14 +27,21 @@
 		 */
 		var $Settings;
 		
+		/**
+		 * @access private
+		 * @var Translation A link to the translation class
+		 */
+		var $_Translation;
 		
 		/**
 		 * @access public
+		 * @param Translation Translation A link to the translation class
 		 * @return void
 		 */
-		function Preferences() {
-			static $static_settings;
-			$this->Settings = & $static_settings;
+		function Preferences(&$Translation) {
+			$this->_Translation = &$Translation;
+			static $staticSettings;
+			$this->Settings = &$staticSettings;
 		}
 		
 		/**
@@ -42,6 +50,7 @@
 		 * @return void
 		 */
 		function Load($PreferencesFile) {
+			$translation = &$this->_Translation;
 			include($PreferencesFile);
 		}
 		

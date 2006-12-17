@@ -137,7 +137,7 @@
 		include('classes/admin/admin_preferences.php');
 		$title = $translation->GetTranslation('preferences');
 		//$text = page_preferences();
-		$admin_page = new Admin_Preferences($sqlConnection, $translation, $config);
+		$admin_page = new Admin_Preferences($sqlConnection, $translation, $config, $user, $lib, $output);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'files') {

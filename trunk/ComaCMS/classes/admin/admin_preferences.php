@@ -18,9 +18,9 @@
  	/**
  	 * @ignore
  	 */
- 	require_once('./classes/admin/admin.php');
- 	require_once('./classes/preferences.php');
- 	require_once('./classes/pagestructure.php');
+ 	require_once __ROOT__ . '/classes/admin/admin.php';
+ 	require_once __ROOT__ . '/classes/preferences.php';
+ 	require_once __ROOT__ . '/classes/pagestructure.php';
  	
 	/**
 	 * @package ComaCMS 
@@ -28,29 +28,11 @@
  	class Admin_Preferences extends Admin{
  		
  		/**
- 		 * @access private
- 		 * @var Preferences
- 		 */
- 		var $_Preferences;
- 		
- 		/**
- 		 * @access private
- 		 * @var Config
- 		 */
- 		
- 		var $_Config;
- 		/**
  		 * @access public
- 		 * @param Sql SqlConnection
- 		 * @param array AdminLang
- 		 * @param Config Config
  		 * @return void
  		 */
- 		function Admin_Preferences($SqlConnection, $AdminLang, $Config) {
- 			$this->_SqlConnection = $SqlConnection;
- 			$this->_AdminLang = $AdminLang;
- 			$this->_Config = $Config;
- 			$this->_Preferences = new Preferences($SqlConnection);
+ 		function _Init() {
+ 			$this->_Preferences = new Preferences(&$this->_Translation);
  		}
  		
  		/**
@@ -73,7 +55,6 @@
  		 * @access private
  		 */
  		function _ShowPreferences() {
- 			$adminLang = $this->_AdminLang;
  			if(count($this->_Preferences->Settings) <= 0)
  				return '';
  			$out = "<form action=\"admin.php\" method=\"post\">
@@ -110,8 +91,8 @@
 										break;
 							// 'bool'-options-list
 							case 'bool':		$out .= "<select id=\"setting_" . $setting['name'] . "\" name=\"setting_" . $setting['name'] . "\">
-												<option value=\"1\"" . (($setting['default'] == 1 ) ? ' selected="selected"': '') . ">" . $adminLang['yes'] . "</option>
-												<option value=\"0\"" . (($setting['default'] == 0 ) ? ' selected="selected"': '') . ">" . $adminLang['no'] . "</option>
+												<option value=\"1\"" . (($setting['default'] == 1 ) ? ' selected="selected"': '') . ">" . $this->_Translation->GetTranslation('yes') . "</option>
+												<option value=\"0\"" . (($setting['default'] == 0 ) ? ' selected="selected"': '') . ">" . $this->_Translation->GetTranslation('no') . "</option>
 											</select>";
 										break;
 							// Every thing else
@@ -120,7 +101,7 @@
 						}
  					$out .= "</div>";
  				}
- 				$out .= "<div class=\"row\"><input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\"/>
+ 				$out .= "<div class=\"row\"><input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('save') . "\"/>
  				</div>";
  				
  				$out .= "</fieldset>";
@@ -134,8 +115,7 @@
  		 * @access private
  		 */
  		function _HomePage() {
- 			$adminLang = $this->_AdminLang;
- 			$out = "<h2>" . $adminLang['preferences'] . "</h2>";
+ 			$out = '<h2>' . $this->_Translation->GetTranslation('preferences') . '</h2>';
  			// Load the main-preferences file
  			$this->_Preferences->Load('system/settings.php');
  			

@@ -81,6 +81,11 @@
  			$this->_User = &$User;
  			$this->_ComaLib = &$ComaLib;
  			$this->_ComaLate = &$ComaLate;
+			$this->_Init();
+ 		}
+ 		
+ 		function _Init() {
+ 			
  		}
  		
  		/**

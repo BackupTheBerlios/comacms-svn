@@ -100,7 +100,7 @@
 			$adminControlStats[] = array('STATS_NAME' => $this->_Translation->GetTranslation('saved_page_modifications'),
 										 'STATS_VALUE' => $historyPagesCount);
 			$adminControlStats[] = array('STATS_NAME' => $this->_Translation->GetTranslation('database_size'),
-										 'STATS_VALUE' => $pagesCount);
+										 'STATS_VALUE' => kbormb($dataSize));
 			$this->_ComaLate->SetReplacement('ADMIN_CONTROL_STATS', $adminControlStats);
 			
 			$pages = array();

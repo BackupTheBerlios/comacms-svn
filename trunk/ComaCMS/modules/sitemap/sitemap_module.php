@@ -120,7 +120,7 @@
  		 * @return string The complete structure beginning at the toppage
  		 */
  		 function _ShowStructure($TopNode = 0) {
- 		 	$pages = &$this->_Pagestructure->RemoveAcessDeletedPages();
+ 		 	$pages = $this->_Pagestructure->RemoveAcessDeletedPages();
  		 	$out = '';
  		 	if(!array_key_exists($TopNode, $pages))
  		 		return;

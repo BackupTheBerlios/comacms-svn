@@ -173,7 +173,7 @@
 	elseif($extern_page == 'modules') {
 		$title = $translation->GetTranslation('modules');
 		include('classes/admin/admin_modules.php');
-		$admin_page = new Admin_Modules($sqlConnection, $translation, $config);
+		$admin_page = new Admin_Modules($sqlConnection, $translation, $config, $user, $lib, $output);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif(substr($extern_page, 0, 7) == 'module_')
@@ -188,9 +188,9 @@
 			include_once("./modules/$moduleName/{$moduleName}_admin.php");
 			if(class_exists('Admin_Module_' . $moduleName)) {
 				// create a link to the initialisation-function for the module-class
-				$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Admin_Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');
+				$newClass = create_function('&$SqlConnection, &$Translation, &$Config, &$User, &$ComaLib, &$ComaLata', 'return new Admin_Module_' . $moduleName . '(&$SqlConnection, &$Translation, &$Config, &$User, &$ComaLib, &$ComaLata);');
 				// create the module-class
-				$moduleAdminInterface = $newClass($sqlConnection, $user, $translation, $config, $output, $lib);
+				$moduleAdminInterface = $newClass($sqlConnection, $translation, $config, $user, $lib, $output);
 				if(isset($moduleAdminInterface)) {
 					$text = $moduleAdminInterface->GetPage($extern_action);
 					$title = $moduleAdminInterface->GetTitle();

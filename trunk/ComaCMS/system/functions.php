@@ -40,9 +40,9 @@
 		if($bytes < 1024)
 			return $bytes . $space .'B';
 		elseif($bytes < 1048576)
-			return round($bytes/1024, 1) . $space . 'KB';
+			return round($bytes/1024, 1) . $space . 'KiB';
 		else
-			return round($bytes/1048576, 1) . $space . 'MB';
+			return round($bytes/1048576, 1) . $space . 'MiB';
 	}
 	
 	function generatePagesTree($parentid, $tabs = "", $lang = "", $show_deleted = false, $show_hidden = false, $type = 'text') {

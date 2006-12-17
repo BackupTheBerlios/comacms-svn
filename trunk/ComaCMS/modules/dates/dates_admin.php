@@ -28,21 +28,10 @@
  	class Admin_Module_Dates extends Admin_Module {
  		
  		/**
-		 * @access public
- 		 * @param Sql SqlConnection
- 		 * @param User User
- 		 * @param array Lang
- 		 * @param Config Config
- 		 * @param ComaLate ComaLate
- 		 * @param ComaLib ComaLib
+ 		 * @access private
  		 */
- 		function Admin_Module_Dates(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
- 			$this->_SqlConnection = &$SqlConnection;
- 			$this->_User = &$User;	
- 			$this->_Lang = &$Lang;
- 			$this->_Config = &$Config;
- 			$this->_ComaLate = &$ComaLate;
- 			$this->_ComaLib = &$ComaLib;
+ 		function _Init() {
+ 			$this->_Translation->AddSources(__ROOT__ . '/modules/dates/lang/');
  		}
  		
  		/**
@@ -75,7 +64,7 @@
 		 * @return string
 		 */
 		function GetTitle() {
-			return 'Dates-Module';
+			return $this->_Translation->GetTranslation('dates'). '-' . $this->_Translation->GetTranslation('module');
 		}
 			
 		/**
@@ -196,7 +185,6 @@
 	 				</div>
 	 				<div class=\"row\">
 	 					<input type=\"submit\" class=\"button\" value=\"{$this->_Lang['save']}\" />
-	 					<input type=\"reset\" class=\"button\" value=\"{$this->_Lang['reset']}\" />
 	 				</div>
 	 			</fieldset>
 	 			</form>";
@@ -205,52 +193,53 @@
 	 		}
 	 		return $this->_homePage();
 	 	}
-		
+				
  		/**
  		 * @access private
  		 * @return string
  		 */
  		function _homePage() {
  			$dates = new Dates($this->_SqlConnection, $this->_ComaLib, $this->_User, $this->_Config);
- 			$datesArray = $dates->FillArray(-1, false);
- 			$out = "<h2>{$this->_Lang['dates']}</h2>
- 				<a href=\"admin.php?page=module_dates&amp;action=new\" class=\"button\">{$this->_Lang['add_a_new_date']}</a>
-				<table class=\"text_table full_width\">
-					<thead>
-						<tr>
-							<th>{$this->_Lang['date']}</th>
-							<th>{$this->_Lang['location']}</th>
-							<th>{$this->_Lang['topic']}</th>
-							<th>{$this->_Lang['creator']}</th>
-							<th>{$this->_Lang['actions']}</th>
-						</tr>
-					</thead>
-					<tbody>\r\n";
-
-			foreach($datesArray as $dateEntry) {
-				$out .= "\t\t\t\t\t<tr ID=\"dateid{$dateEntry['DATE_ID']}\">
-						<td>
-							" . date("d.m.Y H:i", $dateEntry['DATE_DATE']) . "
-						</td>
-						<td>
-							{$dateEntry['DATE_LOCATION']}
-						</td>
-						<td>
-							{$dateEntry['DATE_TOPIC']}
-						</td>
-						<td>
-							" . getUserByID($dateEntry['DATE_CREATOR']) . "
-						</td>
-						<td colspan=\"2\">
-							<a href=\"admin.php?page=module_dates&amp;action=edit&amp;dateID={$dateEntry['DATE_ID']}\" title=\"{$this->_Lang['edit']}\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"{$this->_Lang['edit']}\" title=\"" . $this->_Lang['edit'] . "\"/></a>
-							&nbsp;<a href=\"admin.php?page=module_dates&amp;action=delete&amp;dateID={$dateEntry['DATE_ID']}\" title=\"{$this->_Lang['delete']}\"><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"{ $this->_Lang['delete']}\" title=\"" . $this->_Lang['delete'] . "\"/></a>
-						</td>
-					</tr>\r\n";
-				
-			}
-			$out .= "</tbody>
-				</table>"; 
-			return $out;
+ 			
+ 			// get all dates with readable dates and usernames
+ 			$datesArray = $dates->FillArray(-1, true, true);
+ 			
+ 			$this->_ComaLate->SetReplacement('DATE_DATES', $datesArray);
+ 			
+ 			$this->_ComaLate->SetReplacement('DATES_MODULE_TITLE', $this->_Translation->GetTranslation('dates'));
+ 			$this->_ComaLate->SetReplacement('ADD_A_NEW_DATE', $this->_Translation->GetTranslation('add_a_new_date'));
+ 			$this->_ComaLate->SetReplacement('DATE_TITLE_DATE', $this->_Translation->GetTranslation('date'));
+ 			$this->_ComaLate->SetReplacement('DATE_TITLE_LOCATION', $this->_Translation->GetTranslation('location'));
+ 			$this->_ComaLate->SetReplacement('DATE_TITLE_TOPIC', $this->_Translation->GetTranslation('topic'));
+ 			$this->_ComaLate->SetReplacement('DATE_TITLE_CREATOR', $this->_Translation->GetTranslation('creator'));
+ 			$this->_ComaLate->SetReplacement('DATE_TITLE_ACTIONS', $this->_Translation->GetTranslation('actions'));
+ 			$this->_ComaLate->SetReplacement('DATE_LANG_EDIT', sprintf($this->_Translation->GetTranslation('edit_the_date_%date%'), '{DATE_TOPIC}'));
+			$this->_ComaLate->SetReplacement('DATE_LANG_DELETE', sprintf($this->_Translation->GetTranslation('delete_the_date_%date%'), '{DATE_TOPIC}'));
+			 			
+ 			$template = '<h2>{DATES_MODULE_TITLE}</h2>
+						<a href="admin.php?page=module_dates&amp;action=new" class="button">{ADD_A_NEW_DATE}</a>
+						<table  class="full_width">
+							<tr>
+								<th>{DATE_TITLE_DATE}</th>
+								<th>{DATE_TITLE_LOCATION}</th>
+								<th>{DATE_TITLE_TOPIC}</th>
+								<th>{DATE_TITLE_CREATOR}</th>
+								<th class="actions">{DATE_TITLE_ACTIONS}</th>
+							</tr>
+							<DATE_DATES:loop>
+							<tr>
+								<td>{DATE_DATE}</td>
+								<td>{DATE_LOCATION}</td>
+								<td>{DATE_TOPIC}</td>
+								<td>{DATE_CREATOR}</td>
+								<td>
+									<a href="admin.php?page=module_dates&amp;action=edit&amp;dateID={DATE_ID}" title="{DATE_LANG_EDIT}"><img src="./img/edit.png" height="16" width="16" alt="{DATE_LANG_EDIT}" title="{DATE_LANG_EDIT}" /></a>
+									<a href="admin.php?page=module_dates&amp;action=delete&amp;dateID={DATE_ID}" title="{DATE_LANG_DELETE}"><img src="./img/del.png" height="16" width="16" alt="{DATE_LANG_DELETE}" title="{DATE_LANG_DELETE}" /></a></td>
+							</tr>
+							</DATE_DATES>
+							
+						</table>';
+ 			return $template;
  		}
  		
  		/**

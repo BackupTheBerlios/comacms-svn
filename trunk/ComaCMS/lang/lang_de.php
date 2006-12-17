@@ -150,8 +150,8 @@
 	$langString['unknown'] = 'unbekannt';
 	$langString['deactivate'] = 'Deaktivieren';
 	$langString['activate'] = 'Aktivieren';
-	$langString['activate_module_%modulename%'] = 'Modul &quot;%s&quot; Aktivieren';
-	$langString['deactivate_module_%modulename%'] = 'Modul &quot;%s&quot; Deaktivieren';
+	$langString['activate_module_%modulename%'] = 'Modul &quot;%s&quot; aktivieren';
+	$langString['deactivate_module_%modulename%'] = 'Modul &quot;%s&quot; deaktivieren';
 	$langString['write_a_new_news_message'] = 'Neue News-Meldung schreiben';
 	$langString['new_news_message'] = 'Neue News-Meldung';
 	$langString['news_overview'] = 'News-&Uuml;bersicht';
@@ -317,6 +317,13 @@ Die Administratoren';
 	$langString['login'] = 'Login';
 	$langString['last_changes'] = 'Letzte &Auml;nderungen';
 	$langString['visitors'] = 'Besucher';
+	$langString['activated'] = 'Aktiviert';
+	$langString['not_activated'] = 'Nicht aktiviert';
+	$langString['module_manager'] = 'Modul Manger';
+	$langString['module_name'] = 'Modulname';
+	$langString['version'] = 'Version';
+		
+	
 	//contact module
 	
 	$langString['your_message_was_sent_succesdfully'] = 'Ihre Nachricht wurde erfolgreich verschickt!';

@@ -25,20 +25,7 @@
 	 */
  	class Admin_Modules extends Admin{
 		
-		/**
-		 * Initializes this class with links to the needed 'global' variables
-		 * @access public
-		 * @param SqlConnection SqlConnection
-		 * @param array AdminLang
-		 * @param Config Config
-		 * @return Admin_modules
-		 */
-		function Admin_Modules(&$SqlConnection, &$AdminLang, &$Config) {
-			$this->_SqlConnection = &$SqlConnection;
-			$this->_AdminLang = &$AdminLang;
-			$this->_Config = &$Config;
-		}
-		
+
 		/** GetPage
 		 * 
 		 * Returns the requestet page and if it isn't there the default page will be returned
@@ -127,24 +114,11 @@
 			if(!is_array($modulesActivated))
 				// create the array to prevent bugs caused by 'var-is-not-an-array'-exceptions
 				$modulesActivated = array();
-			// same procedure again...
-			$modulesAutorun = unserialize ($this->_Config->Get('modules_autorun'));
-			if(!is_array($modulesAutorun))
-				$modulesAutorun = array();
+
+
+			$modules = array();
+			$modulesFiles = dir(__ROOT__ . '/modules/');
 			
-			$out = "<h2>{$this->_AdminLang['manage_modules']}</h2>
-				<table class=\"text_table full_width\">
-				<thead>
-					<tr>
-						<th>Pluginname</th>
-						<th>Version</th>
-						<th>Aktiviert</th>
-						<th>Autostart</th>
-						<th class=\"actions\">Aktionen</th>
-					</tr>
-				</thead>
-				<tbody>";
-			$modulesFiles = dir("./modules/");
 			// Get all directories in the modules directory
 			while($moduleDirectory = $modulesFiles->read()) {
 				// Check if it is a directory and nothing else
@@ -153,38 +127,63 @@
 					$module =  array();
 					// load the info-file for the module
 					include("./modules/$moduleDirectory/{$moduleDirectory}_info.php");
+					
 					// try to get the 'well-formed' name of the module	
 					// if it isn't possible display the internal name of the module
 					$moduleName =  (array_key_exists('name', $module)) ? $module['name'] : $moduleDirectory;
-					// try to get the versioninformation
+					
+					// try to get the version-information
 					// if there is no info, a 'unknown' will be displayed
-					$moduleVersion =  (array_key_exists('version', $module)) ? 'v' . $module['version'] : $this->_AdminLang['unknown'];
-					// is the module activated
-					$moduleActivated = (in_array($moduleDirectory, $modulesActivated)) ? $this->_AdminLang['yes'] : $this->_AdminLang['no'];
-					// is the module registered as a 'autorun-module'
-					$moduleAutorun = (in_array($moduleDirectory, $modulesAutorun)) ? $this->_AdminLang['yes'] : $this->_AdminLang['no'];
-					// print the row for the actual module
-					$out .= "<tr>
-						<td>$moduleName</td>
-						<td>$moduleVersion</td>
-						<td>" .
-						// Show the activate or the deactivate function for the module
-						((!in_array($moduleDirectory, $modulesActivated)) ?
-						 "<a href=\"admin.php?page=modules&amp;action=activate&amp;name=$moduleDirectory\" title=\"" . sprintf($this->_AdminLang['activate_module_%modulename%'], $moduleName) . "\"><img alt=\"{$this->_AdminLang['activate']}\" src=\"img/add.png\"/>(Nicht Aktiviert)</a>" :
-						 "<a href=\"admin.php?page=modules&amp;action=deactivate&amp;name=$moduleDirectory\" title=\"" . sprintf($this->_AdminLang['deactivate_module_%modulename%'], $moduleName) . "\"><img alt=\"{$this->_AdminLang['deactivate']}\" src=\"img/del.png\"/>(Aktiviert)</a>") .
-						" $moduleActivated</td>
-						<td>$moduleAutorun</td>
-						<td>						
-						</td>
-					</tr>\r\n";
+					$moduleVersion =  (array_key_exists('version', $module)) ? 'v' . $module['version'] : $this->_Translation->GetTranslation('unknown');
+
+					// the module isn't activated
+					$moduleAction = 'activate';
+					$moduleActivated = $this->_Translation->GetTranslation('not_activated');
+					$actionImage = 'add';
+					
+					// if the module is already activated
+					if(in_array($moduleDirectory, $modulesActivated)) {
+						$moduleAction = 'deactivate';
+						$moduleActivated = $this->_Translation->GetTranslation('activated');
+						$actionImage = 'del';
+					}
+						
+					$modules[] = array('MODULE_NAME' => $moduleName,
+									'MODULE_VERSION' => $moduleVersion,
+									'MODULE_ACTIVATED' => $moduleActivated,
+									'MODULE_ACTION' => $moduleAction,
+									'ACTION_IMAGE' => $actionImage,
+									'MODULE_DIRECTORY' => $moduleDirectory,
+									'MODULE_LANG_ACTION' => sprintf($this->_Translation->GetTranslation($moduleAction . '_module_%modulename%'), $moduleName));
 				}
 			}
-			$modulesFiles->close();	
-			$out .= "</tbody>	
-			</table>
-			";
-
-			return $out;
+			$modulesFiles->close();
+			$this->_ComaLate->SetReplacement('MODULE_MANAGER_TITLE', $this->_Translation->GetTranslation('module_manager'));
+			$this->_ComaLate->SetReplacement('MODULE_TITLE_NAME', $this->_Translation->GetTranslation('module_name'));
+			$this->_ComaLate->SetReplacement('MODULE_TITLE_VERSION', $this->_Translation->GetTranslation('version'));
+			$this->_ComaLate->SetReplacement('MODULE_TITLE_ACTIVATED', $this->_Translation->GetTranslation('activated'));
+			$this->_ComaLate->SetReplacement('MODULE_TITLE_ACTIONS', $this->_Translation->GetTranslation('actions'));
+						
+			$this->_ComaLate->SetReplacement('MODULES', $modules);	
+			
+			$template = '<h2>{MODULE_MANAGER_TITLE}</h2>
+					<table class="full_width">
+						<tr>
+							<th>{MODULE_TITLE_NAME}</th>
+							<th>{MODULE_TITLE_VERSION}</th>
+							<th>{MODULE_TITLE_ACTIVATED}</th>
+							<th class="actions">{MODULE_TITLE_ACTIONS}</th>
+						</tr>
+						<MODULES:loop>
+						<tr>
+							<td>{MODULE_NAME}</td>
+							<td>{MODULE_VERSION}</td>
+							<td>{MODULE_ACTIVATED}</td>
+							<td><a href="admin.php?page=modules&amp;action={MODULE_ACTION}&amp;name={MODULE_DIRECTORY}" title="{MODULE_LANG_ACTION}"><img alt="{MODULE_LANG_ACTION}" src="img/{ACTION_IMAGE}.png" /></a></td>
+						</tr>
+						</MODULES>
+					</table>';
+			return $template;
 		}
  	}
 ?>

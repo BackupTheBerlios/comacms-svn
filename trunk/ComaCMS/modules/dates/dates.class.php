@@ -105,7 +105,13 @@
  		 * @param boolean ConvertTimestamp
  		 * @return array
  		 */
- 		function FillArray($MaxCount = 6, $ConvertTimestamp = true) {
+ 		function FillArray($MaxCount = 6, $ConvertTimestamp = true, $ConvertUsername) {
+ 			
+ 			// get some config-values
+			$dateDayFormat = $this->_Config->Get('date_day_format', '');
+			$dateTimeFormat = $this->_Config->Get('date_time_format', '');
+			$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
+ 			
  			$datesArray = array();
  			
  			if(!is_numeric($MaxCount))
@@ -122,10 +128,10 @@
  			$datesResult = $this->_SqlConnection->SqlQuery($sql);
  			while($dateEntry = mysql_fetch_object($datesResult)) {
  				$datesArray[] = array('DATE_ID' => $dateEntry->date_id,
- 							'DATE_DATE' => ($ConvertTimestamp) ? date('d.m.Y H:i', $dateEntry->date_date) : $dateEntry->date_date,
+ 							'DATE_DATE' => ($ConvertTimestamp) ? date($dateFormat, $dateEntry->date_date) : $dateEntry->date_date,
  							'DATE_TOPIC' => nl2br($dateEntry->date_topic),
  							'DATE_LOCATION' => $dateEntry->date_location,
- 							'DATE_CREATOR' => $dateEntry->date_creator
+ 							'DATE_CREATOR' =>  ($ConvertTimestamp)? $this->_ComaLib->GetUserByID($dateEntry->date_creator) :$dateEntry->date_creator, 
  						);
  			}
  			return $datesArray;

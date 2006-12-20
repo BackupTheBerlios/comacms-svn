@@ -18,7 +18,7 @@
  	/**
 	 * @ignore
 	 */
-	require_once('./classes/admin/admin.php');
+	require_once __ROOT__ . '/classes/admin/admin.php';
 	
 	
 	/**
@@ -27,27 +27,7 @@
 	 */
 	class Admin_Files extends Admin{
 		
-		/**
-		 * @access private
-		 * @var ComaLib
-		 */
-		var $_ComaLib;
-		
-		/**
-		 * Initializes the Admin_Files class
- 		 * @param SqlConnection SqlConnection
- 		 * @param array AdminLang
- 		 * @param User User
- 		 * @param Config Config
- 		 * @return void
- 		 */
- 		function Admin_Files(&$SqlConnection, &$AdminLang, &$User, &$Config, &$ComaLib) {
-			$this->_SqlConnection = &$SqlConnection;
-			$this->_AdminLang = &$AdminLang;
-			$this->_User = &$User;
-			$this->_Config = &$Config;
-			$this->_ComaLib = &$ComaLib;
-		}
+
  		
 		/**
 		 * Available actions (value of <var>$Action</var>):
@@ -59,7 +39,7 @@
 		 * @param string Action text
 		 */
 		function GetPage($Action) {
-			$out = "\t\t\t<h2>{$this->_AdminLang['files']}</h2>\r\n";
+			$out = "\t\t\t<h2>" . $this->_Translation->GetTranslation('files') . "</h2>\r\n";
 		 	$Action = strtolower($Action);
 		 	switch ($Action) {
 		 		case 'delete':		$out .= $this->_deletePage();
@@ -210,11 +190,11 @@
   					if(array_key_exists($uploadPath . $entry, $md5s)) {
   						// is it the same file we found?
   						if(md5_file($uploadPath . $entry) != $md5s[$uploadPath . $entry])
-  							$out .= "<div class=\"row\"><label><strong>{$this->_AdminLang['refresh_database_entry']}:</strong> <span class=\"info\">{$this->_AdminLang['this_insnt_the_file_which_is_registered_as_a_database_entry_under_this_name']}</span></label><input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($uploadPath . $entry)) ."\" checked=\"checked\" /> &quot;" . utf8_encode($entry) . "&quot;</div>\r\n";
+  							$out .= "<div class=\"row\"><label><strong>" . $this->_Translation->GetTranslation('refresh_database_entry') . ":</strong> <span class=\"info\">" . $this->_AdminLang('this_insnt_the_file_which_is_registered_as_a_database_entry_under_this_name') . "</span></label><input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($uploadPath . $entry)) ."\" checked=\"checked\" /> &quot;" . utf8_encode($entry) . "&quot;</div>\r\n";
   					}
   					// the file doesn't exist in the database
   					else
-  						$out .= "<div class=\"row\"><label><strong>{$this->_AdminLang['add_to_database']}:</strong> <span class=\"info\">{$this->_AdminLang['this_file_isnt_registered_in_the_database']}</span></label><input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($uploadPath . $entry)) ."\" checked=\"checked\" /> &quot;" . utf8_encode($entry) . "&quot;</div>\r\n";
+  						$out .= "<div class=\"row\"><label><strong>" . $this->_Translation->GetTranslation('add_to_database') . ":</strong> <span class=\"info\">" . $this->_Translation->GetTranslation('this_file_isnt_registered_in_the_database') . "</span></label><input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($uploadPath . $entry)) ."\" checked=\"checked\" /> &quot;" . utf8_encode($entry) . "&quot;</div>\r\n";
   			
   						
 
@@ -227,11 +207,11 @@
 				to_apply_these_changes_select_the_files_which_should_be_updated
 				warning:
 				this_page_cant_recover_deleted_files*/
-			$out = "{$this->_AdminLang['this_page_shows_all_files_which_are_changed_without_the_admin_interface']}<br />
-				{$this->_AdminLang['to_apply_these_changes_select_the_files_which_should_be_updated']}
-				<div class=\"warning\"><strong>{$this->_AdminLang['warning']}:</strong> {$this->_AdminLang['this_page_cant_recover_deleted_files']}</div> 
+			$out = $this->_Translation->GetTranslation('this_page_shows_all_files_which_are_changed_without_the_admin_interface') . "<br />
+				" . $this->_Translation->GetTranslation('to_apply_these_changes_select_the_files_which_should_be_updated') . "
+				<div class=\"warning\"><strong>" . $this->_Translation->GetTranslation('warning') . ":</strong> " . $this->_Translation->GetTranslation('this_page_cant_recover_deleted_files') . "</div> 
 				<fieldset>
-					<legend>{$this->_AdminLang['changes']}</legend>
+					<legend>" . $this->_Translation->GetTranslation('changes') . "</legend>
 					<form method=\"post\" action=\"admin.php\">
 						<input type=\"hidden\" name=\"page\" value=\"files\"/>
 						<input type=\"hidden\" name=\"action\" value=\"update_database\"/>\r\n"
@@ -239,13 +219,13 @@
 				. "<div class=\"row\">\r\n";
 			// there are no changes : show this result to the user
 			if(!$changes)
-				$out .= "{$this->_AdminLang['there_are_no_changes']}</div>\r\n<div class=\"row\">";
+				$out .= $this->_Translation->GetTranslation('there_are_no_changes') . "</div>\r\n<div class=\"row\">";
 			// back button
-			$out .= "<a class=\"button\" href=\"admin.php?page=files\" title=\"{$this->_AdminLang['back']}\">{$this->_AdminLang['back']}</a>\r\n";
+			$out .= "<a class=\"button\" href=\"admin.php?page=files\" title=\"" . $this->_Translation->GetTranslation('back') . "\">" . $this->_Translation->GetTranslation('back') . "</a>\r\n";
 
 			// there are changes: add a 'appyl-button'
 			if($changes)
-				$out .= "<input type=\"submit\" class=\"button\" value=\"{$this->_AdminLang['apply']}\"/>\r\n";
+				$out .= "<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('apply') . "\"/>\r\n";
 				
 			$out .= "</div>
 					</form>
@@ -291,11 +271,11 @@
 							// is there a file with the same md5?
 							if($md5Exists = mysql_fetch_object($md5ExistsResult)) {
 								// show the user that the same file is already uploaded
-								$out .= "<div class=\"error\"><strong>{$this->_AdminLang['error']}:</strong> ". sprintf($this->_AdminLang['the_file_%file%_is already_uploaded'], $file['name']); 
+								$out .= "<div class=\"error\"><strong>" . $this->_Translation->GetTranslation('error') . ":</strong> ". sprintf($this->_Translation->GetTranslation('the_file_%file%_is already_uploaded'), $file['name']); 
 									
 									/*Die Datei &quot;<strong>" . $file['name'] . "</strong>&quot; ist bereits hochgeladen worden" . " .*/
 								if($md5Exists->file_name != $file['name'])
-									$out .= ' ' . sprintf($this->_AdminLang['the_file_has_a_different_name_%file%'], $md5Exists->file_name);
+									$out .= ' ' . sprintf($this->_Translation->GetTranslation('the_file_has_a_different_name_%file%'), $md5Exists->file_name);
 									//$out .= "(Sie hat nur einen anderen Namen: &quot;<strong>$md5exists->file_name</strong>&quot;).";
 								$out .= "</div>\r\n";
 							}
@@ -308,7 +288,7 @@
 									$this->_SqlConnection->SqlQuery($sql);
 									// prevent uploads, which aren't dowloadable(read-/writeable) by another user(ftp-access etc.)
 									chmod($savePath, 0755);
-									$out .= "<div><strong>{$this->_AdminLang['ok']}:</strong> " . sprintf($this->_AdminLang['the_file_%file%_was_uploaded'], $file['name']) . "</div>\r\n";
+									$out .= "<div><strong>" . $this->_Translation->GetTranslation('ok') . ":</strong> " . sprintf($this->_Translation->GetTranslation('the_file_%file%_was_uploaded'), $file['name']) . "</div>\r\n";
 								}
 							}
 						}
@@ -349,65 +329,65 @@
 	 	 */
 	 	function _homePage() {
 	 		$out = "\t\t\t<fieldset>
-	 			<legend>{$this->_AdminLang['upload']}</legend>
+	 			<legend>" . $this->_Translation->GetTranslation('upload') . "</legend>
 				<form enctype=\"multipart/form-data\" action=\"admin.php?page=files\" method=\"post\">
 					<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1600000\" />
 					<input type=\"hidden\" name=\"action\" value=\"upload\" />
 					<div class=\"row\">
 						<label>
-							<strong>{$this->_AdminLang['file']} 1:</strong>
+							<strong>" . $this->_Translation->GetTranslation('file') . " 1:</strong>
 						</label>
 						<input name=\"uploadfile0\" type=\"file\" />
 					</div>
 					<div class=\"row\">
 						<label>
-							<strong>{$this->_AdminLang['file']} 2:</strong>
+							<strong>" . $this->_Translation->GetTranslation('file') . " 2:</strong>
 						</label>
 						<input name=\"uploadfile1\" type=\"file\" />
 					</div>
 					<div class=\"row\">
 						<label>
-							<strong>{$this->_AdminLang['file']} 3:</strong>
+							<strong>" . $this->_Translation->GetTranslation('file') . " 3:</strong>
 						</label>
 						<input name=\"uploadfile2\" type=\"file\" />
 					</div>
 					<div class=\"row\">
-						<input type=\"submit\" class=\"button\" value=\"{$this->_AdminLang['upload_files']}\"/>
+						<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('upload_files') . "\"/>
 					</div>
 				</form>
 				<div class=\"row\">
-					<a href=\"admin.php?page=files&amp;action=check_new_files\" class=\"button\">{$this->_AdminLang['check_for_changes']}</a>
+					<a href=\"admin.php?page=files&amp;action=check_new_files\" class=\"button\">" . $this->_Translation->GetTranslation('check_for_changes') . "</a>
 				</div>
 			</fieldset>
 			<table id=\"files\" class=\"text_table full_width\">
 				<thead>
 					<tr>
 						<th>
-							<a href=\"admin.php?page=files&amp;sort=filename#files\" title=\"" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filename']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filename']) . "]\" src=\"img/up.png\"/></a>
-							{$this->_AdminLang['filename']}
-							<a href=\"admin.php?page=files&amp;sort=filename&amp;desc=1#files\" title=\"" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filename']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filename']) . "]\" src=\"img/down.png\"/></a>
+							<a href=\"admin.php?page=files&amp;sort=filename#files\" title=\"" . @sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "\"><img alt=\"[" . @sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "]\" src=\"img/up.png\"/></a>
+							" . $this->_Translation->GetTranslation('filename') . "
+							<a href=\"admin.php?page=files&amp;sort=filename&amp;desc=1#files\" title=\"" . @sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "\"><img alt=\"[" . @sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "]\" src=\"img/down.png\"/></a>
 						</th>
 						<th class=\"small_width\">
-							<a href=\"admin.php?page=files&amp;sort=filesize#files\" title=\"" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filesize']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filesize']) . "]\" src=\"img/up.png\"/></a>
-							{$this->_AdminLang['filesize']}
-							<a href=\"admin.php?page=files&amp;sort=filesize&amp;desc=1#files\" title=\"" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filesize']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filesize']) . "]\" src=\"img/down.png\"/></a>
+							<a href=\"admin.php?page=files&amp;sort=filesize#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "]\" src=\"img/up.png\"/></a>
+							" . $this->_Translation->GetTranslation('filesize') . "
+							<a href=\"admin.php?page=files&amp;sort=filesize&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "]\" src=\"img/down.png\"/></a>
 						</th>
 						<th class=\"table_date_width_plus\">
-							<a href=\"admin.php?page=files&amp;sort=filedate#files\" title=\"" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['date']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['date']) . "]\" src=\"img/up.png\"/></a>
-							{$this->_AdminLang['uploaded_on']}
-							<a href=\"admin.php?page=files&amp;sort=filedate&amp;desc=1#files\" title=\"" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['date']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['date']) . "]\" src=\"img/down.png\"/></a>
+							<a href=\"admin.php?page=files&amp;sort=filedate#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('date')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('date')) . "]\" src=\"img/up.png\"/></a>
+							" . $this->_Translation->GetTranslation('uploaded_on') . "
+							<a href=\"admin.php?page=files&amp;sort=filedate&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('date')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('date')) . "]\" src=\"img/down.png\"/></a>
 						</th>
 						<th class=\"small_width\">
-							<a href=\"admin.php?page=files&amp;sort=filetype#files\" title=\"" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filetype']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['filetype']) . "]\" src=\"img/up.png\"/></a>
-							{$this->_AdminLang['filetype']}
-							<a href=\"admin.php?page=files&amp;sort=filetype&amp;desc=1#files\" title=\"" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filetype']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['filetype']) . "]\" src=\"img/down.png\"/></a>
+							<a href=\"admin.php?page=files&amp;sort=filetype#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "]\" src=\"img/up.png\"/></a>
+							" . $this->_Translation->GetTranslation('filetype') . "
+							<a href=\"admin.php?page=files&amp;sort=filetype&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "]\" src=\"img/down.png\"/></a>
 						</th>
 						<th class=\"table_mini_width\">
-							<a href=\"admin.php?page=files&amp;sort=filedownloads#files\" title=\"" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['downloads']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_ascending_by_%name%'], $this->_AdminLang['downloads']) . "]\" src=\"img/up.png\"/></a>
-							<abbr title=\"{$this->_AdminLang['downloads']}\">{$this->_AdminLang['downl']}</abbr>
-							<a href=\"admin.php?page=files&amp;sort=filedownloads&amp;desc=1#files\" title=\"" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['downloads']) . "\"><img alt=\"[" . sprintf($this->_AdminLang['sort_descending_by_%name%'], $this->_AdminLang['downloads']) . "]\" src=\"img/down.png\"/></a>
+							<a href=\"admin.php?page=files&amp;sort=filedownloads#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "]\" src=\"img/up.png\"/></a>
+							<abbr title=\"" . $this->_Translation->GetTranslation('downloads') . "\">" . $this->_Translation->GetTranslation('downl') . "</abbr>
+							<a href=\"admin.php?page=files&amp;sort=filedownloads&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "]\" src=\"img/down.png\"/></a>
 						</th>
-						<th class=\"actions\">{$this->_AdminLang['actions']}</th>
+						<th class=\"actions\">" . $this->_Translation->GetTranslation('actions') . "</th>
 					</tr>
 				</thead>\r\n";
 			// get all files from the database/ which are registered in the database
@@ -448,15 +428,15 @@
 					<td>$file->file_type</td>
 					<td>$file->file_downloads</td>
 					<td>
-						<a href=\"download.php?file_id=$file->file_id\" ><img src=\"./img/download.png\" height=\"16\" width=\"16\" alt=\"[" . sprintf($this->_AdminLang['download_file_%file%'], utf8_encode($file->file_name)) . "]\" title=\"" . sprintf($this->_AdminLang['download_file_%file%'], utf8_encode($file->file_name)) . "\"/></a>
-						<a href=\"admin.php?page=files&amp;action=delete&amp;file_id=$file->file_id\" ><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\" [" . sprintf($this->_AdminLang['delete_file_%file%'], utf8_encode($file->file_name)) . "]\" title=\"" . sprintf($this->_AdminLang['delete_file_%file%'], utf8_encode($file->file_name)) . "\"/></a>
+						<a href=\"download.php?file_id=$file->file_id\" ><img src=\"./img/download.png\" height=\"16\" width=\"16\" alt=\"[" . sprintf($this->_Translation->GetTranslation('download_file_%file%'), utf8_encode($file->file_name)) . "]\" title=\"" . sprintf($this->_Translation->GetTranslation('download_file_%file%'), utf8_encode($file->file_name)) . "\"/></a>
+						<a href=\"admin.php?page=files&amp;action=delete&amp;file_id=$file->file_id\" ><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\" [" . sprintf($this->_Translation->GetTranslation('delete_file_%file%'), utf8_encode($file->file_name)) . "]\" title=\"" . sprintf($this->_Translation->GetTranslation('delete_file_%file%'), utf8_encode($file->file_name)) . "\"/></a>
 					</td>
 				</tr>\r\n";
 				// count the size of all files together
 				$completeSize += $file->file_size;
 			}
 			$out .= "\t\t\t</table>\r\n";
-			$out .= "\t\t\t" . $this->_AdminLang['altogether'] . ' ' . kbormb($completeSize);
+			$out .= "\t\t\t" . $this->_Translation->GetTranslation('altogether') . ' ' . kbormb($completeSize);
 
 			return $out;
 	 	}

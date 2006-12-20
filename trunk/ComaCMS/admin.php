@@ -143,7 +143,7 @@
 	elseif($extern_page == 'files') {
 		$title = $translation->GetTranslation('files');
 		include('classes/admin/admin_files.php');
-		$admin_page = new Admin_Files($sqlConnection, $translation, $user, $config, $lib);
+		$admin_page = new Admin_Files($sqlConnection, $translation, $config, $user, $lib, $output);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'pagestructure') {

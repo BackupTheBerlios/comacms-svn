@@ -48,6 +48,7 @@
 	$menuArray[] = array($translation->GetTranslation('pagestructure'), 'pagestructure');
 	$menuArray[] = array($translation->GetTranslation('menu-editor'), 'menueditor');
 	$menuArray[] = array($translation->GetTranslation('preferences'), 'preferences');
+	$menuArray[] = array($translation->GetTranslation('languages'), 'languages');
 	$menuArray[] = array($translation->GetTranslation('modules'), 'modules');
 
 	
@@ -121,6 +122,14 @@
 		
 		$admin_PagePreview = new Admin_PagePreview($sqlConnection, $translation, $config, $user, $lib, $output);
 		$text = $admin_PagePreview->GetPage('style');
+	}
+	elseif($extern_page == 'languages') {
+		// Get the languages-class
+		include_once('classes/admin/admin_languages.php');
+		$title = $translation->GetTranslation('languages');
+		
+		$admin_Languages = new Admin_Languages($sqlConnection, $translation, $config, $user, $lib, $output);
+		$text = $admin_Languages->GetPage($extern_action);
 	}
 	elseif($extern_page == 'users') {
 		$title = $translation->GetTranslation('users');

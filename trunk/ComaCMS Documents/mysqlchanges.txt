@@ -427,5 +427,14 @@ ALTER TABLE `comacms_users` ADD `user_activated` BOOL NULL DEFAULT '1',
 ADD `user_activationcode` VARCHAR( 32 ) NULL ;
 
 #r340
-'Added menutitle field to menutabel
+#Added menutitle field to menutabel
 ALTER TABLE `comacms_menu` ADD `menu_title` VARCHAR( 255 ) NOT NULL DEFAULT '';
+
+#r352
+#Added table for language administration
+CREATE TABLE `comacms_languages` (
+`languages_id` INT( 10 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`languages_short_name` VARCHAR( 3 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+`languages_name` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+`languages_lang_file` VARCHAR( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL
+) ENGINE = MYISAM ;

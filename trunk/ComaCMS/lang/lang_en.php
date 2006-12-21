@@ -339,4 +339,9 @@ Please don\'t answer this email. This is a computer-generated message.';
 	$langString['articles'] = 'Articles';
 	$langString['articles_module'] = 'Articlesmodule';
 	$langString['write_new_article'] = 'Write a new article';
+	
+	//languages page
+	$langString['languages'] = 'Languages';
+	$langString['add_language'] = 'Add language';
+	$langString['language_file'] = 'Language file';
 ?>

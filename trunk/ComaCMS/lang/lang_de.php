@@ -336,5 +336,10 @@ Die Administratoren';
 	$langString['articles'] = 'Artikel';
 	$langString['articles_module'] = 'Artikelmodul';
 	$langString['write_new_article'] = 'einen neuen Artikel schreiben';
-
+	
+	//languages page
+	$langString['languages'] = 'Sprachen';
+	$langString['add_language'] = 'Sprache hinzuf&uuml;gen';
+	$langString['abbreviation'] = 'Abk&uuml;rzung';
+	$langString['language_file'] = 'Sprachdatei';
 ?>

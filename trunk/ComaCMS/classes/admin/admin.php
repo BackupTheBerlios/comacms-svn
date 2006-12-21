@@ -66,6 +66,7 @@
  		 var $_ComaLate;
  		
  		/**
+ 		 * Initializes the admin_controll classes
  		 * @access public
  		 * @param Sql SqlConnection The connection-class for connecting the database
  		 * @param Language Translation The language-class for translations
@@ -84,6 +85,10 @@
 			$this->_Init();
  		}
  		
+ 		/**
+ 		 * Adds pagespecific initialzation actions
+ 		 * @access private
+ 		 */
  		function _Init() {
  			
  		}

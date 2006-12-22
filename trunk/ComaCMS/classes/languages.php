@@ -51,10 +51,10 @@
  					FROM ' . DB_PREFIX . 'languages';
  			$languagesResult = $this->_SqlConnection->SqlQuery($sql);
  			while ($language = mysql_fetch_object($languagesResult)) {
- 				$this->_Languages[$language->languages_id] = array('Id' => $language->languages_id,
-																'ShortName' => $language->languages_short_name, 
-																'Name' => $language->languages_name,
-																'LanguageFile' => $language->languages_lang_file);
+ 				$this->_Languages[$language->languages_id] = array('LANG_ID' => $language->languages_id,
+																'LANG_SHORT_NAME' => $language->languages_short_name, 
+																'LANG_NAME' => $language->languages_name,
+			/* WHY?? */											'LANG_FILE' => $language->languages_lang_file);
  			}
  		}
  		

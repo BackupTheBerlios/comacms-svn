@@ -158,25 +158,25 @@
 	elseif($extern_page == 'pagestructure') {
 		$title = $translation->GetTranslation('pagestructure');
 		include('classes/admin/admin_pagestructure.php');
-		$admin_page = new Admin_PageStructure($sqlConnection, $translation, $user, $config);
+		$admin_page = new Admin_PageStructure($sqlConnection, $translation, $config, $user, $lib, $output);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'groups') {
 		$title = $admin_lang['groups'];
 		include('classes/admin/admin_groups.php');
-		$admin_page = new Admin_Groups();
-		$text = $admin_page->GetPage($extern_action, $translation);
+		$admin_page = new Admin_Groups($sqlConnection, $translation, $config, $user, $lib, $output);
+		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'rights') {
 		$title = $translation->GetTranslation('rights');
 		include('classes/admin/admin_rights.php');
-		$admin_page = new Admin_Rights();
-		$text = $admin_page->GetPage($extern_action, $translation);
+		$admin_page = new Admin_Rights($sqlConnection, $translation, $config, $user, $lib, $output);
+		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'menueditor') {
 		$title = $translation->GetTranslation('menu-editor');
 		include('classes/admin/admin_menu.php');
-		$admin_page = new Admin_Menu($sqlConnection, $translation);
+		$admin_page = new Admin_Menu($sqlConnection, $translation, $config, $user, $lib, $output);
 		$text = $admin_page->GetPage($extern_action);
 	}
 	elseif($extern_page == 'modules') {

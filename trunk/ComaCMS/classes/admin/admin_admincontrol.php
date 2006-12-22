@@ -36,7 +36,7 @@
 			$dateTimeFormat = $this->_Config->Get('date_time_format', '');
 			$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
 			
-			// get the number of pages whicht aren't deleted
+			// get the number of pages which aren't deleted
 			$sql = "SELECT page_id
 					FROM " . DB_PREFIX . "pages
 					WHERE page_access != 'deleted'";

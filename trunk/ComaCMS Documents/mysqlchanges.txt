@@ -434,7 +434,7 @@ ALTER TABLE `comacms_menu` ADD `menu_title` VARCHAR( 255 ) NOT NULL DEFAULT '';
 #Added table for language administration
 CREATE TABLE `comacms_languages` (
 `languages_id` INT( 10 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`languages_short_name` VARCHAR( 3 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
-`languages_name` VARCHAR( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-`languages_lang_file` VARCHAR( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL
-) ENGINE = MYISAM ;
+`languages_short_name` VARCHAR( 3 ) NOT NULL ,
+`languages_name` VARCHAR( 20 ) NOT NULL,
+`languages_lang_file` VARCHAR( 250 ) NOT NULL
+);

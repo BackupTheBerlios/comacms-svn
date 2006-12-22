@@ -194,7 +194,7 @@
 			$free_memory = $memory_limit - memory_get_usage();
 		else
 			$free_memory = 0;
-		$needspace = ($originalWidth * $originalHeight + $Width * $Height) * 5;
+		$needspace = ($originalWidth * $originalHeight + $Width * $Height) * 10;
 		// check for enough available memory to resize the image
 		if($needspace > $free_memory && $free_memory > 0)
 			return false;

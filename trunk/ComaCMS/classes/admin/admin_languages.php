@@ -49,8 +49,8 @@
 		 * @return string Pagedata
  		 */
 		function GetPage($Action = '') {
-			$out = '<h2>{LANG_LANGUAGES}</h2>';
-			$this->_ComaLate->SetReplacement('LANG_LANGUAGES', $this->_Translation->GetTranslation('languages'));
+			$out = '<h2>{LANG_TITLE_LANGUAGES}</h2>';
+			$this->_ComaLate->SetReplacement('LANG_TITLE_LANGUAGES', $this->_Translation->GetTranslation('languages'));
 			
 			// Switch between the subpages
 			switch ($Action) {
@@ -71,11 +71,11 @@
 		 */
 		function _HomePage() {
 			// Set replacements for language
-			$this->_ComaLate->SetReplacement('LANG_LANGUAGE', $this->_Translation->GetTranslation('language'));
+			$this->_ComaLate->SetReplacement('LANG_TITLE_LANGUAGE', $this->_Translation->GetTranslation('language'));
 			$this->_ComaLate->SetReplacement('LANG_ADD_LANGUAGE', $this->_Translation->GetTranslation('add_language'));
-			$this->_ComaLate->SetReplacement('LANG_ABBREVIATION', $this->_Translation->GetTranslation('abbreviation'));
-			$this->_ComaLate->SetReplacement('LANG_LANGUAGE_FILE', $this->_Translation->GetTranslation('language_file'));
-			$this->_ComaLate->SetReplacement('LANG_ACTIONS', $this->_Translation->GetTranslation('actions'));
+			$this->_ComaLate->SetReplacement('LANG_TITLE_ABBREVIATION', $this->_Translation->GetTranslation('abbreviation'));
+			$this->_ComaLate->SetReplacement('LANG_TITLE_LANGUAGE_FILE', $this->_Translation->GetTranslation('language_file'));
+			$this->_ComaLate->SetReplacement('LANG_TITLE_ACTIONS', $this->_Translation->GetTranslation('actions'));
 			
 			// Set replacement for languages entries
 			$languages = array();
@@ -86,20 +86,20 @@
 			$template = '
 				<a href="admin.php?page=languages&amp;action=newLanguage" class="button">{LANG_ADD_LANGUAGE}</a>';
 			// Add templatetable if any languages exist
-			if (!empty($languages)) {
+			if (empty($languages)) {
 				$template .= '
 				<table class="text_table full_width margin_center">
 					<tr>
-						<th>{LANG_LANGUAGE}</th>
-						<th>{LANG_ABBREVIATION}</th>
-						<th>{LANG_LANGUAGE_FILE}</th>
-						<th>{LANG_ACTIONS}</th>
+						<th>{LANG_TITLE_LANGUAGE}</th>
+						<th>{LANG_TITLE_ABBREVIATION}</th>
+						<th>{LANG_TITLE_LANGUAGE_FILE}</th>
+						<th>{LANG_TITLE_ACTIONS}</th>
 					</tr>
 					<LANGUAGES_LINE:loop>
 					<tr>
-						<td>{Name}</td>
-						<td>{ShortName}</td>
-						<td>{LanguageFile}</td>
+						<td>{LANG_NAME}</td>
+						<td>{LANG_SHOTR_NAME}</td>
+						<td>{LANG_LANG_FILE}</td>
 						<td>edit delete</td>
 					</tr>
 					</LANGUAGES_LINE>
@@ -115,7 +115,9 @@
 		 */
 		function _NewLanguage() {
 			// Set replacements for language
-			
+
+			// QUESTION: Why did we need the filename of the language in the database?
+
 			// Make template
 			$template = '
 				<form action="admin.php" method="get">

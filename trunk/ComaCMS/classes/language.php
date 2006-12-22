@@ -22,7 +22,7 @@
  		
  		function Language($OutputLanguage) {
 			$this->OutputLanguage = $OutputLanguage;
-			$this->_LangString[$this->OutputLanguage] = array();
+//			$this->_LangString[$this->OutputLanguage] = array();
  		}
  		
  		function AddSources($LanguageDirectory) {

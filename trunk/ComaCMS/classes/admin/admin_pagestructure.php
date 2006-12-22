@@ -38,28 +38,9 @@
 		 * @access private
 		 */
  		var $_PageStructure;
- 		/**
- 		 * The current User
- 		 * @var User;
- 		 * @access private
- 		 */
- 		var $_User;
- 		/**
- 		 * A Config-link
- 		 * @var Config
- 		 * @access private
- 		 */
- 		var $_Config;
  		
- 		/**
- 		 * @param SqlConnection SqlConnection
- 		 * @return void
- 		 */
- 		function Admin_PageStructure(&$SqlConnection, &$Translation, &$User, &$Config) {
-			$this->_SqlConnection = &$SqlConnection;
-			$this->_Translation = &$Translation;
-			$this->_User = &$User;
-			$this->_Config = &$Config;
+		
+		function _Init() {
 			$this->_PageStructure = new PageStructure($this->_SqlConnection, $this->_User);
 		}
  		
@@ -175,16 +156,16 @@
 		 								Mit dem Klicken auf OK wird die Aktion sofort durchgeführt und nicht noch einmal hinterfragt!
 		 							</div>
 		 							<div class=\"row\">
-		 								<a href=\"admin.php?page=pagestructure\" class=\"button\">" . $adminLang['back'] . "</a>
-		 								<input type=\"submit\" class=\"button\" value=\"" . $adminLang['ok'] . "\"/>
+		 								<a href=\"admin.php?page=pagestructure\" class=\"button\">" . $this->_Translation->GetTranslation('back') . "</a>
+		 								<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('ok') . "\"/>
 		 							</div>	
 		 						</form>
 		 					</fieldset>";
 		 			}
 		 			else {
-		 				$out .= sprintf($adminLang['Do you really want to delete the page %page_title%?'], $this->_PageStructure->GetPageData($pageID, 'title')) . "<br />
-		 				<a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=$pageID&amp;confirmation=1\" class=\"button\">" . $adminLang['yes'] . "</a>
-		 					<a href=\"admin.php?page=pagestructure\" class=\"button\">" . $adminLang['no'] . "</a>";
+		 				$out .= sprintf($this->_Translation->GetTranslation('Do you really want to delete the page %page_title%?'), $this->_PageStructure->GetPageData($pageID, 'title')) . "<br />
+		 				<a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=$pageID&amp;confirmation=1\" class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a>
+		 					<a href=\"admin.php?page=pagestructure\" class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a>";
 		 			}
 		 			return $out;
 		 		}
@@ -515,7 +496,7 @@
 		 * @access private
 		 */
 		function _inlineMenu() {
-			$adminLang = &$this->_AdminLang;
+		
 			// Get data from header
 			$pageID = GetPostOrGet('pageID');
 			$action = GetPostOrGet('action2');
@@ -531,9 +512,9 @@
 					$out .= $this->_inlineMenu();
 				}
 				else {
-					$out .= $adminLang['at_the_moment_there_is_no_inlinemenu_for_this_page_created,_should_this_be_done_now'] . "<br />
-					<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;action2=create&amp;pageID=$pageID\" title=\"" . $adminLang['yes'] . "\" class=\"button\">" . $adminLang['yes'] . "</a>
-					<a href=\"admin.php?page=pagestructure\" title=\"" . $adminLang['no'] . "\" class=\"button\">" . $adminLang['no'] . "</a>";	
+					$out .= $this->_Translation->GetTranslation('at_the_moment_there_is_no_inlinemenu_for_this_page_created,_should_this_be_done_now') . "<br />
+					<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;action2=create&amp;pageID=$pageID\" title=\"" . $this->_Translation->GetTranslation('yes') . "\" class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a>
+					<a href=\"admin.php?page=pagestructure\" title=\"" . $this->_Translation->GetTranslation('no') . "\" class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a>";	
 				}
 				
 			}
@@ -573,7 +554,7 @@
 		 * @return string
 		 */
 		function _InlineMenuEditEntryPage($PageID) {
-			$adminLang = &$this->_AdminLang;
+			
 			$entryID = GetPostOrGet('entryID');
 			if($entryData = $this->_PageStructure->LoadInlineMenuEntry($entryID)) {
 				$out = '';
@@ -641,8 +622,7 @@
 					$out .= $this->_structurePullDown(0, 0, '', -1, substr($entryData['link'], 15));
 					$out .= "</select></div>
 						<div class=\"row\">
-							<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\" />
-							<input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\" />
+							<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('save') . "\" />
 						</div>
 						</fieldset>
 						</form>";
@@ -698,7 +678,7 @@
 		function _InlineMenuRemoveEntryPage ($PageID) {
 			$entryID = GetPostOrGet('entryID');
 			$confirmation = GetPostOrGet('confirmation');
-			$adminLang = &$this->_AdminLang;
+		
 			if($confirmation == 1) {
 				$this->_PageStructure->RemoveInlineMenuEntry($entryID);
 				return $this->_InlineMenuHomePage($PageID);
@@ -710,8 +690,8 @@
  				$entryResult = $this->_SqlConnection->SqlQuery($sql);
  				if($entry = mysql_fetch_object($entryResult)) {
 					return "Sind sie sicher, dass sie das Element &quot;$entry->inlineentry_text&quot; unwiederruflich l&ouml;schen m&ouml;chten?<br />
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;entryID=$entryID&amp;action2=removeEntry&amp;confirmation=1&amp;pageID=$PageID\" class=\"button\">" . $adminLang['yes'] . "</a >
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID\"class=\"button\">" . $adminLang['no'] . "</a >";
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;entryID=$entryID&amp;action2=removeEntry&amp;confirmation=1&amp;pageID=$PageID\" class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a >
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID\"class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a >";
  				}
 			}
 		}
@@ -796,7 +776,7 @@
 		 * @access private
 		 */
 		function _InlineMenuAddNewEntryDialogPage($PageID) {
-			$adminLang = &$this->_AdminLang;
+			
 			// Get data from header
 			$type = GetPostOrGet('type');
 			
@@ -863,8 +843,7 @@
 						$out .= $this->_PageStructure->PageStructurePulldown(0);
 				$out .= "</select></div>
 						<div class=\"row\">
-							<input type=\"reset\" class=\"button\" value=\"" . $adminLang['reset'] . "\" />
-							<input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\" />
+							<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('save') . "\" />
 						</div>
 						</fieldset>
 						</form>";
@@ -1012,7 +991,7 @@
 				<input type=\"hidden\" name=\"pageID\" value=\"$PageID\"/>
 				<input type=\"hidden\" name=\"action2\" value=\"setImage\"/>
 				<fieldset>
-				<legend>" . $adminLang['inlinemenu_image'] . "</legend>
+				<legend>" . $this->_Translation->GetTranslation('inlinemenu_image') . "</legend>
 				<div class=\"row\"><div class=\"imagesblock\">";
 			while($image = mysql_fetch_object($images_result)) {
 				$thumbnail = resizeImageToMaximum($image->file_path, $inlinemenu_folder ,$imgmax);
@@ -1026,8 +1005,8 @@
 				}
 			}
 			$out .= "</div></div>
-				<div class=\"row noform\"><input type=\"submit\" value=\"" . $adminLang['apply'] . "\" class=\"button\"/>
-				<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID\" class=\"button\">" . $adminLang['back'] . "</a></div></fieldset></form>";
+				<div class=\"row noform\"><input type=\"submit\" value=\"" . $this->_Translation->GetTranslation('apply') . "\" class=\"button\"/>
+				<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID\" class=\"button\">" . $this->_Translation->GetTranslation('back') . "</a></div></fieldset></form>";
 				
 			
 			return $out;
@@ -1039,7 +1018,7 @@
 		 */
 		function _InlineMenuHomePage($PageID) {
 			
-			$adminLang = $this->_AdminLang;
+			
 			$image = 'Noch kein Bild gesetzt';
 			$thumbPath = $this->_PageStructure->GetInlineMenuData($PageID, 'imageThumb');
 			$imagePath = $this->_PageStructure->GetInlineMenuData($PageID, 'image');
@@ -1057,10 +1036,10 @@
 			}	
 			$out = "
 				<fieldset>
-					<legend>" . $adminLang['inlinemenu'] . "</legend>
+					<legend>" . $this->_Translation->GetTranslation('inlinemenu') . "</legend>
 				<div class=\"row\">
 						<label class=\"row\">
-							" . $adminLang['inlinemenu_image'] . ":
+							" . $this->_Translation->GetTranslation('inlinemenu_image') . ":
 							<span class=\"info\">Das ist der Pfad zu dem Bild, das dem Zusatzmen&uuml; zugeordnet wird, es kann der Einfachheit halber aus den bereits hochgeladenen Bildern ausgew&auml;hlt werden.</span>
 						</label>
 						$image
@@ -1082,7 +1061,7 @@
 					<input id=\"inlinemenuThumbTitle\" name=\"imageTitle\" type=\"text\" value=\"$imageTitle\" />
 				</div>
 				<div class=\"row\">
-					<input type=\"submit\" class=\"button\" value=\"" . $adminLang['save'] . "\" />
+					<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('save') . "\" />
 				</div>
 				</form>";
 			$sql = "SELECT *
@@ -1110,10 +1089,10 @@
 					<td>". nl2br($entry->inlineentry_text) ."</td>
 					<td>" . $typeImage . "</td>
 					<td>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entry->inlineentry_sortid&amp;action2=moveEntryUp#entries\"><img src=\"./img/up.png\" alt=\"" . $adminLang['move_up'] ."\" title=\"" . $adminLang['move_up'] ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entry->inlineentry_sortid&amp;action2=moveEntryDown#entries\"><img src=\"./img/down.png\" alt=\"" . $adminLang['move_down'] ."\" title=\"" . $adminLang['move_down'] ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entry->inlineentry_id&amp;action2=editEntry\"><img src=\"./img/edit.png\" alt=\"" . $adminLang['edit'] ."\" title=\"" . $adminLang['edit'] ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entry->inlineentry_id&amp;action2=removeEntry\"><img src=\"./img/del.png\" alt=\"" . $adminLang['delete'] ."\" title=\"" . $adminLang['delete'] ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entry->inlineentry_sortid&amp;action2=moveEntryUp#entries\"><img src=\"./img/up.png\" alt=\"" . $this->_Translation->GetTranslation('move_up') ."\" title=\"" . $this->_Translation->GetTranslation('move_up') ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entry->inlineentry_sortid&amp;action2=moveEntryDown#entries\"><img src=\"./img/down.png\" alt=\"" . $this->_Translation->GetTranslation('move_down') ."\" title=\"" . $this->_Translation->GetTranslation('move_down') ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entry->inlineentry_id&amp;action2=editEntry\"><img src=\"./img/edit.png\" alt=\"" . $this->_Translation->GetTranslation('edit') ."\" title=\"" . $this->_Translation->GetTranslation('edit') ."\" /></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entry->inlineentry_id&amp;action2=removeEntry\"><img src=\"./img/del.png\" alt=\"" . $this->_Translation->GetTranslation('delete') ."\" title=\"" . $this->_Translation->GetTranslation('delete') ."\" /></a>
 						
 					</td>
 					</tr>";
@@ -1130,7 +1109,7 @@
 		 * @return string
 		 */
 		function _infoPage() {
-			global $admin_lang, $user;
+			
 			
 			$page_id =  GetPostOrGet('pageID');
 			$action2 = GetPostOrGet('action2');
@@ -1205,21 +1184,21 @@
 							<input type=\"hidden\" name=\"pageAccessOld\" value=\"$page->page_access\" />
 							<input type=\"hidden\" name=\"action2\" value=\"saveAccess\" />
 							<select name=\"pageAccess\">
-								<option value=\"public\"" . (($page->page_access == 'public') ? ' selected="selected"' : '') . ">" . $admin_lang['public'] . "</option>
-								<option value=\"private\"" . (($page->page_access == 'private') ? ' selected="selected"' : '') . ">" . $admin_lang['private'] . "</option>
-								<option value=\"hidden\"" . (($page->page_access == 'hidden') ? ' selected="selected"' : '') . ">" . $admin_lang['hidden'] . "</option>
-								<option value=\"deleted\"" . (($page->page_access == 'deleted') ? ' selected="selected"' : '') . ">" . $admin_lang['deleted'] . "</option>
+								<option value=\"public\"" . (($page->page_access == 'public') ? ' selected="selected"' : '') . ">" . $this->_Translation->GetTranslation('public') . "</option>
+								<option value=\"private\"" . (($page->page_access == 'private') ? ' selected="selected"' : '') . ">" . $this->_Translation->GetTranslation('private') . "</option>
+								<option value=\"hidden\"" . (($page->page_access == 'hidden') ? ' selected="selected"' : '') . ">" . $this->_Translation->GetTranslation('hidden') . "</option>
+								<option value=\"deleted\"" . (($page->page_access == 'deleted') ? ' selected="selected"' : '') . ">" . $this->_Translation->GetTranslation('deleted') . "</option>
 							</select>
 							<input type=\"submit\" value=\"" . $admin_lang['save'] . "\" class=\"button\" />
 							</form>";
 					}
 					else
-						$out .=	$admin_lang[$page->page_access] . " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id&amp;action2=changeAccess\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
+						$out .=	$this->_Translation->GetTranslation($page->page_access) . " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id&amp;action2=changeAccess\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>";
 					$out .= "</td>
 				</tr>
 				<tr>
 					<th>Sprache</th>
-					<td>" . $admin_lang[$page->page_lang] . "</td>
+					<td>" . $this->_Translation->GetTranslation($page->page_lang) . "</td>
 				</tr>
 				<tr>
 					";
@@ -1235,17 +1214,17 @@
 								<option value=\"0\">Keiner</option>\r\n";
 					$this->_PageStructure->LoadParentIDs();
 					$out .= $this->_PageStructure->PageStructurePulldown(0, 0, '', $page->page_id, $page->page_parent_id);
-					$out .= "\t\t\t\t\t\t\t</select><input type=\"submit\" value=\"" . $admin_lang['save'] . "\" class=\"button\" /></form>";
+					$out .= "\t\t\t\t\t\t\t</select><input type=\"submit\" value=\"" . $this->_Translation->GetTranslation('save') . "\" class=\"button\" /></form>";
 				}
 				else
 					$out .= "<th>Pfad</th>
 					<td>
-						<a href=\"admin.php?page=pagestructure\">root</a><strong>/</strong>" . $this->_pagePath($page->page_id) . " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id&amp;action2=changePath\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
+						<a href=\"admin.php?page=pagestructure\">root</a><strong>/</strong>" . $this->_pagePath($page->page_id) . " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id&amp;action2=changePath\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>";
 				$out .= "</td>
 				</tr>
 				<tr>
 					<th>Bearbeitet von</th>
-					<td>" . getUserById($page->page_creator) . "</td>
+					<td>" . $this->_ComaLib->GetUserByID($page->page_creator) . "</td>
 				</tr>
 				<tr>
 					<th>Bearbeitet am</th>
@@ -1258,8 +1237,8 @@
 				$inlineMenuEntriesResult = $this->_SqlConnection->SqlQuery($sql);
 				
 				$out .= "<tr>
-					<th>" . $admin_lang['inlinemenu'] . "</th>
-					<td>" . mysql_num_rows($inlineMenuEntriesResult) . " Einträge [<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$page_id\">" . $admin_lang['inlinemenu'] . "</a>]</td>
+					<th>" . $this->_Translation->GetTranslation('inlinemenu') . "</th>
+					<td>" . mysql_num_rows($inlineMenuEntriesResult) . " Eintr&auml;ge [<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$page_id\">" . $this->_Translation->GetTranslation('inlinemenu') . "</a>]</td>
 				</tr>
 			</table>\r\n";
 				
@@ -1296,24 +1275,24 @@
 				</thead>
 				<tr>
 					<td>" . date("d.m.Y H:i:s",$page->page_date) . "</td>
-					<td>" . getUserById($page->page_creator) . "</td>
+					<td>" . $this->_ComaLib->GetUserByID($page->page_creator) . "</td>
 					<td>$page->page_title</td>
 					<td>$page->page_edit_comment&nbsp;</td>
 					<td>
 						<a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>
 					</td>
 				</tr>\r\n";
 				
 				while($change = mysql_fetch_object($result)) {
 					$out .= "\t\t\t\t<tr>
 					<td>" . date("d.m.Y H:i:s",$change->page_date) . "</td>
-					<td>".getUserById($change->page_creator) . "</td>
+					<td>" . $this->_ComaLib->GetUserByID($change->page_creator) . "</td>
 					<td>$change->page_title</td>
 					<td>$change->page_edit_comment&nbsp;</td>
 					<td><a href=\"index.php?page=$page->page_id&amp;change=$changes_count\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>
-					<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page->page_id&amp;change=$changes_count\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
-					<a href=\"admin.php?page=pagestructure&amp;action=savePage&amp;pageID=$page->page_id&amp;change=$changes_count\"><img src=\"./img/restore.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['restore'] . "\" title=\"" . $admin_lang['restore'] . "\"/></a></td>
+					<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page->page_id&amp;change=$changes_count\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>
+					<a href=\"admin.php?page=pagestructure&amp;action=savePage&amp;pageID=$page->page_id&amp;change=$changes_count\"><img src=\"./img/restore.png\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('restore') . "\" title=\"" . $this->_Translation->GetTranslation('restore') . "\"/></a></td>
 				</tr>\r\n";
 					$changes_count--;
 				}

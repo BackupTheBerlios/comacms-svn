@@ -86,10 +86,10 @@
 				}
 				else {
 					// ask for the confirmation
-					$out = sprintf($this->_AdminLang['do_you_really_want_to_delete_the_file_%filename%_irrevocablly'], utf8_encode($file->file_name)). "<br />\r\n";
-					$out .= sprintf($this->_AdminLang['this_file_was_uploaded_on_%date%_at%_%time%_oclock_by_%username%'], date('d.m.Y', $file->file_date), date('H:i:s', $file->file_date), $this->_ComaLib->GetUserByID($file->file_creator)). "<br />\r\n";
-					$out .= "<a href=\"admin.php?page=files&amp;action=delete&amp;file_id=$fileID&amp;confirmation=1\" title=\"" . sprintf($this->_AdminLang['delete_file_%file%'], utf8_encode($file->file_name)) . "\"  class=\"button\">{$this->_AdminLang['yes']}</a>
-					<a href=\"admin.php?page=files\" title=\"" . sprintf($this->_AdminLang['dont_delete_file_%file%'], utf8_encode($file->file_name)) . "\" class=\"button\">{$this->_AdminLang['no']}</a>";
+					$out = sprintf($this->_Translation->GetTranslation('do_you_really_want_to_delete_the_file_%filename%_irrevocablly'), utf8_encode($file->file_name)). "<br />\r\n";
+					$out .= sprintf($this->_Translation->GetTranslation('this_file_was_uploaded_on_%date%_at%_%time%_oclock_by_%username%'), date('d.m.Y', $file->file_date), date('H:i:s', $file->file_date), $this->_ComaLib->GetUserByID($file->file_creator)). "<br />\r\n";
+					$out .= "<a href=\"admin.php?page=files&amp;action=delete&amp;file_id=$fileID&amp;confirmation=1\" title=\"" . sprintf($this->_Translation->GetTranslation('delete_file_%file%'), utf8_encode($file->file_name)) . "\"  class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a>
+					<a href=\"admin.php?page=files\" title=\"" . sprintf($this->_Translation->GetTranslation('dont_delete_file_%file%'), utf8_encode($file->file_name)) . "\" class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a>";
 					return $out;
 				}
 			}
@@ -179,7 +179,7 @@
 					$md5s[$file->file_path] = $file->file_md5;
 				// the file doesn't exist
 				else {
-					$out .= "<div class=\"row\"><label><strong>{$this->_AdminLang['remove_database_entry']}:</strong> <span class=\"info\">{$this->_AdminLang['this_file_doesnt_exist_any_longer']}</span></label><input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($file->file_path)) ."\" checked=\"checked\" /> &quot;" . utf8_encode($file->file_name) ."&quot;</div>\r\n";
+					$out .= "<div class=\"row\"><label><strong>" . $this->_Translation->GetTranslation('remove_database_entry') . ":</strong> <span class=\"info\">" . $this->_Translation->GetTranslation('this_file_doesnt_exist_any_longer') . "</span></label><input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($file->file_path)) ."\" checked=\"checked\" /> &quot;" . utf8_encode($file->file_name) ."&quot;</div>\r\n";
 				}
 			}
 			// get all files in the upload-directory
@@ -295,22 +295,22 @@
 						// there are some errors... show them!
 						else {
 							
-							$out .= "<div class=\"error\"><strong>{$this->_AdminLang['error']}:</strong> ";
+							$out .= "<div class=\"error\"><strong>" . $this->_Translation->GetTranslation('error') . ":</strong> ";
 							switch ($file['error']) {
 								// file is to big (php.ini)
-								case 1:		$out .= sprintf($this->_AdminLang['the_file_%file%_is_bigger_than_the_maximum_upload_size_of_the_server'], $file['name']);
+								case 1:		$out .= sprintf($this->_Translation->GetTranslation('the_file_%file%_is_bigger_than_the_maximum_upload_size_of_the_server'), $file['name']);
 										break;
 								// file is to big (MAX_FILE_SIZE)
-								case 2:		$out .= sprintf($this->_AdminLang['the_file_%file%_is_bigger_than_the_maximum_upload_size_of_%maximumsize%'], $file['name'], '1.5MB' );
+								case 2:		$out .= sprintf($this->_Translation->GetTranslation('the_file_%file%_is_bigger_than_the_maximum_upload_size_of_%maximumsize%'), $file['name'], '1.5MB' );
 										break;
 								// file isn't completly transmitted
-								case 3:		$out .= $this->_AdminLang['the_file_was_only_partly_transmitted'];
+								case 3:		$out .= $this->_Translation->GetTranslation('the_file_was_only_partly_transmitted');
 										break;
 								// no upload
-								case 4:		$out .= $this->_AdminLang['there_was_no_file_transmitted'];
+								case 4:		$out .= $this->_Translation->GetTranslation('there_was_no_file_transmitted');
 										break;
 								// unknown error -> say it wasn't possible to upload							
-								default:	$out .= $this->_AdminLang['wasnt_able_to_transmit_the_file'];
+								default:	$out .= $this->_Translation->GetTranslation('wasnt_able_to_transmit_the_file');
 										break;
 							}
 							$out .= "</div>\r\n";

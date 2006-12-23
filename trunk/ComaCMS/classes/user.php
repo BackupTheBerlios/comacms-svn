@@ -163,12 +163,12 @@
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "users
 					WHERE user_name='$this->Name'
-					LIMIT 0,1";
+					LIMIT 1";
 				$original_user_result = $this->_SqlConnection->SqlQuery($sql);
 				if($original_user = mysql_fetch_object($original_user_result)) {
 					// If the user was found check if it is activated
 					if ($original_user->user_activated == '1') {
-						// If the user is activated check if the typed passord is right
+						// If the user is activated check if the typed password is right
 						if ($original_user->user_password === $this->PasswordMd5) {
 							$this->IsLoggedIn = true;
 							$this->Showname = $original_user->user_showname;

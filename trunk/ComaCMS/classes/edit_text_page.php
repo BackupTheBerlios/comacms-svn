@@ -235,8 +235,8 @@
 					
 					//<![CDATA[
 					document.write('<div style=\"float:right;\">');
-					document.write('<img onclick=\"resizeBox(-5)\" title=\"Eingabefeld verkleinern\" alt=\"Eingabefeld verkleinern\" class=\"resize\" src=\"img/up.png\" /> ');
-					document.write('<img onclick=\"resizeBox(5)\" title=\"Eingabefeld vergr&ouml;&szlig;ern\" alt=\"Eingabefeld vergr&ouml;&szlig;ern\" class=\"resize\" src=\"img/down.png\" /><br />');
+					document.write('<img onclick=\"resizeBox(\'editor\', -5, 17)\" title=\"Eingabefeld verkleinern\" alt=\"Eingabefeld verkleinern\" class=\"resize\" src=\"img/up.png\" /> ');
+					document.write('<img onclick=\"resizeBox(\'editor\', 5, 17)\" title=\"Eingabefeld vergr&ouml;&szlig;ern\" alt=\"Eingabefeld vergr&ouml;&szlig;ern\" class=\"resize\" src=\"img/down.png\" /><br />');
 					document.write('</div>');
 					//]]>
 						

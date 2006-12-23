@@ -65,30 +65,55 @@ function preview_style()
 	dframe.src = "index.php?style=" + data.value;
 }
 
-function resizeBox(add) {
-	var textarea = document.getElementById('editor');
+/** 
+ * resizeBox
+ * 
+ * resisizes a specified Textbox
+ * @param string BoxID
+ * @param integer Add
+ * @param integer DefaultSize
+ * @return void
+ */
+function resizeBox(BoxID, Add, DefaultSize) {
+	var textarea = document.getElementById(BoxID);
 	var style = textarea.getAttribute('style');
+	
 	style = (style != null) ? style : '';
-	if(style == '' && add > 0)
-		style = 'height:22em;';
+	// If it is the IE again... (we love him...)
+	if(document.all) {
+		// check if there is something set, if not try to find a value
+		if(style.height == '' && (DefaultSize + Add) > 5)
+			style.height = (DefaultSize + Add) + 'em';
+		else if(style.height != '') {
+			// calculate the new size
+			var size = (eval(style.height.substr(0, style.height.length-2)) + Add);
+			if(size > 5)
+				style.height = size + 'em';
+		}
+		// IE ends here, nobody else will come to this position
+		return;
+	}
+	// finde a value if there is nothing set
+	if(style == '' && (DefaultSize + Add))
+		style = 'height:' + (DefaultSize + Add) + 'em;';
 	else if(style != '') {
+		// get the actual value
 		var startHeight = style.indexOf('height');
-		var endHeight = style.indexOf(';', startHeight);
-		var middleHeight = style.indexOf(':', startHeight);
+		var endHeight = style.substring(startHeight).indexOf(';');
+		var middleHeight = style.substring(startHeight).indexOf(':');
 		var length = style.length;
 		var size = style.substr(middleHeight+1, endHeight - middleHeight - 1);
 		size = size.replace(/ /,'');
 		size = size.replace(/em/,'');
-		size = eval(size) + add;
-		if(size < 17)
-			size = 17;
-		size = 'height:' + size+ 'em;';
-		style = style.substr(0, startHeight) + size + style.substr(endHeight+1,length - endHeight);
-		
+		size = eval(size) + Add;
+		if(size > 5) {
+			size = 'height:' + size+ 'em;';
+			style = style.substr(0, startHeight) + size + style.substr(endHeight+1,length - endHeight);
+		}
 	}
-	//var start_height = 
+	// set the new value
 	textarea.setAttribute('style', style);
-	//alert(textarea.rootElement.getPropertyValue('height'));
+
 }
 
 function writeButton(image, toolTip, tagOpen, tagClose, example, accessKey)

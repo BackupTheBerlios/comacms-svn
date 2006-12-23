@@ -228,14 +228,14 @@
 							" . $this->_Translation->GetTranslation('name/contraction') . ":
 							<span class=\"info\">Mit diesem K&uuml;rzel wird auf die Seite zugegriffen und dient es zur eindeutigen Identifizierung der Seite.</span>
 						</label>
-						<input type=\"text\" name=\"pageName\" maxlength=\"20\" />
+						<input type=\"text\" name=\"pageName\" maxlength=\"28\" />
 					</div>
 					<div class=\"row\">
 						<label>
 							" . $this->_Translation->GetTranslation('title') . ":
 							<span class=\"info\">Der Titel wird sp&auml;ter in der Titelleiste des Browsers angezeigt.</span>
 						</label>
-						<input type=\"text\" name=\"pageTitle\" maxlength=\"100\" />
+						<input type=\"text\" name=\"pageTitle\" maxlength=\"85\" />
 					</div>
 					<div class=\"row\">
 						<label>

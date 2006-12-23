@@ -141,7 +141,7 @@
 			// TODO: ORDER BY page_sortid
 			$sql = "SELECT *
 					FROM " . DB_PREFIX . "pages
-		 			ORDER BY page_parent_id";
+		 			ORDER BY page_title ASC";
 	 		$pageResult = $this->_SqlConnection->SqlQuery($sql);
  			while($page = mysql_fetch_object($pageResult)) {
 	 			$this->_ParentIDPages[$page->page_parent_id][] =

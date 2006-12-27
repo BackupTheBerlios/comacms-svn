@@ -1,6 +1,7 @@
 <?php
 /**
  * @package ComaCMS
+ * @subpackage AdminInterface
  * @copyright (C) 2005 The ComaCMS-Team
  */
  #----------------------------------------------------------------------

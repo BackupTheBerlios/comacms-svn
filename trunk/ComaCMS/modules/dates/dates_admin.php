@@ -16,6 +16,9 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
   	
+  	/**
+  	 * 
+  	 */
  	require_once __ROOT__ . '/classes/admin/admin_module.php';
  	require_once __ROOT__ . '/modules/dates/dates.class.php';
  	

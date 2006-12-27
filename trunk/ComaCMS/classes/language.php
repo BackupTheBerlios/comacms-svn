@@ -14,7 +14,10 @@
  # the Free Software Foundation; either version 2 of the License, or
  # (at your option) any later version.
  #----------------------------------------------------------------------
- 
+
+	/**
+	 * @package ComaCMS
+	 */
  	class Language {
  		
  		var $OutputLanguage = '';
@@ -22,7 +25,6 @@
  		
  		function Language($OutputLanguage) {
 			$this->OutputLanguage = $OutputLanguage;
-//			$this->_LangString[$this->OutputLanguage] = array();
  		}
  		
  		function AddSources($LanguageDirectory) {
@@ -32,7 +34,6 @@
  		}
  		
  		function GetTranslation($TranslationString) {
- 			
  			if(array_key_exists($TranslationString, $this->_LangString))
  				return $this->_LangString[$TranslationString];
  			else {

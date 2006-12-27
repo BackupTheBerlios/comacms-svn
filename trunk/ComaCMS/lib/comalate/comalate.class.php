@@ -21,7 +21,7 @@
   	/** Document type for XHTML transitional */
   	define('DOCTYPE_XHTML_TRANSITIONAL', 'xhtml transitional');
   	/**
-  	 * Default document type
+  	 * Default docty type
   	 * The same like DOCTYPE_XHTML_STRICT
   	 */
   	define('DOCTYPE_DEFAULT', DOCTYPE_XHTML_STRICT);
@@ -63,12 +63,39 @@
  		 */
  		var $GeneratedOutput = '';
  		
- 		var $_Meta = array(); 
+ 		/**
+ 		 * @access private
+ 		 */
+ 		var $_Meta = array();
+ 		
+ 		/**
+ 		 * @access private
+ 		 */ 
  		var $_Replacements = array();
+ 		
+ 		/**
+ 		 * @access private
+ 		 */
  		var $_ReplacementsArrays = array();
+ 		
+ 		/**
+ 		 * @access private
+ 		 */
  		var $_Conditions = array();
+ 		
+ 		/**
+ 		 * @access private
+ 		 */
  		var $_Doctype = '';	
+ 		
+ 		/**
+ 		 * @access private
+ 		 */
  		var $_CssFiles = '';
+		
+		/**
+ 		 * @access private
+ 		 */
 		var $_Config;
 		
 		/**
@@ -81,6 +108,7 @@
  		
  		/**
  		 * With this function it is possible to change the Doctype
+ 		 * @param constant $Doctype
  		 */
  		function SetDoctype($Doctype) {
  			switch ($Doctype) {
@@ -121,6 +149,10 @@
  				$this->_Conditions[$Name] = false;
  		}
  		
+ 		/**
+ 		 * @param string Name
+ 		 * @param string/array Value
+ 		 */
  		function SetReplacement($Name, $Value = '') {
  			if(is_array($Name)) {
  				foreach($Name as $replacementName => $replacementValue) {
@@ -149,6 +181,9 @@
  			$this->_CssFiles .= "\t\t<link rel=\"stylesheet\" href=\"{$File}\" type=\"text/css\" media=\"{$Media}\"/>\r\n";
  		}
  		
+ 		/**
+ 		 * @access private
+ 		 */
  		function _AddCssFiles($cssFiles, $TemplatesFolder, $TemplateName = 'default') {
  			if(!empty($cssFiles)) {
  					foreach($cssFiles as $key => $cssFile) {
@@ -184,6 +219,10 @@
  			
  		}
  		
+ 		/**
+ 		 * @param string TemplateFolder
+ 		 * @param string TemplateName
+ 		 */
  		function LoadTemplate($TemplatesFolder, $TemplateName) {
  			$config = array();
  			$TemplatesFolder .= (substr($TemplatesFolder, -1) != '/') ? '/' : ''; 
@@ -300,6 +339,7 @@
  				unset($this->_Config['conditional-css'][$Condition]);
  			}
  		}
+ 		
 		/**
 		 * @access public
 		 * @return string 

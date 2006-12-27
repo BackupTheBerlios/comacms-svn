@@ -15,17 +15,50 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
  	
+ 	/**
+ 	 * @ignore
+ 	 */
  	require_once __ROOT__ . '/functions.php';
  	require_once __ROOT__ . '/classes/imageconverter.php';
  	
+ 	/**
+ 	 * @access private
+ 	 */
  	define('LINE_STATE_NONE', 0);
+ 	/**
+ 	 * @access private
+ 	 */
  	define('LINE_STATE_TEXT', 1);
+ 	/**
+ 	 * @access private
+ 	 */
  	define('LINE_STATE_ULIST', 2);
+ 	/**
+ 	 * @access private
+ 	 */
  	define('LINE_STATE_OLIST', 3);
+ 	/**
+ 	 * @access private
+ 	 */
  	define('LINE_STATE_TABLE', 4);
+ 	/**
+ 	 * @access private
+ 	 */
  	define('LINE_STATE_HEADER', 5);
+ 	
+ 	/**
+ 	 * Do nothing with email-address-links
+ 	 */
  	define('EMAIL_DEFAULT', 0);
+ 	/**
+ 	 * Convert email-addresses into a 'text-format'
+ 	 * @ => [at]
+ 	 * . => [dot]
+ 	 */
  	define('EMAIL_ANTISPAM_TEXT', 1);
+ 	/**
+ 	 * Convert email-adresses into html-hex-entities
+ 	 */
  	define('EMAIL_ANTISPAM_ASCII', 2);
  	
  	// Constants for image aligns

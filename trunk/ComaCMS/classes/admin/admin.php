@@ -16,6 +16,9 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
  
+ 	/**
+ 	 * 
+ 	 */
  	require_once __ROOT__ . '/classes/sql.php';
  	require_once __ROOT__ . '/classes/language.php';
  	require_once __ROOT__ . '/classes/config.php';

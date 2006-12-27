@@ -99,7 +99,7 @@
 		 * @return string
 		 */
 		function _editImage($PageID) {
-			global $config, $admin_lang;
+			global $config, $translation;
 			if(!is_numeric($PageID))
 				return $this->_editOverView($PageID); 
 			$imageID = GetPostOrGet('imageID');
@@ -120,7 +120,7 @@
 		 		if($imageData = mysql_fetch_object($imageDataResult)) {
 		 			$thumbnailfoler = $config->Get('thumbnailfolder', 'data/thumbnails/');
 					$out = "\t\t\t\t<fieldset> 
-							<legend>{$admin_lang['modify_image_description']}</legend>
+							<legend>" . $translation->GetTranslation('modify_image_description') . "</legend>
 							<form action=\"admin.php\" method=\"post\">
 								<input type=\"hidden\" name=\"pageID\" value=\"{$PageID}\"/>
 								<input type=\"hidden\" name=\"page\" value=\"pagestructure\"/>
@@ -132,14 +132,14 @@
 								</div>
 								<div class=\"row\">
 									<label>
-										<strong>{$admin_lang['image_description']}:</strong>
-										<span class=\"info\">{$admin_lang['todo']}</span>
+										<strong>" . $translation->GetTranslation('image_description') . ":</strong>
+										<span class=\"info\">" . $translation->GetTranslation('todo') . "</span>
 									</label>
 									<input type=\"text\" name=\"imageDescription\" value=\"{$imageData->gallery_description}\" />
 								</div>
 								<div class=\"row\">
-									<a class=\"button\" href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID={$PageID}\">{$admin_lang['back']}</a>
-									<input class=\"button\" type=\"submit\" value=\"{$admin_lang['apply']}\" />
+									<a class=\"button\" href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID={$PageID}\">" . $translation->GetTranslation('back') . "</a>
+									<input class=\"button\" type=\"submit\" value=\"" . $translation->GetTranslation('apply') . "\" />
 								</div>
 							</form>
 						</fieldset>";
@@ -369,7 +369,7 @@
 		 * @return string 
 		 */
 		function _editRemoveImage($page_id) {
-			global $admin_lang;
+			global $translation;
 					
 			$out = '';
 			$image_id = GetPostOrGet('imageID');
@@ -397,8 +397,8 @@
 				$image = mysql_fetch_object($image_result);
 				$out .= "<img src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" />
 					M&ouml;chten sie das Bild wirklich aus der Galerie entfernen?<br />
-					<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=removeImage&amp;imageID=$image_id&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
-		 			<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>
+					<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=removeImage&amp;imageID=$image_id&amp;sure=1\" class=\"button\">" . $translation->GetTranslation('yes') . "</a>
+		 			<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id\" class=\"button\">" . $translation->GetTranslation('no') . "</a>
 					";
 			}
 			return $out;			
@@ -409,7 +409,7 @@
 		 * @return string 
 		 */
 		function _editOverView($page_id) {
-			global $admin_lang;
+			global $translation;
 			
 			$out = '';
 			$sql = "SELECT page.*, gallery.*
@@ -426,7 +426,7 @@
 				<input type=\"hidden\" name=\"pageID\" value=\"$page_data->page_id\" />
 				<table>
 				<tr><td>Titel:</td><td><input name=\"pageTitle\" value=\"$page_data->page_title\"/></td></tr>
-				<tr><td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"" . $admin_lang['apply'] . "\"/><input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\"/></td></tr>
+				<tr><td colspan=\"2\"><input type=\"submit\" class=\"button\" value=\"" . $translation->GetTranslation('apply') . "\"/></td></tr>
 				</table>
 				</form>
 				<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;action2=addNewImageDialog&amp;pageID=$page_id\" class=\"button\">Bilder hinzuf&uuml;gen</a>";
@@ -454,10 +454,10 @@
 						<img style=\"margin-top:{$margin_top}px;margin-bottom:{$margin_bottom}px;width:{$sizes[0]}px;height:{$sizes[1]}px;\" src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"{$image->gallery_description}\" title=\"{$image->gallery_description}\" /></a>
 						
 						<div class=\"actions\">
-						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=moveImageUp&amp;imageID=$image->gallery_file_id\"><img src=\"./img/up.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_up'] . "\" title=\"" . $admin_lang['move_up'] . "\"/></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=editImage&amp;imageID=$image->gallery_file_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"{$admin_lang['edit']}\" title=\"{$admin_lang['edit']}\"/></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=removeImage&amp;imageID=$image->gallery_file_id\"><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=moveImageDown&amp;imageID=$image->gallery_file_id\"><img src=\"./img/down.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['move_down'] . "\" title=\"" . $admin_lang['move_down'] . "\"/></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=moveImageUp&amp;imageID=$image->gallery_file_id\"><img src=\"./img/up.png\" height=\"16\" width=\"16\" alt=\"" . $translation->GetTranslation('move_up') . "\" title=\"" . $translation->GetTranslation('move_up') . "\"/></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=editImage&amp;imageID=$image->gallery_file_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $translation->GetTranslation('edit') . "\" title=\"" . $translation->GetTranslation('edit') . "\"/></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=removeImage&amp;imageID=$image->gallery_file_id\"><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $translation->GetTranslation('delete') . "\" title=\"" . $translation->GetTranslation('delete') . "\"/></a>
+						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page_id&amp;action2=moveImageDown&amp;imageID=$image->gallery_file_id\"><img src=\"./img/down.png\" height=\"16\" width=\"16\" alt=\"" . $translation->GetTranslation('move_down') . "\" title=\"" . $translation->GetTranslation('move_down') . "\"/></a>
 						</div></div>";
 					}
 				}

@@ -190,7 +190,7 @@
   					if(array_key_exists($uploadPath . $entry, $md5s)) {
   						// is it the same file we found?
   						if(md5_file($uploadPath . $entry) != $md5s[$uploadPath . $entry])
-  							$out .= "<div class=\"row\"><label><strong>" . $this->_Translation->GetTranslation('refresh_database_entry') . ":</strong> <span class=\"info\">" . $this->_AdminLang('this_insnt_the_file_which_is_registered_as_a_database_entry_under_this_name') . "</span></label><input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($uploadPath . $entry)) ."\" checked=\"checked\" /> &quot;" . utf8_encode($entry) . "&quot;</div>\r\n";
+  							$out .= "<div class=\"row\"><label><strong>" . $this->_Translation->GetTranslation('refresh_database_entry') . ":</strong> <span class=\"info\">" . $this->_Translation->GetTranslation('this_insnt_the_file_which_is_registered_as_a_database_entry_under_this_name') . "</span></label><input type=\"checkbox\" name=\"change[]\" value=\"" . rawurlencode(utf8_encode($uploadPath . $entry)) ."\" checked=\"checked\" /> &quot;" . utf8_encode($entry) . "&quot;</div>\r\n";
   					}
   					// the file doesn't exist in the database
   					else

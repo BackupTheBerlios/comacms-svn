@@ -28,15 +28,6 @@
 	 */
 	class Module_News extends Module{
 		
-		function Module_News(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
- 			$this->_SqlConnection = &$SqlConnection;
- 			$this->_User = &$User;
- 			$this->_Config = &$Config;
- 			$this->_Lang = &$Lang;
- 			$this->_ComaLate = &$ComaLate;
- 			$this->_ComaLib = &$ComaLib;
- 		}
- 		
  		function UseModule($Identifer, $Parameters) {
  			// default parameter
  			$count = 6;

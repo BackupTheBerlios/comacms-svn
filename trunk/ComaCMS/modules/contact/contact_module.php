@@ -25,16 +25,7 @@
 	 * @package ComaCMS
 	 * @subpackage News 
 	 */
-	class Module_Contact extends Module{
-		
-		function Module_Contact(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
- 			$this->_SqlConnection = &$SqlConnection;
- 			$this->_User = &$User;
- 			$this->_Config = &$Config;
- 			$this->_Lang = &$Lang;
- 			$this->_ComaLate = &$ComaLate;
- 			$this->_ComaLib = &$ComaLib;
- 		}
+	class Module_Contact extends Module {
  		
  		function UseModule($Identifer, $Parameters) {
  			
@@ -49,7 +40,7 @@
  				$$parameter[0] = $parameter[1];
  			}
  			if(!isEMailAddress($mailTo))
- 				return $this->_Lang['no_valid_reciever_email_address'];
+ 				return $this->_Translation->GetTranslation('no_valid_reciever_email_address');
  			$output = '';
  			$action = GetPostOrGet('action');
  			// if the mail should be sended
@@ -67,23 +58,23 @@
  			$output = "</p><form action=\"#\" method=\"post\">
  						<input type=\"hidden\" name=\"page\" value=\"" . GetPostOrGet('page') . "\" />
  						<input type=\"hidden\" name=\"action\" value=\"send\" />
- 					<fieldset><legend>{$this->_Lang['contact']}</legend>";
+ 					<fieldset><legend>" . $this->_Translation->GetTranslation('contact') . "</legend>";
  			$output .= "<div class=\"row\">
- 							<label class=\"row\" for=\"contact_mail_from_name\"><strong>{$this->_Lang['name']}:</strong>
+ 							<label class=\"row\" for=\"contact_mail_from_name\"><strong>" . $this->_Translation->GetTranslation('name') . ":</strong>
  									" . (($NameError != '') ? '<span class="info error">'.$NameError.'</span>' : '') . "
  								</label>
  								<input id=\"contact_mail_from_name\" name=\"contact_mail_from_name\" value=\"{$MailFromName}\" type=\"text\" /></div>\n";
  			$output .= "<div class=\"row\">
- 							<label class=\"row\" for=\"contact_mail_from\"><strong>{$this->_Lang['email']}:</strong>
+ 							<label class=\"row\" for=\"contact_mail_from\"><strong>" . $this->_Translation->GetTranslation('email') . ":</strong>
  									" . (($MailError != '') ? '<span class="info error">'.$MailError.'</span>' : '') . "
  								</label>
  								<input id=\"contact_mail_from\" name=\"contact_mail_from\" type=\"text\" value=\"{$MailFrom}\" /></div>\n";
  			$output .= "<div class=\"row\">
- 							<label class=\"row\" for=\"contact_message\"><strong>{$this->_Lang['message']}:</strong>
+ 							<label class=\"row\" for=\"contact_message\"><strong>" . $this->_Translation->GetTranslation('message') . ":</strong>
  									" . (($MessageError != '') ? '<span class="info error">'.$MessageError.'</span>' : '') . "
  								</label>
  								<textarea id=\"contact_message\" name=\"contact_message\">{$Message}</textarea></div>\n";
- 			$output .= "<div class=\"row\"><input type=\"submit\" class=\"button\" value=\"{$this->_Lang['send']}\"/></div>";
+ 			$output .= "<div class=\"row\"><input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('send') . "\"/></div>";
 			$output .= "</fieldset></form><p>";
 			return $output;
  		}
@@ -97,19 +88,19 @@
  			$mailError = '';
  			// no email
  			if($mailFrom == '')
- 				$mailError = $this->_Lang['the_email_address_must_be_indicated'];
+ 				$mailError = $this->_Translation->GetTranslation('the_email_address_must_be_indicated');
  			// invalid email
  			else if(!isEMailAddress($mailFrom))
- 				$mailError = $this->_Lang['this_is_a_invalid_email_address'];
+ 				$mailError = $this->_Translation->GetTranslation('this_is_a_invalid_email_address');
 
  			$nameError = '';
  			// empty name
  			if($mailFromName == '')
- 				$nameError = $this->_Lang['the_name_must_be_indicated'];
+ 				$nameError = $this->_Translation->GetTranslation('the_name_must_be_indicated');
  			$messageError = '';
  			// empty message
  			if($message == '')
- 				$messageError = $this->_Lang['please_enter_your_message'];
+ 				$messageError = $this->_Translation->GetTranslation('please_enter_your_message');
  			// if no errors occured
  			if($nameError == '' && $mailError == '' && $messageError == ''){
 				// who is the 'real' sender
@@ -117,16 +108,16 @@
  				// the information about the sender
  				$fromInfo = $mailFromName . ' <' . $mailFrom . '>';
  				// the title of the message
- 				$title = sprintf($this->_Lang['new_email_from_a_visitor_of_%homepage%'], $this->_Config->Get('pagename', 'homepage'));
+ 				$title = sprintf($this->_Translation->GetTranslation('new_email_from_a_visitor_of_%homepage%'), $this->_Config->Get('pagename', 'homepage'));
 				//generate the message
-				$messageContent = sprintf($this->_Lang['contact_message_%from%_%message'], $fromInfo, $message);
+				$messageContent = sprintf($this->_Translation->GetTranslation('contact_message_%from%_%message'), $fromInfo, $message);
 				
-				$output = "</p><fieldset><legend>{$this->_Lang['contact']}</legend>";
+				$output = "</p><fieldset><legend>" . $this->_Translation->GetTranslation('contact') . "</legend>";
 				// try to send the email
 				if(sendmail($MailTo, $from, $title, $messageContent))
- 					$output .= $this->_Lang['your_message_was_sent_succesdfully'];
+ 					$output .= $this->_Translation->GetTranslation('your_message_was_sent_succesdfully');
  				else // TODO: try to give some hints what to do 
- 					$output .= $this->_Lang['an_error_occured_on_sending_this_message'];
+ 					$output .= $this->_Translation->GetTranslation('an_error_occured_on_sending_this_message');
  				$output .= '</fieldset><p>';
  				return $output;
  			}

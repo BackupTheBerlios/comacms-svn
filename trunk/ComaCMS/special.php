@@ -64,7 +64,7 @@
 		</form>";
 	}
 	elseif($page == 'register') {
-		$Registration = new Registration($sqlConnection, $admin_lang, $config);
+		$Registration = new Registration($sqlConnection, $translation, $config);
 		$title = 'Registration';
 		$text = $Registration->GetPage(GetPostOrGet('action'));
 	}
@@ -112,9 +112,9 @@
 			// is the module-class available?
 			if(class_exists('Module_' . $moduleName)) {
 				// create a link to the initialisation-function for the module-class
-				$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');
+				$newClass = create_function('&$SqlConnection, &$User, &$Translation, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Translation, &$Config, &$ComaLate, &$ComaLib);');
 				// create the module-class
-				$$moduleName = $newClass($sqlConnection, $user, $admin_lang, $config, $output, $lib);
+				$$moduleName = $newClass($sqlConnection, $user, $translation, $config, $output, $lib);
 			}
 		}
 		// check again if the module-class is available (it should be so)
@@ -122,7 +122,7 @@
 			// Get Text of the module
 			$text = $$moduleName->GetPage(GetPostOrGet('action'));
 			$title = $$moduleName->GetTitle();
-			$path = "<a href=\"special.php?page={$extern_page}&amp;moduleName={$moduleName}\">{$title}</a>";
+			$path = "<a href=\"special.php?page={$page}&amp;moduleName={$moduleName}\">{$title}</a>";
 		}
 	}
 	if($text == '') {
@@ -179,9 +179,9 @@
 			// is the module-class available?
 			if(class_exists('Module_' . $moduleName)) {
 				// create a link to the initialisation-function for the module-class
-				$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');
+				$newClass = create_function('&$SqlConnection, &$User, &$Translation, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Translation, &$Config, &$ComaLate, &$ComaLib);');
 				// create the module-class
-				$$moduleName = $newClass($sqlConnection, $user, $admin_lang, $config, $output, $lib);
+				$$moduleName = $newClass($sqlConnection, $user, $translation, $config, $output, $lib);
 			}
 		}
 		// check again if the module-class is available (it should be so)
@@ -217,9 +217,9 @@
 			// is the module-class available?
 			if(class_exists('Module_' . $moduleName)) {
 				// create a link to the initialisation-function for the module-class
-				$newClass = create_function('&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib);');
+				$newClass = create_function('&$SqlConnection, &$User, &$Translation, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Translation, &$Config, &$ComaLate, &$ComaLib);');
 				// create the module-class
-				$$moduleName = $newClass($sqlConnection, $user, $admin_lang, $config, $output, $lib);
+				$$moduleName = $newClass($sqlConnection, $user, $translation, $config, $output, $lib);
 			}
 		}
 		// check again if the module-class is available (it should be so)

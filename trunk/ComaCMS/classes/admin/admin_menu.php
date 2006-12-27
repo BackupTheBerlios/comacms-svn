@@ -28,7 +28,6 @@
 	 
 	class Admin_Menu extends Admin{
 	 	
-	 	
 	 	/**
 	 	 * Menufunktions
 	 	 * @access private
@@ -37,11 +36,6 @@
 	 	var $_Menu;
 	 	
 	 	
-	 	/*function Admin_Menu($SqlConnection, $AdminLang) {
-	 		$this->_SqlConnection = $SqlConnection;
-	 		$this->_AdminLang = $AdminLang;
-	 		$this->_Menu = new Menu($this->_SqlConnection);
-	 	}*/
 	 	function _Init() {
 	 		$this->_Menu = new Menu($this->_SqlConnection);
 	 	}
@@ -117,7 +111,6 @@
 	 	 * @return string The ready HTML Code of the menu HomePage
 	 	 */
 	 	function _HomePage($Menu_menuid = 1) {
-	 		//$adminLang = $this->_AdminLang;
 	 		$menu_name = '';
 	 		
 	 		if (!is_numeric($Menu_menuid))
@@ -270,7 +263,6 @@
 	 	 */
 	 	function _EditMenuEntry($Menu_entry_id, $Menu_entry_menuid, $Menu_name) {
 	 		$out = '';
-	 		$adminLang = $this->_AdminLang;
 	 		$pageStructure = new Pagestructure($this->_SqlConnection, null);
 	 		$pageStructure->LoadParentIDs();
 	 		
@@ -345,7 +337,6 @@
 	 	 */
 	 	function _DeleteMenuEntry($Menu_entry_id, $Menu_entry_menuid = 1, $Menu_name = 'DEFAULT') {
 	 		$out = '';
-	 		$adminLang = $this->_AdminLang;
 	 		
 	 		$sql = "SELECT *
 	 			FROM " . DB_PREFIX . "menu_entries
@@ -367,7 +358,7 @@
 	 	 */
 	 	function _AddMenu() {
 	 		$out = '';
-	 		$adminLang = $this->_AdminLang;
+	 		
 	 		
 	 		$out .= "\r\n\t\t\t<fieldset>
 				<legend>Ein neues Men&uuml; hinzuf&uuml;gen</legend>
@@ -453,7 +444,7 @@
 	 	 */
 	 	function _deleteMenu($Menu_menuid, $Menu_name) {
 	 		$out = '';
-	 		$adminLang = $this->_AdminLang;
+
 	 		
 	 		if (is_numeric($Menu_menuid) && $Menu_name != 'DEFAULT') {
 	 			$sql = "SELECT *

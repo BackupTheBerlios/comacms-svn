@@ -48,7 +48,7 @@
 		}
 	
 		function Save($page_id) {
-			global $user, $admin_lang;
+			global $user, $translation;
 			$page_edit_comment = GetPostOrGet('pageEditComment');
 			$page_title = GetPostOrGet('pageTitle');
 			$page_text = GetPostOrGet('pageText');
@@ -66,6 +66,8 @@
 				WHERE struct.page_id='$page_id' AND struct.page_type='text'";
 				$old_result = db_result($sql);
 				$html =  TextActions::ConvertToPreHTML($page_text);
+				$html = MakeSecure($html);
+				$page_text = MakeSecure($page_text);
 				if($old = mysql_fetch_object($old_result)) { // exists the page?
 					if($old->page_title != $page_title || MakeSecure($old->text_page_html) != $html) {
 						if(!($page_title == $old->page_title && $old->text_page_text == '')) {					
@@ -73,11 +75,12 @@
 								VALUES($old->page_id, '$old->page_type', '$old->page_name', '$old->page_title', $old->page_parent_id, '$old->page_lang', $old->page_creator, $old->page_date, '$old->page_edit_comment')";
 							db_result($sql);
 							$lastid = mysql_insert_id();
+							$oldText = MakeSecure($old->text_page_text);
 							$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, text_page_text)
-								VALUES ($lastid, '$old->text_page_text')";
+								VALUES ($lastid, '$oldText')";
 							db_result($sql);
 						}
-						//$html =  TextActions::ConvertToPreHTML($page_text);
+						
 						$sql = "UPDATE " . DB_PREFIX . "pages_text
 							SET text_page_text='$page_text', text_page_html='$html'
 							WHERE page_id='$old->page_id'";
@@ -96,7 +99,7 @@
 				}
 				else { // it dosen't
 					// TODO: Show it to the user
-					return "error2!!";
+					return "error2!!(Seite existiert nicht!)";
 				}
 			}
 			else
@@ -133,7 +136,7 @@
 								SET text_page_text='$old->text_page_text', text_page_html='$html'
 								WHERE page_id='$page_id'";
 							db_result($sql);
-							$page_edit_comment = sprintf($admin_lang['restored_from_version'], $change);
+							$page_edit_comment = sprintf($translation->GetTranslation('restored_from_version'), $change);
 							$sql = "UPDATE " . DB_PREFIX . "pages
 								SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$old->page_title', page_edit_comment='$page_edit_comment'
 								WHERE page_id=$page_id";
@@ -143,8 +146,8 @@
 						else {
 							$out = '';
 							$out .= "M&ouml;chten Sie diesen Text:<pre class=\"code\">$actual->text_page_text</pre>wirklich durch diesen Text:<pre class=\"code\">$old->text_page_text</pre>ersetzen?<br />
-								<a href=\"admin.php?page=pagestructure&amp;action=savePage&amp;pageID=$page_id&amp;change=$change&amp;sure=1\" class=\"button\">" . $admin_lang['yes'] . "</a>
-		 						<a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page_id\" class=\"button\">" . $admin_lang['no'] . "</a>";
+								<a href=\"admin.php?page=pagestructure&amp;action=savePage&amp;pageID=$page_id&amp;change=$change&amp;sure=1\" class=\"button\">" . $translation->GetTranslation('yes') . "</a>
+		 						<a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page_id\" class=\"button\">" . $translation->GetTranslation('no') . "</a>";
 							return $out;
 							
 						}
@@ -156,7 +159,7 @@
 		}
 		
 		function Edit($page_id, $title = '', $text = '', $edit_comment = '') {
-			global $_SERVER, $admin_lang;
+			global $_SERVER, $translation;
 			
 			$change = GetPostOrGet('change');
 			$count = 1;
@@ -201,7 +204,7 @@
 				else {
 					$page_title = $page_data->page_title;
 					$page_text = $page_data->text_page_text;
-					$page_edit_comment = $admin_lang['edited'] . '...';
+					$page_edit_comment = $translation->GetTranslation('edited') . '...';
 					$show_preview = false;
 				}
 				$page_text = str_replace('&', '&amp;', $page_text);
@@ -241,7 +244,7 @@
 					//]]>
 						
 				</script>
-				{$admin_lang['comment_on_change']}: <input name=\"pageEditComment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($admin_lang['edited_from_version'], $change) : $page_edit_comment)) . "\" maxlength=\"100\" type=\"text\"/><br />
+				" . $translation->GetTranslation('comment_on_change') . ": <input name=\"pageEditComment\" style=\"width:20em;\" value=\"" .  (($count == 0 ) ? $page_data->page_edit_comment : ((is_numeric($change)) ?  sprintf($translation->GetTranslation('edited_from_version'), $change) : $page_edit_comment)) . "\" maxlength=\"100\" type=\"text\"/><br />
 				<input type=\"submit\" value=\"Speichern\" class=\"button\" />
 				<input type=\"submit\" value=\"Vorschau\" name=\"pagePreview\" class=\"button\" />
 				<input type=\"submit\" value=\"Abbrechen\" name=\"pageAbort\" class=\"button\"/>

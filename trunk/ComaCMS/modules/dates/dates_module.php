@@ -28,16 +28,7 @@
 	 */
 	class Module_Dates extends Module{
 		
-		function Module_Articles(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
- 			$this->_SqlConnection = &$SqlConnection;
- 			$this->_User = &$User;
- 			$this->_Config = &$Config;
- 			$this->_Lang = &$Lang;
- 			$this->_ComaLate = &$ComaLate;
- 			$this->_ComaLib = &$ComaLib;
- 		}
- 		
- 		function UseModule($Identifer, $Parameters) {
+		function UseModule($Identifer, $Parameters) {
  			$Parameters = explode('&', $Parameters);
  			$all= false;
  			$count = 6;
@@ -61,13 +52,13 @@
 				<thead>
 					<tr>
 						<th class=\"table_date_width\">
-							{$this->_Lang['date']}
+							" . $this->_Translation->GetTranslation('date') . "
 						</th>
 						<th class=\"small_width\">
-							{$this->_Lang['location']}
+							" . $this->_Translation->GetTranslation('location') . "
 						</th>
 						<th>
-							{$this->_Lang['topic']}
+							" . $this->_Translation->GetTranslation('topic') . "
 						</th>
 					</tr>
 				</thead>

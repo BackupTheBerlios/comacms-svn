@@ -26,15 +26,6 @@
 	 * @subpackage Articles 
 	 */
 	class Module_Articles extends Module{
-		
-		function Module_Articles(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
- 			$this->_SqlConnection = &$SqlConnection;
- 			$this->_User = &$User;
- 			$this->_Config = &$Config;
- 			$this->_Lang = &$Lang;
- 			$this->_ComaLate = &$ComaLate;
- 			$this->_ComaLib = &$ComaLib;
- 		}
  		
  		function UseModule($Identifer, $Parameters) {
  			$Parameters = explode('&', $Parameters);

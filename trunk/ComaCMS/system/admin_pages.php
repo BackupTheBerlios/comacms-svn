@@ -24,7 +24,7 @@
  *
  */
 	function page_users() {
-		global $_GET, $_POST, $PHP_SELF, $admin_lang, $actual_user_id, $actual_user_passwd_md5,$actual_user_online_id, $actual_user_online_id, $_SERVER, $user;
+		global $_GET, $_POST, $PHP_SELF, $translation, $actual_user_id, $actual_user_passwd_md5,$actual_user_online_id, $actual_user_online_id, $_SERVER, $user;
 	
 		$out  ="";
 	
@@ -115,8 +115,8 @@
 					$result = db_result($sql);
 					$user = mysql_fetch_object($result);
 					$out .= "Den Benutzer &quot;" . $user->user_showname . "&quot; unwiederruflich l&ouml;schen?<br />
-				<a href=\"admin.php?page=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich L&ouml;schen\" class=\"button\">" . $admin_lang['yes'] . "</a>
-				<a href=\"admin.php?page=users\" title=\"Nicht L&ouml;schen\" class=\"button\">" . $admin_lang['no'] . "</a>";
+				<a href=\"admin.php?page=users&amp;action=delete&amp;user_id=" . $user_id . "&amp;sure=1\" title=\"Wirklich L&ouml;schen\" class=\"button\">" . $translation->GetTranslation('yes') . "</a>
+				<a href=\"admin.php?page=users\" title=\"Nicht L&ouml;schen\" class=\"button\">" . $translation->GetTranslation('no') . "</a>";
 					
 					return $out;
 				}
@@ -234,9 +234,9 @@
 						<div class=\"row\">
 							<input type=\"submit\" class=\"button\" value=\"";
 							if($action == "new")
-								$out .= $admin_lang['create'];
+								$out .= $translation->GetTranslation('create');
 							else
-								$out .= $admin_lang['save'];
+								$out .= $translation->GetTranslation('save');
 						$out .= "\" />
 						</div>
 				</fieldset>
@@ -247,7 +247,7 @@
 			}
 			$out .= "\t\t\t<table class=\"text_table full_width\">
 				<tr>
-					<th>" . $admin_lang['name'] . "</th>
+					<th>" . $translation->GetTranslation('name') . "</th>
 					<th>K&uuml;rzel</th>
 					<th>Email</th>
 					<th>Admin</th>
@@ -263,16 +263,16 @@
 					<td>$user_db->user_email</td>
 					<td>";
 					if($user_db->user_admin == 'y')
-						$out .= $admin_lang['yes'];
+						$out .= $translation->GetTranslation('yes');
 					else
-						$out .= $admin_lang['no'];
+						$out .= $translation->GetTranslation('no');
 					$out .= "</td>
-					<td><a href=\"".$PHP_SELF."?page=users&amp;action=edit&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>";
+					<td><a href=\"".$PHP_SELF."?page=users&amp;action=edit&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $translation->GetTranslation('edit') . "\" title=\"" . $translation->GetTranslation('edit') . "\"/></a>";
 					
 					if($user->ID == $user_db->user_id)
 						$out .= "&nbsp;";
 					else
-						$out .= "<a href=\"".$PHP_SELF."?page=users&amp;action=delete&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>";
+						$out .= "<a href=\"".$PHP_SELF."?page=users&amp;action=delete&amp;user_id=".$user_db->user_id."\" ><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\"" . $translation->GetTranslation('delete') . "\" title=\"" . $translation->GetTranslation('delete') . "\"/></a>";
 					$out .= "</td>
 				</tr>\r\n";
 			}

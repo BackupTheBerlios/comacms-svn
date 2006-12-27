@@ -18,7 +18,8 @@
 	/**
 	 * 
 	 */
-	require_once ('classes/page.php');
+	require_once __ROOT__ . '/classes/page.php';
+	require_once __ROOT__ . '/classes/textactions.php';
 	
 	/**
 	 * @package ComaCMS
@@ -34,20 +35,20 @@
 		 * @param integer page_id
 		 * @param integer change
 		 */
-		function TextPage($page_id, $change = 0) {
-			if(empty($page_id))
+		function TextPage($PageID, $change = 0) {
+			if(empty($PageID))
 				return;
 			if($change == 0)
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "pages_text
-					WHERE page_id = $page_id";
+				$sql = 'SELECT text_page_text, text_page_html
+					FROM ' . DB_PREFIX . 'pages_text
+					WHERE page_id = ' . $PageID;
 			else
-				$sql = "SELECT *
-					FROM (" . DB_PREFIX . "pages_history page
-					LEFT JOIN " . DB_PREFIX . "pages_text_history text ON text.page_id = page.id ) 
-					WHERE page.page_id=$page_id
+				$sql = 'SELECT text
+					FROM (' . DB_PREFIX . 'pages_history page
+					LEFT JOIN ' . DB_PREFIX . 'pages_text_history text ON text.page_id = page.id ) 
+					WHERE page.page_id=' . $PageID . '
 					ORDER BY  page.page_date ASC
-					LIMIT " . ($change - 1) . ",1";
+					LIMIT ' . ($change - 1) . ',1';
 			if($page_result = db_result($sql)) {
 				$page = mysql_fetch_object($page_result);
 				if($change == 0) {
@@ -57,7 +58,7 @@
 				else
 				{
 					$this->Text = $page->text_page_text;
-					$this->HTML = convertToPreHtml($page->text_page_text);
+					$this->HTML = TextActions::ConvertToPreHtml($page->text_page_text);
 				}
 			}
 		}

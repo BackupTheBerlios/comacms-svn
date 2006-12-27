@@ -27,15 +27,15 @@
  		
  		/**
  		 * @access private
- 		 * @var SqlConnection
+ 		 * @var SqlConnection 
  		 */
  		var $_SqlConnection;
  		
  		/**
  		 * @access private
- 		 * @var AdminLang
+ 		 * @var Language
  		 */
- 		var $_AdminLang;
+ 		var $_Translation;
  		
  		/**
  		 * @access private
@@ -47,13 +47,13 @@
  		 * Initializes the Registration class
  		 * @access public
  		 * @param SqlConnection SqlConnection Connection to the MysqlDatabase
- 		 * @param array AdminLang Array with texts in the language of the current user
+ 		 * @param Language Translation
  		 * @param config Config Access to the Configurations
  		 * @return void
  		 */
-	 	function Registration(&$SqlConnection, &$AdminLang, &$Config) {
+	 	function Registration(&$SqlConnection, &$Translation, &$Config) {
 			$this->_SqlConnection = &$SqlConnection;
-			$this->_AdminLang = &$AdminLang;
+			$this->_Translation = &$Translation;
 			$this->_Config = &$Config;
 		}
 		
@@ -113,42 +113,42 @@
 							<legend>Registrieren</legend>
 							<div class=\"row\">
 								<label for=\"showname\">
-									<strong>{$this->_AdminLang['name']}:</strong>" . (($ShownameError != '') ? "\r\n\t\t\t\t\t\t\t\t\t<span class=\"error\">{$ShownameError}</span>\r\n\t\t\t\t\t\t\t\t\t" : '') . "
-									<span class=\"info\">{$this->_AdminLang['the_name_that_is_displayed_if_the_user_writes_a_news_for_example']}</span>
+									<strong>" . $this->_Translation->GetTranslation('name') . ":</strong>" . (($ShownameError != '') ? "\r\n\t\t\t\t\t\t\t\t\t<span class=\"error\">{$ShownameError}</span>\r\n\t\t\t\t\t\t\t\t\t" : '') . "
+									<span class=\"info\">" . $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example') . "</span>
 								</label>
 								<input type=\"text\" name=\"showname\" id=\"showname\" value=\"{$Showname}\" />
 							</div>
 							<div class=\"row\">
 								<label for=\"name\">
-									<strong>{$this->_AdminLang['loginname']}:</strong>" . (($NameError != '') ? "\r\n\t\t\t\t\t\t\t\t\t<span class=\"error\">{$NameError}</span>\r\n\t\t\t\t\t\t\t\t\t" : '') . "
-									<span class=\"info\">{$this->_AdminLang['with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name']}</span>
+									<strong>" . $this->_Translation->GetTranslation('loginname') . ":</strong>" . (($NameError != '') ? "\r\n\t\t\t\t\t\t\t\t\t<span class=\"error\">{$NameError}</span>\r\n\t\t\t\t\t\t\t\t\t" : '') . "
+									<span class=\"info\">" . $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name') . "</span>
 								</label>
 								<input type=\"text\" name=\"name\" id=\"name\" value=\"{$Name}\" />
 							</div>
 							<div class=\"row\">
 								<label for=\"email\">
-									<strong>{$this->_AdminLang['email']}:</strong>" . (($EmailError != '') ? "\r\n\t\t\t\t\t\t\t\t\t<span class=\"error\">{$EmailError}</span>\r\n\t\t\t\t\t\t\t\t\t" : '') . "
-									<span class=\"info\">{$this->_AdminLang['using_the_email_address_the_user_is_contacted_by_the_system']}</span>
+									<strong>" . $this->_Translation->GetTranslation('email') . ":</strong>" . (($EmailError != '') ? "\r\n\t\t\t\t\t\t\t\t\t<span class=\"error\">{$EmailError}</span>\r\n\t\t\t\t\t\t\t\t\t" : '') . "
+									<span class=\"info\">" . $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system') . "</span>
 								</label>
 								<input type=\"text\" name=\"email\" id=\"email\" value=\"{$Email}\" />
 							</div>
 							<div class=\"row\">
 								<label for=\"password\">
-									<strong>{$this->_AdminLang['password']}:</strong>" . (($PasswordError != '') ? "\r\n\t\t\t\t\t\t\t\t\t<span class=\"error\">{$PasswordError}</span>\r\n\t\t\t\t\t\t\t\t\t" : '') . "
-									<span class=\"info\">{$this->_AdminLang['with_this_password_the_user_can_login_to_restricted_areas']}</span>
+									<strong>" . $this->_Translation->GetTranslation('password') . ":</strong>" . (($PasswordError != '') ? "\r\n\t\t\t\t\t\t\t\t\t<span class=\"error\">{$PasswordError}</span>\r\n\t\t\t\t\t\t\t\t\t" : '') . "
+									<span class=\"info\">" . $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas') . "</span>
 								</label>
 								<input type=\"password\" name=\"password\" id=\"password\" />
 							</div>
 							<div class=\"row\">
 								<label for=\"password_repetition\">
-									<strong>{$this->_AdminLang['password_repetition']}:</strong>
-									<span class=\"info\">{$this->_AdminLang['it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input']}</span>
+									<strong>" . $this->_Translation->GetTranslation('password_repetition') . ":</strong>
+									<span class=\"info\">" . $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input') . "</span>
 								</label>
 								<input type=\"password\" name=\"password_repetition\" id=\"password_repetition\" />
 							</div>
 							<div class=\"row\">
-								<input type=\"reset\" class=\"button\" value=\"{$this->_AdminLang['reset']}\" />
-								<input type=\"submit\" class=\"button\" value=\"{$this->_AdminLang['save']}\" />
+								<input type=\"reset\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('reset') . "\" />
+								<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('save') . "\" />
 							</div>
 						</fieldset>
 					</form>";
@@ -177,7 +177,7 @@
 			
 			// Check the registrationfields for common errors and write them to the error variables
 			if ($Showname == '') {
-				$ShownameError = $this->_AdminLang['the_name_must_be_indicated'];
+				$ShownameError = $this->_Translation->GetTranslation('the_name_must_be_indicated');
 				$fehlerfrei = false;
 			}
 			else {
@@ -188,12 +188,12 @@
 					LIMIT 0 , 1";
 				$result = $this->_SqlConnection->SqlQuery($sql);
 				if (mysql_num_rows($result) == 1) {
-					$ShownameError = $this->_AdminLang['the_name_is_already_assigned'];
+					$ShownameError = $this->_Translation->GetTranslation('the_name_is_already_assigned');
 					$fehlerfrei = false;
 				}
 			}
 			if ($Name == '') {
-				$NameError = $this->_AdminLang['the_nickname_must_be_indicated'];
+				$NameError = $this->_Translation->GetTranslation('the_nickname_must_be_indicated');
 				$fehlerfrei = false;
 			}
 			else {
@@ -204,12 +204,12 @@
 					LIMIT 0 , 1";
 				$result = $this->_SqlConnection->SqlQuery($sql);
 				if (mysql_num_rows($result) == 1) {
-					$NameError = $this->_AdminLang['the_nickname_is_already_assigned'];
+					$NameError = $this->_Translation->GetTranslation('the_nickname_is_already_assigned');
 					$fehlerfrei = false;
 				}
 			}
 			if ($Email == '') {
-				$EmailError = $this->_AdminLang['the_email_address_must_be_indicated'];
+				$EmailError = $this->_Translation->GetTranslation('the_email_address_must_be_indicated');
 				$fehlerfrei = false;
 			}
 			else {
@@ -221,22 +221,22 @@
 						LIMIT 0 , 1";
 					$result = $this->_SqlConnection->SqlQuery($sql);
 					if (mysql_num_rows($result) >= 1) {
-						$EmailError = $this->_AdminLang['the_email_is_already_assigned_to_another_user'];
+						$EmailError = $this->_Translation->GetTranslation('the_email_is_already_assigned_to_another_user');
 						$fehlerfrei = false;
 					}
 				}
 				else {
 					// If its not a real emailaddress throw exception
-					$EmailError = $this->_AdminLang['this_is_a_invalid_email_address'];
+					$EmailError = $this->_Translation->GetTranslation('this_is_a_invalid_email_address');
 					$fehlerfrei = false;
 				}
 			}
 			if ($Password == '' || $Password_repetition == '') {
-				$PasswordError = $this->_AdminLang['none_of_the_passwordfields_must_not_be_empty'];
+				$PasswordError = $this->_Translation->GetTranslation('none_of_the_passwordfields_must_not_be_empty');
 				$fehlerfrei = false;
 			}
 			elseif ($Password != $Password_repetition) {
-				$PasswordError = $this->_AdminLang['the_password_and_its_repetition_are_unequal'];
+				$PasswordError = $this->_Translation->GetTranslation('the_password_and_its_repetition_are_unequal');
 				$fehlerfrei = false;
 			}
 			
@@ -255,16 +255,16 @@
 					$activationCode = md5($Showname . $registrationTime . $Email);
 					
 					// Send mail with registrationcode and logindata to the user
-					$title = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
-					$message = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_%5\$s:ActivationCode'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email, $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'], $activationCode);
+					$title = $this->_Translation->GetTranslation('activation_of_your_new_accout_at') . $this->_Config->Get('pagename', 'ComaCMS');
+					$message = sprintf($this->_Translation->GetTranslation('welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_%5\$s:ActivationCode'), $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email, $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'], $activationCode);
 					$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\n";
 					mail($Email, $title, $message, $header);
 				}
 				else {
 					if ($this->_Config->Get('activate_through_admin', '0')) {
 						// Send mail with logindata to the user, activation throw administrator
-						$title = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
-						$message = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_activation_throw_admin'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email);
+						$title = $this->_Translation->GetTranslation('activation_of_your_new_accout_at') . $this->_Config->Get('pagename', 'ComaCMS');
+						$message = sprintf($this->_Translation->GetTranslation('welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email_activation_throw_admin'), $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email);
 						$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\n";
 						mail($Email, $title, $message, $header);
 					}
@@ -273,8 +273,8 @@
 						$activated = true;
 						
 						// Send mail with logindata to the user
-						$title = $this->_AdminLang['activation_of_your_new_accout_at'] . $this->_Config->Get('pagename', 'ComaCMS');
-						$message = sprintf($this->_AdminLang['welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email'], $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email);
+						$title = $this->_Translation->GetTranslation('activation_of_your_new_accout_at') . $this->_Config->Get('pagename', 'ComaCMS');
+						$message = sprintf($this->_Translation->GetTranslation('welcome_%1\$s:Pagename_%2\$s:Benutzername_%3\$s:Password_%4\$s:Email'), $this->_Config->Get('pagename', 'ComaCMS'), $Name, $Password, $Email);
 						$header = 'From: ' . $this->_Config->Get('administrator_emailaddress', 'administrator@comacms') . "\n";
 						mail($Email, $title, $message, $header);
 					}
@@ -286,7 +286,7 @@
 					VALUES ('$Name', '$Showname', '" . md5($Password) . "', '$registrationTime', '$Email', " . (($activated) ? '1' : '0') . (($activationCode != '') ? ", '$activationCode'" : '') . ")";
 				$this->_SqlConnection->SqlQuery($sql);
 				
-				$out .= $this->_AdminLang['you_have_been_successfully_registred_please_check_your_emails_for_your_logininformation'];
+				$out .= $this->_Translation->GetTranslation('you_have_been_successfully_registred_please_check_your_emails_for_your_logininformation');
 			}
 			
 			return $out;
@@ -301,14 +301,14 @@
 	 	 function _activateRegistration($ActivationCode) {
 	 	 	$out = '';
 	 	 	if ($this->_Config->Get('activate_throw_admin', '0')) {
-	 	 		$out .= $this->_AdminLang['activation_only_by_an_administrator_possible'];
+	 	 		$out .= $this->_Translation->GetTranslation('activation_only_by_an_administrator_possible');
 	 	 	}
 	 	 	else {
 	 	 		$sql = "UPDATE " . DB_PREFIX . "users
 					SET user_activated=1, user_activationcode=''
 					WHERE user_activationcode='$ActivationCode'";
 				$this->_SqlConnection->SqlQuery($sql);
-				$out .= $this->_AdminLang['your_account_has_been_successfully_activated'];
+				$out .= $this->_Translation->GetTranslation('your_account_has_been_successfully_activated');
 	 	 	}
 	 	 	return $out;
 	 	 }

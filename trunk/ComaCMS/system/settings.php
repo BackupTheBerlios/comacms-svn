@@ -15,7 +15,7 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
 	
-	global $admin_lang;
+	global $translation;
 	
 	//Preferences::SetSetting('einstellungsname', 'angezeigte Option', 'info zu der Option <span class="info">info</span>', 'Einstellungsgruppe', 'Defaultwert', 'Typ');
 	Preferences::SetSetting("default_page", "Startseite", "Auf diese Seite wird jeder Besucher geleitet, der keine Seite angegeben hat.", "Main", '1', 'page_select');

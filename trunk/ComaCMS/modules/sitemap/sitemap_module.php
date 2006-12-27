@@ -35,29 +35,12 @@
 		 * @var class
 		 */
 		var $_Pagestructure; 
-		
-		/**
-		 * This function initializes the Sitemapmoduleclass
-		 * @author ComaWStefan
-		 * @access public
-		 * @param sqlConnection SqlConnection This is the ComaSqlConnectionclass
-		 * @param user User This is the ComaUserclass for the actual user
-		 * @param language Lang This is the ComaLanguageArray
-		 * @param config Config This is the ComaConfigclass containing all configurations
-		 * @param comaLate ComaLate This is the outputclass ComaLate
-		 * @param comaLib ComaLib This is the ComaLibClass containing some necessary functions
-		 * @return class SitemapModule
-		 */
-		function Module_Sitemap(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
- 			$this->_SqlConnection = &$SqlConnection;
- 			$this->_User = &$User;
- 			$this->_Config = &$Config;
- 			$this->_Lang = &$Lang;
- 			$this->_ComaLate = &$ComaLate;
- 			$this->_ComaLib = &$ComaLib;
- 			$this->_Pagestructure = new PageStructure(&$SqlConnection, &$User);
+ 		
+ 		function _Init() {
+ 			$this->_Pagestructure = new PageStructure($this->_SqlConnection, $this->_User);
  			$this->_Pagestructure->LoadParentIDs();
  		}
+ 		
  		
  		/**
  		 * This function returns the text for a template or a page
@@ -127,14 +110,16 @@
  		 	if(empty($pages[$TopNode]))
  		 		return;
  		 	$out .= "\r\n\t\t\t<ul>";
+ 		 	// TODO: make this configureabele by the module-call
+ 		 	$showLanguage = $this->_Config->Get('sitemap_show_language', '1');
  		 	foreach($pages[$TopNode] as $page) {
  		 		if ($page['access'] == 'public') {
 	 		 		// blockelements
 		 			$out .= "\r\n\t\t\t\t<li class=\"page_type_" . $page['type'] . "\"><span class=\"structure_row\">";
 		 			// show language of the page if activated
-		 			if ($this->_Config->Get('sitemap_show_language', '1')) {
-		 				$out .= "<span class=\"page_lang\">[{$this->_Lang[$page['lang']]}]</span>";
-		 			}
+		 			if ($showLanguage)
+		 				$out .= "<span class=\"page_lang\">[" . $this->_Translation->GetTranslation($page['lang']) . "]</span>";
+		 			
 		 			// show pagename with link to index.php and pagetitle
 		 			$out .= "<strong><a href=\"index.php?page={$page['name']}\">{$page['title']}</a></strong></span>";
 		 			// show all subpages

@@ -42,10 +42,10 @@
  		var $_Config;
  		
  		/**
- 		 * @var array
+ 		 * @var Language
  		 * @access private
  		 */
- 		var $_Lang;
+ 		var $_Translation;
  		
  		/**
  		 * @var ComaLate
@@ -62,18 +62,26 @@
  		/**
  		 * @param Sql SqlConnection
  		 * @param User User
- 		 * @param array Lang
+ 		 * @param Language Translation
  		 * @param Config Config
  		 * @param ComaLate ComaLate
  		 * @param ComaLib ComaLib
  		 */
- 		function Module(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
+ 		function Module(&$SqlConnection, &$User, &$Translation, &$Config, &$ComaLate, &$ComaLib) {
  			$this->_SqlConnection = &$SqlConnection;
  			$this->_User = &$User;	
- 			$this->_Lang = &$Lang;
+ 			$this->_Translation = &$Translation;
  			$this->_Config = &$Config;
  			$this->_ComaLate = &$ComaLate;
  			$this->_ComaLib = &$ComaLib;
+ 			$this->_Init();
+ 		}
+ 		
+ 		/**
+ 		 * @access private
+ 		 */
+ 		function _Init() {
+ 		
  		}
  		
  		function UseModule($Parameters) {

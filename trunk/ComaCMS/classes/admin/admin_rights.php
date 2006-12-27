@@ -28,33 +28,31 @@
 		
 		/**
 		 * @param string action
-		 * @param array admin_lang
 		 * @access public
 		 */
-		function GetPage($action, $admin_lang) {
-			$out = "\t\t\t<h3>" . $admin_lang['rights'] . "</h3><hr />\r\n";
+		function GetPage($action) {
+			$out = "\t\t\t<h3>" . $this->_Translation->GetTranslation('rights') . "</h3><hr />\r\n";
 		 	$action = strtolower($action);
 		 	switch ($action) {
-		 		case 'reset_user':	$out .= $this->_resetUser($admin_lang);
+		 		case 'reset_user':	$out .= $this->_resetUser();
 		 					break;
-		 		case 'edit_user':	$out .= $this->editUser($admin_lang);
+		 		case 'edit_user':	$out .= $this->editUser();
 		 					break;
-		 		case 'edit_group':	$out .= $this->editGroup($admin_lang);
+		 		case 'edit_group':	$out .= $this->editGroup();
 		 					break;
-		 		case 'save_user':	$out .= $this->saveUser($admin_lang);
+		 		case 'save_user':	$out .= $this->saveUser();
 		 					break;
-		 		case 'save_group':	$out .= $this->saveGroup($admin_lang);
+		 		case 'save_group':	$out .= $this->saveGroup();
 		 					break;
-		 		default:		$out .= $this->_overview($admin_lang);
+		 		default:		$out .= $this->_overview();
 		 	}
 		 	return $out;
 		}
 		
 		/**
-		 * @param array admin_lang
 		 * @access private
 		 */
-		function _resetUser($admin_lang) {
+		function _resetUser() {
 			$userID = GetPostOrGet('user_id');
 			if(is_numeric($userID)) {
 				$sql = "DELETE FROM " . DB_PREFIX . "auth
@@ -63,14 +61,13 @@
 					AND auth_page_id = 0";
 				db_result($sql);
 			}
-			return $this->_overview($admin_lang);
+			return $this->_overview();
 		}
 		
 		/**
-		 * @param array admin_lang
 		 * @access private
 		 */
-		function saveUser($admin_lang) {
+		function saveUser() {
 			$user_id = GetPostOrGet('user_id');
 			if(is_numeric($user_id)) {
 				$auth = new Auth_User($user_id);
@@ -90,7 +87,7 @@
 			die();
 		}
 		
-		function saveGroup($admin_lang) {
+		function saveGroup() {
 			$group_id = GetPostOrGet('group_id');
 			if(is_numeric($group_id)) {
 				
@@ -110,14 +107,14 @@
 			die();
 		}
 		
-		function editGroup($admin_lang) {
+		function editGroup() {
 			$group_id = GetPostOrGet('group_id');
 			if(is_numeric($group_id)) {
 				
 			
 			$auth = new Auth_Group($group_id);
 			
-			$edit_for_str = sprintf($admin_lang['default_rights_for_the_group_%group%'], getGroupByID($group_id));	
+			$edit_for_str = sprintf($this->_Translation->GetTranslation('default_rights_for_the_group_%group%'), getGroupByID($group_id));	
 				
 			$out = "\t\t\t<form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"rights\"/>
@@ -127,43 +124,42 @@
 					<legend>$edit_for_str</legend>
 					<div class=\"row\">
 						<label class=\"row\">
-							" . $admin_lang['view_right'] . ":
+							" . $this->_Translation->GetTranslation('view_right') . ":
 							<span class=\"info\">
-									" . $admin_lang['todo'] . "
+									" . $this->_Translation->GetTranslation('todo') . "
 							</span>
 						</label>
 						<div><input type=\"checkbox\" class=\"checkbox\" name=\"auth_view\" value=\"true\" " . (($auth->view) ? 'checked="checked"' : '') . "/></div>
 					</div>
 					<div class=\"row\">
 						<label class=\"row\">
-							" . $admin_lang['edit_right'] . ":
+							" . $this->_Translation->GetTranslation('edit_right') . ":
 							<span class=\"info\">
-									" . $admin_lang['todo'] . "
+									" . $this->_Translation->GetTranslation('todo') . "
 							</span>
 						</label>
 						<div><input type=\"checkbox\" class=\"checkbox\" name=\"auth_edit\" value=\"true\" " . (($auth->edit) ? 'checked="checked"' : '') . "/></div>
 					</div>
 					<div class=\"row\">
 						<label class=\"row\">
-							" . $admin_lang['delete_right'] . ":
+							" . $this->_Translation->GetTranslation('delete_right') . ":
 							<span class=\"info\">
-									" . $admin_lang['todo'] . "
+									" . $this->_Translation->GetTranslation('todo') . "
 							</span>
 						</label>
 						<div><input type=\"checkbox\" class=\"checkbox\" name=\"auth_delete\" value=\"true\" " . (($auth->delete) ? 'checked="checked"' : '') . "/></div>
 					</div>
 					<div class=\"row\">
 						<label class=\"row\">
-							" . $admin_lang['add_new_subpage_right'] . ":
+							" . $this->_Translation->GetTranslation('add_new_subpage_right') . ":
 							<span class=\"info\">
-									" . $admin_lang['todo'] . "
+									" . $this->_Translation->GetTranslation('todo') . "
 							</span>
 						</label>
 						<div><input type=\"checkbox\" class=\"checkbox\" name=\"auth_new_sub\" value=\"true\" " . (($auth->new_sub) ? 'checked="checked"' : '') . "/></div>
 					</div>
 					<div class=\"row\">
-						<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['apply'] . "\" />
-						<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />
+						<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('apply') . "\" />
 					</div>
 				</fieldset>
 			</form>";
@@ -176,15 +172,15 @@
 			}
 		}
 		
-		function editUser($admin_lang) {
+		function editUser() {
 			$user_id = GetPostOrGet('user_id');
 			if(!is_numeric($user_id)) {
 				$user_id = 0;
 			}
 			$auth = new Auth_User($user_id);
-			$edit_for_str = $admin_lang['default_rights_for_users_and_groups']; 
+			$edit_for_str = $this->_Translation->GetTranslation('default_rights_for_users_and_groups'); 
 			if($user_id != 0)
-				$edit_for_str = sprintf($admin_lang['default_rights_for_%user%'], getUserByID($user_id));	
+				$edit_for_str = sprintf($this->_Translation->GetTranslation('default_rights_for_%user%'), getUserByID($user_id));	
 				
 			$out = "\t\t\t<form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"rights\"/>
@@ -194,43 +190,42 @@
 					<legend>$edit_for_str</legend>
 					<div class=\"row\">
 						<label class=\"row\">
-							" . $admin_lang['view_right'] . ":
+							" . $this->_Translation->GetTranslation('view_right') . ":
 							<span class=\"info\">
-									" . $admin_lang['todo'] . "
+									" . $this->_Translation->GetTranslation('todo') . "
 							</span>
 						</label>
 						<div><input type=\"checkbox\" class=\"checkbox\" name=\"auth_view\" value=\"true\" " . (($auth->view) ? 'checked="checked"' : '') . (($auth->is_admin) ? ' disabled="disabled"' : '') . "/></div>
 					</div>
 					<div class=\"row\">
 						<label class=\"row\">
-							" . $admin_lang['edit_right'] . ":
+							" . $this->_Translation->GetTranslation('edit_right') . ":
 							<span class=\"info\">
-									" . $admin_lang['todo'] . "
+									" . $this->_Translation->GetTranslation('todo') . "
 							</span>
 						</label>
 						<div><input type=\"checkbox\" class=\"checkbox\" name=\"auth_edit\" value=\"true\" " . (($auth->edit) ? 'checked="checked"' : '') . (($auth->is_admin) ? ' disabled="disabled"' : '') . "/></div>
 					</div>
 					<div class=\"row\">
 						<label class=\"row\">
-							" . $admin_lang['delete_right'] . ":
+							" . $this->_Translation->GetTranslation('delete_right') . ":
 							<span class=\"info\">
-									" . $admin_lang['todo'] . "
+									" . $this->_Translation->GetTranslation('todo') . "
 							</span>
 						</label>
 						<div><input type=\"checkbox\" class=\"checkbox\" name=\"auth_delete\" value=\"true\" " . (($auth->delete) ? 'checked="checked"' : '') . (($auth->is_admin) ? ' disabled="disabled"' : '') . "/></div>
 					</div>
 					<div class=\"row\">
 						<label class=\"row\">
-							" . $admin_lang['add_new_subpage_right'] . ":
+							" . $this->_Translation->GetTranslation('add_new_subpage_right') . ":
 							<span class=\"info\">
-									" . $admin_lang['todo'] . "
+									" . $this->_Translation->GetTranslation('todo') . "
 							</span>
 						</label>
 						<div><input type=\"checkbox\" class=\"checkbox\" name=\"auth_new_sub\" value=\"true\" " . (($auth->new_sub) ? 'checked="checked"' : '') . (($auth->is_admin) ? ' disabled="disabled"' : '') . "/></div>
 					</div>
 					<div class=\"row\">
-						<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['apply'] . "\" />
-						<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />
+						<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('apply') . "\" />
 						" .(($auth->has_own) ? "<a href=\"admin.php?page=rights&amp;action=reset_user&amp;user_id=$user_id\" class=\"button\">Eintrag entfernen</a>" : '') . "
 					</div>
 				</fieldset>
@@ -239,17 +234,17 @@
 			return $out;
 		}
 		
-		function usersOverview($admin_lang) {
+		function usersOverview() {
 			$out = "\t\t\t<form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"rights\">
 				<input type=\"hidden\" name=\"action\" value=\"edit_user\">
 				<fieldset>
-					<legend>" . $admin_lang['select_user'] . "</legend>
+					<legend>" . $this->_Translation->GetTranslation('select_user') . "</legend>
 					<div class=\"row\">
 						<label class=\"row\" for=\"user_id\">
-							" . $admin_lang['user'] . ":
+							" . $this->_Translation->GetTranslation('user') . ":
 							<span class=\"info\">
-									" . $admin_lang['the_rights_of_which_user_should_be_edited?'] . "
+									" . $this->_Translation->GetTranslation('the_rights_of_which_user_should_be_edited?') . "
 							</span>
 						</label>
 						<div>
@@ -265,10 +260,10 @@
 						</div>
 					</div>
 					<div class=\"row\">
-						<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['edit'] . "\" />
+						<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('edit') . "\" />
 					</div>
 					<div class=\"row\">
-						<a href=\"admin.php?page=rights&amp;action=edit_user\">" . $admin_lang['default_rights_for_users'] . "</a>
+						<a href=\"admin.php?page=rights&amp;action=edit_user\">" . $this->_Translation->GetTranslation('default_rights_for_users') . "</a>
 					</div>
 				</fieldset>
 			</form>";
@@ -276,18 +271,18 @@
 			return $out;
 		}
 		
-		function _overview($admin_lang) {
+		function _overview() {
 			$out = "\t\t\t<form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"rights\" />
 				<input type=\"hidden\" name=\"action\" value=\"edit_user\" />
 				<fieldset>
-					<legend>" . $admin_lang['user_rights'] . "</legend>
+					<legend>" . $this->_Translation->GetTranslation('user_rights') . "</legend>
 					
 					<div class=\"row\">
 						<label class=\"row\" for=\"user_id\">
-							" . $admin_lang['user'] . ":
+							" . $this->_Translation->GetTranslation('user') . ":
 							<span class=\"info\">
-								" . $admin_lang['the_rights_of_which_user_should_be_edited?'] . "
+								" . $this->_Translation->GetTranslation('the_rights_of_which_user_should_be_edited?') . "
 							</span>
 						</label>
 						<div>
@@ -303,7 +298,7 @@
 						</div>
 					</div>
 					<div class=\"row\">
-						<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['edit'] . "\" />
+						<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('edit') . "\" />
 					</div>
 				</fieldset>
 			</form>
@@ -311,12 +306,12 @@
 				<input type=\"hidden\" name=\"page\" value=\"rights\" />
 				<input type=\"hidden\" name=\"action\" value=\"edit_group\" />
 				<fieldset>
-					<legend>" . $admin_lang['group_rights'] . "</legend>
+					<legend>" . $this->_Translation->GetTranslation('group_rights') . "</legend>
 					<div class=\"row\">
 						<label class=\"row\" for=\"group_id\">
-							" . $admin_lang['group'] . ":
+							" . $this->_Translation->GetTranslation('group') . ":
 							<span class=\"info\">
-								" . $admin_lang['the_rights_of_which_group_should_be_edited?'] . "
+								" . $this->_Translation->GetTranslation('the_rights_of_which_group_should_be_edited?') . "
 							</span>
 						</label>
 						<div>
@@ -332,17 +327,17 @@
 						</div>
 					</div>
 					<div class=\"row\">
-						<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['edit'] . "\" />
+						<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('edit') . "\" />
 					</div>
 				</fieldset>
 			</form>
-			<a href=\"admin.php?page=rights&amp;action=edit_user\" class=\"button\">" . $admin_lang['edit_default_rights_for_users_and_groups'] . "</a>
+			<a href=\"admin.php?page=rights&amp;action=edit_user\" class=\"button\">" . $this->_Translation->GetTranslation('edit_default_rights_for_users_and_groups') . "</a>
 			
 				<!--</li>
-				<li><a href=\"admin.php?page=rights&amp;action=groups\">" . $admin_lang['group_rights'] . "</a>
+				<li><a href=\"admin.php?page=rights&amp;action=groups\">" . $this->_Translation->GetTranslation('group_rights') . "</a>
 					<span class=\"info\">bla</span>
 				</li>
-				<li><a href=\"admin.php?page=rights&amp;action=pages\">" . $admin_lang['page_rights'] . "</a>
+				<li><a href=\"admin.php?page=rights&amp;action=pages\">" . $this->_Translation->GetTranslation('page_rights') . "</a>
 						<span class=\"info\">bla</span>
 				</li>
 			</ul>-->";

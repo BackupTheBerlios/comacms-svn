@@ -112,9 +112,9 @@ DROP TABLE IF EXISTS {DB_PREFIX}articles;
 		DROP TABLE IF EXISTS {DB_PREFIX}pages;
 		CREATE TABLE {DB_PREFIX}pages (
 			page_id int(10) unsigned NOT NULL auto_increment,
-			page_name varchar(250) NOT NULL default '',
+			page_name varchar(255) NOT NULL default '',
 			page_type enum('text','gallery') NOT NULL default 'text',
-			page_title varchar(120) NOT NULL default '',
+			page_title varchar(255) NOT NULL default '',
 			page_parent_id int(10) NOT NULL default '0',
 			page_creator int(15) NOT NULL default '0',
 			page_date int(20) NOT NULL default '0',
@@ -135,8 +135,8 @@ DROP TABLE IF EXISTS {DB_PREFIX}articles;
   			id int(10) NOT NULL auto_increment,
   			page_id int(10) NOT NULL default '0',
 			page_type longtext NOT NULL,
-			page_name varchar(20) NOT NULL default '',
-			page_title varchar(100) NOT NULL default '',
+			page_name varchar(255) NOT NULL default '',
+			page_title varchar(255) NOT NULL default '',
 			page_parent_id int(10) NOT NULL default '0',
 			page_lang varchar(5) NOT NULL default '',
 			page_creator int(10) NOT NULL default '0',

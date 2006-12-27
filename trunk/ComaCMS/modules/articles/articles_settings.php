@@ -16,7 +16,6 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
  
- 	//global $admin_lang;
  	$category = $translation->GetTranslation('articles');
  	Preferences::SetSetting('articles_title', '&Uuml;berschrift', 'Eine kleine &Uuml;berschrift f&uuml;r den Artikel-Block', $category, $category, 'string0');
 	Preferences::SetSetting('articles_display_author', 'Autor anzeigen', 'Soll der Autor in den Artikel-Vorschau erscheinen?', $category, '1', 'bool');

@@ -18,7 +18,7 @@
  	/**
  	 * @ignore
  	 */
- 	require_once('./classes/admin/admin.php');
+ 	require_once __ROOT__ . '/classes/admin/admin.php';
  	
 	/**
 	 * @package ComaCMS
@@ -27,37 +27,35 @@
 		
 		/**
 		 * @param string action
-		 * @param array admin_lang
 		 * @access public
 		 */
-		function GetPage($action, $admin_lang) {
-			$out = "\t\t\t<h3>" . $admin_lang['groups'] . "</h3><hr />\r\n";
+		function GetPage($action) {
+			$out = "\t\t\t<h3>" . $this->_Translation->GetTranslation('groups') . "</h3><hr />\r\n";
 		 	$action = strtolower($action);
 		 	switch ($action) {
-		 		case 'add_group':	$out .= $this->addGroup($admin_lang);
+		 		case 'add_group':	$out .= $this->addGroup();
 		 					break;
-		 		case 'new_group':	$out .= $this->newGroup($admin_lang);
+		 		case 'new_group':	$out .= $this->newGroup();
 		 					break;
-		 		case 'edit_group':	$out .= $this->editGroup($admin_lang);
+		 		case 'edit_group':	$out .= $this->editGroup();
 		 					break;
-		 		case 'save':		$out .= $this->saveGroup($admin_lang);
+		 		case 'save':		$out .= $this->saveGroup();
 		 					break;
-		 		case 'add_member':	$out .= $this->addMember($admin_lang);
+		 		case 'add_member':	$out .= $this->addMember();
 		 					break;
-		 		case 'remove_member':	$out .= $this->removeMember($admin_lang);
+		 		case 'remove_member':	$out .= $this->removeMember();
 		 					break;
-		 		case 'delete':		$out .= $this->deleteGroup($admin_lang);
+		 		case 'delete':		$out .= $this->deleteGroup();
 		 					break;
-		 		default:		$out .= $this->overview($admin_lang);
+		 		default:		$out .= $this->overview();
 		 	}
 		 	return $out;
 		}
 		
 		/**
-		 * @param array admin_lang
 		 * @access private
 		 */
-		function removeMember($admin_lang) {
+		function removeMember() {
 			$group_id = GetPostOrGet('group_id');
 			$user_id = GetPostOrGet('user_id');
 			if(is_numeric($group_id) && is_numeric($user_id)) {
@@ -78,10 +76,9 @@
 		}
 		
 		/**
-		 * @param array admin_lang
 		 * @access private
 		 */
-		function addMember($admin_lang) {
+		function addMember() {
 			$group_id = GetPostOrGet('group_id');
 			$user_id = GetPostOrGet('user_id');
 			if($user_id == '' && is_numeric($group_id)) {
@@ -99,10 +96,9 @@
 			die();
 		}
 		/**
-		 * @param array admin_lang
 		 * @access private
 		 */
-		function saveGroup($admin_lang) {
+		function saveGroup() {
 			$group_id = GetPostOrGet('group_id');
 			if(is_numeric($group_id)) {
 				$group_name = GetPostOrGet('group_name');
@@ -126,10 +122,9 @@
 			die();
 		}
 		/**
-		 * @param array admin_lang
 		 * @access private
 		 */
-		function editGroup($admin_lang) {
+		function editGroup() {
 			$group_id = GetPostOrGet('group_id');
 			if(is_numeric($group_id)) {
 				$error = (GetPostOrGet('error') == 'name' );
@@ -184,8 +179,7 @@
 					$out .= "\t\t\t\t\t\t</select>
 					</div>
 					<div class=\"row\">
-						<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['save'] . "\" />
-						<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />
+						<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('save') . "\" />
 					</div>
 				</fieldset>
 			</form>
@@ -212,7 +206,7 @@
 							$users_in_group[] = $member->user_id;
 							$out .= "<tr>
 								<td>$member->user_showname</td>
-								<td>" .(($member->user_id != $group->group_manager)? "<a href=\"admin.php?page=groups&amp;action=remove_member&amp;group_id=$group_id&amp;user_id=$member->user_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>" : '&nbsp;') . "</td>
+								<td>" .(($member->user_id != $group->group_manager)? "<a href=\"admin.php?page=groups&amp;action=remove_member&amp;group_id=$group_id&amp;user_id=$member->user_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('delete') . "\" title=\"" . $this->_Translation->GetTranslation('delete') . "\"/></a>" : '&nbsp;') . "</td>
 								</tr>\r\n";
 						}
 					$out .= "\t\t\t\t\t</table><br />
@@ -251,10 +245,9 @@
 		}
 		
 		/**
-		 * @param array admin_lang
-		 * @access private
+@access private
 		 */
-		function deleteGroup($admin_lang) {
+		function deleteGroup() {
 			$group_id = GetPostOrGet('group_id');
 			$sure = GetPostOrGet('sure');
 			if($sure == 1 && is_numeric($group_id)) {
@@ -283,10 +276,9 @@
 		}
 		
 		/**
-		 * @param array admin_lang
 		 * @access private
 		 */
-		function addGroup($admin_lang) {
+		function addGroup() {
 			// get the needed vars
 			$group_name = GetPostOrGet('group_name');
 			$group_manager = GetPostOrGet('group_manager');
@@ -321,10 +313,9 @@
 		}
 		
 		/**
-		 * @param array admin_lang
 		 * @access private
 		 */
-		function newGroup($admin_lang) {
+		function newGroup() {
 			// TODO: handle errors!
 			$out = "<fieldset>
 					<legend>Neue Gruppe erstellen</legend>
@@ -355,8 +346,7 @@
 			}				
 			$out .= "\t\t\t\t\t\t\t</select></div>
 						<div class=\"row\">
-							<input type=\"reset\" class=\"button\" value=\"" . $admin_lang['reset'] . "\" />&nbsp;
-							<input type=\"submit\" class=\"button\" value=\"" . $admin_lang['create'] . "\" />
+							<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('create') . "\" />
 						</div>
 					</form>
 				</fieldset>";
@@ -365,10 +355,9 @@
 		} 
 		
 		/**
-		 * @param array admin_lang
 		 * @access private
 		 */
-		function overview($admin_lang) {
+		function overview() {
 			
 			$out = "<a class=\"button\" href=\"admin.php?page=groups&amp;action=new_group\">Neue Gruppe erstellen</a><br />
 			\t\t\t<table class=\"text_table full_width margin_center\">
@@ -388,10 +377,10 @@
 				$out .= "\t\t\t\t<tr>
 					<td>$group->group_name</td>
 					<td>" . nl2br($group->group_description) . "</td>
-					<td>" . getUserByID($group->group_manager) . "</td>
+					<td>" . $this->_ComaLib->GetUserByID($group->group_manager) . "</td>
 					<td>
-						<a href=\"admin.php?page=groups&amp;action=edit_group&amp;group_id=$group->group_id\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['edit'] . "\" title=\"" . $admin_lang['edit'] . "\"/></a>
-						<a href=\"admin.php?page=groups&amp;action=delete&amp;group_id=$group->group_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $admin_lang['delete'] . "\" title=\"" . $admin_lang['delete'] . "\"/></a>
+						<a href=\"admin.php?page=groups&amp;action=edit_group&amp;group_id=$group->group_id\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>
+						<a href=\"admin.php?page=groups&amp;action=delete&amp;group_id=$group->group_id\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('delete') . "\" title=\"" . $this->_Translation->GetTranslation('delete') . "\"/></a>
 					</td>
 				</tr>";
 			}

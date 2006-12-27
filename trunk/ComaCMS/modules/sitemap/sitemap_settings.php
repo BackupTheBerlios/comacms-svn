@@ -16,7 +16,7 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
  
- 	global $admin_lang;
- 	//Preferences::SetSetting('einstellungsname', 'angezeigte Option', 'info zu der Optionin <span class="info">info</span>', 'Einstellungsgruppe', 'Defaultwert', 'Typ');
+ 	global $translation;
+ 	//Preferences::SetSetting('einstellungsname', 'angezeigte Option', 'info zu der Option <span class="info">info</span>', 'Einstellungsgruppe', 'Defaultwert', 'Typ');
  	Preferences::SetSetting('sitemap_show_language', 'Sprache anzeigen', 'Soll die Sprache einer Seite in der Sitemap angezeigt werden?', 'Sitemap Modul', '1', 'bool');
 ?>

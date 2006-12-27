@@ -18,8 +18,8 @@
 	/**
  	 * @ignore
  	 */
- 	require_once('./classes/pagestructure.php');
- 	require_once('./classes/admin/admin.php');
+ 	require_once __ROOT__ . '/classes/pagestructure.php';
+ 	require_once __ROOT__ . '/classes/admin/admin.php';
  	
 	/**
 	 * @package ComaCMS 
@@ -49,7 +49,6 @@
  		 * @param string Action
  		 */
 		 function GetPage($Action = '') {
-		 	//$adminLang = &$this->_AdminLang;
 		 	$out = '';
 			
 			if($Action != 'internHome')
@@ -95,7 +94,6 @@
 		  * @return string
 		  */
 		 function _deletePage() {
-		 	//$adminLang = &$this->_AdminLang;
 		 	$confirmation = GetPostOrGet('confirmation');
 		 	$pageID = GetPostOrGet('pageID');
 		 	if(!is_numeric($pageID))
@@ -194,7 +192,6 @@
 		  * @return string
 		  */
 		 function _homePage() {
-		 	//$adminLang = &$this->_AdminLang;
 		 	$this->_getMenuPageIDs();
 		 	$out = "\t\t\t<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
 			<a href=\"admin.php?page=pagestructure&amp;action=newPage\" class=\"button\">" . $this->_Translation->GetTranslation('create_new_page') . "</a>
@@ -202,7 +199,6 @@
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"generateMenu\" />\r\n";
 		 	$out .= $this->_showStructure(0);
-		 	//$out .= "\t\t\t\t<input type=\"submit\" class=\"button\" value=\"" . $adminLang['generate_mainmenu'] . "\" />
 			$out .= "</form>
 			<script type=\"text/javascript\" language=\"JavaScript\">
 				SetHover('span', 'structure_row', 'structure_row_hover', function additional() {document.getElementById('menu').className = '';});
@@ -215,7 +211,6 @@
 		  * @return string
 		  */
 		 function _newPage() {
-		 	//$adminLang = &$this->_AdminLang;
 		 	$this->_PageStructure->LoadParentIDs();
 				 	
 		 	$out = "\t\t\t<form method=\"post\" action=\"admin.php\">
@@ -300,30 +295,6 @@
 			</form>";
 		 	return $out;
 		 }
-		 
-		 /*
-		  * @access private
-		  * @return string
-		  */
-		 /*function _structurePullDown($topnode = 0, $deep = 0, $topnumber = '', $without = -1, $selected = -1) {
-		 	$out = '';
-			$sql = "SELECT *
-		 		FROM " . DB_PREFIX . "pages
-		 		WHERE page_parent_id=$topnode AND page_access !='deleted'";
-		 	// TODO: ORDER BY page_sortid
-		 	$pages_result = db_result($sql);
-		 	if(mysql_num_rows($pages_result) != 0) {
-		 		$number = 1;
-		 		while($page = mysql_fetch_object($pages_result)) {
-		 			if($page->page_id != $without) {
-		 				$out .= "<option style=\"padding-left:" . ($deep * 1.5) . "em;\" value=\"$page->page_id\"" . (($page->page_id == $selected) ? ' selected="selected"' : '') . ">$topnumber$number. $page->page_title (" . rawurlencode($page->page_name) . ")</option>\r\n";
-		 				$out .= $this->_structurePullDown($page->page_id, $deep + 1, $topnumber . $number. "." ,$without, $selected);
-		 				$number++;
-		 			}
-		 		}
-		 	}
-		 	return $out;
-		 }*/
 		 
 		 /**
 		  * @access private
@@ -976,7 +947,6 @@
 		 */
 		function _InlineMenuSelectImage($PageID) {
 			$imagePath = $this->_PageStructure->GetInlineMenuData($PageID, 'image');
-			$adminLang = $this->_AdminLang;
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "files
 				WHERE file_type LIKE 'image/%'
@@ -1189,7 +1159,7 @@
 								<option value=\"hidden\"" . (($page->page_access == 'hidden') ? ' selected="selected"' : '') . ">" . $this->_Translation->GetTranslation('hidden') . "</option>
 								<option value=\"deleted\"" . (($page->page_access == 'deleted') ? ' selected="selected"' : '') . ">" . $this->_Translation->GetTranslation('deleted') . "</option>
 							</select>
-							<input type=\"submit\" value=\"" . $admin_lang['save'] . "\" class=\"button\" />
+							<input type=\"submit\" value=\"" . $this->_Translation->GetTranslation('save') . "\" class=\"button\" />
 							</form>";
 					}
 					else

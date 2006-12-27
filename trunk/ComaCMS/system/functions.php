@@ -44,45 +44,6 @@
 		else
 			return round($bytes/1048576, 1) . $space . 'MiB';
 	}
-	
-	function generatePagesTree($parentid, $tabs = "", $lang = "", $show_deleted = false, $show_hidden = false, $type = 'text') {
-		global $_SERVER, $admin_lang;
-		
-		$out = '';
-		$q_lang = '';
-		$q_visible = '';
-		if($lang != '')
-			$q_lang = "AND page_lang='" . $lang . "' ";
-		if($show_deleted == false)
-			$q_visible = "AND page_visible!='deleted' ";
-		if($show_hidden == false)
-			$q_visible .= "AND page_visible!='hidden' ";	
-		$sql = "SELECT page_parent_id, page_name, page_id, page_title, page_visible
-			FROM " . DB_PREFIX . "pages_content
-			WHERE page_parent_id=$parentid ".$q_lang.$q_visible." AND page_type='$type'
-			ORDER BY page_id ASC";
-		$sites_result = db_result($sql);
-		if(mysql_num_rows($sites_result) != 0) {
-			$out .= "\r\n" . $tabs . "<ol>\r\n";
-			while($site_info = mysql_fetch_object($sites_result)) {
-				$out .= $tabs . "\t<li>";
-				if($site_info->page_visible == 'deleted')
-					$out .= '<strike>';
-				$out .= '<a href="' . $_SERVER['PHP_SELF'] . '?page=pageeditor&amp;action=info&amp;page_name=' . $site_info->page_name . '">' . $site_info->page_title . '</a> <em>[' . $site_info->page_name . ']</em> <a href="' . $_SERVER['PHP_SELF'] . '?page=pageeditor&amp;action=info&amp;page_name=' . $site_info->page_name . '">[' . $admin_lang['info'] . ']</a>';
-				if($site_info->page_visible == 'deleted')
-					$out .= '</strike>';
-				else
-					$out .= ' <a href="' . $_SERVER['PHP_SELF'] . '?page=pageeditor&amp;action=edit&amp;page_name=' . $site_info->page_name . '">[' . $admin_lang['edit'] . ']</a> <a href="' . $_SERVER['PHP_SELF'] . '?page=pageeditor&amp;action=delete&amp;page_name=' . $site_info->page_name . '">[' . $admin_lang['delete'] . ']</a>';
-				
-				$out .= generatePagesTree($site_info->page_id, $tabs . "\t\t", $lang, $show_deleted, $show_hidden, $type) . "</li>\r\n";
-				
-			}
-			$out .= $tabs . "</ol>\r\n";
-			$out .= substr($tabs, 0, -1);
-		}
-		return $out;
-	}
-
 		
 	function generateThumb($file, $outputdir, $maxsize= 100) {
 	

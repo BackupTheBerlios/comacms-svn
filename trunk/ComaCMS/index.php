@@ -32,24 +32,16 @@
 	// run common.php to have all ordinary things done, which every page needs
 	include('common.php');
 	$outputpage = new OutputPage($sqlConnection);
-	$extern_page = rawurlencode($extern_page);
+	$page = rawurlencode($page);
 	// load the page
-	$outputpage->LoadPage($extern_page, $user);
-	// get the language strings
-	/**
-	 * @ignore
-	 */
-	//include('./lang/' . $user->Language . '/admin_lang.php');
-	
-	/*
-	 * wtf are we doin here?
-	 * this causes to much memory usage if we have some more menues...
-	 */
-	$sql = "SELECT *
+	$outputpage->LoadPage($page, $user);
+		
+	$sql = "SELECT menu_name, menu_id
 		FROM " . DB_PREFIX . "menu";
 	$menus = $sqlConnection->SqlQuery($sql);
 	while ($menu = mysql_fetch_object($menus)) {
-		$output->SetReplacement('MENU_' . $menu->menu_name, $outputpage->GenerateMenu($menu->menu_id));
+		if($output->ReplacementExists('MENU_' . $menu->menu_name, true))
+			$output->SetReplacement('MENU_' . $menu->menu_name, $outputpage->GenerateMenu($menu->menu_id));
 	}
 	
 	$output->SetReplacement('PATH' , $outputpage->Position);

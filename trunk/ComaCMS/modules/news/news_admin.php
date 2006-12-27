@@ -28,23 +28,6 @@
 	 */
 	class Admin_Module_News extends Admin_Module{
 		
-		/**
-		 * @access public
- 		 * @param Sql SqlConnection
- 		 * @param User User
- 		 * @param array Lang
- 		 * @param Config Config
- 		 * @param ComaLate ComaLate
- 		 * @param ComaLib ComaLib
- 		 */
-		function Admin_Module_News(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
- 			$this->_SqlConnection = &$SqlConnection;
- 			$this->_User = &$User;	
- 			$this->_Lang = &$Lang;
- 			$this->_Config = &$Config;
- 			$this->_ComaLate = &$ComaLate;
- 			$this->_ComaLib = &$ComaLib;
- 		}
  		
  		/**
  		 * @access public

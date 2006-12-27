@@ -18,28 +18,29 @@
 	/**
 	 * @ignore
 	 */
-	define("COMACMS_RUN", true);
+	define('COMACMS_RUN', true);
  
 	include('common.php');
 	$outputpage = new OutputPage($sqlConnection);
 	
-	/**
-	 * @ignore
-	 */
-	//include('./lang/' . $user->Language  . '/admin_lang.php');
-	include('./classes/registration.php');
+
+	include(__ROOT__ . '/classes/registration.php');
 	
-	if(!isset($extern_page))
+	if(!isset($page))
 		header('Locaction: index.php');
 		
 	$text = '';
 	$title = '';
 	$path = '';
-	if($extern_page == 'login') {
+	if($page == 'login') {
 		$error = GetPostOrGet('error');
 		$title = "Login";
+		$redirection = GetPostOrGet('redirect');
+		$action = GetPostOrGet('action');
+		
 		$text = "<form method=\"post\" action=\"admin.php\">
-			<input type=\"hidden\" name=\"page\" value=\"admincontrol\" />
+			<input type=\"hidden\" name=\"action\" value=\"$action\" />
+			<input type=\"hidden\" name=\"page\" value=\"$redirection\" />
 			<fieldset>
 				<legend>Login</legend>
 				<div class=\"row\">
@@ -62,23 +63,23 @@
 			</fieldset>
 		</form>";
 	}
-	elseif($extern_page == 'register') {
+	elseif($page == 'register') {
 		$Registration = new Registration($sqlConnection, $admin_lang, $config);
 		$title = 'Registration';
 		$text = $Registration->GetPage(GetPostOrGet('action'));
 	}
-	elseif($extern_page == '404') {	
+	elseif($page == '404') {	
 		$want = GetPostOrGet('want');
 		$title = 'Seite nicht gefunden.';
 		$text = "Die Seite mit dem Namen &quot;$want&quot; wurde leider nicht gefunden.<br />
 			Falls die Seite aber da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.";
 	}
-	elseif($extern_page == '410') {	//Gone/Deleted
+	elseif($page == '410') {	//Gone/Deleted
 		$title = 'Seite gel&ouml;scht';
 		$text = 'Die Seite wurde leider gel&ouml;scht. <br />
 			Falls die Seite dennoch da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.'; 
 	}
-	elseif($extern_page == 'image') {
+	elseif($page == 'image') {
 		
 		$imageID = GetPostOrGet('id');
 		$imageFile = GetPostOrGet('file');
@@ -97,7 +98,7 @@
 			}
 		}
 	}
-	elseif($extern_page == 'module') {
+	elseif($page == 'module') {
 		// Get the name of Module to show
 		$moduleName = GetPostOrGet('moduleName');
 		if(file_exists('./modules/' . $moduleName . '/' . $moduleName . '_module.php'))
@@ -130,18 +131,19 @@
 	}
 	
 	if($path == '')
-		$path = "<a href=\"special.php?page=$extern_page\">$title</a>";
+		$path = "<a href=\"special.php?page=$page\">$title</a>";
 	
 	$output->Title = $config->Get('pagename') . ' - ' . $title;
 	$output->SetReplacement('TEXT', $text);
 	$output->SetReplacement('PATH', $path);
 	$output->SetCondition('notathome', true);
 	
-	$sql = "SELECT *
+	$sql = "SELECT menu_name, menu_id
 		FROM " . DB_PREFIX . "menu";
 	$menus = $sqlConnection->SqlQuery($sql);
 	while ($menu = mysql_fetch_object($menus)) {
-		$output->SetReplacement('MENU_' . $menu->menu_name, $outputpage->GenerateMenu($menu->menu_id));
+		if($output->ReplacementExists('MENU_' . $menu->menu_name, true))
+			$output->SetReplacement('MENU_' . $menu->menu_name, $outputpage->GenerateMenu($menu->menu_id));
 	}
 	
 	$modules = array();

@@ -15,11 +15,9 @@
  # the Free Software Foundation; either version 2 of the License, or
  # (at your option) any later version.
  #----------------------------------------------------------------------
-  	/**
-  	 * 
- 	 */
- 	require_once('classes/admin/admin_module.php');
- 	require_once('modules/dates/dates.class.php');
+  	
+ 	require_once __ROOT__ . '/classes/admin/admin_module.php';
+ 	require_once __ROOT__ . '/modules/dates/dates.class.php';
  	
  	/**
  	 * @package ComaCMS
@@ -116,38 +114,61 @@
  		 * @return string
  		 */
  		function _newPage() {
- 			$out = "\t\t\t<form method=\"post\" action=\"admin.php\">
-				<input type=\"hidden\" name=\"page\" value=\"module_dates\" />
-				<input type=\"hidden\" name=\"action\" value=\"add\" />
+ 			$this->_ComaLate->SetReplacement('LANG_EVENTS', $this->_Translation->GetTranslation('events'));
+ 			$this->_ComaLate->SetReplacement('LANG_ADD_A_NEW_EVENT', $this->_Translation->GetTranslation('add_a_new_event'));
+ 			$this->_ComaLate->SetReplacement('LANG_DATE', $this->_Translation->GetTranslation('date'));
+ 			$this->_ComaLate->SetReplacement('LANG_THIS_IS_THE_DATE_OF_THE_EVENT', $this->_Translation->GetTranslation('this_is_the_date_of_the_event'));
+ 			$this->_ComaLate->SetReplacement('LANG_LOCATION', $this->_Translation->GetTranslation('location'));
+ 			$this->_ComaLate->SetReplacement('LANG_THIS_IS_THE_LOCATION_WHERE_THE_EVENT_WILL_BE', $this->_Translation->GetTranslation('this_is_the_location_where_the_event_will_be'));
+ 			$this->_ComaLate->SetReplacement('LANG_TOPIC', $this->_Translation->GetTranslation('topic'));
+ 			$this->_ComaLate->SetReplacement('LANG_ADD', $this->_Translation->GetTranslation('add'));
+ 			$this->_ComaLate->SetReplacement('LANG_BACK', $this->_Translation->GetTranslation('back'));
+ 			$this->_ComaLate->SetReplacement('LANG_THE_TOPIC_DESCRIBES_THIS_EVENT', $this->_Translation->GetTranslation('the_topic_describes_this_event'));
+ 			/*'date'
+ 			'location'
+ 			'this_is_the_date_of_the_event'
+ 			'this_is_the_location_where_the_event_will_be'
+ 			Gemeint ist hier der Ort an welchem die Veranstaltung stattfindet.
+ 			'topic'
+ 			'the_topic_describes_this_event'
+ 			Dies ist die Beschreibung des Termins
+ 			'back'
+ 			'add'*/
+ 			
+ 			$template = '<h2>{LANG_EVENTS}</h2>
+ 				<form method="post" action="admin.php">
+				<input type="hidden" name="page" value="module_dates" />
+				<input type="hidden" name="action" value="add" />
 				<fieldset>
-					<legend>{$this->_Lang['add_a_new_date']}</legend>
-					<div class=\"row\">
+					<legend>{LANG_ADD_A_NEW_EVENT}</legend>
+					<div class="row">
 						<label>
-							<strong>{$this->_Lang['date']}:</strong>
-							<span class=\"info\">Dies ist das Datum, an dem die Veranstaltung stattfindet</span>
+							<strong>{LANG_DATE}:</strong>
+							<span class="info">{LANG_THIS_IS_THE_DATE_OF_THE_EVENT}</span>
 							</label>
-						" . Dates::DateSelecter(mktime(), mktime(), 'date', 7) . "
+						' . Dates::DateSelecter(mktime(), mktime(), 'date', 7) . '
 					</div>
-					<div class=\"row\">
+					<div class="row">
 						<label>
-							<strong>{$this->_Lang['location']}:</strong>
-							<span class=\"info\">Gemeint ist hier der Ort an welchem die Veranstaltung stattfindet.</span>
+							<strong>{LANG_LOCATION}:</strong>
+							<span class="info">{LANG_THIS_IS_THE_LOCATION_WHERE_THE_EVENT_WILL_BE}</span>
 						</label>
-						<input type=\"text\" name=\"dateLocation\" maxlength=\"60\" value=\"\" />
+						<input type="text" name="dateLocation" maxlength="60" value="" />
 					</div>
-					<div class=\"row\">
+					<div class="row">
 						<label>
-							<strong>{$this->_Lang['topic']}:</strong>
-							<span class=\"info\">Dies ist die Beschreibung des Termins</span>
+							<strong>{LANG_TOPIC}:</strong>
+							<span class="info">{LANG_THE_TOPIC_DESCRIBES_THIS_EVENT}</span>
 						</label>
-						<textarea name=\"dateTopic\" ></textarea>
+						<textarea name="dateTopic" ></textarea>
 					</div>
-					<div class=\"row\">
-						<input type=\"submit\" class=\"button\" value=\"{$this->_Lang['save']}\" />&nbsp;<input type=\"reset\" class=\"button\" value=\"{$this->_Lang['reset']}\" />
+					<div class="row">
+						<a href="admin.php?page=modules_dates" class="button">{LANG_BACK}</a>
+						<input type="submit" class="button" value="{LANG_ADD}" />
 					</div>
 				</fieldset>
-			</form>";
-			return $out;
+			</form>';
+			return $template;
  		}
 		
 		/**
@@ -206,8 +227,8 @@
  			
  			$this->_ComaLate->SetReplacement('DATE_DATES', $datesArray);
  			
- 			$this->_ComaLate->SetReplacement('DATES_MODULE_TITLE', $this->_Translation->GetTranslation('dates'));
- 			$this->_ComaLate->SetReplacement('ADD_A_NEW_DATE', $this->_Translation->GetTranslation('add_a_new_date'));
+ 			$this->_ComaLate->SetReplacement('DATES_MODULE_TITLE', $this->_Translation->GetTranslation('events'));
+ 			$this->_ComaLate->SetReplacement('ADD_A_NEW_DATE', $this->_Translation->GetTranslation('add_a_new_event'));
  			$this->_ComaLate->SetReplacement('DATE_TITLE_DATE', $this->_Translation->GetTranslation('date'));
  			$this->_ComaLate->SetReplacement('DATE_TITLE_LOCATION', $this->_Translation->GetTranslation('location'));
  			$this->_ComaLate->SetReplacement('DATE_TITLE_TOPIC', $this->_Translation->GetTranslation('topic'));

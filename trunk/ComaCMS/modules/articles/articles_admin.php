@@ -18,8 +18,8 @@
  	/**
  	 * @ignore
  	 */
- 	require_once('classes/admin/admin_module.php');
- 	require_once('modules/articles/articles.class.php');
+ 	require_once __ROOT__ . '/classes/admin/admin_module.php';
+ 	require_once __ROOT__ . 'modules/articles/articles.class.php';
  	require_once __ROOT__ . '/classes/imageconverter.php';
  	
  	/**
@@ -37,7 +37,7 @@
  		 * @param ComaLate ComaLate
  		 * @param ComaLib ComaLib
  		 */
- 		function Admin_Module_Articles(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
+ 		/*function Admin_Module_Articles(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
  			$this->_SqlConnection = &$SqlConnection;
  			$this->_User = &$User;	
  			$this->_Lang = &$Lang;
@@ -45,7 +45,11 @@
  			$this->_ComaLate = &$ComaLate;
  			$this->_ComaLib = &$ComaLib;
  			
+ 			
+ 		}*/
+ 		function _Init() {
  			$this->_Articles = new Articles(&$this->_SqlConnection, &$this->_ComaLib, &$this->_User, &$this->_Config);
+ 			
  		}
  		
  		/**

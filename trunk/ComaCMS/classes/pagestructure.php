@@ -67,7 +67,7 @@
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages
 				WHERE page_name = '$Name' AND page_lang = '$Lang'
-				LIMIT 0,1";	
+				LIMIT 1";	
 			$existsPageResult = $this->_SqlConnection->SqlQuery($sql);
 			
 			if($existsPage = mysql_fetch_object($existsPageResult)) { // the page exists!

@@ -342,4 +342,5 @@ Die Administratoren';
 	$langString['add_language'] = 'Sprache hinzuf&uuml;gen';
 	$langString['abbreviation'] = 'Abk&uuml;rzung';
 	$langString['language_file'] = 'Sprachdatei';
+	$langString['add'] = 'Hinzuf&uuml;gen'
 ?>

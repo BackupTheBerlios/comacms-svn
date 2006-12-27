@@ -42,7 +42,7 @@
 	require_once(__ROOT__ . '/lib/comalate/comalate.class.php');
 	$lib = new ComaLib();
 	
-	$extern_page = GetPostOrGet('page');	
+	$page = GetPostOrGet('page');	
 	
 	$queries_count = 0;
 	define('DB_PREFIX', $d_pre);
@@ -62,32 +62,36 @@
 	$output->SetMeta('generator', 'ComaCMS v0.2 (http://comacms.berlios.de)');
 	$output->SetCondition('notinadmin', true);
 	
-	if(!isset($extern_page) && endsWith($_SERVER['PHP_SELF'], 'index.php'))
-		$extern_page = $config->Get('default_page', 'home');
-	elseif(!isset($extern_page))
-		$extern_page = '';
-		
+	if(!isset($page) && endsWith($_SERVER['PHP_SELF'], 'index.php'))
+		$page = $config->Get('default_page', 'home');
+	elseif(!isset($page))
+		$page = '';
 	
-	if(startsWith($extern_page, 'a:')) {
- 		header('Location: admin.php?page='.substr($extern_page, 2));
- 		die();
-	}
- 	elseif(startsWith($extern_page, 's:')) {
- 		header('Location: special.php?page='.substr($extern_page, 2));
- 		die();
-	}
- 	elseif(startsWith($extern_page, 'l:')) {
- 		header('Location: index.php?page='.substr($extern_page, 2));
- 		die();
+	if(substr($page, 1,1) == ':') { 	
+		$sign = substr($page, 0, 1);
+		switch($sign) {
+			// "a" => admin(interface)
+			case 'a': 
+				header('Location: admin.php?page=' . substr($page, 2));
+				die();
+			// s => special(page)
+			case 's':
+				header('Location: special.php?page=' . substr($page, 2));
+ 				die();
+ 			// s => local
+ 			case 'l':
+ 				header('Location: index.php?page=' . substr($extern_page, 2));
+ 				die();
+		}
 	}
  	
  	$pagePrefix = 'l:';
 	if(endsWith($_SERVER['PHP_SELF'], 'admin.php'))
 		$pagePrefix = 'a:';
-	elseif(endsWith($_SERVER['PHP_SELF'], 'special.php'))
+	else if(endsWith($_SERVER['PHP_SELF'], 'special.php'))
 		$pagePrefix = 's:';
 	else
 		$pagePrefix = '';
 	
-	$user->SetPage($pagePrefix . $extern_page, $config);
+	$user->SetPage($pagePrefix . $page, $config);
 ?>

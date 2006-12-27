@@ -17,4 +17,9 @@
  
  $langString['delete_the_date_%date%'] = 'Den Termin &quot;%s&quot; l&ouml;schen';
  $langString['edit_the_date_%date%'] = 'Den Termin &quot;%s&quot; ver&auml;ndern';
+ $langString['events'] = 'Veranstaltung';
+ $langString['add_a_new_event'] = 'Einen neue Veranstaltung eintragen';
+ $langString['this_is_the_date_of_the_event'] = 'Dies ist das Datum, an dem die Veranstaltung stattfindet.';
+ $langString['this_is_the_location_where_the_event_will_be'] = 'Gemeint ist hier der Ort, an welchem die Veranstaltung stattfindet.';
+ $langString['the_topic_describes_this_event'] = 'Dies ist die Beschreibung des Termins.';
 ?>

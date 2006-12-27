@@ -20,31 +20,49 @@
   	 * @ignore
   	 */
 	define('COMACMS_RUN', true);
-	
+	// include the file common.php to make all preparing actions
 	include('common.php');
-	$outputpage = new OutputPage($sqlConnection);
+	
+	require_once __ROOT__ . '/system/functions.php';
+	
+	$action = GetPostOrGet('action');
+	if(!isset($page))
+		$page = 'admincontrol';
+	if($page == '')
+		$page = 'admincontrol';
+	if(!isset($action))
+		$action = '';
+	
 
+		
+	// If the user isn't logged in
 	if(!$user->IsLoggedIn)  {
-		header('Location: special.php?page=login' . (($user->LoginError != -1) ? ('&error=' . $user->LoginError) : ''));
+		$redirect = '';
+		if($page != '')
+			$redirect .= '&redirect=' . rawurldecode($page);
+		if($redirect != '' && $action != '' )
+			$redirect .= '&action='. rawurldecode($action);
+		header('Location: special.php?page=login' . (($user->LoginError != -1) ? ('&error=' . $user->LoginError) : '') . $redirect);
 		die();
 	}
+	// The user must be a admin to access this page
 	if(!$user->IsAdmin && $user->IsLoggedIn) {
 		header('Location: index.php');
 		die();
 	}
-	include_once('./system/functions.php');
+	
+	$outputpage = new OutputPage($sqlConnection);
 	
 	$text = '';
 	$title = '';
 	/**
 	 * @ignore
 	 */
-	//include('./lang/' . $user->Language . '/admin_lang.php');
-	include('./system/admin_pages.php');
+	
 	// add the menu-entries for the admin menu (Link-Text, $page)
 	$menuArray = array();
 	$menuArray[] = array($translation->GetTranslation('admincontrol'), 'admincontrol',);
-	$menuArray[] = array($translation->GetTranslation('sitepreview'), 'sitepreview');
+	$menuArray[] = array($translation->GetTranslation('pagepreview'), 'pagepreview');
 	$menuArray[] = array($translation->GetTranslation('pagestructure'), 'pagestructure');
 	$menuArray[] = array($translation->GetTranslation('menu-editor'), 'menueditor');
 	$menuArray[] = array($translation->GetTranslation('preferences'), 'preferences');
@@ -89,141 +107,140 @@
 	
 	// FIXME: add path links to make the usability much better! 
 	$path_add = '';
-	// insert the 'functions' here
-	$extern_action = GetPostOrGet('action');
-	if(!isset($extern_page))
-		$extern_page = 'admincontrol';
-	if($extern_page == '')
-		$extern_page = 'admincontrol';
-	if(!isset($extern_action))
-		$extern_action = '';
-//	counter_set("a:$extern_page");
 	
-	if($extern_page == 'admincontrol') {
-		// Get the admin-controll-class
-		include_once('classes/admin/admin_admincontrol.php');
-		$title = $translation->GetTranslation('admincontrol');
-		
-		$admin_admincontrol = new Admin_AdminControl($sqlConnection, $translation, $config, $user, $lib, $output);
-		$text = $admin_admincontrol->GetPage();
-	}
-	elseif($extern_page == 'sitepreview') {
-		// Get the admin-sitepreview-class
-		include_once('classes/admin/admin_pagepreview.php');
-		$title = $translation->GetTranslation('sitepreview');
-		
-		$admin_PagePreview = new Admin_PagePreview($sqlConnection, $translation, $config, $user, $lib, $output);
-		$text = $admin_PagePreview->GetPage();
-	}
-	elseif($extern_page == 'style') {
-		// Get the admin-sitepreview-class
-		include_once('classes/admin/admin_pagepreview.php');
-		$title = $translation->GetTranslation('sitestyle');
-		
-		$admin_PagePreview = new Admin_PagePreview($sqlConnection, $translation, $config, $user, $lib, $output);
-		$text = $admin_PagePreview->GetPage('style');
-	}
-	elseif($extern_page == 'languages') {
-		// Get the languages-class
-		include_once('classes/admin/admin_languages.php');
-		$title = $translation->GetTranslation('languages');
-		
-		$admin_Languages = new Admin_Languages($sqlConnection, $translation, $config, $user, $lib, $output);
-		$text = $admin_Languages->GetPage($extern_action);
-	}
-	elseif($extern_page == 'users') {
-		$title = $translation->GetTranslation('users');
-		$text = page_users();
-	}
-	elseif($extern_page == 'logout') {
-		//include('./system/user_pages.php');
-		//page_logout();
-		$user->Logout();
-		header("Location: index.php");
-		die();
-	}
-	elseif($extern_page == 'preferences') {
-		include('classes/admin/admin_preferences.php');
-		$title = $translation->GetTranslation('preferences');
-		//$text = page_preferences();
-		$admin_page = new Admin_Preferences($sqlConnection, $translation, $config, $user, $lib, $output);
-		$text = $admin_page->GetPage($extern_action);
-	}
-	elseif($extern_page == 'files') {
-		$title = $translation->GetTranslation('files');
-		include('classes/admin/admin_files.php');
-		$admin_page = new Admin_Files($sqlConnection, $translation, $config, $user, $lib, $output);
-		$text = $admin_page->GetPage($extern_action);
-	}
-	elseif($extern_page == 'pagestructure') {
-		$title = $translation->GetTranslation('pagestructure');
-		include('classes/admin/admin_pagestructure.php');
-		$admin_page = new Admin_PageStructure($sqlConnection, $translation, $config, $user, $lib, $output);
-		$text = $admin_page->GetPage($extern_action);
-	}
-	elseif($extern_page == 'groups') {
-		$title = $admin_lang['groups'];
-		include('classes/admin/admin_groups.php');
-		$admin_page = new Admin_Groups($sqlConnection, $translation, $config, $user, $lib, $output);
-		$text = $admin_page->GetPage($extern_action);
-	}
-	elseif($extern_page == 'rights') {
-		$title = $translation->GetTranslation('rights');
-		include('classes/admin/admin_rights.php');
-		$admin_page = new Admin_Rights($sqlConnection, $translation, $config, $user, $lib, $output);
-		$text = $admin_page->GetPage($extern_action);
-	}
-	elseif($extern_page == 'menueditor') {
-		$title = $translation->GetTranslation('menu-editor');
-		include('classes/admin/admin_menu.php');
-		$admin_page = new Admin_Menu($sqlConnection, $translation, $config, $user, $lib, $output);
-		$text = $admin_page->GetPage($extern_action);
-	}
-	elseif($extern_page == 'modules') {
-		$title = $translation->GetTranslation('modules');
-		include('classes/admin/admin_modules.php');
-		$admin_page = new Admin_Modules($sqlConnection, $translation, $config, $user, $lib, $output);
-		$text = $admin_page->GetPage($extern_action);
-	}
-	elseif(substr($extern_page, 0, 7) == 'module_')
-	{
-		// get the name of the module which's  admin-interface should be shown
-		$moduleName = substr($extern_page, 7);
-		// is the module really activated? (yes, I'm paranoid... :-P )
-		if(in_array($moduleName, $modulesActivated)) {
-			/**
-			 * @ignore
-			 */
-			include_once("./modules/$moduleName/{$moduleName}_admin.php");
-			if(class_exists('Admin_Module_' . $moduleName)) {
-				// create a link to the initialisation-function for the module-class
-				$newClass = create_function('&$SqlConnection, &$Translation, &$Config, &$User, &$ComaLib, &$ComaLata', 'return new Admin_Module_' . $moduleName . '(&$SqlConnection, &$Translation, &$Config, &$User, &$ComaLib, &$ComaLata);');
-				// create the module-class
-				$moduleAdminInterface = $newClass($sqlConnection, $translation, $config, $user, $lib, $output);
-				if(isset($moduleAdminInterface)) {
-					$text = $moduleAdminInterface->GetPage($extern_action);
-					$title = $moduleAdminInterface->GetTitle();
+	// insert the 'functions' here
+	
+	
+	switch($page) {
+		case 'pagepreview':
+		case 'style':
+			// Load the pagepreview-class
+			include_once(__ROOT__ . '/classes/admin/admin_pagepreview.php');
+			
+			$title = $translation->GetTranslation($page);
+			$adminClass = new Admin_PagePreview($sqlConnection, $translation, $config, $user, $lib, $output);
+			if($page == 'style')
+				$action = 'style';
+			$text = $adminClass->GetPage($action);
+			break;
+		case 'languages':
+			// Load the languages-class
+			include_once(__ROOT__ . '/classes/admin/admin_languages.php');
+			
+			$title = $translation->GetTranslation('languages');
+			$adminClass = new Admin_Languages($sqlConnection, $translation, $config, $user, $lib, $output);
+			$text = $adminClass->GetPage($action);
+			break;
+		case 'users':
+			// TODO: make a class out of the context of this
+			include_once(__ROOT__ . '/system/admin_pages.php');
+			$title = $translation->GetTranslation('users');
+			$text = page_users();
+			break;
+		case 'logout':
+			// call the logout and redirect to the 
+			$user->Logout();
+			header("Location: index.php");
+			die();
+		case 'preferences':
+			// Load the preferences-class (preferences-management)
+			include_once (__ROOT__ . '/classes/admin/admin_preferences.php');
+			
+			$title = $translation->GetTranslation('preferences');
+			$adminClass = new Admin_Preferences($sqlConnection, $translation, $config, $user, $lib, $output);
+			$text = $adminClass->GetPage($action);
+			break;
+		case 'files':
+			// Load the files-class (file-management)
+			include_once(__ROOT__ . '/classes/admin/admin_files.php');
+			
+			$title = $translation->GetTranslation('files');
+			$adminClass = new Admin_Files($sqlConnection, $translation, $config, $user, $lib, $output);
+			$text = $adminClass->GetPage($action);
+			break;
+		case 'pagestructure':
+			// Load the pagestructure-class (manage & edit all pages)
+			include_once(__ROOT__ . '/classes/admin/admin_pagestructure.php');
+			
+			$title = $translation->GetTranslation('pagestructure');
+			$adminClass = new Admin_PageStructure($sqlConnection, $translation, $config, $user, $lib, $output);
+			$text = $adminClass->GetPage($action);
+			break;
+		case 'groups':
+			// Load the groups-class (groups-management)		
+			include_once(__ROOT__  . '/classes/admin/admin_groups.php');
+
+			$title = $translation->GetTranslation('groups');
+			$adminClass = new Admin_Groups($sqlConnection, $translation, $config, $user, $lib, $output);
+			$text = $adminClass->GetPage($action);
+			break;
+		case 'rights':
+			// Load the rights-class (access-management)
+			include_once(__ROOT__ . '/classes/admin/admin_rights.php');
+			
+			$title = $translation->GetTranslation('rights');
+			$adminClass = new Admin_Rights($sqlConnection, $translation, $config, $user, $lib, $output);
+			$text = $adminClass->GetPage($action);
+			break;
+		case 'menueditor':
+			// Load the menu-class (menu-management)
+			include_once(__ROOT__ . '/classes/admin/admin_menu.php');
+			
+			$title = $translation->GetTranslation('menu-editor');
+			$adminClass = new Admin_Menu($sqlConnection, $translation, $config, $user, $lib, $output);
+			$text = $adminClass->GetPage($action);			
+			break;
+		case 'modules':	
+			// Load te modles-class (module-management)
+			include_once(__ROOT__ . '/classes/admin/admin_modules.php');
+			
+			$title = $translation->GetTranslation('modules');
+			$adminClass = new Admin_Modules($sqlConnection, $translation, $config, $user, $lib, $output);
+			$text = $adminClass->GetPage($action);
+			break;
+		case 'admincontrol': 		
+		default:
+			if(substr($page, 0, 7) == 'module_') {
+				// get the name of the module which's admin-interface should be shown
+				$moduleName = substr($page, 7);
+				// is the module really activated? (yes, I'm paranoid... :-P )
+				if(in_array($moduleName, $modulesActivated)) {
+					// Load the admin-class of the module
+					include_once(__ROOT__ . "/modules/$moduleName/{$moduleName}_admin.php");
+					if(class_exists('Admin_Module_' . $moduleName)) {
+						// create a link to the initialisation-function for the module-class
+						$newClass = create_function('&$SqlConnection, &$Translation, &$Config, &$User, &$ComaLib, &$ComaLata', 'return new Admin_Module_' . $moduleName . '(&$SqlConnection, &$Translation, &$Config, &$User, &$ComaLib, &$ComaLata);');
+						// create the module-class
+						$moduleAdminInterface = $newClass($sqlConnection, $translation, $config, $user, $lib, $output);
+						if(isset($moduleAdminInterface)) {
+							$text = $moduleAdminInterface->GetPage($action);
+							$title = $moduleAdminInterface->GetTitle();
+						}
+					} 
 				}
-			} 
-		}
+			}
+			else {		
+				// Load the admincontrol-class (system-overview)
+				include_once(__ROOT__ . '/classes/admin/admin_admincontrol.php');
+				
+				$title = $translation->GetTranslation('admincontrol');
+				$adminClass = new Admin_AdminControl($sqlConnection, $translation, $config, $user, $lib, $output);
+				$text = $adminClass->GetPage();
+			}
+			break;
 	}
-	//
-	// end of the 'functions'
-	//
-	/**
-	 * @ignore
-	 */
+	
 	$menu = array();
 	
 	foreach($menuArray as $part) {
-		if($extern_page == $part[1])
+		if($page == $part[1])
 			$linkStyle = ' class="actual"';
 		else
 			$linkStyle = '';
 		$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'admin.php?page=' . $part[1], 'CSS_ID' => '', 'LINK_STYLE' => $linkStyle);
 	}
 	// Replace all menus except of DEFAULT with data of database 
-	$sql = "SELECT *
+	$sql = "SELECT menu_name, menu_id
 		FROM " . DB_PREFIX . "menu";
 	$menus = $sqlConnection->SqlQuery($sql);
 	while ($database_menu = mysql_fetch_object($menus)) {
@@ -241,8 +258,8 @@
 	$output->SetCondition('notinindex', true);
 	$output->SetCondition('notinadmin', false);
 	$path = '';
-	if($extern_page != 'admincontrol')
-		$path = " -> <a href=\"admin.php?page=$extern_page\">$title</a>$path_add";
+	if($page != 'admincontrol')
+		$path = " -> <a href=\"admin.php?page=$page\">$title</a>$path_add";
 	$output->SetReplacement('PATH', "<a href=\"admin.php?page=admincontrol\">Admin</a>$path");
 	
 	$output->GenerateOutput();

@@ -70,10 +70,10 @@
  		 */
  		 function _PagePreview() {
  		 	// Set Replacements for the template
- 		 	$this->_ComaLate->SetReplacement('SITEPREVIEW', $this->_Translation->GetTranslation('sitepreview'));
+ 		 	$this->_ComaLate->SetReplacement('PAGEPREVIEW', $this->_Translation->GetTranslation('pagepreview'));
  		 	
  		 	// Throw out the template data for this page
- 		 	$template = '<h2>{SITEPREVIEW}</h2>
+ 		 	$template = '<h2>{PAGEPREVIEW}</h2>
  		 				<iframe src="index.php" class="pagepreview"></iframe>';
  		 	return $template;
  		 }
@@ -92,7 +92,7 @@
  		 	
  		 	// Set replacements for the template
  		 	$this->_ComaLate->SetReplacement('ACTUALSTYLE', $Style);
- 		 	$this->_ComaLate->SetReplacement('SITESTYLE', $this->_Translation->GetTranslation('sitestyle'));
+ 		 	$this->_ComaLate->SetReplacement('PAGESTYLE', $this->_Translation->GetTranslation('pagestyle'));
  		 	
  		 	$styleSelect = array();
  		 	// Get all styles
@@ -119,11 +119,11 @@
 			
  		 	// Throw out the template data
  		 	$template = '<script type="text/javascript" language="JavaScript" src="./system/functions.js"></script>
- 		 				<h2>{SITESTYLE}</h2>
+ 		 				<h2>{PAGESTYLE}</h2>
 						<iframe id="previewiframe" class="pagepreview" src="index.php?style={ACTUALSTYLE}"></iframe>
 						<form action="admin.php" method="get">
 							<input type="hidden" name="page" value="style" />
-							<label for="stylepreviewselect">{SITESTYLE}:
+							<label for="stylepreviewselect">{PAGESTYLE}:
 								<select id="stylepreviewselect" name="style" size="1">
 									<PREVIEW_STYLE_SELECT:loop>
 										<option value="{ENTRY_VALUE}"{ENTRY_SELECTED}>{ENTRY_LONGNAME}</option>

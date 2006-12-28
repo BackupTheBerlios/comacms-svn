@@ -653,6 +653,7 @@
 		
 			if($confirmation == 1) {
 				$this->_PageStructure->RemoveInlineMenuEntry($entryID);
+				$this->_PageStructure->GenerateInlineMenu($PageID);
 				return $this->_InlineMenuHomePage($PageID);
 			}
 			else {

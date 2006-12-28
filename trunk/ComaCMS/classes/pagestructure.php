@@ -496,7 +496,7 @@
 				FROM " . DB_PREFIX . "inlinemenu_entries
 				WHERE inlineentry_sortid >= $InlineMenuEntrySortID AND inlineentry_page_id = $PageID
 				ORDER BY inlineentry_sortid ASC
-				LIMIT 0, 2";
+				LIMIT 2";
 			$entriesResult = $this->_SqlConnection->SqlQuery($sql);
 			
 			$this->_InlineMenuEntriesSwitchSortIDs($entriesResult);

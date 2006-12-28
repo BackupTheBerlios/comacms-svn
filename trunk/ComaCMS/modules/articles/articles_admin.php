@@ -19,7 +19,7 @@
  	 * @ignore
  	 */
  	require_once __ROOT__ . '/classes/admin/admin_module.php';
- 	require_once __ROOT__ . 'modules/articles/articles.class.php';
+ 	require_once __ROOT__ . '/modules/articles/articles.class.php';
  	require_once __ROOT__ . '/classes/imageconverter.php';
  	
  	/**
@@ -28,25 +28,6 @@
  	 */
  	class Admin_Module_Articles extends Admin_Module {
  		
- 		/**
-		 * @access public
- 		 * @param Sql SqlConnection
- 		 * @param User User
- 		 * @param array Lang
- 		 * @param Config Config
- 		 * @param ComaLate ComaLate
- 		 * @param ComaLib ComaLib
- 		 */
- 		/*function Admin_Module_Articles(&$SqlConnection, &$User, &$Lang, &$Config, &$ComaLate, &$ComaLib) {
- 			$this->_SqlConnection = &$SqlConnection;
- 			$this->_User = &$User;	
- 			$this->_Lang = &$Lang;
- 			$this->_Config = &$Config;
- 			$this->_ComaLate = &$ComaLate;
- 			$this->_ComaLib = &$ComaLib;
- 			
- 			
- 		}*/
  		function _Init() {
  			$this->_Articles = new Articles(&$this->_SqlConnection, &$this->_ComaLib, &$this->_User, &$this->_Config);
  			
@@ -138,7 +119,7 @@
 						Eingelogt als {$this->_User->Showname}
 					</div>
 					<div class=\"row\">
-						<input type=\"submit\" class=\"button\" value=\"Eintragen\" /><input type=\"reset\" class=\"button\" value=\"Leeren\" />
+						<input type=\"submit\" class=\"button\" value=\"Eintragen\" />
 					</div>
 				</fieldset>
 				<br /> 
@@ -189,7 +170,7 @@
 						" . ((file_exists($thumbnailfoler . $imgmax . '_' . basename($article->article_image))) ? "<img style=\"float:left\" src=\"". generateUrl($thumbnailfoler . $imgmax . '_' . basename($article->article_image)) . "\"/>" : '<b>noch kein Bild festgelegt</b><br />') . "Wenn das Bild gesetzt oder ver&auml;ndert wird, gehen alle ungespeicherten Ver&auml;nderungen an den Texten verloren!<br /><a class=\"button\" href=\"admin.php?page=module_articles&amp;action=setimage&amp;article_id=$id\">Bild setzen/ver&auml;ndern</a>
 					</div>
 					<div class=\"row\">
-						<input type=\"submit\" class=\"button\" value=\"{$this->_Lang['save']}\" /><input type=\"reset\" class=\"button\" value=\"{$this->_Lang['reset']}\" />
+						<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('save') . "\" />
 					</div>
 				</fieldset>
 				<br />
@@ -205,17 +186,17 @@
 		function _homePage() {	
 	 		$thumbnailfolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
 	 		$imgmax = 100;
-	 		$out = "<h2>{$this->_Lang['articles_module']}</h2>"; 
-	 		$out .= "<a href=\"admin.php?page=module_articles&amp;action=new\" class=\"button\">{$this->_Lang['write_new_article']}</a><br /> 
+	 		$out = "<h2>" . $this->_Translation->GetTranslation('articles_module') . "</h2>"; 
+	 		$out .= "<a href=\"admin.php?page=module_articles&amp;action=new\" class=\"button\">" . $this->_Translation->GetTranslation('write_new_article') . "</a><br /> 
 	 			<table class=\"text_table full_width\">
 					<thead>
 						<tr>
-							<th class=\"table_date_width\">{$this->_Lang['date']}</th>
-							<th>{$this->_Lang['title']}</th>
-							<th>{$this->_Lang['picture']}</th>
-							<th>{$this->_Lang['description']}</th>
-							<th>{$this->_Lang['creator']}</th>
-							<th class=\"actions\">{$this->_Lang['actions']}</th>
+							<th class=\"table_date_width\">" . $this->_Translation->GetTranslation('date') . "</th>
+							<th>" . $this->_Translation->GetTranslation('title') . "</th>
+							<th>" . $this->_Translation->GetTranslation('picture') . "</th>
+							<th>" . $this->_Translation->GetTranslation('description') . "</th>
+							<th>" . $this->_Translation->GetTranslation('creator') . "</th>
+							<th class=\"actions\">" . $this->_Translation->GetTranslation('actions') . "</th>
 						</tr>
 					</thead>\r\n";
 			$sql = "SELECT *
@@ -291,7 +272,7 @@
 						
 					}
 				}
-				$out .= "</div><input type=\"submit\" value=\"{$this->_Lang['apply']}\" class=\"button\"/><a href=\"admin.php?page=module_articles&amp;action=edit&amp;article_id=$article_id\" class=\"button\">{$this->_Lang['back']}</a></form>";
+				$out .= "</div><input type=\"submit\" value=\"" . $this->_Translation->GetTranslation('apply') . "\" class=\"button\"/><a href=\"admin.php?page=module_articles&amp;action=edit&amp;article_id=$article_id\" class=\"button\">" . $this->_Translation->GetTranslation('back') . "</a></form>";
 				return $out;
 			}
 	 	}
@@ -300,7 +281,7 @@
 	 	 * @access public
 	 	 */
 	 	 function GetTitle() {
-	 	 	return $this->_Lang['articles_module'];
+	 	 	return $this->_Translation->GetTranslation('articles_module');
 	 	 }
  	}
 ?>

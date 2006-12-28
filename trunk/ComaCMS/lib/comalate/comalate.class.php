@@ -381,6 +381,20 @@
 			$this->Template = preg_replace( '/\{(.+?)\}/e', "\$this->_Replace('$1')", $this->Template);
 			// Replace all loop-replacements
 			$this->Template = preg_replace("/<([A-Za-z0-9_]+)\:loop>(.+?)<\/\\1>/es", "\$this->_RepeatReplace('$1', '$2')", $this->Template);
+			
+			
+			// find all connditions (genarated through some replacements) and handle them			
+			if(preg_match_all("/<([A-Za-z0-9_]+)\:condition>(.+?)<\/\\1>/s", $this->Template, $conditionMatches)) {
+				foreach($conditionMatches[1] as $condition) {
+					if(!array_key_exists($condition, $this->_Conditions))
+						$this->Template = preg_replace("/\<$condition:condition\>(.+?)\<\/$condition\>/s", '', $this->Template);
+					else if($this->_Conditions[$condition] == false) 
+						$this->Template = preg_replace("/\<$condition:condition\>(.+?)\<\/$condition\>/s", '', $this->Template);
+					else 
+						$this->Template = preg_replace("/\<$condition:condition\>(.+?)\<\/$condition\>/s", '$1', $this->Template);
+				}
+			}
+				
 			// Remove empty p-tags
 			$this->Template = str_replace('<p></p>', '', $this->Template);
 			

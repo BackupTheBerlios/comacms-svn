@@ -27,4 +27,6 @@
  $langString['remove_event'] = 'Veranstaltung l&ouml;schen';
  $langString['remove_this_event'] = 'Dise Veranstaltung l&ouml;schen!';
  $langString['dont_remove_this_event'] = 'Dise Veranstaltung nicht l&ouml;schen!';
+ $langString['please_type_in_a_topic'] = 'Bitte geben sie einee Beschreibung f&uuml;r den Termin ein!';
+ $langString['please_type_in_a_location'] = 'Bitte geben sie den Veranstaltungsort des Termins an! ';
 ?>

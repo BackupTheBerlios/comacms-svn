@@ -86,11 +86,11 @@
 					LIMIT 1";
 				$dateResult = $this->_SqlConnection->SqlQuery($sql);
 				if($dateEntry = mysql_fetch_object($dateResult)) {
-					$dateArray =  array('DATE_ID' => $dateEntry->date_id,
- 							'DATE_DATE' => $dateEntry->date_date,
- 							'DATE_TOPIC' => $dateEntry->date_topic,
- 							'DATE_LOCATION' => $dateEntry->date_location,
- 							'DATE_CREATOR' => $dateEntry->date_creator
+					$dateArray =  array('EVENT_ID' => $dateEntry->date_id,
+ 							'EVENT_DATE' => $dateEntry->date_date,
+ 							'EVENT_TOPIC' => $dateEntry->date_topic,
+ 							'EVENT_LOCATION' => $dateEntry->date_location,
+ 							'EVENT_CREATOR' => $dateEntry->date_creator
  							);
 					return $dateArray;
 				}
@@ -103,9 +103,12 @@
  		 * @access public
  		 * @param integer MaxCount
  		 * @param boolean ConvertTimestamp
+ 		 * @param boolean ConvertUsername
+ 		 * @param boolean HideOld If this is true, all Events behind <param>Older</param> will be ignored
+ 		 * @param timestamp Older
  		 * @return array
  		 */
- 		function FillArray($MaxCount = 6, $ConvertTimestamp = true, $ConvertUsername) {
+ 		function FillArray($MaxCount = 6, $ConvertTimestamp = true, $ConvertUsername = true, $HideOlder = true, $Older = -1) {
  			
  			// get some config-values
 			$dateDayFormat = $this->_Config->Get('date_day_format', '');
@@ -114,24 +117,34 @@
  			
  			$datesArray = array();
  			
+ 			if($HideOlder && $Older == -1)
+ 				$Older = mktime();
+ 				
+ 			$sqlHide = '';
+ 			if($HideOlder)
+ 				$sqlHide = " WHERE date_date > $Older ";
+ 			
+ 			
  			if(!is_numeric($MaxCount))
  				$MaxCount =  6;
  			$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
  				FROM " . DB_PREFIX . "dates
  				ORDER BY date_date ASC
+ 				$sqlHide
  				LIMIT $MaxCount";
  			if($MaxCount < 0)
  				$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
  				FROM " . DB_PREFIX . "dates
+ 				$sqlHide
  				ORDER BY date_date ASC";
  			
  			$datesResult = $this->_SqlConnection->SqlQuery($sql);
  			while($dateEntry = mysql_fetch_object($datesResult)) {
- 				$datesArray[] = array('DATE_ID' => $dateEntry->date_id,
- 							'DATE_DATE' => ($ConvertTimestamp) ? date($dateFormat, $dateEntry->date_date) : $dateEntry->date_date,
- 							'DATE_TOPIC' => nl2br($dateEntry->date_topic),
- 							'DATE_LOCATION' => $dateEntry->date_location,
- 							'DATE_CREATOR' =>  ($ConvertTimestamp)? $this->_ComaLib->GetUserByID($dateEntry->date_creator) :$dateEntry->date_creator, 
+ 				$datesArray[] = array('EVENT_ID' => $dateEntry->date_id,
+ 							'EVENT_DATE' => ($ConvertTimestamp) ? date($dateFormat, $dateEntry->date_date) : $dateEntry->date_date,
+ 							'EVENT_TOPIC' => nl2br($dateEntry->date_topic),
+ 							'EVENT_LOCATION' => $dateEntry->date_location,
+ 							'EVENT_CREATOR' =>  ($ConvertTimestamp)? $this->_ComaLib->GetUserByID($dateEntry->date_creator) :$dateEntry->date_creator, 
  						);
  			}
  			return $datesArray;
@@ -161,11 +174,11 @@
  			
  			$datesResult = $this->_SqlConnection->SqlQuery($sql);
  			while($dateEntry = mysql_fetch_object($datesResult)) {
- 				$datesArray[] = array('DATE_ID' => $dateEntry->date_id,
- 							'DATE_DATE' => ($ConvertTimestamp) ? date('d.m.Y H:i', $dateEntry->date_date) : $dateEntry->date_date,
- 							'DATE_TOPIC' => nl2br($dateEntry->date_topic),
- 							'DATE_LOCATION' => $dateEntry->date_location,
- 							'DATE_CREATOR' => $dateEntry->date_creator
+ 				$datesArray[] = array('EVENT_ID' => $dateEntry->date_id,
+ 							'EVENT_DATE' => ($ConvertTimestamp) ? date('d.m.Y H:i', $dateEntry->date_date) : $dateEntry->date_date,
+ 							'EVENT_TOPIC' => nl2br($dateEntry->date_topic),
+ 							'EVENT_LOCATION' => $dateEntry->date_location,
+ 							'EVENT_CREATOR' => $dateEntry->date_creator
  						);
  			}
  			return $datesArray;
@@ -218,28 +231,35 @@
  			}
  		}
  		
- 		/** DateSelecter
+ 		/** DateSelector
 	 	 * 
 	 	 * Creates a 'control' to select a date without typing something in by keyboard
 	 	 * 
 	 	 * @access public
 	 	 * @static
-	 	 * @param timestamp SelectedDate
+	 	 * @param timestamp SelectedDate This date will be selected after generating the 'control'
 	 	 * @param timestamp StartDate
-	 	 * @param string Prefix
-	 	 * @param integer Years
+	 	 * @param string Prefix The prefix allows to crate more than one DateSelector in one form
+	 	 * @param integer Years 
 	 	 * @return string
 	 	 */
-	 	function DateSelecter($SelectedDate, $StartDate, $Prefix = 'date', $Years = 10) {
+	 	function DateSelector($SelectedDate, $StartDate, $Prefix = 'date', $Years = 10) {
+	 		// The selcted year
 	 		$selectedYear = date('Y', $SelectedDate);
+	 		// The 'maximum'-year (StartDate->Year + Years)
 	 		$endYear = date('Y', $StartDate) + $Years;
+	 		// The selected day
 	 		$selectedDay = date('j', $SelectedDate);
+	 		// The selected month
 	 		$selectedMonth = date('n', $SelectedDate);
+	 		// The selected hour
 	 		$selectedHour = date('G', $SelectedDate);
+	 		// The selected minute
 	 		$selectedMinute = date('i', $SelectedDate);
 	 			 			 		
 	 		$out = "<select id=\"{$Prefix}Day\" name=\"{$Prefix}Day\">";
-	 		for($i = 1; $i <= 31;$i++) {
+	 		// print all possible days of a month
+	 		for($i = 1; $i <= 31; $i++) {
 	 			if($i == $selectedDay)
 	 				$out .= "<option selected=\"selected\" value=\"$i\">" . substr('0' . $i, -2) . "</option>\r\n";
 	 			else
@@ -247,7 +267,8 @@
 	 		}
 	 		$out .= "</select>\r\n
 				<select id=\"{$Prefix}Month\" name=\"{$Prefix}Month\">";
-	 		for($i = 1; $i <= 12;$i++) {
+			// print all months
+	 		for($i = 1; $i <= 12; $i++) {
 	 			if($i == $selectedMonth)
 	 				$out .= "<option selected=\"selected\" value=\"$i\">" . substr('0' . $i, -2) . "</option>\r\n";
 	 			else
@@ -255,6 +276,7 @@
 	 		}
 	 		$out .= "</select>\r\n
 	 			<select id=\"{$Prefix}Year\" name=\"{$Prefix}Year\">";
+	 		// print all selectable years, but make sure that the year is greater than 1970 (lower years will make trouble in windows environments)
 	 		for($i = ($selectedYear - $Years < 1970) ? 1970 : ($selectedYear - $Years); $i <= $endYear; $i++) {
 	 			if($i == $selectedYear)
 	 				$out .= "<option selected=\"selected\" value=\"$i\">$i</option>\r\n";
@@ -263,6 +285,7 @@
 	 		}
 	 		$out .= "</select>\r\n
 				<select id=\"{$Prefix}Hour\" name=\"{$Prefix}Hour\">";
+	 		// print all hours
 	 		for($i = 0; $i <= 23; $i++) {
 	 			if($i == $selectedHour)
 	 				$out .= "<option selected=\"selected\" value=\"$i\">" . substr('0' . $i, -2) . "</option>\r\n";
@@ -271,6 +294,7 @@
 	 		}
 	 		$out .= "</select>\r\n
 				<select id=\"{$Prefix}Minute\" name=\"{$Prefix}Minute\">";
+	 		// print all minutes
 	 		for($i = 0; $i <= 59;$i++) {
 	 			if($i == $selectedMinute)
 	 				$out .= "<option selected=\"selected\" value=\"$i\">" . substr('0' . $i, -2) . "</option>\r\n";

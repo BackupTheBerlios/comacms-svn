@@ -22,4 +22,9 @@
  $langString['this_is_the_date_of_the_event'] = 'Dies ist das Datum, an dem die Veranstaltung stattfindet.';
  $langString['this_is_the_location_where_the_event_will_be'] = 'Gemeint ist hier der Ort, an welchem die Veranstaltung stattfindet.';
  $langString['the_topic_describes_this_event'] = 'Dies ist die Beschreibung des Termins.';
+ $langString['show_old_events'] = 'Alte Veranstaltungen anzeigen';
+ $langString['hide_old_events'] = 'Alte Veranstaltungen ausblenden';
+ $langString['remove_event'] = 'Veranstaltung l&ouml;schen';
+ $langString['remove_this_event'] = 'Dise Veranstaltung l&ouml;schen!';
+ $langString['dont_remove_this_event'] = 'Dise Veranstaltung nicht l&ouml;schen!';
 ?>

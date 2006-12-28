@@ -20,7 +20,7 @@
 	$langString['ok'] = 'OK';
 	$langString['email'] = 'Email';
 	$langString['admincontrol'] = 'AdminControl';
-	$langString['sitepreview'] = 'Sitepreview';
+	$langString['pagepreview'] = 'Sitepreview';
 	$langString['preferences'] = 'Preferences';
 	$langString['menu-editor'] = 'Menu-Editor';
 	$langString['pageeditor'] = 'PageEditor';

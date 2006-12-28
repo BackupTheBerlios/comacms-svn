@@ -34,7 +34,7 @@
 	$langString['gallery'] = 'Galerie';
 	$langString['gallery editor'] = 'GalerieEditor';
 	$langString['logout'] = 'Logout';
-	$langString['sitepreview'] = 'Seitenvorschau';
+	$langString['pagepreview'] = 'Seitenvorschau';
 	$langString['registered_users'] = 'Angemeldete Benutzer';
 	$langString['online_since'] = 'Aktiv seit';
 	$langString['created_pages'] = 'Erstellte Seiten';
@@ -261,7 +261,7 @@
 	$langString['this_is_your_nickname_not_your_showname'] = 'Dies ist Ihr &quot;Nickname&quot;, nicht Ihr &quot;Anzeigename&quot;!'; 
 	$langString['the_login_was_not_typed_in'] = 'Der Login wurde nicht angegeben.';
 	$langString['the_password_was_not_typed_in'] = 'Das Password wurde nicht angegeben.';
-	$langString['this_is_your_loginpassword'] = 'Dies ist Ihr Loginpassword.';
+	$langString['this_is_your_loginpassword'] = 'Dies ist Ihr Loginpasswort.';
 	$langString['you_did_not_make_any_inputs'] = 'Es wurden keine Eingaben gemacht.';
 	$langString['the_user_and(or)_the_password_are_wrong'] = 'Der Benutzername und(oder) das Password sind(ist) falsch.';
 	$langString['the_user_is_not_activated'] = 'Der Benutzer ist nicht aktiviert.';

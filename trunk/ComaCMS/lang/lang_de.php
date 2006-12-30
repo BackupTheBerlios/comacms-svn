@@ -342,5 +342,17 @@ Die Administratoren';
 	$langString['add_language'] = 'Sprache hinzuf&uuml;gen';
 	$langString['abbreviation'] = 'Abk&uuml;rzung';
 	$langString['language_file'] = 'Sprachdatei';
-	$langString['add'] = 'Hinzuf&uuml;gen'
+	$langString['add'] = 'Hinzuf&uuml;gen';
+	
+	
+	
+	$langString['type'] = 'Typ';
+	$langString['access'] = 'Zugang';
+	$langString['view'] = 'Anschauen';
+	$langString['history'] = 'Verlauf';
+	$langString['path'] = 'Pfad';
+	$langString['edited_by'] = 'Ver&auml;ndert von';
+	$langString['last_change'] = 'Letze Ver&auml;nderung';
+	$langString['entries'] = 'Eintr&auml;ge';
+	$langString['subpages'] = 'Unterseiten';
 ?>

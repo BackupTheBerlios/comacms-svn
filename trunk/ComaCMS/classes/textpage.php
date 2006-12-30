@@ -43,7 +43,7 @@
 					FROM ' . DB_PREFIX . 'pages_text
 					WHERE page_id = ' . $PageID;
 			else
-				$sql = 'SELECT text
+				$sql = 'SELECT text.text_page_text
 					FROM (' . DB_PREFIX . 'pages_history page
 					LEFT JOIN ' . DB_PREFIX . 'pages_text_history text ON text.page_id = page.id ) 
 					WHERE page.page_id=' . $PageID . '

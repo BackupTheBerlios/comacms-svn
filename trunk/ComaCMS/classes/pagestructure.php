@@ -31,8 +31,9 @@
 		 * @param SqlConnection SqlConnection
 		 * @param User User
 		 */
-		function PageStructure($SqlConnection, $User) {
+		function PageStructure($SqlConnection, $User, $ComaLib) {
 			$this->_SqlConnection = &$SqlConnection;
+			$this->_ComaLib = &$ComaLib;
 			$this->_User = &$User;
 		}
 		
@@ -125,14 +126,150 @@
 		
 		function LoadData($PageID) {
 			if(empty($this->_Pages[$PageID])) {
-				$sql = "SELECT *
+				$sql = "SELECT page_name, page_title
 		 			FROM " . DB_PREFIX . "pages
 		 			WHERE page_id=$PageID
-		 			LIMIT 0, 1";
+		 			LIMIT 1";
 		 		$pageResult = $this->_SqlConnection->SqlQuery($sql);
 		 		if($page = mysql_fetch_object($pageResult))
-			 		$this->_Pages[$PageID] = array('name' => $page->page_name, 'title' => $page->page_title);
+			 		$this->_Pages[$PageID] = array('name' => $page->page_name,
+													'title' => $page->page_title);
 		 	}
+		}
+		
+		/** GetPageDataArray
+		 * 
+		 * Returns a array containing all "default-data" about the page
+		 * @access public
+		 * @param integer PageID
+		 * @return array
+		 */
+		function GetPageDataArray($PageID) {
+			if(!is_numeric($PageID))
+				return false;
+			$sql = 'SELECT page_id, page_name, page_title, page_type, page_type, page_access, page_lang, page_parent_id, page_creator, page_date, page_edit_comment
+		 			FROM ' . DB_PREFIX . "pages
+		 			WHERE page_id=$PageID
+		 			LIMIT 1";
+		 		$pageResult = $this->_SqlConnection->SqlQuery($sql);
+		 		if($page = mysql_fetch_object($pageResult)) {
+			 		$this->_Pages[$PageID]=  array('id' => $page->page_id,
+													'name' => $page->page_name,
+													'title' => $page->page_title,
+													'type' => $page->page_type,
+													'access' => $page->page_access,
+													'lang' => $page->page_lang,
+													'parentID' => $page->page_parent_id,
+													'creator' => $page->page_creator,
+													'date' => $page->page_date,
+													'comment' => $page->page_edit_comment);
+					return $this->_Pages[$PageID];
+		 			}
+				else
+					return false;
+		}
+		
+		/**
+		 * @access public
+		 * @param integer PageID
+		 * @param integer Count
+		 * @return array
+		 */
+		function GetPageHistory($PageID, $Count = -1) {
+			$history = array();
+			$sql = "SELECT page_id, page_title, page_creator, page_date, page_edit_comment
+					FROM " . DB_PREFIX . "pages_history
+					WHERE page_id = $PageID
+					ORDER BY page_date DESC";
+			$pageResult = $this->_SqlConnection->SqlQuery($sql);
+			$count = mysql_num_rows($pageResult);
+		 	while($page = mysql_fetch_object($pageResult)) {
+		 		$history[] = array('HISTORY_PAGE_DATE' => $page->page_date,
+								'HISTORY_PAGE_USER' => $page->page_creator,
+								'HISTORY_PAGE_TITLE' => $page->page_title,
+								'HISTORY_PAGE_COMMENT' => $page->page_edit_comment,
+								'HISTORY_PAGE_ID' => $page->page_id,
+								'HISTORY_PAGE_REVISION' => $count--);
+		 	}
+		 		
+			return $history;
+		}
+		
+		function GetInlineMenuEntriesCount($PageID) {
+			if(!is_numeric($PageID))
+				return false;
+			$sql = "SELECT inlineentry_page_id
+				FROM " . DB_PREFIX . "inlinemenu_entries
+				WHERE inlineentry_page_id = $PageID";
+			$inlineMenuResult = $this->_SqlConnection->SqlQuery($sql);
+			$count = mysql_num_rows($inlineMenuResult);
+			return $count;
+		}
+		
+		function LogPage($PageID, $LogMessage) {
+			if(!is_numeric($PageID))
+				return false;
+			 
+			if(empty($this->_Pages[$PageID]))
+				GetPageDataArray();
+			$pageData = &$this->_Pages[$PageID];
+			
+			$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
+					VALUES($PageID, '{$pageData['type']}', '" . addslashes($pageData['name']) ."', '" . addslashes($pageData['title']) . "', {$pageData['parentID']}, '" . addslashes($pageData['lang']) . "', {$pageData['creator']}, {$pageData['date']}, '" . addslashes( $pageData['comment']). '\')';
+			$this->_SqlConnection->SqlQuery($sql);
+			$lastID = mysql_insert_id();
+			
+			if($pageData['type'] == 'text') {
+				$sql = "SELECT text_page_text
+						FROM " . DB_PREFIX . "pages_text
+						WHERE page_id=$PageID
+						LIMIT 1";
+				$pageResult = $this->_SqlConnection->SqlQuery($sql);
+				if($page = mysql_fetch_object($pageResult)) {
+					$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, text_page_text)
+							VALUES ($lastID, '$page->text_page_text')";
+							$this->_SqlConnection->SqlQuery($sql);	
+				}
+			}
+			
+			$sql = "UPDATE " . DB_PREFIX . "pages
+					SET page_creator='{$this->_User->ID}', page_date='" . mktime() . "',  page_edit_comment = '$LogMessage'
+					WHERE page_id='$PageID'
+					LIMIT 1";
+			$this->_SqlConnection->SqlQuery($sql);
+		}
+		
+		function ChangePageAccess($PageID, $NewPageAccess) {
+			if(!is_numeric($PageID))
+				return false;
+			$sql = "UPDATE " . DB_PREFIX . "pages
+					SET  page_access='$NewPageAccess'
+					WHERE page_id='$PageID'
+					LIMIT 1";
+			$this->_SqlConnection->SqlQuery($sql);
+			return true;
+		}
+		
+		function ChangePageName($PageID, $NewPageName) {
+			if(!is_numeric($PageID))
+				return false;
+			$sql = "UPDATE " . DB_PREFIX . "pages
+					SET  page_name='$NewPageName'
+					WHERE page_id='$PageID'
+					LIMIT 1";
+			$this->_SqlConnection->SqlQuery($sql);
+			return true;
+		}
+		
+		function ChangePageParentID($PageID, $NewPageParentID) {
+			if(!is_numeric($PageID))
+				return false;
+			$sql = "UPDATE " . DB_PREFIX . "pages
+					SET  page_parent_id='$NewPageParentID'
+					WHERE page_id='$PageID'
+					LIMIT 1";
+			$this->_SqlConnection->SqlQuery($sql);
+			return true;
 		}
 		
 		function LoadParentIDs() {
@@ -151,7 +288,8 @@
  							'lang' => $page->page_lang,
  							'title' => $page->page_title,
  							'access' => $page->page_access);
- 				$this->_Pages[$page->page_id] = array('name' => $page->page_name, 'title' => $page->page_title);
+ 				$this->_Pages[$page->page_id] = array('name' => $page->page_name,
+													'title' => $page->page_title);
  			}
 		}
 		
@@ -199,7 +337,7 @@
 		}
 		
 		
-		function GetPageData($PageID, $Field) {
+		function GetPageData($PageID, $Field = 'name') {
 			$this->LoadData($PageID);
 			if(empty($this->_Pages[$PageID])) {
 				return false;

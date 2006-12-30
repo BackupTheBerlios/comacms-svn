@@ -142,7 +142,7 @@
  		 * @param boolean Value If this value is true, the content of the condition will be displayed
  		 * @return void
  		 */
- 		function SetCondition($Name, $Value) {
+ 		function SetCondition($Name, $Value = true) {
  			if($Value)
  				$this->_Conditions[$Name] = true;
  			else	

@@ -42,7 +42,7 @@
  		
 		
 		function _Init() {
-			$this->_PageStructure = new PageStructure($this->_SqlConnection, $this->_User);
+			$this->_PageStructure = new PageStructure($this->_SqlConnection, $this->_User, $this->_ComaLib);
 		}
  		
  		/**
@@ -358,11 +358,13 @@
 		 * @return string
 		 */
 		function _editPage() {
-			$page_id = GetPostOrGet('pageID');
+			$pageID = GetPostOrGet('pageID');
+			if(!is_numeric($pageID))
+				return false;
 			$out = '';
 			$sql = "SELECT page_id, page_type
 				FROM " . DB_PREFIX . "pages
-				WHERE page_id = $page_id";
+				WHERE page_id = $pageID";
 			$page_result = db_result($sql);
 			if($page = mysql_fetch_object($page_result)) {
 				$edit = null;
@@ -591,7 +593,8 @@
 						<legend>Erstelle neuen InlineMen&uuml;-Interner-Link:</legend>
 						<div class=\"row\"><label>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></label><input type=\"text\" name=\"text\" value=\"" . $entryData['text'] . "\" /></div>
 						<div class=\"row\"><label>Interne Seite<span class=\"info\">Das ist die interne Seite, auf die der Link sp&auml;ter f&uuml;hren soll.</span></label><select name=\"link\">";
-					$out .= $this->_structurePullDown(0, 0, '', -1, substr($entryData['link'], 15));
+					$this->_PageStructure->LoadParentIDs();
+					$out .= $this->_PageStructure->PageStructurePullDown(0, 0, '', -1, substr($entryData['link'], 15));
 					$out .= "</select></div>
 						<div class=\"row\">
 							<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('save') . "\" />
@@ -812,7 +815,7 @@
 						<legend>Erstelle neuen InlineMen&uuml;-Interner-Link:</legend>
 						<div class=\"row\"><label>Link-Titel<span class=\"info\">Ein wenig Text der den Link deutlich macht.</span></label><input type=\"text\" name=\"text\" value=\"\" /></div>
 						<div class=\"row\"><label>Interne Seite<span class=\"info\">Das ist die interne Seite, auf die der Link sp&auml;ter f&uuml;hren soll.</span></label><select name=\"link\">";
-						$out .= $this->_PageStructure->LoadParentIDs();
+						$this->_PageStructure->LoadParentIDs();
 						$out .= $this->_PageStructure->PageStructurePulldown(0);
 				$out .= "</select></div>
 						<div class=\"row\">
@@ -1081,196 +1084,249 @@
 		 * @return string
 		 */
 		function _infoPage() {
+			$pageID =  GetPostOrGet('pageID');
+			$action = GetPostOrGet('action2');
 			
+			$pageData = $this->_PageStructure->GetPageDataArray($pageID);
+			if($pageData === false)
+				return $this->_homePage();
+				
+			// get some config-values
+			$dateDayFormat = $this->_Config->Get('date_day_format', '');
+			$dateTimeFormat = $this->_Config->Get('date_time_format', '');
+			$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
+			$this->_ComaLate->SetCondition('pageaccess_default');
+			$this->_ComaLate->SetCondition('pagepath_default');
+			$this->_ComaLate->SetCondition('pagename_default');
+			$this->_ComaLate->SetReplacement('LANG_PATH', $this->_Translation->GetTranslation('path'));
 			
-			$page_id =  GetPostOrGet('pageID');
-			$action2 = GetPostOrGet('action2');
-			if($action2 == 'savePath' || $action2 == 'saveAccess') {
-				$page_access = GetPostOrGet('pageAccess');
-				$page_access_old = GetPostOrGet('pageAccessOld');
-				$page_parent_id = GetPostOrGet('pageParentID');
-				$page_parent_id_old = GetPostOrGet('pageParentIDOld');
-				if(($action2 == 'saveAccess' && $page_access_old != $page_access) || ($action2 == 'savePath' && $page_id != $page_parent_id && $page_parent_id != $page_parent_id_old)) {
-					$sql = "SELECT struct.*, text.*
-						FROM ( " . DB_PREFIX. "pages struct
-						LEFT JOIN " . DB_PREFIX . "pages_text text ON text.page_id = struct.page_id )
-						WHERE struct.page_id='$page_id' AND struct.page_type='text'";
-					$page_result = db_result($sql);
-					if($page = mysql_fetch_object($page_result)) {
-						
-						$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
-							VALUES($page->page_id, '$page->page_type', '$page->page_name', '$page->page_title', $page->page_parent_id, '$page->page_lang', $page->page_creator, $page->page_date, '$page->page_edit_comment')";
-						db_result($sql);
-						$lastid = mysql_insert_id();
-						
-						$sql = "INSERT INTO " . DB_PREFIX . "pages_text_history (page_id, text_page_text)
-							VALUES ($lastid, '$page->text_page_text')";
-						
-						}
+			switch($action){
+				case 'changeAccess':
+					$this->_ComaLate->SetCondition('pageaccess_edit');
+					$this->_ComaLate->SetCondition('pageaccess_default', false);
+					$this->_ComaLate->SetReplacement('LANG_PUBLIC', $this->_Translation->GetTranslation('public'));
+					$this->_ComaLate->SetReplacement('LANG_PRIVATE', $this->_Translation->GetTranslation('private'));
+					$this->_ComaLate->SetReplacement('LANG_HIDDEN', $this->_Translation->GetTranslation('hidden'));
+					$this->_ComaLate->SetReplacement('LANG_DELETED', $this->_Translation->GetTranslation('deleted'));
+					$this->_ComaLate->SetReplacement('PAGEACCESS_PUBLIC_SELECTED', ('public' == $pageData['access']) ? 'selected="selected"' : '');
+					$this->_ComaLate->SetReplacement('PAGEACCESS_PRIVATE_SELECTED',  ('private' == $pageData['access']) ? 'selected="selected"' : '');
+					$this->_ComaLate->SetReplacement('PAGEACCESS_HIDDEN_SELECTED',  ('hidden' == $pageData['access']) ? 'selected="selected"' : '');
+					$this->_ComaLate->SetReplacement('PAGEACCESS_DELETED_SELECTED',  ('deleted' == $pageData['access']) ? 'selected="selected"' : '');
 					
-					if($action2 == 'savePath') {
-						
-							if(is_numeric($page_parent_id) && is_numeric($page_id)) {
-							$sql = "UPDATE " . DB_PREFIX . "pages
-	 							SET page_parent_id=$page_parent_id, page_creator='$user->ID', page_date='" . mktime() . "',  page_edit_comment = 'Changed ParentID form $page_parent_id_old to $page_parent_id'
- 								WHERE page_id = $page_id";
- 								db_result($sql);
-							}
-						}
-					else if($action2 == 'saveAccess') {
-						
-						$sql = "UPDATE " . DB_PREFIX . "pages
-							SET  page_access='$page_access', page_creator='$user->ID', page_date='" . mktime() . "',  page_edit_comment = 'Changed Page-Access from $page_access_old to $page_access'
-							WHERE page_id='$page_id'";
-						db_result($sql);
-					}
-				}
+					$this->_ComaLate->SetReplacement('LANG_SAVE', $this->_Translation->GetTranslation('save'));
+					break;
+				case 'saveAccess':
+					$newPageAccess = GetPostOrGet('pageAccess');
+					if(!$this->_PageStructure->ChangePageAccess($pageID, $newPageAccess))
+						break;
+					$logMessage = 'Changed Page-Access from ' . $pageData['access'] . ' to '. $newPageAccess;
+					$this->_PageStructure->LogPage($pageID, $logMessage);
+					$pageData['date'] = mktime();
+					$pageData['creator'] = $this->_User->ID;
+					$pageData['access'] = $newPageAccess;
+					$pageData['comment'] = $logMessage;
+					break;
+				case 'changePath':
+					$this->_ComaLate->SetReplacement('LANG_SAVE', $this->_Translation->GetTranslation('save'));
+					$this->_ComaLate->SetReplacement('LANG_NONE', $this->_Translation->GetTranslation('none'));
+					$this->_ComaLate->SetReplacement('LANG_PATH', $this->_Translation->GetTranslation('subpage_of'));
+					$this->_ComaLate->SetCondition('pagepath_default', false);
+					$this->_ComaLate->SetCondition('pagepath_edit');
+					break;
+				case 'savePath':
+					$newPatentID = GetPostOrGet('pageParentID');
+					if(!$this->_PageStructure->ChangePageParentID($pageID, $newPatentID))
+						break;
+					$logMessage = 'Changed ParentID form ' . $pageData['parentID'] . ' to ' . $newPatentID;
+					$this->_PageStructure->LogPage($pageID, $logMessage);		
+					$pageData['date'] = mktime();
+					$pageData['creator'] = $this->_User->ID;
+					$pageData['parentID'] = $newPatentID;
+					$pageData['comment'] = $logMessage;
+					break;
+				case 'changeName':
+					$this->_ComaLate->SetReplacement('LANG_SAVE', $this->_Translation->GetTranslation('save'));
+					$this->_ComaLate->SetCondition('pagename_default', false);
+					$this->_ComaLate->SetCondition('pagename_edit');
+					break;
+				case 'saveName':
+					$newName = GetPostOrGet('pageName');
+					$newName = str_replace(' ', '_', $newName);
+					if(!$this->_PageStructure->ChangePageName($pageID, rawurlencode($newName)))
+						break;
+					$logMessage = 'Changed Name form ' . rawurldecode($pageData['name']) . ' to ' . $newName;
+					$this->_PageStructure->LogPage($pageID, $logMessage);		
+					$pageData['date'] = mktime();
+					$pageData['creator'] = $this->_User->ID;
+					$pageData['comment'] = $logMessage;
+					$pageData['name'] = rawurlencode($newName);
+					break;
 			}	
-			$out = '';
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "pages
-				WHERE page_id=$page_id";
-			$page_result = db_result($sql);
-			if($page = mysql_fetch_object($page_result)) {
-				$out .= "\t\t\t<table class=\"text_table\">
-				<tr>
-					<th>Titel</th>
-					<td>$page->page_title</td>
-				</tr>
-				<tr>
-					<th>Name</th>
-					<td>" . rawurldecode($page->page_name) . "</td>
-				</tr>
-				<tr>
-					<th>Typ</th>
-					<td>$page->page_type</td>
-				</tr>
-				<tr>
-					<th>Zugang</th>
-					<td>";
-					if(GetPostOrGet('action2') == 'changeAccess') {
-						$out .= "<form action=\"admin.php\" method=\"post\">
-							<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-							<input type=\"hidden\" name=\"action\" value=\"pageInfo\" />
-							<input type=\"hidden\" name=\"pageID\" value=\"$page->page_id\" />
-							<input type=\"hidden\" name=\"pageAccessOld\" value=\"$page->page_access\" />
-							<input type=\"hidden\" name=\"action2\" value=\"saveAccess\" />
-							<select name=\"pageAccess\">
-								<option value=\"public\"" . (($page->page_access == 'public') ? ' selected="selected"' : '') . ">" . $this->_Translation->GetTranslation('public') . "</option>
-								<option value=\"private\"" . (($page->page_access == 'private') ? ' selected="selected"' : '') . ">" . $this->_Translation->GetTranslation('private') . "</option>
-								<option value=\"hidden\"" . (($page->page_access == 'hidden') ? ' selected="selected"' : '') . ">" . $this->_Translation->GetTranslation('hidden') . "</option>
-								<option value=\"deleted\"" . (($page->page_access == 'deleted') ? ' selected="selected"' : '') . ">" . $this->_Translation->GetTranslation('deleted') . "</option>
-							</select>
-							<input type=\"submit\" value=\"" . $this->_Translation->GetTranslation('save') . "\" class=\"button\" />
-							</form>";
-					}
-					else
-						$out .=	$this->_Translation->GetTranslation($page->page_access) . " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id&amp;action2=changeAccess\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>";
-					$out .= "</td>
-				</tr>
-				<tr>
-					<th>Sprache</th>
-					<td>" . $this->_Translation->GetTranslation($page->page_lang) . "</td>
-				</tr>
-				<tr>
-					";
-				if(GetPostOrGet('action2') == 'changePath') {
-					$out .= "<th>Unterseite von</th>
-					<td><form action=\"admin.php\" method=\"post\">
-							<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
-							<input type=\"hidden\" name=\"action\" value=\"pageInfo\" />
-							<input type=\"hidden\" name=\"pageID\" value=\"$page->page_id\" />
-							<input type=\"hidden\" name=\"action2\" value=\"savePath\" />
-							<input type=\"hidden\" name=\"pageParentIDOld\" value=\"$page->page_parent_id\" />
-							<select name=\"pageParentID\">
-								<option value=\"0\">Keiner</option>\r\n";
-					$this->_PageStructure->LoadParentIDs();
-					$out .= $this->_PageStructure->PageStructurePulldown(0, 0, '', $page->page_id, $page->page_parent_id);
-					$out .= "\t\t\t\t\t\t\t</select><input type=\"submit\" value=\"" . $this->_Translation->GetTranslation('save') . "\" class=\"button\" /></form>";
-				}
-				else
-					$out .= "<th>Pfad</th>
-					<td>
-						<a href=\"admin.php?page=pagestructure\">root</a><strong>/</strong>" . $this->_pagePath($page->page_id) . " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id&amp;action2=changePath\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>";
-				$out .= "</td>
-				</tr>
-				<tr>
-					<th>Bearbeitet von</th>
-					<td>" . $this->_ComaLib->GetUserByID($page->page_creator) . "</td>
-				</tr>
-				<tr>
-					<th>Bearbeitet am</th>
-					<td>" . date("d.m.Y H:i:s",$page->page_date) . "</td>
-				</tr>";
-				$sql = "SELECT *
-				FROM " . DB_PREFIX . "inlinemenu_entries
-				WHERE inlineentry_page_id = $page_id
-				ORDER BY inlineentry_sortid ASC";
-				$inlineMenuEntriesResult = $this->_SqlConnection->SqlQuery($sql);
-				
-				$out .= "<tr>
-					<th>" . $this->_Translation->GetTranslation('inlinemenu') . "</th>
-					<td>" . mysql_num_rows($inlineMenuEntriesResult) . " Eintr&auml;ge [<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$page_id\">" . $this->_Translation->GetTranslation('inlinemenu') . "</a>]</td>
-				</tr>
-			</table>\r\n";
-				
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "pages
-					WHERE page_parent_id = $page_id
-					ORDER BY page_date DESC";
-				$subpages_c_result = db_result($sql);
-				$subpages_count = mysql_num_rows($subpages_c_result);
-				if($subpages_count != 0) {
-					$out .="\t\t\t<h2>Unterseiten</h2>\r\n
-						<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>";
-					$out .= $this->_showStructure($page->page_id);
-					$out .= "<script type=\"text/javascript\" language=\"JavaScript\">
-						SetHover('span', 'structure_row', 'structure_row_hover', function additional() {document.getElementById('menu').className = '';});
-						</script>\r\n";
-				}
-				$sql = "SELECT *
-					FROM " . DB_PREFIX . "pages_history
-					WHERE page_id = $page_id
-					ORDER BY page_date DESC";
-				$result = db_result($sql);
-				$changes_count = mysql_num_rows($result);
-				$out .="\t\t\t<h2>Ver&auml;nderungen($changes_count)</h2>
-			<table class=\"text_table full_width\">
-				<thead>
-					<tr>
-						<th>Datum</th>
-						<th>Ver&auml;nderer</th>
-						<th>Titel</th>
-						<th>Kommentar</th>
-						<th>Aktionen</th>
-					</tr>
-				</thead>
-				<tr>
-					<td>" . date("d.m.Y H:i:s",$page->page_date) . "</td>
-					<td>" . $this->_ComaLib->GetUserByID($page->page_creator) . "</td>
-					<td>$page->page_title</td>
-					<td>$page->page_edit_comment&nbsp;</td>
-					<td>
-						<a href=\"index.php?page=$page->page_name\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page->page_id\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>
-					</td>
-				</tr>\r\n";
-				
-				while($change = mysql_fetch_object($result)) {
-					$out .= "\t\t\t\t<tr>
-					<td>" . date("d.m.Y H:i:s",$change->page_date) . "</td>
-					<td>" . $this->_ComaLib->GetUserByID($change->page_creator) . "</td>
-					<td>$change->page_title</td>
-					<td>$change->page_edit_comment&nbsp;</td>
-					<td><a href=\"index.php?page=$page->page_id&amp;change=$changes_count\"><img src=\"./img/view.png\" height=\"16\" width=\"16\" alt=\"Anschauen\" title=\"Anschauen\"/></a>
-					<a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=$page->page_id&amp;change=$changes_count\"><img src=\"./img/edit.png\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>
-					<a href=\"admin.php?page=pagestructure&amp;action=savePage&amp;pageID=$page->page_id&amp;change=$changes_count\"><img src=\"./img/restore.png\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('restore') . "\" title=\"" . $this->_Translation->GetTranslation('restore') . "\"/></a></td>
-				</tr>\r\n";
-					$changes_count--;
-				}
-				$out .= "\t\t\t</table>";
-			}
 			
-			return $out;
+			$this->_ComaLate->SetReplacement('LANG_TITLE', $this->_Translation->GetTranslation('title'));
+			$this->_ComaLate->SetReplacement('LANG_EDIT', $this->_Translation->GetTranslation('edit'));
+			$this->_ComaLate->SetReplacement('LANG_NAME', $this->_Translation->GetTranslation('name'));
+			$this->_ComaLate->SetReplacement('LANG_TYPE', $this->_Translation->GetTranslation('type'));
+			$this->_ComaLate->SetReplacement('LANG_ACCESS', $this->_Translation->GetTranslation('access'));
+			$this->_ComaLate->SetReplacement('LANG_LANGUAGE', $this->_Translation->GetTranslation('language'));
+			$this->_ComaLate->SetReplacement('LANG_EDITED_BY', $this->_Translation->GetTranslation('edited_by'));
+			$this->_ComaLate->SetReplacement('LANG_LAST_CHANGE', $this->_Translation->GetTranslation('last_change'));
+			$this->_ComaLate->SetReplacement('LANG_INLINEMENU', $this->_Translation->GetTranslation('inlinemenu'));
+			$this->_ComaLate->SetReplacement('LANG_SUBPAGES', $this->_Translation->GetTranslation('subpages'));
+			$this->_ComaLate->SetReplacement('LANG_HISTORY', $this->_Translation->GetTranslation('history'));
+			$this->_ComaLate->SetReplacement('LANG_DATE', $this->_Translation->GetTranslation('date'));
+			$this->_ComaLate->SetReplacement('LANG_USER', $this->_Translation->GetTranslation('user'));
+			$this->_ComaLate->SetReplacement('LANG_COMMENT', $this->_Translation->GetTranslation('comment'));
+			$this->_ComaLate->SetReplacement('LANG_ACTIONS', $this->_Translation->GetTranslation('actions'));
+			$this->_ComaLate->SetReplacement('LANG_ENTRIES', $this->_Translation->GetTranslation('entries'));
+			$this->_ComaLate->SetReplacement('LANG_VIEW', $this->_Translation->GetTranslation('view'));
+			$this->_ComaLate->SetReplacement('LANG_RESTORE', $this->_Translation->GetTranslation('restore'));
+			
+			$this->_ComaLate->SetReplacement('PAGE_ID', $pageID);
+			$this->_ComaLate->SetReplacement('TITLE_VALUE', $pageData['title']);
+			$this->_ComaLate->SetReplacement('NAME_VALUE', rawurldecode($pageData['name']));
+			$this->_ComaLate->SetReplacement('TYPE_VALUE', $this->_Translation->GetTranslation($pageData['type']));
+			$this->_ComaLate->SetReplacement('ACCESS_VALUE', $this->_Translation->GetTranslation($pageData['access']));
+			$this->_ComaLate->SetReplacement('LANGUAGE_VALUE', $this->_Translation->GetTranslation($pageData['lang']));
+			$this->_ComaLate->SetReplacement('EDITED_BY_VALUE', $this->_ComaLib->GetUserByID($pageData['creator']));
+			$this->_ComaLate->SetReplacement('LAST_CHANGE_VALUE', date($dateFormat, $pageData['date']));
+			
+			$history = array();
+			$history = $this->_PageStructure->GetPageHistory($pageID);
+			$inlineMenuEntriesCount = $this->_PageStructure->GetInlineMenuEntriesCount($pageID);
+			
+			$historyCount = count($history);
+			for($i = 0; $i < $historyCount; $i++) {
+				$history[$i]['HISTORY_PAGE_DATE'] = date($dateFormat,$history[$i]['HISTORY_PAGE_DATE']);
+				$history[$i]['HISTORY_PAGE_USER'] = $this->_ComaLib->GetUserByID($history[$i]['HISTORY_PAGE_USER']);
+			}
+			$this->_ComaLate->SetReplacement('INLINEMENU_ENTRIES_COUNT', $inlineMenuEntriesCount);
+			$this->_ComaLate->SetReplacement('HISTORY_COUNT', $historyCount);
+			$this->_ComaLate->SetReplacement('PAGE_HISTORY', $history);
+			$this->_ComaLate->SetReplacement('PAGE_COMMENT', $pageData['comment']);
+			
+			$template = '<form action="admin.php" method="post">
+						<input type="hidden" name="page" value="pagestructure" />
+						<input type="hidden" name="action" value="pageInfo" />
+						<input type="hidden" name="pageID" value="{PAGE_ID}" />
+						<table>
+						<tr>
+							<th>{LANG_TITLE}</th>
+							<td>{TITLE_VALUE} <a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a></td>
+						</tr>
+						<tr>
+							<th>{LANG_NAME}</th>
+							<td>
+								<pagename_default:condition>
+								{NAME_VALUE} <a href="admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}&amp;action2=changeName"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+								</pagename_default>
+								<pagename_edit:condition>
+								<input type="hidden" name="action2" value="saveName" />
+								<input type="text" maxlength="28" name="pageName" value="{NAME_VALUE}" /><input type="submit" value="{LANG_SAVE}" class="button" />
+								</pagename_edit>
+							</td>
+						</tr>
+						<tr>
+							<th>{LANG_TYPE}</th>
+							<td>{TYPE_VALUE}</td>
+						</tr>
+						<tr>
+							<th>{LANG_ACCESS}</th>
+							<td>
+								<pageaccess_default:condition>
+								{ACCESS_VALUE} <a href="admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}&amp;action2=changeAccess"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+								</pageaccess_default>
+								<pageaccess_edit:condition>
+								<input type="hidden" name="action2" value="saveAccess" />
+								<select name="pageAccess">
+									<option value="public" {PAGEACCESS_PUBLIC_SELECTED}>{LANG_PUBLIC}</option>
+									<option value="private" {PAGEACCESS_PRIVATE_SELECTED}>{LANG_PRIVATE}</option>
+									<option value="hidden" {PAGEACCESS_HIDDEN_SELECTED}>{LANG_HIDDEN}</option>
+									<option value="deleted" {PAGEACCESS_DELETED_SELECTED}>{LANG_DELETED}</option>
+								</select>
+								<input type="submit" value="{LANG_SAVE}" class="button" />
+								</pageaccess_edit>
+							</td>
+						</tr>
+						<tr>
+							<th>{LANG_LANGUAGE}</th>
+							<td>{LANGUAGE_VALUE}</td>
+						</tr>
+						<tr>					
+							<th>{LANG_PATH}</th>
+							<td>
+								<pagepath_default:condition>
+								<a href="admin.php?page=pagestructure">root</a><strong>/</strong> ' . $this->_pagePath($pageID) . ' <a href="admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}&amp;action2=changePath"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+								</pagepath_default>
+								<pagepath_edit:condition>
+								<input type="hidden" name="action2" value="savePath" />
+								<select name="pageParentID">
+									<option value="0">{LANG_NONE}</option>';
+					if($action == 'changePath') {
+						$this->_PageStructure->LoadParentIDs();
+						$template .= $this->_PageStructure->PageStructurePulldown(0, 0, '', $pageID, $pageData['parentID']);
+					}
+					$template .= '</select><input type="submit" value="{LANG_SAVE}" class="button" /></pagepath_edit>
+							</td>
+						</tr>
+						<tr>
+							<th>{LANG_EDITED_BY}</th>
+							<td>{EDITED_BY_VALUE}</td>
+						</tr>
+						<tr>
+							<th>{LANG_LAST_CHANGE}</th>
+							<td>{LAST_CHANGE_VALUE}</td>
+						</tr>
+						<tr>
+							<th>{LANG_INLINEMENU}</th>
+							<td>{INLINEMENU_ENTRIES_COUNT} {LANG_ENTRIES} <a href="admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID={PAGE_ID}"><img src="./img/inlinemenu.png" height="16" width="16" alt="{LANG_INLINEMENU}" title="{LANG_ILNINEMENU}"/></a></td>
+						</tr>
+					</table>
+				</form>
+				<h2>{LANG_SUBPAGES}</h2>
+							<script type="text/javascript" language="JavaScript" src="system/functions.js"></script>
+				' . $this->_showStructure($pageID) . '
+				<script type="text/javascript" language="JavaScript">
+					SetHover(\'span\', \'structure_row\', \'structure_row_hover\', function additional() {document.getElementById(\'menu\').className = \'\';});
+				</script>
+				<h2>{LANG_HISTORY} ({HISTORY_COUNT})</h2>
+					<table class="full_width">
+						<thead>
+							<tr>
+								<th>{LANG_DATE}</th>
+								<th>{LANG_USER}</th>
+								<th>{LANG_TITLE}</th>
+								<th>{LANG_COMMENT}</th>
+								<th>{LANG_ACTIONS}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{LAST_CHANGE_VALUE}</td>
+								<td>{EDITED_BY_VALUE}</td>
+								<td>{TITLE_VALUE}</td>
+								<td>{PAGE_COMMENT}</td>
+								<td>
+									<a href="index.php?page={PAGE_ID}"><img src="./img/view.png" height="16" width="16" alt="{LANG_VIEW}" title="{LANG_VIEW}"/></a>
+									<a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+								</td>
+							</tr>
+						<PAGE_HISTORY:loop>
+							<tr>
+								<td>{HISTORY_PAGE_DATE}</td>
+								<td>{HISTORY_PAGE_USER}</td>
+								<td>{HISTORY_PAGE_TITLE}</td>
+								<td>{HISTORY_PAGE_COMMENT}</td>
+								<td>
+									<a href="index.php?page={PAGE_ID}&amp;change={HISTORY_PAGE_REVISION}"><img src="./img/view.png" height="16" width="16" alt="{LANG_VIEW}" title="{LANG_VIEW}"/></a>
+									<a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;change={HISTORY_PAGE_REVISION}"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+									<a href="admin.php?page=pagestructure&amp;action=savePage&amp;pageID={PAGE_ID}&amp;change={HISTORY_PAGE_REVISION}"><img src="./img/restore.png" height="16" width="16" alt="{LANG_RESTORE}" title="{LANG_RESTORE}"/></a>
+								</td>
+							</tr>
+						</PAGE_HISTORY>
+						</tbody>
+					</table>';
+					
+			return $template;
 		}
  	}

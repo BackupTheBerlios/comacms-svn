@@ -37,10 +37,9 @@
 		var $_Pagestructure; 
  		
  		function _Init() {
- 			$this->_Pagestructure = new PageStructure($this->_SqlConnection, $this->_User);
+ 			$this->_Pagestructure = new PageStructure($this->_SqlConnection, $this->_User, $this->_ComaLib);
  			$this->_Pagestructure->LoadParentIDs();
  		}
- 		
  		
  		/**
  		 * This function returns the text for a template or a page

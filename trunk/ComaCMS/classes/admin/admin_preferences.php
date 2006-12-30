@@ -86,7 +86,7 @@
 										$out .= '</select>';
 										break;
 							// The pages-tree
-							case 'page_select':	$pageStructure = new Pagestructure($this->_SqlConnection, null);
+							case 'page_select':	$pageStructure = new Pagestructure($this->_SqlConnection, $this->_User, $this->_ComaLib);
 										$pageStructure->LoadParentIDs();
 										$out .= "<select id=\"setting_" . $setting['name'] . "\" name=\"setting_" . $setting['name'] . "\">" . $pageStructure->PageStructurePulldown(0, 0, '',  -1, $setting['default']) . '</select>';
 										break;

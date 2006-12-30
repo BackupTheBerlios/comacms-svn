@@ -200,7 +200,7 @@
 	 	function _AddMenuEntry($Menu_menuid, $Menu_name) {
 	 		$out = '';
 	 		
-	 		$pageStructure = new Pagestructure($this->_SqlConnection, null);
+	 		$pageStructure = new Pagestructure($this->_SqlConnection, $this->_User, $this->_ComaLib);
 	 		$pageStructure->LoadParentIDs();
 	 		
 	 		$out .= "\r\n\t\t\t<fieldset>
@@ -264,7 +264,7 @@
 	 	 */
 	 	function _EditMenuEntry($Menu_entry_id, $Menu_entry_menuid, $Menu_name) {
 	 		$out = '';
-	 		$pageStructure = new Pagestructure($this->_SqlConnection, null);
+	 		$pageStructure = new Pagestructure($this->_SqlConnection, $this->_User, $this->_ComaLib);
 	 		$pageStructure->LoadParentIDs();
 	 		
 	 		$sql = "SELECT *

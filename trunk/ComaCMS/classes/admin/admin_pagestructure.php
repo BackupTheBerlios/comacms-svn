@@ -1117,10 +1117,11 @@
 					break;
 				case 'saveAccess':
 					$newPageAccess = GetPostOrGet('pageAccess');
-					if(!$this->_PageStructure->ChangePageAccess($pageID, $newPageAccess))
+					if($newPageAccess == $pageData['access'])
 						break;
 					$logMessage = 'Changed Page-Access from ' . $pageData['access'] . ' to '. $newPageAccess;
 					$this->_PageStructure->LogPage($pageID, $logMessage);
+					$this->_PageStructure->ChangePageAccess($pageID, $newPageAccess);
 					$pageData['date'] = mktime();
 					$pageData['creator'] = $this->_User->ID;
 					$pageData['access'] = $newPageAccess;
@@ -1135,10 +1136,11 @@
 					break;
 				case 'savePath':
 					$newPatentID = GetPostOrGet('pageParentID');
-					if(!$this->_PageStructure->ChangePageParentID($pageID, $newPatentID))
+					if($newPatentID == $pageData['parentID'])
 						break;
 					$logMessage = 'Changed ParentID form ' . $pageData['parentID'] . ' to ' . $newPatentID;
-					$this->_PageStructure->LogPage($pageID, $logMessage);		
+					$this->_PageStructure->LogPage($pageID, $logMessage);
+					$this->_PageStructure->ChangePageParentID($pageID, $newPatentID);		
 					$pageData['date'] = mktime();
 					$pageData['creator'] = $this->_User->ID;
 					$pageData['parentID'] = $newPatentID;
@@ -1152,14 +1154,16 @@
 				case 'saveName':
 					$newName = GetPostOrGet('pageName');
 					$newName = str_replace(' ', '_', $newName);
-					if(!$this->_PageStructure->ChangePageName($pageID, rawurlencode($newName)))
+					$newNameRawUrl = rawurlencode($newName);
+					if($newNameRawUrl == $pageData['name'])
 						break;
 					$logMessage = 'Changed Name form ' . rawurldecode($pageData['name']) . ' to ' . $newName;
-					$this->_PageStructure->LogPage($pageID, $logMessage);		
+					$this->_PageStructure->LogPage($pageID, $logMessage);
+					$this->_PageStructure->ChangePageName($pageID, $newNameRawUrl);		
 					$pageData['date'] = mktime();
 					$pageData['creator'] = $this->_User->ID;
 					$pageData['comment'] = $logMessage;
-					$pageData['name'] = rawurlencode($newName);
+					$pageData['name'] = $newNameRawUrl;
 					break;
 			}	
 			

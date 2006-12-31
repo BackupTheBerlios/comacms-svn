@@ -219,8 +219,9 @@
 	$langString['please_select_your_language'] = 'Please select your language.';
 	$langString['next'] = 'Next';
 	$langString['is_the_file_%file%_writeable'] = 'Is the file &quot;%s&quot; writeable?';
+	$langString['is_the_directory_%directory%_writeable'] = 'Is the directory &quot;%s&quot; writeable?';
 	$langString['php_version'] = 'PHP-Version';
-	$langString['please_try_to fix_these_problems_to_finish_the_installation'] = 'Please try to fix these problems to finish the installation.';
+	$langString['please_try_to_fix_these_problems_to_finish_the_installation'] = 'Please try to fix these problems to finish the installation.';
 	$langString['reload'] = 'Reload'; 
 	$langString['i_agree'] = 'I agree!';
 	$langString['do_you_agee_with_this_conditions'] = 'Do you agree with this conditions?';
@@ -232,6 +233,16 @@
 	$langString['loginname'] = 'Loginname';
 	$langString['password'] = 'Password';
 	$langString['password_repetition'] = 'Password (repetition)';
+	$langString['you_have_to_agree_to_the_licese_to_install_ComaCMS'] = 'You have to agree to the license to install ComaCMS!';
+	$langString['this_is_the_adress_of_the_database_server'] = 'This is the adress of the database server.';
+	$langString['you_have_to_define_a_database_server'] = 'you have to define a database server!';
+	$langString['this_is_the_name_of_the_database_at_the_server_used_for_comacms'] = 'This is the database used at the server for ComaCMS.';
+	$langString['you_have_to_define_a_database'] = 'You have to define a database!';
+	$langString['this_is_the_username_used_to_connect_to_the_database_server'] = 'This is the username used by ComaCMS to connect to the datatbase server.';
+	$langString['you_have_to_define_a_user_name_to_connect_to_the_database_server'] = 'You have to define a username to connect to the database server!';
+	$langString['this_is_the_password_that_is_maybee_needed_to_connect_to_the_databaseserver_with_the_username_(can_bee_empty)'] = 'This is the password that is maybee needed to connect to the database server. (can bee empty)';
+	$langString['with_this_prefix_written_before_each_table_you_can_identify_all_tables_belonging_to_comacms'] = 'With this prefix you can identify all tables in the database belonging to ComaCMS.';
+	$langString['you_have_to_define_a_prefix'] = 'You have to define a prefix!';
 	$langString['homepage'] = 'Homepage';
 	$langString['welcome_to_this_homepage'] = 'Welcome to this homepage.';
 	$langString['installation_complete'] = 'Installation complete!';
@@ -251,6 +262,7 @@
 	$langString['this_is_a_invalid_email_address'] = 'This is a invalid email address!';
 	$langString['the_email_is_already_assigned_to_another_user'] = 'The emailaddress is already assigned to another user!';
 	$langString['none_of_the_passwordfields_must_not_be_empty'] = 'None of the passwordfields must not be empty!';
+	$langString['the_password_field_must_not_be_empty'] = 'The password field must not be empty!';
 	$langString['the_password_and_its_repetition_are_unequal'] = 'The password and its repetitionare unequal!';
 	$langString['activation_of_your_new_accout_at'] = 'Activation of your new account at ';
 	$langString['your_account_has_been_successfully_activated'] = 'Your account has been successfully activated.';
@@ -344,4 +356,7 @@ Please don\'t answer this email. This is a computer-generated message.';
 	$langString['languages'] = 'Languages';
 	$langString['add_language'] = 'Add language';
 	$langString['language_file'] = 'Language file';
+	
+	// preferences test
+	$langString['startpage'] = 'Startpage';
 ?>

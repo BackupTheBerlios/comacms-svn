@@ -221,7 +221,7 @@
 	$langString['is_the_file_%file%_writeable'] = 'Ist die Datei &quot;%s&quot; beschreibbar?';
 	$langString['is_the_directory_%directory%_writeable'] = 'Ist der Ordner &quot;%s&quot; beschreibbar?';
 	$langString['php_version'] = 'PHP-Version';
-	$langString['please_try_to fix_these_problems_to_finish_the_installation'] = 'Um die Installation fortzusezten zu k&ouml;nnen m&uuml;ssen die oben genannten Probleme beseitigt werden.';
+	$langString['please_try_to_fix_these_problems_to_finish_the_installation'] = 'Um die Installation fortzusezten zu k&ouml;nnen m&uuml;ssen die oben genannten Probleme beseitigt werden.';
 	$langString['reload'] = 'Neu laden';
 	$langString['i_agree'] = 'Ich stimme zu!';
 	$langString['do_you_agee_with_this_conditions'] = 'Stimmen Sie diesen Bedinungen zu?';
@@ -233,6 +233,16 @@
 	$langString['loginname'] = 'Loginname';
 	$langString['password'] = 'Passwort';
 	$langString['password_repetition'] = 'Passwort (Wiederholung)';
+	$langString['you_have_to_agree_to_the_licese_to_install_ComaCMS'] = 'Sie m&uuml;ssen der Lizenz zustimmen, um ComaCMS zu installieren!';
+	$langString['this_is_the_adress_of_the_database_server'] = 'Dies ist die Addresse des Datenbankservers.';
+	$langString['you_have_to_define_a_database_server'] = 'Sie m&uuml;ssen einen Datenbankserver angeben!';
+	$langString['this_is_the_name_of_the_database_at_the_server_used_for_comacms'] = 'Dies ist die Datenbank, die auf dem Server f&uuml;r ComaCMS verwendet wird.';
+	$langString['you_have_to_define_a_database'] = 'Sie m&uuml;ssen eine Datenbank angeben!';
+	$langString['this_is_the_username_used_to_connect_to_the_database_server'] = 'Dies ist der Benutzername, den ComaCMS benutzt um eine Verbindung zum Datenbankserver aufzubauen.';
+	$langString['you_have_to_define_a_user_name_to_connect_to_the_database_server'] = 'Sie m&uuml;ssen einen Benutzernamen f&uuml;r die Verbindung angeben!';
+	$langString['this_is_the_password_that_is_maybee_needed_to_connect_to_the_databaseserver_with_the_username_(can_bee_empty)'] = 'Dies ist das Password das evtl. ben&ouml;tigt wird, um zum Datenbankserver zu verbinden. (Kann leer sein)';
+	$langString['with_this_prefix_written_before_each_table_you_can_identify_all_tables_belonging_to_comacms'] = 'Mit dem Prefix k&ouml;nnen sie alle Tabellen in der Datenbank identifizieren, die zu ComaCMS geh&ouml;ren.';
+	$langString['you_have_to_define_a_prefix'] = 'Sie m&uuml;ssen ein Prefix definieren!';
 	$langString['homepage'] = 'Hauptseite';
 	$langString['welcome_to_this_homepage'] = 'Willkommen auf dieser Homepage.';
 	$langString['installation_complete'] = 'Installation abgeschlossen!';
@@ -254,6 +264,7 @@
 	$langString['this_is_a_invalid_email_address'] = 'Dies ist keine g&uuml;ltige Emailadresse!';
 	$langString['the_email_is_already_assigned_to_another_user'] = 'Die Emailadresse ist bereits an einen anderen Benutzer vergeben!';
 	$langString['none_of_the_passwordfields_must_not_be_empty'] = 'Keins der Passwordfelder darf leer sein!';
+	$langString['the_password_field_must_not_be_empty'] = 'Das Passwordfeld darf nicht leer sein!';
 	$langString['the_password_and_its_repetition_are_unequal'] = 'Das Password und seine Wiederholung sind ungleich!';
 	$langString['activation_of_your_new_accout_at'] = 'Aktivierung deines Accounts auf ';
 	$langString['your_account_has_been_successfully_activated'] = 'Ihr Account wurde erfolgreich aktiviert.';
@@ -355,4 +366,9 @@ Die Administratoren';
 	$langString['last_change'] = 'Letze Ver&auml;nderung';
 	$langString['entries'] = 'Eintr&auml;ge';
 	$langString['subpages'] = 'Unterseiten';
+	
+	// install
+	$langString['pagename'] = 'Seitenname';
+	$langString['here_you_can_define_the_name_of_the_page'] = 'Hier wird der Seitenname definiert.';
+	$langString['you_have_to_define_a_pagename'] = 'Sie m&uuml;ssen einen Seitennamen angeben!';
 ?>

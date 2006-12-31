@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS {DB_PREFIX}articles;
+		DROP TABLE IF EXISTS {DB_PREFIX}articles;
 		CREATE TABLE {DB_PREFIX}articles (
 			article_id int(20) unsigned NOT NULL auto_increment,
 			article_title varchar(100) NOT NULL default '',
@@ -228,17 +228,7 @@ DROP TABLE IF EXISTS {DB_PREFIX}articles;
 		);
 		
 		INSERT INTO {DB_PREFIX}config (config_name, config_value)
-		VALUES ('style', 'clear');
-		INSERT INTO {DB_PREFIX}config (config_name, config_value)
 		VALUES ('default_page', '1');
-		INSERT INTO {DB_PREFIX}config (config_name, config_value)
-		VALUES ('pagename', 'ComaCMS');
-		INSERT INTO {DB_PREFIX}config (config_name, config_value)
-		VALUES ('news_date_format', 'd.m.Y');
-		INSERT INTO {DB_PREFIX}config (config_name, config_value)
-		VALUES ('news_time_format', 'H:i:s');
-		INSERT INTO {DB_PREFIX}config (config_name, config_value)
-		VALUES ('news_display_count', '6');
 		INSERT INTO {DB_PREFIX}menu (menu_name, menu_title)
 		VALUES ('DEFAULT', 'DEFAULT');
 		INSERT INTO {DB_PREFIX}menu_entries (menu_entries_link, menu_entries_title, menu_entries_new, menu_entries_orderid, menu_entries_menuid, menu_entries_page_id)

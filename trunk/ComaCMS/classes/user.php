@@ -18,7 +18,7 @@
 	/**
  	 * @ignore
  	 */
- 	require_once('./classes/auth/auth_all.php');
+ 	require_once __ROOT__ . '/classes/auth/auth_all.php';
  
  	/**
  	 * @package ComaCMS

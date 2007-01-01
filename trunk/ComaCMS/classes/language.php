@@ -21,6 +21,9 @@
  	class Language {
  		
  		var $OutputLanguage = '';
+ 		/**
+ 		 * @access private
+ 		 */
  		var $_LangString = array();
  		
  		function Language($OutputLanguage) {

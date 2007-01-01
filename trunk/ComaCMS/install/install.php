@@ -1,12 +1,13 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @subpackage Installation
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : install.php
  # created              : 2005-06-1
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -16,7 +17,9 @@
  #----------------------------------------------------------------------
 	
 	error_reporting(E_ALL);
-	
+	/**
+	 * @ignore
+	 */
 	define('__ROOT__', dirname(__FILE__) . '/..');
 	
 	/**

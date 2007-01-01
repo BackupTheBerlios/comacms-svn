@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : special.php
  # created              : 2005-08-10
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 	define('COMACMS_RUN', true);
  
 	include('common.php');
-	$outputpage = new OutputPage($sqlConnection);
+	$outputpage = new OutputPage($sqlConnection, $config, $translation, $output);
 	
 
 	include(__ROOT__ . '/classes/registration.php');

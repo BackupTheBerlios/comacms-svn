@@ -1,12 +1,13 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @subpackage Installation
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : install.class.php
- # created              : 2005-12-23
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # created              : 2006-12-23
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify

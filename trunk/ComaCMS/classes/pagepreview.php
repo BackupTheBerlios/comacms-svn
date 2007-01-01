@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : filename.php
  # created              : 2006-12-17
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
  		
  		/**
  		 * A config link
+ 		 * @access private
  		 * @var Config A config link
  		 */
  		var $_Config;

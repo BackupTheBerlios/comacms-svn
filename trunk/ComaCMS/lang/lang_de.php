@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : lang_de.php
  # created              : 2006-12-14
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -366,9 +366,15 @@ Die Administratoren';
 	$langString['last_change'] = 'Letze Ver&auml;nderung';
 	$langString['entries'] = 'Eintr&auml;ge';
 	$langString['subpages'] = 'Unterseiten';
-	
+	$langString['image_of'] = 'Bild aus';
+	$langString['image'] = 'Bild';
+	$langString['up'] = 'Aufw&auml;rts';
+	$langString['next_image'] = 'N&auml;chstes Bild';
+	$langString['previous_image'] = 'Vorheriges Bild';
+		
 	// install
 	$langString['pagename'] = 'Seitenname';
+	// QUESTION: here can you define ... ?
 	$langString['here_you_can_define_the_name_of_the_page'] = 'Hier wird der Seitenname definiert.';
 	$langString['you_have_to_define_a_pagename'] = 'Sie m&uuml;ssen einen Seitennamen angeben!';
 ?>

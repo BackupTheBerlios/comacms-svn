@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : index.php
  # created              : 2005-07-11
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@
 	define("COMACMS_RUN", true);
 	// run common.php to have all ordinary things done, which every page needs
 	include('common.php');
-	$outputpage = new OutputPage($sqlConnection);
+	$outputpage = new OutputPage($sqlConnection, $config, $translation, $output);
 	$page = rawurlencode($page);
 	// load the page
 	$outputpage->LoadPage($page, $user);

@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : outputpge.php
  # created              : 2005-09-01
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -68,14 +68,17 @@
 		var $_SqlConnection;
 		
 		var $Language = 'en';
+	
 		/**
 		 * @access public
 		 * @return void
 		 */
-		function Outputpage($SqlConnection) {
-			$this->_SqlConnection = $SqlConnection;
+		function Outputpage(&$SqlConnection, &$Config, &$Translation, &$ComaLate) {
+			$this->_SqlConnection = &$SqlConnection;
+			$this->_Config = &$Config;
+			$this->_ComaLate = &$ComaLate;
+			$this->_Translation = &$Translation;
 		}
-		
 		
 		/**
 		 * @return string
@@ -111,7 +114,6 @@
 		 * @return array Menuentries
 		 */
 		function GenerateMenu($menuid = 1) {
-			//include($this->Templatefolder . '/menu.php');
 			$menu = array();
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "menu_entries
@@ -178,14 +180,18 @@
 			$this->PageID = $page_data->page_id;
 			$this->Language = $page_data->page_lang;
 			if($page_data->page_type == 'text') {
-				include('./classes/textpage.php');
-				$textpage = new TextPage($page_data->page_id, $change);
-				$this->Text = $textpage->HTML;
+				include(__ROOT__ . '/classes/page/page_text.php');
+				$page = new Page_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate);
+				if(!is_numeric($change))
+					$change = 0;
+				$page->LoadPageFromRevision($page_data->page_id, $change);
+				$this->Text = $page->HTML;
 			}
 			elseif($page_data->page_type == 'gallery') {
-				include('./classes/gallerypage.php');
-				$gallerypage = new GalleryPage($page_data->page_id);
-				$this->Text = $gallerypage->HTML;
+				include(__ROOT__ . '/classes/page/page_gallery.php');
+				$page = new Page_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate);
+				$page->LoadPage($page_data->page_id);
+				$this->Text = $page->HTML;
 			}
 			if($load_old || $page_data->page_access == 'deleted')
 				$this->Text = "<div class=\"warning\">Sie befinden sich auf einer Seite, die so wie Sie sie sehen, nicht mehr existiert.</div>" . $this->Text;

@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : textactions.php
  # created              : 2006-10-06
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -45,6 +45,10 @@
  	 * @access private
  	 */
  	define('LINE_STATE_HEADER', 5);
+ 	/**
+ 	 * @access private
+ 	 */
+ 	define('LINE_STATE_DEFINITON', 6);
  	
  	/**
  	 * Do nothing with email-address-links
@@ -97,7 +101,7 @@
 			$Text = str_replace('&uuml;', 'ü', $Text);
 			$Text = str_replace('&Uuml;', 'Ü', $Text);
 			$Text = str_replace('&ouml;', 'ö', $Text);
-			$Text = str_replace('&Ouml;', 'O', $Text);
+			$Text = str_replace('&Ouml;', 'Ö', $Text);
 			$Text = str_replace('&szlig;', 'ß', $Text);
 			$Text = str_replace('&gt;', '>', $Text);
 			$Text = str_replace('&lt;', '<', $Text);
@@ -239,6 +243,8 @@
 					$state = LINE_STATE_TABLE;
 				else if(TextActions::StartsWith('<h', $line))
 					$state = LINE_STATE_HEADER;
+				else if(TextActions::StartsWith('&gt;', $line) || TextActions::StartsWith('=&gt;', $line))
+					$state = LINE_STATE_DEFINITON;
 				// EOF
 				else if ($line == "\n" || $line == "")
 					$state = LINE_STATE_NONE;
@@ -246,21 +252,31 @@
 				else
 					$state = LINE_STATE_TEXT;
 				if($lastState == $state)
-					$tempText .= "\t".$line."\n"  ;
+					$tempText .= "\t" . $line . "\n"  ;
 				else{
 					
 					// convert the specific parts
-					if ($lastState == LINE_STATE_TEXT)
-						$outputText .= TextActions::ConvertText($tempText);
-					else if ($lastState == LINE_STATE_ULIST)
-						$outputText .= TextActions::ConvertUList($tempText);
-					else if ($lastState == LINE_STATE_OLIST)
-						$outputText .= TextActions::ConvertOList($tempText);
-					else if ($lastState == LINE_STATE_TABLE)
-						$outputText .= TextActions::Converttable($tempText);
-					else if ($lastState == LINE_STATE_HEADER)
-						$outputText .= $tempText;	
-					$tempText = "\t".$line."\n";
+					switch ($lastState) {
+						case LINE_STATE_TEXT:
+							$outputText .= TextActions::ConvertText($tempText);
+							break;
+						case LINE_STATE_ULIST:
+							$outputText .= TextActions::ConvertUList($tempText);
+							break;
+						case LINE_STATE_OLIST:
+							$outputText .= TextActions::ConvertOList($tempText);
+							break;
+						case LINE_STATE_TABLE:
+							$outputText .= TextActions::ConvertTable($tempText);
+							break;
+						case LINE_STATE_HEADER:
+							$outputText .= $tempText;
+							break;
+						case LINE_STATE_DEFINITON:
+							$outputText .= TextActions::ConvertDefinition($tempText);
+							break;	
+					}
+					$tempText = "\t" . $line . "\n";
 				}
 				
 			
@@ -330,9 +346,9 @@
 			return $textpart;
 		}
 		
-		function ConvertTable($textpart) {
+		function ConvertTable($Textpart) {
 			$outputText = "<table>\n";
-			$lines = explode("\n", $textpart);
+			$lines = explode("\n", $Textpart);
 			// go through each line
 			foreach($lines as $line) {
 				if($line != '') {
@@ -355,6 +371,36 @@
 				}
 			}
 			$outputText .= "</table>\n";
+			return $outputText;
+		}
+		
+		/** ConvertDefinition
+		 * 	
+		 * Generates a definiton-list
+		 * <code>
+		 * >Word
+		 * =>Definiton
+		 * <dl>
+		 * 	<dt>Word</dt>
+		 * 		</dd>Definiton</dd>
+		 * </dl>
+		 * </code>
+		 * @return string
+		 * @param string Textpart
+		 */
+		function ConvertDefinition($Textpart) {
+			$lines = explode("\n", $Textpart);
+			$outputText = "\n\t<dl>\n";
+			foreach($lines as $line) {
+				if($line != '') {
+				$textLine = substr($line, strpos($line, '&gt;') + strlen('&gt;'));
+				if(TextActions::StartsWith('&gt;', $line))
+					$outputText .= "\t\t<dt>" . $textLine . "</dt>\n";
+				else
+					$outputText .= "\t\t\t<dd>" . $textLine . "</dd>\n";
+				}
+			}
+			$outputText .= "\t</dl>\n";
 			return $outputText;
 		}
 		
@@ -384,7 +430,7 @@
 			// go through each line
 			foreach($lines as $line) {
 				// get the 'real' content of the line
-				$line = substr($line,strpos($line, $codesequence) + strlen($codesequence));
+				$line = substr($line, strpos($line, $codesequence) + strlen($codesequence));
 				// check if it's real text or a line which initializes a sublist
 				if(TextActions::StartsWith($codesequence, $line))
 					$nodes .= $line."\n";

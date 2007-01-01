@@ -563,4 +563,5 @@ div.last_change {
   font-size: .96em;
   font-style: italic;
   float: right;
+  clear: both;
 }

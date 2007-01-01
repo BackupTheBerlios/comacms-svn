@@ -165,23 +165,12 @@
 			// catch all links
 			preg_match_all("#\[\[(.+?)\]\]#s", $Text, $links);
 			$link_list = array();
-//			$link_sources_list = array();
-//			$sourceNr = 1;
 			$linkNr = 1;
 			// replace all links with a short uniqe id to replace them later back
 			foreach($links[1] as $link) {
-/*				if(substr($link, 0, 7) == 'source:') {
-					$link_sources_list[$sourceNr] = substr($link, 7);
-					$Text = str_replace("[[$link]]", "[[s$sourceNr]]", $Text);
-					$sourceNr++;
-				}
-				else {*/
-					$link_list[$linkNr] = $link;
-					$Text = str_replace("[[$link]]", "[[%$linkNr%]]", $Text);
-					$linkNr++;
-//				}	
-				
-				
+				$link_list[$linkNr] = $link;
+				$Text = str_replace("[[$link]]", "[[%$linkNr%]]", $Text);
+				$linkNr++;
 			}
 			// convert all **text** to <strong>text</strong> => Bold
 			$Text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $Text);
@@ -196,15 +185,13 @@
 			// convert ==== text ==== to a header <h2>
 			$Text = preg_replace("#==\ (.+?)\ ==#s", "\n\n<h2>$1</h2>\n", $Text);
 			
-			
 			// convert <center>text</center> to <div class="center">text</div>
 			$Text = preg_replace("#&lt;center&gt;(.+?)&lt;/center&gt;#s", "\n\n<div class=\"center\">$1</div>\n", $Text);
 		
-			// convert ({text}{text}{text}) to tree colums
-			$Text = preg_replace("#\(\{(.+?)[\r\n ]*\}\{(.+?)[\r\n ]*\}\{(.+?)[\r\n ]*\}\)#s", "\n<div class=\"column ctree\">\n$1\n</p></div>\n<div class=\"column ctree\"><p>\n$2\n</p></div><div class=\"column ctree\"><p>\n$3\n</p></div>\n<p class=\"after_column\">\n", $Text);
 			// convert ({text}{text}) to two colums
-			$Text = preg_replace("#\(\{(.+?)[\r\n ]*\}\{(.+?)[\r\n ]*\}\)#s", "\n<div class=\"column ctwo\">\n$1\n</div>\n<div class=\"column ctwo\">\n$2\n</div>\n<p class=\"after_column\"/>\n", $Text);
-		
+			$Text = preg_replace("#\(\{([^\}\{]*?)[\r\n ]*\}\{([^\}\{]*?)[\r\n ]*\}\)#mu", "</p>\n<div class=\"column ctwo\">\n<p>\n$1\n</p>\n</div>\n<div class=\"column ctwo\">\n<p>\n$2\n</p>\n</div>\n<p class=\"after_column\"/>\n<p>\n", $Text);
+			// convert ({text}{text}{text}) to tree colums
+			$Text = preg_replace("#\(\{([^\}\{]*?)[\r\n ]*\}\{([^\}\{]*?)[\r\n ]*\}\{([^\}\{]*?)[\r\n ]*\}\)#mu", "</p>\n<div class=\"column ctree\">\n<p>\n$1\n</p>\n</div>\n<div class=\"column ctree\">\n<p>\n$2\n</p>\n</div><div class=\"column ctree\">\n<p>\n$3\n</p>\n</div>\n<p class=\"after_column\">\n<p>\n", $Text);
 			
 			// paste links into the text
 			foreach($link_list as $linkNr => $link) {
@@ -213,17 +200,7 @@
 				else
 					$Text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link) . "\">" . $link . "</a>", $Text);
 			}
-		/*	if(count($link_sources_list) > 0) {
-				$Text .= "<hr />\n<ol>"; 
-				foreach($link_sources_list as $sourceNr => $link) {
-					$Text = str_replace("[[s{$sourceNr}]]", "<a href=\"#source_{$sourceNr}\">[{$sourceNr}]</a>", $Text);
-					if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))
-						$Text .= "\n\t<li id=\"source_{$sourceNr}\"><a href=\"" . TextActions::MakeLink($link2[1]) . "\" >{$link2[1]}</a></li>";
-					else
-						$Text .= "\n\t<li id=\"source_{$sourceNr}\"><a href=\"" . TextActions::MakeLink($link) . "\" >$link</a></li>";
-				}
-				$Text .= "\n</ol>";
-			}*/
+		
 			$lines = explode("\n", $Text);
 			$lines[] = "\n";
 			$tempText = '';
@@ -338,10 +315,7 @@
 		
 		
 		function ConvertText($textpart) {
-			$textpart = str_replace("\n\n", "\n</p>\n<p>\n", $textpart);
-			$textpart = "\n<p>\n" . $textpart . "\n</p>";
-			$textpart = str_replace("[block]", "\n</p>[block]", $textpart);
-			$textpart = str_replace("[/block]", "[/block]<p>\n", $textpart);
+			$textpart = '<p>' . $textpart . '</p>';
 			$textpart = preg_replace("#<p>[\r\n\t\ ]{0,}</p>#i", '', $textpart);
 			return $textpart;
 		}

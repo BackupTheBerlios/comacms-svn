@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : edit_text_page.php
  # created              : 2005-09-08
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -235,7 +235,7 @@
 					writeButton(\"img/button_fett.png\",\"Formatiert Text fett\",\"**\",\"**\",\"Fetter Text\",\"f\");
 					writeButton(\"img/button_kursiv.png\",\"Formatiert Text kursiv\",\"//\",\"//\",\"Kursiver Text\",\"k\");
 					writeButton(\"img/button_unterstrichen.png\",\"Unterstreicht den Text\",\"__\",\"__\",\"Unterstrichener Text\",\"u\");
-					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als &Uuml;berschrift\",\"==== \",\" ====\",\"&Uuml;berschrift\",\"h\");
+					writeButton(\"img/button_ueberschrift.png\",\"Markiert den Text als &Uuml;berschrift\",\"== \",\" ==\",\"&Uuml;berschrift\",\"h\");
 				</script><br />
 				<textarea id=\"editor\" class=\"edit\" name=\"pageText\">$page_text</textarea>
 				<script type=\"text/javascript\" language=\"javascript\">
@@ -244,7 +244,7 @@
 					document.write('<div style=\"float:right;\">');
 					document.write('<img onclick=\"resizeBox(\'editor\', -5, 17)\" title=\"Eingabefeld verkleinern\" alt=\"Eingabefeld verkleinern\" class=\"resize\" src=\"img/up.png\" /> ');
 					document.write('<img onclick=\"resizeBox(\'editor\', 5, 17)\" title=\"Eingabefeld vergr&ouml;&szlig;ern\" alt=\"Eingabefeld vergr&ouml;&szlig;ern\" class=\"resize\" src=\"img/down.png\" /><br />');
-					document.write('</div>');
+					document.write('<' + '/div>');
 					//]]>
 						
 				</script>

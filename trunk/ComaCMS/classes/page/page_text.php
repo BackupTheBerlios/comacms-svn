@@ -42,10 +42,24 @@
 			$sql = 'SELECT text_page_text, text_page_html
 					FROM ' . DB_PREFIX . 'pages_text
 					WHERE page_id = ' . $PageID;
+			$sql = 'SELECT page.page_date, text.text_page_text, text.text_page_html
+				FROM ( ' . DB_PREFIX. 'pages page
+				LEFT JOIN ' . DB_PREFIX . 'pages_text text ON text.page_id = page.page_id )
+				WHERE page.page_id=' . $PageID . '
+				LIMIT 1';
 			$pageDataResult = $this->_SqlConnection->SqlQuery($sql);
 			if($pageData = mysql_fetch_object($pageDataResult)) {
-				 $this->HTML = $pageData->text_page_html;
-				 $this->Text = $pageData->text_page_text;
+				$this->HTML = $pageData->text_page_html;
+				$this->Text = $pageData->text_page_text;
+				
+				
+				$dateDayFormat = $this->_Config->Get('date_day_format', '');
+				$dateTimeFormat = $this->_Config->Get('date_time_format', '');
+				$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
+				$this->HTML .= '<div class="last_change">' . $this->_Translation->GetTranslation('last_change') . ': ' . date($dateFormat, $pageData->page_date) . '</div>'; 
+				
+				//yyyy-mm-ddThh:mm:ss+hh:mm
+				$this->_ComaLate->SetMeta('date', date('Y-m-d\TH:i:sO', $pageData->page_date)); 
 				return true;
 			}
  			return false;

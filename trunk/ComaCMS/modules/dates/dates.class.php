@@ -129,8 +129,8 @@
  				$MaxCount =  6;
  			$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
  				FROM " . DB_PREFIX . "dates
- 				ORDER BY date_date ASC
  				$sqlHide
+ 				ORDER BY date_date ASC
  				LIMIT $MaxCount";
  			if($MaxCount < 0)
  				$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location

@@ -47,37 +47,43 @@
  				$datesArray = $dates->ExtendedFillArray($location, $count);
  			else
  				$datesArray = $dates->FillArray($count);
- 			$this->_ComaLate->SetReplacement('DATES', $datesArray);
- 			return "</p><table class=\"text_table full_width\">
+ 			
+ 			$name = uniqid('EVENTS_');
+ 			$this->_ComaLate->SetReplacement($name, $datesArray);
+ 			$this->_ComaLate->SetReplacement('LANG_DATE', $this->_Translation->GetTranslation('date'));
+ 			$this->_ComaLate->SetReplacement('LANG_LOCATION', $this->_Translation->GetTranslation('location'));
+ 			$this->_ComaLate->SetReplacement('LANG_TOPIC', $this->_Translation->GetTranslation('topic'));
+ 			
+ 			return '</p><table class="full_width">
 				<thead>
 					<tr>
-						<th class=\"table_date_width\">
-							" . $this->_Translation->GetTranslation('date') . "
+						<th class="table_date_width">
+							{LANG_DATE}
 						</th>
-						<th class=\"small_width\">
-							" . $this->_Translation->GetTranslation('location') . "
+						<th class="small_width">
+							{LANG_LOCATION}
 						</th>
 						<th>
-							" . $this->_Translation->GetTranslation('topic') . "
+							{LANG_TOPIC}
 						</th>
 					</tr>
 				</thead>
 				<tbody>
-					<DATES:loop>
+					<' . $name . ':loop>
 					<tr>
 						<td>
-							{DATE_DATE}
+							{EVENT_DATE}
 						</td>
 						<td>
-							{DATE_LOCATION}
+							{EVENT_LOCATION}
 						</td>
 						<td>
-							{DATE_TOPIC}
+							{EVENT_TOPIC}
 						</td>
 					</tr>
-					</DATES>
+					</' . $name . '>
 				</tbody>
- 			</table><p>";
+ 			</table><p>';
  			
  		}
 	}

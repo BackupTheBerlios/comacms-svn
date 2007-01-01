@@ -60,6 +60,7 @@
 		$styleName = $headerStyleName; 
 	$output->LoadTemplate('./styles/', $styleName);
 	$output->SetMeta('generator', 'ComaCMS v0.2 (http://comacms.berlios.de)');
+	
 	$output->SetCondition('notinadmin', true);
 	
 	if(!isset($page) && endsWith($_SERVER['PHP_SELF'], 'index.php'))

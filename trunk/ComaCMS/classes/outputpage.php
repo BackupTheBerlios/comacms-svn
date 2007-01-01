@@ -195,6 +195,7 @@
 			}
 			if($load_old || $page_data->page_access == 'deleted')
 				$this->Text = "<div class=\"warning\">Sie befinden sich auf einer Seite, die so wie Sie sie sehen, nicht mehr existiert.</div>" . $this->Text;
+	
 		}
 	
 	}

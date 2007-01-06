@@ -53,5 +53,41 @@
  			else
  				return;
  		}
+ 		
+ 		/**
+ 		 * Gets all existing styles into an array
+ 		 * @param string StyleFolder The folder to search in for styles
+ 		 * @param string Style The actual style
+ 		 * @return array All styles in that directory
+ 		 */
+ 		function GetStyles($StyleFolder, $Style) {
+			
+			if (empty($StyleFolder))
+				$StyleFolder = __ROOT__ . '/styles/';
+ 		 	// Get all styles 			
+ 			$styles = array();
+			
+			// read the available styles
+			$folder = dir($StyleFolder);
+			while($entry = $folder->read()) {
+				// check if the style really exists
+				if($entry != "." && $entry != ".." && file_exists($StyleFolder . $entry . "/config.php")) {
+					$config = array();
+					include($StyleFolder . $entry . "/config.php");
+					// mark the selected style as selected in the list
+					if($entry == $Style)
+						$styles[] = array('ENTRY_VALUE' => $entry,
+											'ENTRY_SELECTED' => ' selected="selected"',
+											'ENTRY_LONGNAME' => $config['longname']); 
+					else
+						$styles[] = array('ENTRY_VALUE' => $entry,
+											'ENTRY_SELECTED' => '',
+											'ENTRY_LONGNAME' => $config['longname']);
+				}
+			}
+			$folder->close();
+			
+			return $styles;
+ 		}
  	}
 ?>

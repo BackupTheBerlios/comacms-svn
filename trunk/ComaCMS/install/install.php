@@ -21,10 +21,6 @@
 	 * @ignore
 	 */
 	define('__ROOT__', dirname(__FILE__) . '/..');
-	
-	/**
-	 * @ignore
-	 */
 	require_once __ROOT__ . '/classes/language.php';
 	require_once __ROOT__ . '/classes/comalib.php';
 	require_once __ROOT__ . '/classes/sql.php';
@@ -103,14 +99,74 @@
 	
 	// Initialize the install class
 	$installation = new Installation($translation, $output);
-	
+
 	// Define menuentries
 	$menuArray = array();
-	$menuArray[] = array($translation->GetTranslation('language'), '1');
-	$menuArray[] = array($translation->GetTranslation('requirements'), '2');
-	$menuArray[] = array($translation->GetTranslation('license'), '3');
-	$menuArray[] = array($translation->GetTranslation('database_settings'), '4');
-	$menuArray[] = array($translation->GetTranslation('create_administrator'), '5');
+	// Generate and replace PATH
+	switch ($extern_page) {
+		case 1:
+			$pagename = $translation->GetTranslation('language');
+			$menuArray[] = array($translation->GetTranslation('language'), '1');
+			break;
+		
+		case 2:
+			$pagename = $translation->GetTranslation('sitestyle');
+			$menuArray[] = array($translation->GetTranslation('language'), '1');
+			$menuArray[] = array($translation->GetTranslation('sitestyle'), '2');
+			break;
+				
+		case 3:
+			$pagename = $translation->GetTranslation('requirements');
+			$menuArray[] = array($translation->GetTranslation('language'), '1');
+			$menuArray[] = array($translation->GetTranslation('sitestyle'), '2');
+			$menuArray[] = array($translation->GetTranslation('requirements'), '3');
+			break;
+			
+		case 4:
+			$pagename = $translation->GetTranslation('license');
+			$menuArray[] = array($translation->GetTranslation('language'), '1');
+			$menuArray[] = array($translation->GetTranslation('sitestyle'), '2');
+			$menuArray[] = array($translation->GetTranslation('requirements'), '3');
+			$menuArray[] = array($translation->GetTranslation('license'), '4');
+			break;
+		
+		case 5:
+			$pagename = $translation->GetTranslation('database_settings');
+			$menuArray[] = array($translation->GetTranslation('language'), '1');
+			$menuArray[] = array($translation->GetTranslation('sitestyle'), '2');
+			$menuArray[] = array($translation->GetTranslation('requirements'), '3');
+			$menuArray[] = array($translation->GetTranslation('license'), '4');
+			$menuArray[] = array($translation->GetTranslation('database_settings'), '5');
+			break;
+		
+		case 6:
+		case 7:
+		case 8:
+			$pagename = $translation->GetTranslation('create_administrator');
+			$menuArray[] = array($translation->GetTranslation('language'), '1');
+			$menuArray[] = array($translation->GetTranslation('sitestyle'), '2');
+			$menuArray[] = array($translation->GetTranslation('requirements'), '3');
+			$menuArray[] = array($translation->GetTranslation('license'), '4');
+			$menuArray[] = array($translation->GetTranslation('database_settings'), '5');
+			$menuArray[] = array($translation->GetTranslation('create_administrator'), (($extern_page == 6) ? '6' : '7'));
+			break;
+		
+		case 9:
+			$pagename = $translation->GetTranslation('preferences');
+			$menuArray[] = array($translation->GetTranslation('language'), '1');
+			$menuArray[] = array($translation->GetTranslation('sitestyle'), '2');
+			$menuArray[] = array($translation->GetTranslation('requirements'), '3');
+			$menuArray[] = array($translation->GetTranslation('license'), '4');
+			$menuArray[] = array($translation->GetTranslation('database_settings'), '5');
+			$menuArray[] = array($translation->GetTranslation('create_administrator'), (($extern_page == 6) ? '6' : '7'));
+			$menuArray[] = array($translation->GetTranslation('preferences'), (($extern_page == 8) ? '8' : '9'));
+			break;
+		
+		default:
+			$pagename = '';
+			break;
+	}
+	$output->SetReplacement('PATH', "<a href=\"install.php\">" . $translation->GetTranslation('installation') . "</a> -> <a href=\"install.php?page={$extern_page}\">{$pagename}</a>");
 	
 	// Generate menu and replace it in template
 	$menu = array();
@@ -122,33 +178,6 @@
 		$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'install.php?page=' . $part[1], 'CSS_ID' => '', 'LINK_STYLE' => $linkStyle);
 	}
 	$output->SetReplacement('MENU_DEFAULT' , $menu);
-	
-	// Generate and replace PATH
-	switch ($extern_page) {
-		case 1:
-			$pagename = $translation->GetTranslation('language');
-			break;
-	
-		case 2:
-			$pagename = $translation->GetTranslation('requirements');
-			break;
-			
-		case 3:
-			$pagename = $translation->GetTranslation('license');
-			break;
-		
-		case 4:
-			$pagename = $translation->GetTranslation('database_settings');
-			break;
-		
-		case 5:
-			$pagename = $translation->GetTranslation('create_administrator');
-		
-		default:
-			$pagename = '';
-			break;
-	}
-	$output->SetReplacement('PATH', "<a href=\"install.php\">" . $translation->GetTranslation('installation') . "</a> -> <a href=\"install.php?page={$extern_page}\">{$pagename}</a>");
 	
 	$output->SetReplacement('TEXT' , $installation->GetPage($extern_page, $language));
 	$output->GenerateOutput();

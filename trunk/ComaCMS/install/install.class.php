@@ -19,35 +19,41 @@
 	/**
 	 * @ignore
 	 */
-	require_once '../classes/sql.php';
-	//require_once '../classes/config.php';
-	require_once '../classes/comalib.php';
-	//require_once '../classes/user.php';
-	//require_once '../classes/admin/admin_preferences.php';
+	require_once __ROOT__ . '/classes/sql.php';
+	require_once __ROOT__ . '/classes/comalib.php';
+	require_once __ROOT__ . '/classes/pagepreview.php';
+	require_once __ROOT__ . '/lib/formmaker/formmaker.class.php';
 	
 	/**
 	 * @package ComaCMS
-	 * @subpackage Intall
+	 * @subpackage Installation
 	 */
 	class Installation {
 		
 		/**
 		 * A link to the translation class
-		 * @var class Translation
+		 * @var Language The Translation class
 		 * @access private
 		 */
 		var $_Translation;
 		
 		/**
 		 * A link to the ComaLate class
-		 * @var class ComaLate
+		 * @var ComaLate The ComaLate class
 		 * @access private
 		 */
 		var $_ComaLate;
 		
 		/**
+		 * A link to the ComaLib class
+		 * @var ComaLib The ComaLib class
+		 * @access private
+		 */
+		var $_ComaLib;
+		
+		/**
 		 * A link to the MySqlConnectionClass
-		 * @var class SqlConnection
+		 * @var Sql The SqlConnection class
 		 * @access private
 		 */
 		var $_SqlConnection;
@@ -55,20 +61,22 @@
 		/**
 		 * Initializes the Intallation class
 		 * @access public
-		 * @param class Translation A link to the translation class
-		 * @param class ComaLate A link to the ComaLate class
-		 * @return class Intallation class
+		 * @param Language &$Translation A link to the translation class
+		 * @param ComaLate &$ComaLate A link to the ComaLate class
+		 * @return Installation The Intallation class
 		 */
 		function Installation(&$Translation, &$ComaLate) {
 			$this->_Translation = &$Translation;
 			$this->_ComaLate = &$ComaLate;
+			$this->_ComaLib = new ComaLib();
 		}
 		
 		/**
 		 * Returns the templates for the Installsubpages and sets replacements for ComaLate
 		 * @access public
-		 * @param string Action The name of the subpage
-		 * @return string Template for the subpage 
+		 * @param string $Action The name of the subpage
+		 * @param string $Language The actual language
+		 * @return string A template for the subpage 
 		 */
 		function GetPage($Action = '', $Language) {
 			
@@ -96,17 +104,14 @@
 			$DatabasePrefixError = GetPostOrGet('database_prefix_error');
 			if (!is_numeric($DatabasePrefixError)) $DatabasePrefixError = 0;
 			$AdminShowName = GetPostOrGet('admin_showname');
-			$AdminShowNameError = GetPostOrGet('admin_showname_error');
-			if (!is_numeric($AdminShowNameError)) $AdminShowNameError = 0;
 			$AdminName = GetPostOrGet('admin_name');
-			$AdminNameError = GetPostOrGet('admin_name_error');
-			if (!is_numeric($AdminNameError)) $AdminNameError = 0;
 			$AdminPassword = GetPostOrGet('admin_password');
-			$AdminPasswordError = GetPostOrGet('admin_password_error');
-			if (!is_numeric($AdminPasswordError)) $AdminPasswordError = 0;
 			$AdminPassword2 = GetPostOrGet('admin_password2');
-			$AdminPassword2Error = GetPostOrGet('admin_password2_error');
-			if (!is_numeric($AdminPassword2Error)) $AdminPassword2Error = 0;
+			$CheckInputs = GetPostOrGet('CheckInputs');
+			if ($CheckInputs == 'true')
+				$CheckInputs = true;
+			else
+				$CheckInputs = false;
 			
 			// Switch between the subpages
 			switch ($Action) {
@@ -140,11 +145,12 @@
 					$this->_CheckDatabaseSettings($Language, $Style, $Confirmation, $DatabaseServer, $DatabaseName, $DatabaseUsername, $DatabasePassword, $DatabasePrefix);
 					
 				case '7':
-					$template .= $this->_AddAdministrator($Language, $Style, 'yes', $AdminShowName, $AdminShowNameError, $AdminName, $AdminNameError, $AdminPasswordError, $AdminPassword2Error);
+					$template .= $this->_AddAdministrator($Language, $Style, 'yes', $AdminShowName, $AdminName, $AdminPassword, $AdminPassword2, $CheckInputs);
 					break;
 					
 				case '8': 
-					$this->_CheckAdministrator($Language, $Style, $Confirmation, $AdminShowName, $AdminName, $AdminPassword, $AdminPassword2);
+					$template .= $this->_CheckAdministrator($Language, $Style, $Confirmation, $AdminShowName, $AdminName, $AdminPassword, $AdminPassword2);
+					break;
 					
 				case '9':
 					$template .= $this->_ConfigPage($Language, $Style);
@@ -162,10 +168,18 @@
 		/**
 		 * Returns the template for the language page
 		 * @access private
-		 * @param string Language The actual choosen language
-		 * @return string template
+		 * @param string $Language The actual choosen language
+		 * @return string The template for the language page
 		 */
 		function _LanguagePage($Language) {
+			
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
+			$formMaker->AddForm('installation_language', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('language'), 'post');
+			
+			$formMaker->AddHiddenInput('installation_language', 'page', '2');
+			
+			$formMaker->AddInput('installation_language', 'lang', 'select', $this->_Translation->GetTranslation('language'), $this->_Translation->GetTranslation('please_select_your_language'));
+			
 			// search for the availible language-files
 			$languageItems = array();
 			$languageFolder = dir("../lang/");
@@ -175,78 +189,30 @@
 					$file = str_replace('lang_', '', $file);
 					$file = str_replace('.php', '', $file);
 					if($Language == $file)
-						$selected = ' selected="selected"';
+						$selected = true;
 					else
-						$selected = '';
-					$languageItems[] = array(
-										'file_translation' => $this->_Translation->GetTranslation($file),
-										'file' => $file,
-										'selected' => $selected);
+						$selected = false;
+					$formMaker->AddSelectEntry('installation_language', 'lang', $selected, $file, $this->_Translation->GetTranslation($file));
 				}
 			}
-			$this->_ComaLate->SetReplacement('language_items', $languageItems);
 			
-			// Set Translationreplacements
-			$this->_ComaLate->SetReplacement('LANG_LANGUAGE', $this->_Translation->GetTranslation('language'));
-			$this->_ComaLate->SetReplacement('LANG_PLEASE_SELECT_YOUR_LANGUAGE', $this->_Translation->GetTranslation('please_select_your_language'));
-			$this->_ComaLate->SetReplacement('LANG_NEXT', $this->_Translation->GetTranslation('next'));
-			
-			// Generate the template
-			$template = "\t\t\t\t<form action=\"install.php\" method=\"post\">
-					<fieldset>
-					<input type=\"hidden\" name=\"page\" value=\"2\" />
-					<legend>{LANG_LANGUAGE}</legend>
-					<div class=\"row\">
-						<label for=\"lang\">
-							<strong>{LANG_LANGUAGE}:</strong>
-							<span class=\"info\">{LANG_PLEASE_SELECT_YOUR_LANGUAGE}</span>
-						</label>
-						<select name=\"lang\" id=\"lang\">
-							<language_items:loop>
-								<option{selected} value=\"{file}\">{file_translation}</option>
-							</language_items>
-						</select>
-					</div>
-					<div class=\"row\">
-						<input type=\"submit\" value=\"{LANG_NEXT}\"/>
-					</div>
-				</fieldset>
-			</form>";
+			$template = "\r\n\t\t\t\t" . $formMaker->GenerateTemplate(&$this->_ComaLate, false);
 			return $template;
 		}
 		
 		/**
 		 * Returns the template for the template page
 		 * @access private
-		 * @param string Language The actual language
-		 * @return string template 
+		 * @param string $Language The actual language
+		 * @return string the template for the template chooser 
 		 */
 		function _TemplatePage($Language) {
 			
+			$pagePreview = new PagePreview(&$this->_ComaLib);
 			// preselect a style
 			$style = "comacms";
 			
- 		 	$styleSelect = array();
- 		 	// Get all styles
- 		 	$styleFolder = dir("../styles/");
-			// read the available styles
-			while($entry = $styleFolder->read()) {
-				// check if the style really exists
-				if($entry != "." && $entry != ".." && file_exists("../styles/" . $entry . "/config.php")) {
-					$config = array();
-					include("../styles/" . $entry . "/config.php");
-					// mark the selected style as selected in the list
-					if($entry == $style)
-						$styleSelect[] = array('ENTRY_VALUE' => $entry,
-												'ENTRY_SELECTED' => ' selected="selected"',
-												'ENTRY_LONGNAME' => $config['longname']); 
-					else
-						$styleSelect[] = array('ENTRY_VALUE' => $entry,
-												'ENTRY_SELECTED' => '',
-												'ENTRY_LONGNAME' => $config['longname']);
-				}
-			}
-			$styleFolder->close();
+ 		 	$styleSelect = $pagePreview->GetStyles(__ROOT__. '/styles/', $style);
 			$this->_ComaLate->SetReplacement('PREVIEW_STYLE_SELECT', $styleSelect);
 			
 			// Set replacements for the template
@@ -264,7 +230,7 @@
 								<input type="hidden" name="lang" value="{ACTUAL_LANGUAGE}" />
 								<legend>{LANG_SITESTYLE}</legend>
 								<label for="stylepreviewselect">{LANG_SITESTYLE}:
-									<select id="stylepreviewselect" name="style" size="1">
+									<select id="stylepreviewselect" name="style">
 										<PREVIEW_STYLE_SELECT:loop>
 											<option value="{ENTRY_VALUE}"{ENTRY_SELECTED}>{ENTRY_LONGNAME}</option>
 										</PREVIEW_STYLE_SELECT>
@@ -395,7 +361,7 @@
 						<input type="hidden" name="page" value="5" />
 						<input type="hidden" name="lang" value="{ACTUAL_LANGUAGE}" />
 						<input type="hidden" name="style" value="{ACTUAL_STYLE}" />
-						<legend>{LANG_LICENSE}</lang>
+						<legend>{LANG_LICENSE}</legend>
 						<div class="row">
 							<textarea readonly="readonly" id="license" rows="17">{LICENSE_FILE_CONTENT}</textarea>
 						</div>
@@ -591,94 +557,65 @@
 		}
 		
 		/**
+		 * Generates the formular for the adminregistration
+		 * @param string $Language The actual language
+		 * @param string $Style The actual style
+		 * @param string $AdminShowName The AdminShowName if exists
+		 * @param string $AdminName The AdminName if exists
+		 * @param string $AdminPassword The AdminPassword if exists
+		 * @param string $AdminPassword2 The AdminPasswordRepetition if exists
+		 * @return FormMaker The link to the FormMaker class
+		 */
+		function _GenerateAdminForm($Language, $Style, $AdminShowName = '', $AdminName = '', $AdminPassword = '', $AdminPassword2 = '') {
+			// Generate the inputs
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
+			
+			$formMaker->AddForm('admin_registration', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('create_administrator'), 'post');
+			
+			$formMaker->AddHiddenInput('admin_registration', 'page', '8');
+			$formMaker->AddHiddenInput('admin_registration', 'lang', $Language);
+			$formMaker->AddHiddenInput('admin_registration', 'style', $Style);
+			$formMaker->AddHiddenInput('admin_registration', 'confirmation', 'yes');
+			
+			$formMaker->AddInput('admin_registration', 'admin_showname', 'text', $this->_Translation->GetTranslation('name'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'), $AdminShowName);
+			$formMaker->AddCheck('admin_registration', 'admin_showname', 'empty', $this->_Translation->GetTranslation('the_name_must_be_indicated'));
+			
+			$formMaker->AddInput('admin_registration', 'admin_name', 'text', $this->_Translation->GetTranslation('loginname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'), $AdminName);
+			$formMaker->AddCheck('admin_registration', 'admin_name', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
+			
+			$formMaker->AddInput('admin_registration', 'admin_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'), $AdminPassword);
+			$formMaker->AddCheck('admin_registration', 'admin_password', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
+			$formMaker->AddCheck('admin_registration', 'admin_password', 'not_same_password_value_as', $this->_Translation->GetTranslation('the_password_and_its_repetition_are_unequal'), 'admin_password2');
+			
+			$formMaker->AddInput('admin_registration', 'admin_password2', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'), $AdminPassword2);
+			$formMaker->AddCheck('admin_registration', 'admin_password2', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
+			
+			return $formMaker;
+		}
+		
+		/**
 		 * Returns a template for the user to add a new administrator
 		 * @access private
-		 * @param string Language The actual language
-		 * @param string Style The actual style
-		 * @param string DatabaseInitialized Is the database correctly initialized?
-		 * @param string AdminShowName The typed in admin show name
-		 * @param integer AdminShowNameError The errorcode for the adminshowname field
-		 * @param string AdminName The typed in admin name
-		 * @param integer AdminNameError The errorcode for the adminname field
-		 * @param integer AdminPasswordError The errorcode for the adminpassword
-		 * @param integer AdminPassword2Error The errorcode for the password repetition
+		 * @param string $Language The actual language
+		 * @param string $Style The actual style
+		 * @param string $DatabaseInitialized Is the database correctly initialized?
+		 * @param string $AdminShowName The typed in admin show name
+		 * @param string $AdminName The typed in admin name
+		 * @param string $AdminPassword The typed in admin password
+		 * @param string $AdminPassword2 The typed in admin password repetition
+		 * @param bool $CheckInputs Shall the inputs be checked?
 		 * @return string template
 		 */
-		function _AddAdministrator($Language, $Style, $DatabaseInitialized, $AdminShowName, $AdminShowNameError, $AdminName, $AdminNameError, $AdminPasswordError, $AdminPassword2Error) {
+		function _AddAdministrator($Language, $Style, $DatabaseInitialized, $AdminShowName, $AdminName, $AdminPassword, $AdminPassword2, $CheckInputs = false) {
 			
 			// Is the database realy Initialized or tries someone to skip the databasesettings?
 			if ($DatabaseInitialized != 'yes')
 				header("Location: install.php?page=3&lang={$Language}");
 			
-			// Generate the inputs
-			$inputs = array();
-			$inputs[] = array(
-							'name' => 'admin_showname',
-							'type' => 'text',
-							'translation' => $this->_Translation->GetTranslation('name'),
-							'errorinformation' => (($AdminShowNameError == 1) ? '<span class="error">' . $this->_Translation->GetTranslation('the_name_must_be_indicated') . '</span>' : ''),
-							'information' => $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'),
-							'value_preset' => (($AdminShowName != '') ? $AdminShowName : ''));
-			$inputs[] = array(
-							'name' => 'admin_name',
-							'type' => 'text',
-							'translation' => $this->_Translation->GetTranslation('loginname'),
-							'errorinformation' => (($AdminNameError == 1) ? '<span class="error">' . $this->_Translation->GetTranslation('the_nickname_must_be_indicated') . '</span>' : ''),
-							'information' => $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'),
-							'value_preset' => (($AdminName != '') ? $AdminName : ''));
-			
-			if ($AdminPasswordError == 1)
-				$errorInformation = '<span class="error">' . $this->_Translation->GetTranslation('the_password_field_must_not_be_empty') . '</span>';
-			elseif ($AdminPasswordError == 2)
-				$errorInformation = '<span class="error">' . $this->_Translation->GetTranslation('the_password_and_its_repetition_are_unequal') . '</span>';
-			else
-				$errorInformation = '';
-			
-			$inputs[] = array(
-							'name' => 'admin_password',
-							'type' => 'password',
-							'translation' => $this->_Translation->GetTranslation('password'),
-							'errorinformation' => $errorInformation,
-							'information' => $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'),
-							'value_preset' => '');
-			$inputs[] = array(
-							'name' => 'admin_password2',
-							'type' => 'password',
-							'translation' => $this->_Translation->GetTranslation('password_repetition'),
-							'errorinformation' => (($AdminPassword2Error == 1) ? '<span class="error">' . $this->_Translation->GetTranslation('the_password_field_must_not_be_empty') . '</span>' : ''),
-							'information' => $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'),
-							'value_preset' => '');
-			$this->_ComaLate->SetReplacement('INPUTS', $inputs);
-			
-			// Set replacements for template
-			$this->_ComaLate->SetReplacement('ACTUAL_LANGUAGE', $Language);
-			$this->_ComaLate->SetReplacement('ACTUAL_STYLE', $Style);
-			$this->_ComaLate->SetReplacement('LANG_CREATE_ADMINISTRATOR', $this->_Translation->GetTranslation('create_administrator'));
-			$this->_ComaLate->SetReplacement('LANG_NEXT', $this->_Translation->GetTranslation('next'));
+			$form = $this->_GenerateAdminForm($Language, $Style, $AdminShowName, $AdminName, $AdminPassword, $AdminPassword2);
 			
 			// Generate template
-			$template = "\r\n\t\t\t\t" . '<form action="install.php" method="get">
-					<fieldset>	
-						<input type="hidden" name="page" value="8" />
-						<input type="hidden" name="lang" value="{ACTUAL_LANGUAGE}" />
-						<input type="hidden" name="style" value="{ACTUAL_STYLE}" />
-						<input type="hidden" name="confirmation" value="yes" />
-						<legend>{LANG_CREATE_ADMINISTRATOR}</legend>
-						<INPUTS:loop>
-							<div class="row">
-								<label for="{name}">
-									<strong>{translation}:</strong>
-									{errorinformation}
-									<span class="info">{information}</span>
-								</label>
-								<input type="{type}" name="{name}" id="{name}" value="{value_preset}" />
-							</div>
-						</INPUTS>
-						<div class="row">
-							<input type="submit" value="{LANG_NEXT}" />
-						</div>
-					</fieldset>
-				</form>';
+			$template = "\r\n\t\t\t\t" . $form->GenerateTemplate(&$this->_ComaLate, $CheckInputs);
 			return $template;
 		}
 		
@@ -696,47 +633,20 @@
 		 */
 		function _CheckAdministrator($Language, $Style, $Confirmation, $AdminShowName, $AdminName, $AdminPassword, $AdminPasswordRepetition) {
 			
-			// Set all errorcodes to 0 => everything is ok
-			$ok = true;
-			$AdminShowNameError = 0;
-			$AdminNameError = 0;
-			$AdminPasswordError = 0;
-			$AdminPassword2Error = 0;
+			// Inititalize variables
+			$d_server = 'localhost';
+			$d_pre = 'comacms_';
+			$d_user = 'root';
+			$d_pw = '';
+			$d_base = 'comacms';
 			
-			// If the user has not typed in an admin show name set errorcode to 1 => nothing typed in
-			if (empty($AdminShowName)) {
-				$ok = false;
-				$AdminShowNameError = 1;
-			}
 			
-			// If the user has not typed in an adminname set errorcode to 1 => nothing typed in	
-			if (empty($AdminName)) {
-				$ok = false;
-				$AdminNameError = 1;
-			}
-			
-			// If the password and it's repetition are unequal set errorcode to 2 => unequal passwords
-			if ($AdminPassword != $AdminPasswordRepetition) {
-				$ok = false;
-				$AdminPasswordError = 2;
-			}
-			else {
-				// If the adminpassword is empty set errorcode to 1 => nothing typed in
-				if (empty($AdminPassword)) {
-				$ok = false;
-				$AdminPasswordError = 1;
-				}
-			}
-			
-			// If the adminpasswordrepetition is empty set errorcode to 1 => nothing typed in
-			if (empty($AdminPasswordRepetition)) {
-				$ok = false;
-				$AdminPassword2Error = 1;
-			}
+			$form = $this->_GenerateAdminForm($Language, $Style, $AdminShowName, $AdminName, $AdminPassword, $AdminPasswordRepetition);
+			$ok = $form->CheckInputs('admin_registration', false);
 			
 			// If everything is ok
 			if ($ok && $Confirmation == 'yes') {
-				include '../config.php';
+				include __ROOT__ . '/config.php';
 				$sql = "INSERT INTO {$d_pre}users (user_name, user_showname, user_password, user_registerdate, user_admin, user_icq)
 						VALUES ('{$AdminName}', '{$AdminShowName}', '" . md5($AdminPassword) . "', '" . mktime() . "', 'y', '');
 						INSERT INTO {$d_pre}config (config_name, config_value)
@@ -753,9 +663,13 @@
 				$sql = "INSERT INTO {$d_pre}pages_text (page_id, text_page_text,text_page_html)
 						VALUES ({$lastid}, '" . $this->_Translation->GetTranslation('welcome_to_this_homepage') . "', '" . $this->_Translation->GetTranslation('welcome_to_this_homepage') . "')";
 				$this->_SqlConnection->SqlQuery($sql);
+				
+				// Lead on to the next page
+				header("Location: install.php?page=9&lang={$Language}&style={$Style}");
+				die();
 			}
 			else {
-				header("Location: install.php?&style={$Style}&lang={$Language}&page=7&confirmation=yes" . ((!empty($AdminShowName)) ? "&admin_showname={$AdminShowName}" : '') . "&admin_showname_error={$AdminShowNameError}" . ((!empty($AdminName)) ? "&admin_name={$AdminName}" : '') . "&admin_name_error={$AdminNameError}&admin_password_error={$AdminPasswordError}&admin_password2_error={$AdminPassword2Error}");
+				return $this->_AddAdministrator($Language, $Style, $Confirmation, $AdminShowName, $AdminName, $AdminPassword, $AdminPasswordRepetition, true);
 			}
 		}
 		

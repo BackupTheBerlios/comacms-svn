@@ -117,7 +117,10 @@
 			// Load the pagepreview-class
 			include_once(__ROOT__ . '/classes/admin/admin_pagepreview.php');
 			
-			$title = $translation->GetTranslation($page);
+			if ($page == 'style')
+				$title = $translation->GetTranslation('sitestyle');
+			else
+				$title = $translation->GetTranslation('pagepreview');
 			$adminClass = new Admin_PagePreview($sqlConnection, $translation, $config, $user, $lib, $output);
 			if($page == 'style')
 				$action = 'style';

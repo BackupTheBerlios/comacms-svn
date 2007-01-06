@@ -19,7 +19,7 @@
 	 * @ignore
 	 * make sure that all used functions are available
 	 */
-	require_once('./system/functions.php');
+	require_once __ROOT__ . '/system/functions.php';
 		
 	/**
 	 * @package ComaCMS
@@ -33,13 +33,29 @@
  		var $Elements = array();
  		
  		/**
+ 		 * A link to the mysql connection class
+ 		 * @var class SqlConnection
+ 		 * @access private
+ 		 */
+ 		var $_SqlConnection;
+ 		
+ 		/**
+ 		 * Initializes the config class
+ 		 * @access public
+ 		 * @param class SqlConnection A link to the mysql connection class
+ 		 */
+ 		function Config(&$SqlConnection) {
+ 			$this->_SqlConnection = &$SqlConnection;
+ 		}
+ 		
+ 		/**
  		 * Loads all configurations into a local array to easily get them
  		 * @access public
  		 */
 		function LoadAll() {
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "config";
-			$var_result = db_result($sql);
+			$var_result = $this->_SqlConnection->SqlQuery($sql);
 			while($var_data = mysql_fetch_object($var_result)) {
 				$this->Elements[$var_data->config_name] = $var_data->config_value;
 			}
@@ -71,13 +87,13 @@
 				$sql = "UPDATE " . DB_PREFIX . "config
 					SET config_value = '$value'
 					WHERE config_name = '$name'";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 				}
 			}
 			else {
 				$sql = "INSERT INTO " . DB_PREFIX . "config (config_name , config_value )
 					VALUES ( '$name', '$value')";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 			}
 			$this->Elements[$name] = $value;
 		}

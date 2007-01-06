@@ -48,14 +48,14 @@
  			$out = '';
  			// Get external parameters
  			$style = GetPostOrGet('style');
+ 			if (empty($style))
+ 				$style = $this->_Config->Get('style', 'comacms');
  			$save = GetPostOrGet('save');
  			
  			if(!empty($save))
  				$Action = 'saveStyle';
  			switch ($Action) {
  				case 'saveStyle':	$this->_PagePreview->SaveStyle($style);
- 									header('Location: admin.php?page=style');
- 									die();
  				case 'style': 		$out .= $this->_Style($style);
  									break;
  				default:			$out .= $this->_PagePreview();
@@ -91,40 +91,20 @@
  		 	if(empty($style))
 				$style = $this->_Config->Get('style');
  		 	
- 		 	// Set replacements for the template
- 		 	$this->_ComaLate->SetReplacement('ACTUALSTYLE', $Style);
- 		 	$this->_ComaLate->SetReplacement('PAGESTYLE', $this->_Translation->GetTranslation('pagestyle'));
- 		 	
- 		 	$styleSelect = array();
- 		 	// Get all styles
- 		 	$styleFolder = dir("./styles/");
-			// read the available styles
-			while($entry = $styleFolder->read()) {
-				// check if the style really exists
-				if($entry != "." && $entry != ".." && file_exists("./styles/" . $entry . "/config.php")) {
-					$config = array();
-					include("./styles/" . $entry . "/config.php");
-					// mark the selected style as selected in the list
-					if($entry == $style)
-						$styleSelect[] = array('ENTRY_VALUE' => $entry,
-												'ENTRY_SELECTED' => ' selected="selected"',
-												'ENTRY_LONGNAME' => $config['longname']); 
-					else
-						$styleSelect[] = array('ENTRY_VALUE' => $entry,
-												'ENTRY_SELECTED' => '',
-												'ENTRY_LONGNAME' => $config['longname']);
-				}
-			}
-			$styleFolder->close();
+ 		 	$styleSelect = $this->_PagePreview->GetStyles(__ROOT__ . '/styles/', $Style);
 			$this->_ComaLate->SetReplacement('PREVIEW_STYLE_SELECT', $styleSelect);
 			
+			// Set replacements for the template
+ 		 	$this->_ComaLate->SetReplacement('ACTUALSTYLE', $Style);
+ 		 	$this->_ComaLate->SetReplacement('SITESTYLE', $this->_Translation->GetTranslation('sitestyle'));
+ 		 	
  		 	// Throw out the template data
  		 	$template = '<script type="text/javascript" language="JavaScript" src="./system/functions.js"></script>
- 		 				<h2>{PAGESTYLE}</h2>
+ 		 				<h2>{SITESTYLE}</h2>
 						<iframe id="previewiframe" class="pagepreview" src="index.php?style={ACTUALSTYLE}"></iframe>
 						<form action="admin.php" method="get">
 							<input type="hidden" name="page" value="style" />
-							<label for="stylepreviewselect">{PAGESTYLE}:
+							<label for="stylepreviewselect"><strong>{SITESTYLE}:</strong>
 								<select id="stylepreviewselect" name="style" size="1">
 									<PREVIEW_STYLE_SELECT:loop>
 										<option value="{ENTRY_VALUE}"{ENTRY_SELECTED}>{ENTRY_LONGNAME}</option>

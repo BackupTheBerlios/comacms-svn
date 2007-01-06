@@ -48,7 +48,7 @@
 	define('DB_PREFIX', $d_pre);
 	$sqlConnection = new Sql($d_user, $d_pw, $d_server);
 	$sqlConnection->Connect($d_base);
-	$config = new Config();
+	$config = new Config(&$sqlConnection);
 	$config->LoadAll();
 	$user = new User($sqlConnection);
 	$translation = new Language($user->Language);

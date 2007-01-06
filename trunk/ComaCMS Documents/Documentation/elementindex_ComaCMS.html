@@ -25,20 +25,13 @@
     <td width="200" class="menu">
       <b>Packages:</b><br />
               <a href="li_ComaCMS.html">ComaCMS</a><br />
+              <a href="li_FormMaker.html">FormMaker</a><br />
             <br /><br />
                         <b>Files:</b><br />
       	  <div class="package">
 			<a href="ComaCMS/_admin.php.html">		admin.php
 		</a><br>
 			<a href="ComaCMS/_system---admin_pages.php.html">		admin_pages.php
-		</a><br>
-			<a href="ComaCMS/_classes---auth---auth.php.html">		auth.php
-		</a><br>
-			<a href="ComaCMS/_classes---auth---auth_all.php.html">		auth_all.php
-		</a><br>
-			<a href="ComaCMS/_classes---auth---auth_group.php.html">		auth_group.php
-		</a><br>
-			<a href="ComaCMS/_classes---auth---auth_user.php.html">		auth_user.php
 		</a><br>
 			<a href="ComaCMS/_classes---comalib.php.html">		comalib.php
 		</a><br>
@@ -50,21 +43,15 @@
 		</a><br>
 			<a href="ComaCMS/_classes---edit_text_page.php.html">		edit_text_page.php
 		</a><br>
-			<a href="ComaCMS/_functions.php.html">		functions.php
-		</a><br>
 			<a href="ComaCMS/_system---functions.php.html">		functions.php
 		</a><br>
-			<a href="ComaCMS/_classes---gallerypage.php.html">		gallerypage.php
+			<a href="ComaCMS/_functions.php.html">		functions.php
 		</a><br>
 			<a href="ComaCMS/_classes---imageconverter.php.html">		imageconverter.php
 		</a><br>
 			<a href="ComaCMS/_index.php.html">		index.php
 		</a><br>
-			<a href="ComaCMS/_admin---index.php.html">		index.php
-		</a><br>
 			<a href="ComaCMS/_classes---inlinemenu.php.html">		inlinemenu.php
-		</a><br>
-			<a href="ComaCMS/_install---install.php.html">		install.php
 		</a><br>
 			<a href="ComaCMS/_classes---language.php.html">		language.php
 		</a><br>
@@ -75,8 +62,6 @@
 			<a href="ComaCMS/_classes---module.php.html">		module.php
 		</a><br>
 			<a href="ComaCMS/_classes---outputpage.php.html">		outputpage.php
-		</a><br>
-			<a href="ComaCMS/_classes---page.php.html">		page.php
 		</a><br>
 			<a href="ComaCMS/_classes---pagepreview.php.html">		pagepreview.php
 		</a><br>
@@ -93,8 +78,6 @@
 			<a href="ComaCMS/_classes---sql.php.html">		sql.php
 		</a><br>
 			<a href="ComaCMS/_classes---textactions.php.html">		textactions.php
-		</a><br>
-			<a href="ComaCMS/_classes---textpage.php.html">		textpage.php
 		</a><br>
 			<a href="ComaCMS/_classes---user.php.html">		user.php
 		</a><br>
@@ -137,6 +120,16 @@
 			<a href="ComaCMS/Articles/_modules---articles---articles_settings.php.html">		articles_settings.php
 		</a><br>
 	  </div><br />
+	subpackage <b>Auth</b><br>  <div class="package">
+			<a href="ComaCMS/Auth/_classes---auth---auth.php.html">		auth.php
+		</a><br>
+			<a href="ComaCMS/Auth/_classes---auth---auth_all.php.html">		auth_all.php
+		</a><br>
+			<a href="ComaCMS/Auth/_classes---auth---auth_group.php.html">		auth_group.php
+		</a><br>
+			<a href="ComaCMS/Auth/_classes---auth---auth_user.php.html">		auth_user.php
+		</a><br>
+	  </div><br />
 	subpackage <b>ComaLate</b><br>  <div class="package">
 			<a href="ComaCMS/ComaLate/_lib---comalate---comalate.class.php.html">		comalate.class.php
 		</a><br>
@@ -159,6 +152,12 @@
 			<a href="ComaCMS/Dates/_modules---dates---dates_module.php.html">		dates_module.php
 		</a><br>
 	  </div><br />
+	subpackage <b>Installation</b><br>  <div class="package">
+			<a href="ComaCMS/Installation/_install---install.class.php.html">		install.class.php
+		</a><br>
+			<a href="ComaCMS/Installation/_install---install.php.html">		install.php
+		</a><br>
+	  </div><br />
 	subpackage <b>News</b><br>  <div class="package">
 			<a href="ComaCMS/News/_modules---news---news.class.php.html">		news.class.php
 		</a><br>
@@ -169,6 +168,14 @@
 			<a href="ComaCMS/News/_modules---news---news_module.php.html">		news_module.php
 		</a><br>
 			<a href="ComaCMS/News/_modules---news---news_settings.php.html">		news_settings.php
+		</a><br>
+	  </div><br />
+	subpackage <b>Page</b><br>  <div class="package">
+			<a href="ComaCMS/Page/_classes---page---page.php.html">		page.php
+		</a><br>
+			<a href="ComaCMS/Page/_classes---page---page_gallery.php.html">		page_gallery.php
+		</a><br>
+			<a href="ComaCMS/Page/_classes---page---page_text.php.html">		page_text.php
 		</a><br>
 	  </div><br />
 	subpackage <b>Sitemap</b><br>  <div class="package">
@@ -202,14 +209,18 @@
 	    &nbsp;&nbsp;		<a href="ComaCMS/Articles/Module_Articles.html">Module_Articles</a><br />
 	  </div>
   <div class="package">
-		    		<a href="ComaCMS/Auth.html">Auth</a><br />
-	    		<a href="ComaCMS/Auth_All.html">Auth_All</a><br />
-	    		<a href="ComaCMS/Auth_Group.html">Auth_Group</a><br />
-	    		<a href="ComaCMS/Auth_User.html">Auth_User</a><br />
-	    		<a href="ComaCMS/ComaLib.html">ComaLib</a><br />
+	Auth<br />	    &nbsp;&nbsp;		<a href="ComaCMS/Auth/Auth.html">Auth</a><br />
+	    &nbsp;&nbsp;		<a href="ComaCMS/Auth/Auth_All.html">Auth_All</a><br />
+	    &nbsp;&nbsp;		<a href="ComaCMS/Auth/Auth_Group.html">Auth_Group</a><br />
+	    &nbsp;&nbsp;		<a href="ComaCMS/Auth/Auth_User.html">Auth_User</a><br />
+	  </div>
+  <div class="package">
+	ComaLate<br />	    &nbsp;&nbsp;		<a href="ComaCMS/ComaLate/ComaLate.html">ComaLate</a><br />
+	  </div>
+  <div class="package">
+		    		<a href="ComaCMS/ComaLib.html">ComaLib</a><br />
 	    		<a href="ComaCMS/Edit_Gallery_Page.html">Edit_Gallery_Page</a><br />
 	    		<a href="ComaCMS/Edit_Text_Page.html">Edit_Text_Page</a><br />
-	    		<a href="ComaCMS/GalleryPage.html">GalleryPage</a><br />
 	    		<a href="ComaCMS/ImageConverter.html">ImageConverter</a><br />
 	    		<a href="ComaCMS/InlineMenu.html">InlineMenu</a><br />
 	    		<a href="ComaCMS/Language.html">Language</a><br />
@@ -217,18 +228,13 @@
 	    		<a href="ComaCMS/Menu.html">Menu</a><br />
 	    		<a href="ComaCMS/Module.html">Module</a><br />
 	    		<a href="ComaCMS/OutputPage.html">OutputPage</a><br />
-	    		<a href="ComaCMS/Page.html">Page</a><br />
 	    		<a href="ComaCMS/PagePreview.html">PagePreview</a><br />
 	    		<a href="ComaCMS/PageStructure.html">PageStructure</a><br />
 	    		<a href="ComaCMS/Preferences.html">Preferences</a><br />
 	    		<a href="ComaCMS/Registration.html">Registration</a><br />
 	    		<a href="ComaCMS/Sql.html">Sql</a><br />
 	    		<a href="ComaCMS/TextActions.html">TextActions</a><br />
-	    		<a href="ComaCMS/TextPage.html">TextPage</a><br />
 	    		<a href="ComaCMS/User.html">User</a><br />
-	  </div>
-  <div class="package">
-	ComaLate<br />	    &nbsp;&nbsp;		<a href="ComaCMS/ComaLate/ComaLate.html">ComaLate</a><br />
 	  </div>
   <div class="package">
 	News<br />	    &nbsp;&nbsp;		<a href="ComaCMS/News/Admin_Module_News.html">Admin_Module_News</a><br />
@@ -240,6 +246,14 @@
 	Dates<br />	    &nbsp;&nbsp;		<a href="ComaCMS/Dates/Admin_Module_Dates.html">Admin_Module_Dates</a><br />
 	    &nbsp;&nbsp;		<a href="ComaCMS/Dates/Dates.html">Dates</a><br />
 	    &nbsp;&nbsp;		<a href="ComaCMS/Dates/Module_Dates.html">Module_Dates</a><br />
+	  </div>
+  <div class="package">
+	Installation<br />	    &nbsp;&nbsp;		<a href="ComaCMS/Installation/Installation.html">Installation</a><br />
+	  </div>
+  <div class="package">
+	Page<br />	    &nbsp;&nbsp;		<a href="ComaCMS/Page/Page.html">Page</a><br />
+	    &nbsp;&nbsp;		<a href="ComaCMS/Page/Page_Gallery.html">Page_Gallery</a><br />
+	    &nbsp;&nbsp;		<a href="ComaCMS/Page/Page_Text.html">Page_Text</a><br />
 	  </div>
   <div class="package">
 	Sitemap<br />	    &nbsp;&nbsp;		<a href="ComaCMS/Sitemap/Module_Sitemap.html">Module_Sitemap</a><br />
@@ -278,14 +292,6 @@
 	<div>
 		<h2>_</h2>
 		<dl>
-							<dt><b>$_Config</b></dt>
-				<dd>in file pagepreview.php, variable <a href="ComaCMS/PagePreview.html#var$_Config">PagePreview::$_Config</a><br>&nbsp;&nbsp;&nbsp;&nbsp;A config link</dd>
-							<dt><b>$_file</b></dt>
-				<dd>in file imageconverter.php, variable <a href="ComaCMS/ImageConverter.html#var$_file">ImageConverter::$_file</a></dd>
-							<dt><b>$_GroupNames</b></dt>
-				<dd>in file comalib.php, variable <a href="ComaCMS/ComaLib.html#var$_GroupNames">ComaLib::$_GroupNames</a></dd>
-							<dt><b>$_LangString</b></dt>
-				<dd>in file language.php, variable <a href="ComaCMS/Language.html#var$_LangString">Language::$_LangString</a></dd>
 							<dt><b>$_NextSortID</b></dt>
 				<dd>in file pagestructure.php, variable <a href="ComaCMS/PageStructure.html#var$_NextSortID">PageStructure::$_NextSortID</a></dd>
 							<dt><b>$_Pages</b></dt>
@@ -298,10 +304,6 @@
 				<dd>in file pagestructure.php, variable <a href="ComaCMS/PageStructure.html#var$_SqlConnection">PageStructure::$_SqlConnection</a></dd>
 							<dt><b>$_User</b></dt>
 				<dd>in file pagestructure.php, variable <a href="ComaCMS/PageStructure.html#var$_User">PageStructure::$_User</a></dd>
-							<dt><b>$_UserIDs</b></dt>
-				<dd>in file comalib.php, variable <a href="ComaCMS/ComaLib.html#var$_UserIDs">ComaLib::$_UserIDs</a></dd>
-							<dt><b>$_UserShownames</b></dt>
-				<dd>in file comalib.php, variable <a href="ComaCMS/ComaLib.html#var$_UserShownames">ComaLib::$_UserShownames</a></dd>
 							<dt><b>_InlineMenuEntriesSwitchSortIDs</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#method_InlineMenuEntriesSwitchSortIDs">PageStructure::_InlineMenuEntriesSwitchSortIDs()</a></dd>
 							<dt><b>__ROOT__</b></dt>
@@ -334,6 +336,8 @@
 				<dd>in file articles.class.php, method <a href="ComaCMS/Articles/Articles.html#method_saveImage">Articles::_saveImage()</a></dd>
 							<dt><b>_ShowArticlePage</b></dt>
 				<dd>in file articles_module.php, method <a href="ComaCMS/Articles/Module_Articles.html#method_ShowArticlePage">Module_Articles::_ShowArticlePage()</a></dd>
+							<dt><b>_GenerateAdminForm</b></dt>
+				<dd>in file install.class.php, method <a href="ComaCMS/Installation/Installation.html#method_GenerateAdminForm">Installation::_GenerateAdminForm()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generates the formular for the adminregistration</dd>
 							<dt><b>_mailForm</b></dt>
 				<dd>in file contact_module.php, method <a href="ComaCMS/News/Module_Contact.html#method_mailForm">Module_Contact::_mailForm()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;this function shows the email-form</dd>
 							<dt><b>_sendMail</b></dt>
@@ -368,28 +372,6 @@
 				<dd>in file language.php, method <a href="ComaCMS/Language.html#methodAddSources">Language::AddSources()</a></dd>
 							<dt><b>admin.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_admin.php.html">admin.php</a></dd>
-							<dt><b>Auth</b></dt>
-				<dd>in file auth.php, class <a href="ComaCMS/Auth.html">Auth</a></dd>
-							<dt><b>Auth_All</b></dt>
-				<dd>in file auth_all.php, method <a href="ComaCMS/Auth_All.html#methodAuth_All">Auth_All::Auth_All()</a></dd>
-							<dt><b>Auth_All</b></dt>
-				<dd>in file auth_all.php, class <a href="ComaCMS/Auth_All.html">Auth_All</a></dd>
-							<dt><b>Auth_Group</b></dt>
-				<dd>in file auth_group.php, method <a href="ComaCMS/Auth_Group.html#methodAuth_Group">Auth_Group::Auth_Group()</a></dd>
-							<dt><b>Auth_Group</b></dt>
-				<dd>in file auth_group.php, class <a href="ComaCMS/Auth_Group.html">Auth_Group</a></dd>
-							<dt><b>Auth_User</b></dt>
-				<dd>in file auth_user.php, class <a href="ComaCMS/Auth_User.html">Auth_User</a></dd>
-							<dt><b>Auth_User</b></dt>
-				<dd>in file auth_user.php, method <a href="ComaCMS/Auth_User.html#methodAuth_User">Auth_User::Auth_User()</a></dd>
-							<dt><b>auth.php</b></dt>
-				<dd>procedural page <a href="ComaCMS/_classes---auth---auth.php.html">auth.php</a></dd>
-							<dt><b>auth_all.php</b></dt>
-				<dd>procedural page <a href="ComaCMS/_classes---auth---auth_all.php.html">auth_all.php</a></dd>
-							<dt><b>auth_group.php</b></dt>
-				<dd>procedural page <a href="ComaCMS/_classes---auth---auth_group.php.html">auth_group.php</a></dd>
-							<dt><b>auth_user.php</b></dt>
-				<dd>procedural page <a href="ComaCMS/_classes---auth---auth_user.php.html">auth_user.php</a></dd>
 							<dt><b>admin_pages.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_system---admin_pages.php.html">admin_pages.php</a></dd>
 							<dt><b>Admin</b></dt>
@@ -458,6 +440,28 @@
 				<dd>procedural page <a href="ComaCMS/Articles/_modules---articles---articles_module.php.html">articles_module.php</a></dd>
 							<dt><b>articles_settings.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/Articles/_modules---articles---articles_settings.php.html">articles_settings.php</a></dd>
+							<dt><b>Auth</b></dt>
+				<dd>in file auth.php, class <a href="ComaCMS/Auth/Auth.html">Auth</a></dd>
+							<dt><b>Auth_All</b></dt>
+				<dd>in file auth_all.php, class <a href="ComaCMS/Auth/Auth_All.html">Auth_All</a></dd>
+							<dt><b>Auth_All</b></dt>
+				<dd>in file auth_all.php, method <a href="ComaCMS/Auth/Auth_All.html#methodAuth_All">Auth_All::Auth_All()</a></dd>
+							<dt><b>Auth_Group</b></dt>
+				<dd>in file auth_group.php, method <a href="ComaCMS/Auth/Auth_Group.html#methodAuth_Group">Auth_Group::Auth_Group()</a></dd>
+							<dt><b>Auth_Group</b></dt>
+				<dd>in file auth_group.php, class <a href="ComaCMS/Auth/Auth_Group.html">Auth_Group</a></dd>
+							<dt><b>Auth_User</b></dt>
+				<dd>in file auth_user.php, class <a href="ComaCMS/Auth/Auth_User.html">Auth_User</a></dd>
+							<dt><b>Auth_User</b></dt>
+				<dd>in file auth_user.php, method <a href="ComaCMS/Auth/Auth_User.html#methodAuth_User">Auth_User::Auth_User()</a></dd>
+							<dt><b>auth.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/Auth/_classes---auth---auth.php.html">auth.php</a></dd>
+							<dt><b>auth_all.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/Auth/_classes---auth---auth_all.php.html">auth_all.php</a></dd>
+							<dt><b>auth_group.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/Auth/_classes---auth---auth_group.php.html">auth_group.php</a></dd>
+							<dt><b>auth_user.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/Auth/_classes---auth---auth_user.php.html">auth_user.php</a></dd>
 							<dt><b>AddCssFile</b></dt>
 				<dd>in file comalate.class.php, method <a href="ComaCMS/ComaLate/ComaLate.html#methodAddCssFile">ComaLate::AddCssFile()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Adds a link to the specified CSS-File</dd>
 							<dt><b>AddDate</b></dt>
@@ -478,6 +482,12 @@
 		<dl>
 							<dt><b>CalcSizeByMax</b></dt>
 				<dd>in file imageconverter.php, method <a href="ComaCMS/ImageConverter.html#methodCalcSizeByMax">ImageConverter::CalcSizeByMax()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Calculate the width and height of the loaded picture, with a given maximum</dd>
+							<dt><b>ChangePageAccess</b></dt>
+				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodChangePageAccess">PageStructure::ChangePageAccess()</a></dd>
+							<dt><b>ChangePageName</b></dt>
+				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodChangePageName">PageStructure::ChangePageName()</a></dd>
+							<dt><b>ChangePageParentID</b></dt>
+				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodChangePageParentID">PageStructure::ChangePageParentID()</a></dd>
 							<dt><b>comalib.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---comalib.php.html">comalib.php</a></dd>
 							<dt><b>ClearMenu</b></dt>
@@ -490,6 +500,8 @@
 				<dd>procedural page <a href="ComaCMS/_common.php.html">common.php</a></dd>
 							<dt><b>Connect</b></dt>
 				<dd>in file sql.php, method <a href="ComaCMS/Sql.html#methodConnect">Sql::Connect()</a></dd>
+							<dt><b>ConvertDefinition</b></dt>
+				<dd>in file textactions.php, method <a href="ComaCMS/TextActions.html#methodConvertDefinition">TextActions::ConvertDefinition()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;ConvertDefinition</dd>
 							<dt><b>ConvertList</b></dt>
 				<dd>in file textactions.php, method <a href="ComaCMS/TextActions.html#methodConvertList">TextActions::ConvertList()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;ConvertList</dd>
 							<dt><b>ConvertOList</b></dt>
@@ -528,8 +540,6 @@
 		<dl>
 							<dt><b>$Database</b></dt>
 				<dd>in file sql.php, variable <a href="ComaCMS/Sql.html#var$Database">Sql::$Database</a><br>&nbsp;&nbsp;&nbsp;&nbsp;The name of the database in the MySQL-server</dd>
-							<dt><b>$delete</b></dt>
-				<dd>in file auth.php, variable <a href="ComaCMS/Auth.html#var$delete">Auth::$delete</a></dd>
 							<dt><b>DB_PREFIX</b></dt>
 				<dd>in file common.php, constant <a href="ComaCMS/_common.php.html#defineDB_PREFIX">DB_PREFIX</a></dd>
 							<dt><b>db_result</b></dt>
@@ -542,6 +552,8 @@
 				<dd>procedural page <a href="ComaCMS/_download.php.html">download.php</a></dd>
 							<dt><b>deleteGroup</b></dt>
 				<dd>in file admin_groups.php, method <a href="ComaCMS/AdminInterface/Admin_Groups.html#methoddeleteGroup">Admin_Groups::deleteGroup()</a></dd>
+							<dt><b>$delete</b></dt>
+				<dd>in file auth.php, variable <a href="ComaCMS/Auth/Auth.html#var$delete">Auth::$delete</a></dd>
 							<dt><b>DOCTYPE_DEFAULT</b></dt>
 				<dd>in file comalate.class.php, constant <a href="ComaCMS/ComaLate/_lib---comalate---comalate.class.php.html#defineDOCTYPE_DEFAULT">DOCTYPE_DEFAULT</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Default docty type</dd>
 							<dt><b>DOCTYPE_XHTML_STRICT</b></dt>
@@ -552,8 +564,8 @@
 				<dd>in file dates.class.php, class <a href="ComaCMS/Dates/Dates.html">Dates</a></dd>
 							<dt><b>Dates</b></dt>
 				<dd>in file dates.class.php, method <a href="ComaCMS/Dates/Dates.html#methodDates">Dates::Dates()</a></dd>
-							<dt><b>DateSelecter</b></dt>
-				<dd>in file dates.class.php, method <a href="ComaCMS/Dates/Dates.html#methodDateSelecter">Dates::DateSelecter()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;DateSelecter</dd>
+							<dt><b>DateSelector</b></dt>
+				<dd>in file dates.class.php, method <a href="ComaCMS/Dates/Dates.html#methodDateSelector">Dates::DateSelector()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;DateSelector</dd>
 							<dt><b>DeleteDate</b></dt>
 				<dd>in file dates.class.php, method <a href="ComaCMS/Dates/Dates.html#methodDeleteDate">Dates::DeleteDate()</a></dd>
 							<dt><b>dates.class.php</b></dt>
@@ -574,8 +586,6 @@
 	<div>
 		<h2>e</h2>
 		<dl>
-							<dt><b>$edit</b></dt>
-				<dd>in file auth.php, variable <a href="ComaCMS/Auth.html#var$edit">Auth::$edit</a></dd>
 							<dt><b>edit_gallery_page.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---edit_gallery_page.php.html">edit_gallery_page.php</a></dd>
 							<dt><b>edit_text_page.php</b></dt>
@@ -604,6 +614,8 @@
 				<dd>in file admin_rights.php, method <a href="ComaCMS/AdminInterface/Admin_Rights.html#methodeditGroup">Admin_Rights::editGroup()</a></dd>
 							<dt><b>editUser</b></dt>
 				<dd>in file admin_rights.php, method <a href="ComaCMS/AdminInterface/Admin_Rights.html#methodeditUser">Admin_Rights::editUser()</a></dd>
+							<dt><b>$edit</b></dt>
+				<dd>in file auth.php, variable <a href="ComaCMS/Auth/Auth.html#var$edit">Auth::$edit</a></dd>
 							<dt><b>ExtendedFillArray</b></dt>
 				<dd>in file dates.class.php, method <a href="ComaCMS/Dates/Dates.html#methodExtendedFillArray">Dates::ExtendedFillArray()</a></dd>
 					</dl>
@@ -632,20 +644,12 @@
 	<div>
 		<h2>g</h2>
 		<dl>
-							<dt><b>$group_id</b></dt>
-				<dd>in file auth_group.php, variable <a href="ComaCMS/Auth_Group.html#var$group_id">Auth_Group::$group_id</a></dd>
-							<dt><b>gallerypage.php</b></dt>
-				<dd>procedural page <a href="ComaCMS/_classes---gallerypage.php.html">gallerypage.php</a></dd>
-							<dt><b>GalleryPage</b></dt>
-				<dd>in file gallerypage.php, method <a href="ComaCMS/GalleryPage.html#methodGalleryPage">GalleryPage::GalleryPage()</a></dd>
-							<dt><b>GalleryPage</b></dt>
-				<dd>in file gallerypage.php, class <a href="ComaCMS/GalleryPage.html">GalleryPage</a></dd>
 							<dt><b>GenerateInlineMenu</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGenerateInlineMenu">PageStructure::GenerateInlineMenu()</a></dd>
 							<dt><b>GenerateMenu</b></dt>
-				<dd>in file outputpage.php, method <a href="ComaCMS/OutputPage.html#methodGenerateMenu">OutputPage::GenerateMenu()</a></dd>
-							<dt><b>GenerateMenu</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGenerateMenu">PageStructure::GenerateMenu()</a></dd>
+							<dt><b>GenerateMenu</b></dt>
+				<dd>in file outputpage.php, method <a href="ComaCMS/OutputPage.html#methodGenerateMenu">OutputPage::GenerateMenu()</a></dd>
 							<dt><b>generateThumb</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_system---functions.php.html#functiongenerateThumb">generateThumb()</a></dd>
 							<dt><b>generateUrl</b></dt>
@@ -658,6 +662,8 @@
 				<dd>in file comalib.php, method <a href="ComaCMS/ComaLib.html#methodGetGroupByID">ComaLib::GetGroupByID()</a></dd>
 							<dt><b>GetInlineMenuData</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGetInlineMenuData">PageStructure::GetInlineMenuData()</a></dd>
+							<dt><b>GetInlineMenuEntriesCount</b></dt>
+				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGetInlineMenuEntriesCount">PageStructure::GetInlineMenuEntriesCount()</a></dd>
 							<dt><b>GetInternUrl</b></dt>
 				<dd>in file textactions.php, method <a href="ComaCMS/TextActions.html#methodGetInternUrl">TextActions::GetInternUrl()</a></dd>
 							<dt><b>getmicrotime</b></dt>
@@ -665,13 +671,19 @@
 							<dt><b>GetMimeContentType</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functionGetMimeContentType">GetMimeContentType()</a></dd>
 							<dt><b>GetPage</b></dt>
-				<dd>in file module.php, method <a href="ComaCMS/Module.html#methodGetPage">Module::GetPage()</a></dd>
-							<dt><b>GetPage</b></dt>
 				<dd>in file registration.php, method <a href="ComaCMS/Registration.html#methodGetPage">Registration::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Available actions (value of <var>$Action</var>):</dd>
+							<dt><b>GetPage</b></dt>
+				<dd>in file module.php, method <a href="ComaCMS/Module.html#methodGetPage">Module::GetPage()</a></dd>
 							<dt><b>GetPageData</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGetPageData">PageStructure::GetPageData()</a></dd>
+							<dt><b>GetPageDataArray</b></dt>
+				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGetPageDataArray">PageStructure::GetPageDataArray()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;GetPageDataArray</dd>
+							<dt><b>GetPageHistory</b></dt>
+				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGetPageHistory">PageStructure::GetPageHistory()</a></dd>
 							<dt><b>GetPostOrGet</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functionGetPostOrGet">GetPostOrGet()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;GetPostOrGet</dd>
+							<dt><b>GetStyles</b></dt>
+				<dd>in file pagepreview.php, method <a href="ComaCMS/PagePreview.html#methodGetStyles">PagePreview::GetStyles()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets all existing styles into an array</dd>
 							<dt><b>GetTitle</b></dt>
 				<dd>in file module.php, method <a href="ComaCMS/Module.html#methodGetTitle">Module::GetTitle()</a></dd>
 							<dt><b>GetTranslation</b></dt>
@@ -712,16 +724,20 @@
 				<dd>in file articles_module.php, method <a href="ComaCMS/Articles/Module_Articles.html#methodgetTitle">Module_Articles::getTitle()</a></dd>
 							<dt><b>GetTitle</b></dt>
 				<dd>in file articles_admin.php, method <a href="ComaCMS/Articles/Admin_Module_Articles.html#methodGetTitle">Admin_Module_Articles::GetTitle()</a></dd>
+							<dt><b>$group_id</b></dt>
+				<dd>in file auth_group.php, variable <a href="ComaCMS/Auth/Auth_Group.html#var$group_id">Auth_Group::$group_id</a></dd>
 							<dt><b>$GeneratedOutput</b></dt>
 				<dd>in file comalate.class.php, variable <a href="ComaCMS/ComaLate/ComaLate.html#var$GeneratedOutput">ComaLate::$GeneratedOutput</a></dd>
 							<dt><b>GenerateOutput</b></dt>
-				<dd>in file comalate.class.php, method <a href="ComaCMS/ComaLate/ComaLate.html#methodGenerateOutput">ComaLate::GenerateOutput()</a></dd>
+				<dd>in file comalate.class.php, method <a href="ComaCMS/ComaLate/ComaLate.html#methodGenerateOutput">ComaLate::GenerateOutput()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Generates the output html and saves it to a local string variable</dd>
 							<dt><b>GetDate</b></dt>
 				<dd>in file dates.class.php, method <a href="ComaCMS/Dates/Dates.html#methodGetDate">Dates::GetDate()</a></dd>
 							<dt><b>GetPage</b></dt>
 				<dd>in file dates_admin.php, method <a href="ComaCMS/Dates/Admin_Module_Dates.html#methodGetPage">Admin_Module_Dates::GetPage()</a></dd>
 							<dt><b>GetTitle</b></dt>
 				<dd>in file dates_admin.php, method <a href="ComaCMS/Dates/Admin_Module_Dates.html#methodGetTitle">Admin_Module_Dates::GetTitle()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;The title of the actual-module-page</dd>
+							<dt><b>GetPage</b></dt>
+				<dd>in file install.class.php, method <a href="ComaCMS/Installation/Installation.html#methodGetPage">Installation::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the templates for the Installsubpages and sets replacements for ComaLate</dd>
 							<dt><b>GetMessage</b></dt>
 				<dd>in file news.class.php, method <a href="ComaCMS/News/News.html#methodGetMessage">News::GetMessage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Get a News-Message by ID</dd>
 							<dt><b>GetPage</b></dt>
@@ -745,11 +761,11 @@
 		<h2>h</h2>
 		<dl>
 							<dt><b>$has_own</b></dt>
-				<dd>in file auth_group.php, variable <a href="ComaCMS/Auth_Group.html#var$has_own">Auth_Group::$has_own</a></dd>
+				<dd>in file auth_user.php, variable <a href="ComaCMS/Auth/Auth_User.html#var$has_own">Auth_User::$has_own</a></dd>
 							<dt><b>$has_own</b></dt>
-				<dd>in file auth_user.php, variable <a href="ComaCMS/Auth_User.html#var$has_own">Auth_User::$has_own</a></dd>
+				<dd>in file auth_group.php, variable <a href="ComaCMS/Auth/Auth_Group.html#var$has_own">Auth_Group::$has_own</a></dd>
 							<dt><b>$HTML</b></dt>
-				<dd>in file page.php, variable <a href="ComaCMS/Page.html#var$HTML">Page::$HTML</a></dd>
+				<dd>in file page.php, variable <a href="ComaCMS/Page/Page.html#var$HTML">Page::$HTML</a></dd>
 					</dl>
 	</div>
 	<a href="elementindex_ComaCMS.html#top">top</a><br>
@@ -764,18 +780,14 @@
 				<dd>in file user.php, variable <a href="ComaCMS/User.html#var$IsAdmin">User::$IsAdmin</a></dd>
 							<dt><b>$IsLoggedIn</b></dt>
 				<dd>in file user.php, variable <a href="ComaCMS/User.html#var$IsLoggedIn">User::$IsLoggedIn</a></dd>
-							<dt><b>$is_admin</b></dt>
-				<dd>in file auth_user.php, variable <a href="ComaCMS/Auth_User.html#var$is_admin">Auth_User::$is_admin</a></dd>
-							<dt><b>index.php</b></dt>
-				<dd>procedural page <a href="ComaCMS/_admin---index.php.html">index.php</a></dd>
 							<dt><b>imageconverter.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---imageconverter.php.html">imageconverter.php</a></dd>
 							<dt><b>inlinemenu.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---inlinemenu.php.html">inlinemenu.php</a></dd>
 							<dt><b>ImageConverter</b></dt>
-				<dd>in file imageconverter.php, class <a href="ComaCMS/ImageConverter.html">ImageConverter</a><br>&nbsp;&nbsp;&nbsp;&nbsp;ImageConverter  This class contains functions to manipulate images</dd>
-							<dt><b>ImageConverter</b></dt>
 				<dd>in file imageconverter.php, method <a href="ComaCMS/ImageConverter.html#methodImageConverter">ImageConverter::ImageConverter()</a></dd>
+							<dt><b>ImageConverter</b></dt>
+				<dd>in file imageconverter.php, class <a href="ComaCMS/ImageConverter.html">ImageConverter</a><br>&nbsp;&nbsp;&nbsp;&nbsp;ImageConverter  This class contains functions to manipulate images</dd>
 							<dt><b>IMG_ALIGN_CENTER</b></dt>
 				<dd>in file textactions.php, constant <a href="ComaCMS/_classes---textactions.php.html#defineIMG_ALIGN_CENTER">IMG_ALIGN_CENTER</a></dd>
 							<dt><b>IMG_ALIGN_LEFT</b></dt>
@@ -800,8 +812,6 @@
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodInlineMenuEntryMoveUp">PageStructure::InlineMenuEntryMoveUp()</a></dd>
 							<dt><b>InlineMenuExists</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodInlineMenuExists">PageStructure::InlineMenuExists()</a></dd>
-							<dt><b>install.php</b></dt>
-				<dd>procedural page <a href="ComaCMS/_install---install.php.html">install.php</a></dd>
 							<dt><b>isEMailAddress</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functionisEMailAddress">isEMailAddress()</a></dd>
 							<dt><b>isIcqNumber</b></dt>
@@ -810,6 +820,16 @@
 				<dd>in file menu.php, method <a href="ComaCMS/Menu.html#methodItemMoveDown">Menu::ItemMoveDown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Moves a MenuItem unter the following MenuItem</dd>
 							<dt><b>ItemMoveUp</b></dt>
 				<dd>in file menu.php, method <a href="ComaCMS/Menu.html#methodItemMoveUp">Menu::ItemMoveUp()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Moves a MenuItem above the previous MenuItem</dd>
+							<dt><b>$is_admin</b></dt>
+				<dd>in file auth_user.php, variable <a href="ComaCMS/Auth/Auth_User.html#var$is_admin">Auth_User::$is_admin</a></dd>
+							<dt><b>install.class.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/Installation/_install---install.class.php.html">install.class.php</a></dd>
+							<dt><b>install.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/Installation/_install---install.php.html">install.php</a></dd>
+							<dt><b>Installation</b></dt>
+				<dd>in file install.class.php, class <a href="ComaCMS/Installation/Installation.html">Installation</a></dd>
+							<dt><b>Installation</b></dt>
+				<dd>in file install.class.php, method <a href="ComaCMS/Installation/Installation.html#methodInstallation">Installation::Installation()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initializes the Intallation class</dd>
 					</dl>
 	</div>
 	<a href="elementindex_ComaCMS.html#top">top</a><br>
@@ -829,9 +849,9 @@
 		<h2>l</h2>
 		<dl>
 							<dt><b>$Language</b></dt>
-				<dd>in file user.php, variable <a href="ComaCMS/User.html#var$Language">User::$Language</a></dd>
-							<dt><b>$Language</b></dt>
 				<dd>in file outputpage.php, variable <a href="ComaCMS/OutputPage.html#var$Language">OutputPage::$Language</a></dd>
+							<dt><b>$Language</b></dt>
+				<dd>in file user.php, variable <a href="ComaCMS/User.html#var$Language">User::$Language</a></dd>
 							<dt><b>$LoginError</b></dt>
 				<dd>in file user.php, variable <a href="ComaCMS/User.html#var$LoginError">User::$LoginError</a><br>&nbsp;&nbsp;&nbsp;&nbsp;LoginError</dd>
 							<dt><b>language.php</b></dt>
@@ -848,8 +868,6 @@
 				<dd>in file languages.php, class <a href="ComaCMS/Languages.html">Languages</a></dd>
 							<dt><b>Load</b></dt>
 				<dd>in file preferences.php, method <a href="ComaCMS/Preferences.html#methodLoad">Preferences::Load()</a></dd>
-							<dt><b>load</b></dt>
-				<dd>in file auth_all.php, method <a href="ComaCMS/Auth_All.html#methodload">Auth_All::load()</a></dd>
 							<dt><b>LoadAllLanguages</b></dt>
 				<dd>in file languages.php, method <a href="ComaCMS/Languages.html#methodLoadAllLanguages">Languages::LoadAllLanguages()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all languages form mysqldatabase to local array</dd>
 							<dt><b>LoadData</b></dt>
@@ -868,10 +886,26 @@
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodLoadParentIDs">PageStructure::LoadParentIDs()</a></dd>
 							<dt><b>Logout</b></dt>
 				<dd>in file user.php, method <a href="ComaCMS/User.html#methodLogout">User::Logout()</a></dd>
+							<dt><b>LogPage</b></dt>
+				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodLogPage">PageStructure::LogPage()</a></dd>
+							<dt><b>load</b></dt>
+				<dd>in file auth_all.php, method <a href="ComaCMS/Auth/Auth_All.html#methodload">Auth_All::load()</a></dd>
 							<dt><b>$Language</b></dt>
 				<dd>in file comalate.class.php, variable <a href="ComaCMS/ComaLate/ComaLate.html#var$Language">ComaLate::$Language</a></dd>
 							<dt><b>LoadTemplate</b></dt>
-				<dd>in file comalate.class.php, method <a href="ComaCMS/ComaLate/ComaLate.html#methodLoadTemplate">ComaLate::LoadTemplate()</a></dd>
+				<dd>in file comalate.class.php, method <a href="ComaCMS/ComaLate/ComaLate.html#methodLoadTemplate">ComaLate::LoadTemplate()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads a ComaLate template from a file to local variables and sets css files for the output</dd>
+							<dt><b>LoadGalleryPage</b></dt>
+				<dd>in file page_gallery.php, method <a href="ComaCMS/Page/Page_Gallery.html#methodLoadGalleryPage">Page_Gallery::LoadGalleryPage()</a></dd>
+							<dt><b>LoadImagePage</b></dt>
+				<dd>in file page_gallery.php, method <a href="ComaCMS/Page/Page_Gallery.html#methodLoadImagePage">Page_Gallery::LoadImagePage()</a></dd>
+							<dt><b>LoadPage</b></dt>
+				<dd>in file page_text.php, method <a href="ComaCMS/Page/Page_Text.html#methodLoadPage">Page_Text::LoadPage()</a></dd>
+							<dt><b>LoadPage</b></dt>
+				<dd>in file page_gallery.php, method <a href="ComaCMS/Page/Page_Gallery.html#methodLoadPage">Page_Gallery::LoadPage()</a></dd>
+							<dt><b>LoadPage</b></dt>
+				<dd>in file page.php, method <a href="ComaCMS/Page/Page.html#methodLoadPage">Page::LoadPage()</a></dd>
+							<dt><b>LoadPageFromRevision</b></dt>
+				<dd>in file page_text.php, method <a href="ComaCMS/Page/Page_Text.html#methodLoadPageFromRevision">Page_Text::LoadPageFromRevision()</a></dd>
 					</dl>
 	</div>
 	<a href="elementindex_ComaCMS.html#top">top</a><br>
@@ -926,12 +960,12 @@
 		<dl>
 							<dt><b>$Name</b></dt>
 				<dd>in file user.php, variable <a href="ComaCMS/User.html#var$Name">User::$Name</a></dd>
-							<dt><b>$new_sub</b></dt>
-				<dd>in file auth.php, variable <a href="ComaCMS/Auth.html#var$new_sub">Auth::$new_sub</a></dd>
-							<dt><b>NewPage</b></dt>
-				<dd>in file edit_gallery_page.php, method <a href="ComaCMS/Edit_Gallery_Page.html#methodNewPage">Edit_Gallery_Page::NewPage()</a></dd>
 							<dt><b>NewPage</b></dt>
 				<dd>in file edit_text_page.php, method <a href="ComaCMS/Edit_Text_Page.html#methodNewPage">Edit_Text_Page::NewPage()</a></dd>
+							<dt><b>NewPage</b></dt>
+				<dd>in file edit_gallery_page.php, method <a href="ComaCMS/Edit_Gallery_Page.html#methodNewPage">Edit_Gallery_Page::NewPage()</a></dd>
+							<dt><b>$new_sub</b></dt>
+				<dd>in file auth.php, variable <a href="ComaCMS/Auth/Auth.html#var$new_sub">Auth::$new_sub</a></dd>
 							<dt><b>news.class.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/News/_modules---news---news.class.php.html">news.class.php</a></dd>
 							<dt><b>news_admin.php</b></dt>
@@ -978,28 +1012,24 @@
 				<dd>in file user.php, variable <a href="ComaCMS/User.html#var$PasswordMd5">User::$PasswordMd5</a></dd>
 							<dt><b>$Position</b></dt>
 				<dd>in file outputpage.php, variable <a href="ComaCMS/OutputPage.html#var$Position">OutputPage::$Position</a></dd>
-							<dt><b>page.php</b></dt>
-				<dd>procedural page <a href="ComaCMS/_classes---page.php.html">page.php</a></dd>
 							<dt><b>pagepreview.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---pagepreview.php.html">pagepreview.php</a></dd>
 							<dt><b>pagestructure.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---pagestructure.php.html">pagestructure.php</a></dd>
 							<dt><b>preferences.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---preferences.php.html">preferences.php</a></dd>
-							<dt><b>Page</b></dt>
-				<dd>in file page.php, class <a href="ComaCMS/Page.html">Page</a></dd>
 							<dt><b>PageExists</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodPageExists">PageStructure::PageExists()</a></dd>
 							<dt><b>PageHasSubPages</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodPageHasSubPages">PageStructure::PageHasSubPages()</a></dd>
 							<dt><b>PagePreview</b></dt>
-				<dd>in file pagepreview.php, class <a href="ComaCMS/PagePreview.html">PagePreview</a></dd>
-							<dt><b>PagePreview</b></dt>
 				<dd>in file pagepreview.php, method <a href="ComaCMS/PagePreview.html#methodPagePreview">PagePreview::PagePreview()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initializes the PagePreview class</dd>
-							<dt><b>PageStructure</b></dt>
-				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodPageStructure">PageStructure::PageStructure()</a></dd>
+							<dt><b>PagePreview</b></dt>
+				<dd>in file pagepreview.php, class <a href="ComaCMS/PagePreview.html">PagePreview</a></dd>
 							<dt><b>PageStructure</b></dt>
 				<dd>in file pagestructure.php, class <a href="ComaCMS/PageStructure.html">PageStructure</a></dd>
+							<dt><b>PageStructure</b></dt>
+				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodPageStructure">PageStructure::PageStructure()</a></dd>
 							<dt><b>PageStructurePulldown</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodPageStructurePulldown">PageStructure::PageStructurePulldown()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;PageStructurePulldown  This function generates all &lt;option&gt;-tags to create a pull-down-list wherec you can select a page</dd>
 							<dt><b>page_users</b></dt>
@@ -1007,9 +1037,23 @@
 							<dt><b>PositionOfPage</b></dt>
 				<dd>in file outputpage.php, method <a href="ComaCMS/OutputPage.html#methodPositionOfPage">OutputPage::PositionOfPage()</a></dd>
 							<dt><b>Preferences</b></dt>
-				<dd>in file preferences.php, class <a href="ComaCMS/Preferences.html">Preferences</a></dd>
-							<dt><b>Preferences</b></dt>
 				<dd>in file preferences.php, method <a href="ComaCMS/Preferences.html#methodPreferences">Preferences::Preferences()</a></dd>
+							<dt><b>Preferences</b></dt>
+				<dd>in file preferences.php, class <a href="ComaCMS/Preferences.html">Preferences</a></dd>
+							<dt><b>page.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/Page/_classes---page---page.php.html">page.php</a></dd>
+							<dt><b>page_gallery.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/Page/_classes---page---page_gallery.php.html">page_gallery.php</a></dd>
+							<dt><b>page_text.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/Page/_classes---page---page_text.php.html">page_text.php</a></dd>
+							<dt><b>Page</b></dt>
+				<dd>in file page.php, method <a href="ComaCMS/Page/Page.html#methodPage">Page::Page()</a></dd>
+							<dt><b>Page</b></dt>
+				<dd>in file page.php, class <a href="ComaCMS/Page/Page.html">Page</a></dd>
+							<dt><b>Page_Gallery</b></dt>
+				<dd>in file page_gallery.php, class <a href="ComaCMS/Page/Page_Gallery.html">Page_Gallery</a></dd>
+							<dt><b>Page_Text</b></dt>
+				<dd>in file page_text.php, class <a href="ComaCMS/Page/Page_Text.html">Page_Text</a></dd>
 					</dl>
 	</div>
 	<a href="elementindex_ComaCMS.html#top">top</a><br>
@@ -1069,13 +1113,9 @@
 							<dt><b>sql.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---sql.php.html">sql.php</a></dd>
 							<dt><b>Save</b></dt>
-				<dd>in file auth_group.php, method <a href="ComaCMS/Auth_Group.html#methodSave">Auth_Group::Save()</a></dd>
+				<dd>in file edit_gallery_page.php, method <a href="ComaCMS/Edit_Gallery_Page.html#methodSave">Edit_Gallery_Page::Save()</a></dd>
 							<dt><b>Save</b></dt>
 				<dd>in file edit_text_page.php, method <a href="ComaCMS/Edit_Text_Page.html#methodSave">Edit_Text_Page::Save()</a></dd>
-							<dt><b>Save</b></dt>
-				<dd>in file auth_user.php, method <a href="ComaCMS/Auth_User.html#methodSave">Auth_User::Save()</a></dd>
-							<dt><b>Save</b></dt>
-				<dd>in file edit_gallery_page.php, method <a href="ComaCMS/Edit_Gallery_Page.html#methodSave">Edit_Gallery_Page::Save()</a></dd>
 							<dt><b>SaveInlineMenuDownload</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodSaveInlineMenuDownload">PageStructure::SaveInlineMenuDownload()</a></dd>
 							<dt><b>SaveInlineMenuInternLink</b></dt>
@@ -1090,8 +1130,6 @@
 				<dd>in file pagepreview.php, method <a href="ComaCMS/PagePreview.html#methodSaveStyle">PagePreview::SaveStyle()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Saves a choosen style to config</dd>
 							<dt><b>sendmail</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functionsendmail">sendmail()</a></dd>
-							<dt><b>setAdmin</b></dt>
-				<dd>in file auth_all.php, method <a href="ComaCMS/Auth_All.html#methodsetAdmin">Auth_All::setAdmin()</a></dd>
 							<dt><b>SetInlineMenuImage</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodSetInlineMenuImage">PageStructure::SetInlineMenuImage()</a></dd>
 							<dt><b>SetInlineMenuImageTitle</b></dt>
@@ -1107,23 +1145,29 @@
 							<dt><b>special.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_special.php.html">special.php</a></dd>
 							<dt><b>Sql</b></dt>
-				<dd>in file sql.php, method <a href="ComaCMS/Sql.html#methodSql">Sql::Sql()</a></dd>
-							<dt><b>Sql</b></dt>
 				<dd>in file sql.php, class <a href="ComaCMS/Sql.html">Sql</a></dd>
+							<dt><b>Sql</b></dt>
+				<dd>in file sql.php, method <a href="ComaCMS/Sql.html#methodSql">Sql::Sql()</a></dd>
 							<dt><b>SqlExecFile</b></dt>
 				<dd>in file sql.php, method <a href="ComaCMS/Sql.html#methodSqlExecFile">Sql::SqlExecFile()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Executes a Sql-File</dd>
 							<dt><b>SqlExecMultiple</b></dt>
 				<dd>in file sql.php, method <a href="ComaCMS/Sql.html#methodSqlExecMultiple">Sql::SqlExecMultiple()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Executes many sql-queries at once</dd>
 							<dt><b>SqlQuery</b></dt>
 				<dd>in file sql.php, method <a href="ComaCMS/Sql.html#methodSqlQuery">Sql::SqlQuery()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sends a MySQL-Query to the Server and incements a counter which counts the MySQL-queries</dd>
-							<dt><b>StartsWith</b></dt>
-				<dd>in file textactions.php, method <a href="ComaCMS/TextActions.html#methodStartsWith">TextActions::StartsWith()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;special_start_with</dd>
 							<dt><b>startsWith</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functionstartsWith">startsWith()</a></dd>
+							<dt><b>StartsWith</b></dt>
+				<dd>in file textactions.php, method <a href="ComaCMS/TextActions.html#methodStartsWith">TextActions::StartsWith()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;special_start_with</dd>
 							<dt><b>settings.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_system---settings.php.html">settings.php</a></dd>
 							<dt><b>saveGroup</b></dt>
 				<dd>in file admin_rights.php, method <a href="ComaCMS/AdminInterface/Admin_Rights.html#methodsaveGroup">Admin_Rights::saveGroup()</a></dd>
+							<dt><b>Save</b></dt>
+				<dd>in file auth_user.php, method <a href="ComaCMS/Auth/Auth_User.html#methodSave">Auth_User::Save()</a></dd>
+							<dt><b>Save</b></dt>
+				<dd>in file auth_group.php, method <a href="ComaCMS/Auth/Auth_Group.html#methodSave">Auth_Group::Save()</a></dd>
+							<dt><b>setAdmin</b></dt>
+				<dd>in file auth_all.php, method <a href="ComaCMS/Auth/Auth_All.html#methodsetAdmin">Auth_All::setAdmin()</a></dd>
 							<dt><b>SetCondition</b></dt>
 				<dd>in file comalate.class.php, method <a href="ComaCMS/ComaLate/ComaLate.html#methodSetCondition">ComaLate::SetCondition()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Adds or changes (if the condition already exists) a condition by name</dd>
 							<dt><b>SetDoctype</b></dt>
@@ -1131,7 +1175,9 @@
 							<dt><b>SetMeta</b></dt>
 				<dd>in file comalate.class.php, method <a href="ComaCMS/ComaLate/ComaLate.html#methodSetMeta">ComaLate::SetMeta()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Adds or changes (if the meta-tag already exists) a meta-tag by name</dd>
 							<dt><b>SetReplacement</b></dt>
-				<dd>in file comalate.class.php, method <a href="ComaCMS/ComaLate/ComaLate.html#methodSetReplacement">ComaLate::SetReplacement()</a></dd>
+				<dd>in file comalate.class.php, method <a href="ComaCMS/ComaLate/ComaLate.html#methodSetReplacement">ComaLate::SetReplacement()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Adds or changes a replacement (if the replacement already exists) in one of the local replacement arrays</dd>
+							<dt><b>SetShortcutIcon</b></dt>
+				<dd>in file comalate.class.php, method <a href="ComaCMS/ComaLate/ComaLate.html#methodSetShortcutIcon">ComaLate::SetShortcutIcon()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets the link to the shoutcuticon so that each template can define its one one.</dd>
 							<dt><b>sitemap_info.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/Sitemap/_modules---sitemap---sitemap_info.php.html">sitemap_info.php</a></dd>
 							<dt><b>sitemap_module.php</b></dt>
@@ -1152,24 +1198,18 @@
 				<dd>in file outputpage.php, variable <a href="ComaCMS/OutputPage.html#var$Templatefolder">OutputPage::$Templatefolder</a></dd>
 							<dt><b>$Text</b></dt>
 				<dd>in file outputpage.php, variable <a href="ComaCMS/OutputPage.html#var$Text">OutputPage::$Text</a></dd>
-							<dt><b>$Text</b></dt>
-				<dd>in file textpage.php, variable <a href="ComaCMS/TextPage.html#var$Text">TextPage::$Text</a></dd>
 							<dt><b>$Title</b></dt>
 				<dd>in file outputpage.php, variable <a href="ComaCMS/OutputPage.html#var$Title">OutputPage::$Title</a></dd>
 							<dt><b>textactions.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---textactions.php.html">textactions.php</a></dd>
-							<dt><b>textpage.php</b></dt>
-				<dd>procedural page <a href="ComaCMS/_classes---textpage.php.html">textpage.php</a></dd>
 							<dt><b>TextActions</b></dt>
 				<dd>in file textactions.php, class <a href="ComaCMS/TextActions.html">TextActions</a><br>&nbsp;&nbsp;&nbsp;&nbsp;TextActions  This class contains the functions which are used to convert plain text into a html-sourcecode</dd>
-							<dt><b>TextPage</b></dt>
-				<dd>in file textpage.php, method <a href="ComaCMS/TextPage.html#methodTextPage">TextPage::TextPage()</a></dd>
-							<dt><b>TextPage</b></dt>
-				<dd>in file textpage.php, class <a href="ComaCMS/TextPage.html">TextPage</a></dd>
 							<dt><b>$Template</b></dt>
 				<dd>in file comalate.class.php, variable <a href="ComaCMS/ComaLate/ComaLate.html#var$Template">ComaLate::$Template</a></dd>
 							<dt><b>$Title</b></dt>
 				<dd>in file comalate.class.php, variable <a href="ComaCMS/ComaLate/ComaLate.html#var$Title">ComaLate::$Title</a></dd>
+							<dt><b>$Text</b></dt>
+				<dd>in file page_text.php, variable <a href="ComaCMS/Page/Page_Text.html#var$Text">Page_Text::$Text</a></dd>
 					</dl>
 	</div>
 	<a href="elementindex_ComaCMS.html#top">top</a><br>
@@ -1178,14 +1218,10 @@
 	<div>
 		<h2>u</h2>
 		<dl>
-							<dt><b>$userID</b></dt>
-				<dd>in file auth_all.php, variable <a href="ComaCMS/Auth_All.html#var$userID">Auth_All::$userID</a></dd>
 							<dt><b>$UserName</b></dt>
 				<dd>in file sql.php, variable <a href="ComaCMS/Sql.html#var$UserName">Sql::$UserName</a><br>&nbsp;&nbsp;&nbsp;&nbsp;The username of the MySQL-account</dd>
 							<dt><b>$UserPassword</b></dt>
 				<dd>in file sql.php, variable <a href="ComaCMS/Sql.html#var$UserPassword">Sql::$UserPassword</a><br>&nbsp;&nbsp;&nbsp;&nbsp;The passwort for the MySQL-account</dd>
-							<dt><b>$user_id</b></dt>
-				<dd>in file auth_user.php, variable <a href="ComaCMS/Auth_User.html#var$user_id">Auth_User::$user_id</a></dd>
 							<dt><b>user.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---user.php.html">user.php</a></dd>
 							<dt><b>UpdateMenu</b></dt>
@@ -1202,6 +1238,10 @@
 				<dd>in file admin_rights.php, method <a href="ComaCMS/AdminInterface/Admin_Rights.html#methodusersOverview">Admin_Rights::usersOverview()</a></dd>
 							<dt><b>UseModule</b></dt>
 				<dd>in file articles_module.php, method <a href="ComaCMS/Articles/Module_Articles.html#methodUseModule">Module_Articles::UseModule()</a></dd>
+							<dt><b>$userID</b></dt>
+				<dd>in file auth_all.php, variable <a href="ComaCMS/Auth/Auth_All.html#var$userID">Auth_All::$userID</a></dd>
+							<dt><b>$user_id</b></dt>
+				<dd>in file auth_user.php, variable <a href="ComaCMS/Auth/Auth_User.html#var$user_id">Auth_User::$user_id</a></dd>
 							<dt><b>UpdateDate</b></dt>
 				<dd>in file dates.class.php, method <a href="ComaCMS/Dates/Dates.html#methodUpdateDate">Dates::UpdateDate()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;UpdateDate</dd>
 							<dt><b>UseModule</b></dt>
@@ -1223,7 +1263,7 @@
 		<h2>v</h2>
 		<dl>
 							<dt><b>$view</b></dt>
-				<dd>in file auth.php, variable <a href="ComaCMS/Auth.html#var$view">Auth::$view</a></dd>
+				<dd>in file auth.php, variable <a href="ComaCMS/Auth/Auth.html#var$view">Auth::$view</a></dd>
 					</dl>
 	</div>
 	<a href="elementindex_ComaCMS.html#top">top</a><br>
@@ -1239,7 +1279,7 @@
 	<a href="elementindex_ComaCMS.html#top">top</a><br>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Wed, 27 Dec 2006 23:43:01 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Sat, 06 Jan 2007 22:31:57 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
 	      </div>
       </td></tr></table>
     </td>

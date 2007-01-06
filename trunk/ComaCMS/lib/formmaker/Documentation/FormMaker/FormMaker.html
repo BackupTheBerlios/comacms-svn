@@ -1,0 +1,596 @@
+<html>
+<head>
+<title>Docs For Class FormMaker</title>
+<link rel="stylesheet" type="text/css" href="../media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">FormMaker</td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+  		  [ <a href="../classtrees_FormMaker.html" class="menu">class tree: FormMaker</a> ]
+		  [ <a href="../elementindex_FormMaker.html" class="menu">index: FormMaker</a> ]
+		  [ <a href="../elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+      <b>Packages:</b><br />
+              <a href="../li_FormMaker.html">FormMaker</a><br />
+            <br /><br />
+                        <b>Files:</b><br />
+      	  <div class="package">
+			<a href="../FormMaker/_formmaker.class.php.html">		formmaker.class.php
+		</a><br>
+	  </div><br />
+      
+      
+            <b>Classes:</b><br />
+        <div class="package">
+		    		<a href="../FormMaker/FormMaker.html">FormMaker</a><br />
+	  </div>
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<h1>Class: FormMaker</h1>
+Source Location: /formmaker.class.php<br /><br />
+
+
+<table width="100%" border="0">
+<tr><td valign="top">
+
+<h3><a href="#class_details">Class Overview</a></h3>
+<pre></pre><br />
+<div class="description">Helps the user to generate a formular and checks the inputs if the user wants it to</div><br /><br />
+
+
+
+
+
+
+        
+</td>
+
+
+
+<td valign="top">
+<h3><a href="#class_methods">Methods</a></h3>
+<ul>
+    <li><a href="../FormMaker/FormMaker.html#methodFormMaker">FormMaker</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodAddCheck">AddCheck</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodAddForm">AddForm</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodAddHiddenInput">AddHiddenInput</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodAddInput">AddInput</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodAddSelectEntry">AddSelectEntry</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodCheckInputs">CheckInputs</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodGenerateOutputs">GenerateOutputs</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodGenerateTemplate">GenerateTemplate</a></li>
+  </ul>
+</td>
+
+</tr></table>
+<hr />
+
+<table width="100%" border="0"><tr>
+
+
+
+
+
+
+</tr></table>
+<hr />
+
+<a name="class_details"></a>
+<h3>Class Details</h3>
+<div class="tags">
+[line 23]<br />
+Helps the user to generate a formular and checks the inputs if the user wants it to<br /><br /></div><br /><br />
+<div class="top">[ <a href="#top">Top</a> ]</div><br />
+
+
+<hr />
+<a name="class_methods"></a>
+<h3>Class Methods</h3>
+<div class="tags">
+
+  <hr />
+	<a name="methodFormMaker"></a>
+	<h3>constructor FormMaker <span class="smalllinenumber">[line 45]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code><a href="../FormMaker/FormMaker.html">FormMaker</a> FormMaker(
+string
+$TodoValue)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Initializes the FormMaker class<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>A new FormMaker class</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$TodoValue</b>&nbsp;&nbsp;</td>
+        <td>A value for the langstring todo. It is needed if anywhere is no translation set for an information tag</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodAddCheck"></a>
+	<h3>method AddCheck <span class="smalllinenumber">[line 193]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void AddCheck(
+string
+$FormName, string
+$InputName, string
+$CheckType, string
+$ErrorInformation, [string
+$SecondInputName = ''])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Adds a check to an input in the local array<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Adds a check</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$FormName</b>&nbsp;&nbsp;</td>
+        <td>The name of the formular in witch the input is</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$InputName</b>&nbsp;&nbsp;</td>
+        <td>The name of the input</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$CheckType</b>&nbsp;&nbsp;</td>
+        <td>The type of the checking</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$ErrorInformation</b>&nbsp;&nbsp;</td>
+        <td>The errorinformation text if the error matches</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$SecondInputName</b>&nbsp;&nbsp;</td>
+        <td>The second input if the check needs a compatison to another field</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodAddForm"></a>
+	<h3>method AddForm <span class="smalllinenumber">[line 101]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void AddForm(
+string
+$Name, string
+$Action, string
+$SubmitValue, string
+$FieldsetLegend, [string
+$Method = 'post'])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Adds a new formular to the local array<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Adds a form</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Name</b>&nbsp;&nbsp;</td>
+        <td>The name of the form</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Action</b>&nbsp;&nbsp;</td>
+        <td>The action of the form</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$SubmitValue</b>&nbsp;&nbsp;</td>
+        <td>The value of the submit button</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$FieldsetLegend</b>&nbsp;&nbsp;</td>
+        <td>The legend of a fieldset if the form should be displayed in one</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Method</b>&nbsp;&nbsp;</td>
+        <td>The method of the form. Can be [post] or [get]</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodAddHiddenInput"></a>
+	<h3>method AddHiddenInput <span class="smalllinenumber">[line 134]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void AddHiddenInput(
+string
+$FormName, string
+$Name, string
+$Value)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Adds a hidden inputfield to the local array<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Adds hidden inputfield</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$FormName</b>&nbsp;&nbsp;</td>
+        <td>The name of the formular to that the hidden input should be added</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Name</b>&nbsp;&nbsp;</td>
+        <td>The name of the hidden input</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Value</b>&nbsp;&nbsp;</td>
+        <td>The value of the hidden input</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodAddInput"></a>
+	<h3>method AddInput <span class="smalllinenumber">[line 154]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void AddInput(
+string
+$FormName, string
+$Name, [string
+$Type = 'text'], string
+$NameTranslation, string
+$Information, [string
+$Value = ''])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Adds an input to a formular in the local aray<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Adds an input to a form in the local array</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$FormName</b>&nbsp;&nbsp;</td>
+        <td>The name of the formular the input should be added to</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Name</b>&nbsp;&nbsp;</td>
+        <td>The name of the input</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Type</b>&nbsp;&nbsp;</td>
+        <td>The type of the input, possible are [TEXT], [SELECT] and [PASSWORD]</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$NameTranslation</b>&nbsp;&nbsp;</td>
+        <td>The translation that should be shown for that input</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Information</b>&nbsp;&nbsp;</td>
+        <td>The information about that input that should be shown</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Value</b>&nbsp;&nbsp;</td>
+        <td>The value of the input if any exist</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodAddSelectEntry"></a>
+	<h3>method AddSelectEntry <span class="smalllinenumber">[line 215]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void AddSelectEntry(
+string
+$FormName, string
+$InputName, bool
+$Checked, string
+$Value, string
+$DisplayValue)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Adds a select entry to an existing select input field in the local array<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Add a select entry to an input of a form saved in the local array</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$FormName</b>&nbsp;&nbsp;</td>
+        <td>The name of the form in the local array</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$InputName</b>&nbsp;&nbsp;</td>
+        <td>The name of the input</td>
+      </tr>
+          <tr>
+        <td class="type">bool&nbsp;&nbsp;</td>
+        <td><b>$Checked</b>&nbsp;&nbsp;</td>
+        <td>Is the entry checked?</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Value</b>&nbsp;&nbsp;</td>
+        <td>The value of the select entry</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$DisplayValue</b>&nbsp;&nbsp;</td>
+        <td>The value of the entry that should be displayed</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodCheckInputs"></a>
+	<h3>method CheckInputs <span class="smalllinenumber">[line 238]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>bool CheckInputs(
+string
+$FormName, [bool
+$GenerateErrorInformations = false])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Checks every input using its checkings<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>If there are no errors found it returns true, else false</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$FormName</b>&nbsp;&nbsp;</td>
+        <td>The name of the form that should be checked</td>
+      </tr>
+          <tr>
+        <td class="type">bool&nbsp;&nbsp;</td>
+        <td><b>$GenerateErrorInformations</b>&nbsp;&nbsp;</td>
+        <td>Shall the function create an output for each error?</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodGenerateOutputs"></a>
+	<h3>method GenerateOutputs <span class="smalllinenumber">[line 378]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string GenerateOutputs(
+[bool
+$GiveErrorInformation = false])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Generates a template for the inputs and returns it<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>The ready compiled inputs</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">bool&nbsp;&nbsp;</td>
+        <td><b>$GiveErrorInformation</b>&nbsp;&nbsp;</td>
+        <td>Shall the method give out any errorinformation?</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodGenerateTemplate"></a>
+	<h3>method GenerateTemplate <span class="smalllinenumber">[line 412]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string GenerateTemplate(
+ComaLate
+&$ComaLate, [bool
+$GiveErrorInformation = false])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Returns the default template and sets replacements for ComaLate<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>The default template</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">ComaLate&nbsp;&nbsp;</td>
+        <td><b>&$ComaLate</b>&nbsp;&nbsp;</td>
+        <td>A link to the comalate class to set the replacements for the template</td>
+      </tr>
+          <tr>
+        <td class="type">bool&nbsp;&nbsp;</td>
+        <td><b>$GiveErrorInformation</b>&nbsp;&nbsp;</td>
+        <td>Shall the method give out any errorinformation?</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+</div><br />
+
+
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Thu, 04 Jan 2007 22:55:23 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

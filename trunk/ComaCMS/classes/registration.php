@@ -71,11 +71,17 @@
 		function GetPage($Action) {
 			$out = "";
 		 	switch ($Action) {
-		 		case 'checkRegistration':	$out .= $this->_checkRegistration(GetPostOrGet('showname'), GetPostOrGet('name'), GetPostOrGet('email'), GetPostOrGet('password'), GetPostOrGet('password_repetition'));
-		 						break;
-		 		case 'activateRegistration':	$out .= $this->_activateRegistration(GetPostOrGet('code'));
-		 						break;
-		 		default:			$out .= $this->_register();
+		 		case 'checkRegistration':	
+		 			$out .= $this->_checkRegistration(GetPostOrGet('showname'), GetPostOrGet('name'), GetPostOrGet('email'), GetPostOrGet('password'), GetPostOrGet('password_repetition'));
+		 			break;
+		 			
+		 		case 'activateRegistration':	
+		 			$out .= $this->_activateRegistration(GetPostOrGet('code'));
+		 			break;
+		 			
+		 		default:			
+		 			$out .= $this->_register();
+		 			break;
 		 	}
 			return $out;
 	 	}

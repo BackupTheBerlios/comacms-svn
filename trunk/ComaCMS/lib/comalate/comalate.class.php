@@ -1,14 +1,13 @@
 <?php
 /**
- * @package ComaCMS
- * @subpackage ComaLate
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @package ComaLate
+@copyright (C) 2005-2007 The ComaCMS-Team
  * @version ComaLate 0.3
  */
  #----------------------------------------------------------------------
  # file                 : comalate.php
  # created              : 2006-02-12
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -29,8 +28,7 @@
   	
 	/**
 	 * ComaLate Template Engine
-	 * @package ComaCMS
-	 * @subpackage ComaLate
+	 * @package ComaLate
 	 */
  	class ComaLate {
  		

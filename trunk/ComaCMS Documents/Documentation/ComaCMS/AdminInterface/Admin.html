@@ -25,6 +25,7 @@
     <td width="200" class="menu">
       <b>Packages:</b><br />
               <a href="../../li_ComaCMS.html">ComaCMS</a><br />
+              <a href="../../li_ComaLate.html">ComaLate</a><br />
               <a href="../../li_FormMaker.html">FormMaker</a><br />
             <br /><br />
                         <b>Files:</b><br />
@@ -130,10 +131,6 @@
 			<a href="../../ComaCMS/Auth/_classes---auth---auth_user.php.html">		auth_user.php
 		</a><br>
 	  </div><br />
-	subpackage <b>ComaLate</b><br>  <div class="package">
-			<a href="../../ComaCMS/ComaLate/_lib---comalate---comalate.class.php.html">		comalate.class.php
-		</a><br>
-	  </div><br />
 	subpackage <b>Contact</b><br>  <div class="package">
 			<a href="../../ComaCMS/Contact/_modules---contact---contact_info.php.html">		contact_info.php
 		</a><br>
@@ -172,6 +169,12 @@
 	  </div><br />
 	subpackage <b>Page</b><br>  <div class="package">
 			<a href="../../ComaCMS/Page/_classes---page---page.php.html">		page.php
+		</a><br>
+			<a href="../../ComaCMS/Page/_classes---page---page_extended.php.html">		page_extended.php
+		</a><br>
+			<a href="../../ComaCMS/Page/_classes---page---page_extended_gallery.php.html">		page_extended_gallery.php
+		</a><br>
+			<a href="../../ComaCMS/Page/_classes---page---page_extended_text.php.html">		page_extended_text.php
 		</a><br>
 			<a href="../../ComaCMS/Page/_classes---page---page_gallery.php.html">		page_gallery.php
 		</a><br>
@@ -215,12 +218,9 @@
 	    &nbsp;&nbsp;		<a href="../../ComaCMS/Auth/Auth_User.html">Auth_User</a><br />
 	  </div>
   <div class="package">
-	ComaLate<br />	    &nbsp;&nbsp;		<a href="../../ComaCMS/ComaLate/ComaLate.html">ComaLate</a><br />
-	  </div>
-  <div class="package">
 		    		<a href="../../ComaCMS/ComaLib.html">ComaLib</a><br />
 	    		<a href="../../ComaCMS/Edit_Gallery_Page.html">Edit_Gallery_Page</a><br />
-	    		<a href="../../ComaCMS/Edit_Text_Page.html">Edit_Text_Page</a><br />
+	    		<a href="../../ComaCMS/Edit_Text_Page_.html">Edit_Text_Page_</a><br />
 	    		<a href="../../ComaCMS/ImageConverter.html">ImageConverter</a><br />
 	    		<a href="../../ComaCMS/InlineMenu.html">InlineMenu</a><br />
 	    		<a href="../../ComaCMS/Language.html">Language</a><br />
@@ -252,6 +252,9 @@
 	  </div>
   <div class="package">
 	Page<br />	    &nbsp;&nbsp;		<a href="../../ComaCMS/Page/Page.html">Page</a><br />
+	    &nbsp;&nbsp;		<a href="../../ComaCMS/Page/Page_Extended.html">Page_Extended</a><br />
+	    &nbsp;&nbsp;		<a href="../../ComaCMS/Page/Page_Extended_Gallery.html">Page_Extended_Gallery</a><br />
+	    &nbsp;&nbsp;		<a href="../../ComaCMS/Page/Page_Extended_Text.html">Page_Extended_Text</a><br />
 	    &nbsp;&nbsp;		<a href="../../ComaCMS/Page/Page_Gallery.html">Page_Gallery</a><br />
 	    &nbsp;&nbsp;		<a href="../../ComaCMS/Page/Page_Text.html">Page_Text</a><br />
 	  </div>
@@ -301,20 +304,12 @@ Source Location: /classes/admin/admin.php<br /><br />
 <h3>Child classes:</h3>
 <div class="tags">
 <dl>
-<dt><a href="../../ComaCMS/AdminInterface/Admin_AdminControl.html">Admin_AdminControl</a></dt>
+<dt><a href="../../ComaCMS/AdminInterface/Admin_Preferences.html">Admin_Preferences</a></dt>
 	<dd></dd>
 </dl>
 <dl>
 <dt><a href="../../ComaCMS/AdminInterface/Admin_Files.html">Admin_Files</a></dt>
 	<dd>Admin-Interface-Page to mangage Files</dd>
-</dl>
-<dl>
-<dt><a href="../../ComaCMS/AdminInterface/Admin_Groups.html">Admin_Groups</a></dt>
-	<dd></dd>
-</dl>
-<dl>
-<dt><a href="../../ComaCMS/AdminInterface/Admin_Languages.html">Admin_Languages</a></dt>
-	<dd></dd>
 </dl>
 <dl>
 <dt><a href="../../ComaCMS/AdminInterface/Admin_Menu.html">Admin_Menu</a></dt>
@@ -325,11 +320,15 @@ Source Location: /classes/admin/admin.php<br /><br />
 	<dd></dd>
 </dl>
 <dl>
+<dt><a href="../../ComaCMS/AdminInterface/Admin_Languages.html">Admin_Languages</a></dt>
+	<dd></dd>
+</dl>
+<dl>
 <dt><a href="../../ComaCMS/AdminInterface/Admin_Modules.html">Admin_Modules</a></dt>
 	<dd></dd>
 </dl>
 <dl>
-<dt><a href="../../ComaCMS/AdminInterface/Admin_PagePreview.html">Admin_PagePreview</a></dt>
+<dt><a href="../../ComaCMS/AdminInterface/Admin_AdminControl.html">Admin_AdminControl</a></dt>
 	<dd></dd>
 </dl>
 <dl>
@@ -337,11 +336,15 @@ Source Location: /classes/admin/admin.php<br /><br />
 	<dd></dd>
 </dl>
 <dl>
-<dt><a href="../../ComaCMS/AdminInterface/Admin_Preferences.html">Admin_Preferences</a></dt>
+<dt><a href="../../ComaCMS/AdminInterface/Admin_Groups.html">Admin_Groups</a></dt>
 	<dd></dd>
 </dl>
 <dl>
 <dt><a href="../../ComaCMS/AdminInterface/Admin_Rights.html">Admin_Rights</a></dt>
+	<dd></dd>
+</dl>
+<dl>
+<dt><a href="../../ComaCMS/AdminInterface/Admin_PagePreview.html">Admin_PagePreview</a></dt>
 	<dd></dd>
 </dl>
 </div>
@@ -378,7 +381,7 @@ Source Location: /classes/admin/admin.php<br /><br />
 &$Translation, Config
 &$Config, <a href="../../ComaCMS/User.html">User</a>
 &$User, <a href="../../ComaCMS/ComaLib.html">ComaLib</a>
-&$ComaLib, <a href="../../ComaCMS/ComaLate/ComaLate.html">ComaLate</a>
+&$ComaLib, <a href="../../ComaLate/ComaLate.html">ComaLate</a>
 &$ComaLate)</code>
     </td></tr></table>
     </td></tr></table><br />
@@ -401,32 +404,32 @@ Source Location: /classes/admin/admin.php<br /><br />
           <tr>
         <td class="type"><a href="../../ComaCMS/Sql.html">Sql</a>&nbsp;&nbsp;</td>
         <td><b>&$SqlConnection</b>&nbsp;&nbsp;</td>
-        <td>SqlConnection The connection-class for connecting the database</td>
+        <td>The connection-class for connecting the database</td>
       </tr>
           <tr>
         <td class="type"><a href="../../ComaCMS/Language.html">Language</a>&nbsp;&nbsp;</td>
         <td><b>&$Translation</b>&nbsp;&nbsp;</td>
-        <td>Translation The language-class for translations</td>
+        <td>The language-class for translations</td>
       </tr>
           <tr>
         <td class="type">Config&nbsp;&nbsp;</td>
         <td><b>&$Config</b>&nbsp;&nbsp;</td>
-        <td>Config The config-class for config-requests</td>
+        <td>The config-class for config-requests</td>
       </tr>
           <tr>
         <td class="type"><a href="../../ComaCMS/User.html">User</a>&nbsp;&nbsp;</td>
         <td><b>&$User</b>&nbsp;&nbsp;</td>
-        <td>User The user-class, handling the current user</td>
+        <td>The user-class, handling the current user</td>
       </tr>
           <tr>
         <td class="type"><a href="../../ComaCMS/ComaLib.html">ComaLib</a>&nbsp;&nbsp;</td>
         <td><b>&$ComaLib</b>&nbsp;&nbsp;</td>
-        <td>ComaLib The ComaLib-class containing systemrelated functions</td>
+        <td>The ComaLib-class containing systemrelated functions</td>
       </tr>
           <tr>
-        <td class="type"><a href="../../ComaCMS/ComaLate/ComaLate.html">ComaLate</a>&nbsp;&nbsp;</td>
+        <td class="type"><a href="../../ComaLate/ComaLate.html">ComaLate</a>&nbsp;&nbsp;</td>
         <td><b>&$ComaLate</b>&nbsp;&nbsp;</td>
-        <td>ComaLate The ComaLate-class to handle</td>
+        <td>The ComaLate-class to handle</td>
       </tr>
         </table>
     </div><br />
@@ -448,7 +451,7 @@ $Action = ''])</code>
 
 	<p>Overridden in child classes as:<br />
 		<dl>
-	<dt><a href="../../ComaCMS/AdminInterface/Admin_AdminControl.html#methodGetPage">Admin_AdminControl::GetPage()</a></dt>
+	<dt><a href="../../ComaCMS/AdminInterface/Admin_Preferences.html#methodGetPage">Admin_Preferences::GetPage()</a></dt>
 		<dd></dd>
 	</dl>
 		<dl>
@@ -456,23 +459,15 @@ $Action = ''])</code>
 		<dd>Available actions (value of <var>$Action</var>):</dd>
 	</dl>
 		<dl>
-	<dt><a href="../../ComaCMS/AdminInterface/Admin_Groups.html#methodGetPage">Admin_Groups::GetPage()</a></dt>
-		<dd></dd>
-	</dl>
-		<dl>
-	<dt><a href="../../ComaCMS/AdminInterface/Admin_Languages.html#methodGetPage">Admin_Languages::GetPage()</a></dt>
-		<dd>Returns the page which is selected by <var>$Action</var></dd>
-	</dl>
-		<dl>
 	<dt><a href="../../ComaCMS/AdminInterface/Admin_Menu.html#methodGetPage">Admin_Menu::GetPage()</a></dt>
 		<dd>Gets HTML out from the different parts of the Menuengine</dd>
 	</dl>
 		<dl>
-	<dt><a href="../../ComaCMS/Articles/Admin_Module_Articles.html#methodGetPage">Admin_Module_Articles::GetPage()</a></dt>
+	<dt><a href="../../ComaCMS/Dates/Admin_Module_Dates.html#methodGetPage">Admin_Module_Dates::GetPage()</a></dt>
 		<dd></dd>
 	</dl>
 		<dl>
-	<dt><a href="../../ComaCMS/Dates/Admin_Module_Dates.html#methodGetPage">Admin_Module_Dates::GetPage()</a></dt>
+	<dt><a href="../../ComaCMS/Articles/Admin_Module_Articles.html#methodGetPage">Admin_Module_Articles::GetPage()</a></dt>
 		<dd></dd>
 	</dl>
 		<dl>
@@ -480,24 +475,32 @@ $Action = ''])</code>
 		<dd></dd>
 	</dl>
 		<dl>
+	<dt><a href="../../ComaCMS/AdminInterface/Admin_Languages.html#methodGetPage">Admin_Languages::GetPage()</a></dt>
+		<dd>Returns the page which is selected by <var>$Action</var></dd>
+	</dl>
+		<dl>
 	<dt><a href="../../ComaCMS/AdminInterface/Admin_Modules.html#methodGetPage">Admin_Modules::GetPage()</a></dt>
 		<dd>GetPage</dd>
 	</dl>
 		<dl>
-	<dt><a href="../../ComaCMS/AdminInterface/Admin_PagePreview.html#methodGetPage">Admin_PagePreview::GetPage()</a></dt>
-		<dd>Returns the code of the page</dd>
+	<dt><a href="../../ComaCMS/AdminInterface/Admin_AdminControl.html#methodGetPage">Admin_AdminControl::GetPage()</a></dt>
+		<dd></dd>
 	</dl>
 		<dl>
 	<dt><a href="../../ComaCMS/AdminInterface/Admin_PageStructure.html#methodGetPage">Admin_PageStructure::GetPage()</a></dt>
 		<dd></dd>
 	</dl>
 		<dl>
-	<dt><a href="../../ComaCMS/AdminInterface/Admin_Preferences.html#methodGetPage">Admin_Preferences::GetPage()</a></dt>
+	<dt><a href="../../ComaCMS/AdminInterface/Admin_Groups.html#methodGetPage">Admin_Groups::GetPage()</a></dt>
 		<dd></dd>
 	</dl>
 		<dl>
 	<dt><a href="../../ComaCMS/AdminInterface/Admin_Rights.html#methodGetPage">Admin_Rights::GetPage()</a></dt>
 		<dd></dd>
+	</dl>
+		<dl>
+	<dt><a href="../../ComaCMS/AdminInterface/Admin_PagePreview.html#methodGetPage">Admin_PagePreview::GetPage()</a></dt>
+		<dd>Returns the code of the page</dd>
 	</dl>
 	</p>
 	
@@ -518,7 +521,7 @@ $Action = ''])</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sat, 06 Jan 2007 22:31:59 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Sat, 06 Jan 2007 23:10:25 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
 	      </div>
       </td></tr></table>
     </td>

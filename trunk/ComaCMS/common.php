@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : common.php
  # created              : 2005-08-05
- # copyright            : (C) 2005-2005 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -30,16 +30,16 @@
 	}
 	header('Content-type: text/html; charset=utf-8');
 	define('__ROOT__', dirname(__FILE__));
-	require_once(__ROOT__ . '/classes/sql.php');
-	require_once(__ROOT__ . '/classes/comalib.php');
-	require_once(__ROOT__ . '/classes/outputpage.php');
-	require_once(__ROOT__ . '/classes/config.php');
-	require_once(__ROOT__ . '/classes/user.php');
-	require_once(__ROOT__ . '/classes/inlinemenu.php');
-	require_once(__ROOT__ . '/classes/module.php');
-	require_once(__ROOT__ . '/classes/language.php');
-	require_once(__ROOT__ . '/functions.php');
-	require_once(__ROOT__ . '/lib/comalate/comalate.class.php');
+	require_once __ROOT__ . '/classes/sql.php';
+	require_once __ROOT__ . '/classes/comalib.php';
+	require_once __ROOT__ . '/classes/outputpage.php';
+	require_once __ROOT__ . '/classes/config.php';
+	require_once __ROOT__ . '/classes/user.php';
+	require_once __ROOT__ . '/classes/inlinemenu.php';
+	require_once __ROOT__ . '/classes/module.php';
+	require_once __ROOT__ . '/classes/language.php';
+	require_once __ROOT__ . '/functions.php';
+	require_once __ROOT__ . '/lib/comalate/comalate.class.php';
 	$lib = new ComaLib();
 	
 	$page = GetPostOrGet('page');	

@@ -23,7 +23,7 @@
 	/**
 	 * @package ComaCMS
 	 */
-	class Edit_Text_Page {
+	class Edit_Text_Page_ {
 		/**
 		 * @access public
 		 * @return void

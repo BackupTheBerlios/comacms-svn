@@ -5,8 +5,8 @@
  * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
- # file                 : page.php
- # created              : 2006-12-30
+ # file                 : page_extended.php
+ # created              : 2007-01-03
  # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
@@ -15,59 +15,69 @@
  # the Free Software Foundation; either version 2 of the License, or
  # (at your option) any later version.
  #----------------------------------------------------------------------
- 
-	/**
-	 * @package ComaCMS
+ 	/**
+	 * 
+	 */
+	require_once __ROOT__ . '/classes/page/page.php';
+ 	/**
+ 	 * @package ComaCMS
 	 * @subpackage Page
-  	 */
- 	class Page {
+ 	 */
+	class Page_Extended extends Page {
  		
  		/**
  		 * @access private
- 		 * @var Sql
+ 		 * @var array
  		 */
- 		var $_SqlConnection;
- 		
+ 		var $_PagesData;
  		/**
  		 * @access private
- 		 * @var Config
  		 */
- 		var $_Config;
+ 		var $HTML;
  		
  		/**
- 		 * @access private
- 		 * @var Language
+ 		 * @return array
  		 */
- 		var $_Translation;
- 		
- 		/**
- 		 * @access private
- 		 * @var ComaLate
- 		 */
- 		var $_ComaLate;
- 		
- 		/**
- 		 * @access private
- 		 * @var User
- 		 */
- 		var $_User;
- 		
- 		/**
- 		 * @access public
- 		 * @var string
- 		 */
- 		var $HTML = '';
- 		
- 		function Page(&$SqlConnection, &$Config, &$Translation, &$ComaLate, &$User) {
- 			$this->_SqlConnection = &$SqlConnection;
- 			$this->_Config = &$Config;
- 			$this->_Translation = &$Translation;
- 			$this->_ComaLate = &$ComaLate;
- 			$this->_User = &$User;
+ 		function GetPageData($PageID) {
+ 			return array();
  		}
  		
- 		function LoadPage($PageID) {
+ 		/**
+ 		 * @return boolean
+ 		 */
+ 		 
+ 		function LoadPageData($PageID) {
  			return false;
  		}
- 	}
+ 		
+ 		/**
+ 		 * @return boolean
+ 		 */
+ 		function PageExists($PageID) {
+ 			return false;
+ 		}
+ 		
+ 		/**
+ 		 * @return string
+ 		 */
+ 		function GetEditPage($PageID) {
+ 			return '';
+ 		}
+ 		
+ 		/**
+ 		 * @param integer $PageID
+ 		 * @return string/boolean If this value is an empty string everything was well
+ 		 */
+ 		function GetSavePage($PageID) {
+ 			return false;
+ 		}
+ 		
+ 		/**
+ 		 * @param ingeger $PageID
+ 		 * @return boolean
+ 		 */
+ 		function LogPage($PageID) {
+ 			return false;
+ 		}
+	}
 ?>

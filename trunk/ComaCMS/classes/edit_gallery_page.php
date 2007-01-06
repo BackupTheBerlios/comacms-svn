@@ -31,7 +31,7 @@
 			db_result($sql);
 		}
 	
-		function Save($page_id) {
+		function GetSavePage($page_id) {
 			global $user;
 			$page_title = GetPostOrGet('pageTitle');
 			
@@ -42,7 +42,7 @@
 			header("Location: admin.php?page=pagestructure&action=editPage&pageID=$page_id");
 		}
 		
-		function Edit($pageID) {
+		function GetEditPage($pageID) {
 			$action2 = GetPostOrGet('action2');
 			$out = '';
 			

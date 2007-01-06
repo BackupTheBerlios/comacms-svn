@@ -359,4 +359,9 @@ Please don\'t answer this email. This is a computer-generated message.';
 	
 	// preferences test
 	$langString['startpage'] = 'Startpage';
+	
+	
+	$langString['the_title_is_someting_like_a_headline_of_the_page'] = 'The title is someting like a headline of the page.'; 
+	$langString['edit_page'] = 'Edit page';
+	$langString['do_you_want_to_replace_the_first_text_with_the_secont_one'] = 'Do you want to replace the first Text with the second one?'; 
 ?>

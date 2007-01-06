@@ -2,12 +2,12 @@
 /**
  * @package ComaCMS
  * @subpackage AdminInterface
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : admin.php
  # created              : 2006-01-29
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -71,12 +71,12 @@
  		/**
  		 * Initializes the admin_controll classes
  		 * @access public
- 		 * @param Sql SqlConnection The connection-class for connecting the database
- 		 * @param Language Translation The language-class for translations
- 		 * @param Config Config The config-class for config-requests
- 		 * @param User User The user-class, handling the current user
- 		 * @param ComaLib ComaLib The ComaLib-class containing systemrelated functions
- 		 * @param ComaLate ComaLate The ComaLate-class to handle
+ 		 * @param Sql &$SqlConnection The connection-class for connecting the database
+ 		 * @param Language &$Translation The language-class for translations
+ 		 * @param Config &$Config The config-class for config-requests
+ 		 * @param User &$User The user-class, handling the current user
+ 		 * @param ComaLib &$ComaLib The ComaLib-class containing systemrelated functions
+ 		 * @param ComaLate &$ComaLate The ComaLate-class to handle
  		 */
  		function Admin(&$SqlConnection, &$Translation, &$Config, &$User, &$ComaLib, &$ComaLate) {
  			$this->_SqlConnection = &$SqlConnection;

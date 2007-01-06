@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : sql.php
  # created              : 2006-01-22
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -94,7 +94,7 @@
  		 */
  		function SqlQuery($Query) {
  			global $sqlConnection;
- 			$sqlConnection->QueriesCount++;
+ 			$sqlConnection->QueriesCount .= "\r\n$Query\r\n" /*. /*print_r(debug_backtrace(),true);*/;
  			/* helpful to find unnecessary SQL-queries(replace it only with the "++"):
 			 * 
 			 * .= "\r\n$Query\r\n" . print_r(debug_backtrace(),true);

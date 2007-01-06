@@ -31,7 +31,7 @@
 	define("COMACMS_RUN", true);
 	// run common.php to have all ordinary things done, which every page needs
 	include('common.php');
-	$outputpage = new OutputPage($sqlConnection, $config, $translation, $output);
+	$outputpage = new OutputPage($sqlConnection, $config, $translation, $output, $user);
 	$page = rawurlencode($page);
 	// load the page
 	$outputpage->LoadPage($page, $user);

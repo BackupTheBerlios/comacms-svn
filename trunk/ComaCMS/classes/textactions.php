@@ -16,7 +16,7 @@
  #----------------------------------------------------------------------
  	
  	/**
- 	 * @ignore
+ 	 * 
  	 */
  	require_once __ROOT__ . '/functions.php';
  	require_once __ROOT__ . '/classes/imageconverter.php';

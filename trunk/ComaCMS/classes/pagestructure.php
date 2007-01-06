@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : pagestructure.php
  # created              : 2006-01-27
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -48,8 +48,8 @@
 			$pageContentEditor = null;
 			// Load the page-type-specific module to crate the 'real' page
 			switch($Type) {
-				case 'text':		include(__ROOT__ . '/classes/edit_text_page.php');
-							$pageContentEditor = new Edit_Text_Page();
+				case 'text':		include(__ROOT__ . '/classes/page/page_extended_text.php');
+							$pageContentEditor = new Page_Extended_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
 							break;
 				case 'gallery':		include(__ROOT__ . '/classes/edit_gallery_page.php');
 							$pageContentEditor = new Edit_Gallery_Page();
@@ -75,21 +75,21 @@
 				if($existsPage->page_access != 'deleted')
 					// the page exists and isn't deleted we can't do anything
 					return false;
-
+				$pageContentEditor->LogPage($existsPage->page_id, $Comment);
 				// the page is marked as deleted, we are allowed to overwrite the page
 				// save the old things into the history
-				$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
-					VALUES($existsPage->page_id, '$existsPage->page_type', '$existsPage->page_name', '$existsPage->page_title', $existsPage->page_parent_id, '$existsPage->page_lang', $existsPage->page_creator, $existsPage->page_date, '$existsPage->page_edit_comment')";
-				$this->_SqlConnection->SqlQuery($sql);
+				//$sql = "INSERT INTO " . DB_PREFIX . "pages_history (page_id, page_type, page_name, page_title, page_parent_id, page_lang, page_creator, page_date, page_edit_comment)
+				//	VALUES($existsPage->page_id, '$existsPage->page_type', '$existsPage->page_name', '$existsPage->page_title', $existsPage->page_parent_id, '$existsPage->page_lang', $existsPage->page_creator, $existsPage->page_date, '$existsPage->page_edit_comment')";
+				//$this->_SqlConnection->SqlQuery($sql);
 				$historyID = mysql_insert_id();
 				// now we can overwrite!
 				$sql = "UPDATE " . DB_PREFIX . "pages
-					SET page_creator={$this->_User->ID}, page_date=" . mktime() . ", page_title='$Title', page_edit_comment='$Comment', page_access='$Access', page_type='$Type', page_parent_id='$ParentPageID'
+					SET page_creator={$this->_User->ID}, page_date=" . mktime() . ", page_title='$Title', page_access='$Access', page_type='$Type', page_parent_id='$ParentPageID'
 					WHERE page_id=$existsPage->page_id";
 				$this->_SqlConnection->SqlQuery($sql);
-				$lastID = $existsPage->page_id;
-				$pageContentEditor->NewPage($existsPage->page_id, $historyID);
-				return $lastID;				
+				//$lastID = $existsPage->page_id;
+				//$pageContentEditor->NewPage($existsPage->page_id);
+				return $existsPage->page_id;				
 			}
 			else {
 				$sql = "INSERT INTO " . DB_PREFIX . "pages (page_lang, page_access, page_name, page_title, page_parent_id, page_creator, page_type, page_date, page_edit_comment)

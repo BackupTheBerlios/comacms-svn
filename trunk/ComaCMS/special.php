@@ -21,7 +21,7 @@
 	define('COMACMS_RUN', true);
  
 	include('common.php');
-	$outputpage = new OutputPage($sqlConnection, $config, $translation, $output);
+	$outputpage = new OutputPage($sqlConnection, $config, $translation, $output, $user);
 	
 
 	include(__ROOT__ . '/classes/registration.php');

@@ -377,4 +377,24 @@ Die Administratoren';
 	// QUESTION: here can you define ... ?
 	$langString['here_you_can_define_the_name_of_the_page'] = 'Hier wird der Seitenname definiert.';
 	$langString['you_have_to_define_a_pagename'] = 'Sie m&uuml;ssen einen Seitennamen angeben!';
+	
+	$langString['the_title_is_someting_like_a_headline_of_the_page'] = 'Der Titel ist eine Art &Uuml;berschrift für die Seite.';
+	$langString['edit_page'] = 'Seite bearbeiten';
+	$langString['bold_text'] = 'fetter Text';
+	$langString['italic_text'] = 'kursiver Text';
+	$langString['underlined_text'] = 'unterstrichener Text';
+	$langString['headline'] = '&Uuml;berschrift';
+	$langString['format_text_bold'] = 'Text fett formatieren';
+	$langString['format_text_italic'] = 'Text kursiv formatieren';
+	$langString['underline_text'] = 'Text unterstreichen';
+	$langString['format_text_as_a_headline'] = 'Text als &Uuml;berschrift formatieren';
+	$langString['a_short_description_what_you_did_here'] = 'Eine kurze Beschreibung, was hier gemacht wurde.';
+	$langString['make_input_box_bigger'] = 'Eingabefeld vergr&ouml;&szlig;ern';
+	$langString['make_input_box_smaller'] = 'Eingabefeld verkleinern';
+	$langString['preview'] = 'Vorschau';
+	$langString['abort'] = 'Abbrechen';
+	$langString['current'] = 'Aktuell';
+	$langString['revision'] = 'Revision';
+	$langString['do_you_want_to_replace_the_first_text_with_the_secont_one'] = 'M&ouml;chten sie den ersten Text durch den zweiten Ersetzen?';
+	
 ?>

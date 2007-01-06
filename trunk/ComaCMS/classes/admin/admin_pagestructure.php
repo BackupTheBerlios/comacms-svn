@@ -2,12 +2,12 @@
 /**
  * @package ComaCMS
  * @subpackage AdminInterface
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : admin_pagestructure.php
  # created              : 2005-09-04
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -40,7 +40,9 @@
 		 */
  		var $_PageStructure;
  		
-		
+		/**
+		 * @access private
+		 */
 		function _Init() {
 			$this->_PageStructure = new PageStructure($this->_SqlConnection, $this->_User, $this->_ComaLib);
 		}
@@ -55,23 +57,35 @@
 			if($Action != 'internHome')
 				$out .= "\t\t\t<h2>" . $this->_Translation->GetTranslation('pagestructure') . "</h2>\r\n";
 		 	switch ($Action) {
-		 		case 'deletePage':	$out .= $this->_deletePage();
-		 					break;
-		 		case 'pageInfo':	$out .= $this->_infoPage();
-		 					break;
-		 		case 'newPage':		$out .= $this->_newPage();
-		 					break;
-		 		case 'addNewPage':	$out .= $this->_addPage();
-		 					break;
-		 		case 'editPage':	$out .= $this->_editPage();
-							break;
-				case 'savePage':	$out .= $this->_savePage();
-							break;
-				case 'generateMenu':	$out .= $this->_generate_menu();
-							break;
-				case 'pageInlineMenu':	$out .= $this->_inlineMenu();
-							break;
-		 		default:		$out .= $this->_homePage();
+		 		case 'deletePage':
+		 			$out .= $this->_deletePage();
+		 			break;
+		 		case 'pageInfo':
+		 			$out .= $this->_infoPage();
+		 			break;
+		 		case 'newPage':
+		 			$out .= $this->_newPage();
+		 			break;
+		 		case 'addNewPage':
+		 			$out .= $this->_addPage();
+		 			break;
+		 		case 'editPage':
+		 			$out .= $this->_editPage();
+					break;
+				case 'savePage':
+					$out .= $this->_savePage();
+					break;
+				case 'generateMenu':
+					$out .= $this->_generate_menu();
+					break;
+				case 'pageInlineMenu':
+					$out .= $this->_inlineMenu();
+					break;
+				case 'restorePage':
+					$out .= $this->_restorePage();
+					break;
+		 		default:
+		 			$out .= $this->_homePage();
 		 	}
 			return $out;
 		 }
@@ -369,20 +383,22 @@
 			if($page = mysql_fetch_object($page_result)) {
 				$edit = null;
 				switch($page->page_type) {
-					case 'text':		include('classes/edit_text_page.php');
-								$edit = new Edit_Text_Page();
-								break;
-					case 'gallery':		include('classes/edit_gallery_page.php');
-								$edit = new Edit_Gallery_Page();
-								break;	
-					case 'link':		include('classes/edit_link_page.php');
-								$edit = new Edit_Link_Page();
-								break;			
-					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> l&auml;sst sich noch nicht bearbeiten.";
-								break;
+					case 'text':
+						include_once (__ROOT__ . '/classes/page/page_extended_text.php');
+						$edit = new Page_Extended_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
+						break;
+					case 'gallery':
+						//include('classes/page/page_extended_gallery.php');
+						//$edit = new Page_Extended_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate);
+						include_once(__ROOT__ . '/classes/edit_gallery_page.php');
+						$edit = new Edit_Gallery_Page();
+						break;	
+					default:
+						$out .= "Der Seitentyp <strong>$page->page_type</strong> l&auml;sst sich noch nicht bearbeiten.";
+						break;
 				}
 				if($edit !== null)
-					$out .= $edit->Edit($page->page_id);
+					$out .= $edit->GetEditPage($page->page_id);
 				return $out;
 			}
 		}
@@ -401,21 +417,57 @@
 			if($page = mysql_fetch_object($page_result)) {
 				$edit = null;
 				switch($page->page_type) {
-					case 'text':		include('classes/edit_text_page.php');
-								$edit = new Edit_Text_Page();
-								break;
-					case 'gallery':		include('classes/edit_gallery_page.php');
+					case 'text':
+						include_once (__ROOT__ . '/classes/page/page_extended_text.php');
+						$edit = new Page_Extended_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
+						break;
+					case 'gallery':		include_once(__ROOT__ . '/classes/edit_gallery_page.php');
 								$edit = new Edit_Gallery_Page();
 								break;				
 					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> l&auuml;sst sich noch nicht bearbeiten.";
 								break;
 				}
 				if($edit !== null)
-					$out .= $edit->Save($page->page_id);
+					$out .= $edit->GetSavePage($page->page_id);
+				if($out == '')
+					return $this->_homePage();
 				return $out;
 			}
 		}
 		
+		/**
+		 * @access private
+		 */
+		function _restorePage() {
+			$revision = GetPostOrGet('revision');
+			$sure = GetPostOrGet('sure');
+			$pageID = GetPostOrGet('pageID');
+			$pageData = $this->_PageStructure->GetPageDataArray($pageID);
+			$edit = 0;
+			switch($pageData['type']) {
+					case 'text':
+						include_once (__ROOT__ . '/classes/page/page_extended_text.php');
+						$edit = new Page_Extended_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
+						break;
+					case 'gallery':
+						//include('classes/page/page_extended_gallery.php');
+						//$edit = new Page_Extended_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate);
+						include_once(__ROOT__ . '/classes/edit_gallery_page.php');
+						$edit = new Edit_Gallery_Page();
+						break;	
+					default:
+						return "Der Seitentyp <strong>{$pageData['type']}</strong> l&auml;sst sich noch nicht bearbeiten.";
+				}
+			$out = '';
+			if($sure == 1)
+				$edit->RestoreRevision($pageID, $revision);
+			else
+				$out .= $edit->GetRestoreRevisionPage($pageID, $revision);
+			if($out != '')
+				return $out;
+			return $this->_homePage();
+				
+		}
 		/**
 		 * @access private
 		 * @return string
@@ -1205,7 +1257,7 @@
 				$history[$i]['HISTORY_PAGE_USER'] = $this->_ComaLib->GetUserByID($history[$i]['HISTORY_PAGE_USER']);
 			}
 			$this->_ComaLate->SetReplacement('INLINEMENU_ENTRIES_COUNT', $inlineMenuEntriesCount);
-			$this->_ComaLate->SetReplacement('HISTORY_COUNT', $historyCount);
+			$this->_ComaLate->SetReplacement('HISTORY_COUNT', $historyCount + 1);
 			$this->_ComaLate->SetReplacement('PAGE_HISTORY', $history);
 			$this->_ComaLate->SetReplacement('PAGE_COMMENT', $pageData['comment']);
 			
@@ -1323,8 +1375,8 @@
 								<td>{HISTORY_PAGE_COMMENT}</td>
 								<td>
 									<a href="index.php?page={PAGE_ID}&amp;change={HISTORY_PAGE_REVISION}"><img src="./img/view.png" height="16" width="16" alt="{LANG_VIEW}" title="{LANG_VIEW}"/></a>
-									<a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;change={HISTORY_PAGE_REVISION}"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
-									<a href="admin.php?page=pagestructure&amp;action=savePage&amp;pageID={PAGE_ID}&amp;change={HISTORY_PAGE_REVISION}"><img src="./img/restore.png" height="16" width="16" alt="{LANG_RESTORE}" title="{LANG_RESTORE}"/></a>
+									<a href="admin.php?page=pagestructure&amp;action=editOldPage&amp;pageID={PAGE_ID}&amp;revision={HISTORY_PAGE_REVISION}"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+									<a href="admin.php?page=pagestructure&amp;action=restorePage&amp;pageID={PAGE_ID}&amp;revision={HISTORY_PAGE_REVISION}"><img src="./img/restore.png" height="16" width="16" alt="{LANG_RESTORE}" title="{LANG_RESTORE}"/></a>
 								</td>
 							</tr>
 						</PAGE_HISTORY>

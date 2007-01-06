@@ -1,12 +1,12 @@
 <?php
 /**
  * @package ComaCMS
- * @copyright (C) 2005-2006 The ComaCMS-Team
+ * @copyright (C) 2005-20067 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
  # file                 : registration.php
- # created              : 2005-11-23
- # copyright            : (C) 2005-2006 The ComaCMS-Team
+ # created              : 2006-11-23
+ # copyright            : (C) 2005-2007 The ComaCMS-Team
  # email                : comacms@williblau.de
  #----------------------------------------------------------------------
  # This program is free software; you can redistribute it and/or modify
@@ -15,10 +15,7 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
  
- 	/**
- 	 * @ignore
- 	 */
- 	
+	
  	/**
  	 * User-Interface-Page to register at the system
  	 * @package ComaCMS
@@ -27,7 +24,7 @@
  		
  		/**
  		 * @access private
- 		 * @var SqlConnection 
+ 		 * @var Sql 
  		 */
  		var $_SqlConnection;
  		
@@ -46,9 +43,9 @@
  		/**
  		 * Initializes the Registration class
  		 * @access public
- 		 * @param SqlConnection SqlConnection Connection to the MysqlDatabase
+ 		 * @param Sql SqlConnection Connection to the MysqlDatabase
  		 * @param Language Translation
- 		 * @param config Config Access to the Configurations
+ 		 * @param Config Config Access to the Configurations
  		 * @return void
  		 */
 	 	function Registration(&$SqlConnection, &$Translation, &$Config) {

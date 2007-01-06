@@ -51,7 +51,7 @@
 		die();
 	}
 	
-	$outputpage = new OutputPage($sqlConnection, $config, $translation, $output);
+	$outputpage = new OutputPage($sqlConnection, $config, $translation, $output, $user);
 	
 	$text = '';
 	$title = '';

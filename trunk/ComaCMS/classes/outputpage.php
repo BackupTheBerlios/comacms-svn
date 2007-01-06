@@ -73,11 +73,12 @@
 		 * @access public
 		 * @return void
 		 */
-		function Outputpage(&$SqlConnection, &$Config, &$Translation, &$ComaLate) {
+		function Outputpage(&$SqlConnection, &$Config, &$Translation, &$ComaLate, &$User) {
 			$this->_SqlConnection = &$SqlConnection;
 			$this->_Config = &$Config;
 			$this->_ComaLate = &$ComaLate;
 			$this->_Translation = &$Translation;
+			$this->_User = &$User;
 		}
 		
 		/**
@@ -181,7 +182,7 @@
 			$this->Language = $page_data->page_lang;
 			if($page_data->page_type == 'text') {
 				include(__ROOT__ . '/classes/page/page_text.php');
-				$page = new Page_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate);
+				$page = new Page_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_UserID);
 				if(!is_numeric($change))
 					$change = 0;
 				$page->LoadPageFromRevision($page_data->page_id, $change);
@@ -189,7 +190,7 @@
 			}
 			elseif($page_data->page_type == 'gallery') {
 				include(__ROOT__ . '/classes/page/page_gallery.php');
-				$page = new Page_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate);
+				$page = new Page_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_UserID);
 				$page->LoadPage($page_data->page_id);
 				$this->Text = $page->HTML;
 			}

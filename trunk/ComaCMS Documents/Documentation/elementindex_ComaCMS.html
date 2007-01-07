@@ -38,6 +38,8 @@
 		</a><br>
 			<a href="ComaCMS/_common.php.html">		common.php
 		</a><br>
+			<a href="ComaCMS/_classes---config.php.html">		config.php
+		</a><br>
 			<a href="ComaCMS/_download.php.html">		download.php
 		</a><br>
 			<a href="ComaCMS/_classes---edit_gallery_page.php.html">		edit_gallery_page.php
@@ -219,6 +221,7 @@
 	  </div>
   <div class="package">
 		    		<a href="ComaCMS/ComaLib.html">ComaLib</a><br />
+	    		<a href="ComaCMS/Config.html">Config</a><br />
 	    		<a href="ComaCMS/Edit_Gallery_Page.html">Edit_Gallery_Page</a><br />
 	    		<a href="ComaCMS/Edit_Text_Page_.html">Edit_Text_Page_</a><br />
 	    		<a href="ComaCMS/ImageConverter.html">ImageConverter</a><br />
@@ -489,6 +492,8 @@
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodChangePageParentID">PageStructure::ChangePageParentID()</a></dd>
 							<dt><b>comalib.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---comalib.php.html">comalib.php</a></dd>
+							<dt><b>config.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/_classes---config.php.html">config.php</a></dd>
 							<dt><b>ClearMenu</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodClearMenu">PageStructure::ClearMenu()</a></dd>
 							<dt><b>COMACMS_RUN</b></dt>
@@ -497,6 +502,10 @@
 				<dd>in file comalib.php, class <a href="ComaCMS/ComaLib.html">ComaLib</a></dd>
 							<dt><b>common.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_common.php.html">common.php</a></dd>
+							<dt><b>Config</b></dt>
+				<dd>in file config.php, method <a href="ComaCMS/Config.html#methodConfig">Config::Config()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initializes the config class</dd>
+							<dt><b>Config</b></dt>
+				<dd>in file config.php, class <a href="ComaCMS/Config.html">Config</a></dd>
 							<dt><b>Connect</b></dt>
 				<dd>in file sql.php, method <a href="ComaCMS/Sql.html#methodConnect">Sql::Connect()</a></dd>
 							<dt><b>ConvertDefinition</b></dt>
@@ -630,15 +639,17 @@
 							<dt><b>GenerateInlineMenu</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGenerateInlineMenu">PageStructure::GenerateInlineMenu()</a></dd>
 							<dt><b>GenerateMenu</b></dt>
-				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGenerateMenu">PageStructure::GenerateMenu()</a></dd>
-							<dt><b>GenerateMenu</b></dt>
 				<dd>in file outputpage.php, method <a href="ComaCMS/OutputPage.html#methodGenerateMenu">OutputPage::GenerateMenu()</a></dd>
+							<dt><b>GenerateMenu</b></dt>
+				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGenerateMenu">PageStructure::GenerateMenu()</a></dd>
 							<dt><b>generateThumb</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_system---functions.php.html#functiongenerateThumb">generateThumb()</a></dd>
 							<dt><b>generateUrl</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_system---functions.php.html#functiongenerateUrl">generateUrl()</a></dd>
 							<dt><b>generate_password</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functiongenerate_password">generate_password()</a></dd>
+							<dt><b>Get</b></dt>
+				<dd>in file config.php, method <a href="ComaCMS/Config.html#methodGet">Config::Get()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets one specific configurationitem from local array and returns its value if it is in local array, else returns default value</dd>
 							<dt><b>GetAllLanguages</b></dt>
 				<dd>in file languages.php, method <a href="ComaCMS/Languages.html#methodGetAllLanguages">Languages::GetAllLanguages()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the local Languagearray</dd>
 							<dt><b>GetEditPage</b></dt>
@@ -865,6 +876,8 @@
 				<dd>in file languages.php, class <a href="ComaCMS/Languages.html">Languages</a></dd>
 							<dt><b>Load</b></dt>
 				<dd>in file preferences.php, method <a href="ComaCMS/Preferences.html#methodLoad">Preferences::Load()</a></dd>
+							<dt><b>LoadAll</b></dt>
+				<dd>in file config.php, method <a href="ComaCMS/Config.html#methodLoadAll">Config::LoadAll()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all configurations into a local array to easily get them</dd>
 							<dt><b>LoadAllLanguages</b></dt>
 				<dd>in file languages.php, method <a href="ComaCMS/Languages.html#methodLoadAllLanguages">Languages::LoadAllLanguages()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all languages form mysqldatabase to local array</dd>
 							<dt><b>LoadData</b></dt>
@@ -1132,6 +1145,8 @@
 							<dt><b>sql.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---sql.php.html">sql.php</a></dd>
 							<dt><b>Save</b></dt>
+				<dd>in file config.php, method <a href="ComaCMS/Config.html#methodSave">Config::Save()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Saves a new value for a configurationitem to database or adds it if it does not exist</dd>
+							<dt><b>Save</b></dt>
 				<dd>in file edit_text_page.php, method <a href="ComaCMS/Edit_Text_Page_.html#methodSave">Edit_Text_Page_::Save()</a></dd>
 							<dt><b>SaveInlineMenuDownload</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodSaveInlineMenuDownload">PageStructure::SaveInlineMenuDownload()</a></dd>
@@ -1286,7 +1301,7 @@
 	<a href="elementindex_ComaCMS.html#top">top</a><br>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sat, 06 Jan 2007 23:10:25 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Sun, 07 Jan 2007 18:15:51 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
 	      </div>
       </td></tr></table>
     </td>

@@ -94,7 +94,7 @@
  		 */
  		function SqlQuery($Query) {
  			global $sqlConnection;
- 			$sqlConnection->QueriesCount .= "\r\n$Query\r\n" /*. /*print_r(debug_backtrace(),true);*/;
+ 			$sqlConnection->QueriesCount++;
  			/* helpful to find unnecessary SQL-queries(replace it only with the "++"):
 			 * 
 			 * .= "\r\n$Query\r\n" . print_r(debug_backtrace(),true);

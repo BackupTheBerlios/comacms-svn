@@ -363,7 +363,7 @@ Die Administratoren';
 	$langString['history'] = 'Verlauf';
 	$langString['path'] = 'Pfad';
 	$langString['edited_by'] = 'Ver&auml;ndert von';
-	$langString['last_change'] = 'Letze Ver&auml;nderung';
+	$langString['last_change'] = 'Letzte Ver&auml;nderung';
 	$langString['entries'] = 'Eintr&auml;ge';
 	$langString['subpages'] = 'Unterseiten';
 	$langString['image_of'] = 'Bild aus';

@@ -33,8 +33,8 @@
 	 	 */
 		function GetPage($Action = '') {
 			// get some config-values
-			$dateDayFormat = $this->_Config->Get('date_day_format', '');
-			$dateTimeFormat = $this->_Config->Get('date_time_format', '');
+			$dateDayFormat = $this->_Config->Get('date_day_format', 'd.m.Y');
+			$dateTimeFormat = $this->_Config->Get('date_time_format', 'H:i:s');
 			$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
 			
 			// get the number of pages which aren't deleted

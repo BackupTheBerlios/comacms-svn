@@ -24,6 +24,7 @@
  		
  		/**
  		 * This array contains all generated formulars in a certain structure that is ready for a ComaLate template
+ 		 * 
  		 * @var array Generated forms
  		 * @access private
  		 */
@@ -31,6 +32,7 @@
  		
  		/**
  		 * The language value for todo. It is needed if anywhere is no information or errorinformation given so that the user can see that there is still no value there
+ 		 * 
  		 * @var string The TodoValue
  		 * @access private
  		 */
@@ -38,6 +40,7 @@
  		
  		/**
  		 * Initializes the FormMaker class
+ 		 * 
  		 * @access public
  		 * @param string $TodoValue A value for the langstring todo. It is needed if anywhere is no translation set for an information tag
  		 * @return FormMaker A new FormMaker class
@@ -48,6 +51,7 @@
  		
  		/**
  		 * Checks a given value by using a regular expression
+ 		 * 
  		 * @access private
  		 * @param string $EMail The emailaddress that should be checked
  		 * @return bool Is the value an emailaddress? [true] [false]
@@ -57,7 +61,8 @@
 		}
 		
 		/**
-		 * Checks a given value by using a regular expressionn
+		 * Checks a given value by using a regular expression
+		 * 
 		 * @access private
 		 * @param string $Icq Contains the value that should be checked
 		 * @return bool Is the value an icq number? [true] [false]
@@ -68,6 +73,7 @@
 		
 		/**
 		 * Checks wether a given value ends witch a specified string
+		 * 
 		 * @access private
 		 * @param string $String The string that should be tested wether it ends with the string $Search
 		 * @param string $Search This is the string witch which the $String should end
@@ -79,6 +85,7 @@
 		
 		/**
 		 * Checks wether a given value starts witch a specified string
+		 * 
 		 * @access private
 		 * @param string $String The string that should be tested wether it starts with the string $Search
 		 * @param string $Search This is the string witch which the $String should start
@@ -98,12 +105,10 @@
  		 * @param string $Method The method of the form. Can be [post] or [get]
  		 * @return void Adds a form
  		 */
- 		function AddForm($Name, $Action, $SubmitValue, $FieldsetLegend, $Method = 'post') {
+ 		function AddForm($Name, $Action = '', $SubmitValue = '', $FieldsetLegend = '', $Method = 'post') {
  			
- 			if (!empty($Name) && !empty($Action)) {
- 				// Set the value of the submitbutton
-	 			if (empty($SubmitValue))
-	 				$SubmitValue = $this->_TodoValue;
+ 			if (!empty($Name)) {
+ 				
 	 			// Set the formmethod either to get or to post
  				if (!empty($Method))
  					$Method = (($Method == 'get') ? 'get' : 'post');
@@ -113,7 +118,8 @@
  										'form_name' => $Name,
  										'action' => $Action,
  										'method' => $Method,
- 										'submit_value' => $SubmitValue,
+ 										'submit_button' => ((!empty($SubmitValue)) ? '<div class="row"><input type="submit" value="{submit_value}" /></div>' : ''),
+ 										'submit_value' => ((!empty($SubmitValue)) ? $SubmitValue : $this->_TodoValue),
  										'fieldset_start' => ((!empty($FieldsetLegend)) ? '<fieldset>' : ''),
  										'fieldset_legend' => ((!empty($FieldsetLegend)) ? '<legend>' . $FieldsetLegend . '</legend>' : ''),
  										'fieldset_end' => ((!empty($FieldsetLegend)) ? '</fieldset>' : ''),
@@ -125,6 +131,7 @@
  		
  		/**
  		 * Adds a hidden inputfield to the local array
+ 		 * 
  		 * @access public
  		 * @param string $FormName The name of the formular to that the hidden input should be added
  		 * @param string $Name The name of the hidden input
@@ -142,6 +149,7 @@
  		
  		/**
  		 * Adds an input to a formular in the local aray
+ 		 * 
  		 * @access public
  		 * @param string $FormName The name of the formular the input should be added to
  		 * @param string $Name The name of the input
@@ -151,7 +159,7 @@
  		 * @param string $Value The value of the input if any exist
  		 * @return void Adds an input to a form in the local array
  		 */
- 		function AddInput($FormName, $Name, $Type = 'text', $NameTranslation, $Information, $Value = '') {
+ 		function AddInput($FormName, $Name, $Type = 'text', $NameTranslation = '', $Information = '', $Value = '') {
  			
  			// If a local form can be identified and there is a name for that input specified go on
  			if (!empty($FormName) && array_key_exists($FormName, $this->_Forms) && !empty($Name)){
@@ -164,10 +172,12 @@
 	 			// Add the input to the local array
  				$this->_Forms[$FormName]['inputs'][$Name] = array(
 							'name' => $Name,
+							'form_name' => $FormName,
 							'start_input' => (($Type == 'password') ? '<input type="{type}"' : (($Type == 'select') ? '<select' : '<input type="{type}"')),
 							'end_input' => (($Type == 'password') ? '/>' : (($Type == 'select') ? '>
 									<select_entrys:loop><option{selected} value="{select_value}">{display_value}</option>
 									</select_entrys>
+									{select_entrys_code}
 								</select>' : ' value="{value}" />')),
 							'type' => (($Type == 'password') ? 'password' : 'text'),
 							'translation' => $NameTranslation,
@@ -175,13 +185,16 @@
 							'errorinformation' => array(),
 							'value' => (($Type != 'password') ? $Value : ''),
 							'password_value' => (($Type == 'password') ? $Value : ''),
+							'select_entrys_code' => ' ',
 							'select_entrys' => array(),
 							'checkings' => array());
  			}
+ 			
  		}
  		
  		/**
  		 * Adds a check to an input in the local array
+ 		 * 
  		 * @access public
  		 * @param string $FormName The name of the formular in witch the input is
  		 * @param string $InputName The name of the input
@@ -190,7 +203,7 @@
  		 * @param string $SecondInputName The second input if the check needs a compatison to another field
  		 * @return void Adds a check
  		 */
- 		function AddCheck($FormName, $InputName, $CheckType, $ErrorInformation, $SecondInputName = '') {
+ 		function AddCheck($FormName, $InputName, $CheckType, $ErrorInformation = '', $SecondInputName = '') {
  			
  			// Initialize the variables
  			if (empty($ErrorInformation))
@@ -214,8 +227,9 @@
  		 */
  		function AddSelectEntry($FormName, $InputName, $Checked, $Value, $DisplayValue) {
  			
+ 			
  			// If there is no Input specified the FormMaker cannot identify the right one and so returns false, the value and the DisplayValue mustn`t be empty, too
- 			if (!empty($FormName) && array_key_exists($FormName, $this->_Forms) && !empty($InputName) && !empty($Value) && !empty($DisplayValue)) {
+ 			if (!empty($FormName) && array_key_exists($FormName, $this->_Forms) && !empty($InputName) && !empty($DisplayValue)) {
  				
  				// If $Checked is true add the html code to the variable. so it can be either [selected="selected"] or []
 	 			$Checked = (($Checked) ? ' selected="selected"' : '');
@@ -229,7 +243,90 @@
  		}
  		
  		/**
+ 		 * Adds a completely compiled code for the settings
+ 		 * 
+ 		 * @access public
+ 		 * @param string $FormName The name of the form where the select is in
+ 		 * @param string $InputName The name of the select input where the code should be pasted
+ 		 * @param string $Entrys The code of the entrys
+ 		 */
+ 		function AddSelectEntrysCode($FormName, $InputName, $Entrys) {
+ 			$this->_Forms[$FormName]['inputs'][$InputName]['select_entrys_code'] = $Entrys;
+ 		}
+ 		
+ 		/**
+ 		 * Checks a specific input by switching between its checks and sets errorinformations if it is forced to
+ 		 * 
+ 		 * @access private
+ 		 * @param input &$Input The input that should be checked
+ 		 * @param bool $GenerateErrorinformations Shall the function generate any errorinformation?
+ 		 * @return bool Is the check true or false?
+ 		 */
+ 		function _CheckInput(&$Input, $GenerateErrorInformations) {
+ 			
+ 			// Initialize variables
+ 			$ok = true;
+ 			$input = &$Input;
+ 			
+ 			// Work through all checkings
+		 	foreach($input['checkings'] as $check) {
+		 				
+				// Switch between the checkings and set a new errorinformation if there is an error
+				switch ($check['type']) {
+					case 'empty':
+						$value = (($input['type'] == 'password') ? $input['password_value'] : $input['value']);
+						if (empty($value)) {
+							$ok = false;
+							if ($GenerateErrorInformations)
+								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
+						} 
+						break;
+						
+					case 'not_email':
+					
+						// Identify wether value is an emailadress or not 
+						if (!$this->_IsEMailAddress($input['value'])){
+							$ok = false;
+							if ($GenerateErrorInformations)
+								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
+						}
+						break;
+						
+					case 'not_icq':
+					
+						// Identify wether value is and icq number or not
+						if (!$this->_IsIcqNumber($input['value'])) {
+							$ok = false;
+							if ($GenerateErrorInformations)
+								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
+						}
+						break;
+					
+					case 'not_same_password_value_as':
+						if ($this->_Forms[$input['form_name']]['inputs'][$check['secondInput']]['password_value'] != $input['password_value']) {
+							$ok = false;
+							if ($GenerateErrorInformations)
+								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
+						}
+						break;
+									
+					case 'unserialized_value_not_array':
+						if (!is_array(unserialize($input['value']))) {
+							$ok = false;
+							if ($GenerateErrorInformations)
+								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
+						}
+						break;			
+				}
+			}
+			
+			// Return the outcome is true or false
+			return $ok;
+ 		}
+ 		
+ 		/**
  		 * Checks every input using its checkings
+ 		 * 
  		 * @access public
  		 * @param string $FormName The name of the form that should be checked
  		 * @param bool $GenerateErrorInformations Shall the function create an output for each error?
@@ -249,61 +346,21 @@
 	 			
 	 			// Work through all inputs
 	 			foreach($this->_Forms[$FormName]['inputs'] as $input) {
-	 				
-	 				// Work through all checkings
-	 				foreach($input['checkings'] as $check) {
-	 					
-						// Switch between the checkings and set a new errorinformation if there is an error
-						switch ($check['type']) {
-							case 'empty':
-								// Get the right value to check
-								$value = (($input['type'] == 'password') ? $input['password_value'] : $input['value']);
-								if (empty($value)) {
-									$ok = false;
-									if ($GenerateErrorInformations)
-										$this->_Forms[$FormName]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
-								} 
-								break;
-								
-							case 'not_email':
-							
-								// Identify wether value is an emailadress or not 
-								if ($this->_IsEMailAddress($input['value'])) {
-									$ok = false;
-									if ($GenerateErrorInformations)
-										$this->_Forms[$FormName]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
-								}
-								break;
-								
-							case 'not_icq':
-							
-								// Identify wether value is an icq number or not
-								if (!$this->_IsIcqNumber($input['value'])) {
-									$ok = false;
-									if ($GenerateErrorInformations)
-										$this->_Forms[$FormName]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
-								}
-								break;
-							
-							case 'not_same_password_value_as':
-								// Compare the values of the second input and the input field
-								if ($this->_Forms[$FormName]['inputs'][$check['secondInput']]['password_value'] != $input['password_value']) {
-									$ok = false;
-									if ($GenerateErrorInformations)
-										$this->_Forms[$FormName]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
-								}
-								break;
-						}
-					}
+					
+	 				if (!$this->_CheckInput($input, $GenerateErrorInformations))
+	 					$ok = false;
 	 			}
 	 			
 	 			// Return wether everything is ok or not
 	 			return $ok;
  			}
+ 			
+ 			return false;
  		}
  		
  		/**
  		 * Generates the errorinformations for one specific formular
+ 		 * 
  		 * @access private
  		 * @param string $FormName The name of the form for which errorinformations should be generated
  		 * @return void Generate errorinformations
@@ -313,50 +370,22 @@
  			// If the function can identify a form then go on
  			if (!empty($FormName) && array_key_exists($FormName, $this->_Forms)) {
  				
- 				// Set local variables
-				$this->_Forms[$FormName]['errorinformation_generated'] = true;
-	 			
-	 			// Work through all inputs
-	 			foreach($this->_Forms[$FormName]['inputs'] as $input) {
-	 				
-	 				// Work through all checkings
-	 				foreach($input['checkings'] as $check) {
-	 					
-						// Switch between the checkings and set a new errorinformation if there is an error
-						switch ($check['type']) {
-							case 'empty':
-								$value = (($input['type'] == 'password') ? $input['password_value'] : $input['value']);
-								if (empty($value)) {
-									$this->_Forms[$FormName]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
-								} 
-								break;
-								
-							case 'not_email':
-							
-								// Identify wether value is an emailadress or not 
-								if (!$this->_IsEMailAddress($input['value']))
-									$this->_Forms[$FormName]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
-								break;
-								
-							case 'not_icq':
-							
-								// Identify wether value is and icq number or not
-								if (!$this->_IsIcqNumber($input['value']))
-									$this->_Forms[$FormName]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
-								break;
-							
-							case 'not_same_password_value_as':
-								if ($this->_Forms[$FormName]['inputs'][$check['secondInput']]['password_value'] != $input['password_value'])
-									$this->_Forms[$FormName]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
-								break;
-						}
-					}
-	 			}
+ 				if (!$this->_Forms[$FormName]['errorinformation_generated']) {
+	 				// Set local variables
+					$this->_Forms[$FormName]['errorinformation_generated'] = true;
+		 			
+		 			// Work through all inputs
+		 			foreach($this->_Forms[$FormName]['inputs'] as $input) {
+		 				
+		 				$this->_CheckInput($input, true);
+		 			}
+ 				}
  			}
  		}
  		
  		/**
  		 * Generates errorinformations for all forms in the local array
+ 		 * 
  		 * @access private
  		 * @return void Generates errorinformations
  		 */
@@ -364,13 +393,14 @@
  			
  			// Generate errorinformation for each form
  			foreach ($this->_Forms as $form) {
- 				
- 				$this->_GenerateErrorInformation($form['form_name']);
+ 				if (!$form['errorinformation_generated'])
+ 					$this->_GenerateErrorInformation($form['form_name']);
  			}
  		}
  		
  		/**
  		 * Generates a template for the inputs and returns it
+ 		 * 
  		 * @access public
  		 * @param bool $GiveErrorInformation Shall the method give out any errorinformation?
  		 * @return string The ready compiled inputs
@@ -404,12 +434,13 @@
  		
  		/**
  		 * Returns the default template and sets replacements for ComaLate
+ 		 * 
  		 * @access public
  		 * @param ComaLate &$ComaLate A link to the comalate class to set the replacements for the template
  		 * @param bool $GiveErrorInformation Shall the method give out any errorinformation?
  		 * @return string The default template
  		 */
- 		function GenerateTemplate(&$ComaLate, $GiveErrorInformation = false) {
+ 		function GenerateMultiFormTemplate(&$ComaLate, $GiveErrorInformation = false) {
  			
  			$comaLate = &$ComaLate;
  			// If the class shall give out any errorinformation it must be generated
@@ -439,15 +470,79 @@
 								{start_input} name=\"{name}\" id=\"{name}\" {end_input}
 							</div>
 						</inputs>
-						<div class=\"row\">
-							<input type=\"submit\" value=\"{submit_value}\" />
-						</div>
+						{submit_button}
 					{fieldset_end}
 				</form>
 				</FORM_MAKER>"; 
  			
  			// Return the template
  			return $template;
+ 		}
+ 		
+ 		/**
+ 		 * Returns the default template and sets replacements for ComaLate
+ 		 * 
+ 		 * @access public
+ 		 * @param ComaLate &$ComaLate A link to the comalate class to set the replacements for the template
+ 		 * @param bool $GiveErrorInformation Shall the method give out any errorinformation?
+ 		 * @return string The default template
+ 		 */
+ 		function GenerateSingleFormTemplate(&$ComaLate, $GiveErrorInformation = false) {
+ 			
+ 			$comaLate = &$ComaLate;
+ 			// If the class shall give out any errorinformation it must be generated
+ 			if ($GiveErrorInformation)
+ 				$this->_GenerateErrorInformations();
+ 			
+ 			// Set replacements for the template
+ 			$comaLate->SetReplacement("FORM_MAKER", $this->_Forms);
+ 			
+			// Generate the template
+ 			$template = "\r\n\t\t\t\t<FORM_MAKER:loop>
+ 				<form action=\"{action}\" method=\"{method}\">
+					{fieldset_start}
+						<hidden_inputs:loop><input type=\"hidden\" name=\"{name}\" value=\"{value}\" />\r\n\t\t\t\t\t\t</hidden_inputs>
+						{fieldset_legend}
+						<inputs:loop>
+							<div class=\"row\">
+								<label for=\"{name}\">
+									<strong>{translation}:</strong>";
+				
+				// If the method shall give out any errorinformation there must be a template for that
+			if ($GiveErrorInformation)
+				$template .= "\r\n\t\t\t\t\t\t\t\t\t<errorinformation:loop><span class=\"error\">{errortext}</span></errorinformation>";
+				
+			$template .= "\r\n\t\t\t\t\t\t\t\t\t<span class=\"info\">{information}</span>
+								</label>
+								{start_input} name=\"{name}\" id=\"{name}\" {end_input}
+							</div>
+						</inputs>
+						{submitbutton}
+					{fieldset_end}
+				</form>
+				</FORM_MAKER>"; 
+ 			
+ 			// Return the template
+ 			return $template;
+ 		}
+ 		
+ 		/**
+ 		 * Returns the default template and sets replacements for ComaLate
+ 		 * 
+ 		 * @access public
+ 		 * @param ComaLate &$ComaLate A link to the comalate class to set the replacements for the template
+ 		 * @param bool $GiveErrorInformation Shall the method give out any errorinformation?
+ 		 * @return string The default template
+ 		 */
+ 		function SetComaLateReplacement(&$ComaLate, $GiveErrorInformation = false) {
+ 			
+ 			$comaLate = &$ComaLate;
+ 			// If the class shall give out any errorinformation it must be generated
+ 			if ($GiveErrorInformation)
+ 				$this->_GenerateErrorInformations();
+ 			
+ 			// Set replacements for the template
+ 			$comaLate->SetReplacement("FORM_MAKER", $this->_Forms);
  		}
  	}
 ?>

@@ -116,14 +116,45 @@
 		 */
 		function _NewLanguage() {
 			// Set replacements for language
+			$this->_ComaLate->SetReplacement('LANG_LANGUAGE', $this->_Translation->GetTranslation('language'));
+			$this->_ComaLate->SetReplacement('LANG_ADD_TO_DATABASE', $this->_Translation->GetTranslation('add_to_database'));
+			$this->_ComaLate->SetReplacement('LANG_BACK', $this->_Translation->GetTranslation('back'));
+			$this->_ComaLate->SetReplacement('LANG_LANGUAGE_NAME', $this->_Translation->GetTranslation('language_name'));
+			$this->_ComaLate->SetReplacement('LANG_LANGUAGE_FILE', $this->_Translation->GetTranslation('language_file'));
 
-			// QUESTION: Why did we need the filename of the language in the database?
-
+			// Set replacement for existing languagefiles
+			$this->_Languages->FindAllLangFilesInDirectory(__ROOT__ . '/lang/');
+			$existingLanguagesFiles = $this->_Languages->GetExistingLangFiles();
+			$this->_ComaLate->SetReplacement('LANGUAGE_FILES_LIST', $existingLanguagesFiles);
+			
 			// Make template
 			$template = '
 				<form action="admin.php" method="get">
-					<input type="hidden" name="action" value="checkForm" />
-					<input type="hidden" name="page" value="languages" />
+					<fieldset>
+						<legend>{LANG_LANGUAGE}</legend>
+						<input type="hidden" name="action" value="checkForm" />
+						<input type="hidden" name="page" value="languages" />
+						<div class="row">
+							<label for="LanguageName">
+								{LANG_LANGUAGE_NAME}:
+								<span class="info">{LANGUAGE_NAME_INFO}</span>
+							</label>
+							<input type="text" id="LanguageName" name="LanguageName" />
+						</div>
+						<div class="row">
+							<label for="LanguageFile">
+								{LANG_LANGUAGE_FILE}:
+								<span class="info">{LANGUAGE_FILE_INFO}</span>
+							</label>
+							<select id="LanguageFile" name="LanguageFile"><LANGUAGE_FILES_LIST:loop>
+								<option value="{FilePath}">{FileName}</option></LANGUAGE_FILES_LIST>
+							</select>
+						</div>
+						<div class="row">
+							<input type="submit" class="button" value="{LANG_ADD_TO_DATABASE}" />&nbsp;
+							<a href="admin.php?page=languages" class="button">{LANG_BACK}</a>
+						</div>
+					</fieldset>
 				</form>
 				';
 			return $template;

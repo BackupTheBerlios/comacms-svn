@@ -21,13 +21,14 @@
 	class Preferences {
 		
 		/**
+		 * Contains all Settings setted by any loaded settings file
 		 * @access public
-		 * @var array
-		 * @static
+		 * @staticvar Settings Contains all settings loaded by the preferences system
 		 */
 		var $Settings;
 		
 		/**
+		 * This is the link to the Translation class for the Preferences class
 		 * @access private
 		 * @var Translation A link to the translation class
 		 */
@@ -45,30 +46,34 @@
 		}
 		
 		/**
+		 * Loads all settings from the $SettingsFile to the local array
 		 * @access public
-		 * @param string PreferencesFile
-		 * @return void
+		 * @param string $SettingsFile A link to a settingsfile that should be loaded
+		 * @return void Load settings file
 		 */
-		function Load($PreferencesFile) {
+		function Load($SettingsFile) {
 			$translation = &$this->_Translation;
-			include($PreferencesFile);
+			include($SettingsFile);
 		}
 		
 		/** SetSetting
 		 * Adds a property to the preferences-page
 		 * 
 		 * @access public
-		 * @static
-		 * @param string Name The name of the property
-		 * @param string Display The displayed title of the property
-		 * @param string Description The description of the property
-		 * @param string Group The group
-		 * @param string Default The default-value of the property
-		 * @param string DataType The data-type of the property 
-	 	 * @return void
+		 * @param string $Name The name of the property
+		 * @param string $Display The displayed title of the property
+		 * @param string $Description The description of the property
+		 * @param string $Group The group
+		 * @param string $Default The default-value of the property
+		 * @param string $DataType The data-type of the property 
+	 	 * @return void Sets a setting or updates an existing one
 		 */
 		function SetSetting($Name, $Display, $Description, $Group,  $Default = '', $DataType = 'string') {
-			$this->Settings[$Group][$Name] = array('name' => $Name, 'display' => $Display, 'description' => $Description, 'default' => $Default, 'datatype' => $DataType);
+			$this->Settings[$Group][$Name] = array(	'name' => $Name, 
+													'display' => $Display, 
+													'description' => $Description, 
+													'default' => $Default, 
+													'datatype' => $DataType);
 		}
 	}
 	

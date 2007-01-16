@@ -85,34 +85,6 @@
 			$this->_ComaLate->SetReplacement('LANG_STEP', $this->_Translation->GetTranslation('step'));
 			$template = "<h2>{LANG_INSTALLATION}: {LANG_STEP} {$Action}</h2>";
 			
-			// Get external parameters
-			$Style = GetPostOrGet('style');
-			$Confirmation = GetPostOrGet('confirmation');
-			$AgreementError = GetPostOrGet('agreement_error');
-			if (!is_numeric($AgreementError)) $AgreementError = 0;
-			$DatabaseServer = GetPostOrGet('database_server');
-			$DatabaseServerError = GetPostOrGet('database_server_error');
-			if (!is_numeric($DatabaseServerError)) $DatabaseServerError = 0;
-			$DatabaseName = GetPostOrGet('database_name');
-			$DatabaseNameError = GetPostOrGet('database_name_error');
-			if (!is_numeric($DatabaseNameError)) $DatabaseNameError = 0;
-			$DatabaseUsername = GetPostOrGet('database_username');
-			$DatabaseUsernameError = GetPostOrGet('database_username_error');
-			if (!is_numeric($DatabaseUsernameError)) $DatabaseUsernameError = 0;
-			$DatabasePassword = GetPostOrGet('database_password');
-			$DatabasePrefix = GetPostOrGet('database_prefix');
-			$DatabasePrefixError = GetPostOrGet('database_prefix_error');
-			if (!is_numeric($DatabasePrefixError)) $DatabasePrefixError = 0;
-			$AdminShowName = GetPostOrGet('admin_showname');
-			$AdminName = GetPostOrGet('admin_name');
-			$AdminPassword = GetPostOrGet('admin_password');
-			$AdminPassword2 = GetPostOrGet('admin_password2');
-			$CheckInputs = GetPostOrGet('CheckInputs');
-			if ($CheckInputs == 'true')
-				$CheckInputs = true;
-			else
-				$CheckInputs = false;
-			
 			// Switch between the subpages
 			switch ($Action) {
 				default:
@@ -124,36 +96,31 @@
 					break;
 					
 				case '3':
-					$template .= $this->_RequirementsPage($Language, $Style);
+					$template .= $this->_RequirementsPage($Language);
 					break;
 					
 				case '4':			
-					$template .= $this->_LicensePage($Language, $Style, $AgreementError);
+					$template .= $this->_LicensePage($Language);
 					break;
 					
 				case '5':
-					if ($Confirmation == 'yes') {
-						$template .= $this->_DatabaseSettings($Language, $Style, $Confirmation, $DatabaseServer, $DatabaseServerError, $DatabaseName, $DatabaseNameError, $DatabaseUsername, $DatabaseUsernameError, $DatabasePrefix, $DatabasePrefixError);
-					}
-					else {
-						header("Location: install.php?page=4&lang={$Language}&agreement_error=1&style={$Style}");
-						die();
-					}
+					$template .= $this->_DatabaseSettings($Language);
 					break;
 				
 				case '6':
-					$this->_CheckDatabaseSettings($Language, $Style, $Confirmation, $DatabaseServer, $DatabaseName, $DatabaseUsername, $DatabasePassword, $DatabasePrefix);
+					$template .= $this->_CheckDatabaseSettings($Language);
+					break;
 					
 				case '7':
-					$template .= $this->_AddAdministrator($Language, $Style, 'yes', $AdminShowName, $AdminName, $AdminPassword, $AdminPassword2, $CheckInputs);
+					$template .= $this->_AddAdministrator($Language);
 					break;
 					
 				case '8': 
-					$template .= $this->_CheckAdministrator($Language, $Style, $Confirmation, $AdminShowName, $AdminName, $AdminPassword, $AdminPassword2);
+					$template .= $this->_CheckAdministrator($Language);
 					break;
 					
 				case '9':
-					$template .= $this->_ConfigPage($Language, $Style);
+					$template .= $this->_ConfigPage($Language);
 					break;
 				
 				case '10':
@@ -196,7 +163,7 @@
 				}
 			}
 			
-			$template = "\r\n\t\t\t\t" . $formMaker->GenerateTemplate(&$this->_ComaLate, false);
+			$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, false);
 			return $template;
 		}
 		
@@ -247,10 +214,12 @@
 		 * Returns the template for therequirements page
 		 * @access private
 		 * @param string Language The actual language
-		 * @param string Style The actual stye
 		 * @return string template
 		 */
-		function _RequirementsPage($Language, $Style) {
+		function _RequirementsPage($Language) {
+			
+			// Get external Parameters
+			$Style = GetPostOrGet('style');
 			
 			// Set phpminversion
 			$phpversion_min = '4.3.0';
@@ -337,11 +306,14 @@
 		 * Returns the template for the license page
 		 * @access private
 		 * @param string Language The actual language
-		 * @param string Style The actual style
-		 * @param integer AgreementError The user has to agree with the license and so he is asked again
 		 * @return string template
 		 */
-		function _LicensePage($Language, $Style, $AgreementError) {
+		function _LicensePage($Language) {
+			
+			// Get external parameters
+			$Style = GetPostOrGet('style');
+			$AgreementError = GetPostOrGet('agreement_error');
+			if (!is_numeric($AgreementError)) $AgreementError = 0;
 			
 			// Read licensefile and set replacement
 			$this->_ComaLate->SetReplacement('LICENSE_FILE_CONTENT', file_get_contents('./license.txt'));
@@ -384,145 +356,87 @@
 		/**
 		 * Returns the template for the database settings page
 		 * @access private
-		 * @param string Language The actual language
-		 * @param string Style The actual style
-		 * @param string Confirmation Has the user agreed with the license?
-		 * @param string DatabaseServer The typed in database server
-		 * @param integer DatabaseServerError Has the user typed in a valid databaseserver?
-		 * @param string DatabaseName The typed in database name
-		 * @param integer DatabaseNameError Has the user typed in a valid database name?
-		 * @param string DatabaseUsername The typed in database username
-		 * @param integer DatabaseUsernameError Has the user typed in a valid database username?
-		 * @param string DatabasePrefix The typed in database prefix
-		 * @param integer DatabasePrefixError Has the user typed in a databaseprefix?
-		 * @return sring template
+		 * @param string $Language The actual language
+		 * @return sring Returns a template for the database settings page
 		 */
-		function _DatabaseSettings($Language, $Style, $Confirmation, $DatabaseServer = '', $DatabaseServerError = 0, $DatabaseName = '', $DatabaseNameError = 0, $DatabaseUsername = '', $DatabaseUsernameError = 0, $DatabasePrefix = '', $DatabasePrefixError = 0) {
+		function _DatabaseSettings($Language) {
+			
+			// Get external parameters
+			$Style = GetPostOrGet('style');
+			$Confirmation = GetPostOrGet('confirmation');
 			
 			// Has the user agreed with the license?
 			if ($Confirmation != 'yes')
-				header("Location: install.php?page=3&lang={$Language}&agreement_error=1");
+				header("Location: install.php?page=4&lang={$Language}&style={$Style}&agreement_error=1");
 			
-			// Generate inputs
-			$inputs = array();
-			$inputs[] = array(
-							'name' => 'database_server',
-							'type' => 'text',
-							'translation' => $this->_Translation->GetTranslation('database_server'),
-							'errorinformation' => (($DatabaseServerError == 1) ? '<span class="error">' . $this->_Translation->GetTranslation('you_have_to_define_a_database_server') . '</span>' : ''),
-							'information' => $this->_Translation->GetTranslation('this_is_the_adress_of_the_database_server'),
-							'value_preset' => (($DatabaseServer != '') ? $DatabaseServer : 'localhost'));
-			$inputs[] = array(
-							'name' => 'database_name',
-							'type' => 'text',
-							'translation' => $this->_Translation->GetTranslation('database_name'),
-							'errorinformation' => (($DatabaseNameError == 1) ? '<span class="error">' . $this->_Translation->GetTranslation('you_have_to_define_a_database') . '</span>' : ''),
-							'information' => $this->_Translation->GetTranslation('this_is_the_name_of_the_database_at_the_server_used_for_comacms'),
-							'value_preset' => (($DatabaseName != '') ? $DatabaseName : 'comacms'));
-			$inputs[] = array(
-							'name' => 'database_username',
-							'type' => 'text',
-							'translation' => $this->_Translation->GetTranslation('database_username'),
-							'errorinformation' => (($DatabaseUsernameError == 1) ? '<span class="error">' . $this->_Translation->GetTranslation('you_have_to_define_a_user_name_to_connect_to_the_database_server') . '</span>' : ''),
-							'information' => $this->_Translation->GetTranslation('this_is_the_username_used_to_connect_to_the_database_server'),
-							'value_preset' => (($DatabaseUsername != '') ? $DatabaseUsername : 'root'));
-			$inputs[] = array(
-							'name' => 'database_password',
-							'type' => 'password',
-							'translation' => $this->_Translation->GetTranslation('database_password'),
-							'errorinformation' => '',
-							'information' => $this->_Translation->GetTranslation('this_is_the_password_that_is_maybee_needed_to_connect_to_the_databaseserver_with_the_username_(can_bee_empty)'),
-							'value_preset' => '');
-			$inputs[] = array(
-							'name' => 'database_prefix',
-							'type' => 'text',
-							'translation' => $this->_Translation->GetTranslation('prefix_for_tables'),
-							'errorinformation' => (($DatabasePrefixError == 1) ? '<span class="error">' . $this->_Translation->GetTranslation('you_have_to_define_a_prefix') . '</span>' : ''),
-							'information' => $this->_Translation->GetTranslation('with_this_prefix_written_before_each_table_you_can_identify_all_tables_belonging_to_comacms'),
-							'value_preset' => (($DatabasePrefix != '') ? $DatabasePrefix : 'comacms_'));
-			$this->_ComaLate->SetReplacement('INPUTS', $inputs);
+			// Initialize FormMaker class
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
 			
-			// Set replacements
-			$this->_ComaLate->SetReplacement('ACTUAL_LANGUAGE', $Language);
-			$this->_ComaLate->SetReplacement('ACTUAL_STYLE', $Style);
-			$this->_ComaLate->SetReplacement('CONFIRMATION', $Confirmation);
-			$this->_ComaLate->SetReplacement('LANG_DATABASE_SETTINGS', $this->_Translation->GetTranslation('database_settings'));
-			$this->_ComaLate->SetReplacement('LANG_NEXT', $this->_Translation->GetTranslation('next'));
+			// Add a form
+			$formMaker->AddForm('database_settings', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('database_settings'), 'post');
+			
+			// Add hidden inputs
+			$formMaker->AddHiddenInput('database_settings', 'page', '6');
+			$formMaker->AddHiddenInput('database_settings', 'lang', $Language);
+			$formMaker->AddHiddenInput('database_settings', 'confirmation', 'yes');
+			$formMaker->AddHiddenInput('database_settings', 'style', $Style);
+			
+			// Add the inputs of the form
+			$formMaker->AddInput('database_settings', 'database_server', 'text', $this->_Translation->GetTranslation('database_server'), $this->_Translation->GetTranslation('this_is_the_adress_of_the_database_server'), 'localhost');
+			$formMaker->AddInput('database_settings', 'database_name', 'text', $this->_Translation->GetTranslation('database_name'), $this->_Translation->GetTranslation('this_is_the_name_of_the_database_at_the_server_used_for_comacms'), 'comacms');
+			$formMaker->AddInput('database_settings', 'database_username', 'text', $this->_Translation->GetTranslation('database_username'), $this->_Translation->GetTranslation('this_is_the_username_used_to_connect_to_the_database_server'), 'root');
+			$formMaker->AddInput('database_settings', 'database_password', 'password', $this->_Translation->GetTranslation('database_password'), $this->_Translation->GetTranslation('this_is_the_password_that_is_maybee_needed_to_connect_to_the_databaseserver_with_the_username_(can_bee_empty)'));
+			$formMaker->AddInput('database_settings', 'database_prefix', 'text', $this->_Translation->GetTranslation('prefix_for_tables'), $this->_Translation->GetTranslation('with_this_prefix_written_before_each_table_you_can_identify_all_tables_belonging_to_comacms'), 'comacms_');
 			
 			// Generate template
-			$template = "\r\n\t\t\t\t" . '<form action="install.php" method="get">
-					<fieldset>
-						<input type="hidden" name="page" value="6" />
-						<input type="hidden" name="lang" value="{ACTUAL_LANGUAGE}" />
-						<input type="hidden" name="confirmation" value="{CONFIRMATION}" />
-						<input type="hidden" name="style" value="{ACTUAL_STYLE}" />
-						<legend>{LANG_DATABASE_SETTINGS}</legend>
-						<INPUTS:loop>
-							<div class="row">
-								<label for="{name}">
-									<strong>{translation}:</strong>
-									{errorinformation}
-									<span class="info">{information}</span>
-								</label>
-								<input type="{type}" name="{name}" id="{name}" value="{value_preset}" />
-							</div>
-						</INPUTS>
-						<div class="row">
-							<input type="submit" value="{LANG_NEXT}" />
-						</div>
-					</fieldset>
-				</form>';
+			$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, false); 
 			return $template;
 		}
 		
 		/**
 		 * Checks all database settings inputs, creates the config.php and initializes the database
 		 * @access private
-		 * @param string Language The actual language
-		 * @param string Style The actual style
-		 * @param string Confirmation Has the user agreed with the license?
-		 * @param string DatabaseServer The address of the database server
-		 * @param string DatabaseName The name of the database used for ComaCMS
-		 * @param string DatabaseUsername The username to connect to the database server
-		 * @param string DatabasePassword The password for the username to connect to the database server
-		 * @param string DatabasePrefix The prefix used for the tables used by ComaCMS
-		 * @return void
+		 * @param string $Language The actual language
+		 * @return void Returns the database settingspage with the errorcodes if there are any or sets the user to the next page
 		 */
-		function _CheckDatabaseSettings($Language, $Style, $Confirmation, $DatabaseServer, $DatabaseName, $DatabaseUsername, $DatabasePassword, $DatabasePrefix) {
-			$ok = true;
-			if (empty($DatabaseServer)) {
-				$ok = false;
-				$DatabaseServerError = 1;
-			}
-			else
-				$DatabaseServerError = 0;
-				
-			if (empty($DatabaseUsername)) {
-				$ok = false;
-				$DatabaseUsernameError = 1;
-			}
-			else
-				$DatabaseUsernameError = 0;
+		function _CheckDatabaseSettings($Language) {
 			
-			if (empty($DatabaseName)) {
-				$ok = false;
-				$DatabaseNameError = 1;
-			}
-			else
-				$DatabaseNameError = 0;
+			// Get external parameters
+			$Style = GetPostOrGet('style');
+			$DatabaseServer = GetPostOrGet('database_server');
+			$DatabaseName = GetPostOrGet('database_name');
+			$DatabaseUsername = GetPostOrGet('database_username');
+			$DatabasePassword = GetPostOrGet('database_password');
+			$DatabasePrefix = GetPostOrGet('database_prefix');
 			
-			if (empty($DatabasePrefix)) {
-				$ok = false;
-				$DatabasePrefixError = 1;
-			}
-			else
-				$DatabasePrefixError = 0;
 			
-			if ($Confirmation != 'yes') {
-				$ok = false;
-				header("Location: install.php?page=4&lang={$Language}&agreement_error=1&style={$Style}");
-				die();
-			}
+			// Initialize FormMaker class
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
+			
+			// Add a form
+			$formMaker->AddForm('database_settings', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('database_settings'), 'post');
+			
+			// Add hidden inputs
+			$formMaker->AddHiddenInput('database_settings', 'page', '6');
+			$formMaker->AddHiddenInput('database_settings', 'lang', $Language);
+			$formMaker->AddHiddenInput('database_settings', 'confirmation', 'yes');
+			$formMaker->AddHiddenInput('database_settings', 'style', $Style);
+			
+			// Add the inputs of the form
+			$formMaker->AddInput('database_settings', 'database_server', 'text', $this->_Translation->GetTranslation('database_server'), $this->_Translation->GetTranslation('this_is_the_adress_of_the_database_server'), $DatabaseServer);
+			$formMaker->AddInput('database_settings', 'database_name', 'text', $this->_Translation->GetTranslation('database_name'), $this->_Translation->GetTranslation('this_is_the_name_of_the_database_at_the_server_used_for_comacms'), $DatabaseName);
+			$formMaker->AddInput('database_settings', 'database_username', 'text', $this->_Translation->GetTranslation('database_username'), $this->_Translation->GetTranslation('this_is_the_username_used_to_connect_to_the_database_server'), $DatabaseUsername);
+			$formMaker->AddInput('database_settings', 'database_password', 'password', $this->_Translation->GetTranslation('database_password'), $this->_Translation->GetTranslation('this_is_the_password_that_is_maybee_needed_to_connect_to_the_databaseserver_with_the_username_(can_bee_empty)'));
+			$formMaker->AddInput('database_settings', 'database_prefix', 'text', $this->_Translation->GetTranslation('prefix_for_tables'), $this->_Translation->GetTranslation('with_this_prefix_written_before_each_table_you_can_identify_all_tables_belonging_to_comacms'), $DatabasePrefix);
+			
+			// Add the checkings for the inputs
+			$formMaker->AddCheck('database_settings', 'database_server', 'empty', $this->_Translation->GetTranslation('you_have_to_define_a_database_server'));
+			$formMaker->AddCheck('database_settings', 'database_name', 'empty', $this->_Translation->GetTranslation('you_have_to_define_a_database'));
+			$formMaker->AddCheck('database_settings', 'database_username', 'empty', $this->_Translation->GetTranslation('you_have_to_define_a_user_name_to_connect_to_the_database_server'));
+			$formMaker->AddCheck('database_settings', 'database_prefix', 'empty', $this->_Translation->GetTranslation('you_have_to_define_a_prefix'));
+			
+			$ok = $formMaker->CheckInputs('database_settings', true);
+			
 			if ($ok) {
 				$this->_SqlConnection = new Sql($DatabaseUsername, $DatabasePassword, $DatabaseServer);
 				$this->_SqlConnection->Connect($DatabaseName);
@@ -549,100 +463,112 @@
 				$fp = @fopen('../config.php', 'w');
 				$result = @fputs($fp, $config_data, strlen($config_data));
 				@fclose($fp);
-			}
-			else {
-				header("Location: install.php?page=5&lang={$Language}&style={$Style}&confirmation=yes&" . ((!empty($DatabaseServer)) ? "database_server={$DatabaseServer}&" : '') . "database_server_error={$DatabaseServerError}" . ((!empty($DatabaseUsername)) ? "&database_username={$DatabaseUsername}" : '') . "&database_username_error={$DatabaseUsernameError}" . ((!empty($DatabaseName)) ? "&database_name={$DatabaseName}" : '') . "&database_name_error={$DatabaseNameError}" . ((!empty($DatabasePrefix)) ? "&database_prefix={$DatabasePrefix}" : '') . "&database_prefix_error={$DatabasePrefixError}");
+				
+				header("Location: install.php?page=7&lang={$Language}&style={$Style}&confirmation=yes");
 				die();
 			}
-		}
-		
-		/**
-		 * Generates the formular for the adminregistration
-		 * @param string $Language The actual language
-		 * @param string $Style The actual style
-		 * @param string $AdminShowName The AdminShowName if exists
-		 * @param string $AdminName The AdminName if exists
-		 * @param string $AdminPassword The AdminPassword if exists
-		 * @param string $AdminPassword2 The AdminPasswordRepetition if exists
-		 * @return FormMaker The link to the FormMaker class
-		 */
-		function _GenerateAdminForm($Language, $Style, $AdminShowName = '', $AdminName = '', $AdminPassword = '', $AdminPassword2 = '') {
-			// Generate the inputs
-			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
-			
-			$formMaker->AddForm('admin_registration', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('create_administrator'), 'post');
-			
-			$formMaker->AddHiddenInput('admin_registration', 'page', '8');
-			$formMaker->AddHiddenInput('admin_registration', 'lang', $Language);
-			$formMaker->AddHiddenInput('admin_registration', 'style', $Style);
-			$formMaker->AddHiddenInput('admin_registration', 'confirmation', 'yes');
-			
-			$formMaker->AddInput('admin_registration', 'admin_showname', 'text', $this->_Translation->GetTranslation('name'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'), $AdminShowName);
-			$formMaker->AddCheck('admin_registration', 'admin_showname', 'empty', $this->_Translation->GetTranslation('the_name_must_be_indicated'));
-			
-			$formMaker->AddInput('admin_registration', 'admin_name', 'text', $this->_Translation->GetTranslation('loginname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'), $AdminName);
-			$formMaker->AddCheck('admin_registration', 'admin_name', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
-			
-			$formMaker->AddInput('admin_registration', 'admin_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'), $AdminPassword);
-			$formMaker->AddCheck('admin_registration', 'admin_password', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
-			$formMaker->AddCheck('admin_registration', 'admin_password', 'not_same_password_value_as', $this->_Translation->GetTranslation('the_password_and_its_repetition_are_unequal'), 'admin_password2');
-			
-			$formMaker->AddInput('admin_registration', 'admin_password2', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'), $AdminPassword2);
-			$formMaker->AddCheck('admin_registration', 'admin_password2', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
-			
-			return $formMaker;
+			else {
+				return "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, true);
+			}
 		}
 		
 		/**
 		 * Returns a template for the user to add a new administrator
 		 * @access private
 		 * @param string $Language The actual language
-		 * @param string $Style The actual style
-		 * @param string $DatabaseInitialized Is the database correctly initialized?
-		 * @param string $AdminShowName The typed in admin show name
-		 * @param string $AdminName The typed in admin name
-		 * @param string $AdminPassword The typed in admin password
-		 * @param string $AdminPassword2 The typed in admin password repetition
-		 * @param bool $CheckInputs Shall the inputs be checked?
-		 * @return string template
+		 * @return string The template for the add administrator page
 		 */
-		function _AddAdministrator($Language, $Style, $DatabaseInitialized, $AdminShowName, $AdminName, $AdminPassword, $AdminPassword2, $CheckInputs = false) {
+		function _AddAdministrator($Language) {
+			
+			// Get external parameters
+			$Style = GetPostOrGet('style');
+			$Confirmation = GetPostOrGet('confirmation');
+			$AdminShowName = GetPostOrGet('admin_showname');
+			$AdminName = GetPostOrGet('admin_name');
+			$AdminPassword = GetPostOrGet('admin_password');
+			$AdminPassword2 = GetPostOrGet('admin_password2');
 			
 			// Is the database realy Initialized or tries someone to skip the databasesettings?
-			if ($DatabaseInitialized != 'yes')
-				header("Location: install.php?page=3&lang={$Language}");
+			if ($Confirmation != 'yes')
+				header("Location: install.php?page=5&lang={$Language}&style={$Style}&confirmation=yes");
 			
-			$form = $this->_GenerateAdminForm($Language, $Style, $AdminShowName, $AdminName, $AdminPassword, $AdminPassword2);
+			// Initialize the FormMaker class
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
+			
+			// Add a new form for the admin registration
+			$formMaker->AddForm('admin_registration', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('create_administrator'), 'post');
+			
+			// Add the hidden inputs
+			$formMaker->AddHiddenInput('admin_registration', 'page', '8');
+			$formMaker->AddHiddenInput('admin_registration', 'lang', $Language);
+			$formMaker->AddHiddenInput('admin_registration', 'style', $Style);
+			$formMaker->AddHiddenInput('admin_registration', 'confirmation', 'yes');
+			
+			// Add the inputs
+			$formMaker->AddInput('admin_registration', 'admin_showname', 'text', $this->_Translation->GetTranslation('name'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'), $AdminShowName);
+			$formMaker->AddInput('admin_registration', 'admin_name', 'text', $this->_Translation->GetTranslation('loginname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'), $AdminName);
+			$formMaker->AddInput('admin_registration', 'admin_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'), $AdminPassword);
+			$formMaker->AddInput('admin_registration', 'admin_password2', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'), $AdminPassword2);
 			
 			// Generate template
-			$template = "\r\n\t\t\t\t" . $form->GenerateTemplate(&$this->_ComaLate, $CheckInputs);
+			$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, false);
 			return $template;
 		}
 		
 		/**
 		 * Checks the administrator inputs
 		 * @access private
-		 * @param string Language The actual language
-		 * @param string Style The actual style
-		 * @param string Confirmation Is everything ok?
-		 * @param string AdminShowName The showname of the administrator that should be created
-		 * @param string AdminName The nickname of the administrator that should be created
-		 * @param string AdminPassword The password for the administrator
-		 * @param string AdminPasswordRepetition The repepetition of the password to prevent typing errors
-		 * @return void
+		 * @param string $Language The actual language
+		 * @return void Returns the add administrator page or sets the user back to the database settings
 		 */
-		function _CheckAdministrator($Language, $Style, $Confirmation, $AdminShowName, $AdminName, $AdminPassword, $AdminPasswordRepetition) {
+		function _CheckAdministrator($Language) {
 			
-			// Inititalize variables
+			// Get external parameters
+			$Style = GetPostOrGet('style');
+			$Confirmation = GetPostOrGet('confirmation');
+			$AdminShowName = GetPostOrGet('admin_showname');
+			$AdminName = GetPostOrGet('admin_name');
+			$AdminPassword = GetPostOrGet('admin_password');
+			$AdminPassword2 = GetPostOrGet('admin_password2');
+			
+			// Give config variables their default value to prevent PHP Eclipse from warning about a missing variable
 			$d_server = 'localhost';
 			$d_pre = 'comacms_';
 			$d_user = 'root';
 			$d_pw = '';
 			$d_base = 'comacms';
 			
+			// Is the database realy Initialized or tries someone to skip the databasesettings?
+			if ($Confirmation != 'yes')
+				header("Location: install.php?page=5&lang={$Language}&style={$Style}&confirmation=yes");
 			
-			$form = $this->_GenerateAdminForm($Language, $Style, $AdminShowName, $AdminName, $AdminPassword, $AdminPasswordRepetition);
-			$ok = $form->CheckInputs('admin_registration', false);
+			// Initialize the FormMaker class
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
+			
+			// Add a new form for the admin registration
+			$formMaker->AddForm('admin_registration', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('create_administrator'), 'post');
+			
+			// Add the hidden inputs
+			$formMaker->AddHiddenInput('admin_registration', 'page', '8');
+			$formMaker->AddHiddenInput('admin_registration', 'lang', $Language);
+			$formMaker->AddHiddenInput('admin_registration', 'style', $Style);
+			$formMaker->AddHiddenInput('admin_registration', 'confirmation', 'yes');
+			
+			// Add the inputs
+			$formMaker->AddInput('admin_registration', 'admin_showname', 'text', $this->_Translation->GetTranslation('name'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'), $AdminShowName);
+			$formMaker->AddInput('admin_registration', 'admin_name', 'text', $this->_Translation->GetTranslation('loginname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'), $AdminName);
+			$formMaker->AddInput('admin_registration', 'admin_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'), $AdminPassword);
+			$formMaker->AddInput('admin_registration', 'admin_password2', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'), $AdminPassword2);
+			
+			// Add the checks for the formular
+			$formMaker->AddCheck('admin_registration', 'admin_showname', 'empty', $this->_Translation->GetTranslation('the_name_must_be_indicated'));
+			$formMaker->AddCheck('admin_registration', 'admin_name', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
+			$formMaker->AddCheck('admin_registration', 'admin_password', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
+			$formMaker->AddCheck('admin_registration', 'admin_password', 'not_same_password_value_as', $this->_Translation->GetTranslation('the_password_and_its_repetition_are_unequal'), 'admin_password2');
+			$formMaker->AddCheck('admin_registration', 'admin_password2', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
+			
+			// Check the form and generate errorinformations
+			$ok = $formMaker->CheckInputs('admin_registration', true);
 			
 			// If everything is ok
 			if ($ok && $Confirmation == 'yes') {
@@ -669,7 +595,9 @@
 				die();
 			}
 			else {
-				return $this->_AddAdministrator($Language, $Style, $Confirmation, $AdminShowName, $AdminName, $AdminPassword, $AdminPasswordRepetition, true);
+				// Generate template
+			$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, true);
+			return $template;
 			}
 		}
 		
@@ -692,8 +620,8 @@
 		 * @param integer ConfigAdministratorEmailError The errorcode for the administrator emailadress field
 		 * @return string template
 		 */
-		function _ConfigPage($Language, $Style, $ConfigPagename = 'ComaCMS', $ConfigPagenameError = '', $ConfigKeywords = '', $ConfigKeywordsError = '', $ConfigThumbnailFolder = 'data/thumbnails/', $ConfigThumbnailFolderError = '', $ConfigDateDayFormat = 'd.m.Y', $ConfigDateDayFormatError = '', $ConfigDateTimeFormat = 'H:i:s', $ConfigDateTimeFormatError = '', $ConfigAdministratorEmail = 'administrator@comacms', $ConfigAdministratorEmailError = '') {
-			
+		function _ConfigPage($Language) {
+			/*
 			// Generate inputs
 			$inputs = array();
 			$inputs[] = array(
@@ -785,7 +713,7 @@
 				</form>';
 			
 			// return the output
-			return $template;
+			return $template;*/
 		}
 		
 		/**

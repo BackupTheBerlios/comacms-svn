@@ -131,6 +131,7 @@
 			break;
 		
 		case 5:
+		case 6:
 			$pagename = $translation->GetTranslation('database_settings');
 			$menuArray[] = array($translation->GetTranslation('language'), '1');
 			$menuArray[] = array($translation->GetTranslation('sitestyle'), '2');
@@ -139,7 +140,6 @@
 			$menuArray[] = array($translation->GetTranslation('database_settings'), '5');
 			break;
 		
-		case 6:
 		case 7:
 		case 8:
 			$pagename = $translation->GetTranslation('create_administrator');
@@ -175,7 +175,7 @@
 			$linkStyle = ' class="actual"';
 		else
 			$linkStyle = '';
-		$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'install.php?page=' . $part[1], 'CSS_ID' => '', 'LINK_STYLE' => $linkStyle);
+		$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'install.php?page=' . $part[1] . '&amp;style=' . $extern_style, 'CSS_ID' => '', 'LINK_STYLE' => $linkStyle);
 	}
 	$output->SetReplacement('MENU_DEFAULT' , $menu);
 	

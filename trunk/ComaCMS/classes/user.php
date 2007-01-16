@@ -26,43 +26,56 @@
 	class User {
 		
 		/**
-		 * @var string
+		 * @access public
+		 * @var string The online id of the user to change his informations in the online table
 		 */
 		var $OnlineID = '';
 		
 		/**
-		 * @var string
+		 * @access public
+		 * @var string The name of the user if he is logged in
 		 */
 		var $Name = '';
 		
 		/**
-		 * @var string
+		 * @access public
+		 * @var string The showname of the user if he is logged in
 		 */
 		var $Showname = '';
 		
 		/**
-		 * @var string
+		 * @access private
+		 * @var string The md5 code of the password during the login of the user
 		 */
 		var $PasswordMd5 = '';
 		
 		/**
-		 * @var integer
+		 * @access public
+		 * @var integer The ID of the user in the system
 		 */
 		var $ID = 0;
 		
 		/**
-		 * @var bool
+		 * @access public
+		 * @var bool Is the user an administrator?
 		 */
 		var $IsAdmin = false;
 		
 		/**
-		 * @var bool
+		 * @access public
+		 * @var bool Is the user an author?
+		 */
+		var $IsAuthor = false;
+		
+		/**
+		 * @access public
+		 * @var bool Is the user logged in to a valid user account?
 		 */
 		var $IsLoggedIn = false;
 		
 		/**
-		 * 
-		 * @var string
+		 * @access public
+		 * @var string The language that the user has choosen
 		 */
 		var $Language = '';
 		
@@ -75,23 +88,26 @@
 		 * -  2: No password
 		 * -  3: Nothing of both
 		 * -  4: Sorry wrong data
+		 * -  5: Sorry the user is not activated
+		 * @access public
 		 * @var integer is an error disciption for better login handling
 		 */
 		var $LoginError = -1;
 		
 		/**
+		 * @access public
 		 * @var Auth_All
 		 */
 		var $AccessRghts;
 		
 		/**
 		 * @access private
-		 * @var Sql
+		 * @var Sql A link to the SqlConnection class
 		 */
 		var $_SqlConnection;
 		
 		/**
-		 * @param Sql SqlConnection
+		 * @param Sql &$SqlConnection A link to the SqlConnection class
 		 * @return void
 		 */
 		function User(&$SqlConnection) {
@@ -142,7 +158,7 @@
 			// Tries somebody to log in?
 			if(!empty($extern_login_name) && !empty($extern_login_password)) {
 				$this->Name = $extern_login_name;
-				$this->PasswordMd5 = md5($extern_login_password);
+				$this->_PasswordMd5 = md5($extern_login_password);
 			}
 			// Has the user no OnlineId? Generate one!
 			$newOnlineID = false;
@@ -158,7 +174,7 @@
 			elseif($extern_login_name !== '' && $extern_login_password === '')
 				$this->LoginError = 2;
 			// Check: had the user typed in the right name and password?
-			elseif($this->Name != '' && $this->PasswordMd5 != '') {
+			elseif($this->Name != '' && $this->_PasswordMd5 != '') {
 
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "users
@@ -169,44 +185,49 @@
 					// If the user was found check if it is activated
 					if ($original_user->user_activated == '1') {
 						// If the user is activated check if the typed password is right
-						if ($original_user->user_password === $this->PasswordMd5) {
+						if ($original_user->user_password === $this->_PasswordMd5) {
 							$this->IsLoggedIn = true;
 							$this->Showname = $original_user->user_showname;
 							$this->ID = $original_user->user_id;
-							if($original_user->user_admin == 'y')
+							if($original_user->user_admin == '1')
 								$this->IsAdmin = true;
+							if($original_user->user_author == '1')
+								$this->IsAuthor = true;
 							$this->LoginError = 0;
 						}
 						// else set user back to login
 						else {
 							$this->IsAdmin = false;
+							$this->IsAuthor = false;
 							$this->IsLoggedIn = false;
 							$this->Name = '';
-							$this->PasswordMd5 = '';
+							$this->_PasswordMd5 = '';
 							$this->LoginError = 4;
 						}
 					}
 					else {
 						// If the user is not activated set him back to login and throw exception
 						$this->IsAdmin = false;
+						$this->IsAuthor = false;
 						$this->IsLoggedIn = false;
 						$this->Name = '';
-						$this->PasswordMd5 = '';
+						$this->_PasswordMd5 = '';
 						$this->LoginError = 5;
 					}
 				}
 				else {
 					// If the user was not found set him back to login
 					$this->IsAdmin = false;
+					$this->IsAuthor = false;
 					$this->IsLoggedIn = false;
 					$this->Name = '';
-					$this->PasswordMd5 = '';
+					$this->_PasswordMd5 = '';
 					$this->LoginError = 4;
 				}
 			}
 			// Is he logged on? check the data behind his OnlineID!
 			elseif($this->OnlineID != '' && !$newOnlineID) {
-				$sql  = "SELECT user.user_showname, user.user_admin, user.user_name, user.user_id, online.online_loggedon, online.online_ip
+				$sql  = "SELECT user.user_showname, user.user_admin, user.user_author, user.user_name, user.user_id, online.online_loggedon, online.online_ip
 					FROM (
 						". DB_PREFIX . "users user LEFT JOIN " . DB_PREFIX . "online online
 						ON online.online_userid = user.user_id
@@ -221,16 +242,19 @@
 						$this->IsLoggedIn = true;
 						$this->Showname = $onlineUser->user_showname;
 						$this->ID = $onlineUser->user_id;
-						if($onlineUser->user_admin == 'y')
+						if($onlineUser->user_admin == '1')
 							$this->IsAdmin = true;
+						if($onlineUser->user_author == '1')
+							$this->IsAuthor = true;
 						$this->LoginError = 0;
 					}
 					else {
 						$this->ID = $onlineUser->user_id;
 						$this->IsAdmin = false;
+						$this->IsAuthor = false;
 						$this->IsLoggedIn = false;
 						$this->Name = '';
-						$this->PasswordMd5 = '';
+						$this->_PasswordMd5 = '';
 						$this->LoginError = -1;
 					}
 				}		
@@ -249,12 +273,15 @@
 		}
 		
 		/**
-		 * @return void
-		 * @param string page
-		 * @param Config config
+		 * Sets the actual page of the user to the database
 		 * @access public
+		 * @param string $page The actual page
+		 * @param Config &$config A link to the config
+		 * @return void 
 		 */
-		function SetPage($page, $config) {
+		function SetPage($page, &$Config) {
+			
+			$config = &$Config;
 			global $REMOTE_ADDR;
 			
 			$counter_start_date = $config->Get('counter_start_date');

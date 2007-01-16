@@ -19,7 +19,13 @@
 	 * @package ComaCMS
 	 */
  	class Admin_Module extends Admin{
- 		 		
+ 		
+ 		/**
+ 		 * Returns the title of the moduleadministration
+ 		 * 
+ 		 * @access public
+ 		 * @return string The title of the moduleadministration
+ 		 */ 		
  		function GetTitle() {
  			return 'Module Admin';
  		}

@@ -38,10 +38,13 @@
 		case 'login':
 			$error = GetPostOrGet('error');
 			$title = "Login";
+			$externRedirection = GetPostOrGet('extern_redirect');
+			if (empty($externRedirection))
+				$externRedirection = 'admin.php';
 			$redirection = GetPostOrGet('redirect');
 			$action = GetPostOrGet('action');
 			
-			$text = "<form method=\"post\" action=\"admin.php\">
+			$text = "<form method=\"post\" action=\"{$externRedirection}\">
 				<input type=\"hidden\" name=\"action\" value=\"$action\" />
 				<input type=\"hidden\" name=\"page\" value=\"$redirection\" />
 				<fieldset>
@@ -112,9 +115,6 @@
 			// Get the name of Module to show
 			$moduleName = GetPostOrGet('moduleName');
 			if(file_exists('./modules/' . $moduleName . '/' . $moduleName . '_module.php'))
-				/**
-				 * @ignore
-				 */
 				include_once('./modules/' . $moduleName . '/' . $moduleName . '_module.php');
 			// If the menu is activated it's class should be created
 			// check if the module-class is already created
@@ -133,6 +133,80 @@
 				$text = $$moduleName->GetPage(GetPostOrGet('action'));
 				$title = $$moduleName->GetTitle();
 				$path = "<a href=\"special.php?page={$page}&amp;moduleName={$moduleName}\">{$title}</a>";
+			}
+			break;
+		
+		case 'userinterface':
+			
+			if (!$user->IsLoggedIn) {
+				header("Location: special.php?page=login&extern_redirect=special.php&redirect=userinterface");
+				die();
+			}
+			
+			// Generate UI menu
+			$menuArray = array();
+			$menuArray[] = array($translation->GetTranslation('usercontrol'), 'usercontrol');
+			$menuArray[] = array($translation->GetTranslation('back_to_homepage'), 'back_to_homepage');
+			$menuArray[] = array($translation->GetTranslation('logout'), 'logout');
+			
+			// Switch between the subpages of the userinterface
+			$subpage = GetPostOrGet('subpage');
+			$action = GetPostOrGet('action');
+			switch ($subpage) {
+				
+				case 'logout':
+					// call the logout and redirect to the index 
+					$user->Logout();
+					header("Location: index.php");
+					die();
+				
+				case 'userinterface':
+				default:
+					if(substr($page, 0, 7) == 'module_') {
+						// get the name of the module which's admin-interface should be shown
+						$moduleName = substr($page, 7);
+						
+						$access = $config->Get($moduleName. '_author_access');
+						if($access != true && $access != false) {
+							if (file_exists(__ROOT__ . "/modules/{$moduleName}/{$moduleName}_info.php")) {
+								
+							}
+							else 
+								$access = false;
+						}
+							
+						if ($access) {
+							// is the module really activated? (yes, I'm paranoid... :-P )
+							$modulesActivated = unserialize($config->Get('modules_activated'));
+							if(in_array($moduleName, $modulesActivated)) {
+								// Load the admin-class of the module
+								include_once(__ROOT__ . "/modules/$moduleName/{$moduleName}_admin.php");
+								if(class_exists('Admin_Module_' . $moduleName)) {
+									// create a link to the initialisation-function for the module-class
+									$newClass = create_function('&$SqlConnection, &$Translation, &$Config, &$User, &$ComaLib, &$ComaLata', 'return new Admin_Module_' . $moduleName . '(&$SqlConnection, &$Translation, &$Config, &$User, &$ComaLib, &$ComaLata);');
+									// create the module-class
+									$moduleAdminInterface = $newClass($sqlConnection, $translation, $config, $user, $lib, $output);
+									if(isset($moduleAdminInterface)) {
+										$text = $moduleAdminInterface->GetPage($action);
+										$title = $moduleAdminInterface->GetTitle();
+									}
+								} 
+							}
+						}
+						else {
+							$text = 'You have no access rights!';
+							$title = 'Access denied';
+						}
+					}
+					else {		
+						// Load the admincontrol-class (system-overview)
+						include_once(__ROOT__ . '/classes/user/user_usercontrol.php');
+						
+						$title = $translation->GetTranslation('usercontrol');
+						$adminClass = new User_UserControl($sqlConnection, $translation, $config, $user, $lib, $output);
+						$text = $adminClass->GetPage($action);
+					}
+					break;
 			}
 			break;
 		
@@ -158,9 +232,28 @@
 	
 	while ($menu = mysql_fetch_object($menus)) {
 		
-		// TODO: is this really necessary? or is it stealing time?... ;-)
-		if($output->ReplacementExists('MENU_' . $menu->menu_name, true))
-			$output->SetReplacement('MENU_' . $menu->menu_name, $outputpage->GenerateMenu($menu->menu_id));
+		if (empty($menuArray)) { 
+			if($output->ReplacementExists('MENU_' . $menu->menu_name, true))
+				$output->SetReplacement('MENU_' . $menu->menu_name, $outputpage->GenerateMenu($menu->menu_id));
+		}
+		else {
+			if ($menu->menu_name != 'DEFAULT') {
+				if($output->ReplacementExists('MENU_' . $menu->menu_name, true))
+					$output->SetReplacement('MENU_' . $menu->menu_name, $outputpage->GenerateMenu($menu->menu_id));
+			}
+			else {
+				$menu = array();
+	
+				foreach($menuArray as $part) {
+					if($page == $part[1])
+						$linkStyle = ' class="actual"';
+					else
+						$linkStyle = '';
+					$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'special.php?page=userinterface&amp;subpage=' . $part[1], 'CSS_ID' => '', 'LINK_STYLE' => $linkStyle);
+				}
+				$output->SetReplacement('MENU_DEFAULT', $menu);
+			}
+		}
 	}
 	
 	// Work throug all modules in the text of the page

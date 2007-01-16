@@ -17,7 +17,7 @@
  	/**
 	 * @ignore
 	 */
-	require_once('./classes/admin/admin.php');
+	require_once __ROOT__ . '/classes/admin/admin.php';
 	
 	/**
 	 * @package ComaCMS

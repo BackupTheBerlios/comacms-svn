@@ -19,8 +19,8 @@
  	/**
 	 * @ignore
 	 */
-	require_once('classes/admin/admin_module.php');
-	require_once('modules/news/news.class.php');
+	require_once __ROOT__ . 'classes/admin/admin_module.php';
+	require_once __ROOT__ . 'modules/news/news.class.php';
 	 	
 	/**
 	 * @package ComaCMS

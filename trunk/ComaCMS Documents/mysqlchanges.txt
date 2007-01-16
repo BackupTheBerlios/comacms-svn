@@ -448,3 +448,11 @@ ALTER TABLE comacms_pages CHANGE page_name page_name VARCHAR( 255 ) NOT NULL;
 #Made topic and location field a bit bigger
 ALTER TABLE comacms_dates CHANGE date_topic date_topic TEXT NOT NULL ,
 CHANGE date_location date_location VARCHAR( 255 ) NOT NULL;
+
+#r378
+#changed isAdmin from enum('y', 'n') to bool
+#changed default value for activated
+#added isAuthor field
+ALTER TABLE `comacms_users` CHANGE `user_admin` `user_admin` BOOL NULL DEFAULT '0';
+ALTER TABLE `comacms_users` CHANGE `user_activated` `user_activated` TINYINT( 1 ) NULL DEFAULT '0';
+ALTER TABLE `comacms_users` ADD `user_author` BOOL NULL DEFAULT '0' AFTER `user_admin` ;

@@ -23,6 +23,7 @@
 	
 	/**
 	 * @package ComaCMS
+	 * @subpackage AdminInterface
 	 */
 	class Admin_AdminControl extends Admin {
  	 

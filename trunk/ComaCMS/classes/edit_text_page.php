@@ -24,11 +24,12 @@
 	 * @package ComaCMS
 	 */
 	class Edit_Text_Page_ {
+		
 		/**
 		 * @access public
+		 * @param integer $page_id
+		 * @param integer $history_id
 		 * @return void
-		 * @param integer page_id
-		 * @param integer history_id
 		 */
 		function NewPage($page_id, $history_id = 0) {
 			$sql = "SELECT *

@@ -21,131 +21,149 @@
 	define('COMACMS_RUN', true);
  
 	include('common.php');
-	$outputpage = new OutputPage($sqlConnection, $config, $translation, $output, $user);
 	
-
-	include(__ROOT__ . '/classes/registration.php');
+	// Initialize outputpage
+	$outputpage = new OutputPage($sqlConnection, $config, $translation, $output, $user);
 	
 	if(!isset($page))
 		header('Locaction: index.php');
-		
+	
+	// Initialize Variables
 	$text = '';
 	$title = '';
 	$path = '';
-	if($page == 'login') {
-		$error = GetPostOrGet('error');
-		$title = "Login";
-		$redirection = GetPostOrGet('redirect');
-		$action = GetPostOrGet('action');
+	
+	// Switch between the subpages
+	switch ($page) {
+		case 'login':
+			$error = GetPostOrGet('error');
+			$title = "Login";
+			$redirection = GetPostOrGet('redirect');
+			$action = GetPostOrGet('action');
+			
+			$text = "<form method=\"post\" action=\"admin.php\">
+				<input type=\"hidden\" name=\"action\" value=\"$action\" />
+				<input type=\"hidden\" name=\"page\" value=\"$redirection\" />
+				<fieldset>
+					<legend>Login</legend>
+					<div class=\"row\">
+						<label for=\"login_name\">
+							<strong>" . $translation->GetTranslation('loginname') . ":</strong>" . (($error == '1') ? "\r\n\t\t\t\t\t\t<span class=\"error\">" . $translation->GetTranslation('the_login_was_not_typed_in') . "</span>\r\n\t\t\t\t\t\t" : '') . (($error == '3') ? "\r\n\t\t\t\t\t\t<span class=\"error\">" . $translation->GetTranslation('you_did_not_make_any_inputs') . "</span>\r\n\t\t\t\t\t\t" : '') . (($error == '4') ? "\r\n\t\t\t\t\t\t<span class=\"error\">" . $translation->GetTranslation('the_user_and(or)_the_password_are_wrong') . "</span>\r\n\t\t\t\t\t\t" : '') . (($error == '5') ? "\r\n\t\t\t\t\t\t<span class=\"error\">" . $translation->GetTranslation('the_user_is_not_activated') . "</span>\r\n\t\t\t\t\t\t" : '') . "
+							<span class=\"info\">" . $translation->GetTranslation('this_is_your_nickname_not_your_showname') . "</span>
+						</label>
+						<input type=\"text\" name=\"login_name\" id=\"login_name\" />
+					</div>
+					<div class=\"row\">
+						<label for=\"login_password\">
+							<strong>" . $translation->GetTranslation('password') . "</strong>" . (($error == '2') ? "\r\n\t\t\t\t\t\t<span class=\"error\">" . $translation->GetTranslation('the_password_was_not_typed_in')."</span>\r\n\t\t\t\t\t\t" : '') . "
+							<span class=\"info\">" . $translation->GetTranslation('this_is_your_loginpassword') . "</span>
+						</label>
+						<input type=\"password\" name=\"login_password\" id=\"login_password\" />
+					</div>
+					<div class=\"row\">
+						<input type=\"submit\" value=\"" . $translation->GetTranslation('login') . "\" class=\"button\"/>
+					</div>
+				</fieldset>
+			</form>";
+			break;
 		
-		$text = "<form method=\"post\" action=\"admin.php\">
-			<input type=\"hidden\" name=\"action\" value=\"$action\" />
-			<input type=\"hidden\" name=\"page\" value=\"$redirection\" />
-			<fieldset>
-				<legend>Login</legend>
-				<div class=\"row\">
-					<label for=\"login_name\">
-						<strong>" . $translation->GetTranslation('loginname') . ":</strong>" . (($error == '1') ? "\r\n\t\t\t\t\t\t<span class=\"error\">" . $translation->GetTranslation('the_login_was_not_typed_in') . "</span>\r\n\t\t\t\t\t\t" : '') . (($error == '3') ? "\r\n\t\t\t\t\t\t<span class=\"error\">" . $translation->GetTranslation('you_did_not_make_any_inputs') . "</span>\r\n\t\t\t\t\t\t" : '') . (($error == '4') ? "\r\n\t\t\t\t\t\t<span class=\"error\">" . $translation->GetTranslation('the_user_and(or)_the_password_are_wrong') . "</span>\r\n\t\t\t\t\t\t" : '') . (($error == '5') ? "\r\n\t\t\t\t\t\t<span class=\"error\">" . $translation->GetTranslation('the_user_is_not_activated') . "</span>\r\n\t\t\t\t\t\t" : '') . "
-						<span class=\"info\">" . $translation->GetTranslation('this_is_your_nickname_not_your_showname') . "</span>
-					</label>
-					<input type=\"text\" name=\"login_name\" id=\"login_name\" />
-				</div>
-				<div class=\"row\">
-					<label for=\"login_password\">
-						<strong>" . $translation->GetTranslation('password') . "</strong>" . (($error == '2') ? "\r\n\t\t\t\t\t\t<span class=\"error\">" . $translation->GetTranslation('the_password_was_not_typed_in')."</span>\r\n\t\t\t\t\t\t" : '') . "
-						<span class=\"info\">" . $translation->GetTranslation('this_is_your_loginpassword') . "</span>
-					</label>
-					<input type=\"password\" name=\"login_password\" id=\"login_password\" />
-				</div>
-				<div class=\"row\">
-					<input type=\"submit\" value=\"" . $translation->GetTranslation('login') . "\" class=\"button\"/>
-				</div>
-			</fieldset>
-		</form>";
-	}
-	elseif($page == 'register') {
-		$Registration = new Registration($sqlConnection, $translation, $config);
-		$title = 'Registration';
-		$text = $Registration->GetPage(GetPostOrGet('action'));
-	}
-	elseif($page == '404') {	
-		$want = GetPostOrGet('want');
-		$title = 'Seite nicht gefunden.';
-		$text = "Die Seite mit dem Namen &quot;$want&quot; wurde leider nicht gefunden.<br />
-			Falls die Seite aber da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.";
-	}
-	elseif($page == '410') {	//Gone/Deleted
-		$title = 'Seite gel&ouml;scht';
-		$text = 'Die Seite wurde leider gel&ouml;scht. <br />
-			Falls die Seite dennoch da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.'; 
-	}
-	elseif($page == 'image') {
+		case 'register':
+			include_once(__ROOT__ . '/classes/registration.php');
+			$Registration = new Registration($sqlConnection, $translation, $config);
+			$title = 'Registration';
+			$text = $Registration->GetPage(GetPostOrGet('action'));
+			break;
 		
-		$imageID = GetPostOrGet('id');
-		$imageFile = GetPostOrGet('file');
-		if(is_numeric($imageID) || !empty($imageFile)) {
-			$title = 'Bild';
-			$condition = 'file_id = ' . $imageID;
-			if(empty($imageID))
-				$condition = "file_name = '$imageFile'";
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "files
-				WHERE $condition
-				LIMIT 0,1";
-			$imageResult = $sqlConnection->SqlQuery($sql);
-			if($imageData = mysql_fetch_object($imageResult)) {
-				$text = "<img src=\"" . generateUrl($imageData->file_path) ."\" class=\"pureimage\"/>";
+		case '404':
+			$want = GetPostOrGet('want');
+			$title = 'Seite nicht gefunden.';
+			$text = "Die Seite mit dem Namen &quot;$want&quot; wurde leider nicht gefunden.<br />
+				Falls die Seite aber da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.";
+			break;
+		
+		case '410':
+			$title = 'Seite gel&ouml;scht';
+			$text = 'Die Seite wurde leider gel&ouml;scht. <br />
+				Falls die Seite dennoch da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.';
+			break;
+		
+		case 'image':
+			
+			include_once(__ROOT__ . '/system/functions.php');
+			$imageID = GetPostOrGet('id');
+			$imageFile = GetPostOrGet('file');
+			if(is_numeric($imageID) || !empty($imageFile)) {
+				$title = 'Bild';
+				$condition = 'file_id = ' . $imageID;
+				if(empty($imageID))
+					$condition = "file_name = '$imageFile'";
+				$sql = "SELECT *
+					FROM " . DB_PREFIX . "files
+					WHERE $condition
+					LIMIT 0,1";
+				$imageResult = $sqlConnection->SqlQuery($sql);
+				if($imageData = mysql_fetch_object($imageResult)) {
+					$text = "<img src=\"" . generateUrl($imageData->file_path) ."\" class=\"pureimage\"/>";
+				}
 			}
-		}
-	}
-	elseif($page == 'module') {
-		// Get the name of Module to show
-		$moduleName = GetPostOrGet('moduleName');
-		if(file_exists('./modules/' . $moduleName . '/' . $moduleName . '_module.php'))
-			/**
-			 * @ignore
-			 */
-			include_once('./modules/' . $moduleName . '/' . $moduleName . '_module.php');
-		// If the menu is activated it's class should be created
-		// check if the module-class is already created
-		if(!isset($$moduleName)) {
-			// is the module-class available?
-			if(class_exists('Module_' . $moduleName)) {
-				// create a link to the initialisation-function for the module-class
-				$newClass = create_function('&$SqlConnection, &$User, &$Translation, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Translation, &$Config, &$ComaLate, &$ComaLib);');
-				// create the module-class
-				$$moduleName = $newClass($sqlConnection, $user, $translation, $config, $output, $lib);
+			break;
+		
+		case 'module':
+			// Get the name of Module to show
+			$moduleName = GetPostOrGet('moduleName');
+			if(file_exists('./modules/' . $moduleName . '/' . $moduleName . '_module.php'))
+				/**
+				 * @ignore
+				 */
+				include_once('./modules/' . $moduleName . '/' . $moduleName . '_module.php');
+			// If the menu is activated it's class should be created
+			// check if the module-class is already created
+			if(!isset($$moduleName)) {
+				// is the module-class available?
+				if(class_exists('Module_' . $moduleName)) {
+					// create a link to the initialisation-function for the module-class
+					$newClass = create_function('&$SqlConnection, &$User, &$Translation, &$Config, &$ComaLate, &$ComaLib', 'return new Module_' . $moduleName . '(&$SqlConnection, &$User, &$Translation, &$Config, &$ComaLate, &$ComaLib);');
+					// create the module-class
+					$$moduleName = $newClass($sqlConnection, $user, $translation, $config, $output, $lib);
+				}
 			}
-		}
-		// check again if the module-class is available (it should be so)
-		if (isset($$moduleName)) {
-			// Get Text of the module
-			$text = $$moduleName->GetPage(GetPostOrGet('action'));
-			$title = $$moduleName->GetTitle();
-			$path = "<a href=\"special.php?page={$page}&amp;moduleName={$moduleName}\">{$title}</a>";
-		}
-	}
-	if($text == '') {
-		header('Location: index.php');
-		die();
+			// check again if the module-class is available (it should be so)
+			if (isset($$moduleName)) {
+				// Get Text of the module
+				$text = $$moduleName->GetPage(GetPostOrGet('action'));
+				$title = $$moduleName->GetTitle();
+				$path = "<a href=\"special.php?page={$page}&amp;moduleName={$moduleName}\">{$title}</a>";
+			}
+			break;
+		
+		default:
+			header('Location: index.php');
+			die();
 	}
 	
+	// Set the path if it is not done now
 	if($path == '')
 		$path = "<a href=\"special.php?page=$page\">$title</a>";
 	
-	$output->Title = $config->Get('pagename') . ' - ' . $title;
+	// Set replacements and variables for ComaLate
+	$output->Title = $config->Get('pagename', 'ComaCMS') . ' - ' . $title;
 	$output->SetReplacement('TEXT', $text);
 	$output->SetReplacement('PATH', $path);
 	$output->SetCondition('notathome', true);
 	
+	//  Get and generate the menus for the page
 	$sql = "SELECT menu_name, menu_id
 		FROM " . DB_PREFIX . "menu";
 	$menus = $sqlConnection->SqlQuery($sql);
+	
 	while ($menu = mysql_fetch_object($menus)) {
+		
+		// TODO: is this really necessary? or is it stealing time?... ;-)
 		if($output->ReplacementExists('MENU_' . $menu->menu_name, true))
 			$output->SetReplacement('MENU_' . $menu->menu_name, $outputpage->GenerateMenu($menu->menu_id));
 	}
 	
+	// Work throug all modules in the text of the page
 	$modules = array();
 	// get the activated modules
 	$modulesActivated = unserialize ($config->Get('modules_activated'));
@@ -189,6 +207,8 @@
 			// replace the module-call with the output of the module
 			$outputpage->Text = str_replace($module['identifer'], $$moduleName->UseModule($module['identifer'], str_replace('&amp;', '&', $moduleParameter)), $outputpage->Text);
 	}
+	
+	// Work throug all modulecalls in the template
 	// prevent unnecesary runs
 	$modules = array();
 	// search for Modulematches in template
@@ -228,6 +248,7 @@
 			$output->Template = str_replace($module['identifer'], $$moduleName->UseModule($module['identifer'], str_replace('&amp;', '&', $moduleParameter)), $output->Template);
 	}
 	
+	// Generate Output and return it to the waiting client
 	$output->GenerateOutput();
 	echo $output->GeneratedOutput;
 	echo "\r\n<!-- rendered in " . round(getmicrotime(microtime()) - getmicrotime($starttime), 4) . ' seconds with ' . $sqlConnection->QueriesCount .' SQL queries -->';

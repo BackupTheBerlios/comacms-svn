@@ -27,6 +27,7 @@
 		var $_ParentIDPages = array();
 		var $_ParentIDPagesNonDeleted = array();
 		var $_NextSortID = array();
+		
 		/**
 		 * @param SqlConnection SqlConnection
 		 * @param User User

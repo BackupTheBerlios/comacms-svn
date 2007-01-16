@@ -1,6 +1,7 @@
 <?php
 /**
  * @package ComaCMS
+ * @subpackage AdminInterface
  * @copyright (C) 2005-2006 The ComaCMS-Team
  * This file contains (nearly) all subsites in the admin-interface
  */

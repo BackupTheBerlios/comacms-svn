@@ -1,6 +1,7 @@
 <?php
 /**
  * @package ComaCMS
+ * @subpackage AdminInterface
  * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
@@ -126,6 +127,7 @@
 				$action = 'style';
 			$text = $adminClass->GetPage($action);
 			break;
+		
 		case 'languages':
 			// Load the languages-class
 			include_once(__ROOT__ . '/classes/admin/admin_languages.php');
@@ -134,17 +136,20 @@
 			$adminClass = new Admin_Languages($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);
 			break;
+		
 		case 'users':
 			// TODO: make a class out of the context of this
 			include_once(__ROOT__ . '/system/admin_pages.php');
 			$title = $translation->GetTranslation('users');
 			$text = page_users();
 			break;
+		
 		case 'logout':
 			// call the logout and redirect to the 
 			$user->Logout();
 			header("Location: index.php");
 			die();
+		
 		case 'preferences':
 			// Load the preferences-class (preferences-management)
 			include_once (__ROOT__ . '/classes/admin/admin_preferences.php');
@@ -153,6 +158,7 @@
 			$adminClass = new Admin_Preferences($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);
 			break;
+		
 		case 'files':
 			// Load the files-class (file-management)
 			include_once(__ROOT__ . '/classes/admin/admin_files.php');
@@ -161,6 +167,7 @@
 			$adminClass = new Admin_Files($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);
 			break;
+		
 		case 'pagestructure':
 			// Load the pagestructure-class (manage & edit all pages)
 			include_once(__ROOT__ . '/classes/admin/admin_pagestructure.php');
@@ -169,6 +176,7 @@
 			$adminClass = new Admin_PageStructure($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);
 			break;
+		
 		case 'groups':
 			// Load the groups-class (groups-management)		
 			include_once(__ROOT__  . '/classes/admin/admin_groups.php');
@@ -177,6 +185,7 @@
 			$adminClass = new Admin_Groups($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);
 			break;
+		
 		case 'rights':
 			// Load the rights-class (access-management)
 			include_once(__ROOT__ . '/classes/admin/admin_rights.php');
@@ -185,6 +194,7 @@
 			$adminClass = new Admin_Rights($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);
 			break;
+		
 		case 'menueditor':
 			// Load the menu-class (menu-management)
 			include_once(__ROOT__ . '/classes/admin/admin_menu.php');
@@ -193,6 +203,7 @@
 			$adminClass = new Admin_Menu($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);			
 			break;
+		
 		case 'modules':	
 			// Load te modles-class (module-management)
 			include_once(__ROOT__ . '/classes/admin/admin_modules.php');
@@ -201,6 +212,7 @@
 			$adminClass = new Admin_Modules($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);
 			break;
+		
 		case 'admincontrol': 		
 		default:
 			if(substr($page, 0, 7) == 'module_') {
@@ -231,6 +243,7 @@
 				$text = $adminClass->GetPage();
 			}
 			break;
+		
 	}
 	
 	$menu = array();

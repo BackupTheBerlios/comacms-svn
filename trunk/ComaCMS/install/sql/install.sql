@@ -170,10 +170,11 @@
 			user_showname varchar(40) NOT NULL default '',
 			user_password varchar(100) NOT NULL default '',
 			user_registerdate varchar(20) default '0',
-			user_admin enum('y','n') default 'n',
+			user_admin bool NULL default '0',
+			user_author bool NULL default '0',
 			user_icq varchar(12) default '0',
 			user_email varchar(200) NOT NULL default '',
-			user_activated bool NULL default '1',
+			user_activated bool NULL default '0',
 			user_activationcode varchar(32) NULL,
 			PRIMARY KEY  (user_id)
 		);

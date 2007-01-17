@@ -29,7 +29,7 @@
  	 
 		/**
 	 	 * @access public
-	 	 * @param string Action This parameter is without a function
+	 	 * @param string $Action This parameter is without a function
 		 * @return string
 	 	 */
 		function GetPage($Action = '') {

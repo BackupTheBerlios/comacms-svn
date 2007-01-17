@@ -135,12 +135,12 @@
 			$count = 0;
 			
 			foreach ($pages as $date => $page) {
-   				$logData[] = array('LOG_DATE' => date($dateFormat, $date),
-						'LOG_PAGE_URL'  =>  $page[0],
-						'LOG_PAGE_TITLE' => $page[1],
-						'LOG_PAGE_NAME' => rawurldecode($page[0]),
-						'LOG_USER' => $this->_ComaLib->GetUserByID($page[2]),
-						'LOG_COMMENT' => $page[3]);
+   				$logData[] = array( 'LOG_DATE' => date($dateFormat, $date),
+									'LOG_PAGE_URL'  =>  $page[0],
+									'LOG_PAGE_TITLE' => $page[1],
+									'LOG_PAGE_NAME' => rawurldecode($page[0]),
+									'LOG_USER' => $this->_ComaLib->GetUserByID($page[2]),
+									'LOG_COMMENT' => $page[3]);
 				if($count++ == 5)
 					break;	
 			}

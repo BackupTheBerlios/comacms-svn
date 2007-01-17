@@ -84,6 +84,11 @@
 				Falls die Seite aber da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.";
 			break;
 		
+		case '401':
+			$title = 'Zugriff verweigert!';
+			$text = 'Sie haben keine Zugriffsrechte zu dieser Seite!';
+			break;
+		
 		case '410':
 			$title = 'Seite gel&ouml;scht';
 			$text = 'Die Seite wurde leider gel&ouml;scht. <br />
@@ -154,6 +159,10 @@
 			$action = GetPostOrGet('action');
 			switch ($subpage) {
 				
+				case 'back_to_homepage':
+					header('Location: index.php');
+					die();
+				
 				case 'logout':
 					// call the logout and redirect to the index 
 					$user->Logout();
@@ -167,9 +176,15 @@
 						$moduleName = substr($page, 7);
 						
 						$access = $config->Get($moduleName. '_author_access');
-						if($access != true && $access != false) {
+						if(!is_bool($access)) {
 							if (file_exists(__ROOT__ . "/modules/{$moduleName}/{$moduleName}_info.php")) {
 								
+								$module = array();
+								include (__ROOR__ . "/modules/{$moduleName}/{$moduleName}_info.php");
+								if (array_key_exists('author_access', $module))
+									$access = $module['author_access'];
+								else
+									$access = false;
 							}
 							else 
 								$access = false;
@@ -194,8 +209,8 @@
 							}
 						}
 						else {
-							$text = 'You have no access rights!';
-							$title = 'Access denied';
+							header('Location: special.php?page=401');
+							die();
 						}
 					}
 					else {		

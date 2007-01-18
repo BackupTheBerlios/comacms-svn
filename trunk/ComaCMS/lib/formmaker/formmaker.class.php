@@ -118,7 +118,7 @@
  										'form_name' => $Name,
  										'action' => $Action,
  										'method' => $Method,
- 										'submit_button' => ((!empty($SubmitValue)) ? '<div class="row"><input type="submit" value="{submit_value}" /></div>' : ''),
+ 										'submit_button' => ((!empty($SubmitValue)) ? '<div class="row"><input type="submit" class="button" value="{submit_value}" /></div>' : ''),
  										'submit_value' => ((!empty($SubmitValue)) ? $SubmitValue : $this->_TodoValue),
  										'fieldset_start' => ((!empty($FieldsetLegend)) ? '<fieldset>' : ''),
  										'fieldset_legend' => ((!empty($FieldsetLegend)) ? '<legend>' . $FieldsetLegend . '</legend>' : ''),

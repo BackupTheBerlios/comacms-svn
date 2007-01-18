@@ -150,8 +150,7 @@
 								<input type=\"password\" name=\"password_repetition\" id=\"password_repetition\" />
 							</div>
 							<div class=\"row\">
-								<input type=\"reset\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('reset') . "\" />
-								<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('save') . "\" />
+								<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('register') . "\" />
 							</div>
 						</fieldset>
 					</form>";

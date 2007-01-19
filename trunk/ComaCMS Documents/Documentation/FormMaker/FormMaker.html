@@ -73,9 +73,12 @@ Source Location: /lib/formmaker/formmaker.class.php<br /><br />
     <li><a href="../FormMaker/FormMaker.html#methodAddHiddenInput">AddHiddenInput</a></li>
     <li><a href="../FormMaker/FormMaker.html#methodAddInput">AddInput</a></li>
     <li><a href="../FormMaker/FormMaker.html#methodAddSelectEntry">AddSelectEntry</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodAddSelectEntrysCode">AddSelectEntrysCode</a></li>
     <li><a href="../FormMaker/FormMaker.html#methodCheckInputs">CheckInputs</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodGenerateMultiFormTemplate">GenerateMultiFormTemplate</a></li>
     <li><a href="../FormMaker/FormMaker.html#methodGenerateOutputs">GenerateOutputs</a></li>
-    <li><a href="../FormMaker/FormMaker.html#methodGenerateTemplate">GenerateTemplate</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodGenerateSingleFormTemplate">GenerateSingleFormTemplate</a></li>
+    <li><a href="../FormMaker/FormMaker.html#methodSetComaLateReplacement">SetComaLateReplacement</a></li>
   </ul>
 </td>
 
@@ -107,13 +110,14 @@ Helps the user to generate a formular and checks the inputs if the user wants it
 
   <hr />
 	<a name="methodFormMaker"></a>
-	<h3>constructor FormMaker <span class="smalllinenumber">[line 45]</span></h3>
+	<h3>constructor FormMaker <span class="smalllinenumber">[line 55]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
 		<code><a href="../FormMaker/FormMaker.html">FormMaker</a> FormMaker(
 string
-$TodoValue)</code>
+$TodoValue, 
+&$SqlConnection)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
@@ -140,13 +144,18 @@ $TodoValue)</code>
         <td><b>$TodoValue</b>&nbsp;&nbsp;</td>
         <td>A value for the langstring todo. It is needed if anywhere is no translation set for an information tag</td>
       </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>&$SqlConnection</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
         </table>
     </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodAddCheck"></a>
-	<h3>method AddCheck <span class="smalllinenumber">[line 193]</span></h3>
+	<h3>method AddCheck <span class="smalllinenumber">[line 216]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -154,9 +163,11 @@ $TodoValue)</code>
 string
 $FormName, string
 $InputName, string
-$CheckType, string
-$ErrorInformation, [string
-$SecondInputName = ''])</code>
+$CheckType, [string
+$ErrorInformation = ''], [string
+$SecondInputName = ''], [string
+$TableName = ''], [string
+$FieldName = ''])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
@@ -203,22 +214,32 @@ $SecondInputName = ''])</code>
         <td><b>$SecondInputName</b>&nbsp;&nbsp;</td>
         <td>The second input if the check needs a compatison to another field</td>
       </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$TableName</b>&nbsp;&nbsp;</td>
+        <td>The name of a mysql table if something should be checked in there</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$FieldName</b>&nbsp;&nbsp;</td>
+        <td>The name of a mysql field if something should be checked in there</td>
+      </tr>
         </table>
     </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodAddForm"></a>
-	<h3>method AddForm <span class="smalllinenumber">[line 101]</span></h3>
+	<h3>method AddForm <span class="smalllinenumber">[line 116]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
 		<code>void AddForm(
 string
-$Name, string
-$Action, string
-$SubmitValue, string
-$FieldsetLegend, [string
+$Name, [string
+$Action = ''], [string
+$SubmitValue = ''], [string
+$FieldsetLegend = ''], [string
 $Method = 'post'])</code>
     </td></tr></table>
     </td></tr></table><br />
@@ -272,7 +293,7 @@ $Method = 'post'])</code>
   </div>
   <hr />
 	<a name="methodAddHiddenInput"></a>
-	<h3>method AddHiddenInput <span class="smalllinenumber">[line 134]</span></h3>
+	<h3>method AddHiddenInput <span class="smalllinenumber">[line 149]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -323,7 +344,7 @@ $Value)</code>
   </div>
   <hr />
 	<a name="methodAddInput"></a>
-	<h3>method AddInput <span class="smalllinenumber">[line 154]</span></h3>
+	<h3>method AddInput <span class="smalllinenumber">[line 170]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -331,9 +352,9 @@ $Value)</code>
 string
 $FormName, string
 $Name, [string
-$Type = 'text'], string
-$NameTranslation, string
-$Information, [string
+$Type = 'text'], [string
+$NameTranslation = ''], [string
+$Information = ''], [string
 $Value = ''])</code>
     </td></tr></table>
     </td></tr></table><br />
@@ -392,7 +413,7 @@ $Value = ''])</code>
   </div>
   <hr />
 	<a name="methodAddSelectEntry"></a>
-	<h3>method AddSelectEntry <span class="smalllinenumber">[line 215]</span></h3>
+	<h3>method AddSelectEntry <span class="smalllinenumber">[line 240]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -454,8 +475,56 @@ $DisplayValue)</code>
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
+	<a name="methodAddSelectEntrysCode"></a>
+	<h3>method AddSelectEntrysCode <span class="smalllinenumber">[line 265]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void AddSelectEntrysCode(
+string
+$FormName, string
+$InputName, string
+$Entrys)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Adds a completely compiled code for the settings<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$FormName</b>&nbsp;&nbsp;</td>
+        <td>The name of the form where the select is in</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$InputName</b>&nbsp;&nbsp;</td>
+        <td>The name of the select input where the code should be pasted</td>
+      </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Entrys</b>&nbsp;&nbsp;</td>
+        <td>The code of the entrys</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
 	<a name="methodCheckInputs"></a>
-	<h3>method CheckInputs <span class="smalllinenumber">[line 238]</span></h3>
+	<h3>method CheckInputs <span class="smalllinenumber">[line 360]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -499,8 +568,53 @@ $GenerateErrorInformations = false])</code>
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
+	<a name="methodGenerateMultiFormTemplate"></a>
+	<h3>method GenerateMultiFormTemplate <span class="smalllinenumber">[line 472]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string GenerateMultiFormTemplate(
+<a href="../ComaLate/ComaLate.html">ComaLate</a>
+&$ComaLate, [bool
+$GiveErrorInformation = false])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Returns the default template and sets replacements for ComaLate<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>The default template</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type"><a href="../ComaLate/ComaLate.html">ComaLate</a>&nbsp;&nbsp;</td>
+        <td><b>&$ComaLate</b>&nbsp;&nbsp;</td>
+        <td>A link to the comalate class to set the replacements for the template</td>
+      </tr>
+          <tr>
+        <td class="type">bool&nbsp;&nbsp;</td>
+        <td><b>$GiveErrorInformation</b>&nbsp;&nbsp;</td>
+        <td>Shall the method give out any errorinformation?</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
 	<a name="methodGenerateOutputs"></a>
-	<h3>method GenerateOutputs <span class="smalllinenumber">[line 378]</span></h3>
+	<h3>method GenerateOutputs <span class="smalllinenumber">[line 437]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -538,12 +652,57 @@ $GiveErrorInformation = false])</code>
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
-	<a name="methodGenerateTemplate"></a>
-	<h3>method GenerateTemplate <span class="smalllinenumber">[line 412]</span></h3>
+	<a name="methodGenerateSingleFormTemplate"></a>
+	<h3>method GenerateSingleFormTemplate <span class="smalllinenumber">[line 519]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>string GenerateTemplate(
+		<code>string GenerateSingleFormTemplate(
+<a href="../ComaLate/ComaLate.html">ComaLate</a>
+&$ComaLate, [bool
+$GiveErrorInformation = false])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Returns the default template and sets replacements for ComaLate<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>The default template</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type"><a href="../ComaLate/ComaLate.html">ComaLate</a>&nbsp;&nbsp;</td>
+        <td><b>&$ComaLate</b>&nbsp;&nbsp;</td>
+        <td>A link to the comalate class to set the replacements for the template</td>
+      </tr>
+          <tr>
+        <td class="type">bool&nbsp;&nbsp;</td>
+        <td><b>$GiveErrorInformation</b>&nbsp;&nbsp;</td>
+        <td>Shall the method give out any errorinformation?</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodSetComaLateReplacement"></a>
+	<h3>method SetComaLateReplacement <span class="smalllinenumber">[line 566]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string SetComaLateReplacement(
 <a href="../ComaLate/ComaLate.html">ComaLate</a>
 &$ComaLate, [bool
 $GiveErrorInformation = false])</code>
@@ -587,7 +746,7 @@ $GiveErrorInformation = false])</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sun, 07 Jan 2007 18:15:58 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Fri, 19 Jan 2007 13:13:36 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
 	      </div>
       </td></tr></table>
     </td>

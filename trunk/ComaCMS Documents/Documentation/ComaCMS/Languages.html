@@ -30,10 +30,6 @@
             <br /><br />
                         <b>Files:</b><br />
       	  <div class="package">
-			<a href="../ComaCMS/_admin.php.html">		admin.php
-		</a><br>
-			<a href="../ComaCMS/_system---admin_pages.php.html">		admin_pages.php
-		</a><br>
 			<a href="../ComaCMS/_classes---comalib.php.html">		comalib.php
 		</a><br>
 			<a href="../ComaCMS/_common.php.html">		common.php
@@ -46,9 +42,9 @@
 		</a><br>
 			<a href="../ComaCMS/_classes---edit_text_page.php.html">		edit_text_page.php
 		</a><br>
-			<a href="../ComaCMS/_system---functions.php.html">		functions.php
-		</a><br>
 			<a href="../ComaCMS/_functions.php.html">		functions.php
+		</a><br>
+			<a href="../ComaCMS/_system---functions.php.html">		functions.php
 		</a><br>
 			<a href="../ComaCMS/_classes---imageconverter.php.html">		imageconverter.php
 		</a><br>
@@ -88,6 +84,8 @@
 	subpackage <b>AdminInterface</b><br>  <div class="package">
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin.php.html">		admin.php
 		</a><br>
+			<a href="../ComaCMS/AdminInterface/_admin.php.html">		admin.php
+		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_admincontrol.php.html">		admin_admincontrol.php
 		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_files.php.html">		admin_files.php
@@ -103,6 +101,8 @@
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_modules.php.html">		admin_modules.php
 		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_pagepreview.php.html">		admin_pagepreview.php
+		</a><br>
+			<a href="../ComaCMS/AdminInterface/_system---admin_pages.php.html">		admin_pages.php
 		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_pagestructure.php.html">		admin_pagestructure.php
 		</a><br>
@@ -191,6 +191,10 @@
 			<a href="../ComaCMS/Sitemap/_modules---sitemap---sitemap_settings.php.html">		sitemap_settings.php
 		</a><br>
 	  </div><br />
+	subpackage <b>UserInterface</b><br>  <div class="package">
+			<a href="../ComaCMS/UserInterface/_classes---admin---admin_user_usercontrol.php.html">		admin_user_usercontrol.php
+		</a><br>
+	  </div><br />
       
       
             <b>Classes:</b><br />
@@ -207,6 +211,9 @@
 	    &nbsp;&nbsp;		<a href="../ComaCMS/AdminInterface/Admin_PageStructure.html">Admin_PageStructure</a><br />
 	    &nbsp;&nbsp;		<a href="../ComaCMS/AdminInterface/Admin_Preferences.html">Admin_Preferences</a><br />
 	    &nbsp;&nbsp;		<a href="../ComaCMS/AdminInterface/Admin_Rights.html">Admin_Rights</a><br />
+	  </div>
+  <div class="package">
+	UserInterface<br />	    &nbsp;&nbsp;		<a href="../ComaCMS/UserInterface/Admin_User_Usercontrol.html">Admin_User_Usercontrol</a><br />
 	  </div>
   <div class="package">
 	Articles<br />	    &nbsp;&nbsp;		<a href="../ComaCMS/Articles/Admin_Module_Articles.html">Admin_Module_Articles</a><br />
@@ -293,7 +300,9 @@ Source Location: /classes/languages.php<br /><br />
 <h3><a href="#class_methods">Methods</a></h3>
 <ul>
     <li><a href="../ComaCMS/Languages.html#methodLanguages">Languages</a></li>
+    <li><a href="../ComaCMS/Languages.html#methodFindAllLangFilesInDirectory">FindAllLangFilesInDirectory</a></li>
     <li><a href="../ComaCMS/Languages.html#methodGetAllLanguages">GetAllLanguages</a></li>
+    <li><a href="../ComaCMS/Languages.html#methodGetExistingLangFiles">GetExistingLangFiles</a></li>
     <li><a href="../ComaCMS/Languages.html#methodLoadAllLanguages">LoadAllLanguages</a></li>
   </ul>
 </td>
@@ -326,7 +335,7 @@ Source Location: /classes/languages.php<br /><br />
 
   <hr />
 	<a name="methodLanguages"></a>
-	<h3>constructor Languages <span class="smalllinenumber">[line 41]</span></h3>
+	<h3>constructor Languages <span class="smalllinenumber">[line 93]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -364,8 +373,44 @@ Source Location: /classes/languages.php<br /><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
+	<a name="methodFindAllLangFilesInDirectory"></a>
+	<h3>method FindAllLangFilesInDirectory <span class="smalllinenumber">[line 128]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void FindAllLangFilesInDirectory(
+string
+$Directory)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Searches in a directory for languagefiles and adds them to local array<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Directory</b>&nbsp;&nbsp;</td>
+        <td>Directory The directory to search in</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
 	<a name="methodGetAllLanguages"></a>
-	<h3>method GetAllLanguages <span class="smalllinenumber">[line 65]</span></h3>
+	<h3>method GetAllLanguages <span class="smalllinenumber">[line 118]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -379,7 +424,38 @@ Source Location: /classes/languages.php<br /><br />
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>return:</b>&nbsp;&nbsp;</td><td>Languagesarray</td>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>LanguagesArray</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodGetExistingLangFiles"></a>
+	<h3>method GetExistingLangFiles <span class="smalllinenumber">[line 147]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>array GetExistingLangFiles(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Returns the local languagefiles list for extern use<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>LoadedLanguageFiles</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
   </tr>
 </table>
 </div>
@@ -390,7 +466,7 @@ Source Location: /classes/languages.php<br /><br />
   </div>
   <hr />
 	<a name="methodLoadAllLanguages"></a>
-	<h3>method LoadAllLanguages <span class="smalllinenumber">[line 49]</span></h3>
+	<h3>method LoadAllLanguages <span class="smalllinenumber">[line 101]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -418,7 +494,7 @@ Source Location: /classes/languages.php<br /><br />
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sun, 07 Jan 2007 18:16:00 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Fri, 19 Jan 2007 13:13:37 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
 	      </div>
       </td></tr></table>
     </td>

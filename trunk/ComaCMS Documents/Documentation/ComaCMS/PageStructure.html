@@ -30,10 +30,6 @@
             <br /><br />
                         <b>Files:</b><br />
       	  <div class="package">
-			<a href="../ComaCMS/_admin.php.html">		admin.php
-		</a><br>
-			<a href="../ComaCMS/_system---admin_pages.php.html">		admin_pages.php
-		</a><br>
 			<a href="../ComaCMS/_classes---comalib.php.html">		comalib.php
 		</a><br>
 			<a href="../ComaCMS/_common.php.html">		common.php
@@ -46,9 +42,9 @@
 		</a><br>
 			<a href="../ComaCMS/_classes---edit_text_page.php.html">		edit_text_page.php
 		</a><br>
-			<a href="../ComaCMS/_system---functions.php.html">		functions.php
-		</a><br>
 			<a href="../ComaCMS/_functions.php.html">		functions.php
+		</a><br>
+			<a href="../ComaCMS/_system---functions.php.html">		functions.php
 		</a><br>
 			<a href="../ComaCMS/_classes---imageconverter.php.html">		imageconverter.php
 		</a><br>
@@ -88,6 +84,8 @@
 	subpackage <b>AdminInterface</b><br>  <div class="package">
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin.php.html">		admin.php
 		</a><br>
+			<a href="../ComaCMS/AdminInterface/_admin.php.html">		admin.php
+		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_admincontrol.php.html">		admin_admincontrol.php
 		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_files.php.html">		admin_files.php
@@ -103,6 +101,8 @@
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_modules.php.html">		admin_modules.php
 		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_pagepreview.php.html">		admin_pagepreview.php
+		</a><br>
+			<a href="../ComaCMS/AdminInterface/_system---admin_pages.php.html">		admin_pages.php
 		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_pagestructure.php.html">		admin_pagestructure.php
 		</a><br>
@@ -191,6 +191,10 @@
 			<a href="../ComaCMS/Sitemap/_modules---sitemap---sitemap_settings.php.html">		sitemap_settings.php
 		</a><br>
 	  </div><br />
+	subpackage <b>UserInterface</b><br>  <div class="package">
+			<a href="../ComaCMS/UserInterface/_classes---admin---admin_user_usercontrol.php.html">		admin_user_usercontrol.php
+		</a><br>
+	  </div><br />
       
       
             <b>Classes:</b><br />
@@ -207,6 +211,9 @@
 	    &nbsp;&nbsp;		<a href="../ComaCMS/AdminInterface/Admin_PageStructure.html">Admin_PageStructure</a><br />
 	    &nbsp;&nbsp;		<a href="../ComaCMS/AdminInterface/Admin_Preferences.html">Admin_Preferences</a><br />
 	    &nbsp;&nbsp;		<a href="../ComaCMS/AdminInterface/Admin_Rights.html">Admin_Rights</a><br />
+	  </div>
+  <div class="package">
+	UserInterface<br />	    &nbsp;&nbsp;		<a href="../ComaCMS/UserInterface/Admin_User_Usercontrol.html">Admin_User_Usercontrol</a><br />
 	  </div>
   <div class="package">
 	Articles<br />	    &nbsp;&nbsp;		<a href="../ComaCMS/Articles/Admin_Module_Articles.html">Admin_Module_Articles</a><br />
@@ -473,7 +480,7 @@ Source Location: /classes/pagestructure.php<br /><br />
 
   <hr />
 	<a name="methodPageStructure"></a>
-	<h3>constructor PageStructure <span class="smalllinenumber">[line 34]</span></h3>
+	<h3>constructor PageStructure <span class="smalllinenumber">[line 35]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -512,7 +519,7 @@ $ComaLib)</code>
   </div>
   <hr />
 	<a name="methodAddInlineMenuDownload"></a>
-	<h3>method AddInlineMenuDownload <span class="smalllinenumber">[line 575]</span></h3>
+	<h3>method AddInlineMenuDownload <span class="smalllinenumber">[line 576]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -551,7 +558,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodAddInlineMenuInternLink"></a>
-	<h3>method AddInlineMenuInternLink <span class="smalllinenumber">[line 543]</span></h3>
+	<h3>method AddInlineMenuInternLink <span class="smalllinenumber">[line 544]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -590,7 +597,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodAddInlineMenuLink"></a>
-	<h3>method AddInlineMenuLink <span class="smalllinenumber">[line 527]</span></h3>
+	<h3>method AddInlineMenuLink <span class="smalllinenumber">[line 528]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -629,7 +636,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodAddInlineMenuText"></a>
-	<h3>method AddInlineMenuText <span class="smalllinenumber">[line 559]</span></h3>
+	<h3>method AddInlineMenuText <span class="smalllinenumber">[line 560]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -662,7 +669,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodAddNewPage"></a>
-	<h3>method AddNewPage <span class="smalllinenumber">[line 40]</span></h3>
+	<h3>method AddNewPage <span class="smalllinenumber">[line 41]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -725,7 +732,7 @@ $Comment)</code>
   </div>
   <hr />
 	<a name="methodChangePageAccess"></a>
-	<h3>method ChangePageAccess <span class="smalllinenumber">[line 242]</span></h3>
+	<h3>method ChangePageAccess <span class="smalllinenumber">[line 243]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -758,7 +765,7 @@ $NewPageAccess)</code>
   </div>
   <hr />
 	<a name="methodChangePageName"></a>
-	<h3>method ChangePageName <span class="smalllinenumber">[line 253]</span></h3>
+	<h3>method ChangePageName <span class="smalllinenumber">[line 254]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -791,7 +798,7 @@ $NewPageName)</code>
   </div>
   <hr />
 	<a name="methodChangePageParentID"></a>
-	<h3>method ChangePageParentID <span class="smalllinenumber">[line 264]</span></h3>
+	<h3>method ChangePageParentID <span class="smalllinenumber">[line 265]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -824,7 +831,7 @@ $NewPageParentID)</code>
   </div>
   <hr />
 	<a name="methodClearMenu"></a>
-	<h3>method ClearMenu <span class="smalllinenumber">[line 378]</span></h3>
+	<h3>method ClearMenu <span class="smalllinenumber">[line 379]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -851,7 +858,7 @@ $MenuID = 1])</code>
   </div>
   <hr />
 	<a name="methodCreateInlineMenu"></a>
-	<h3>method CreateInlineMenu <span class="smalllinenumber">[line 446]</span></h3>
+	<h3>method CreateInlineMenu <span class="smalllinenumber">[line 447]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -878,7 +885,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodGenerateInlineMenu"></a>
-	<h3>method GenerateInlineMenu <span class="smalllinenumber">[line 583]</span></h3>
+	<h3>method GenerateInlineMenu <span class="smalllinenumber">[line 584]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -905,7 +912,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodGenerateMenu"></a>
-	<h3>method GenerateMenu <span class="smalllinenumber">[line 353]</span></h3>
+	<h3>method GenerateMenu <span class="smalllinenumber">[line 354]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -938,7 +945,7 @@ $MenuID = 1])</code>
   </div>
   <hr />
 	<a name="methodGetInlineMenuData"></a>
-	<h3>method GetInlineMenuData <span class="smalllinenumber">[line 456]</span></h3>
+	<h3>method GetInlineMenuData <span class="smalllinenumber">[line 457]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -971,7 +978,7 @@ $Field)</code>
   </div>
   <hr />
 	<a name="methodGetInlineMenuEntriesCount"></a>
-	<h3>method GetInlineMenuEntriesCount <span class="smalllinenumber">[line 198]</span></h3>
+	<h3>method GetInlineMenuEntriesCount <span class="smalllinenumber">[line 199]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -998,7 +1005,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodGetPageData"></a>
-	<h3>method GetPageData <span class="smalllinenumber">[line 340]</span></h3>
+	<h3>method GetPageData <span class="smalllinenumber">[line 341]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1031,7 +1038,7 @@ $Field = 'name'])</code>
   </div>
   <hr />
 	<a name="methodGetPageDataArray"></a>
-	<h3>method GetPageDataArray <span class="smalllinenumber">[line 147]</span></h3>
+	<h3>method GetPageDataArray <span class="smalllinenumber">[line 148]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1067,7 +1074,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodGetPageHistory"></a>
-	<h3>method GetPageHistory <span class="smalllinenumber">[line 178]</span></h3>
+	<h3>method GetPageHistory <span class="smalllinenumber">[line 179]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1109,7 +1116,7 @@ $Count = -1])</code>
   </div>
   <hr />
 	<a name="methodInlineMenuEntryMoveDown"></a>
-	<h3>method InlineMenuEntryMoveDown <span class="smalllinenumber">[line 632]</span></h3>
+	<h3>method InlineMenuEntryMoveDown <span class="smalllinenumber">[line 633]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1142,7 +1149,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodInlineMenuEntryMoveUp"></a>
-	<h3>method InlineMenuEntryMoveUp <span class="smalllinenumber">[line 620]</span></h3>
+	<h3>method InlineMenuEntryMoveUp <span class="smalllinenumber">[line 621]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1175,7 +1182,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodInlineMenuExists"></a>
-	<h3>method InlineMenuExists <span class="smalllinenumber">[line 441]</span></h3>
+	<h3>method InlineMenuExists <span class="smalllinenumber">[line 442]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1202,7 +1209,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodLoadData"></a>
-	<h3>method LoadData <span class="smalllinenumber">[line 127]</span></h3>
+	<h3>method LoadData <span class="smalllinenumber">[line 128]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1229,7 +1236,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodLoadInlineMenuData"></a>
-	<h3>method LoadInlineMenuData <span class="smalllinenumber">[line 426]</span></h3>
+	<h3>method LoadInlineMenuData <span class="smalllinenumber">[line 427]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1256,7 +1263,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodLoadInlineMenuEntry"></a>
-	<h3>method LoadInlineMenuEntry <span class="smalllinenumber">[line 672]</span></h3>
+	<h3>method LoadInlineMenuEntry <span class="smalllinenumber">[line 673]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1283,7 +1290,7 @@ $EntryID)</code>
   </div>
   <hr />
 	<a name="methodLoadNextInlineMenuSortID"></a>
-	<h3>method LoadNextInlineMenuSortID <span class="smalllinenumber">[line 497]</span></h3>
+	<h3>method LoadNextInlineMenuSortID <span class="smalllinenumber">[line 498]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1310,7 +1317,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodLoadParentIDs"></a>
-	<h3>method LoadParentIDs <span class="smalllinenumber">[line 275]</span></h3>
+	<h3>method LoadParentIDs <span class="smalllinenumber">[line 276]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1326,7 +1333,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodLogPage"></a>
-	<h3>method LogPage <span class="smalllinenumber">[line 209]</span></h3>
+	<h3>method LogPage <span class="smalllinenumber">[line 210]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1359,7 +1366,7 @@ $LogMessage)</code>
   </div>
   <hr />
 	<a name="methodMoveSubPagesFromTo"></a>
-	<h3>method MoveSubPagesFromTo <span class="smalllinenumber">[line 325]</span></h3>
+	<h3>method MoveSubPagesFromTo <span class="smalllinenumber">[line 326]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1392,7 +1399,7 @@ $NewParentPageID)</code>
   </div>
   <hr />
 	<a name="methodMoveSubPageTo"></a>
-	<h3>method MoveSubPageTo <span class="smalllinenumber">[line 332]</span></h3>
+	<h3>method MoveSubPageTo <span class="smalllinenumber">[line 333]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1425,7 +1432,7 @@ $NewParentPageID)</code>
   </div>
   <hr />
 	<a name="methodPageExists"></a>
-	<h3>method PageExists <span class="smalllinenumber">[line 300]</span></h3>
+	<h3>method PageExists <span class="smalllinenumber">[line 301]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1452,7 +1459,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodPageHasSubPages"></a>
-	<h3>method PageHasSubPages <span class="smalllinenumber">[line 309]</span></h3>
+	<h3>method PageHasSubPages <span class="smalllinenumber">[line 310]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1485,7 +1492,7 @@ $IgnoreDeleted = true])</code>
   </div>
   <hr />
 	<a name="methodPageStructurePulldown"></a>
-	<h3>method PageStructurePulldown <span class="smalllinenumber">[line 396]</span></h3>
+	<h3>method PageStructurePulldown <span class="smalllinenumber">[line 397]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1545,7 +1552,7 @@ $Selected = -1])</code>
   </div>
   <hr />
 	<a name="methodRemoveAcessDeletedPages"></a>
-	<h3>method RemoveAcessDeletedPages <span class="smalllinenumber">[line 414]</span></h3>
+	<h3>method RemoveAcessDeletedPages <span class="smalllinenumber">[line 415]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1561,7 +1568,7 @@ $Selected = -1])</code>
   </div>
   <hr />
 	<a name="methodRemoveInlineMenuEntry"></a>
-	<h3>method RemoveInlineMenuEntry <span class="smalllinenumber">[line 666]</span></h3>
+	<h3>method RemoveInlineMenuEntry <span class="smalllinenumber">[line 667]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1588,7 +1595,7 @@ $EntryID)</code>
   </div>
   <hr />
 	<a name="methodRemoveInlineMenuImage"></a>
-	<h3>method RemoveInlineMenuImage <span class="smalllinenumber">[line 484]</span></h3>
+	<h3>method RemoveInlineMenuImage <span class="smalllinenumber">[line 485]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1615,7 +1622,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodSaveInlineMenuDownload"></a>
-	<h3>method SaveInlineMenuDownload <span class="smalllinenumber">[line 567]</span></h3>
+	<h3>method SaveInlineMenuDownload <span class="smalllinenumber">[line 568]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1660,7 +1667,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodSaveInlineMenuInternLink"></a>
-	<h3>method SaveInlineMenuInternLink <span class="smalllinenumber">[line 535]</span></h3>
+	<h3>method SaveInlineMenuInternLink <span class="smalllinenumber">[line 536]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1705,7 +1712,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodSaveInlineMenuLink"></a>
-	<h3>method SaveInlineMenuLink <span class="smalllinenumber">[line 519]</span></h3>
+	<h3>method SaveInlineMenuLink <span class="smalllinenumber">[line 520]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1750,7 +1757,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodSaveInlineMenuText"></a>
-	<h3>method SaveInlineMenuText <span class="smalllinenumber">[line 551]</span></h3>
+	<h3>method SaveInlineMenuText <span class="smalllinenumber">[line 552]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1789,7 +1796,7 @@ $PageID)</code>
   </div>
   <hr />
 	<a name="methodSetInlineMenuImage"></a>
-	<h3>method SetInlineMenuImage <span class="smalllinenumber">[line 465]</span></h3>
+	<h3>method SetInlineMenuImage <span class="smalllinenumber">[line 466]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1828,7 +1835,7 @@ $Image)</code>
   </div>
   <hr />
 	<a name="methodSetInlineMenuImageTitle"></a>
-	<h3>method SetInlineMenuImageTitle <span class="smalllinenumber">[line 476]</span></h3>
+	<h3>method SetInlineMenuImageTitle <span class="smalllinenumber">[line 477]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1861,7 +1868,7 @@ $Title)</code>
   </div>
   <hr />
 	<a name="methodSetPageDeleted"></a>
-	<h3>method SetPageDeleted <span class="smalllinenumber">[line 110]</span></h3>
+	<h3>method SetPageDeleted <span class="smalllinenumber">[line 111]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1894,7 +1901,7 @@ $PageID, string
   </div>
   <hr />
 	<a name="methodSetSubPagesDeleted"></a>
-	<h3>method SetSubPagesDeleted <span class="smalllinenumber">[line 117]</span></h3>
+	<h3>method SetSubPagesDeleted <span class="smalllinenumber">[line 118]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1921,7 +1928,7 @@ $ParentPageID)</code>
   </div>
   <hr />
 	<a name="method_InlineMenuEntriesSwitchSortIDs"></a>
-	<h3>method _InlineMenuEntriesSwitchSortIDs <span class="smalllinenumber">[line 644]</span></h3>
+	<h3>method _InlineMenuEntriesSwitchSortIDs <span class="smalllinenumber">[line 645]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -1951,7 +1958,7 @@ $InlineMenuEntriesResult)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sun, 07 Jan 2007 18:16:03 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Fri, 19 Jan 2007 13:13:39 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
 	      </div>
       </td></tr></table>
     </td>

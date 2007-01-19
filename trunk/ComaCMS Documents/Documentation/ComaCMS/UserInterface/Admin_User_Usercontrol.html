@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Docs For Class Admin_Module</title>
+<title>Docs For Class Admin_User_Usercontrol</title>
 <link rel="stylesheet" type="text/css" href="../../media/style.css">
 </head>
 <body>
@@ -275,8 +275,8 @@
     <td>
       <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
 
-<h1>Class: Admin_Module</h1>
-Source Location: /classes/admin/admin_module.php<br /><br />
+<h1>Class: Admin_User_Usercontrol</h1>
+Source Location: /classes/admin/admin_user_usercontrol.php<br /><br />
 
 
 <table width="100%" border="0">
@@ -285,8 +285,8 @@ Source Location: /classes/admin/admin_module.php<br /><br />
 <h3><a href="#class_details">Class Overview</a></h3>
 <pre><a href="../../ComaCMS/AdminInterface/Admin.html">Admin</a>
    |
-   --Admin_Module</pre><br />
-<div class="description"></div><br /><br />
+   --Admin_User_Usercontrol</pre><br />
+<div class="description">Returns the Usercontrol</div><br /><br />
 
 
 
@@ -301,7 +301,7 @@ Source Location: /classes/admin/admin_module.php<br /><br />
 <td valign="top">
 <h3><a href="#class_methods">Methods</a></h3>
 <ul>
-    <li><a href="../../ComaCMS/AdminInterface/Admin_Module.html#methodGetTitle">GetTitle</a></li>
+    <li><a href="../../ComaCMS/UserInterface/Admin_User_Usercontrol.html#methodGetPage">GetPage</a></li>
   </ul>
 </td>
 
@@ -311,23 +311,6 @@ Source Location: /classes/admin/admin_module.php<br /><br />
 <table width="100%" border="0"><tr>
 
 
-<td valign="top">
-<h3>Child classes:</h3>
-<div class="tags">
-<dl>
-<dt><a href="../../ComaCMS/Dates/Admin_Module_Dates.html">Admin_Module_Dates</a></dt>
-	<dd></dd>
-</dl>
-<dl>
-<dt><a href="../../ComaCMS/Articles/Admin_Module_Articles.html">Admin_Module_Articles</a></dt>
-	<dd></dd>
-</dl>
-<dl>
-<dt><a href="../../ComaCMS/News/Admin_Module_News.html">Admin_Module_News</a></dt>
-	<dd></dd>
-</dl>
-</div>
-</td>
 
 
 
@@ -358,8 +341,8 @@ Source Location: /classes/admin/admin_module.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line 21]<br />
-</div><br /><br />
+[line 30]<br />
+Returns the Usercontrol<br /><br /></div><br /><br />
 <div class="top">[ <a href="#top">Top</a> ]</div><br />
 
 
@@ -369,22 +352,23 @@ Source Location: /classes/admin/admin_module.php<br /><br />
 <div class="tags">
 
   <hr />
-	<a name="methodGetTitle"></a>
-	<h3>method GetTitle <span class="smalllinenumber">[line 29]</span></h3>
+	<a name="methodGetPage"></a>
+	<h3>method GetPage <span class="smalllinenumber">[line 38]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>string GetTitle(
-)</code>
+		<code>string GetPage(
+[string
+$Action = ''])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Returns the title of the moduleadministration<br /><br /><br /><br />
+		Gets the subpages of the usercontrol<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>return:</b>&nbsp;&nbsp;</td><td>The title of the moduleadministration</td>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>A template for the outputpage</td>
   </tr>
   <tr>
     <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
@@ -393,21 +377,17 @@ Source Location: /classes/admin/admin_module.php<br /><br />
 </div>
 <br /><br />
 
-	<p>Overridden in child classes as:<br />
-		<dl>
-	<dt><a href="../../ComaCMS/Dates/Admin_Module_Dates.html#methodGetTitle">Admin_Module_Dates::GetTitle()</a></dt>
-		<dd>The title of the actual-module-page</dd>
-	</dl>
-		<dl>
-	<dt><a href="../../ComaCMS/Articles/Admin_Module_Articles.html#methodGetTitle">Admin_Module_Articles::GetTitle()</a></dt>
-		<dd></dd>
-	</dl>
-		<dl>
-	<dt><a href="../../ComaCMS/News/Admin_Module_News.html#methodGetTitle">Admin_Module_News::GetTitle()</a></dt>
-		<dd></dd>
-	</dl>
-	</p>
-	
+	Overrides <a href="../../ComaCMS/AdminInterface/Admin.html#methodGetPage">Admin::GetPage()</a> (Returns the page which is selected by <var>$Action</var>)<br /><br />
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Action</b>&nbsp;&nbsp;</td>
+        <td>The subpage of the usercontrol</td>
+      </tr>
+        </table>
+    </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
 </div><br />
@@ -415,7 +395,7 @@ Source Location: /classes/admin/admin_module.php<br /><br />
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Fri, 19 Jan 2007 13:13:31 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Fri, 19 Jan 2007 13:13:32 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
 	      </div>
       </td></tr></table>
     </td>

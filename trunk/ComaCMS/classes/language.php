@@ -40,7 +40,8 @@
  			if(array_key_exists($TranslationString, $this->_LangString))
  				return $this->_LangString[$TranslationString];
  			else {
- 				$this->_LangString[$TranslationString] = '*' . str_replace('_', ' ', $TranslationString) . '*';
+ 				$this->_LangString[$TranslationString] = preg_replace("/\%([A-Za-z0-9_]+)\%/", "&quot;%s&quot;", $TranslationString);
+ 				$this->_LangString[$TranslationString] = '*' . str_replace('_', ' ', $this->_LangString[$TranslationString]) . '*';
  				return $this->_LangString[$TranslationString];
  			}
  		}

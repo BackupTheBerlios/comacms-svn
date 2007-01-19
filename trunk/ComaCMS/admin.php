@@ -139,9 +139,15 @@
 		
 		case 'users':
 			// TODO: make a class out of the context of this
-			include_once(__ROOT__ . '/system/admin_pages.php');
+			/*include_once(__ROOT__ . '/system/admin_pages.php');
 			$title = $translation->GetTranslation('users');
-			$text = page_users();
+			$text = page_users();*/
+			// Load the usermanagement-class
+			include_once(__ROOT__ . '/classes/admin/admin_usermanagement.php');
+			
+			$title = $translation->GetTranslation('users');
+			$usermanagementClass = new Admin_Usermanagement($sqlConnection, $translation, $config, $user, $lib, $output);
+			$text = $usermanagementClass->GetPage($action);
 			break;
 		
 		case 'logout':

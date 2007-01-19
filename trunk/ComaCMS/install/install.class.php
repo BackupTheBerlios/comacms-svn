@@ -69,6 +69,7 @@
 			$this->_Translation = &$Translation;
 			$this->_ComaLate = &$ComaLate;
 			$this->_ComaLib = new ComaLib();
+			$this->_SqlConnection = new Sql('', '', '');
 		}
 		
 		/**
@@ -140,7 +141,7 @@
 		 */
 		function _LanguagePage($Language) {
 			
-			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
 			$formMaker->AddForm('installation_language', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('language'), 'post');
 			
 			$formMaker->AddHiddenInput('installation_language', 'page', '2');
@@ -370,7 +371,7 @@
 				header("Location: install.php?page=4&lang={$Language}&style={$Style}&agreement_error=1");
 			
 			// Initialize FormMaker class
-			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
 			
 			// Add a form
 			$formMaker->AddForm('database_settings', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('database_settings'), 'post');
@@ -411,7 +412,7 @@
 			
 			
 			// Initialize FormMaker class
-			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
 			
 			// Add a form
 			$formMaker->AddForm('database_settings', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('database_settings'), 'post');
@@ -438,6 +439,8 @@
 			$ok = $formMaker->CheckInputs('database_settings', true);
 			
 			if ($ok) {
+				
+				$this->_SqlConnection = '';
 				$this->_SqlConnection = new Sql($DatabaseUsername, $DatabasePassword, $DatabaseServer);
 				$this->_SqlConnection->Connect($DatabaseName);
 				
@@ -493,7 +496,7 @@
 				header("Location: install.php?page=5&lang={$Language}&style={$Style}&confirmation=yes");
 			
 			// Initialize the FormMaker class
-			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
 			
 			// Add a new form for the admin registration
 			$formMaker->AddForm('admin_registration', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('create_administrator'), 'post');
@@ -543,7 +546,7 @@
 				header("Location: install.php?page=5&lang={$Language}&style={$Style}&confirmation=yes");
 			
 			// Initialize the FormMaker class
-			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
 			
 			// Add a new form for the admin registration
 			$formMaker->AddForm('admin_registration', 'install.php', $this->_Translation->GetTranslation('next'), $this->_Translation->GetTranslation('create_administrator'), 'post');
@@ -573,8 +576,8 @@
 			// If everything is ok
 			if ($ok && $Confirmation == 'yes') {
 				include __ROOT__ . '/config.php';
-				$sql = "INSERT INTO {$d_pre}users (user_name, user_showname, user_password, user_registerdate, user_admin, user_icq)
-						VALUES ('{$AdminName}', '{$AdminShowName}', '" . md5($AdminPassword) . "', '" . mktime() . "', 'y', '');
+				$sql = "INSERT INTO {$d_pre}users (user_name, user_showname, user_password, user_registerdate, user_admin, user_activated)
+						VALUES ('{$AdminName}', '{$AdminShowName}', '" . md5($AdminPassword) . "', '" . mktime() . "', 1, 1);
 						INSERT INTO {$d_pre}config (config_name, config_value)
 						VALUES ('install_date', '" . mktime() . "');
 						INSERT INTO {$d_pre}config (config_name, config_value)

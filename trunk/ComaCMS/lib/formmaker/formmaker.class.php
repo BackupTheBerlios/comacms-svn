@@ -39,14 +39,22 @@
  		var $_TodoValue;
  		
  		/**
+ 		 * A link to the sql connection class
+ 		 * @access private
+ 		 * @var sql A link to the sql connection
+ 		 */
+ 		var $_SqlConnection;
+ 		
+ 		/**
  		 * Initializes the FormMaker class
  		 * 
  		 * @access public
  		 * @param string $TodoValue A value for the langstring todo. It is needed if anywhere is no translation set for an information tag
  		 * @return FormMaker A new FormMaker class
  		 */
- 		function FormMaker($TodoValue) {
+ 		function FormMaker($TodoValue, &$SqlConnection) {
  			$this->_TodoValue = $TodoValue;
+ 			$this->_SqlConnection = &$SqlConnection;
  		}
  		
  		/**
@@ -201,9 +209,11 @@
  		 * @param string $CheckType The type of the checking
  		 * @param string $ErrorInformation The errorinformation text if the error matches
  		 * @param string $SecondInputName The second input if the check needs a compatison to another field
+ 		 * @param string $TableName The name of a mysql table if something should be checked in there
+ 		 * @param string $FieldName The name of a mysql field if something should be checked in there
  		 * @return void Adds a check
  		 */
- 		function AddCheck($FormName, $InputName, $CheckType, $ErrorInformation = '', $SecondInputName = '') {
+ 		function AddCheck($FormName, $InputName, $CheckType, $ErrorInformation = '', $SecondInputName = '', $TableName = '', $FieldName = '') {
  			
  			// Initialize the variables
  			if (empty($ErrorInformation))
@@ -212,6 +222,8 @@
  			$this->_Forms[$FormName]['inputs'][$InputName]['checkings'][] = array(
  															'type' => $CheckType,
  															'secondInput' => $SecondInputName,
+ 															'tableName' => $TableName,
+ 															'fieldName' => $FieldName,
  															'text' => $ErrorInformation);
  		}
  		
@@ -316,7 +328,20 @@
 							if ($GenerateErrorInformations)
 								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
 						}
-						break;			
+						break;	
+					
+					case 'already_assigned':
+						// Get the field from the mysql database
+						$sql = "SELECT *
+							FROM " . DB_PREFIX . $check['tableName'] ."
+							WHERE {$check['fieldName']}='{$input['value']}'
+							LIMIT 0 , 1";
+						$result = $this->_SqlConnection->SqlQuery($sql);
+						if (mysql_num_rows($result) == 1) {
+							$ok = false;
+							if ($GenerateErrorInformations)
+								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
+						}		
 				}
 			}
 			
@@ -337,19 +362,23 @@
  			// If the function can identify an existing form go on
  			if (!empty($FormName) && array_key_exists($FormName, $this->_Forms)) {
  				
- 				// Set the variables of the formular
-	 			if ($GenerateErrorInformations)
-	 				$this->_Forms[$FormName]['errorinformation_generated'] = true;
-	 			
-	 			// Hopely there are no errors made... if there are some set $ok then to false
+ 				// Hopely there are no errors made... if there are some set $ok then to false
 	 			$ok = true;
 	 			
 	 			// Work through all inputs
 	 			foreach($this->_Forms[$FormName]['inputs'] as $input) {
 					
-	 				if (!$this->_CheckInput($input, $GenerateErrorInformations))
-	 					$ok = false;
+	 				if ($GenerateErrorInformations && !$this->_Forms[$FormName]['errorinformation_generated'])
+	 					if (!$this->_CheckInput($input, true))
+	 						$ok = false;
+	 				else
+	 					if (!$this->_CheckInput($input, false))
+	 						$ok = false;
 	 			}
+	 			
+ 				// Set the variables of the formular
+	 			if ($GenerateErrorInformations)
+	 				$this->_Forms[$FormName]['errorinformation_generated'] = true;
 	 			
 	 			// Return wether everything is ok or not
 	 			return $ok;

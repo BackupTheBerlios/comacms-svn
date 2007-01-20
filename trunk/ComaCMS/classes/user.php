@@ -188,10 +188,11 @@
 						if ($original_user->user_password === $this->_PasswordMd5) {
 							$this->IsLoggedIn = true;
 							$this->Showname = $original_user->user_showname;
+							$this->Name = $original_user->user_name;
 							$this->ID = $original_user->user_id;
 							if($original_user->user_admin == '1')
 								$this->IsAdmin = true;
-							if($original_user->user_author == '1')
+							if($original_user->user_author == '1' || $original_user->user_admin == '1')
 								$this->IsAuthor = true;
 							$this->LoginError = 0;
 						}
@@ -241,10 +242,11 @@
 					if($ip == $onlineUser->online_ip && $onlineUser->online_loggedon == 'yes') {
 						$this->IsLoggedIn = true;
 						$this->Showname = $onlineUser->user_showname;
+						$this->Name = $onlineUser->user_name;
 						$this->ID = $onlineUser->user_id;
 						if($onlineUser->user_admin == '1')
 							$this->IsAdmin = true;
-						if($onlineUser->user_author == '1')
+						if($onlineUser->user_author == '1' || $onlineUser->user_admin == '1')
 							$this->IsAuthor = true;
 						$this->LoginError = 0;
 					}

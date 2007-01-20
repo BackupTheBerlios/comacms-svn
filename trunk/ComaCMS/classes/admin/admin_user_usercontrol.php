@@ -71,7 +71,7 @@
 			$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
 			
 			// Get the data of the userinterface
-			$sql = "SELECT user_id, user_name, user_showname, user_registerdate, user_admin, user_author, user_email
+			$sql = "SELECT user_registerdate, user_email
 					FROM " . DB_PREFIX . "users
 					WHERE user_id='{$this->_User->ID}'";
 			$userResult = $this->_SqlConnection->SqlQuery($sql);
@@ -79,17 +79,18 @@
 			
 			$userProfile = array();
 			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('name'),
-									'PROFILE_FIELD_VALUE' => $user->user_showname);
+									'PROFILE_FIELD_VALUE' => $this->_User->Showname);
 			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('loginname'),
-									'PROFILE_FIELD_VALUE' => $user->user_name);
+									'PROFILE_FIELD_VALUE' => $this->_User->Name);
 			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('email'),
 									'PROFILE_FIELD_VALUE' => $user->user_email);
 			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('registered_since'),
 									'PROFILE_FIELD_VALUE' => date($dateDayFormat, $user->user_registerdate));
-			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('is_admin'),
-									'PROFILE_FIELD_VALUE' => (($user->user_admin) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')));
 			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('is_author'),
-									'PROFILE_FIELD_VALUE' => (($user->user_author) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')));
+									'PROFILE_FIELD_VALUE' => (($this->_User->IsAuthor) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')));
+			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('is_admin'),
+									'PROFILE_FIELD_VALUE' => (($this->_User->IsAdmin) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')));
+			
 			$this->_ComaLate->SetReplacement('USER_PROFILE', $userProfile);
 			
 			// Set lang replacements for comalate
@@ -108,7 +109,7 @@
 					<a href="special.php?page=userinterface&amp;action=edit_profile" class="button">Bearbeiten</a>
 					';
 			
-			if ($this->_User->IsAuthor || $this->_User->IsAdmin) {
+			if ($this->_User->IsAuthor) {
 				
 				// Initialize pages array
 				$pages = array();

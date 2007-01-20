@@ -19,8 +19,8 @@
  	/**
 	 * @ignore
 	 */
-	require_once __ROOT__ . 'classes/admin/admin_module.php';
-	require_once __ROOT__ . 'modules/news/news.class.php';
+	require_once __ROOT__ . '/classes/admin/admin_module.php';
+	require_once __ROOT__ . '/modules/news/news.class.php';
 	 	
 	/**
 	 * @package ComaCMS
@@ -132,10 +132,10 @@
 					if($confirmation == 1)
 						$news->DeleteMessage($newsID);
 					else {
-						$out = "<h2>" . $this->_Translation->GeTranslation('delete_news_message') . "?</h2>
-							<p>" . sprintf($this->_Translation->GeTranslation('do_you_really_want_to_delete_the_news_message_%news_title%_from_the_%date%?'), $newsMessage['NEWS_TITLE'], date('d.m.Y H:i:s', $newsMessage['NEWS_DATE'])) . "</p>
-							<a href=\"admin.php?page=module_news&amp;action=delete&amp;newsID=$newsID&amp;confirmation=1\" class=\"button\">" . $this->_Translation->GeTranslation('yes') . "</a>
-							<a href=\"admin.php?page=module_news\" class=\"button\">" . $this->_Translation->GeTranslation('no') . "</a>";
+						$out = "<h2>" . $this->_Translation->GetTranslation('delete_news_message') . "?</h2>
+							<p>" . sprintf($this->_Translation->GetTranslation('do_you_really_want_to_delete_the_news_message_%news_title%_from_the_%date%?'), $newsMessage['NEWS_TITLE'], date('d.m.Y H:i:s', $newsMessage['NEWS_DATE'])) . "</p>
+							<a href=\"admin.php?page=module_news&amp;action=delete&amp;newsID=$newsID&amp;confirmation=1\" class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a>
+							<a href=\"admin.php?page=module_news\" class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a>";
 						return $out;
 					}		
 				}

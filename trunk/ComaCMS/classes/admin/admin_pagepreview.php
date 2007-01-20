@@ -97,6 +97,8 @@
 			// Set replacements for the template
  		 	$this->_ComaLate->SetReplacement('ACTUALSTYLE', $Style);
  		 	$this->_ComaLate->SetReplacement('SITESTYLE', $this->_Translation->GetTranslation('sitestyle'));
+ 		 	$this->_ComaLate->SetReplacement('LANG_PREVIEW', $this->_Translation->GetTranslation('preview'));
+ 		 	$this->_ComaLate->SetReplacement('LANG_APPLY', $this->_Translation->GetTranslation('apply'));
  		 	
  		 	// Throw out the template data
  		 	$template = '<script type="text/javascript" language="JavaScript" src="./system/functions.js"></script>
@@ -111,8 +113,8 @@
 									</PREVIEW_STYLE_SELECT>
 								</select>
 							</label>
-							<input type="submit" value="Vorschau" onclick="preview_style();return false;" class="button" />
-							<input type="submit" value="Speichern" name="save" class="button" />
+							<input type="submit" value="{LANG_PREVIEW}" onclick="preview_style();return false;" class="button" />
+							<input type="submit" value="{LANG_APPLY}" name="save" class="button" />
 						</form>';
 			return $template;
  		}

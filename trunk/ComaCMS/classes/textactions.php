@@ -178,11 +178,15 @@
 			$Text = preg_replace("/\/\/(.+?)\/\//s", "<em>$1</em>", $Text);
 			// convert all __text__ to <u>text</u> => Underline
 			$Text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $Text);
-			// convert == text == to a header <h4>
+			// convert ====== text ====== to a header <h5>
+			$Text = preg_replace("#======\ (.+?)\ ======#s", "\n\n<h6>$1</h6>\n", $Text);
+			// convert ===== text ===== to a header <h5>
+			$Text = preg_replace("#=====\ (.+?)\ =====#s", "\n\n<h5>$1</h5>\n", $Text);
+			// convert ==== text ==== to a header <h4>
 			$Text = preg_replace("#====\ (.+?)\ ====#s", "\n\n<h4>$1</h4>\n", $Text);
 			// convert === text === to a header <h3>
 			$Text = preg_replace("#===\ (.+?)\ ===#s", "\n\n<h3>$1</h3>\n", $Text);
-			// convert ==== text ==== to a header <h2>
+			// convert == text == to a header <h2>
 			$Text = preg_replace("#==\ (.+?)\ ==#s", "\n\n<h2>$1</h2>\n", $Text);
 			
 			// convert <center>text</center> to <div class="center">text</div>

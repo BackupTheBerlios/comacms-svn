@@ -63,7 +63,7 @@
  				return '';
  			
  			// Initialize the formMaker class
- 			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'));
+ 			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
  			
  			// Add necessary inputs
  			$formMaker->AddForm('settings');

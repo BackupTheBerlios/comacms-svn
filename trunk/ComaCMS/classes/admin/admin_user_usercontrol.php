@@ -192,11 +192,12 @@
 		function _EditProfile() {
 			
 			// Get the data of the userinterface
-			$sql = "SELECT user_id, user_name, user_showname, user_registerdate, user_admin, user_author, user_email
+			$sql = "SELECT user_registerdate, user_email
 					FROM " . DB_PREFIX . "users
 					WHERE user_id='{$this->_User->ID}'";
 			$userResult = $this->_SqlConnection->SqlQuery($sql);
 			$user = mysql_fetch_object($userResult);
+			mysql_free_result($userResult);
 			
 			// Initialize the formmaker class
 			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
@@ -204,10 +205,10 @@
 			
 			$formMaker->AddHiddenInput('edit_user', 'page', 'userinterface');
 			$formMaker->AddHiddenInput('edit_user', 'action', 'check_profile');
-			$formMaker->AddHiddenInput('edit_user', 'user_id', $user->user_id);
+			$formMaker->AddHiddenInput('edit_user', 'user_id', $this->_User->ID);
 			
-			$formMaker->AddInput('edit_user', 'user_showname', 'text', $this->_Translation->GetTranslation('showname'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'), $user->user_showname);
-			$formMaker->AddInput('edit_user', 'user_name', 'text', $this->_Translation->GetTranslation('nickname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'), $user->user_name);
+			$formMaker->AddInput('edit_user', 'user_showname', 'text', $this->_Translation->GetTranslation('showname'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'), $this->_User->Showname);
+			$formMaker->AddInput('edit_user', 'user_name', 'text', $this->_Translation->GetTranslation('nickname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'), $this->_User->Name);
 			$formMaker->AddInput('edit_user', 'user_email', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system'), $user->user_email);
 			$formMaker->AddInput('edit_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'));
 			$formMaker->AddInput('edit_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'));
@@ -237,14 +238,15 @@
 				$UserPassword = GetPostOrGet('user_password');
 				$UserPasswordRepetition = GetPostOrGet('user_password_repetition');
 				
-				// Get the data of the user
-				$sql = "SELECT user_id, user_name, user_showname, user_registerdate, user_admin, user_author, user_email
+				// Get the missing data of the user
+				$sql = "SELECT user_email
 						FROM " . DB_PREFIX . "users
 						WHERE user_id='{$this->_User->ID}'";
 				$userResult = $this->_SqlConnection->SqlQuery($sql);
 				$user = mysql_fetch_object($userResult);
+				mysql_free_result($userResult);
 				
-				if (($UserShowname != $user->user_showname) || ($UserName != $user->user_name) || ($UserEmail != $user->user_email) || (!empty($UserPassword)) || (!empty($UserPasswordRepetition))) {
+				if (($UserShowname != $this->_User->Showname) || ($UserName != $this->_User->Name) || ($UserEmail != $user->user_email) || (!empty($UserPassword)) || (!empty($UserPasswordRepetition))) {
 					
 					// Initialize the formmaker class
 					$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
@@ -266,11 +268,12 @@
 					
 					$formMaker->AddInput('edit_user', 'user_email', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system'), $UserEmail);
 					$formMaker->AddCheck('edit_user', 'user_email', 'empty', $this->_Translation->GetTranslation('the_email_address_must_be_indicated'));
+					$formMaker->AddCheck('edit_user', 'user_email', 'not_email', $this->_Translation->GetTranslation('this_is_not_a_valid_email_address'));
 					if ($user->user_email != $UserEmail)
 						$formMaker->AddCheck('edit_user', 'user_email', 'already_assigned', $this->_Translation->GetTranslation('the_email_is_already_assigned_to_another_user'), '', 'users', 'user_email');
 					
-					$formMaker->AddInput('edit_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'), $UserPassword);
-					$formMaker->AddInput('edit_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'), $UserPasswordRepetition);
+					$formMaker->AddInput('edit_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'), ((!empty($UserPassword)) ? $UserPassword : ''));
+					$formMaker->AddInput('edit_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'), ((!empty($UserPasswordRepetition)) ? $UserPasswordRepetition : ''));
 					
 					if (!empty($UserPassword) || !empty($UserPasswordRepetition)) {
 						$formMaker->AddCheck('edit_user', 'user_password', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));

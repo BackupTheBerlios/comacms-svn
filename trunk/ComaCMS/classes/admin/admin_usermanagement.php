@@ -52,6 +52,16 @@
 					$template .= $this->_CheckUser();
 					break;
 				
+				case 'new_user':
+					// Returns a formtemplate to add a new user to the system
+					$template .= $this->_NewUser();
+					break;
+					
+				case 'add_user':
+					// Returns a formtemplate to check the userdata
+					$template .= $this->_AddUser();
+					break;
+				
 				default:
 					// Returns a list with all registred users
 					$template .= $this->_HomePage();
@@ -106,6 +116,7 @@
 			
 			// Generate the template
 			$template = '
+				<a href="admin.php?page=users&amp;action=new_user" class="button">{LANG_CREATE_NEW_USER}</a>
 				<table class="full_width">
 					<tr>
 						<th>{LANG_SHOWNAME}</th>
@@ -125,8 +136,7 @@
 						<td><USER_ACTIONS:loop><a href="admin.php?page=users&amp;action={ACTION}&amp;user_id={USER_ID}"><img src="{ACTION_IMG}" height="16" width="16" alt="{ACTION_TITLE}" title="{ACTION_TITLE}" /></a>&nbsp;</USER_ACTIONS></td>
 					</tr>
 				</USERS>
-				</table>
-				<a href="admin.php?page=users&amp;action=new_user" class="button">{LANG_CREATE_NEW_USER}</a>';
+				</table>';
 			return $template;
 		}
 		
@@ -165,6 +175,8 @@
 				$formMaker->AddInput('edit_user', 'user_email', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system'), $user->user_email);
 				$formMaker->AddInput('edit_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'));
 				$formMaker->AddInput('edit_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'));
+				$formMaker->AddInput('edit_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'), (($user->user_admin == 1) ? true : false));
+				$formMaker->AddInput('edit_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($user->user_author == 1) ? true : false));
 				
 				// Generate the template
 				$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, false);
@@ -200,8 +212,11 @@
 				$UserEmail = GetPostOrGet('user_email');
 				$UserPassword = GetPostOrGet('user_password');
 				$UserPasswordRepetition = GetPostOrGet('user_password_repetition');
+				$UserAdmin = ((GetPostOrGet('user_admin') == 'on') ? 1 : 0);
+				$UserAuthor = ((GetPostOrGet('user_author') == 'on') ? 1 : 0);
 				
-				if (($UserShowname != $user->user_showname) || ($UserName != $user->user_name) || ($UserEmail != $user->user_emai) || (!empty($UserPassword)) || (!empty($UserPasswordRepetition))) {
+				// Check wether anything was changed in the userdetailes
+				if (($UserShowname != $user->user_showname) || ($UserName != $user->user_name) || ($UserEmail != $user->user_email) || (!empty($UserPassword)) || (!empty($UserPasswordRepetition)) || ($UserAdmin != $user->user_admin) || ($UserAuthor != $user->user_author)) {
 					
 					// Initialize the formmaker class
 					$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
@@ -237,18 +252,21 @@
 						$formMaker->AddCheck('edit_user', 'user_password_repetition', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
 					}
 					
+					$formMaker->AddInput('add_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'), (($UserAdmin == 1) ? true : false));
+					$formMaker->AddInput('add_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($UserAuthor == 1) ? true : false));
+					
 					if ($formMaker->CheckInputs('edit_user', true)) {
 						
 						$user_password = ((!empty($UserPassword)) ? ", user_password='" . md5($UserPassword) . "'": '');
 						// Update the user in the database
 						$sql = "UPDATE " . DB_PREFIX . "users
-								SET user_showname='$UserShowname', user_name='$UserName', user_email='$UserEmail'$user_password
+								SET user_showname='$UserShowname', user_name='$UserName', user_email='$UserEmail', user_admin='$UserAdmin', user_author='$UserAuthor'$user_password
 								WHERE user_id=$UserID";
 						$this->_SqlConnection->SqlQuery($sql);
 						
-						// Set user back to the usermanager
-						header('Location: admin.php?page=users');
-						die();
+						// Send the user the HomePage of the usermanager
+						$template = $this->_HomePage();
+						return $template;
 					}
 					else {
 						
@@ -258,9 +276,106 @@
 					}
 				}
 				else {
-					header('Location: admin.php?page=users');
-					die();
+					
+					// Send the user the HomePage of the usermanager
+					$template = $this->_HomePage();
+					return $template;
 				}
+			}
+		}
+		
+		/**
+		 * Add a new user to the system
+		 * @access private
+		 * @return string A formtemplate to add a new user to the system
+		 */
+		function _NewUser() {
+			
+			// Initialize the formmaker class
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
+			$formMaker->AddForm('new_user', 'admin.php', $this->_Translation->GetTranslation('save'), $this->_Translation->GetTranslation('user'), 'post');
+			
+			$formMaker->AddHiddenInput('new_user', 'page', 'users');
+			$formMaker->AddHiddenInput('new_user', 'action', 'add_user');
+			
+			$formMaker->AddInput('new_user', 'user_showname', 'text', $this->_Translation->GetTranslation('showname'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'));
+			$formMaker->AddInput('new_user', 'user_name', 'text', $this->_Translation->GetTranslation('nickname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'));
+			$formMaker->AddInput('new_user', 'user_email', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system'));
+			$formMaker->AddInput('new_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'));
+			$formMaker->AddInput('new_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'));
+			$formMaker->AddInput('new_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'));
+			$formMaker->AddInput('new_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'));
+			
+			// Generate the template
+			$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, false);
+			return $template;
+		}
+		
+		/**
+		 * Checks the inputs of the editformular and returns a form showing the errors if there are any
+		 * @access private
+		 * @return string Template for the Errorform
+		 */
+		function _AddUser() {
+			
+			// Get the rest of the external parameters
+			$UserShowname = GetPostOrGet('user_showname');
+			$UserName = GetPostOrGet('user_name');
+			$UserEmail = GetPostOrGet('user_email');
+			$UserPassword = GetPostOrGet('user_password');
+			$UserPasswordRepetition = GetPostOrGet('user_password_repetition');
+			$UserAdmin = ((GetPostOrGet('user_admin') == 'on') ? 1 : 0);
+			$UserAuthor = ((GetPostOrGet('user_author') == 'on') ? 1 : 0);
+			
+			// Initialize the formmaker class
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
+			$formMaker->AddForm('add_user', 'admin.php', $this->_Translation->GetTranslation('save'), $this->_Translation->GetTranslation('user'), 'post');
+			
+			$formMaker->AddHiddenInput('add_user', 'page', 'users');
+			$formMaker->AddHiddenInput('add_user', 'action', 'add_user');
+			
+			$formMaker->AddInput('add_user', 'user_showname', 'text', $this->_Translation->GetTranslation('showname'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'), $UserShowname);
+			$formMaker->AddCheck('add_user', 'user_showname', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
+			$formMaker->AddCheck('add_user', 'user_showname', 'already_assigned', $this->_Translation->GetTranslation('the_name_is_already_assigned'), '', 'users', 'user_showname');
+			
+			$formMaker->AddInput('add_user', 'user_name', 'text', $this->_Translation->GetTranslation('nickname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'), $UserName);
+			$formMaker->AddCheck('add_user', 'user_name', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
+			$formMaker->AddCheck('add_user', 'user_name', 'already_assigned', $this->_Translation->GetTranslation('the_nickname_is_already_assigned'), '', 'users', 'user_name');
+			
+			$formMaker->AddInput('add_user', 'user_email', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system'), $UserEmail);
+			$formMaker->AddCheck('add_user', 'user_email', 'empty', $this->_Translation->GetTranslation('the_email_address_must_be_indicated'));
+			$formMaker->AddCheck('add_user', 'user_email', 'not_email', $this->_Translation->GetTranslation('this_is_not_a_valid_email_address'));
+			$formMaker->AddCheck('add_user', 'user_email', 'already_assigned', $this->_Translation->GetTranslation('the_email_is_already_assigned_to_another_user'), '', 'users', 'user_email');
+			
+			$formMaker->AddInput('add_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'), $UserPassword);
+			$formMaker->AddInput('add_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'), $UserPasswordRepetition);
+			$formMaker->AddCheck('add_user', 'user_password', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
+			$formMaker->AddCheck('add_user', 'user_password', 'not_same_password_value_as', $this->_Translation->GetTranslation('the_password_and_its_repetition_are_unequal'), 'user_password_repetition');
+			$formMaker->AddCheck('add_user', 'user_password_repetition', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
+			
+			$formMaker->AddInput('add_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'), (($UserAdmin == 1) ? true : false));
+			$formMaker->AddInput('add_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($UserAuthor == 1) ? true : false));
+			
+			if ($formMaker->CheckInputs('add_user', true)) {
+				
+				// Encrypt userpassword
+				$user_password = md5($UserPassword);
+				
+				// Add new user to the database
+				$sql = "INSERT INTO " . DB_PREFIX . "users
+						(user_showname, user_name, user_email, user_password, user_registerdate, user_admin, user_author)
+						VALUES ('$UserShowname', '$UserName', '$UserEmail', '$UserPassword', '" . mktime() . "', '$UserAdmin', '$UserAuthor')";
+				$this->_SqlConnection->SqlQuery($sql);
+					
+				// Set user to the HomePage of the usermanager
+				$template = "\r\n\t\t\t\t" . $this->_HomePage();
+				return $template;
+			}
+			else {
+				
+				// Generate to edit the errors
+				$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, true);
+				return $template;
 			}
 		}
 	}

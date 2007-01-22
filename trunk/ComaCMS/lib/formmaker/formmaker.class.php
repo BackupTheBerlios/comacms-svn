@@ -181,23 +181,22 @@
  				$this->_Forms[$FormName]['inputs'][$Name] = array(
 							'name' => $Name,
 							'form_name' => $FormName,
-							'start_input' => (($Type == 'password') ? '<input type="{type}"' : (($Type == 'select') ? '<select' : '<input type="{type}"')),
+							'start_input' => (($Type == 'select') ? '<select' : '<input type="{type}"'),
 							'end_input' => (($Type == 'password') ? '/>' : (($Type == 'select') ? '>
 									<select_entrys:loop><option{selected} value="{select_value}">{display_value}</option>
 									</select_entrys>
 									{select_entrys_code}
-								</select>' : ' value="{value}" />')),
-							'type' => (($Type == 'password') ? 'password' : 'text'),
+								</select>' : (($Type == 'checkbox') ? ' {value} />' : ' value="{value}" />'))),
+							'type' => (($Type == 'password') ? 'password' : (($Type == 'checkbox') ? 'checkbox' : 'text')),
 							'translation' => $NameTranslation,
 							'information' => $Information,
 							'errorinformation' => array(),
-							'value' => (($Type != 'password') ? $Value : ''),
+							'value' => (($Type == 'password') ? '' : (($Type == 'checkbox') ? (($Value) ? 'checked="true"' : '') : $Value)),
 							'password_value' => (($Type == 'password') ? $Value : ''),
 							'select_entrys_code' => ' ',
 							'select_entrys' => array(),
 							'checkings' => array());
  			}
- 			
  		}
  		
  		/**

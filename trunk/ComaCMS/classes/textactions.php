@@ -190,7 +190,7 @@
 			$Text = preg_replace("#==\ (.+?)\ ==#s", "\n\n<h2>$1</h2>\n", $Text);
 			
 			// convert <center>text</center> to <div class="center">text</div>
-			$Text = preg_replace("#&lt;center&gt;(.+?)&lt;/center&gt;#s", "\n\n<div class=\"center\">$1</div>\n", $Text);
+			$Text = preg_replace("#&lt;center&gt;(.+?)&lt;/center&gt;#s", "</p><div class=\"center\">$1</div><p>", $Text);
 		
 			// convert ({text}{text}) to two colums
 			$Text = preg_replace("#\(\{([^\}\{]*?)[\r\n ]*\}\{([^\}\{]*?)[\r\n ]*\}\)#mu", "</p>\n<div class=\"column ctwo\">\n<p>\n$1\n</p>\n</div>\n<div class=\"column ctwo\">\n<p>\n$2\n</p>\n</div>\n<p class=\"after_column\"/>\n<p>\n", $Text);
@@ -392,12 +392,14 @@
 		 * @param bool ordered
 		 * @param string textpart
 		 */
-		function ConvertList($ordered, $textpart) {
+		function ConvertList($Ordered, $textpart) {
 			// initialize the settings for an ordered or an unsorted list
 			$codesequence = '# ';
+			$codesequence2 = '* ';
 			$htmlcode = 'ol';
-			if(!$ordered) {
+			if(!$Ordered) {
 				$codesequence = '* ';
+				$codesequence2 = '# ';
 				$htmlcode = 'ul';
 			}
 			$output_text = "\n<{$htmlcode}>";
@@ -405,13 +407,42 @@
 			$lines = explode("\n", $textpart);
 			$nodes = '';
 			$first = true;
+			$sublistordered = $Ordered;
 			// go through each line
 			foreach($lines as $line) {
 				// get the 'real' content of the line
 				$line = substr($line, strpos($line, $codesequence) + strlen($codesequence));
 				// check if it's real text or a line which initializes a sublist
-				if(TextActions::StartsWith($codesequence, $line))
+				if(TextActions::StartsWith($codesequence, $line)) {
+					if($Ordered != $sublistordered && $nodes != '') {
+						// add subnodes
+						if($nodes != '') {
+							if($first) {
+								$fist = false;
+								$output_text .= "\n\t<li>";
+							}
+						}
+						$output_text .= TextActions::ConvertList($sublistordered, $nodes)."\n";
+						$nodes = '';
+					}
 					$nodes .= $line."\n";
+					$sublistordered = $Ordered;
+				}
+				else if(TextActions::StartsWith($codesequence2, $line)) {
+					if($Ordered == $sublistordered && $nodes != '') {
+						// add subnodes
+						if($nodes != '') {
+							if($first) {
+								$fist = false;
+								$output_text .= "\n\t<li>";
+							}
+						}
+						$output_text .= TextActions::ConvertList($sublistordered, $nodes)."\n";
+						$nodes = '';
+					}
+					$nodes .= $line."\n";
+					$sublistordered = !$Ordered;
+				}
 				else { 
 					// if it is a 'text'-line make sure if there is a sublist to add before
 					if($nodes != '') {
@@ -420,7 +451,7 @@
 							$output_text .= "\n\t<li>";
 						}
 						// add the text of a sublist
-						$output_text .= TextActions::ConvertList($ordered, $nodes)."\n";
+						$output_text .= TextActions::ConvertList($sublistordered, $nodes)."\n";
 						$nodes = '';
 					}
 					// if the line isn't empty add it to the oter code

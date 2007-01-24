@@ -177,7 +177,8 @@
 				if($this->PageHasHistory($PageID))
 					$pageData['pageComment'] = $this->_Translation->GetTranslation('edited') . '...';
 			}
-			
+			$pageData['pageText'] = str_replace('<', '&lt;', $pageData['pageText']);
+			$pageData['pageText'] = str_replace('>', '&gt;', $pageData['pageText']);
 			$this->_ComaLate->SetReplacement('PAGE_ID', $PageID);
 			$this->_ComaLate->SetReplacement('PAGE_TITLE', $pageData['pageTitle']);
 			$this->_ComaLate->SetReplacement('PAGE_TEXT', $pageData['pageText']);

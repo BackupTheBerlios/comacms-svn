@@ -87,7 +87,7 @@
 			// Initialize users array
 			$users = array();
 			
-			// Fetch all users data and save them to an array
+			// Fetch all users data and save them to the array
 			while ($user = mysql_fetch_object($usersResult)) {
 				
 				// Add the next user to the array
@@ -103,7 +103,25 @@
 										)
 									);
 			}
+			mysql_free_result($usersResult);
 			$this->_ComaLate->SetReplacement('USERS', $users);
+			
+			// Get the existing custom fields from the database
+			$sql = "SELECT *
+					FROM " . DB_PREFIX . "custom_fields";
+			$customFieldsResult = $this->_SqlConnection->SqlQuery($sql);
+			
+			// Initialize fields array
+			$customFields = array();
+			
+			// Fetch all field data and save them to the array
+			while ($customField = mysql_fetch_object($customFieldsResult)) {
+				$customFields[] = array('CUSTOM_FIELDS_FIELD_NAME' => $customField->field_name,
+										'CUSTOM_FIELDS_FIELD_TITLE' => $customField->field_title,
+										'CUSTOM_FIELDS_FIELD_TYPE' => $customField->field_type);
+			}
+			mysql_free_result($customFieldsResult);
+			$this->_ComaLate->SetReplacement('CUSTOM_FIELDS', $customFields);
 			
 			// Set replacements for language
 			$this->_ComaLate->SetReplacement('LANG_SHOWNAME', $this->_Translation->GetTranslation('showname'));
@@ -113,6 +131,16 @@
 			$this->_ComaLate->SetReplacement('LANG_AUTHOR', $this->_Translation->GetTranslation('author'));
 			$this->_ComaLate->SetReplacement('LANG_ACTIONS', $this->_Translation->GetTranslation('actions'));
 			$this->_ComaLate->SetReplacement('LANG_CREATE_NEW_USER', $this->_Translation->GetTranslation('create_new_user'));
+			
+			$this->_ComaLate->SetReplacement('LANG_CUSTOM_FIELDS', $this->_Translation->GetTranslation('custom_fields'));
+			$this->_ComaLate->SetReplacement('LANG_CREATE_NEW_CUSTOM_FIELD', $this->_Translation->GetTranslation('create_new_custom_field'));
+			$this->_ComaLate->SetReplacement('LANG_FIELD_NAME', $this->_Translation->GetTranslation('name'));
+			$this->_ComaLate->SetReplacement('LANG_FIELD_TITLE', $this->_Translation->GetTranslation('title'));
+			$this->_ComaLate->SetReplacement('LANG_FIELD_TYPE', $this->_Translation->GetTranslation('type'));
+			$this->_ComaLate->SetReplacement('LANG_SIZE', $this->_Translation->GetTranslation('size'));
+			$this->_ComaLate->SetReplacement('LANG_SHOW_AT_REGISTRATION', $this->_Translation->GetTranslation('show_at_registration'));
+			$this->_ComaLate->SetReplacement('LANG_REQUIRED', $this->_Translation->GetTranslation('required'));
+			
 			
 			// Generate the template
 			$template = '
@@ -136,6 +164,31 @@
 						<td><USER_ACTIONS:loop><a href="admin.php?page=users&amp;action={ACTION}&amp;user_id={USER_ID}"><img src="{ACTION_IMG}" height="16" width="16" alt="{ACTION_TITLE}" title="{ACTION_TITLE}" /></a>&nbsp;</USER_ACTIONS></td>
 					</tr>
 				</USERS>
+				</table>
+				
+				<h2>{LANG_CUSTOM_FIELDS}</h2>
+				<a href="admin.php?page=users&amp;action=new_custom_field" class="button">{LANG_CREATE_NEW_CUSTOM_FIELD}</a>
+				<table class="full_width">
+					<tr>
+						<th>{LANG_FIELD_NAME}</th>
+						<th>{LANG_FIELD_TITLE}</th>
+						<th>{LANG_FIELD_TYPE}</th>
+						<th>{LANG_SIZE}</th>
+						<th>{LANG_SHOW_AT_REGISTRATION}</th>
+						<th>{LANG_REQUIRED}</th>
+						<th>{LANG_ACTIONS}</th>
+					</tr>
+				<CUSTOM_FIELDS:loop>
+					<tr>
+						<td>{CUSTOM_FIELDS_FIELD_NAME}</td>
+						<td>{CUSTOM_FIELDS_FIELD_TITLE}</td>
+						<td>{CUSTOM_FIELDS_FIELD_TYPE}</td>
+						<td>{CUSTOM_FIELDS_FIELD_SIZE}</td>
+						<td>{CUSTOM_FIELDS_FIELD_SHOW_AT_REGISTRATION}</td>
+						<td>{CUSTOM_FIELDS_FIELD_REQUIRED}</td>
+						<td><CUSTOM_FIELDS_ACTIONS:loop><a href="admin.php?page=users&amp;action={ACTION}&amp;user_id={USER_ID}"><img src="{ACTION_IMG}" height="16" width="16" alt="{ACTION_TITLE}" title="{ACTION_TITLE}" /></a>&nbsp;</USER_ACTIONS></td>
+					</tr>
+				</CUSTOM_FIELDS>
 				</table>';
 			return $template;
 		}

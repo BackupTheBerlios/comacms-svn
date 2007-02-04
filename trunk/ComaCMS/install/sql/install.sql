@@ -203,8 +203,28 @@
 			PRIMARY KEY  (smilie_id),
 			UNIQUE KEY smilie_text (smilie_text)
 		);
+		DROP TABLE IF EXISTS {DB_PREFIX}custom_fields;
+		CREATE TABLE {DB_PREFIX}custom_fields (
+			custom_fields_id int(10) NOT NULL AUTO_INCREMENT,
+			custom_fields_name varchar(255) NOT NULL default '',
+			custom_fields_title varchar(255) NOT NULL default '',
+			custom_fields_type int(2) NOT NULL,
+			custom_fields_size int(3) NOT NULL,
+			custom_fields_show_at_registration bool NOT NULL default '1',
+			custom_fields_required bool NOT NULL default '0',
+			custom_fields_information text NOT NULL,
+			custom_fields_orderid int(10) UNSIGNED NULL,
+			PRIMARY KEY (custom_fields_id)
+		);
+		DROP TABLE IF EXISTS {DB_PREFIX}custom_fields_values;
+		CREATE TABLE {DB_PREFIX}custom_fields_values (
+			custom_fields_values_id int(10) NOT NULL AUTO_INCREMENT,
+			custom_fields_values_fieldid int(10) NOT NULL,
+			custom_fields_values_userid int(10) NOT NULL,
+			PRIMARY KEY (custom_fields_values_id)
+		);
 		DROP TABLE IF EXISTS {DB_PREFIX}auth;
-        	CREATE TABLE {DB_PREFIX}auth (
+        CREATE TABLE {DB_PREFIX}auth (
 			auth_group_id INT( 20 ) ,
 			auth_user_id INT( 20 ) ,
 			auth_page_id INT( 20 ) DEFAULT '0' NOT NULL ,

@@ -101,8 +101,8 @@
 		
 	$menuArray[] = array($translation->GetTranslation('sitestyle'), 'style');
 	$menuArray[] = array($translation->GetTranslation('users'), 'users');
-	$menuArray[] = array($translation->GetTranslation('groups'), 'groups');
-	$menuArray[] = array($translation->GetTranslation('rights'), 'rights');
+	// $menuArray[] = array($translation->GetTranslation('groups'), 'groups');
+	// $menuArray[] = array($translation->GetTranslation('rights'), 'rights');
 	$menuArray[] = array($translation->GetTranslation('files'), 'files');
 	$menuArray[] = array($translation->GetTranslation('logout'), 'logout');
 	
@@ -138,10 +138,6 @@
 			break;
 		
 		case 'users':
-			// TODO: make a class out of the context of this
-			/*include_once(__ROOT__ . '/system/admin_pages.php');
-			$title = $translation->GetTranslation('users');
-			$text = page_users();*/
 			// Load the usermanagement-class
 			include_once(__ROOT__ . '/classes/admin/admin_usermanagement.php');
 			
@@ -183,23 +179,23 @@
 			$text = $adminClass->GetPage($action);
 			break;
 		
-		case 'groups':
+		/*case 'groups':
 			// Load the groups-class (groups-management)		
 			include_once(__ROOT__  . '/classes/admin/admin_groups.php');
 
 			$title = $translation->GetTranslation('groups');
 			$adminClass = new Admin_Groups($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);
-			break;
+			break;*/
 		
-		case 'rights':
+		/*case 'rights':
 			// Load the rights-class (access-management)
 			include_once(__ROOT__ . '/classes/admin/admin_rights.php');
 			
 			$title = $translation->GetTranslation('rights');
 			$adminClass = new Admin_Rights($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);
-			break;
+			break;*/
 		
 		case 'menueditor':
 			// Load the menu-class (menu-management)

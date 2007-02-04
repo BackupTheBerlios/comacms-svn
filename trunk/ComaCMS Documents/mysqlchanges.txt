@@ -456,3 +456,22 @@ CHANGE date_location date_location VARCHAR( 255 ) NOT NULL;
 ALTER TABLE `comacms_users` CHANGE `user_admin` `user_admin` BOOL NULL DEFAULT '0';
 ALTER TABLE `comacms_users` CHANGE `user_activated` `user_activated` TINYINT( 1 ) NULL DEFAULT '0';
 ALTER TABLE `comacms_users` ADD `user_author` BOOL NULL DEFAULT '0' AFTER `user_admin` ;
+
+#r392
+#Added tables for custom fields in the user profiles
+CREATE TABLE `comacms_custom_fields` (
+	`custom_fields_id` int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`custom_fields_name` varchar(255) NOT NULL default '',
+	`custom_fields_title` varchar(255) NOT NULL default '',
+	`custom_fields_type` int(2) NOT NULL,
+	`custom_fields_size` int(3) NOT NULL,
+	`custom_fields_show_at_registration` bool NOT NULL default '1',
+	`custom_fields_required` bool NOT NULL default '0',
+	`custom_fields_information` text NOT NULL,
+	`custom_fields_orderid` int(10) UNSIGNED NULL,
+);
+CREATE TABLE `comacms_custom_fields_values` (
+	`custom_fields_values_id` int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`custom_fields_values_fieldid` int(10) NOT NULL,
+	`custom_fields_values_userid` int(10) NOT NULL,
+);

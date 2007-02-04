@@ -22,7 +22,7 @@
  	require_once __ROOT__ . '/classes/sql.php';
  	require_once __ROOT__ . '/classes/language.php';
  	require_once __ROOT__ . '/classes/config.php';
- 	require_once __ROOT__ . '/classes/user.php';
+ 	require_once __ROOT__ . '/classes/account.php';
  	require_once __ROOT__ . '/classes/comalib.php';
  	require_once __ROOT__ . '/lib/comalate/comalate.class.php';
  	

@@ -23,7 +23,7 @@
  	/**
  	 * @package ComaCMS
  	 */
-	class User {
+	class Account {
 		
 		/**
 		 * @access public
@@ -110,7 +110,7 @@
 		 * @param Sql &$SqlConnection A link to the SqlConnection class
 		 * @return void
 		 */
-		function User(&$SqlConnection) {
+		function Account(&$SqlConnection) {
 			global $_COOKIE;
 			$this->_SqlConnection = &$SqlConnection;
 			$extern_login_name = GetPostOrGet('login_name');

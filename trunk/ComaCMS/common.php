@@ -34,7 +34,7 @@
 	require_once __ROOT__ . '/classes/comalib.php';
 	require_once __ROOT__ . '/classes/outputpage.php';
 	require_once __ROOT__ . '/classes/config.php';
-	require_once __ROOT__ . '/classes/user.php';
+	require_once __ROOT__ . '/classes/account.php';
 	require_once __ROOT__ . '/classes/inlinemenu.php';
 	require_once __ROOT__ . '/classes/module.php';
 	require_once __ROOT__ . '/classes/language.php';
@@ -50,7 +50,7 @@
 	$sqlConnection->Connect($d_base);
 	$config = new Config(&$sqlConnection);
 	$config->LoadAll();
-	$user = new User($sqlConnection);
+	$user = new Account($sqlConnection);
 	$translation = new Language($user->Language);
 	$translation->AddSources(__ROOT__  . '/lang/');
 	$output = new ComaLate();

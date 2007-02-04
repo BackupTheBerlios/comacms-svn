@@ -116,9 +116,20 @@
 			
 			// Fetch all field data and save them to the array
 			while ($customField = mysql_fetch_object($customFieldsResult)) {
-				$customFields[] = array('CUSTOM_FIELDS_FIELD_NAME' => $customField->field_name,
-										'CUSTOM_FIELDS_FIELD_TITLE' => $customField->field_title,
-										'CUSTOM_FIELDS_FIELD_TYPE' => $customField->field_type);
+				$customFields[] = array('CUSTOM_FIELDS_FIELD_NAME' => $customField->custom_fields_name,
+										'CUSTOM_FIELDS_FIELD_TITLE' => $customField->custom_fields_title,
+										'CUSTOM_FIELDS_FIELD_TYPE' => $customField->custom_fields_type,
+										'CUSTOM_FIELDS_FIELD_SIZE' => $customField->custom_fields_size,
+										'CUSTOM_FIELDS_SHOW_AT_REGISTRATION', (($customField->custom_fields_show_at_registration == 1) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
+										'CUSTOM_FIELDS_REQUIRED', (($customField->custom_fields_required == 1) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
+										'CUSTOM_FIELDS_ACTIONS' => array(
+											0 => array('ACTION' => 'edit_custom_field', 'ACTION_IMG' => './img/edit.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('edit')),
+											1 => array('ACTION' => 'view_custom_field', 'ACTION_IMG' => './img/info.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('info')),
+											2 => array('ACTION' => 'move_custom_field_down', 'ACTION_IMG' => './img/down.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('move_down')),
+											3 => array('ACTION' => 'move_custom_field_up', 'ACTION_IMG' => './img/up.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('move_up')),
+											4 => array('ACTION' => 'delete_custom_field', 'ACTION_IMG' => './img/del.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('delete'))
+											)
+										);
 			}
 			mysql_free_result($customFieldsResult);
 			$this->_ComaLate->SetReplacement('CUSTOM_FIELDS', $customFields);
@@ -229,7 +240,7 @@
 				$formMaker->AddInput('edit_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'));
 				$formMaker->AddInput('edit_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'));
 				$formMaker->AddInput('edit_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'), (($user->user_admin == 1) ? true : false));
-				$formMaker->AddInput('edit_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($user->user_author == 1) ? true : false));
+				$formMaker->AddInput('edit_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($user->user_author == 1) ? true : false));
 				
 				// Generate the template
 				$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, false);
@@ -306,7 +317,7 @@
 					}
 					
 					$formMaker->AddInput('add_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'), (($UserAdmin == 1) ? true : false));
-					$formMaker->AddInput('add_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($UserAuthor == 1) ? true : false));
+					$formMaker->AddInput('add_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($UserAuthor == 1) ? true : false));
 					
 					if ($formMaker->CheckInputs('edit_user', true)) {
 						
@@ -357,7 +368,7 @@
 			$formMaker->AddInput('new_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'));
 			$formMaker->AddInput('new_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'));
 			$formMaker->AddInput('new_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'));
-			$formMaker->AddInput('new_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'));
+			$formMaker->AddInput('new_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'));
 			
 			// Generate the template
 			$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, false);
@@ -407,7 +418,7 @@
 			$formMaker->AddCheck('add_user', 'user_password_repetition', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
 			
 			$formMaker->AddInput('add_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'), (($UserAdmin == 1) ? true : false));
-			$formMaker->AddInput('add_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($UserAuthor == 1) ? true : false));
+			$formMaker->AddInput('add_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($UserAuthor == 1) ? true : false));
 			
 			if ($formMaker->CheckInputs('add_user', true)) {
 				

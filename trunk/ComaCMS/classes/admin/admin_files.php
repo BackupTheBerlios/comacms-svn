@@ -20,7 +20,7 @@
 	 * @ignore
 	 */
 	require_once __ROOT__ . '/classes/admin/admin.php';
-	
+	require_once __ROOT__ . '/classes/imageconverter.php';
 	
 	/**
 	 * Admin-Interface-Page to mangage Files
@@ -364,6 +364,9 @@
 				<thead>
 					<tr>
 						<th>
+							" .  $this->_Translation->GetTranslation('preview') . "
+						</th>
+						<th>
 							<a href=\"admin.php?page=files&amp;sort=filename#files\" title=\"" . @sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "\"><img alt=\"[" . @sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "]\" src=\"img/up.png\"/></a>
 							" . $this->_Translation->GetTranslation('filename') . "
 							<a href=\"admin.php?page=files&amp;sort=filename&amp;desc=1#files\" title=\"" . @sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "\"><img alt=\"[" . @sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "]\" src=\"img/down.png\"/></a>
@@ -420,9 +423,29 @@
 
 			$files_result = $this->_SqlConnection->SqlQuery($sql);
 			$completeSize = 0;
+			$thumbnailfolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/'); 
 			// show all files
 			while($file = mysql_fetch_object($files_result)) {
+				$filePath = utf8_encode($file->file_path);
+				$imageThumb = '';
+				// if the file is an image try to get a thumbnail
+				if(substr($file->file_type,0,6) == 'image/') {
+					$image = new ImageConverter($file->file_path);
+					// max: 100px;
+					$maximum = 100;
+					$size = $image->CalcSizeByMax($maximum);
+					$imageUrl = '';
+					if (file_exists($thumbnailfolder . '/' .  $size[0] . 'x' . $size[1] . '_' . basename($file->file_path)))
+						$imageUrl = $thumbnailfolder . '/' .  $size[0] . 'x' . $size[1] . '_' . basename($file->file_path);
+					else
+						$imageUrl = $image->SaveResizedTo($size[0], $size[1], $thumbnailfolder, $size[0] . 'x' . $size[1] . '_');
+					
+					if($imageUrl)
+						$imageThumb = "<img alt=\"$filePath\" src=\"". $imageUrl . "\" />";
+				}
+				
 				$out .= "\t\t\t\t<tr>
+					<td>$imageThumb</td>
 					<td><span title=\"" . utf8_encode($file->file_path) . "\">" . utf8_encode($file->file_name) . "</span></td>
 					<td>" . kbormb($file->file_size) . "</td>
 					<td>" . date('d.m.Y H:i:s', $file->file_date) . "</td>

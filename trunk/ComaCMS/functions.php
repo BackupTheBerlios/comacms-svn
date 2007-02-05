@@ -61,21 +61,6 @@
 		fclose ($handle);
 	}
 
-	/*function getUserIDByName($name) {
-		global $lib;
-		return $lib->GetUserIDByName($name);
-	}
-
-	function getUserByID($id) {
-		global $lib;
-		return $lib->GetUserByID($id);
-	}
-	
-	function getGroupByID($id) {
-		global $lib;
-		return $lib->GetGroupByID($id);
-	}*/
-
 	function replace_smilies($textdata) {
 		$sql = "SELECT *
 			FROM " . DB_PREFIX . "_smilies";

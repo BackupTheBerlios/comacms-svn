@@ -36,10 +36,10 @@
 			list($this->Size[0], $this->Size[1]) = getimagesize($File);
 		}
 		/**
-		 * @param int Width
-		 * @param int Height
-		 * @param string Destinationfolder
-		 * @param string Prefix
+		 * @param integer $Width
+		 * @param integer $Height
+		 * @param string $Destinationfolder
+		 * @param string $Prefix
 		 */
 		function SaveResizedTo($Width, $Height, $DestinationFolder, $Prefix = '') {
 			if(!file_exists($this->_file))

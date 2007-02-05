@@ -47,10 +47,10 @@
  		
  		/**
  		 * @access public
- 		 * @param Sql SqlConnection
- 		 * @param ComaLib ComaLib
- 		 * @param User User
- 		 * @param Config Config
+ 		 * @param Sql &SqlConnection
+ 		 * @param ComaLib &ComaLib
+ 		 * @param User &User
+ 		 * @param Config &Config
  		 */
  		function Dates(&$SqlConnection, &$ComaLib, &$User, &$Config) {
  			$this->_SqlConnection = &$SqlConnection;
@@ -99,6 +99,45 @@
  			}
  		}
  		
+ 		function GetCount($HideOlder = true, $Older = -1) {
+ 			$count = 0;
+ 			
+ 			if($HideOlder && $Older == -1)
+ 				$Older = mktime();
+ 				
+ 			$sqlHide = '';
+ 			if($HideOlder)
+ 				$sqlHide = " WHERE date_date > $Older ";
+ 			
+ 			$sql = "SELECT date_id
+ 			 		FROM " . DB_PREFIX . "dates
+ 					$sqlHide";
+ 			$datesResult = $this->_SqlConnection->SqlQuery($sql);
+ 			$count = mysql_num_rows($datesResult);
+ 			return $count;	
+ 		}
+ 		
+ 		
+ 		function GetExtendedCount($Location, $HideOlder = true, $Older = -1) {
+ 			$count = 0;
+ 			
+ 			if($HideOlder && $Older == -1)
+ 				$Older = mktime();
+ 				
+ 			$sqlHide = '';
+ 			if($HideOlder)
+ 				$sqlHide = " AND date_date > $Older ";
+ 			
+ 			$sql = "SELECT date_id
+ 			 		FROM " . DB_PREFIX . "dates
+ 			 		WHERE (date_location LIKE '$Location')
+ 					$sqlHide";
+ 			$datesResult = $this->_SqlConnection->SqlQuery($sql);
+ 			$count = mysql_num_rows($datesResult);
+ 			return $count;	
+ 		}
+ 		
+ 		
  		/**
  		 * @access public
  		 * @param integer MaxCount
@@ -108,7 +147,7 @@
  		 * @param timestamp Older
  		 * @return array
  		 */
- 		function FillArray($MaxCount = 6, $ConvertTimestamp = true, $ConvertUsername = true, $HideOlder = true, $Older = -1) {
+ 		function FillArray($MaxCount = 6, $Start = 0, $ConvertTimestamp = true, $ConvertUsername = true, $HideOlder = true, $Older = -1) {
  			
  			// get some config-values
 			$dateDayFormat = $this->_Config->Get('date_day_format', '');
@@ -131,7 +170,7 @@
  				FROM " . DB_PREFIX . "dates
  				$sqlHide
  				ORDER BY date_date ASC
- 				LIMIT $MaxCount";
+ 				LIMIT $Start, $MaxCount";
  			if($MaxCount < 0)
  				$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
  				FROM " . DB_PREFIX . "dates
@@ -156,7 +195,7 @@
  		 * @param boolean ConvertTimestamp
  		 * @return array
  		 */
- 		function ExtendedFillArray($Location, $MaxCount = 6, $ConvertTimestamp = true) {
+ 		function ExtendedFillArray($Location, $MaxCount = 6, $Start = 0, $ConvertTimestamp = true) {
  			$datesArray = array();
  			
  			if(!is_numeric($MaxCount))
@@ -165,7 +204,7 @@
  				FROM " . DB_PREFIX . "dates
  				WHERE date_location LIKE '$Location'
  				ORDER BY date_date ASC
- 				LIMIT $MaxCount";
+ 				LIMIT $Start, $MaxCount";
  			if($MaxCount < 0)
  				$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
  				FROM " . DB_PREFIX . "dates

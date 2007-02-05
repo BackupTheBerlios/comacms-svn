@@ -1,7 +1,7 @@
 <?php
 /**
+ * @ignore
  * @package ComaCMS
- * @subpackage UserInterface
  * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
@@ -15,7 +15,6 @@
  # the Free Software Foundation; either version 2 of the License, or
  # (at your option) any later version.
  #----------------------------------------------------------------------
-	
+
 	header('Location: ../special.php?page=userinterface');
-	
 ?>

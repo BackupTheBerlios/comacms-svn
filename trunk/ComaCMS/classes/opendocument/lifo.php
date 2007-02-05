@@ -14,33 +14,32 @@
  # the Free Software Foundation; either version 2 of the License, or
  # (at your option) any later version.
  #----------------------------------------------------------------------
- /**
-  * LIFO
-  * A Last In First Out String management
-  */
- class LIFO {
-	/**
-	 * @access private
-	 */
-	var $_data = array();
-	
-	/** Add
-	 * @access public
-	 * @param string $Data
-	 * @return void
-	 */
-	function Add($Data) {
-		$this->_data[] = $Data;
+	 /**
+	  * LIFO
+	  * A Last In First Out String management
+	  */
+	 class LIFO {
+		/**
+		 * @access private
+		 */
+		var $_Data = array();
+		
+		/** Add
+		 * @access public
+		 * @param string $Data
+		 * @return void
+		 */
+		function Add($Data) {
+			$this->_Data[] = $Data;
+		}
+		
+		/** Get
+		 * Removes the item which was added at las
+		 * @access public
+		 * @return string
+		 */
+		function Get() {
+			return array_pop($this->_Data);
+		}
 	}
-	
-	/** Get
-	 * Removes the item which was added at las
-	 * @access public
-	 * @return string
-	 */
-	function Get() {
-		return 	array_pop($this->_data);
-	}
-	
-}
 ?>

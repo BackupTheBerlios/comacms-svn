@@ -218,6 +218,7 @@
 	$langString['step'] = 'Schritt';
 	$langString['please_select_your_language'] = 'Bitte die gew&uuml;nschte Sprache ausw&auml;hlen.';
 	$langString['next'] = 'Weiter';
+	$langString['previous'] = 'Zurück';
 	$langString['is_the_file_%file%_writeable'] = 'Ist die Datei &quot;%s&quot; beschreibbar?';
 	$langString['is_the_directory_%directory%_writeable'] = 'Ist der Ordner &quot;%s&quot; beschreibbar?';
 	$langString['php_version'] = 'PHP-Version';

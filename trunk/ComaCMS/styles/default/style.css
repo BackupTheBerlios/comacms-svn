@@ -557,7 +557,7 @@ p.after_column {
 	display: block;
 }
 
-div.last_change {
+.last_change {
   margin-top: 2em;
   margin-right: .8em;
   font-size: .96em;

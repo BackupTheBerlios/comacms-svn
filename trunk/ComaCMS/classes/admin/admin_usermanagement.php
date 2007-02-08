@@ -120,8 +120,8 @@
 										'CUSTOM_FIELDS_FIELD_TITLE' => $customField->custom_fields_title,
 										'CUSTOM_FIELDS_FIELD_TYPE' => $customField->custom_fields_type,
 										'CUSTOM_FIELDS_FIELD_SIZE' => $customField->custom_fields_size,
-										'CUSTOM_FIELDS_SHOW_AT_REGISTRATION', (($customField->custom_fields_show_at_registration == 1) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
-										'CUSTOM_FIELDS_REQUIRED', (($customField->custom_fields_required == 1) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
+										'CUSTOM_FIELDS_SHOW_AT_REGISTRATION' => (($customField->custom_fields_show_at_registration == 1) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
+										'CUSTOM_FIELDS_REQUIRED' => (($customField->custom_fields_required == 1) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
 										'CUSTOM_FIELDS_ACTIONS' => array(
 											0 => array('ACTION' => 'edit_custom_field', 'ACTION_IMG' => './img/edit.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('edit')),
 											1 => array('ACTION' => 'view_custom_field', 'ACTION_IMG' => './img/info.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('info')),
@@ -195,9 +195,9 @@
 						<td>{CUSTOM_FIELDS_FIELD_TITLE}</td>
 						<td>{CUSTOM_FIELDS_FIELD_TYPE}</td>
 						<td>{CUSTOM_FIELDS_FIELD_SIZE}</td>
-						<td>{CUSTOM_FIELDS_FIELD_SHOW_AT_REGISTRATION}</td>
-						<td>{CUSTOM_FIELDS_FIELD_REQUIRED}</td>
-						<td><CUSTOM_FIELDS_ACTIONS:loop><a href="admin.php?page=users&amp;action={ACTION}&amp;user_id={USER_ID}"><img src="{ACTION_IMG}" height="16" width="16" alt="{ACTION_TITLE}" title="{ACTION_TITLE}" /></a>&nbsp;</USER_ACTIONS></td>
+						<td>{CUSTOM_FIELDS_SHOW_AT_REGISTRATION}</td>
+						<td>{CUSTOM_FIELDS_REQUIRED}</td>
+						<td><CUSTOM_FIELDS_ACTIONS:loop><a href="admin.php?page=users&amp;action={ACTION}&amp;user_id={USER_ID}"><img src="{ACTION_IMG}" height="16" width="16" alt="{ACTION_TITLE}" title="{ACTION_TITLE}" /></a>&nbsp;</CUSTOM_FIELDS_ACTIONS></td>
 					</tr>
 				</CUSTOM_FIELDS>
 				</table>';

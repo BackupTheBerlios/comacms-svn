@@ -215,10 +215,10 @@
 					}
 					else {		
 						// Load the admincontrol-class (system-overview)
-						include_once(__ROOT__ . '/classes/admin/admin_user_usercontrol.php');
+						include_once(__ROOT__ . '/classes/user/user_usercontrol.php');
 						
 						$title = $translation->GetTranslation('usercontrol');
-						$adminClass = new Admin_User_UserControl($sqlConnection, $translation, $config, $user, $lib, $output);
+						$adminClass = new User_UserControl($sqlConnection, $translation, $config, $user, $lib, $output);
 						$text = $adminClass->GetPage($action);
 					}
 					break;

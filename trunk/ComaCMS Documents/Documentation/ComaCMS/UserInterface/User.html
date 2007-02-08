@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Docs for page index.php</title>
+<title>Docs For Class User</title>
 <link rel="stylesheet" type="text/css" href="../../media/style.css">
 </head>
 <body>
@@ -46,9 +46,9 @@
 		</a><br>
 			<a href="../../ComaCMS/_classes---edit_text_page.php.html">		edit_text_page.php
 		</a><br>
-			<a href="../../ComaCMS/_system---functions.php.html">		functions.php
-		</a><br>
 			<a href="../../ComaCMS/_functions.php.html">		functions.php
+		</a><br>
+			<a href="../../ComaCMS/_system---functions.php.html">		functions.php
 		</a><br>
 			<a href="../../ComaCMS/_classes---imageconverter.php.html">		imageconverter.php
 		</a><br>
@@ -198,9 +198,9 @@
 		</a><br>
 	  </div><br />
 	subpackage <b>UserInterface</b><br>  <div class="package">
-			<a href="../../ComaCMS/UserInterface/_classes---admin---admin_user_usercontrol.php.html">		admin_user_usercontrol.php
+			<a href="../../ComaCMS/UserInterface/_classes---user---user.php.html">		user.php
 		</a><br>
-			<a href="../../ComaCMS/UserInterface/_user---index.php.html">		index.php
+			<a href="../../ComaCMS/UserInterface/_classes---user---user_usercontrol.php.html">		user_usercontrol.php
 		</a><br>
 	  </div><br />
       
@@ -245,9 +245,6 @@
 	    &nbsp;&nbsp;		<a href="../../ComaCMS/AdminInterface/Admin_Usermanagement.html">Admin_Usermanagement</a><br />
 	  </div>
   <div class="package">
-	UserInterface<br />	    &nbsp;&nbsp;		<a href="../../ComaCMS/UserInterface/Admin_User_Usercontrol.html">Admin_User_Usercontrol</a><br />
-	  </div>
-  <div class="package">
 	Articles<br />	    &nbsp;&nbsp;		<a href="../../ComaCMS/Articles/Admin_Module_Articles.html">Admin_Module_Articles</a><br />
 	    &nbsp;&nbsp;		<a href="../../ComaCMS/Articles/Articles.html">Articles</a><br />
 	    &nbsp;&nbsp;		<a href="../../ComaCMS/Articles/Module_Articles.html">Module_Articles</a><br />
@@ -283,35 +280,183 @@
   <div class="package">
 	Sitemap<br />	    &nbsp;&nbsp;		<a href="../../ComaCMS/Sitemap/Module_Sitemap.html">Module_Sitemap</a><br />
 	  </div>
+  <div class="package">
+	UserInterface<br />	    &nbsp;&nbsp;		<a href="../../ComaCMS/UserInterface/User.html">User</a><br />
+	    &nbsp;&nbsp;		<a href="../../ComaCMS/UserInterface/User_Usercontrol.html">User_Usercontrol</a><br />
+	  </div>
                 </td>
     <td>
       <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
 
-<h1>Procedural File: index.php</h1>
-Source Location: /user/index.php<br /><br />
-
-<br>
-<br>
+<h1>Class: User</h1>
+Source Location: /classes/user/user.php<br /><br />
 
 
-<h2>Page Details:</h2>
-<br /><br />
+<table width="100%" border="0">
+<tr><td valign="top">
+
+<h3><a href="#class_details">Class Overview</a></h3>
+<pre></pre><br />
+<div class="description"></div><br /><br />
+
+
+
+
+
+
+        
+</td>
+
+
+
+<td valign="top">
+<h3><a href="#class_methods">Methods</a></h3>
+<ul>
+    <li><a href="../../ComaCMS/UserInterface/User.html#methodUser">User</a></li>
+    <li><a href="../../ComaCMS/UserInterface/User.html#methodGetPage">GetPage</a></li>
+  </ul>
+</td>
+
+</tr></table>
+<hr />
+
+<table width="100%" border="0"><tr>
+
+
+<td valign="top">
+<h3>Child classes:</h3>
+<div class="tags">
+<dl>
+<dt><a href="../../ComaCMS/UserInterface/User_Usercontrol.html">User_Usercontrol</a></dt>
+	<dd>Returns the Usercontrol</dd>
+</dl>
+</div>
+</td>
+
+
+
+
+</tr></table>
+<hr />
+
+<a name="class_details"></a>
+<h3>Class Details</h3>
+<div class="tags">
+[line 34]<br />
+</div><br /><br />
+<div class="top">[ <a href="#top">Top</a> ]</div><br />
+
+
+<hr />
+<a name="class_methods"></a>
+<h3>Class Methods</h3>
+<div class="tags">
+
+  <hr />
+	<a name="methodUser"></a>
+	<h3>constructor User <span class="smalllinenumber">[line 82]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>User User(
+<a href="../../ComaCMS/Sql.html">Sql</a>
+&$SqlConnection, <a href="../../ComaCMS/Language.html">Language</a>
+&$Translation, <a href="../../ComaCMS/Config.html">Config</a>
+&$Config, <a href="../../ComaCMS/Account.html">Account</a>
+&$User, <a href="../../ComaCMS/ComaLib.html">ComaLib</a>
+&$ComaLib, <a href="../../ComaLate/ComaLate.html">ComaLate</a>
+&$ComaLate)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Initializes a subpage of the userinterface<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>copyright:</b>&nbsp;&nbsp;</td><td>(C) 2005-2007 The ComaCMS-Team</td>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
   </tr>
 </table>
 </div>
 <br /><br />
-<br /><br />
-<br /><br />
-<br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type"><a href="../../ComaCMS/Sql.html">Sql</a>&nbsp;&nbsp;</td>
+        <td><b>&$SqlConnection</b>&nbsp;&nbsp;</td>
+        <td>The connection-class for connecting the database</td>
+      </tr>
+          <tr>
+        <td class="type"><a href="../../ComaCMS/Language.html">Language</a>&nbsp;&nbsp;</td>
+        <td><b>&$Translation</b>&nbsp;&nbsp;</td>
+        <td>The language-class for translations</td>
+      </tr>
+          <tr>
+        <td class="type"><a href="../../ComaCMS/Config.html">Config</a>&nbsp;&nbsp;</td>
+        <td><b>&$Config</b>&nbsp;&nbsp;</td>
+        <td>The config-class for config-requests</td>
+      </tr>
+          <tr>
+        <td class="type"><a href="../../ComaCMS/Account.html">Account</a>&nbsp;&nbsp;</td>
+        <td><b>&$User</b>&nbsp;&nbsp;</td>
+        <td>The user-class, handling the current user</td>
+      </tr>
+          <tr>
+        <td class="type"><a href="../../ComaCMS/ComaLib.html">ComaLib</a>&nbsp;&nbsp;</td>
+        <td><b>&$ComaLib</b>&nbsp;&nbsp;</td>
+        <td>The ComaLib-class containing systemrelated functions</td>
+      </tr>
+          <tr>
+        <td class="type"><a href="../../ComaLate/ComaLate.html">ComaLate</a>&nbsp;&nbsp;</td>
+        <td><b>&$ComaLate</b>&nbsp;&nbsp;</td>
+        <td>The ComaLate-class to handle</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodGetPage"></a>
+	<h3>method GetPage <span class="smalllinenumber">[line 105]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string GetPage(
+[string
+$Action = ''])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Returns the page which is selected by <var>$Action</var><br /><br /><br /><br />
+
+	<p>Overridden in child classes as:<br />
+		<dl>
+	<dt><a href="../../ComaCMS/UserInterface/User_Usercontrol.html#methodGetPage">User_Usercontrol::GetPage()</a></dt>
+		<dd>Gets the subpages of the usercontrol</dd>
+	</dl>
+	</p>
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Action</b>&nbsp;&nbsp;</td>
+        <td>Action</td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+</div><br />
+
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sun, 04 Feb 2007 23:12:11 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Thu, 08 Feb 2007 22:28:43 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
 	      </div>
       </td></tr></table>
     </td>

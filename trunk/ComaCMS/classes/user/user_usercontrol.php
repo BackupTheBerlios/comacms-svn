@@ -19,7 +19,7 @@
 	/**
 	 * @ignore
 	 */
-	require_once __ROOT__ . '/classes/admin/admin.php';
+	require_once __ROOT__ . '/classes/user/user.php';
 	require_once __ROOT__ . '/lib/formmaker/formmaker.class.php';
 	
 	/**
@@ -27,7 +27,7 @@
 	 * @package ComaCMS
 	 * @subpackage UserInterface
 	 */
-	class Admin_User_Usercontrol extends Admin {
+	class User_Usercontrol extends User {
 		
 		/**
 		 * Gets the subpages of the usercontrol

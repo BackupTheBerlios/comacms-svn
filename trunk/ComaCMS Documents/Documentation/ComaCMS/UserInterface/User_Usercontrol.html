@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Docs For Class News</title>
+<title>Docs For Class User_Usercontrol</title>
 <link rel="stylesheet" type="text/css" href="../../media/style.css">
 </head>
 <body>
@@ -288,16 +288,18 @@
     <td>
       <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
 
-<h1>Class: News</h1>
-Source Location: /modules/news/news.class.php<br /><br />
+<h1>Class: User_Usercontrol</h1>
+Source Location: /classes/user/user_usercontrol.php<br /><br />
 
 
 <table width="100%" border="0">
 <tr><td valign="top">
 
 <h3><a href="#class_details">Class Overview</a></h3>
-<pre></pre><br />
-<div class="description"></div><br /><br />
+<pre><a href="../../ComaCMS/UserInterface/User.html">User</a>
+   |
+   --User_Usercontrol</pre><br />
+<div class="description">Returns the Usercontrol</div><br /><br />
 
 
 
@@ -312,12 +314,7 @@ Source Location: /modules/news/news.class.php<br /><br />
 <td valign="top">
 <h3><a href="#class_methods">Methods</a></h3>
 <ul>
-    <li><a href="../../ComaCMS/News/News.html#methodNews">News</a></li>
-    <li><a href="../../ComaCMS/News/News.html#methodAddMessage">AddMessage</a></li>
-    <li><a href="../../ComaCMS/News/News.html#methodDeleteMessage">DeleteMessage</a></li>
-    <li><a href="../../ComaCMS/News/News.html#methodFillArray">FillArray</a></li>
-    <li><a href="../../ComaCMS/News/News.html#methodGetMessage">GetMessage</a></li>
-    <li><a href="../../ComaCMS/News/News.html#methodUpdateMessage">UpdateMessage</a></li>
+    <li><a href="../../ComaCMS/UserInterface/User_Usercontrol.html#methodGetPage">GetPage</a></li>
   </ul>
 </td>
 
@@ -330,6 +327,26 @@ Source Location: /modules/news/news.class.php<br /><br />
 
 
 
+<td valign="top">
+<h3>Inherited Methods</h3>
+<div class="tags">
+<h4>Class: <a href="../../ComaCMS/UserInterface/User.html">User</a></h4>
+<dl>
+    <dt>
+    <a href="../../ComaCMS/UserInterface/User.html#methodUser">User::User()</a>
+  </dt>
+  <dd>
+    Initializes a subpage of the userinterface
+  </dd>
+    <dt>
+    <a href="../../ComaCMS/UserInterface/User.html#methodGetPage">User::GetPage()</a>
+  </dt>
+  <dd>
+    Returns the page which is selected by <var>$Action</var>
+  </dd>
+  </dl>
+</div>
+</td>
 
 </tr></table>
 <hr />
@@ -337,8 +354,8 @@ Source Location: /modules/news/news.class.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line 23]<br />
-</div><br /><br />
+[line 30]<br />
+Returns the Usercontrol<br /><br /></div><br /><br />
 <div class="top">[ <a href="#top">Top</a> ]</div><br />
 
 
@@ -348,67 +365,24 @@ Source Location: /modules/news/news.class.php<br /><br />
 <div class="tags">
 
   <hr />
-	<a name="methodNews"></a>
-	<h3>constructor News <span class="smalllinenumber">[line 55]</span></h3>
+	<a name="methodGetPage"></a>
+	<h3>method GetPage <span class="smalllinenumber">[line 38]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>News News(
-<a href="../../ComaCMS/Sql.html">Sql</a>
-&$SqlConnection, <a href="../../ComaCMS/ComaLib.html">ComaLib</a>
-&$ComaLib, <a href="../../ComaCMS/UserInterface/User.html">User</a>
-&$User, <a href="../../ComaCMS/Config.html">Config</a>
-&$Config)</code>
+		<code>string GetPage(
+[string
+$Action = ''])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		<br /><br />
-
-	
-        <h4>Parameters:</h4>
-    <div class="tags">
-    <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-        <td class="type"><a href="../../ComaCMS/Sql.html">Sql</a>&nbsp;&nbsp;</td>
-        <td><b>&$SqlConnection</b>&nbsp;&nbsp;</td>
-        <td>SqlConnection</td>
-      </tr>
-          <tr>
-        <td class="type"><a href="../../ComaCMS/ComaLib.html">ComaLib</a>&nbsp;&nbsp;</td>
-        <td><b>&$ComaLib</b>&nbsp;&nbsp;</td>
-        <td>ComaLib</td>
-      </tr>
-          <tr>
-        <td class="type"><a href="../../ComaCMS/UserInterface/User.html">User</a>&nbsp;&nbsp;</td>
-        <td><b>&$User</b>&nbsp;&nbsp;</td>
-        <td>User</td>
-      </tr>
-          <tr>
-        <td class="type"><a href="../../ComaCMS/Config.html">Config</a>&nbsp;&nbsp;</td>
-        <td><b>&$Config</b>&nbsp;&nbsp;</td>
-        <td>Config</td>
-      </tr>
-        </table>
-    </div><br />
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
-	<a name="methodAddMessage"></a>
-	<h3>method AddMessage <span class="smalllinenumber">[line 87]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void AddMessage(
-string
-$Title, string
-$Text)</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		Adds a new News-Message<br /><br /><br /><br />
+		Gets the subpages of the usercontrol<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>A template for the outputpage</td>
+  </tr>
   <tr>
     <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
   </tr>
@@ -416,190 +390,14 @@ $Text)</code>
 </div>
 <br /><br />
 
-	
+	Overrides <a href="../../ComaCMS/UserInterface/User.html#methodGetPage">User::GetPage()</a> (Returns the page which is selected by <var>$Action</var>)<br /><br />
         <h4>Parameters:</h4>
     <div class="tags">
     <table border="0" cellspacing="0" cellpadding="0">
           <tr>
         <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$Title</b>&nbsp;&nbsp;</td>
-        <td>Title</td>
-      </tr>
-          <tr>
-        <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$Text</b>&nbsp;&nbsp;</td>
-        <td>Text</td>
-      </tr>
-        </table>
-    </div><br />
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
-	<a name="methodDeleteMessage"></a>
-	<h3>method DeleteMessage <span class="smalllinenumber">[line 103]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void DeleteMessage(
-[integer
-$NewsID = -1])</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		Delete a News-Message by ID<br /><br /><br /><br />
-<h4>Tags:</h4>
-<div class="tags">
-<table border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
-  </tr>
-</table>
-</div>
-<br /><br />
-
-	
-        <h4>Parameters:</h4>
-    <div class="tags">
-    <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-        <td class="type">integer&nbsp;&nbsp;</td>
-        <td><b>$NewsID</b>&nbsp;&nbsp;</td>
-        <td>NewsID</td>
-      </tr>
-        </table>
-    </div><br />
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
-	<a name="methodFillArray"></a>
-	<h3>method FillArray <span class="smalllinenumber">[line 147]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>array FillArray(
-[integer
-$Maximum = 6], [boolean
-$ConvertTimestamp = true], [boolean
-$DisplayAuthor = false])</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		Fill an array with the data of News-Messages, which is ready to paste in a ComaLate-Template<br /><br /><br /><br />
-<h4>Tags:</h4>
-<div class="tags">
-<table border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><b>return:</b>&nbsp;&nbsp;</td><td>A ComaLate ready Array</td>
-  </tr>
-  <tr>
-    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
-  </tr>
-</table>
-</div>
-<br /><br />
-
-	
-        <h4>Parameters:</h4>
-    <div class="tags">
-    <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-        <td class="type">integer&nbsp;&nbsp;</td>
-        <td><b>$Maximum</b>&nbsp;&nbsp;</td>
-        <td>Maximum The maximum count of News-Messages, which should be loaded, if it is -1 all News-Messages will be loaded</td>
-      </tr>
-          <tr>
-        <td class="type">boolean&nbsp;&nbsp;</td>
-        <td><b>$ConvertTimestamp</b>&nbsp;&nbsp;</td>
-        <td>ParserDate Should the timsamp of each News-Message parsed to a hunam-readable value?</td>
-      </tr>
-          <tr>
-        <td class="type">boolean&nbsp;&nbsp;</td>
-        <td><b>$DisplayAuthor</b>&nbsp;&nbsp;</td>
-        <td>DisplayAutor Put the author into the array? if it's 'false' the value of the config is decisive if not the name will be shown</td>
-      </tr>
-        </table>
-    </div><br />
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
-	<a name="methodGetMessage"></a>
-	<h3>method GetMessage <span class="smalllinenumber">[line 117]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>array GetMessage(
-[integer
-$NewsID = -1])</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		Get a News-Message by ID<br /><br /><br /><br />
-<h4>Tags:</h4>
-<div class="tags">
-<table border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
-  </tr>
-</table>
-</div>
-<br /><br />
-
-	
-        <h4>Parameters:</h4>
-    <div class="tags">
-    <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-        <td class="type">integer&nbsp;&nbsp;</td>
-        <td><b>$NewsID</b>&nbsp;&nbsp;</td>
-        <td>NewsID</td>
-      </tr>
-        </table>
-    </div><br />
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
-	<a name="methodUpdateMessage"></a>
-	<h3>method UpdateMessage <span class="smalllinenumber">[line 71]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void UpdateMessage(
-integer
-$NewsID, string
-$Title, string
-$Text)</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		Update a News-Message<br /><br /><br /><br />
-<h4>Tags:</h4>
-<div class="tags">
-<table border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
-  </tr>
-</table>
-</div>
-<br /><br />
-
-	
-        <h4>Parameters:</h4>
-    <div class="tags">
-    <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-        <td class="type">integer&nbsp;&nbsp;</td>
-        <td><b>$NewsID</b>&nbsp;&nbsp;</td>
-        <td>NewsID</td>
-      </tr>
-          <tr>
-        <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$Title</b>&nbsp;&nbsp;</td>
-        <td>Title</td>
-      </tr>
-          <tr>
-        <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$Text</b>&nbsp;&nbsp;</td>
-        <td>Text</td>
+        <td><b>$Action</b>&nbsp;&nbsp;</td>
+        <td>The subpage of the usercontrol</td>
       </tr>
         </table>
     </div><br />
@@ -610,7 +408,7 @@ $Text)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 08 Feb 2007 22:28:38 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Thu, 08 Feb 2007 22:28:43 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
 	      </div>
       </td></tr></table>
     </td>

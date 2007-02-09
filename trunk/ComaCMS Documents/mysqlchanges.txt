@@ -475,3 +475,7 @@ CREATE TABLE `comacms_custom_fields_values` (
 	`custom_fields_values_fieldid` int(10) NOT NULL,
 	`custom_fields_values_userid` int(10) NOT NULL
 );
+
+#r400
+#Changed custom_fields_type field
+ALTER TABLE `comacms_custom_fields` CHANGE `custom_fields_type` `custom_fields_type` varchar(50) NOT NULL;

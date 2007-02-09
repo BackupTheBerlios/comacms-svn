@@ -294,7 +294,6 @@
 						break;
 						
 					case 'not_email':
-					
 						// Identify wether value is an emailadress or not 
 						if (!$this->_IsEMailAddress($input['value'])){
 							$ok = false;
@@ -304,9 +303,17 @@
 						break;
 						
 					case 'not_icq':
-					
 						// Identify wether value is and icq number or not
 						if (!$this->_IsIcqNumber($input['value'])) {
+							$ok = false;
+							if ($GenerateErrorInformations)
+								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
+						}
+						break;
+					
+					case 'not_nummeric':
+						// Identify wether value is nummeric or not
+						if (!is_numeric($input['value'])) {
 							$ok = false;
 							if ($GenerateErrorInformations)
 								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
@@ -340,7 +347,8 @@
 							$ok = false;
 							if ($GenerateErrorInformations)
 								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
-						}		
+						}
+						break;	
 				}
 			}
 			

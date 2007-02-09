@@ -63,7 +63,7 @@
 	
 	$output->SetCondition('notinadmin', true);
 	
-	if(!isset($page) && endsWith($_SERVER['PHP_SELF'], 'index.php'))
+	if(!isset($page) && substr($_SERVER['PHP_SELF'], -9) == 'index.php')
 		$page = $config->Get('default_page', 'home');
 	elseif(!isset($page))
 		$page = '';
@@ -87,9 +87,9 @@
 	}
  	
  	$pagePrefix = 'l:';
-	if(endsWith($_SERVER['PHP_SELF'], 'admin.php'))
+	if(substr($_SERVER['PHP_SELF'], -9) == 'admin.php')
 		$pagePrefix = 'a:';
-	else if(endsWith($_SERVER['PHP_SELF'], 'special.php'))
+	else if(substr($_SERVER['PHP_SELF'], -11) == 'special.php')
 		$pagePrefix = 's:';
 	else
 		$pagePrefix = '';

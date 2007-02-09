@@ -28,7 +28,7 @@
 		function NewPage($page_id) {
 			$sql = "INSERT INTO " . DB_PREFIX . "pages_gallery (page_id)
 				VALUES ($page_id)";
-			db_result($sql);
+			$this->_SqlConnection->SqlQuery($sql);
 		}
 	
 		function GetSavePage($page_id) {
@@ -38,7 +38,7 @@
 			$sql = "UPDATE " . DB_PREFIX . "pages " .
 				"SET page_creator=$user->ID, page_date=" . mktime() . ", page_title='$page_title' " .
 				"WHERE page_id=$page_id";
-			db_result($sql);
+			$this->_SqlConnection->SqlQuery($sql);
 			header("Location: admin.php?page=pagestructure&action=editPage&pageID=$page_id");
 		}
 		
@@ -79,7 +79,7 @@
 				LEFT JOIN " . DB_PREFIX . "pages_gallery gallery ON page.page_id = gallery.page_id)
 				WHERE page.page_id={$PageID} AND page.page_type='gallery'
 				LIMIT 1";
-			$pageResult = db_result($sql);	
+			$pageResult = $this->_SqlConnection->SqlQuery($sql);	
 			if($pageData = mysql_fetch_object($pageResult)) {
 				$galleryID = $pageData->gallery_id;
 				$imageID = GetPostOrGet('imageID');
@@ -88,7 +88,7 @@
 					SET `gallery_description` = '{$imageDescription}'
 					WHERE gallery_id={$galleryID} AND gallery_file_id={$imageID}
 					LIMIT 1";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 			}
 			return $this->_editOverView($PageID);
 		}
@@ -109,14 +109,14 @@
 				LEFT JOIN " . DB_PREFIX . "pages_gallery gallery ON page.page_id = gallery.page_id)
 				WHERE page.page_id={$PageID} AND page.page_type='gallery'
 				LIMIT 1";
-			$pageResult = db_result($sql);	
+			$pageResult = $this->_SqlConnection->SqlQuery($sql);	
 			if($pageData = mysql_fetch_object($pageResult)) {
 				$galleryID = $pageData->gallery_id;
 				$sql = "SELECT *
 		 			FROM " . DB_PREFIX . "gallery
 		 			WHERE gallery_id={$galleryID} AND gallery_file_id={$imageID}
 		 			LIMIT 1";
-		 		$imageDataResult = db_result($sql);
+		 		$imageDataResult = $this->_SqlConnection->SqlQuery($sql);
 		 		if($imageData = mysql_fetch_object($imageDataResult)) {
 		 			$thumbnailfoler = $config->Get('thumbnailfolder', 'data/thumbnails/');
 					$out = "\t\t\t\t<fieldset> 
@@ -162,13 +162,13 @@
 				LEFT JOIN " . DB_PREFIX . "pages_gallery gallery ON page.page_id = gallery.page_id)
 				WHERE page.page_id=$page_id AND page.page_type='gallery'
 				LIMIT 0,1";
-			$page_result = db_result($sql);
+			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			$page_data = mysql_fetch_object($page_result);
 			$gallery_id = $page_data->gallery_id;
 		 	$sql = "SELECT *
 		 		FROM " . DB_PREFIX . "gallery
 		 		WHERE gallery_id=$gallery_id AND gallery_file_id=$image_id";
-		 	$first_image_result = db_result($sql);
+		 	$first_image_result = $this->_SqlConnection->SqlQuery($sql);
 		 	$first_image = mysql_fetch_object($first_image_result);
 		 	$first_id = $first_image->gallery_file_id;
 		 	$first_orderid = $first_image->gallery_orderid;
@@ -177,18 +177,18 @@
 		 		FROM " . DB_PREFIX . "gallery
 		 		WHERE gallery_id=$gallery_id AND gallery_orderid < $first_orderid
 		 		ORDER BY gallery_orderid DESC";
-		 	$second_image_result = db_result($sql);
+		 	$second_image_result = $this->_SqlConnection->SqlQuery($sql);
 		 	if($second_image = mysql_fetch_object($second_image_result)) {
 		 		$second_id = $second_image->gallery_file_id;
 		 		$second_orderid = $second_image->gallery_orderid;
 		 		$sql = "UPDATE " . DB_PREFIX . "gallery
 		 			SET gallery_orderid=$second_orderid 
 		 			WHERE gallery_id=$gallery_id AND gallery_file_id=$first_id";
-		 		db_result($sql);
+		 		$this->_SqlConnection->SqlQuery($sql);
 		 		$sql = "UPDATE " . DB_PREFIX . "gallery
 		 			SET gallery_orderid=$first_orderid 
 		 			WHERE gallery_id=$gallery_id AND gallery_file_id=$second_id";
-		 		db_result($sql);
+		 		$this->_SqlConnection->SqlQuery($sql);
 		 	}	
 		 	header("Location: admin.php?page=pagestructure&action=editPage&pageID=$page_id");
 		}
@@ -205,13 +205,13 @@
 				LEFT JOIN " . DB_PREFIX . "pages_gallery gallery ON page.page_id = gallery.page_id)
 				WHERE page.page_id=$page_id AND page.page_type='gallery'
 				LIMIT 0,1";
-			$page_result = db_result($sql);
+			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			$page_data = mysql_fetch_object($page_result);
 			$gallery_id = $page_data->gallery_id;
 		 	$sql = "SELECT *
 		 		FROM " . DB_PREFIX . "gallery
 		 		WHERE gallery_id=$gallery_id AND gallery_file_id=$image_id";
-		 	$first_image_result = db_result($sql);
+		 	$first_image_result = $this->_SqlConnection->SqlQuery($sql);
 		 	$first_image = mysql_fetch_object($first_image_result);
 		 	$first_id = $first_image->gallery_file_id;
 		 	$first_orderid = $first_image->gallery_orderid;
@@ -220,18 +220,18 @@
 		 		FROM " . DB_PREFIX . "gallery
 		 		WHERE gallery_id=$gallery_id AND gallery_orderid > $first_orderid
 		 		ORDER BY gallery_orderid ASC";
-		 	$second_image_result = db_result($sql);
+		 	$second_image_result = $this->_SqlConnection->SqlQuery($sql);
 		 	if($second_image = mysql_fetch_object($second_image_result)) {
 		 		$second_id = $second_image->gallery_file_id;
 		 		$second_orderid = $second_image->gallery_orderid;
 		 		$sql = "UPDATE " . DB_PREFIX . "gallery
 		 			SET gallery_orderid=$second_orderid 
 		 			WHERE gallery_id=$gallery_id AND gallery_file_id=$first_id";
-		 		db_result($sql);
+		 		$this->_SqlConnection->SqlQuery($sql);
 		 		$sql = "UPDATE " . DB_PREFIX . "gallery
 		 			SET gallery_orderid=$first_orderid 
 		 			WHERE gallery_id=$gallery_id AND gallery_file_id=$second_id";
-		 		db_result($sql);
+		 		$this->_SqlConnection->SqlQuery($sql);
 		 	}	
 		 	header("Location: admin.php?page=pagestructure&action=editPage&pageID=$page_id");
 		}
@@ -249,14 +249,14 @@
 				WHERE page.page_id=$page_id AND page.page_type='gallery'
 				LIMIT 0,1";
 
-			$page_result = db_result($sql);
+			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			$page_data = mysql_fetch_object($page_result);
 		 	$sql = "SELECT *
 		 		FROM " . DB_PREFIX ."gallery
 		 		WHERE gallery_id=$page_data->gallery_id
 		 		ORDER BY gallery_orderid DESC
 		 		LIMIT 0,1";
-		 	$orderid_result = db_result($sql);
+		 	$orderid_result = $this->_SqlConnection->SqlQuery($sql);
 		 	$orderid = 0;
 		 	if($orderid_res = mysql_fetch_object($orderid_result))
 		 		$orderid = $orderid_res->gallery_orderid + 1;
@@ -267,7 +267,7 @@
 					$sql = "SELECT file_path, file_id
 						FROM " . DB_PREFIX . "files
 						WHERE file_id=$id";
-					$image_result = db_result($sql);
+					$image_result = $this->_SqlConnection->SqlQuery($sql);
 					
 					if($image = mysql_fetch_object($image_result)) {
 						$thumb = $thumb_folder . $imgmax . '_' . basename($image->file_path);
@@ -277,7 +277,7 @@
 						if(file_exists($thumb)) {
 							$sql = "INSERT INTO " . DB_PREFIX . "gallery (gallery_id, gallery_file_id, gallery_image_thumbnail, gallery_image, gallery_orderid)
 								VALUES($page_data->gallery_id, $image->file_id,'$thumb','$image->file_path', $orderid)";
-							db_result($sql);
+							$this->_SqlConnection->SqlQuery($sql);
 						}
 					}
 					$orderid++;
@@ -297,13 +297,13 @@
 				"WHERE page.page_id=$page_id AND page.page_type='gallery' " .
 				"LIMIT 0,1";
 
-			$page_result = db_result($sql);
+			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			$page_data = mysql_fetch_object($page_result);
 			$ids = array();
 			$sql = "SELECT gallery_file_id
 				FROM " . DB_PREFIX . "gallery
 				WHERE gallery_id = $page_data->gallery_id";
-			$img_result = db_result($sql);
+			$img_result = $this->_SqlConnection->SqlQuery($sql);
 			while($img = mysql_fetch_object($img_result)) {
 				$ids[] = $img->gallery_file_id;
 			}	
@@ -325,7 +325,7 @@
 		 		FROM " . DB_PREFIX . "files
 		 		WHERE file_type LIKE 'image/%'
 		 		ORDER BY file_name ASC";
-	 		$images_result = db_result($sql);
+	 		$images_result = $this->_SqlConnection->SqlQuery($sql);
 	 		$imgmax = 100;
 	 		$thumb_folder = 'data/thumbnails/';
 	 		$img_count = 0;
@@ -379,21 +379,21 @@
 				LEFT JOIN " . DB_PREFIX . "pages_gallery gallery ON page.page_id = gallery.page_id)
 				WHERE page.page_id=$page_id AND page.page_type='gallery'
 				LIMIT 0,1";
-			$page_result = db_result($sql);
+			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			$page_data = mysql_fetch_object($page_result);
 			$gallery_id = $page_data->gallery_id;
 			
 			if($sure == 1) {
 				$sql = "DELETE FROM " . DB_PREFIX . "gallery
 					WHERE gallery_id=$gallery_id AND gallery_file_id=$image_id";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 				header("Location: admin.php?page=pagestructure&action=editPage&pageID=$page_id");
 			}
 			else{
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "gallery
 					WHERE gallery_id=$gallery_id AND gallery_file_id=$image_id";
-				$image_result = db_result($sql);
+				$image_result = $this->_SqlConnection->SqlQuery($sql);
 				$image = mysql_fetch_object($image_result);
 				$out .= "<img src=\"" . generateUrl($image->gallery_image_thumbnail) . "\" alt=\"$image->gallery_image_thumbnail\" />
 					M&ouml;chten sie das Bild wirklich aus der Galerie entfernen?<br />
@@ -418,7 +418,7 @@
 				WHERE page.page_id=$page_id AND page.page_type='gallery'
 				LIMIT 0,1";
 
-			$page_result = db_result($sql);
+			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			$page_data = mysql_fetch_object($page_result);
 			$out .= "<form action=\"admin.php\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
@@ -434,7 +434,7 @@
 					FROM " . DB_PREFIX . "gallery
 					WHERE gallery_id=$page_data->gallery_id
 					ORDER BY gallery_orderid ASC";
-				$images = db_result($sql);
+				$images = $this->_SqlConnection->SqlQuery($sql);
 				$imgmax = 100;
 				while($image = mysql_fetch_object($images)) {
 					if(!file_exists($image->gallery_image_thumbnail)) {

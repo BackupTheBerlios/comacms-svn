@@ -20,11 +20,11 @@
 	 * 
 	 */
 	//FIXME: make it possible to remove this alias
-	function db_result($command) {
+	/*function sdbs_result($command) {
 		global $sqlConnection;//$db_con, $queries_count;
 		
 		return $sqlConnection->SqlQuery($command);
-	}
+	}*/
 
 	function generate_password($length) {
 		$abc = array('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 'r', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'R', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0');
@@ -55,23 +55,6 @@
 		return ((float)$usec + (float)$sec);
 	}
 
-	function writelog($text) {
-		$handle = fopen ('log.log', 'a');
-		fwrite($handle, $text . "\n");
-		fclose ($handle);
-	}
-
-	function replace_smilies($textdata) {
-		$sql = "SELECT *
-			FROM " . DB_PREFIX . "_smilies";
-		$result = db_result($sql);
-		// FIXME: problem with replacing if a smilie_text is in a smile_title => <img src="*" alt="*<img */>*" />
-		while($smilie = mysql_fetch_object($result)){
-			$textdata = str_replace($smilie->smilie_text, "<img src=\"".$smilie->smilie_path."\" alt=\"".$smilie->smilie_title."\"/>", $textdata);
-		}
-		return $textdata;
-	}
-
 	function isEMailAddress($email){
 		return eregi("^[a-z0-9\._-]+@+[a-z0-9\._-]+\.+[a-z]{2,4}$", $email);
 	}
@@ -80,15 +63,6 @@
 		return eregi("^[0-9]{3}(\-)?[0-9]{3}(\-)?[0-9]{3}$", $icq);
 	}
 
-	function endsWith($string, $search) {
-		return $search == substr($string, 0 - (strlen($search)));
-	}
-
-	function startsWith($string, $search) {
-		return 0 === strpos($string, $search);
-	}
-
-	
 	/**
 	 * GetPostOrGet
 	 *
@@ -290,7 +264,19 @@
 			'.xpm' => 'image/x-xpixmap',
 			'.xwd' => 'image/x-xwindowdump',
 			'.xyz' => 'chemical/x-pdb',
-			'.zip' => 'application/zip'
+			'.zip' => 'application/zip',
+			'.odt' => 'application/vnd.oasis.opendocument.text',
+			'.ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+			'.odp' => 'application/vnd.oasis.opendocument.presentation',
+			'.odg' => 'application/vnd.oasis.opendocument.graphics',
+			'.odc' => 'application/vnd.oasis.opendocument.chart',
+			'.odf' => 'application/vnd.oasis.opendocument.formula',
+			'.odi' => 'application/vnd.oasis.opendocument.image',
+			'.odm' => 'application/vnd.oasis.opendocument.text-master',
+			'.ott' => 'application/vnd.oasis.opendocument.text-template',
+			'.ots' => 'application/vnd.oasis.opendocument.spreadsheet-template',
+			'.otp' => 'application/vnd.oasis.opendocument.presentation-template',
+			'.otg' => 'application/vnd.oasis.opendocument.graphics-template'
 		);
 		$ext = strrchr($filename, '.');
 		if(array_key_exists($ext, $mime))

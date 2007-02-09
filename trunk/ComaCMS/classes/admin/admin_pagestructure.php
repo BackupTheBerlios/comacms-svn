@@ -197,7 +197,7 @@
 		 	$sql = "SELECT menu_entries_page_id
 		 		FROM " . DB_PREFIX . "menu_entries
 		 		WHERE menu_entries_menuid=1";
-		 	$ids_result = db_result($sql);
+		 	$ids_result = $this->_SqlConnection->SqlQuery($sql);
 		 	while($id = mysql_fetch_object($ids_result))
 		 		$this->MenuPageIDs[] = $id->menu_entries_page_id;
 		 }
@@ -379,7 +379,7 @@
 			$sql = "SELECT page_id, page_type
 				FROM " . DB_PREFIX . "pages
 				WHERE page_id = $pageID";
-			$page_result = db_result($sql);
+			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			if($page = mysql_fetch_object($page_result)) {
 				$edit = null;
 				switch($page->page_type) {
@@ -413,7 +413,7 @@
 			$sql = "SELECT page_id, page_type
 				FROM " . DB_PREFIX . "pages
 				WHERE page_id = $pageID";
-			$page_result = db_result($sql);
+			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			if($page = mysql_fetch_object($page_result)) {
 				$edit = null;
 				switch($page->page_type) {
@@ -501,7 +501,7 @@
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "pages
 				WHERE page_id=$PageID";
-			$page_result = db_result($sql);
+			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			while($page = mysql_fetch_object($page_result)) {
 				if($PageID == $page->page_id)
 					$out = " <span title=\"$page->page_title\">" . rawurldecode($page->page_name) . "</span>";
@@ -512,7 +512,7 @@
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "pages
 					WHERE page_id=$page->page_parent_id";
-				$page_result = db_result($sql);
+				$page_result = $this->_SqlConnection->SqlQuery($sql);
 			}
 			return $out;
 		}
@@ -681,7 +681,7 @@
 					$sql = "SELECT *
 						FROM " . DB_PREFIX . "files
 						ORDER BY file_name";
-					$files_result = db_result($sql);
+					$files_result = $this->_SqlConnection->SqlQuery($sql);
 					while($file = mysql_fetch_object($files_result)) {
 						if(file_exists($file->file_path))
 							$out .= "<option " . (($entryData['link'] == $file->file_id) ? 'selected="selected" ' : '') . "value=\"$file->file_id\">" . utf8_encode($file->file_name) . " (" . kbormb($file->file_size) . ")</option>\r\n";
@@ -902,7 +902,7 @@
 					$sql = "SELECT *
 						FROM " . DB_PREFIX . "files
 						ORDER BY file_name";
-					$files_result = db_result($sql);
+					$files_result = $this->_SqlConnection->SqlQuery($sql);
 					while($file = mysql_fetch_object($files_result)) {
 						if(file_exists($file->file_path))
 							$out .= "<option value=\"$file->file_id\">" . utf8_encode($file->file_name) . " (" . kbormb($file->file_size) . ")</option>\r\n";
@@ -1008,7 +1008,7 @@
 				FROM " . DB_PREFIX . "files
 				WHERE file_type LIKE 'image/%'
 				ORDER BY file_name ASC";
-			$images_result = db_result($sql);
+			$images_result = $this->_SqlConnection->SqlQuery($sql);
 			$imgmax = 100;
 			$imgmax2 = 200;
 			$inlinemenu_folder = 'data/thumbnails/';
@@ -1095,7 +1095,7 @@
 				FROM " . DB_PREFIX . "inlinemenu_entries
 				WHERE inlineentry_page_id = $PageID
 				ORDER BY inlineentry_sortid ASC";
-			$entries_result = db_result($sql);
+			$entries_result = $this->_SqlConnection->SqlQuery($sql);
 			$out .= "<h3 id=\"entries\">Eintr&auml;ge</h3>
 				<div class=\"row\"><table class=\"text_table full_width\">
 					<thead><tr><th>Text</th><th class=\"small_width\">Typ</th><th class=\"actions\">Aktion</th></tr></thead>";

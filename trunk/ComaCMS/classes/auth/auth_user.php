@@ -30,13 +30,14 @@
  		var $is_admin = false;
  		var $has_own = false;
  		
- 		function Auth_User($user_id = 0) {
+ 		function Auth_User(&$SqlConnection, $user_id = 0) {
  			$this->user_id = $user_id;
+ 			$this->_SqlConnection = &$SqlConnection;
  			if($this->user_id != 0) {
  				$sql = "SELECT user_admin
 					FROM " . DB_PREFIX . "users
  					WHERE user_id=$this->user_id";
- 				$admin_result = db_result($sql);
+ 				$admin_result = $this->_SqlConnection->SqlQuery($sql);
  				if($admin = mysql_fetch_object($admin_result))
  					$this->is_admin = ($admin->user_admin == 'y');
  			}
@@ -45,7 +46,7 @@
  					FROM " . DB_PREFIX . "auth
  					WHERE (auth_user_id=0 OR auth_user_id=$user_id) AND auth_page_id=0 AND auth_group_id=0
  					ORDER BY auth_user_id ASC";
- 				$auth_result = db_result($sql);
+ 				$auth_result = $this->_SqlConnection->SqlQuery($sql);
  				$user_id_similar = false;
  				while($auth = mysql_fetch_object($auth_result)) {
  					if($auth->auth_user_id == $this->user_id) {
@@ -96,7 +97,7 @@
  			else
  				$sql = "INSERT INTO " . DB_PREFIX . "auth (auth_user_id, auth_group_id, auth_page_id, auth_view, auth_edit, auth_delete, auth_new_sub)
 					VALUES ($this->user_id, 0, 0, " . (($this->view)? 1 : 0) . ", " . (($this->edit)? 1 : 0) . ", " . (($this->delete)? 1 : 0) . ", " . (($this->new_sub)? 1 : 0) . ")";
- 			db_result($sql);
+ 			$this->_SqlConnection->SqlQuery($sql);
  		}
  	}
 ?>

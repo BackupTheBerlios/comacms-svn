@@ -63,12 +63,12 @@
 				$sql = "SELECT group_manager
 					FROM " . DB_PREFIX . "groups
 					WHERE group_id = $group_id";
-				$group_result = db_result($sql);
+				$group_result = $this->_SqlConnection->SqlQuery($sql);
 				if($group = mysql_fetch_object($group_result)) {
 					if($group->group_manager != $user_id) {
 						$sql = "DELETE FROM " . DB_PREFIX . "group_users
 							WHERE group_id = $group_id AND user_id = $user_id";
-						db_result($sql);
+						$this->_SqlConnection->SqlQuery($sql);
 					}
 					header("Location: admin.php?page=groups&action=edit_group&group_id=$group_id");
 					die();	
@@ -89,7 +89,7 @@
 			if(is_numeric($user_id) && is_numeric($group_id)) {
 				$sql = "INSERT INTO " . DB_PREFIX . "group_users (group_id, user_id)
 					VALUES ($group_id, $user_id)";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 				header("Location: admin.php?page=groups&action=edit_group&group_id=$group_id");
 				die();	
 			}
@@ -109,7 +109,7 @@
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "groups
 					WHERE group_id != $group_id AND group_name = '$group_name'";
-				$check_result = db_result($sql);
+				$check_result = $this->_SqlConnection->SqlQuery($sql);
 				if($check = mysql_fetch_object($check_result)) {
 					header("Location: admin.php?page=groups&action=edit_group&error=name&group_name=$group_name&group_id=$group_id");
 					die();
@@ -117,7 +117,7 @@
 				$sql = "UPDATE " . DB_PREFIX . "groups
 					SET group_name='$group_name', group_manager=$group_manager, group_description='$group_description'
 					WHERE group_id=$group_id";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 			}
 			header('Location: admin.php?page=groups');
 			die();
@@ -133,7 +133,7 @@
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "groups
 					WHERE group_id=$group_id";
-				$group_result = db_result($sql);
+				$group_result = $this->_SqlConnection->SqlQuery($sql);
 				if($group = mysql_fetch_object($group_result)) {
 					$out = "\t\t\t<form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"groups\" />
@@ -169,7 +169,7 @@
 						LEFT JOIN " . DB_PREFIX . "users user ON user.user_id = link.user_id )
 						WHERE link.group_id = $group_id
 						ORDER BY user.user_name ASC";
-					$users_result = db_result($sql);
+					$users_result = $this->_SqlConnection->SqlQuery($sql);
 					while($user = mysql_fetch_object($users_result)) {
 						$out.= "\t\t\t\t\t\t\t<option value=\"$user->user_id\"";
 						// select the actual group-manager
@@ -201,7 +201,7 @@
 							FROM ( " . DB_PREFIX. "group_users link
 							LEFT JOIN " . DB_PREFIX . "users user ON user.user_id = link.user_id )
 							WHERE link.group_id = $group_id";
-						$mebmers_result = db_result($sql);
+						$mebmers_result = $this->_SqlConnection->SqlQuery($sql);
 						$users_in_group = array();
 						while($member = mysql_fetch_object($mebmers_result)) {
 							$users_in_group[] = $member->user_id;
@@ -220,7 +220,7 @@
 					$sql = "SELECT *
 						FROM " . DB_PREFIX . "users
 						ORDER BY user_name ASC";
-					$users_result = db_result($sql);
+					$users_result = $this->_SqlConnection->SqlQuery($sql);
 					$user_count = 0;
 					while($user = mysql_fetch_object($users_result)) {
 						if(!in_array($user->user_id, $users_in_group)) {
@@ -254,16 +254,16 @@
 			if($sure == 1 && is_numeric($group_id)) {
 	 			$sql = "DELETE FROM " . DB_PREFIX . "groups
 	 				WHERE group_id=$group_id";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 				$sql = "DELETE FROM " . DB_PREFIX . "group_users
 	 				WHERE group_id=$group_id";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 			}
 			elseif(is_numeric($group_id)) {
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "groups
 					WHERE group_id=$group_id";
-				$result = db_result($sql);
+				$result = $this->_SqlConnection->SqlQuery($sql);
 				if($group = mysql_fetch_object($result)) {
 					$out = "Die Gruppe &quot;" . $group->group_name . "&quot; wirklich löschen?<br />
 			<a class=\"button\" href=\"admin.php?page=groups&amp;action=delete&amp;group_id=" . $group_id . "&amp;sure=1\" title=\"Wirklich Löschen\">ja</a> &nbsp;&nbsp;&nbsp;&nbsp;
@@ -294,7 +294,7 @@
 				$sql = "SELECT *	
 					FROM " . DB_PREFIX . "groups
 					WHERE group_name='$group_name'";
-				$exist_result = db_result($sql);
+				$exist_result = $this->_SqlConnection->SqlQuery($sql);
 				if($exist = mysql_fetch_object($exist_result)) {
 					header("Location: admin.php?page=groups&action=new_group&error=name&group_name=$group_name&group_manager=$group_manager&group_description=$group_description");
 					die();
@@ -302,12 +302,12 @@
 				// create the group 
 				$sql = "INSERT INTO " . DB_PREFIX . "groups (group_name, group_manager, group_description)
 					VALUES ('$group_name', $group_manager, '$group_description')";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 				// add the user to the group
 				$group_id = mysql_insert_id();
 				$sql = "INSERT INTO " . DB_PREFIX . "group_users (group_id, user_id)
 					VALUES($group_id, $group_manager)";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 			}
 			header('Location: admin.php?page=groups');
 			die();
@@ -341,7 +341,7 @@
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "users
 				ORDER BY user_name ASC";
-			$users_result = db_result($sql);
+			$users_result = $this->_SqlConnection->SqlQuery($sql);
 			while($user = mysql_fetch_object($users_result)) {
 				$out.= "<option value=\"$user->user_id\">$user->user_showname</option>\r\n";
 			}				
@@ -373,7 +373,7 @@
 			$sql = "SELECT *
 				FROM " . DB_PREFIX ."groups
 				ORDER BY group_name ASC";
-			$group_result = db_result($sql);
+			$group_result = $this->_SqlConnection->SqlQuery($sql);
 			while($group = mysql_fetch_object($group_result)) {
 				$out .= "\t\t\t\t<tr>
 					<td>$group->group_name</td>

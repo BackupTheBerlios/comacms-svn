@@ -41,7 +41,8 @@
 				$sql = "SELECT user_id
 					FROM " . DB_PREFIX . "users
 					WHERE user_name='$Name'";
-				$result = db_result($sql);
+				global $sqlConnection;
+				$result = $sqlConnection->SqlQuery($sql);
 				if($user_data = mysql_fetch_object($result)) {
 					$this->_UserIDs[$Name] = $user_data->user_id;
 					return $user_data->user_id;
@@ -56,7 +57,8 @@
 				$sql = "SELECT user_showname
 					FROM " . DB_PREFIX . "users
 					WHERE user_id = '$ID'";
-				$result = db_result($sql);
+				global $sqlConnection;
+				$result = $sqlConnection->SqlQuery($sql);
 				if($user_data = mysql_fetch_object($result)) {
 					$this->_UserShownames[$ID] = $user_data->user_showname;
 					return $user_data->user_showname;
@@ -71,7 +73,8 @@
 				$sql = "SELECT group_name
 					FROM " . DB_PREFIX . "groups
 					WHERE group_id = '$ID'";
-				$result = db_result($sql);
+				global $sqlConnection;
+				$result = $sqlConnection->SqlQuery($sql);
 				if($group_data = mysql_fetch_object($result)) {
 					$this->_GroupNames[$ID] = $group_data->group_name;
 					return $group_data->group_name;

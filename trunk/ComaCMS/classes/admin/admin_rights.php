@@ -60,7 +60,7 @@
 					WHERE auth_group_id = 0
 					AND auth_user_id = $userID
 					AND auth_page_id = 0";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 			}
 			return $this->_overview();
 		}
@@ -253,7 +253,7 @@
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "users
 				ORDER BY user_name ASC";
-			$users_result = db_result($sql);
+			$users_result = $this->_SqlConnection->SqlQuery($sql);
 			while($user = mysql_fetch_object($users_result)) {
 				$out.= "\t\t\t\t\t\t\t\t<option value=\"$user->user_id\">$user->user_showname</option>\r\n";
 			}	
@@ -291,7 +291,7 @@
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "users
 				ORDER BY user_name ASC";
-			$users_result = db_result($sql);
+			$users_result = $this->_SqlConnection->SqlQuery($sql);
 			while($user = mysql_fetch_object($users_result)) {
 				$out.= "\t\t\t\t\t\t\t\t<option value=\"$user->user_id\">$user->user_showname</option>\r\n";
 			}	
@@ -320,7 +320,7 @@
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "groups
 				ORDER BY group_name ASC";
-			$group_result = db_result($sql);
+			$group_result = $this->_SqlConnection->SqlQuery($sql);
 			while($group = mysql_fetch_object($group_result)) {
 				$out.= "\t\t\t\t\t\t\t\t<option value=\"$group->group_id\">$group->group_name</option>\r\n";
 			}	

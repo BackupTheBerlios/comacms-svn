@@ -134,7 +134,7 @@
 				$sql = "INSERT INTO " . DB_PREFIX . "articles
 					(article_title, article_description, article_text, article_html, article_creator, article_date)
 					VALUES ('$title', '$description', '$text', '" . TextActions::ConvertToPreHTML($text) . "', '{$this->_User->ID}', '" . mktime() . "')";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 			}
 			if(GetPostOrGet('add_image') == 'add') 
 				return "addImage";
@@ -160,7 +160,7 @@
 					article_text= '$text',
 					article_html= '" . TextActions::ConvertToPreHTML($text) . "'
 					WHERE article_id=$id";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 			}
 	 	}
 	 	
@@ -169,7 +169,7 @@
 	 			FROM " . DB_PREFIX . "articles
 				ORDER BY article_id DESC
 				LIMIT 1";
-			$result = db_result($sql);
+			$result = $this->_SqlConnection->SqlQuery($sql);
 			$article = mysql_fetch_object($result);
 			return $article->article_id;
 	 	}
@@ -185,14 +185,14 @@
 			if(GetPostOrGet('sure') == 1) {
 				$sql = "DELETE FROM " . DB_PREFIX . "articles
 					WHERE article_id=$id";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 				return $out;
 			}
 			else {
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "articles
 					WHERE article_id=$id";
-				$article_result = db_result($sql);
+				$article_result = $this->_SqlConnection->SqlQuery($sql);
 				if($row = mysql_fetch_object($article_result)) {
 					$out = "Den News Eintrag &quot;" . $row->article_title . "&quot; wirklich l&ouml;schen?<br />
 			<a href=\"admin.php?page=module_articles&amp;action=delete&amp;article_id=" . $id . "&amp;sure=1\" title=\"Wirklich L&ouml;schen\" class=\"button\">Ja</a>
@@ -214,7 +214,7 @@
 	 			$sql = "UPDATE ".DB_PREFIX."articles SET 
 					article_image= '$file_path'
 					WHERE article_id=$article_id";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 			}
 		}
  	}

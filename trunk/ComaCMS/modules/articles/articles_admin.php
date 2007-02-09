@@ -137,7 +137,7 @@
 	 		$sql = "SELECT *
 	 			FROM " . DB_PREFIX . "articles
 	 			WHERE article_id=$id";
-	 		$article_result = db_result($sql);
+	 		$article_result = $this->_SqlConnection->SqlQuery($sql);
 	 		if($article = mysql_fetch_object($article_result)) {
 	 			$thumbnailfoler = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
 	 			$imgmax = 100; 
@@ -202,7 +202,7 @@
 			$sql = "SELECT *
 				FROM " . DB_PREFIX . "articles
 				ORDER BY article_date DESC";
-			$articles_result = db_result($sql);
+			$articles_result = $this->_SqlConnection->SqlQuery($sql);
 			while($article = mysql_fetch_object($articles_result)) {
 				$image = new ImageConverter($article->article_image);
 				$size = $image->CalcSizeByMax($imgmax);
@@ -237,14 +237,14 @@
 	 		$sql = "SELECT *
 				FROM " . DB_PREFIX . "articles
 				WHERE article_id=$article_id";
-			$article_result = db_result($sql);
+			$article_result = $this->_SqlConnection->SqlQuery($sql);
 			if($article = mysql_fetch_object($article_result)) {
 	 			$out = '';
 	 			$sql = "SELECT file_path
 					FROM " . DB_PREFIX . "files
 					WHERE file_type LIKE 'image/%'
 					ORDER BY file_name ASC";
-				$images_result = db_result($sql);
+				$images_result = $this->_SqlConnection->SqlQuery($sql);
 				$imgmax = 100;
 				$imgmax2 = 100;
 				$thumbnailfolder = 'data/thumbnails/';

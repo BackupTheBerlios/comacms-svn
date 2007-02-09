@@ -29,8 +29,9 @@
  		
  		var $userID;
  		
- 		function Auth_All($UserID) {
+ 		function Auth_All(&$SqlConnection, $UserID) {
  			$this->userID = $UserID;
+ 			$this->_SqlConnection = &$SqlConnection;
  		}
  		
  		function setAdmin() {
@@ -52,7 +53,7 @@
 				AND ( auth.auth_page_id =0
 				OR auth.auth_page_id =$PageID)
 				ORDER BY auth.auth_user_id ASC, auth.auth_group_id ASC";
-			$auth_result = db_result($sql);
+			$auth_result = $this->_SqlConnection->SqlQuery($sql);
 			$user_id_similar = false;
  			while($auth = mysql_fetch_object($auth_result)) {
  				$user_id_similar = ($auth->auth_user_id == $this->userID);

@@ -35,7 +35,7 @@
 			FROM " .  DB_PREFIX . "files
 			WHERE file_id = $file_id
 			LIMIT 1";
-		$file_result = db_result($sql);
+		$file_result = $sqlConnection->SqlQuery($sql);
 		if($file = mysql_fetch_object($file_result)) { // We have found a file in the database
 			if(!file_exists($file->file_path)) { // Check: exists the file also on the server?
 				// Show error page "download not found" 
@@ -46,7 +46,7 @@
 			$sql = "UPDATE " . DB_PREFIX . "files
 				SET file_downloads = " . ($file->file_downloads + 1) . "
 				WHERE file_id = $file_id";
-			db_result($sql);
+			$sqlConnection->SqlQuery($sql);
 			// set the headers for the download
 			header("Content-Type: application/octet-stream");
 			header("Content-Disposition: attachment; filename=\"$file->file_name\"");

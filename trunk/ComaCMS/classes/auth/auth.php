@@ -25,5 +25,6 @@
  		var $edit = false;
  		var $delete = false;
  		var $new_sub = false;
+ 		var $_SqlConnection;
  	}
 ?>

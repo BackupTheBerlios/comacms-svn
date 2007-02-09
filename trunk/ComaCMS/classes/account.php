@@ -262,7 +262,7 @@
 				}		
 			}
 			if($this->IsLoggedIn) {
-				$this->accessRghts = new Auth_All($this->ID);
+				$this->accessRghts = new Auth_All(&$this->_SqlConnection, $this->ID);
 				
 			if(!$this->IsAdmin) 
 				$this->accessRghts->Load();
@@ -304,12 +304,12 @@
 				FROM " . DB_PREFIX . "online
 				WHERE online_id='$this->OnlineID'
 				LIMIT 0,1";
-			$result_new = db_result($sql);
+			$result_new = $this->_SqlConnection->SqlQuery($sql);
 			if($row3 = mysql_fetch_object($result_new)) {
 				$sql = "UPDATE " . DB_PREFIX . "online
 					SET online_lastaction='" . mktime() . "', online_userid=$this->ID, online_lang='$this->Language', online_page='$page', online_loggedon = '" . (($this->IsLoggedIn) ? 'yes' : 'no' ) . "'
 					WHERE online_id='$this->OnlineID'";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 			}
 			else {
 				// get the ip of the user
@@ -317,7 +317,7 @@
 				// add the online-record for the user
 				$sql = "INSERT INTO " . DB_PREFIX . "online (online_id, online_ip, online_lastaction, online_page, online_userid, online_lang, online_host, online_loggedon)
 				VALUES ('$this->OnlineID', '$ip', '" . mktime() . "', '$page', $this->ID, '$this->Language', '" . gethostbyaddr($ip) . "', '" . (($this->IsLoggedIn) ? 'yes' : 'no' ) . "')";
-				db_result($sql);
+				$this->_SqlConnection->SqlQuery($sql);
 				$counter_all++;
 			}
 
@@ -328,7 +328,7 @@
 			// delete all enries with a last action which is more than 20 minutes passed
 			$sql = "DELETE FROM " . DB_PREFIX . "online
 				WHERE online_lastaction < '" . (mktime() - 1200) . "'";
-			db_result($sql);
+			$this->_SqlConnection->SqlQuery($sql);
 			
 		}
 		

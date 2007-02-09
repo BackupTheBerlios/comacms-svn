@@ -429,7 +429,7 @@
 				$filePath = utf8_encode($file->file_path);
 				$imageThumb = '';
 				// if the file is an image try to get a thumbnail
-				if(substr($file->file_type,0,6) == 'image/') {
+				if(strpos($file->file_type, 'image/') === 0) {
 					$image = new ImageConverter($file->file_path);
 					// max: 100px;
 					$maximum = 100;

@@ -29,13 +29,14 @@
  		var $group_id = 0;
  		var $has_own = false;
  		
- 		function Auth_Group($group_id = 0) {
- 			$this->group_id = $group_id;	  			
+ 		function Auth_Group(&$SqlConnection, $group_id = 0) {
+ 			$this->group_id = $group_id;
+ 			$this->_SqlConnection = &$SqlConnection;  			
  			$sql = "SELECT *
  				FROM " . DB_PREFIX . "auth
  				WHERE (auth_group_id=0 OR auth_group_id=$this->group_id) AND auth_page_id=0 AND auth_user_id=0
  				ORDER BY auth_group_id ASC";
- 			$auth_result = db_result($sql);
+ 			$auth_result = $this->_SqlConnection->SqlQuery($sql);
  			$group_id_similar = false;
  			while($auth = mysql_fetch_object($auth_result)) {
  				if($auth->auth_group_id == $this->group_id) {
@@ -78,7 +79,7 @@
  			else
  				$sql = "INSERT INTO " . DB_PREFIX . "auth (auth_user_id, auth_group_id, auth_page_id, auth_view, auth_edit, auth_delete, auth_new_sub)
 					VALUES (0, $this->group_id, 0, " . (($this->view)? 1 : 0) . ", " . (($this->edit)? 1 : 0) . ", " . (($this->delete)? 1 : 0) . ", " . (($this->new_sub)? 1 : 0) . ")";
- 			db_result($sql);
+ 			$this->_SqlConnection->SqlQuery($sql);
  		}
  	}
 ?>

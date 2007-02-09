@@ -98,6 +98,18 @@
 					$template .= $this->_ViewCustomField();
 					break;
 				
+				case 'move_custom_field_up':
+					// Moves a custom field one step up
+					$this->_MoveCustomFieldUp();
+					$template .= $this->_HomePage();
+					break;
+				
+				case 'move_custom_field_down':
+					// Moves a custom field one step down
+					$this->_MoveCustomFieldDown();
+					$template .= $this->_HomePage();
+					break;
+				
 				case 'delete_custom_field':
 					// Returns a question wether a custom field shall really be deleted
 					$template .= $this->_DeleteCustomField();
@@ -155,7 +167,8 @@
 			
 			// Get the existing custom fields from the database
 			$sql = "SELECT *
-					FROM " . DB_PREFIX . "custom_fields";
+					FROM " . DB_PREFIX . "custom_fields
+					ORDER BY custom_fields_orderid ASC";
 			$customFieldsResult = $this->_SqlConnection->SqlQuery($sql);
 			
 			// Initialize fields array
@@ -172,8 +185,8 @@
 										'CUSTOM_FIELDS_ACTIONS' => array(
 											0 => array('FIELD_ID' => $customField->custom_fields_id, 'ACTION' => 'edit_custom_field', 'ACTION_IMG' => './img/edit.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('edit')),
 											1 => array('FIELD_ID' => $customField->custom_fields_id, 'ACTION' => 'view_custom_field', 'ACTION_IMG' => './img/info.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('info')),
-											2 => array('FIELD_ID' => $customField->custom_fields_id, 'ACTION' => 'move_custom_field_down', 'ACTION_IMG' => './img/down.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('move_down')),
-											3 => array('FIELD_ID' => $customField->custom_fields_id, 'ACTION' => 'move_custom_field_up', 'ACTION_IMG' => './img/up.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('move_up')),
+											2 => array('FIELD_ID' => $customField->custom_fields_orderid, 'ACTION' => 'move_custom_field_down', 'ACTION_IMG' => './img/down.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('move_down')),
+											3 => array('FIELD_ID' => $customField->custom_fields_orderid, 'ACTION' => 'move_custom_field_up', 'ACTION_IMG' => './img/up.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('move_up')),
 											4 => array('FIELD_ID' => $customField->custom_fields_id, 'ACTION' => 'delete_custom_field', 'ACTION_IMG' => './img/del.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('delete'))
 											)
 										);
@@ -808,6 +821,84 @@
 			
 			// Return the generated template
 			return $template;
+		}
+		
+		/**
+		 * Switches the orderids of two custom fields
+ 		 * @access private
+ 		 * @param resource $CustomFieldsResult This is an mysqlresult that should include two 'rows'
+ 		 * @return void
+ 		 */
+ 		function _SwitchOrderIDs ($CustomFieldsResult) {
+ 			if ($customField = mysql_fetch_object($CustomFieldsResult)) {
+				$customFieldID1 = $customField->custom_fields_id;
+				$customFieldOrderID1 = $customField->custom_fields_orderid;
+				
+				if ($customField = mysql_fetch_object($CustomFieldsResult)) {
+					$customFieldID2 = $customField->custom_fields_id;
+					$customFieldOrderID2 = $customField->custom_fields_orderid;
+					
+					$sql = "UPDATE " . DB_PREFIX . "custom_fields
+						SET custom_fields_orderid=$customFieldOrderID2
+						WHERE custom_fields_id=$customFieldID1";
+					$this->_SqlConnection->SqlQuery($sql);
+						 
+					$sql = "UPDATE " . DB_PREFIX . "custom_fields
+						SET custom_fields_orderid=$customFieldOrderID1
+						WHERE custom_fields_id=$customFieldID2";
+					$this->_SqlConnection->SqlQuery($sql);
+				}
+			}
+ 		}
+		
+		/**
+		 * Moves a custom field one position up
+		 * @access private
+		 * @return void Moves custom field up
+		 */
+		function _MoveCustomFieldUp() {
+			
+			// Get external parameters
+			$CustomFieldOrderID = GetPostOrGet('field_id');
+			
+			// is this parameter really a number?
+ 			if(is_numeric($CustomFieldOrderID)) {
+ 				
+ 				// this query should return two 'rows' 
+ 				$sql = "SELECT *
+					FROM " . DB_PREFIX . "custom_fields
+					WHERE custom_fields_orderid <= $CustomFieldOrderID
+					ORDER BY custom_fields_orderid DESC
+					LIMIT 0 , 2";
+				$fieldsResult = $this->_SqlConnection->SqlQuery($sql);
+				// try to switch the orderID between these 'rows'
+				$this->_SwitchOrderIDs($fieldsResult);
+ 			}
+		}
+		
+		/**
+		 * Moves a custom field one position down
+		 * @access private
+		 * @return void Moves custom field down
+		 */
+		function _MoveCustomFieldDown() {
+			
+			// Get external parameters
+			$CustomFieldOrderID = GetPostOrGet('field_id');
+			
+			// is this parameter really a number?
+ 			if(is_numeric($CustomFieldOrderID)) {
+ 				
+ 				// this query should return two 'rows' 
+ 				$sql = "SELECT *
+					FROM " . DB_PREFIX . "custom_fields
+					WHERE custom_fields_orderid >= $CustomFieldOrderID
+					ORDER BY custom_fields_orderid ASC
+					LIMIT 0 , 2";
+				$fieldsResult = $this->_SqlConnection->SqlQuery($sql);
+				// try to switch the orderID between these 'rows'
+				$this->_SwitchOrderIDs($fieldsResult);
+ 			}
 		}
 		
 		/**

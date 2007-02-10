@@ -479,3 +479,7 @@ CREATE TABLE `comacms_custom_fields_values` (
 #r400
 #Changed custom_fields_type field
 ALTER TABLE `comacms_custom_fields` CHANGE `custom_fields_type` `custom_fields_type` varchar(50) NOT NULL;
+
+#r404
+#Added value field to custom_fields_values table
+ALTER TABLE `comacms_custom_fields_values` ADD `custom_fields_values_value` TEXT NOT NULL ;

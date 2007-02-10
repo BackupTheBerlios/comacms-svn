@@ -76,37 +76,72 @@
 					WHERE user_id='{$this->_User->ID}'";
 			$userResult = $this->_SqlConnection->SqlQuery($sql);
 			$user = mysql_fetch_object($userResult);
-			
+			 
+			// Generate profile array
 			$userProfile = array();
-			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('name'),
-									'PROFILE_FIELD_VALUE' => $this->_User->Showname);
-			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('loginname'),
-									'PROFILE_FIELD_VALUE' => $this->_User->Name);
-			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('email'),
-									'PROFILE_FIELD_VALUE' => $user->user_email);
-			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('registered_since'),
-									'PROFILE_FIELD_VALUE' => date($dateDayFormat, $user->user_registerdate));
-			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('is_author'),
-									'PROFILE_FIELD_VALUE' => (($this->_User->IsAuthor) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')));
-			$userProfile[] = array( 'PROFILE_FIELD_NAME' => $this->_Translation->GetTranslation('is_admin'),
-									'PROFILE_FIELD_VALUE' => (($this->_User->IsAdmin) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')));
+			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'showname',
+									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('showname'),
+									'PROFILE_FIELD_VALUE' => $this->_User->Showname,
+									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'));
+			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'nickname',
+									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('nickname'),
+									'PROFILE_FIELD_VALUE' => $this->_User->Name,
+									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'));
+			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'email',
+									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('email'),
+									'PROFILE_FIELD_VALUE' => $user->user_email,
+									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system'));
+			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'registerdate',
+									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('registered_since'),
+									'PROFILE_FIELD_VALUE' => date($dateFormat, $user->user_registerdate),
+									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('you_are_registred_since'));
+			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'admin',
+									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('is_admin'),
+									'PROFILE_FIELD_VALUE' => (($this->_User->IsAdmin) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
+									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('if_you_are_an_admin_you_can_access_to_the_administration_interface'));
+			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'author',
+									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('is_author'),
+									'PROFILE_FIELD_VALUE' => (($this->_User->IsAuthor) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
+									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('if_you_are_an_author_you_can_edit_the_content_of_the_page'));
+			
+			// Get custom fields
+			$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title
+					FROM (" . DB_PREFIX . "custom_fields_values value
+					LEFT JOIN " . DB_PREFIX . "custom_fields field
+					ON value.custom_fields_values_fieldid = field.custom_fields_id)
+					WHERE value.custom_fields_values_userid='{$this->_User->ID}'";
+			$customFieldsValuesResult = $this->_SqlConnection->SqlQuery($sql); 
+			
+			while ($customFieldsValue = mysql_fetch_object($customFieldsValuesResult)) {
+				$userProfile[] = array(	'PROFILE_FIELD_NAME' => $customFieldsValue->custom_fields_name,
+										'PROFILE_FIELD_TRANSLATION' => $customFieldsValue->custom_fields_title,
+										'PROFILE_FIELD_VALUE' => $customFieldsValue->custom_fields_values_value,
+										'PROFILE_FIELD_INFORMATION' => $customFieldsValue->custom_fields_information);
+			}
 			
 			$this->_ComaLate->SetReplacement('USER_PROFILE', $userProfile);
 			
 			// Set lang replacements for comalate
 			$this->_ComaLate->SetReplacement('LANG_USERPROFILE', $this->_Translation->GetTranslation('user_profile'));
+			$this->_ComaLate->SetReplacement('LANG_PROFILE', $this->_Translation->GetTranslation('profile'));
 			
 			// Generate the template
 			$template = '<h2>{LANG_USERPROFILE}</h2>
-					<table>
-					<USER_PROFILE:loop>
-						<tr>
-							<th>{PROFILE_FIELD_NAME}</th>
-							<td>{PROFILE_FIELD_VALUE}</td>
-						</tr>
-					</USER_PROFILE>
-					</table>
-					<a href="special.php?page=userinterface&amp;action=edit_profile" class="button">Bearbeiten</a>
+					<fieldset>
+						<legend>{LANG_PROFILE}</legend>
+						<USER_PROFILE:loop>
+						<div class="row">
+							<label for="{PROFILE_FIELD_NAME}">
+								<strong>{PROFILE_FIELD_TRANSLATION}:</strong>
+								<span class="info">{PROFILE_FIELD_INFORMATION}</span>
+							</label>
+							<span class="edit">{PROFILE_FIELD_VALUE}</span>
+						</div>
+						</USER_PROFILE>
+						<div class="row">
+							<a href="special.php?page=userinterface&amp;action=edit_profile" class="button">Bearbeiten</a>
+						</div>
+					</fieldset>
 					';
 			
 			if ($this->_User->IsAuthor) {
@@ -246,67 +281,60 @@
 				$user = mysql_fetch_object($userResult);
 				mysql_free_result($userResult);
 				
-				if (($UserShowname != $this->_User->Showname) || ($UserName != $this->_User->Name) || ($UserEmail != $user->user_email) || (!empty($UserPassword)) || (!empty($UserPasswordRepetition))) {
+				// Initialize the formmaker class
+				$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
+				$formMaker->AddForm('edit_user', 'special.php', $this->_Translation->GetTranslation('save'), $this->_Translation->GetTranslation('user'), 'post');
+				
+				$formMaker->AddHiddenInput('edit_user', 'page', 'userinterface');
+				$formMaker->AddHiddenInput('edit_user', 'action', 'check_profile');
+				$formMaker->AddHiddenInput('edit_user', 'user_id', $UserID);
+				
+				$formMaker->AddInput('edit_user', 'user_showname', 'text', $this->_Translation->GetTranslation('name'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'), $UserShowname);
+				$formMaker->AddCheck('edit_user', 'user_showname', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
+				if ($this->_User->Showname != $UserShowname)
+					$formMaker->AddCheck('edit_user', 'user_showname', 'already_assigned', $this->_Translation->GetTranslation('the_name_is_already_assigned'), '', 'users', 'user_showname');
+				
+				$formMaker->AddInput('edit_user', 'user_name', 'text', $this->_Translation->GetTranslation('loginname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'), $UserName);
+				$formMaker->AddCheck('edit_user', 'user_name', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
+				if ($this->_User->Name != $UserName)
+					$formMaker->AddCheck('edit_user', 'user_name', 'already_assigned', $this->_Translation->GetTranslation('the_nickname_is_already_assigned'), '', 'users', 'user_name');
+				
+				$formMaker->AddInput('edit_user', 'user_email', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system'), $UserEmail);
+				$formMaker->AddCheck('edit_user', 'user_email', 'empty', $this->_Translation->GetTranslation('the_email_address_must_be_indicated'));
+				$formMaker->AddCheck('edit_user', 'user_email', 'not_email', $this->_Translation->GetTranslation('this_is_not_a_valid_email_address'));
+				if ($user->user_email != $UserEmail)
+					$formMaker->AddCheck('edit_user', 'user_email', 'already_assigned', $this->_Translation->GetTranslation('the_email_is_already_assigned_to_another_user'), '', 'users', 'user_email');
+				
+				$formMaker->AddInput('edit_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'), ((!empty($UserPassword)) ? $UserPassword : ''));
+				$formMaker->AddInput('edit_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'), ((!empty($UserPasswordRepetition)) ? $UserPasswordRepetition : ''));
+				
+				if (!empty($UserPassword) || !empty($UserPasswordRepetition)) {
+					$formMaker->AddCheck('edit_user', 'user_password', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
+					$formMaker->AddCheck('edit_user', 'user_password', 'not_same_password_value_as', $this->_Translation->GetTranslation('the_password_and_its_repetition_are_unequal'), 'user_password_repetition');
 					
-					// Initialize the formmaker class
-					$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
-					$formMaker->AddForm('edit_user', 'special.php', $this->_Translation->GetTranslation('save'), $this->_Translation->GetTranslation('user'), 'post');
-					
-					$formMaker->AddHiddenInput('edit_user', 'page', 'userinterface');
-					$formMaker->AddHiddenInput('edit_user', 'action', 'check_profile');
-					$formMaker->AddHiddenInput('edit_user', 'user_id', $UserID);
-					
-					$formMaker->AddInput('edit_user', 'user_showname', 'text', $this->_Translation->GetTranslation('name'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'), $UserShowname);
-					$formMaker->AddCheck('edit_user', 'user_showname', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
-					if ($user->user_showname != $UserShowname)
-						$formMaker->AddCheck('edit_user', 'user_showname', 'already_assigned', $this->_Translation->GetTranslation('the_name_is_already_assigned'), '', 'users', 'user_showname');
-					
-					$formMaker->AddInput('edit_user', 'user_name', 'text', $this->_Translation->GetTranslation('loginname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'), $UserName);
-					$formMaker->AddCheck('edit_user', 'user_name', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
-					if ($user->user_name != $UserName)
-						$formMaker->AddCheck('edit_user', 'user_name', 'already_assigned', $this->_Translation->GetTranslation('the_nickname_is_already_assigned'), '', 'users', 'user_name');
-					
-					$formMaker->AddInput('edit_user', 'user_email', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system'), $UserEmail);
-					$formMaker->AddCheck('edit_user', 'user_email', 'empty', $this->_Translation->GetTranslation('the_email_address_must_be_indicated'));
-					$formMaker->AddCheck('edit_user', 'user_email', 'not_email', $this->_Translation->GetTranslation('this_is_not_a_valid_email_address'));
-					if ($user->user_email != $UserEmail)
-						$formMaker->AddCheck('edit_user', 'user_email', 'already_assigned', $this->_Translation->GetTranslation('the_email_is_already_assigned_to_another_user'), '', 'users', 'user_email');
-					
-					$formMaker->AddInput('edit_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'), ((!empty($UserPassword)) ? $UserPassword : ''));
-					$formMaker->AddInput('edit_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'), ((!empty($UserPasswordRepetition)) ? $UserPasswordRepetition : ''));
-					
-					if (!empty($UserPassword) || !empty($UserPasswordRepetition)) {
-						$formMaker->AddCheck('edit_user', 'user_password', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
-						$formMaker->AddCheck('edit_user', 'user_password', 'not_same_password_value_as', $this->_Translation->GetTranslation('the_password_and_its_repetition_are_unequal'), 'user_password_repetition');
-						
-						$formMaker->AddCheck('edit_user', 'user_password_repetition', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
-					}
-					
-					
-					if ($formMaker->CheckInputs('edit_user', true)) {
-						
-						$user_password = ((!empty($UserPassword)) ? ", user_password='" . md5($UserPassword) . "'": '');
-						// Update the user in the database
-						$sql = "UPDATE " . DB_PREFIX . "users
-								SET user_showname='$UserShowname', user_name='$UserName', user_email='$UserEmail'$user_password
-								WHERE user_id=$UserID";
-						$this->_SqlConnection->SqlQuery($sql);
-						
-						$this->_User->Logout();
-						
-						// Set user back to userinterface
-						header('Location: special.php?page=userinterface');
-						die();
-					}
-					else {
-						// Generate the template
-						$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, true);
-						return $template;
-					}
+					$formMaker->AddCheck('edit_user', 'user_password_repetition', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
 				}
-				else {
+				
+				
+				if ($formMaker->CheckInputs('edit_user', true)) {
+					
+					$user_password = ((!empty($UserPassword)) ? ", user_password='" . md5($UserPassword) . "'": '');
+					// Update the user in the database
+					$sql = "UPDATE " . DB_PREFIX . "users
+							SET user_showname='$UserShowname', user_name='$UserName', user_email='$UserEmail'$user_password
+							WHERE user_id=$UserID";
+					$this->_SqlConnection->SqlQuery($sql);
+					
+					$this->_User->Logout();
+					
+					// Set user back to userinterface
 					header('Location: special.php?page=userinterface');
 					die();
+				}
+				else {
+					// Generate the template
+					$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, true);
+					return $template;
 				}
 			}
 			else

@@ -309,6 +309,14 @@ li.inline_intern{
 	border: none;
 }
 
+div.row span.edit {
+	display: block;
+	margin-left: 49%;
+	border-width: 1px;
+	border-style: solid;
+	min-height: 1em;
+}
+
 .page_lang {
 	float: right;
 	margin-top: -1px;

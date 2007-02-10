@@ -20,6 +20,7 @@
  	 * 
  	 */
  	require_once __ROOT__ . '/classes/page/page.php';
+ 	require_once __ROOT__ . '/classes/imageconverter.php';
 	
 	/**
 	 * @package ComaCMS
@@ -71,14 +72,19 @@
 				
 					
 				$thumbnailFoler = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
-				$imageUrl = resizeImageToMaximum($image->gallery_image, $thumbnailFoler, 600);
+				$imageReszier = new ImageConverter($image->gallery_image);
+				$sizes = $imageReszier->CalcSizeByMax(600);
+				$imageUrl = $image->gallery_image;
+				if($sizes[0] < $imageReszier->Size[0] && $sizes[1] < $imageReszier->Size[1])
+					$imageUrl = $imageReszier->SaveResizedTo($sizes[0], $sizes[1], $thumbnailFoler, $sizes[0] . 'x' . $sizes[1] . '_');
+
 				$imageSrc = generateUrl($imageUrl);
 				if(file_exists($imageUrl)) {
-				$sizes = getimagesize($imageUrl);
-				$this->_ComaLate->SetReplacement('IMAGE_WIDTH', $sizes[0]);
-				$this->_ComaLate->SetReplacement('IMAGE_HEIGHT', $sizes[1]);
-				$this->_ComaLate->SetReplacement('IMAGE_WIDTH+4', $sizes[0] + 4);
-				$this->_ComaLate->SetReplacement('IMAGE_SRC', $imageSrc);
+					$sizes = getimagesize($imageUrl);
+					$this->_ComaLate->SetReplacement('IMAGE_WIDTH', $sizes[0]);
+					$this->_ComaLate->SetReplacement('IMAGE_HEIGHT', $sizes[1]);
+					$this->_ComaLate->SetReplacement('IMAGE_WIDTH+4', $sizes[0] + 4);
+					$this->_ComaLate->SetReplacement('IMAGE_SRC', $imageSrc);
 				}
 				
 			}

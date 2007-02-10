@@ -41,12 +41,17 @@
 		 * @param string $Destinationfolder
 		 * @param string $Prefix
 		 */
-		function SaveResizedTo($Width, $Height, $DestinationFolder, $Prefix = '') {
+		function SaveResizedTo($Width, $Height, $DestinationFolder, $Prefix = '', $Overwrite = false) {
 			if(!file_exists($this->_file))
 				return null;
 			// get the extension of the file
 			preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $this->_file, $ext);
 			
+			$OutputFile = $DestinationFolder . '/' . $Prefix . basename($this->_file);
+			if(strtolower($ext[2]) == 'gif')
+				$OutputFile .= '.png';
+			if(!$Overwrite && file_exists($OutputFile))
+				return $OutputFile;
 			// mostly all php-binarys for windows are not compiled with --enable-memory-limit
 			// and don't suport memory_get_usage() and are able to handle bigger data
 		 	// (it is not bad for us)
@@ -78,14 +83,12 @@
 				default    : return false;
 			}
 			imagecopyresized($newImage, $source, 0, 0, 0, 0, $Width, $Height, $this->Size[0], $this->Size[1]);
-			$OutputFile = $DestinationFolder . '/' . $Prefix . basename($this->_file);
+			//$OutputFile = $DestinationFolder . '/' . $Prefix . basename($this->_file);
 			switch (strtolower($ext[2])) {
 				case 'jpg' :
 				case 'jpeg': imagejpeg($newImage, $OutputFile, 100);
 					break;
-				case 'gif' : imagepng($newImage, $OutputFile . '.png');
-					$OutputFile .= '.png';
-					break;
+				case 'gif' : 
 				case 'png' : imagepng($newImage, $OutputFile);
 					break;
 				default	   : return false;

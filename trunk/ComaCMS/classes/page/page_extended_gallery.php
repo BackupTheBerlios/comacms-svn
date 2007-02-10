@@ -36,18 +36,30 @@
 			$this->_SqlConnection->SqlQuery($sql);		
  		}
  		
+ 		function UpdateTitle($PageID, $PageTitle) {
+			if(!is_numeric($PageID))
+ 				return false;
+			$sql = "UPDATE " . DB_PREFIX . "pages
+					SET page_title='$PageTitle'
+					WHERE page_id='$PageID'
+					LIMIT 1";
+			$this->_SqlConnection->SqlQuery($sql);
+		}
+ 		
  		function GetEditPage($PageID) {
  			$action = GetPostOrGet('action2');
 			$out = '';
 			switch ($action) {
-				/*
-		 		case 'removeImage':		$out .= $this->_editRemoveImage($pageID);
-		 						break;
-		 		case 'editImage':		$out .= $this->_editImage($pageID);
-		 						break;
-		 		case 'saveImage':		$out .= $this->_saveImage($pageID);
-		 						break;
-					break;*/
+				
+		 		case 'saveImage':
+		 			$out .= $this->_EditPageSaveImage($PageID);
+					break;
+				case 'editImage':
+					$out .= $this->_EditPageImage($PageID);
+					break;
+				case 'saveTitle': 
+					$out .= $this->_EditPageSaveTitle($PageID);
+					break;
 				case 'addNewImage':
 					$out .= $this->_EditPageAddNew($PageID);
 					break;
@@ -63,11 +75,147 @@
 				case 'removeImage':
 					$out .= $this->_EditPageRemove($PageID);
 					break;
+				case 'regenerateThumbnails':
+					$out .= $this->_EditPageRegenerateThumbnails($PageID);
+					break;
 				default:
 					$out .= $this->_EditPageOverview($PageID);
 					break;
 			}
  			return $out;
+ 		}
+ 		
+ 		function _EditPageRegenerateThumbnails($PageID) {
+ 				$sql = "SELECT page.*, gallery.* 
+					FROM (" . DB_PREFIX . "pages page 
+					LEFT JOIN " . DB_PREFIX . "pages_gallery gallery ON page.page_id = gallery.page_id)
+					WHERE page.page_id=$PageID AND page.page_type='gallery' 
+					LIMIT 1";
+
+			$pageResult = $this->_SqlConnection->SqlQuery($sql);
+			$pageData = mysql_fetch_object($pageResult);
+
+			
+			$sql = "SELECT gallery_file_id, gallery_image, gallery_image_thumbnail, gallery_file_id
+					FROM " . DB_PREFIX . "gallery
+					WHERE gallery_id = {$pageData->gallery_id}";
+			$img_result = $this->_SqlConnection->SqlQuery($sql);
+			$thumbnailSize = 100;
+			$outputSize = 600;
+			$thumbnailfolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
+			while($galleryImage = mysql_fetch_object($img_result)) {
+				$imageResizer = new ImageConverter($galleryImage->gallery_image);
+				$sizes = $imageResizer->CalcSizeByMax($thumbnailSize);
+				$thumbnailFile = $galleryImage->gallery_image;
+				if($sizes[0] < $imageResizer->Size[0] && $sizes[1] < $imageResizer->Size[1])
+					$thumbnailFile = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $thumbnailfolder, $sizes[0] . 'x' . $sizes[1] . '_', true);
+				if($thumbnailFile != $galleryImage->gallery_image_thumbnail) {
+					$sql = "UPDATE " . DB_PREFIX . "gallery
+							SET gallery_image_thumbnail = '{$thumbnailFile}'
+							WHERE gallery_id={$pageData->gallery_id} AND gallery_file_id={$galleryImage->gallery_file_id}
+							LIMIT 1";
+					$this->_SqlConnection->SqlQuery($sql);
+				}
+				$sizes = $imageResizer->CalcSizeByMax($outputSize);
+				if($sizes[0] < $imageResizer->Size[0] && $sizes[1] < $imageResizer->Size[1])
+					$imageResizer->SaveResizedTo($sizes[0], $sizes[1], $thumbnailfolder, $sizes[0] . 'x' . $sizes[1] . '_', true);
+			}
+			return $this->_EditPageOverview($PageID);	
+ 		}
+ 		
+ 		function _EditPageSaveImage($PageID) {
+ 			if(!is_numeric($PageID))
+				return $this->_EditPageOverview($PageID);
+			$sql = "SELECT gallery.gallery_id
+				FROM (" . DB_PREFIX . "pages page
+				LEFT JOIN " . DB_PREFIX . "pages_gallery gallery ON page.page_id = gallery.page_id)
+				WHERE page.page_id={$PageID} AND page.page_type='gallery'
+				LIMIT 1";
+			$pageResult = $this->_SqlConnection->SqlQuery($sql);	
+			if($pageData = mysql_fetch_object($pageResult)) {
+				$galleryID = $pageData->gallery_id;
+				$imageID = GetPostOrGet('imageID');
+				$imageDescription = GetPostOrGet('imageDescription');
+				$sql = "UPDATE " . DB_PREFIX . "gallery
+					SET `gallery_description` = '{$imageDescription}'
+					WHERE gallery_id={$galleryID} AND gallery_file_id={$imageID}
+					LIMIT 1";
+				$this->_SqlConnection->SqlQuery($sql);
+			}
+			
+ 			return $this->_EditPageOverview($PageID);
+ 		}
+ 		
+ 		function _EditPageImage($PageID) {
+			if(!is_numeric($PageID))
+				return $this->_EditPageOverview($PageID); 
+			$imageID = GetPostOrGet('imageID');
+			
+			$sql = "SELECT gallery.gallery_id
+				FROM (" . DB_PREFIX . "pages page
+				LEFT JOIN " . DB_PREFIX . "pages_gallery gallery ON page.page_id = gallery.page_id)
+				WHERE page.page_id={$PageID} AND page.page_type='gallery'
+				LIMIT 1";
+			$pageResult = $this->_SqlConnection->SqlQuery($sql);	
+			if($pageData = mysql_fetch_object($pageResult)) {
+				$galleryID = $pageData->gallery_id;
+				$sql = "SELECT *
+		 				FROM " . DB_PREFIX . "gallery
+		 				WHERE gallery_id={$galleryID} AND gallery_file_id={$imageID}
+		 				LIMIT 1";
+		 		$imageDataResult = $this->_SqlConnection->SqlQuery($sql);
+		 		if($imageData = mysql_fetch_object($imageDataResult)) {
+		 			$thumbnailfolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
+					
+						
+						$imageResizer = new ImageConverter($imageData->gallery_image);
+						$sizes = $imageResizer->CalcSizeByMax(400);
+						$prefix = $sizes[0] . 'x' . $sizes[1] . '_';
+						$imageUrl = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $thumbnailfolder, $prefix);
+						$this->_ComaLate->SetReplacement('LANG_BACK', $this->_Translation->GetTranslation('back'));
+						$this->_ComaLate->SetReplacement('LANG_APPLY', $this->_Translation->GetTranslation('apply'));
+						$this->_ComaLate->SetReplacement('LANG_IMAGE', $this->_Translation->GetTranslation('image'));
+						$this->_ComaLate->SetReplacement('LANG_IMAGE_DESCRIPTION', $this->_Translation->GetTranslation('image_description'));
+						$this->_ComaLate->SetReplacement('LANG_IMAGE_DESCRIPTION_INFO', $this->_Translation->GetTranslation('this_text_describes_what_you_can_see_on_the_picture'));
+						$this->_ComaLate->SetReplacement('LANG_MODIFY_IMAGE_DESCRIPTION', $this->_Translation->GetTranslation('modyfy_image_description'));
+						$this->_ComaLate->SetReplacement('IMAGE_DESCRIPTION', $imageData->gallery_description);
+						$this->_ComaLate->SetReplacement('PAGE_ID', $PageID);
+						$this->_ComaLate->SetReplacement('IMAGE_ID', $imageID);
+						$this->_ComaLate->SetReplacement('IMAGE_SRC', generateUrl($imageUrl));
+						$template = '<fieldset> 
+							<legend>{LANG_MODIFY_IMAGE_DESCRIPTION}</legend>
+							<form action="admin.php" method="post">
+								<input type="hidden" name="pageID" value="{PAGE_ID}" />
+								<input type="hidden" name="page" value="pagestructure" />
+								<input type="hidden" name="action" value="editPage" />
+								<input type="hidden" name="action2" value="saveImage" />
+								<input type="hidden" name="imageID" value="{IMAGE_ID}" />					
+								<div class="imagebox">
+									<img alt="{LANG_IMAGE}: {IMAGE_DESCRIPTION}" title="{IMAGE_DESCRIPTION}" src="{IMAGE_SRC}" />
+								</div>
+								<div class="row">
+									<label>
+										<strong>{LANG_IMAGE_DESCRIPTION}:</strong>
+										<span class="info">{LANG_IMAGE_DESCRIPTION_INFO}</span>
+									</label>
+									<input type="text" name="imageDescription" value="{IMAGE_DESCRIPTION}" />
+								</div>
+								<div class="row">
+									<input class="button" type="submit" value="{LANG_APPLY}" />
+									<a class="button" href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}">{LANG_BACK}</a>
+								</div>
+							</form>
+						</fieldset>';
+					return $template;
+		 		}
+			}	
+			return $this->_EditPageOverview($PageID); 
+ 		}
+ 		
+ 		function _EditPageSaveTitle($PageID) {
+ 			$title = GetPostOrGet('pageTitle');
+ 			$this->UpdateTitle($PageID, $title);
+ 			return $this->_EditPageOverview($PageID);
  		}
  		
  		function _EditPageRemove($PageID) {
@@ -97,13 +245,12 @@
 			$imageResult = $this->_SqlConnection->SqlQuery($sql);
 			$image = mysql_fetch_object($imageResult);
 			//M&ouml;chten sie das Bild wirklich aus der Galerie entfernen?
-			//generateUrl($image->gallery_image_thumbnail)
-			// $image->gallery_image_thumbnail
 			$this->_ComaLate->SetReplacement('LANG_IMAGE', $this->_Translation->GetTranslation('image'));
 			$this->_ComaLate->SetReplacement('LANG_YES', $this->_Translation->GetTranslation('yes'));
 			$this->_ComaLate->SetReplacement('LANG_NO', $this->_Translation->GetTranslation('no'));
 			$this->_ComaLate->SetReplacement('LANG_BACK', $this->_Translation->GetTranslation('back'));
 			$this->_ComaLate->SetReplacement('LANG_DELETE_QUESTION', $this->_Translation->GetTranslation('do_you_really_want_to_remove_this_image_from_the_gallery'));
+			$this->_ComaLate->SetReplacement('LANG_REMOVE_IMAGE', $this->_Translation->GetTranslation('remove_image'));
 			$this->_ComaLate->SetReplacement('IMAGE_SRC', generateUrl($image->gallery_image_thumbnail));
 			$this->_ComaLate->SetReplacement('PAGE_ID', $PageID);
 			$this->_ComaLate->SetReplacement('IMAGE_ID', $imageID);
@@ -139,6 +286,7 @@
 		 		$orderid = $orderidRes->gallery_orderid + 1;
 			$thumbnailFolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
 			$imgmax = 100;
+			$outputSize = 600; 
 			if(count($images) > 0) {
 				$usedIDs = array();
 			
@@ -161,19 +309,18 @@
 							
 							$imageResizer = new ImageConverter($image->file_path);
 							$sizes = $imageResizer->CalcSizeByMax($imgmax);
-							$gif = '';
-							if(substr($image->file_path, -4) == '.gif')
-								$gif = '.png';
-							$prefix = $sizes[0] . 'x' . $sizes[1] . '_';
-							$fileName = $imageUrl = $thumbnailFolder . '/' .  $prefix . basename($image->file_path . $gif);
 				
-							if(!file_exists($fileName))
-								$fileName = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $thumbnailFolder, $prefix);
+							$fileName = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $thumbnailFolder, $sizes[0] . 'x' . $sizes[1] . '_');
 							if(file_exists($fileName)) {
 								$sql = "INSERT INTO " . DB_PREFIX . "gallery (gallery_id, gallery_file_id, gallery_image_thumbnail, gallery_image, gallery_orderid)
 										VALUES($pageData->gallery_id, $image->file_id,'$fileName','$image->file_path', $orderid)";
 								$this->_SqlConnection->SqlQuery($sql);
+								$sizes = $imageResizer->CalcSizeByMax($outputSize);
+								print_r($sizes);
+								if($sizes[0] < $imageResizer->Size[0] && $sizes[1] < $imageResizer->Size[1])
+									$imageResizer->SaveResizedTo($sizes[0], $sizes[1], $thumbnailFolder, $sizes[0] . 'x' . $sizes[1] . '_');
 							}
+							
 						}
 						$orderid++;
 					}
@@ -409,8 +556,6 @@
 				$fileName = $imageUrl = $thumbnailfolder . '/' .  $prefix . basename($image->gallery_image . $gif);
 				if(!file_exists($fileName))
 					$fileName = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $thumbnailfolder, $prefix);
-				/*if(file_exists($image->gallery_image_thumbnail)) {*/
-					//$sizes = array(100,100); //getimagesize($image->gallery_image_thumbnail);
 					$marginTop = round(($imgmax - $sizes[1]) / 2);
 					$marginBottom = $imgmax - $sizes[1] - $marginTop;
 					if(file_exists($fileName))
@@ -422,7 +567,7 @@
 								'IMAGE_HEIGHT' => $sizes[1],
 								'IMAGE_SRC' => generateUrl($fileName),
 								'IMAGE_FILE_ID' => $image->gallery_file_id);
-				//}
+
 			}
 			$this->_ComaLate->SetReplacement('IMAGES', $images);
 			$this->_ComaLate->SetReplacement('PAGE_TITLE', $title);
@@ -469,7 +614,5 @@
  					</fieldset>';
  			return $template;
  		}
- 		
- 		
  	}
 ?>

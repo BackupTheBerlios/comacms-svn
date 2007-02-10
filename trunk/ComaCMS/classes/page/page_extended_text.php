@@ -55,7 +55,6 @@
 				
 				$this->LogPage($PageID, $logMessage);
 				
-				
 				$html = addslashes(TextActions::ConvertToPreHTML($oldPage->text_page_text));
 				$this->UpdatePage($PageID, addslashes($oldPage->text_page_text), $html);
 				$this->UpdateTitle($PageID, addslashes($oldPage->page_title));

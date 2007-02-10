@@ -39,22 +39,25 @@
 		}
 		
 		function AddNewPage($Name, $Title, $Lang, $Access, $Type, $ParentPageID, $Comment) {
-			if($Name == '' || $Title == '' || $Lang == '' || $Access == '' || $Type == '' || !is_numeric($ParentPageID) || $Comment == '')
-				return false;			
+			/*if($Name == '' || $Title == '' || $Lang == '' || $Access == '' || $Type == '' || !is_numeric($ParentPageID) || $Comment == '')
+				return false;*/			
 			
 			// convert the name into an url-acceptable format
 			$Name = str_replace(' ', '_', $Name);
 			$Name = rawurlencode($Name);
-			//die($Name);
 			$pageContentEditor = null;
 			// Load the page-type-specific module to crate the 'real' page
 			switch($Type) {
-				case 'text':		include(__ROOT__ . '/classes/page/page_extended_text.php');
-							$pageContentEditor = new Page_Extended_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
-							break;
-				case 'gallery':		include(__ROOT__ . '/classes/edit_gallery_page.php');
-							$pageContentEditor = new Edit_Gallery_Page();
-							break;
+				case 'text':
+					include(__ROOT__ . '/classes/page/page_extended_text.php');
+					$pageContentEditor = new Page_Extended_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
+					break;
+				case 'gallery':
+					include(__ROOT__ . '/classes/page/page_extended_gallery.php');
+					$pageContentEditor = new Page_Extended_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
+					/*include(__ROOT__ . '/classes/edit_gallery_page.php');
+					$pageContentEditor = new Edit_Gallery_Page();*/
+					break;
 				
 			}
 			
@@ -76,6 +79,7 @@
 				if($existsPage->page_access != 'deleted')
 					// the page exists and isn't deleted we can't do anything
 					return false;
+				
 				$pageContentEditor->LogPage($existsPage->page_id, $Comment);
 				// the page is marked as deleted, we are allowed to overwrite the page
 				// save the old things into the history

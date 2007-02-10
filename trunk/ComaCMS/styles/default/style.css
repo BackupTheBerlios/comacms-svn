@@ -223,6 +223,10 @@ div.row label {
 	width: 17em;
 }
 
+div.row label.input {
+    float: none;
+}
+
 div.row label.simple {
 	float: none;
 	display: inline;

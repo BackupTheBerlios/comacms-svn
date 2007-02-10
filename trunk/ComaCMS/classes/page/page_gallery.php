@@ -122,12 +122,7 @@
 			$this->_ComaLate->SetReplacement('LANG_GALLERY', $this->_Translation->GetTranslation('gallery'));
 			$this->_ComaLate->SetReplacement('LANG_IMAGE', $this->_Translation->GetTranslation('image'));
 			$this->_ComaLate->SetReplacement('PAGE_ID', $PageID);
-			/*$sql = 'SELECT gallery.gallery_description, gallery.gallery_image_thumbnail
-					FROM (' . DB_PREFIX . 'gallery gallery
-					LEFT JOIN ' . DB_PREFIX . 'pages_gallery page
-					ON page.gallery_id = gallery.gallery_id)
-					WHERE page.page_id=' . $PageID . '
-					ORDER BY gallery.gallery_orderid';*/
+			// Load the images of the gallery with file-information
 			$sql = 'SELECT gallery.gallery_description, gallery.gallery_image_thumbnail, page.page_title
 					FROM (
 						(' . DB_PREFIX . 'pages page

@@ -96,6 +96,7 @@
 		
 		/**
 		 * Calculate the width and height of the loaded picture, with a given maximum
+		 * @param integer $Maximum
 		 */
 		function CalcSizeByMax($Maximum) {
 			if(!file_exists($this->_file))

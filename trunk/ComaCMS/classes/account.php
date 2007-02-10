@@ -262,7 +262,7 @@
 				}		
 			}
 			if($this->IsLoggedIn) {
-				$this->accessRghts = new Auth_All(&$this->_SqlConnection, $this->ID);
+				$this->accessRghts = new Auth_All($this->_SqlConnection, $this->ID);
 				
 			if(!$this->IsAdmin) 
 				$this->accessRghts->Load();

@@ -388,10 +388,10 @@
 						$edit = new Page_Extended_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
 						break;
 					case 'gallery':
-						//include('classes/page/page_extended_gallery.php');
-						//$edit = new Page_Extended_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate);
-						include_once(__ROOT__ . '/classes/edit_gallery_page.php');
-						$edit = new Edit_Gallery_Page();
+						include('classes/page/page_extended_gallery.php');
+						$edit = new Page_Extended_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->User);
+						//include_once(__ROOT__ . '/classes/edit_gallery_page.php');
+						//$edit = new Edit_Gallery_Page();
 						break;	
 					default:
 						$out .= "Der Seitentyp <strong>$page->page_type</strong> l&auml;sst sich noch nicht bearbeiten.";

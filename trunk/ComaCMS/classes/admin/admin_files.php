@@ -423,7 +423,8 @@
 
 			$files_result = $this->_SqlConnection->SqlQuery($sql);
 			$completeSize = 0;
-			$thumbnailfolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/'); 
+			$thumbnailfolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
+			; 
 			// show all files
 			while($file = mysql_fetch_object($files_result)) {
 				$filePath = utf8_encode($file->file_path);
@@ -441,7 +442,7 @@
 						$imageUrl = $image->SaveResizedTo($size[0], $size[1], $thumbnailfolder, $size[0] . 'x' . $size[1] . '_');
 					
 					if($imageUrl)
-						$imageThumb = "<img alt=\"$filePath\" src=\"". $imageUrl . "\" />";
+						$imageThumb = "<img alt=\"$filePath\" src=\"". generateUrl($imageUrl) . "\" />";
 				}
 				
 				$out .= "\t\t\t\t<tr>

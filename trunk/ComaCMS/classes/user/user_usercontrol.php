@@ -106,9 +106,9 @@
 			
 			// Get custom fields
 			$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title
-					FROM (" . DB_PREFIX . "custom_fields_values value
-					LEFT JOIN " . DB_PREFIX . "custom_fields field
-					ON value.custom_fields_values_fieldid = field.custom_fields_id)
+					FROM (" . DB_PREFIX . "custom_fields field
+					LEFT JOIN " . DB_PREFIX . "custom_fields_values value
+					ON field.custom_fields_id = value.custom_fields_values_fieldid)
 					WHERE value.custom_fields_values_userid='{$this->_User->ID}'";
 			$customFieldsValuesResult = $this->_SqlConnection->SqlQuery($sql); 
 			
@@ -248,6 +248,20 @@
 			$formMaker->AddInput('edit_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'));
 			$formMaker->AddInput('edit_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'));
 			
+			// Get custom fields
+			$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title
+					FROM (" . DB_PREFIX . "custom_fields field
+					LEFT JOIN " . DB_PREFIX . "custom_fields_values value
+					ON field.custom_fields_id = value.custom_fields_values_fieldid)
+					WHERE value.custom_fields_values_userid='{$this->_User->ID}'
+					OR value.custom_fields_values_userid IS NULL";
+			$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
+			
+			while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
+				// TODO: ids may not have any ".", " ", ...
+				$formMaker->AddInput('edit_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information, $customFieldsData->custom_fields_values_value);
+			}
+			
 			// Generate the template
 			$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, false);
 			return $template;
@@ -315,6 +329,57 @@
 					$formMaker->AddCheck('edit_user', 'user_password_repetition', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
 				}
 				
+				// Get custom fields
+				$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title, field.custom_fields_type, field.custom_fields_required
+					FROM (" . DB_PREFIX . "custom_fields field
+					LEFT JOIN " . DB_PREFIX . "custom_fields_values value
+					ON field.custom_fields_id = value.custom_fields_values_fieldid)
+					WHERE value.custom_fields_values_userid='{$this->_User->ID}'
+					OR value.custom_fields_values_userid IS NULL";
+				$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
+				
+				while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
+					
+					// Get external value for that field
+					${$customFieldsData->custom_fields_name} = GetPostOrGet($customFieldsData->custom_fields_name);
+					
+					// Add input to the formmaker class
+					$formMaker->AddInput('edit_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information, ${$customFieldsData->custom_fields_name});
+					
+					// Get the type of the field
+					switch ($customFieldsData->custom_fields_type) {
+							
+						case 'EMail':
+							$type = 'not_email';
+							$text =$this->_Translation->GetTranslation('this_is_not_a_valid_email_address');
+							break;
+						
+						case 'ICQ':
+							$type = 'not_icq';
+							$text = $this->_Translation->GetTranslation('this_is_not_a_valid_icq_number');
+							break;
+						
+						default:
+							$type = '';
+							$text = '';
+							break;
+					}
+					
+					// Add necessary checks
+					if ($customFieldsData->custom_fields_required == 1) {
+						
+						// Check wether the field has any value
+						$formMaker->AddCheck('edit_user', $customFieldsData->custom_fields_name, 'empty', sprintf($this->_Translation->GetTranslation('you_have_to_give_a_value_for_the_field_%field%!'), $customFieldsData->custom_fields_title));
+						
+						// Check wether the field has the necessary value
+						if (!empty($type) && !empty($text))
+							$formMaker->AddCheck('edit_user', $customFieldsData->custom_fields_name, $type, $text);
+					}
+					else {
+						if (!empty(${$customFieldsData->custom_fields_name}))
+							$formMaker->AddCheck('edit_user', $customFieldsData->custom_fields_name, $type, $text);
+					}
+				}
 				
 				if ($formMaker->CheckInputs('edit_user', true)) {
 					
@@ -325,7 +390,39 @@
 							WHERE user_id=$UserID";
 					$this->_SqlConnection->SqlQuery($sql);
 					
-					$this->_User->Logout();
+					// Get custom fields
+					$sql = "SELECT value.custom_fields_values_value, field.custom_fields_name, value.custom_fields_values_id, field.custom_fields_id, value.custom_fields_values_userid
+						FROM (" . DB_PREFIX . "custom_fields field
+						LEFT JOIN " . DB_PREFIX . "custom_fields_values value
+						ON field.custom_fields_id = value.custom_fields_values_fieldid)
+						WHERE value.custom_fields_values_userid='{$this->_User->ID}'
+						OR value.custom_fields_values_userid IS NULL";
+					$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
+					
+					while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
+						
+						// Get external value for that field
+						${$customFieldsData->custom_fields_name} = GetPostOrGet($customFieldsData->custom_fields_name);
+						
+						if ($customFieldsData->custom_fields_values_userid != '') {
+							
+							// Update existing entry
+							$sql = "UPDATE " . DB_PREFIX . "custom_fields_values
+									SET custom_fields_values_value='" . ${$customFieldsData->custom_fields_name} . "'
+									WHERE custom_fields_values_id='$customFieldsData->custom_fields_values_id'";
+							$this->_SqlConnection->SqlQuery($sql);
+						}
+						else {
+							
+							// Insert a new entry into the database
+							$sql = "INSERT INTO " . DB_PREFIX . "custom_fields_values
+									(custom_fields_values_userid, custom_fields_values_fieldid, custom_fields_values_value)
+									VALUES ('{$this->_User->ID}', '{$customFieldsData->custom_fields_id}', '" . ${$customFieldsData->custom_fields_name} . "')";
+							$this->_SqlConnection->SqlQuery($sql);
+						}
+					}
+					
+					// $this->_User->Logout();
 					
 					// Set user back to userinterface
 					header('Location: special.php?page=userinterface');

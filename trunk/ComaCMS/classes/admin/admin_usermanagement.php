@@ -286,6 +286,17 @@
 			$formMaker->AddInput('new_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'));
 			$formMaker->AddInput('new_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'));
 			
+			// Get custom fields
+				$sql = "SELECT custom_fields_information, custom_fields_name, custom_fields_title, custom_fields_type, custom_fields_required
+					FROM " . DB_PREFIX . "custom_fields field";
+				$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
+				
+				while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
+					
+					// Add input to the formmaker class
+					$formMaker->AddInput('edit_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information, $customFieldsData->custom_fields_values_value);
+				}
+			
 			// Generate the template
 			$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, false);
 			return $template;
@@ -399,6 +410,21 @@
 					$formMaker->AddInput('edit_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($user->user_author == 1) ? true : false));
 				}
 				
+				// Get custom fields
+				$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title, field.custom_fields_type, field.custom_fields_required
+					FROM (" . DB_PREFIX . "custom_fields field
+					LEFT JOIN " . DB_PREFIX . "custom_fields_values value
+					ON field.custom_fields_id = value.custom_fields_values_fieldid)
+					WHERE value.custom_fields_values_userid='{$UserID}'
+					OR value.custom_fields_values_userid IS NULL";
+				$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
+				
+				while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
+					
+					// Add input to the formmaker class
+					$formMaker->AddInput('edit_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information, $customFieldsData->custom_fields_values_value);
+				}
+				
 				// Generate the template
 				$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, false);
 				return $template;
@@ -478,6 +504,58 @@
 						$formMaker->AddInput('check_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($UserAuthor == 1) ? true : false));
 					}
 					
+					// Get custom fields
+					$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title, field.custom_fields_type, field.custom_fields_required
+						FROM (" . DB_PREFIX . "custom_fields field
+						LEFT JOIN " . DB_PREFIX . "custom_fields_values value
+						ON field.custom_fields_id = value.custom_fields_values_fieldid)
+						WHERE value.custom_fields_values_userid='{$UserID}'
+						OR value.custom_fields_values_userid IS NULL";
+					$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
+					
+					while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
+						
+						// Get external value for that field
+						${$customFieldsData->custom_fields_name} = GetPostOrGet($customFieldsData->custom_fields_name);
+						
+						// Add input to the formmaker class
+						$formMaker->AddInput('check_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information, ${$customFieldsData->custom_fields_name});
+						
+						// Get the type of the field
+						switch ($customFieldsData->custom_fields_type) {
+								
+							case 'EMail':
+								$type = 'not_email';
+								$text =$this->_Translation->GetTranslation('this_is_not_a_valid_email_address');
+								break;
+							
+							case 'ICQ':
+								$type = 'not_icq';
+								$text = $this->_Translation->GetTranslation('this_is_not_a_valid_icq_number');
+								break;
+							
+							default:
+								$type = '';
+								$text = '';
+								break;
+						}
+						
+						// Add necessary checks
+						if ($customFieldsData->custom_fields_required == 1) {
+							
+							// Check wether the field has any value
+							$formMaker->AddCheck('check_user', $customFieldsData->custom_fields_name, 'empty', sprintf($this->_Translation->GetTranslation('you_have_to_give_a_value_for_the_field_%field%!'), $customFieldsData->custom_fields_title));
+							
+							// Check wether the field has the necessary value
+							if (!empty($type) && !empty($text))
+								$formMaker->AddCheck('check_user', $customFieldsData->custom_fields_name, $type, $text);
+						}
+						else {
+							if (!empty(${$customFieldsData->custom_fields_name}))
+								$formMaker->AddCheck('check_user', $customFieldsData->custom_fields_name, $type, $text);
+						}
+					}
+					
 					if ($formMaker->CheckInputs('check_user', true)) {
 						
 						$user_password = ((!empty($UserPassword)) ? ", user_password='" . md5($UserPassword) . "'": '');
@@ -486,6 +564,38 @@
 								SET user_showname='$UserShowname', user_name='$UserName', user_email='$UserEmail', " . (($this->_User->ID != $UserID) ? "user_admin='$UserAdmin'," : '') . "user_author='$UserAuthor'$user_password
 								WHERE user_id=$UserID";
 						$this->_SqlConnection->SqlQuery($sql);
+						
+						// Get custom fields
+						$sql = "SELECT value.custom_fields_values_value, field.custom_fields_name, value.custom_fields_values_id, field.custom_fields_id, value.custom_fields_values_userid
+							FROM (" . DB_PREFIX . "custom_fields field
+							LEFT JOIN " . DB_PREFIX . "custom_fields_values value
+							ON field.custom_fields_id = value.custom_fields_values_fieldid)
+							WHERE value.custom_fields_values_userid='{$UserID}'
+							OR value.custom_fields_values_userid IS NULL";
+						$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
+						
+						while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
+							
+							// Get external value for that field
+							${$customFieldsData->custom_fields_name} = GetPostOrGet($customFieldsData->custom_fields_name);
+							
+							if ($customFieldsData->custom_fields_values_userid != '') {
+								
+								// Update existing entry
+								$sql = "UPDATE " . DB_PREFIX . "custom_fields_values
+										SET custom_fields_values_value='" . ${$customFieldsData->custom_fields_name} . "'
+										WHERE custom_fields_values_id='$customFieldsData->custom_fields_values_id'";
+								$this->_SqlConnection->SqlQuery($sql);
+							}
+							else {
+								
+								// Insert a new entry into the database
+								$sql = "INSERT INTO " . DB_PREFIX . "custom_fields_values
+										(custom_fields_values_userid, custom_fields_values_fieldid, custom_fields_values_value)
+										VALUES ('{$UserID}', '{$customFieldsData->custom_fields_id}', '" . ${$customFieldsData->custom_fields_name} . "')";
+								$this->_SqlConnection->SqlQuery($sql);
+							}
+						}
 						
 						// Send the user the HomePage of the usermanager
 						$template = $this->_HomePage();
@@ -632,6 +742,8 @@
 			$formMaker->AddInput('add_custom_field', 'custom_field_required', 'checkbox', $this->_Translation->GetTranslation('required'), $this->_Translation->GetTranslation('is_this_field_required_to_save_the_userdetails?'), (($CustomFieldRequired == 1) ? true : false));
 			$formMaker->AddInput('add_custom_field', 'custom_field_information', 'text', $this->_Translation->GetTranslation('information'), $this->_Translation->GetTranslation('this_is_the_information_displayed_for_this_field_to_the_user'), $CustomFieldInformation);
 			
+			
+			
 			// Check the inputs made by the user
 			if ($formMaker->CheckInputs('add_custom_field', true)) {
 				
@@ -729,7 +841,8 @@
 			$formMaker->AddForm('check_custom_field', 'admin.php', $this->_Translation->GetTranslation('save'), $this->_Translation->GetTranslation('custom_field'), 'post');
 			
 			$formMaker->AddHiddenInput('check_custom_field', 'page', 'users');
-			$formMaker->AddHiddenInput('check_custom_field', 'action', 'add_custom_field');
+			$formMaker->AddHiddenInput('check_custom_field', 'action', 'check_custom_field');
+			$formMaker->AddHiddenInput('edit_custom_field', 'custom_field_id', $CustomFieldId);
 			
 			$formMaker->AddInput('check_custom_field', 'custom_field_name', 'text', $this->_Translation->GetTranslation('name'), $this->_Translation->GetTranslation('with_this_name_shall_the_admin_identify_the_custom_field'), $CustomFieldName);
 			$formMaker->AddCheck('check_custom_field', 'custom_field_name', 'empty', $this->_Translation->GetTranslation('you_have_to_give_each_custom_field_a_name!'));
@@ -757,7 +870,7 @@
 				// Add new custom field to the database
 				$sql = "UPDATE " . DB_PREFIX . "custom_fields
 						SET custom_fields_name='$CustomFieldName', custom_fields_title='$CustomFieldTitle', custom_fields_type='$CustomFieldType', custom_fields_size='$CustomFieldSize', custom_fields_show_at_registration='" . (($CustomFieldShowAtRegistration == 1) ? 1 : 0) . "', custom_fields_required='" . (($CustomFieldRequired == 1) ? 1 : 0) . "', custom_fields_information='$CustomFieldInformation'
-						WHERE custom_fields_id=$CustomFieldId";
+						WHERE custom_fields_id='$CustomFieldId'";
 				$this->_SqlConnection->SqlQuery($sql);
 					
 				// Set user to the HomePage of the usermanager

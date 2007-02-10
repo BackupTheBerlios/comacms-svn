@@ -214,16 +214,19 @@
  		 */
  		function AddCheck($FormName, $InputName, $CheckType, $ErrorInformation = '', $SecondInputName = '', $TableName = '', $FieldName = '') {
  			
- 			// Initialize the variables
- 			if (empty($ErrorInformation))
- 				$ErrorInformation = $this->_TodoValue;
- 			
- 			$this->_Forms[$FormName]['inputs'][$InputName]['checkings'][] = array(
- 															'type' => $CheckType,
- 															'secondInput' => $SecondInputName,
- 															'tableName' => $TableName,
- 															'fieldName' => $FieldName,
- 															'text' => $ErrorInformation);
+ 			if (!empty($FormName) && !empty($InputName) && !empty($CheckType)) {
+ 				
+ 				// Initialize the variables
+	 			if (empty($ErrorInformation))
+	 				$ErrorInformation = $this->_TodoValue;
+	 			
+	 			$this->_Forms[$FormName]['inputs'][$InputName]['checkings'][] = array(
+	 															'type' => $CheckType,
+	 															'secondInput' => $SecondInputName,
+	 															'tableName' => $TableName,
+	 															'fieldName' => $FieldName,
+	 															'text' => $ErrorInformation);
+ 			}
  		}
  		
  		/**
@@ -295,7 +298,7 @@
 						
 					case 'not_email':
 						// Identify wether value is an emailadress or not 
-						if (!$this->_IsEMailAddress($input['value'])){
+						if (!$this->_IsEMailAddress($input['value']) && !empty($input['value'])){
 							$ok = false;
 							if ($GenerateErrorInformations)
 								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);
@@ -494,7 +497,7 @@
 						{fieldset_legend}
 						<inputs:loop>
 							<div class=\"row\">
-								<label for=\"{name}\">
+								<label for=\"id{name}\">
 									<strong>{translation}:</strong>";
 				
 				// If the method shall give out any errorinformation there must be a template for that
@@ -503,7 +506,7 @@
 				
 			$template .= "\r\n\t\t\t\t\t\t\t\t\t<span class=\"info\">{information}</span>
 								</label>
-								{start_input} name=\"{name}\" id=\"{name}\" {end_input}
+								{start_input} name=\"{name}\" id=\"id{name}\" {end_input}
 							</div>
 						</inputs>
 						{submit_button}

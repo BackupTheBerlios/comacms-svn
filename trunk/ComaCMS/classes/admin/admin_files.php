@@ -369,29 +369,29 @@
 							" .  $this->_Translation->GetTranslation('preview') . "
 						</th>
 						<th>
-							<a href=\"admin.php?page=files&amp;sort=filename#files\" title=\"" . @sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "\"><img alt=\"[" . @sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "]\" src=\"img/up.png\"/></a>
+							<a href=\"admin.php?page=files&amp;order=filename#files\" title=\"" . @sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "\"><img alt=\"[" . @sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "]\" src=\"img/up.png\"/></a>
 							" . $this->_Translation->GetTranslation('filename') . "
-							<a href=\"admin.php?page=files&amp;sort=filename&amp;desc=1#files\" title=\"" . @sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "\"><img alt=\"[" . @sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "]\" src=\"img/down.png\"/></a>
+							<a href=\"admin.php?page=files&amp;order=filename&amp;desc=1#files\" title=\"" . @sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "\"><img alt=\"[" . @sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filename')) . "]\" src=\"img/down.png\"/></a>
 						</th>
 						<th class=\"small_width\">
-							<a href=\"admin.php?page=files&amp;sort=filesize#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "]\" src=\"img/up.png\"/></a>
+							<a href=\"admin.php?page=files&amp;order=filesize#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "]\" src=\"img/up.png\"/></a>
 							" . $this->_Translation->GetTranslation('filesize') . "
-							<a href=\"admin.php?page=files&amp;sort=filesize&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "]\" src=\"img/down.png\"/></a>
+							<a href=\"admin.php?page=files&amp;order=filesize&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filesize')) . "]\" src=\"img/down.png\"/></a>
 						</th>
 						<th class=\"table_date_width_plus\">
-							<a href=\"admin.php?page=files&amp;sort=filedate#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('date')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('date')) . "]\" src=\"img/up.png\"/></a>
+							<a href=\"admin.php?page=files&amp;order=filedate#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('date')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('date')) . "]\" src=\"img/up.png\"/></a>
 							" . $this->_Translation->GetTranslation('uploaded_on') . "
-							<a href=\"admin.php?page=files&amp;sort=filedate&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('date')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('date')) . "]\" src=\"img/down.png\"/></a>
+							<a href=\"admin.php?page=files&amp;order=filedate&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('date')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('date')) . "]\" src=\"img/down.png\"/></a>
 						</th>
 						<th class=\"small_width\">
-							<a href=\"admin.php?page=files&amp;sort=filetype#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "]\" src=\"img/up.png\"/></a>
+							<a href=\"admin.php?page=files&amp;order=filetype#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "]\" src=\"img/up.png\"/></a>
 							" . $this->_Translation->GetTranslation('filetype') . "
-							<a href=\"admin.php?page=files&amp;sort=filetype&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "]\" src=\"img/down.png\"/></a>
+							<a href=\"admin.php?page=files&amp;order=filetype&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('filetype')) . "]\" src=\"img/down.png\"/></a>
 						</th>
 						<th class=\"table_mini_width\">
-							<a href=\"admin.php?page=files&amp;sort=filedownloads#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "]\" src=\"img/up.png\"/></a>
+							<a href=\"admin.php?page=files&amp;order=filedownloads#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_ascending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "]\" src=\"img/up.png\"/></a>
 							<abbr title=\"" . $this->_Translation->GetTranslation('downloads') . "\">" . $this->_Translation->GetTranslation('downl') . "</abbr>
-							<a href=\"admin.php?page=files&amp;sort=filedownloads&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "]\" src=\"img/down.png\"/></a>
+							<a href=\"admin.php?page=files&amp;order=filedownloads&amp;desc=1#files\" title=\"" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "\"><img alt=\"[" . sprintf($this->_Translation->GetTranslation('sort_descending_by_%name%'), $this->_Translation->GetTranslation('downloads')) . "]\" src=\"img/down.png\"/></a>
 						</th>
 						<th class=\"actions\">" . $this->_Translation->GetTranslation('actions') . "</th>
 					</tr>
@@ -404,8 +404,35 @@
 			$thumbnailfolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
 			
 			$files = new Files($this->_SqlConnection);
+			$order = FILES_NAME;
+			$ascending = true;
+			$orderByGet = GetPostOrGet('order');
+			$desc = GetPostOrGet('desc');
+			switch ($orderByGet) {
+				case 'filesize':
+					$order = FILES_SIZE;
+					break;
+				case 'filedate':
+					$order = FILES_DATE;
+					break;
+				case 'filetype':
+					$order = FILES_TYPE;
+					break;
+				case 'filedownloads':
+					$order = FILES_DOWNLOADS;
+					break;
+				case 'filename':
+				default:
+					$order = FILES_NAME;
+					break;
+			}
+			// descending or ascending?
+			if($desc == 1)
+				$ascending = false;
+			
+			
 			// get all files from the database/ which are registered in the database
-			$filesArray = $files->FillArray();
+			$filesArray = $files->FillArray($order, $ascending);
 			//print str_replace('  ','&nbsp;&nbsp;',nl2br(print_r($fileArray, true)));
 			//die();
 			$filesCount = count($filesArray);
@@ -429,6 +456,7 @@
 			
 			$this->_ComaLate->SetReplacement('FILES', $filesArray);
 			$this->_ComaLate->SetReplacement('SIZE_COUNT', kbormb($files->SizeCount));
+			$this->_ComaLate->SetReplacement('LANG_ALTOGETHER', $this->_Translation->GetTranslation('altogether'));
 			$out .= '<FILES:loop>
 					<tr>
 						<td>{FILE_PREVIEW}</td>

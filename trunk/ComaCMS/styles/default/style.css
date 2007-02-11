@@ -86,7 +86,7 @@ thead td, th {
 	font-weight: bold;
 }
 
-table {
+table, fieldset {
 	margin: 1em;
 }
 

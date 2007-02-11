@@ -214,7 +214,7 @@
  		 */
  		function AddCheck($FormName, $InputName, $CheckType, $ErrorInformation = '', $SecondInputName = '', $TableName = '', $FieldName = '') {
  			
- 			if (!empty($FormName) && !empty($InputName) && !empty($CheckType)) {
+ 			if (!empty($FormName) && !empty($InputName) && !empty($CheckType) && array_key_exists($FormName, $this->_Forms)) {
  				
  				// Initialize the variables
 	 			if (empty($ErrorInformation))

@@ -105,7 +105,7 @@
 									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('if_you_are_an_author_you_can_edit_the_content_of_the_page'));
 			
 			// Get custom fields
-			$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title
+			$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title, field.custom_fields_required
 					FROM (" . DB_PREFIX . "custom_fields field
 					LEFT JOIN " . DB_PREFIX . "custom_fields_values value
 					ON field.custom_fields_id = value.custom_fields_values_fieldid)
@@ -116,7 +116,7 @@
 				$userProfile[] = array(	'PROFILE_FIELD_NAME' => $customFieldsValue->custom_fields_name,
 										'PROFILE_FIELD_TRANSLATION' => $customFieldsValue->custom_fields_title,
 										'PROFILE_FIELD_VALUE' => $customFieldsValue->custom_fields_values_value,
-										'PROFILE_FIELD_INFORMATION' => $customFieldsValue->custom_fields_information);
+										'PROFILE_FIELD_INFORMATION' => $customFieldsValue->custom_fields_information. (($customFieldsValue->custom_fields_required == 1) ? ' ' . $this->_Translation->GetTranslation('(required)') : ''));
 			}
 			
 			$this->_ComaLate->SetReplacement('USER_PROFILE', $userProfile);
@@ -249,7 +249,7 @@
 			$formMaker->AddInput('edit_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'));
 			
 			// Get custom fields
-			$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title
+			$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title, field.custom_fields_required
 					FROM (" . DB_PREFIX . "custom_fields field
 					LEFT JOIN " . DB_PREFIX . "custom_fields_values value
 					ON field.custom_fields_id = value.custom_fields_values_fieldid)
@@ -258,8 +258,8 @@
 			$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
 			
 			while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
-				// TODO: ids may not have any ".", " ", ...
-				$formMaker->AddInput('edit_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information, $customFieldsData->custom_fields_values_value);
+				
+				$formMaker->AddInput('edit_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information . (($customFieldsData->custom_fields_required == 1) ? ' ' . $this->_Translation->GetTranslation('(required)') : ''), $customFieldsData->custom_fields_values_value);
 			}
 			
 			// Generate the template
@@ -344,7 +344,7 @@
 					${$customFieldsData->custom_fields_name} = GetPostOrGet($customFieldsData->custom_fields_name);
 					
 					// Add input to the formmaker class
-					$formMaker->AddInput('edit_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information, ${$customFieldsData->custom_fields_name});
+					$formMaker->AddInput('edit_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information . (($customFieldsData->custom_fields_required == 1) ? ' ' . $this->_Translation->GetTranslation('(required)') : ''), ${$customFieldsData->custom_fields_name});
 					
 					// Get the type of the field
 					switch ($customFieldsData->custom_fields_type) {
@@ -435,7 +435,11 @@
 				}
 			}
 			else
-				return $this->_Translation->GetTranslation('you_have_no_right_to_edit_the_profile_of_another_user');
+				
+				if ($this->_User->IsAdmin)
+					header('Location: admin.php?page=users&action=edit_user&user_id=' . $UserID);
+				else
+					return $this->_Translation->GetTranslation('you_have_no_right_to_edit_the_profile_of_another_user');
 		}
 	}
 

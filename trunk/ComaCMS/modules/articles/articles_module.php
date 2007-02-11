@@ -58,17 +58,18 @@
 				$thumbnail = '';
 				$style = '';
 				if($article->article_image != '') {
-					$image = new ImageConverter($article->article_image);
-					$size = $image->Size; 
-					if($size[0] > $imgMax && $size[1] > $imgMax)
-						$size = $image->CalcSizeByMax($imgMax);
-					$resizedFileName = $thumbnailFolder . '/' . $size[0] . 'x' . $size[1] . '_' . basename($article->article_image);
-					if(!file_exists($resizedFileName))
-						$image->SaveResizedTo($size[0], $size[1], $thumbnailFolder, $size[0] . 'x' . $size[1] . '_');
-					if(file_exists($resizedFileName))
-							$thumbnail = '<img class="article_image" style="padding-right:' . (($imgMax - $size[0])/2) . 'px;padding-left:' . (($imgMax - $size[0])/2) . 'px;" title="' . $article->article_title . '" alt="' . $article->article_title . '" src="' . generateUrl($resizedFileName) . '" />';
+					if(file_exists($article->article_image)){
+						$image = new ImageConverter($article->article_image);
+					 	$size = $image->Size;
+					 	if($image->Size[0] > $imgMax && $image->Size[1] > $imgMax)
+							$size = $image->CalcSizeByMax($imgMax);
+						//$resizedFileName = $thumbnailFolder . '/' . $size[0] . 'x' . $size[1] . '_' . basename($article->article_image);
+					//if(!file_exists($resizedFileName))
+						$thumbnailUrl = $image->SaveResizedTo($size[0], $size[1], $thumbnailFolder, $size[0] . 'x' . $size[1] . '_');
+					if(file_exists($thumbnailUrl))
+							$thumbnail = '<img class="article_image" style="padding-right:' . (($imgMax - $size[0])/2) . 'px;padding-left:' . (($imgMax - $size[0])/2) . 'px;" title="' . $article->article_title . '" alt="' . $article->article_title . '" src="' . generateUrl($thumbnailUrl) . '" />';
 					$style = ' style="min-height:' . ($size[1] - (19 * $showAuthor)) . 'px"';
-					//}
+					}
 				}
 				$author = '';
 				if($showAuthor) {

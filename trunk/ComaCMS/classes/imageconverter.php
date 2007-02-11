@@ -109,6 +109,15 @@
 			$size[1] = ($this->Size[1] > $this->Size[0]) ? round($Maximum, 0) : round($this->Size[1] / ($this->Size[0] / $Maximum), 0);
 			return $size;
 		}
+		
+		function CalcSizeByMaxWidth($Maximum) {
+			if(!file_exists($this->_file))
+				return null;
+			$size = array();
+			$size[0] = $Maximum;
+			$size[1] = round($this->Size[1] / $this->Size[0] *  $Maximum, 0);
+			return $size;
+		}
 	}
  
 ?>

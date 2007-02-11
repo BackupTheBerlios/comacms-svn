@@ -34,17 +34,37 @@
 		
 		
 		function GetIDByPath($Path) {
-			
+			$sql = "SELECT file_id
+					FROM " . DB_PREFIX . "files
+					WHERE file_path='$Path'
+					LIMIT 1";
+			$result = $this->_SqlConnection->SqlQuery($sql);
+			if($file = mysql_fetch_object($result))
+				return $file->file_id;
+			else
+				return -1;
 		}
 		
 		function GetIDByFileName($FileName) {
-			
+			$sql = "SELECT file_id
+					FROM " . DB_PREFIX . "files
+					WHERE file_name='$FileName'
+					LIMIT 1";
+			$result = $this->_SqlConnection->SqlQuery($sql);
+			if($file = mysql_fetch_object($result))
+				return $file->file_id;
+			else
+				return -1;
 		}
 		
 		function UploadFile() {
 			
 		}
+		
+		
 		function AddFile($Path) {
+			if($this->GetIDByPath($Path) != -1)
+				return;
 			$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date, file_creator)
 					VALUES('" . basename($Path) . "', '" . GetMimeContentType($Path) . "', '$Path', '" . filesize($Path) . "', '" . md5_file($Path) . "', " . mktime() . ", {$this->_User->ID})";
 			$this->_SqlConnection->SqlQuery($sql);

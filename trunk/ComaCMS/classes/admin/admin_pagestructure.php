@@ -20,6 +20,7 @@
  	 * @ignore
  	 */
  	require_once __ROOT__ . '/classes/pagestructure.php';
+ 	require_once __ROOT__ . '/classes/imageconverter.php';
  	require_once __ROOT__ . '/classes/admin/admin.php';
  	
 	/**
@@ -737,7 +738,11 @@
 			// Get data form config
 			$inlinemenuFolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
 			// resize the image if it doesn't exist
-			$thumbnail = resizeImageToWidth($imagePath, $inlinemenuFolder, $imgmax2);
+			$imageResizer = new ImageConverter($imagePath);
+			$sizes = $imageResizer->CalcSizeByMaxWidth($imgmax2);
+			$thumbnail = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $inlinemenuFolder, $sizes[0] . 'x' . $sizes[1] . '_');
+			
+			//$thumbnail = residzeImageToWidth($imagePath, $inlinemenuFolder, $imgmax2);
 			// if resizing was successful ...
 			if(file_exists($thumbnail)) {
 				// ... set it to the inlinemenu
@@ -1011,7 +1016,7 @@
 			$images_result = $this->_SqlConnection->SqlQuery($sql);
 			$imgmax = 100;
 			$imgmax2 = 200;
-			$inlinemenu_folder = 'data/thumbnails/';
+			$inlinemenuFolder = 'data/thumbnails/';
 			$out = "<form action=\"admin.php\" method=\"post\">
 				<input type=\"hidden\" name=\"page\" value=\"pagestructure\"/>
 				<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\"/>
@@ -1021,13 +1026,18 @@
 				<legend>" . $this->_Translation->GetTranslation('inlinemenu_image') . "</legend>
 				<div class=\"row\"><div class=\"imagesblock\">";
 			while($image = mysql_fetch_object($images_result)) {
-				$thumbnail = resizeImageToMaximum($image->file_path, $inlinemenu_folder ,$imgmax);
-				if($thumbnail !== false) {
-					list($originalWidth, $originalHeight) = getimagesize($thumbnail);
+				$imageResizer = new ImageConverter($image->file_path);
+				$sizes = $imageResizer->CalcSizeByMax($imgmax);
+				if($sizes[0] > $imageResizer->Size[0] && $sizes[1] > $imageResizer->Size[1])
+					$sizes = $imageResizer->Size;
+				$thumbnail = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $inlinemenuFolder, $sizes[0] . 'x' . $sizes[1] . '_');
+				//$thumbnail = resizeIkmageToMaximum($image->file_path, $inlinemenu_folder ,$imgmax);
+				if(file_exists($thumbnail)) {
+					//list($originalWidth, $originalHeight) = getimagesize($thumbnail);
 					
 					$out .= "<div class=\"imageblock\">
 				<a href=\"" . generateUrl($image->file_path) . "\">
-				<img style=\"margin-top:" . ($imgmax-$originalHeight) . "px;\" src=\"" . generateUrl($thumbnail) . "\" alt=\"". basename($thumbnail) ."\" /></a><br />
+				<img style=\"margin-top:" . ($imgmax - $sizes[1]) . "px;\" src=\"" . generateUrl($thumbnail) . "\" alt=\"". basename($thumbnail) ."\" /></a><br />
 				<input type=\"radio\" name=\"imagePath\" " .(($imagePath == $image->file_path) ? 'checked="checked" ' : '') . " value=\"$image->file_path\"/></div>";
 				}
 			}
@@ -1053,10 +1063,13 @@
 			
 			if(file_exists($thumbPath))
 				$image = "<img alt=\"{$imageTitle}\" src=\"" . generateUrl($thumbPath) . "\"/>";
-			else {
+			else if(file_exists($imagePath)){
 				$imgmax2 = 200;
 				$inlinemenuFolder = 'data/thumbnails/';
-				$thumbnail = resizeImageToWidth($imagePath, $inlinemenuFolder, $imgmax2);
+				$imageResizer = new ImageConverter($imagePath);
+				$sizes = $imageResizer->CalcSizeByMaxWidth($imgmax2);
+				$thumbnail = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $inlinemenuFolder, $sizes[0] . 'x' . $sizes[1] . '_');
+				//$thumbnail = resizeImagkeToWidth($imagePath, $inlinemenuFolder, $imgmax2);
 				if($thumbnail !== false){
 					$image = "<img alt=\"{$imageTitle}\" src=\"" . generateUrl($thumbnail) . "\"/>";
 				}

@@ -71,7 +71,7 @@
 	 			return $this->_homePage();
 	 		
 	 		// try to get the file-information from database
-			$files = new Files($this->_SqlConnection);
+			$files = new Files($this->_SqlConnection, $this->_User);
 			$file = $files->GetFile($fileID);
 			
 			if($file === null)
@@ -121,9 +121,9 @@
 
 				// is the file in the table?
 				$sql = "SELECT file_id, file_path
-					FROM " . DB_PREFIX . "files
-					WHERE file_path = '$change'
-					LIMIT 1";
+						FROM " . DB_PREFIX . "files
+						WHERE file_path = '$change'
+						LIMIT 1";
 				$file_result = $this->_SqlConnection->SqlQuery($sql);
 				// is the file in the database?
 				if(($file = mysql_fetch_object($file_result))) {
@@ -131,18 +131,18 @@
  					if(!file_exists($change)) {
 						// remove the database entry
 						$sql = "DELETE FROM " . DB_PREFIX . "files
-							WHERE file_id = $file->file_id
-							LIMIT 1";
+								WHERE file_id = $file->file_id
+								LIMIT 1";
 						$this->_SqlConnection->SqlQuery($sql);
  					}
  					// the file exists!
  					else {
  						// update the values, which could be changed
  						$sql = "UPDATE " . DB_PREFIX . "files
- 							SET file_size = " . filesize($file->file_path) . ",
- 							file_md5 = '" . md5_file($file->file_path) . "'
-							WHERE file_id =$file->file_id
-							LIMIT 1";
+ 								SET file_size = " . filesize($file->file_path) . ",
+ 								file_md5 = '" . md5_file($file->file_path) . "'
+								WHERE file_id =$file->file_id
+								LIMIT 1";
 						$this->_SqlConnection->SqlQuery($sql);
  					}
 				}
@@ -150,7 +150,7 @@
 				elseif(file_exists($change)) {
 					// create him a database-entry
 					$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date, file_creator)
-						VALUES('" . basename($change) . "', '" . GetMimeContentType($change) . "', '$change', '" . filesize($change) . "', '" . md5_file($change) . "', " . mktime() . ", {$this->_User->ID})";
+							VALUES('" . basename($change) . "', '" . GetMimeContentType($change) . "', '$change', '" . filesize($change) . "', '" . md5_file($change) . "', " . mktime() . ", {$this->_User->ID})";
 					$this->_SqlConnection->SqlQuery($sql);
 				}
 			}
@@ -173,7 +173,7 @@
 	 		$out = '';
 			// get all files
 			$sql = "SELECT file_path, file_md5, file_name
-				FROM " . DB_PREFIX . "files";
+					FROM " . DB_PREFIX . "files";
 			$files_result = $this->_SqlConnection->SqlQuery($sql);
 			
 			while($file = mysql_fetch_object($files_result)) {
@@ -248,7 +248,7 @@
 			// foreach file that is 'posted' with this request
 			foreach($_FILES as $name => $file) {
 				// has it a trusted name? and has it some content 
-				if(startsWith($name, 'uploadfile') && $file['error'] != 4) {
+				if(strpos($name, 'uploadfile') === 0 && $file['error'] != 4) {
 					// get the 'number of the upload'
 					$nr = substr($name, 10);
 					// alow to upload max. 5 files in one action
@@ -403,7 +403,7 @@
 			$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
 			$thumbnailfolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
 			
-			$files = new Files($this->_SqlConnection);
+			$files = new Files($this->_SqlConnection, $this->_User);
 			$order = FILES_NAME;
 			$ascending = true;
 			$orderByGet = GetPostOrGet('order');
@@ -429,7 +429,6 @@
 			// descending or ascending?
 			if($desc == 1)
 				$ascending = false;
-			
 			
 			// get all files from the database/ which are registered in the database
 			$filesArray = $files->FillArray($order, $ascending);

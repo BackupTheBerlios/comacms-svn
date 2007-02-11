@@ -22,7 +22,7 @@
 	/**
 	 * @return string
 	 */
-	function make_link($Link) {
+	/*function make_link($Link) {
 		
 		$Link = encodeUri($Link);
 		
@@ -32,20 +32,12 @@
 			return "$Link\" class=\"link_extern";
 		// TODO: load the title of the page into the link title and set an other css-class if the page does not exists
 		return "index.php?page=$Link\" class=\"link_intern";
-	}
+	}*/
 	
 
-	function kbormb($bytes, $space = true) {
-		$space = ($space) ? ' ' : '&nbsp;';
-		if($bytes < 1024)
-			return $bytes . $space .'B';
-		elseif($bytes < 1048576)
-			return round($bytes/1024, 1) . $space . 'KiB';
-		else
-			return round($bytes/1048576, 1) . $space . 'MiB';
-	}
+	
 		
-	function generateThumb($file, $outputdir, $maxsize= 100) {
+	/*function generateThumb($file, $outputdir, $maxsize= 100) {
 	
 		list($width, $height) = getimagesize($file);
 		
@@ -103,12 +95,12 @@
 		}
 		else
 			return copy($file, $newfile);
-	}
+	}*/
 	
 	/**
 	 * @return string filename of the thumbnail
 	 */
-	function resizeImageToMaximum($InputFile, $OutputDir, $Maximum) {
+	/*function resizeImageToMaximum($InputFile, $OutputDir, $Maximum) {
 		list($originalWidth, $originalHeight) = getimagesize($InputFile);
 		$width = ($originalWidth > $originalHeight) ? round($Maximum, 0) : round($originalWidth / ($originalHeight / $Maximum), 0);
 		$height = ($originalHeight > $originalWidth) ? round($Maximum, 0) : round($originalHeight / ($originalWidth / $Maximum), 0);
@@ -117,12 +109,12 @@
 		$outputFile = (substr($OutputDir, -1) == '/') ? $OutputDir :  $OutputDir . '/';
 		$outputFile .= $width . 'x' . $height . '_'. basename($InputFile);
 		return resizeImage($InputFile, $outputFile, $width, $height);
-	}
+	}*/
 	
 	/**
 	 * @return string filename of the thumbnail
 	 */
-	function resizeImageToWidth($InputFile, $OutputDir, $Width) {
+	/*function resizeImageToWidth($InputFile, $OutputDir, $Width) {
 		if(!file_exists($InputFile))
 			return false;
 		list($originalWidth, $originalHeight) = getimagesize($InputFile);
@@ -130,12 +122,12 @@
 		$outputFile = (substr($OutputDir, -1) == '/') ? $OutputDir :  $OutputDir . '/';
 		$outputFile .= $Width . 'x' . $height . '_'. basename($InputFile);
 		return resizeImage($InputFile, $outputFile, $Width, $height);
-	}
+	}*/
 	
 	/**
 	 * @return string filename of the thumbnail
 	 */
-	function resizeImage($InputFile, $OutputFile, $Width, $Height) {
+	/*function resizeImage($InputFile, $OutputFile, $Width, $Height) {
 		
 		preg_match("'^(.*)\.(gif|jpe?g|png|bmp)$'i", $InputFile, $ext);
 		
@@ -146,11 +138,11 @@
 		$memory_limit = ini_get("memory_limit");
 		if(substr($memory_limit, -1) == 'M')
 			$memory_limit = substr($memory_limit, 0, -1) * 1048576;
-		/*
-		 * mostly all php-binarys for windows are not compiled with --enable-memory-limit
-		 * and don't suport memory_get_usage() and are able to handle bigger data
-		 * (it is not bad for us) 
-		 */
+		//
+		 // mostly all php-binarys for windows are not compiled with --enable-memory-limit
+		 // and don't suport memory_get_usage() and are able to handle bigger data
+		 // (it is not bad for us)
+		 //
 		if(function_exists('memory_get_usage'))
 			$free_memory = $memory_limit - memory_get_usage();
 		else
@@ -184,10 +176,7 @@
 				break;
 		}
 		return $OutputFile;
-	}
+	}*/
 	
-	function generateUrl($string) {
-		$string = preg_replace("~^\ *(.+?)\ *$~", "$1", $string);
-		return str_replace(" ", "%20", $string);
-	}
+	
 ?>

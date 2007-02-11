@@ -14,6 +14,7 @@
  # the Free Software Foundation; either version 2 of the License, or
  # (at your option) any later version.
  #----------------------------------------------------------------------
+ 	
  	define('FILES_NAME', 0);
  	define('FILES_SIZE', 1);
  	define('FILES_DATE', 2);
@@ -24,10 +25,13 @@
 		
 		var $SizeCount = 0;
 		var $_SqlConnection;
-		
-		function Files(&$SqlConnection) {
-			$this->_SqlConnection =&$SqlConnection;
+		var $_User;
+		function Files(&$SqlConnection, &$User) {
+			$this->_SqlConnection = &$SqlConnection;
+			$this->_User = &$User;
 		}
+		
+		
 		
 		function GetIDByPath($Path) {
 			
@@ -40,11 +44,15 @@
 		function UploadFile() {
 			
 		}
-		function AddFile() {
-			
+		function AddFile($Path) {
+			$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date, file_creator)
+					VALUES('" . basename($Path) . "', '" . GetMimeContentType($Path) . "', '$Path', '" . filesize($Path) . "', '" . md5_file($Path) . "', " . mktime() . ", {$this->_User->ID})";
+			$this->_SqlConnection->SqlQuery($sql);
 		}
 		
 		function GetFile($FileID) {
+			if(!is_numeric($FileID))
+				return null;
 			$sql = "SELECT file_type, file_path, file_name, file_id, file_downloads, file_date, file_size, file_creator
 					FROM " . DB_PREFIX . "files
 					WHERE file_id = $FileID";
@@ -84,11 +92,13 @@
 			
 		}*/
 		
-		function FillArray($Order = FILES_NAME, $Ascending = true) {
+		function FillArray($Order = FILES_NAME, $Ascending = true, $Where = '') {
 			$SizeCount = 0;
-			
+			if(!empty($Where))
+				$Where = "WHERE " . $Where;
 			$sql = "SELECT file_type, file_path, file_name, file_id, file_downloads, file_date, file_size
-					FROM " . DB_PREFIX . "files
+					FROM " . DB_PREFIX . "files " .
+					$Where . "
 					ORDER BY ";
 			switch ($Order) {
 				case FILES_SIZE:

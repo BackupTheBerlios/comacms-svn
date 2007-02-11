@@ -26,6 +26,7 @@
 		var $_Filename = '';
 		var $_StyleName = '';
 		var $_OpensName = '';
+		var $Images = array();
 		
 		var $_ImageQuery = array();
 		function OpenDocumentImport() {
@@ -33,8 +34,11 @@
 		}
 		
 		function LoadFile($Filename, $ImagePath) {	
-			if(!file_exists($Filename))
+			if(!file_exists($Filename)) {
+				trigger_error('Could not find the file "' .$Filename . '"!', E_USER_ERROR);
 				return false;
+			}
+				
 			$this->_ImagesPath = $ImagePath;
 			$this->_Filename = $Filename;
 			$zip = zip_open($Filename);
@@ -65,6 +69,7 @@
 			$this->_Text =  str_replace('****', '', $this->_Text);
 			$this->_Text =  str_replace('____', '', $this->_Text);
 			$this->_Text =  str_replace('////', '', $this->_Text);
+			$this->_Text =  str_replace('&', '&amp;', $this->_Text);
 			$this->_Text = preg_replace("#<p>[\r\n\t\ ]{0,}</p>#i", '', $this->_Text);
 	
 		}
@@ -81,9 +86,12 @@
 							zip_entry_close($zipEntry);
 							$fileExtension = end(explode('.', $zipEntryName));
 							$newName = $this->_ImagesPath . '/' .basename($this->_Filename). '_' . count($this->_ImageQuery) . '.' . $fileExtension;
-							$writer = fopen($newName, 'w');
-	           				fwrite($writer, $buf);
-	           				fclose($writer);
+							$this->Images[] = $newName;
+							if(!file_exists($newName)) {
+								$writer = fopen($newName, 'w');
+	           					fwrite($writer, $buf);
+	           					fclose($writer);
+							}
 						}
 				}
 			}
@@ -210,8 +218,6 @@
 					$this->OpenParagraph();
 				
 				if(($Name == 'TEXT:P' || $Name == 'TEXT:SPAN' || $Name == 'TABLE:COLUMN' || $Name == 'TEXT:A') && $styleName != ''){
-					if($this->Debug)
-						$this->_Text .= "[open]<br/>\n";
 					$this->OpenCenter($center);
 					$this->OpenBold($bold);
 					$this->OpenItalic($italic);
@@ -326,8 +332,6 @@
 					$this->CloseItalic($italic);
 					$this->CloseBold($bold);
 					$this->CloseCenter($center);
-					if($this->Debug)
-						$this->_Text .= "[close]<br/>\n";
 				}
 				
 				if($Name == 'TEXT:P' && $class == 'text') 

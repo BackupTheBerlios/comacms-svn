@@ -15,10 +15,6 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
 
-	/**
-	 * 
-	 */
- 	require_once __ROOT__ . '/system/functions.php';
  	 
  	/**
  	 * @package ComaCMS

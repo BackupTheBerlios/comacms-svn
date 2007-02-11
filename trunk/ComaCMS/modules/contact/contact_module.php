@@ -20,7 +20,6 @@
 	 * @ignore
 	 */
 	require_once __ROOT__ . '/classes/module.php';
-	require_once __ROOT__ . '/functions.php';
 	/**
 	 * @package ComaCMS
 	 * @subpackage News 

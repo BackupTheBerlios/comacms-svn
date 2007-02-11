@@ -19,7 +19,6 @@
  	/**
  	 * @ignore
  	 */
- 	require_once __ROOT__ . '/system/functions.php';
  	require_once __ROOT__ . '/classes/textactions.php';
  	
  	/**

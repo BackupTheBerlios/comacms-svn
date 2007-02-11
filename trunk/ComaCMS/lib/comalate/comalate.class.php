@@ -386,7 +386,6 @@
 			// Return the generated output for the $Match
 			return $output;
  		}
- 		//var $ser
  		
  		/**
  		 * Works through a "loop" replacement by replacing all of it`s subreplacements

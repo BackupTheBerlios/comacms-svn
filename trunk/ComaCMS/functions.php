@@ -313,4 +313,19 @@
 			return  rawurlencode($Uri);
 	}
 	
+	function generateUrl($string) {
+		$string = preg_replace("~^\ *(.+?)\ *$~", "$1", $string);
+		return str_replace(" ", "%20", $string);
+	}
+	
+	function kbormb($bytes, $space = true) {
+		$space = ($space) ? ' ' : '&nbsp;';
+		if($bytes < 1024)
+			return $bytes . $space .'B';
+		elseif($bytes < 1048576)
+			return round($bytes/1024, 1) . $space . 'KiB';
+		else
+			return round($bytes/1048576, 1) . $space . 'MiB';
+	}
+	
 ?>

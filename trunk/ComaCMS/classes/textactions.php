@@ -656,7 +656,8 @@
 				$imageWidth = $image->Size[0];
 				$imageHeight = $image->Size[1];
 			}
-
+			$originalUrl = generateUrl($originalUrl);
+			$imageUrl = generateUrl($imageUrl);
 		
 			if($imageDisplay == IMG_DISPLAY_BOX) {
 				$imageString = "</p>\n\n<div class=\"thumb t" . $ImageAlign . "\">

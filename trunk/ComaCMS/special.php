@@ -97,7 +97,6 @@
 		
 		case 'image':
 			
-			include_once(__ROOT__ . '/system/functions.php');
 			$imageID = GetPostOrGet('id');
 			$imageFile = GetPostOrGet('file');
 			if(is_numeric($imageID) || !empty($imageFile)) {

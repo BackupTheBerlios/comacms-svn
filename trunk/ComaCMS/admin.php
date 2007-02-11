@@ -24,7 +24,6 @@
 	// include the file common.php to make all preparing actions
 	include('common.php');
 	
-	require_once __ROOT__ . '/system/functions.php';
 	
 	$action = GetPostOrGet('action');
 	if(!isset($page))

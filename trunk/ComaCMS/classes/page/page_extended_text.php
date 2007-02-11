@@ -21,6 +21,8 @@
 	 */
 	require_once __ROOT__ . '/classes/page/page_extended.php';
 	require_once __ROOT__ . '/classes/textactions.php';
+	require_once __ROOT__ . '/classes/files.php';
+	require_once __ROOT__ . '/classes/opendocument/opendocumentimport_comacms.php';
 	
 	/**
 	 * @package ComaCMS
@@ -154,30 +156,84 @@
 			return false;
  		}
  		
- 		function _EditPageImportOdt() {
+ 		function _EditPageImportOdtPage($PageID) {
+ 			$files = new Files($this->_SqlConnection, $this->_User);
+ 			$filesArray = $files->FillArray(FILES_NAME, true, 'file_type = \'application/vnd.oasis.opendocument.text\'');
+ 			$this->_ComaLate->SetReplacement('LANG_IMPORT_ODT', $this->_Translation->GetTranslation('import_odt'));
+ 			$this->_ComaLate->SetReplacement('LANG_IMPORT', $this->_Translation->GetTranslation('import'));
+ 			$this->_ComaLate->SetReplacement('LANG_ABORT', $this->_Translation->GetTranslation('abort'));
+ 			$this->_ComaLate->SetReplacement('LANG_FILENAME', $this->_Translation->GetTranslation('filename'));
+ 			$this->_ComaLate->SetReplacement('LANG_FILENAME_INFO', $this->_Translation->GetTranslation('the_selected_file_will_be_converted_into_a_comacms_page')); 			
+ 			$this->_ComaLate->SetReplacement('FILES', $filesArray);
+ 			$this->_ComaLate->SetReplacement('PAGE_ID', $PageID);
+ 			
  			$template ='<fieldset>
  							<legend>{LANG_IMPORT_ODT}</legend>
- 							<h3>{LANG_USE_UPLOADED_FILE}</h3>
+ 							<!--<h3>{LANG_USE_UPLOADED_FILE}</h3>-->
  								<form action="admin.php" method="post">
  									<input type="hidden" name="page" value="pagestructure" />
-									<input type="hidden" name="action" value="savePage" />
+									<input type="hidden" name="action" value="editPage" />
+									<input type="hidden" name="action2" value="importFile" />
 									<input type="hidden" name="pageID" value="{PAGE_ID}" />
-									<select></select>
+									<div class="row">
+										<label>
+											<strong>{LANG_FILENAME}:</strong>
+											<span class="info">{LANG_FILENAME_INFO}</span>
+										</label>
+										<select name="file" id="file" >
+										<FILES:loop>
+											<option value="{FILE_ID}">{FILE_NAME}</option>
+										</FILES>
+										</select>
+									</div>
+									<div class="row">
+										<input class="button" type="submit" value="{LANG_IMPORT}"/>
+										<a href="admin.php?page=pagestructure&amp;action=editPage&amp;%pageID={PAGE_ID}" class="button">{LANG_ABORT}</a>
+									</div>
  								</form>
- 							<h3>{UPLOAD_NEW_FILE}</h3>
+ 							<!--<h3>{UPLOAD_NEW_FILE}</h3>-->
  						</fieldset>';
  			return $template;
+ 		}
+ 		
+ 		function _EditPageImportFile($PageID) {
+ 			// TODO: make it configurable
+			$uploadPath = './data/upload/';
+ 			
+ 			$fileID = GetPostOrGet('file');
+ 			$files = new Files($this->_SqlConnection, $this->_User);
+ 			$file = $files->GetFile($fileID);
+ 			
+ 			$import = new OpenDocumentImport_ComaCMS();
+ 			$import->LoadFile($file['FILE_PATH'], $uploadPath);
+
+ 			$logMessage = $this->_Translation->GetTranslation('import') . ' ' . $file['FILE_NAME'];
+ 			$this->LogPage($PageID, $logMessage);
+ 			
+ 			$PageHtml = TextActions::ConvertToPreHTML($import->_Text);
+ 			$this->UpdatePage($PageID, $import->_Text, $PageHtml);
+ 			foreach($import->Images as $image) {
+ 				$files->AddFile($image);
+ 			}
+ 			$this->_ComaLate->SetCondition('page_preview');
+			$this->_ComaLate->SetReplacement('PREVIEW_CONTENT', urlencode($PageHtml));
+			 
  		}
  		
  		function GetEditPage($PageID) {
 			if(!is_numeric($PageID))
  				return false;
 			$action2 = GetPostOrGet('action2');
+			$preview = GetPostOrGet('pagePreview');
+			
 			switch($action2) {
 				case 'importOdt':
-					return $this->_EditPageImportOdt($PageID);
+					return $this->_EditPageImportOdtPage($PageID);
+				case 'importFile':
+					$this->_EditPageImportFile($PageID);
+					break;
 			}
-			$preview = GetPostOrGet('pagePreview');
+			
 
 			$pageData = array();
 			

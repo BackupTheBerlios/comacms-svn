@@ -742,7 +742,6 @@
 			$sizes = $imageResizer->CalcSizeByMaxWidth($imgmax2);
 			$thumbnail = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $inlinemenuFolder, $sizes[0] . 'x' . $sizes[1] . '_');
 			
-			//$thumbnail = residzeImageToWidth($imagePath, $inlinemenuFolder, $imgmax2);
 			// if resizing was successful ...
 			if(file_exists($thumbnail)) {
 				// ... set it to the inlinemenu
@@ -1031,7 +1030,6 @@
 				if($sizes[0] > $imageResizer->Size[0] && $sizes[1] > $imageResizer->Size[1])
 					$sizes = $imageResizer->Size;
 				$thumbnail = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $inlinemenuFolder, $sizes[0] . 'x' . $sizes[1] . '_');
-				//$thumbnail = resizeIkmageToMaximum($image->file_path, $inlinemenu_folder ,$imgmax);
 				if(file_exists($thumbnail)) {
 					//list($originalWidth, $originalHeight) = getimagesize($thumbnail);
 					
@@ -1069,10 +1067,8 @@
 				$imageResizer = new ImageConverter($imagePath);
 				$sizes = $imageResizer->CalcSizeByMaxWidth($imgmax2);
 				$thumbnail = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $inlinemenuFolder, $sizes[0] . 'x' . $sizes[1] . '_');
-				//$thumbnail = resizeImagkeToWidth($imagePath, $inlinemenuFolder, $imgmax2);
-				if($thumbnail !== false){
+				if($thumbnail !== false)
 					$image = "<img alt=\"{$imageTitle}\" src=\"" . generateUrl($thumbnail) . "\"/>";
-				}
 			}	
 			$out = "
 				<fieldset>

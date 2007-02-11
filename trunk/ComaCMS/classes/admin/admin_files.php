@@ -21,6 +21,7 @@
 	 */
 	require_once __ROOT__ . '/classes/admin/admin.php';
 	require_once __ROOT__ . '/classes/imageconverter.php';
+	require_once __ROOT__ . '/classes/files.php';
 	
 	/**
 	 * Admin-Interface-Page to mangage Files
@@ -68,32 +69,33 @@
 	 		// is the fileID something numeric? if not, stop the
 	 		if(!is_numeric($fileID))
 	 			return $this->_homePage();
+	 		
 	 		// try to get the file-information from database
-			$sql = "SELECT *
-				FROM " . DB_PREFIX . "files
-				WHERE file_id = $fileID
-				LIMIT 1";
-			$fileResult = $this->_SqlConnection->SqlQuery($sql);
-			if($file = mysql_fetch_object($fileResult)) {
-				// the confirmation is given: delete this file!
-				if($confirmation == 1) {
-					// delete the database-entry
-					$sql = "DELETE FROM " . DB_PREFIX . "files
-						WHERE file_id = $fileID
-						LIMIT 1";
-					$this->_SqlConnection->SqlQuery($sql);
-					// delete the file
-					unlink($file->file_path);
-				}
-				else {
-					// ask for the confirmation
-					$out = sprintf($this->_Translation->GetTranslation('do_you_really_want_to_delete_the_file_%filename%_irrevocablly'), utf8_encode($file->file_name)). "<br />\r\n";
-					$out .= sprintf($this->_Translation->GetTranslation('this_file_was_uploaded_on_%date%_at%_%time%_oclock_by_%username%'), date('d.m.Y', $file->file_date), date('H:i:s', $file->file_date), $this->_ComaLib->GetUserByID($file->file_creator)). "<br />\r\n";
-					$out .= "<a href=\"admin.php?page=files&amp;action=delete&amp;file_id=$fileID&amp;confirmation=1\" title=\"" . sprintf($this->_Translation->GetTranslation('delete_file_%file%'), utf8_encode($file->file_name)) . "\"  class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a>
-					<a href=\"admin.php?page=files\" title=\"" . sprintf($this->_Translation->GetTranslation('dont_delete_file_%file%'), utf8_encode($file->file_name)) . "\" class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a>";
-					return $out;
-				}
+			$files = new Files($this->_SqlConnection);
+			$file = $files->GetFile($fileID);
+			
+			if($file === null)
+				return $this->_homePage();
+			// the confirmation is given: delete this file!
+			
+			if($confirmation == 1)
+				$files->DeleteFile($fileID);
+			else {
+				// ask for the confirmation
+				$this->_ComaLate->SetReplacement('FILE_ID', $fileID);
+				$this->_ComaLate->SetReplacement('LANG_YES', $this->_Translation->GetTranslation('yes'));
+				$this->_ComaLate->SetReplacement('LANG_NO', $this->_Translation->GetTranslation('no'));
+				$this->_ComaLate->SetReplacement('LANG_DONT_DELETE_FILE', sprintf($this->_Translation->GetTranslation('dont_delete_file_%file%'), $file['FILE_NAME']));
+				$this->_ComaLate->SetReplacement('LANG_DELETE_FILE', sprintf($this->_Translation->GetTranslation('delete_file_%file%'), $file['FILE_NAME']));
+				$this->_ComaLate->SetReplacement('LANG_DELETE_QUESTION',sprintf($this->_Translation->GetTranslation('do_you_really_want_to_delete_the_file_%filename%_irrevocablly'), $file['FILE_NAME']));
+				$this->_ComaLate->SetReplacement('LANG_FILE_INFO', sprintf($this->_Translation->GetTranslation('this_file_was_uploaded_on_%date%_at%_%time%_oclock_by_%username%'), date($this->_Config->Get('date_day_format', 'd.m.Y'), $file['FILE_DATE']), date($this->_Config->Get('date_time_format', 'H:i:s'), $file['FILE_DATE']), $this->_ComaLib->GetUserByID($file['FILE_CREATOR'])));
+				$template = '<p>{LANG_DELETE_QUESTION}</p>
+				<p>{LANG_FILE_INFO}</p>
+				<a href="admin.php?page=files&amp;action=delete&amp;file_id={FILE_ID}&amp;confirmation=1" title="{LANG_DELETE_FILE}"  class="button">{LANG_YES}</a>
+				<a href="admin.php?page=files" title="{LANG_DONT_DELETE_FILE}" class="button">{LANG_NO}</a>';
+				return $template;
 			}
+		
 			return $this->_homePage();
 	 	}
 	 	
@@ -394,74 +396,53 @@
 						<th class=\"actions\">" . $this->_Translation->GetTranslation('actions') . "</th>
 					</tr>
 				</thead>\r\n";
-			// get all files from the database/ which are registered in the database
-			$sql = "SELECT file_type, file_path, file_name, file_id, file_downloads, file_date, file_size
-				FROM " . DB_PREFIX . "files
-				ORDER BY ";
-			$sort = GetPostOrGet('sort');
-			$desc = GetPostOrGet('desc');
-			// sorting by what?
-			switch ($sort) {
-				case 'filename':	$sql .= 'file_name';	
-							break;
-				case 'filesize':	$sql .= 'file_size';
-							break;
-				case 'filedate':	$sql .= 'file_date';
-							break;
-				case 'filetype':	$sql .= 'file_type';
-							break;
-				case 'filedownloads':	$sql .= 'file_downloads';
-							break;
-				default:		$sql .= 'file_name';
-							break;
-			}
-			// descending or ascending?
-			if($desc == 1)
-				$sql .= ' DESC';
-			else
-				$sql .= ' ASC';
-
-			$files_result = $this->_SqlConnection->SqlQuery($sql);
-			$completeSize = 0;
+			
+						
+			$dateDayFormat = $this->_Config->Get('date_day_format', 'd.m.Y');
+			$dateTimeFormat = $this->_Config->Get('date_time_format', 'H:i:s');
+			$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
 			$thumbnailfolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
-			; 
-			// show all files
-			while($file = mysql_fetch_object($files_result)) {
-				$filePath = utf8_encode($file->file_path);
-				$imageThumb = '';
-				// if the file is an image try to get a thumbnail
-				if(strpos($file->file_type, 'image/') === 0) {
-					$image = new ImageConverter($file->file_path);
+			
+			$files = new Files($this->_SqlConnection);
+			// get all files from the database/ which are registered in the database
+			$filesArray = $files->FillArray();
+			//print str_replace('  ','&nbsp;&nbsp;',nl2br(print_r($fileArray, true)));
+			//die();
+			$filesCount = count($filesArray);
+			for($i = 0; $i < $filesCount; $i++) {
+				$filesArray[$i]['FILE_SIZE'] = kbormb($filesArray[$i]['FILE_SIZE']); 
+				$filesArray[$i]['FILE_DATE'] = date($dateFormat, $filesArray[$i]['FILE_DATE']);
+				$filesArray[$i]['FILE_DOWNLOAD_FILE'] = sprintf($this->_Translation->GetTranslation('download_file_%file%'), $filesArray[$i]['FILE_NAME']);
+				$filesArray[$i]['FILE_DELETE_FILE'] = sprintf($this->_Translation->GetTranslation('delete_file_%file%'), $filesArray[$i]['FILE_NAME']);
+				$preview = '';
+				if(strpos($filesArray[$i]['FILE_TYPE'], 'image/') === 0) {
+					$image = new ImageConverter($filesArray[$i]['FILE_PATH']);
 					// max: 100px;
 					$maximum = 100;
 					$size = $image->CalcSizeByMax($maximum);
-					$imageUrl = '';
-					if (file_exists($thumbnailfolder . '/' .  $size[0] . 'x' . $size[1] . '_' . basename($file->file_path)))
-						$imageUrl = $thumbnailfolder . '/' .  $size[0] . 'x' . $size[1] . '_' . basename($file->file_path);
-					else
-						$imageUrl = $image->SaveResizedTo($size[0], $size[1], $thumbnailfolder, $size[0] . 'x' . $size[1] . '_');
-					
-					if($imageUrl)
-						$imageThumb = "<img alt=\"$filePath\" src=\"". generateUrl($imageUrl) . "\" />";
+					$imageUrl = $image->SaveResizedTo($size[0], $size[1], $thumbnailfolder, $size[0] . 'x' . $size[1] . '_');
+					if(file_exists($imageUrl))
+							$preview = "<img alt=\"{$filesArray[$i]['FILE_NAME']}\" src=\"". generateUrl($imageUrl) . "\" />";
 				}
-				
-				$out .= "\t\t\t\t<tr>
-					<td>$imageThumb</td>
-					<td><span title=\"" . utf8_encode($file->file_path) . "\">" . utf8_encode($file->file_name) . "</span></td>
-					<td>" . kbormb($file->file_size) . "</td>
-					<td>" . date('d.m.Y H:i:s', $file->file_date) . "</td>
-					<td>$file->file_type</td>
-					<td>$file->file_downloads</td>
-					<td>
-						<a href=\"download.php?file_id=$file->file_id\" ><img src=\"./img/download.png\" height=\"16\" width=\"16\" alt=\"[" . sprintf($this->_Translation->GetTranslation('download_file_%file%'), utf8_encode($file->file_name)) . "]\" title=\"" . sprintf($this->_Translation->GetTranslation('download_file_%file%'), utf8_encode($file->file_name)) . "\"/></a>
-						<a href=\"admin.php?page=files&amp;action=delete&amp;file_id=$file->file_id\" ><img src=\"./img/del.png\" height=\"16\" width=\"16\" alt=\" [" . sprintf($this->_Translation->GetTranslation('delete_file_%file%'), utf8_encode($file->file_name)) . "]\" title=\"" . sprintf($this->_Translation->GetTranslation('delete_file_%file%'), utf8_encode($file->file_name)) . "\"/></a>
-					</td>
-				</tr>\r\n";
-				// count the size of all files together
-				$completeSize += $file->file_size;
+				$filesArray[$i]['FILE_PREVIEW'] = $preview;
 			}
-			$out .= "\t\t\t</table>\r\n";
-			$out .= "\t\t\t" . $this->_Translation->GetTranslation('altogether') . ' ' . kbormb($completeSize);
+			
+			$this->_ComaLate->SetReplacement('FILES', $filesArray);
+			$this->_ComaLate->SetReplacement('SIZE_COUNT', kbormb($files->SizeCount));
+			$out .= '<FILES:loop>
+					<tr>
+						<td>{FILE_PREVIEW}</td>
+						<td>{FILE_NAME}</td>
+						<td>{FILE_SIZE}</td>
+						<td>{FILE_DATE}</td>
+						<td>{FILE_TYPE}</td>
+						<td>{FILE_DOWNLOADS}</td>
+						<td><a href="download.php?file_id={FILE_ID}" ><img src="img/download.png" alt="[{FILE_DOWNLOAD_FILE}]" title="{FILE_DOWNLOAD_FILE}"/></a>
+						<a href="admin.php?page=files&amp;action=delete&amp;file_id={FILE_ID}" ><img src="img/del.png" alt="[{FILE_DELETE_FILE}]" title="{FILE_DELETE_FILE}" /></a></td>
+					</tr>
+					</FILES>
+				</table>
+				{LANG_ALTOGETHER} {SIZE_COUNT}'; 
 
 			return $out;
 	 	}

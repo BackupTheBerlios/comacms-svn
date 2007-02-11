@@ -341,13 +341,15 @@
  		 * @return string The generated rows
  		 */
  		function _RepeatInlineReplace($Replacements, $ReplacementString) {
- 			
+
  			// Stripe the backslashes from the replacement string
  			$ReplacementString = stripslashes($ReplacementString);
  			
  			// Generate the replacements array if it is given in serialized form
- 			if (!is_array($Replacements))
+ 			if (!is_array($Replacements)) {
+ 				$Replacements = stripslashes($Replacements);
  				$Replacements = unserialize($Replacements);
+ 			}
  			
  			// If $Replacements is still no array the function will not work so return ''
  			if (!is_array($Replacements))
@@ -384,6 +386,7 @@
 			// Return the generated output for the $Match
 			return $output;
  		}
+ 		//var $ser
  		
  		/**
  		 * Works through a "loop" replacement by replacing all of it`s subreplacements
@@ -417,7 +420,7 @@
 							
 							$serializedSubValue = serialize($subValue);
 							// try to find a matching "loop" replacement and do an inline replacement for that
-							$toReplaceString = preg_replace("/<$subName\:loop>(.+?)<\/$subName>/es", "\$this->_RepeatInlineReplace('$serializedSubValue', '$1')", $toReplaceString);
+							$toReplaceString = preg_replace("/<$subName\:loop>(.+?)<\/$subName>/es", "\$this->_RepeatInlineReplace('" . addslashes($serializedSubValue) . "', '$1')", $toReplaceString);
 						}
 						// Else do a normal replacement for a single value
 						else

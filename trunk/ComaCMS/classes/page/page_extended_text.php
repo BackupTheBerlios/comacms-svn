@@ -154,9 +154,29 @@
 			return false;
  		}
  		
+ 		function _EditPageImportOdt() {
+ 			$template ='<fieldset>
+ 							<legend>{LANG_IMPORT_ODT}</legend>
+ 							<h3>{LANG_USE_UPLOADED_FILE}</h3>
+ 								<form action="admin.php" method="post">
+ 									<input type="hidden" name="page" value="pagestructure" />
+									<input type="hidden" name="action" value="savePage" />
+									<input type="hidden" name="pageID" value="{PAGE_ID}" />
+									<select></select>
+ 								</form>
+ 							<h3>{UPLOAD_NEW_FILE}</h3>
+ 						</fieldset>';
+ 			return $template;
+ 		}
+ 		
  		function GetEditPage($PageID) {
 			if(!is_numeric($PageID))
  				return false;
+			$action2 = GetPostOrGet('action2');
+			switch($action2) {
+				case 'importOdt':
+					return $this->_EditPageImportOdt($PageID);
+			}
 			$preview = GetPostOrGet('pagePreview');
 
 			$pageData = array();
@@ -207,6 +227,10 @@
 			$this->_ComaLate->SetReplacement('LANG_SAVE', $this->_Translation->GetTranslation('save'));
 			$this->_ComaLate->SetReplacement('LANG_PREVIEW', $this->_Translation->GetTranslation('preview'));
 			$this->_ComaLate->SetReplacement('LANG_ABORT', $this->_Translation->GetTranslation('abort'));
+			$this->_ComaLate->SetReplacement('LANG_IMPORT', $this->_Translation->GetTranslation('import'));
+			$this->_ComaLate->SetReplacement('LANG_IMPORT_ODT', $this->_Translation->GetTranslation('import_odt'));
+			//mit der importfunkion ist es möglich Textdokumente im odt format direkt importieren zu lassen
+			$this->_ComaLate->SetReplacement('LANG_IMPORT_INFO', $this->_Translation->GetTranslation('the_odt_import_make_it_possible_to_load_documents_saved_in_the_odt_format'));
 
 			$template = '
 			<fieldset>
@@ -216,14 +240,21 @@
 					<input type="hidden" name="action" value="savePage" />
 					<input type="hidden" name="pageID" value="{PAGE_ID}" />
 					<div class="row">
- 						<label class="row" for="pageTitle">
+ 						<label for="pageTitle">
  							<strong>{LANG_TITLE}:</strong>
  							<span class="info">{LANG_TITLE_INFO}</span>
  						</label>
  						<input type="text" name="pageTitle" id="pageTitle" value="{PAGE_TITLE}" />
  					</div>
  					<div class="row">
- 						<label class="row" for="editor">
+ 						<label>
+ 							<strong>{LANG_IMPORT}:</strong>
+ 							<span class="info">{LANG_IMPORT_INFO}</span>
+ 						</label>
+ 						<a class="button" href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=importOdt">{LANG_IMPORT_ODT}</a>
+ 					</div>
+ 					<div class="row">
+ 						<label for="editor">
  							<strong>{LANG_TEXT}:</strong>
  						</label>
  						<script type="text/javascript" language="JavaScript" src="system/functions.js"></script>
@@ -246,7 +277,7 @@
 						</script>
 					</div>
 					<div class="row">
-						<label class="row" for="pageEditComment">
+						<label for="pageEditComment">
  							<strong>{LANG_COMMENT}:</strong>
  							<span class="info">{LANG_COMMENT_INFO}</span>
  						</label>

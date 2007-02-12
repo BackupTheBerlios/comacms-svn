@@ -739,8 +739,17 @@
 			$inlinemenuFolder = $this->_Config->Get('thumbnailfolder', 'data/thumbnails/');
 			// resize the image if it doesn't exist
 			$imageResizer = new ImageConverter($imagePath);
-			$sizes = $imageResizer->CalcSizeByMaxWidth($imgmax2);
-			$thumbnail = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $inlinemenuFolder, $sizes[0] . 'x' . $sizes[1] . '_');
+			//$sizes = $imageResizer->CalcSizeByMaxWidth($imgmax2);
+			$sizes = array();
+			if($imageResizer->Size[0] > $imgmax2)
+				$sizes = $imageResizer->CalcSizeByMaxWidth($imgmax2);
+			else if($imageResizer->Size[1] > $imgmax2)
+				$sizes = $imageResizer->CalcSizeByMax($imgmax2);
+				
+				
+			$thumbnail = $imagePath;
+			if(count($sizes) == 2)
+				$thumbnail = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $inlinemenuFolder, $sizes[0] . 'x' . $sizes[1] . '_');
 			
 			// if resizing was successful ...
 			if(file_exists($thumbnail)) {
@@ -1062,11 +1071,24 @@
 			if(file_exists($thumbPath))
 				$image = "<img alt=\"{$imageTitle}\" src=\"" . generateUrl($thumbPath) . "\"/>";
 			else if(file_exists($imagePath)){
+				// maximum width
 				$imgmax2 = 200;
+				// if it isn't "wide" enough
+				$imgmax3 = 350;
 				$inlinemenuFolder = 'data/thumbnails/';
 				$imageResizer = new ImageConverter($imagePath);
-				$sizes = $imageResizer->CalcSizeByMaxWidth($imgmax2);
-				$thumbnail = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $inlinemenuFolder, $sizes[0] . 'x' . $sizes[1] . '_');
+				$sizes = array();
+				// it is "wide" enough??
+				if($imageResizer->Size[0] > $imgmax2)
+					$sizes = $imageResizer->CalcSizeByMaxWidth($imgmax2);
+				// make sure, that it isn't to big
+				else if($imageResizer->Size[1] > $imgmax3)
+					$sizes = $imageResizer->CalcSizeByMax($imgmax2);
+				
+				$thumbnail = $imagePath;
+				// is there something to resize?
+				if(count($sizes) == 2)
+					$thumbnail = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $inlinemenuFolder, $sizes[0] . 'x' . $sizes[1] . '_');
 				if($thumbnail !== false)
 					$image = "<img alt=\"{$imageTitle}\" src=\"" . generateUrl($thumbnail) . "\"/>";
 			}	

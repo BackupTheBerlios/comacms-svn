@@ -10,17 +10,17 @@
 		[X]- Preferences
 		[X]- AdminControl(statistics etc.)
 		[X]- Stylemanagement(change, preview)
-		[_]- Usermanagement
+		[X]- Usermanagement
 		[_]- Rightsmanagement
 		[_]- Groupmanagement
 		[_]- Menu-editor
 		[X]- Inlinemenu-editor
-	[ ]- 'User'-Interface
+	[_]- 'User'-Interface
 		[ ]- Page-editor
-		[ ]- Own preferences
-		[_]- Login
-	[ ]- Admin-/User-Interface
-		[_]- Gallery-editor
+		[_]- Own preferences
+		[X]- Login
+	[_]- Admin-/User-Interface
+		[X]- Gallery-editor
 		[_]- Page-editor
 			[_]- Special-elements
 			[ ]- Spellcheck
@@ -42,7 +42,7 @@
 	[ ]- Database-size-reducer
 	[ ]- Newsletter
 	[ ]- Administration can dedect elements which are configurable in the style
-	[ ]- Sitemap
+	[X]- Sitemap
 	[_]- Downloads
 	[ ]- GUI-Generator
 	[ ]- XHTML-PageGenerator

@@ -62,6 +62,20 @@
 					$template .= $this->_CheckUser();
 					break;
 				
+				case 'activate_user':
+					// Activates an existing user
+					$this->_ActivateUser();
+					// Set the user back to the homepage
+					$template .= $this->_HomePage();
+					break;
+				
+				case 'deactivate_user':
+					// Deactivates an existing user
+					$this->_DeactivateUser();
+					// Set the user back to the homepage
+					$template .= $this->_HomePage();
+					break;
+				
 				case 'delete_user':
 					// Returns a question if the user shall really be deleted
 					$template .= $this->_DeleteUser();
@@ -154,6 +168,10 @@
 									'USER_SHOWNAME' => $user->user_showname,
 									'USER_NICKNAME' => $user->user_name,
 									'USER_EMAIL' => $user->user_email,
+									'USER_ACTIVATED' => (($user->user_activated == 1) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
+									'USER_TOGGLE_ACTIVATE' => (($user->user_activated == 1) ? 'deactivate_user' : 'activate_user'),
+									'USER_ACTIVATION_IMG' => (($user->user_activated == 1) ? './img/del.png' : './img/add.png'),
+									'USER_ACTIVATION_TITLE' => (($user->user_activated == 1) ? sprintf($this->_Translation->GetTranslation('deactivate_user_%user%'), $user->user_showname) : sprintf($this->_Translation->GetTranslation('activate_user_%user%'), $user->user_showname)),
 									'USER_ADMIN' => (($user->user_admin == 1) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
 									'USER_AUTHOR' => (($user->user_author == 1) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
 									'USER_ACTIONS' => array(
@@ -198,6 +216,7 @@
 			$this->_ComaLate->SetReplacement('LANG_SHOWNAME', $this->_Translation->GetTranslation('showname'));
 			$this->_ComaLate->SetReplacement('LANG_NICKNAME', $this->_Translation->GetTranslation('nickname'));
 			$this->_ComaLate->SetReplacement('LANG_EMAIL', $this->_Translation->GetTranslation('email'));
+			$this->_ComaLate->SetReplacement('LANG_ACTIVATED', $this->_Translation->GetTranslation('activated'));
 			$this->_ComaLate->SetReplacement('LANG_ADMIN', $this->_Translation->GetTranslation('admin'));
 			$this->_ComaLate->SetReplacement('LANG_AUTHOR', $this->_Translation->GetTranslation('author'));
 			$this->_ComaLate->SetReplacement('LANG_ACTIONS', $this->_Translation->GetTranslation('actions'));
@@ -221,6 +240,7 @@
 						<th>{LANG_SHOWNAME}</th>
 						<th>{LANG_NICKNAME}</th>
 						<th>{LANG_EMAIL}</th>
+						<th>{LANG_ACTIVATED}</th>
 						<th>{LANG_ADMIN}</th>
 						<th>{LANG_AUTHOR}</th>
 						<th>{LANG_ACTIONS}</th>
@@ -230,6 +250,7 @@
 						<td>{USER_SHOWNAME}</td>
 						<td>{USER_NICKNAME}</td>
 						<td>{USER_EMAIL}</td>
+						<td><a href="admin.php?page=users&amp;action={USER_TOGGLE_ACTIVATE}&amp;user_id={USER_ID}"><img src="{USER_ACTIVATION_IMG}" height="16" width="16" alt="{USER_ACTIVATION_TITLE}" title="{USER_ACTIVATION_TITLE}" />&nbsp;</a>({USER_ACTIVATED})</td>
 						<td>{USER_ADMIN}</td>
 						<td>{USER_AUTHOR}</td>
 						<td><USER_ACTIONS:loop><a href="admin.php?page=users&amp;action={ACTION}&amp;user_id={USER_ID}"><img src="{ACTION_IMG}" height="16" width="16" alt="{ACTION_TITLE}" title="{ACTION_TITLE}" /></a>&nbsp;</USER_ACTIONS></td>
@@ -686,6 +707,39 @@
 					$template = $this->_HomePage();
 					return $template;
 				}
+			}
+		}
+		
+		/**
+		 * Activates an existing user in the database
+		 * @access private
+		 * @return void
+		 */
+		function _ActivateUser() {
+			
+			$UserID = GetPostOrGet('user_id');
+			
+			if (!empty($UserID)) {
+				$sql = "UPDATE " . DB_PREFIX . "users
+						SET user_activated='1', user_activationcode=NULL
+						WHERE user_id='$UserID'";
+				$this->_SqlConnection->SqlQuery($sql);
+			}
+		}
+		
+		/**
+		 * Deactivates an existin user in the database
+		 * @access private
+		 * @return void
+		 */
+		function _DeactivateUser() {
+			$UserID = GetPostOrGet('user_id');
+			
+			if (!empty($UserID)) {
+				$sql = "UPDATE " . DB_PREFIX . "users
+						SET user_activated='0', user_activationcode=NULL
+						WHERE user_id='$UserID'";
+				$this->_SqlConnection->SqlQuery($sql);
 			}
 		}
 		

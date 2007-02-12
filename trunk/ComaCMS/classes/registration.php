@@ -306,11 +306,13 @@
 	 	 		$out .= $this->_Translation->GetTranslation('activation_only_by_an_administrator_possible');
 	 	 	}
 	 	 	else {
-	 	 		$sql = "UPDATE " . DB_PREFIX . "users
-					SET user_activated=1, user_activationcode=''
-					WHERE user_activationcode='$ActivationCode'";
-				$this->_SqlConnection->SqlQuery($sql);
-				$out .= $this->_Translation->GetTranslation('your_account_has_been_successfully_activated');
+	 	 		if ($ActivationCode != '') {
+		 	 		$sql = "UPDATE " . DB_PREFIX . "users
+						SET user_activated=1, user_activationcode=NULL
+						WHERE user_activationcode='$ActivationCode'";
+					$this->_SqlConnection->SqlQuery($sql);
+					$out .= $this->_Translation->GetTranslation('your_account_has_been_successfully_activated');
+	 	 		}
 	 	 	}
 	 	 	return $out;
 	 	 }

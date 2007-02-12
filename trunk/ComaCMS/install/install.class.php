@@ -153,7 +153,7 @@
 			$languageFolder = dir("../lang/");
 			while($file = $languageFolder->read()) {
 				// check if the language-file really exists
-				if($file != "." && $file != ".." && startsWith($file, 'lang_') && endsWith($file, '.php')) {
+				if($file != "." && $file != ".." && (strpos($file, 'lang_') === 0) && substr($file,-4) == '.php') {
 					$file = str_replace('lang_', '', $file);
 					$file = str_replace('.php', '', $file);
 					if($Language == $file)
@@ -268,7 +268,15 @@
 			else {
 				$requirements[] = array('requirement' => sprintf($this->_Translation->GetTranslation('is_the_directory_%directory%_writeable'), '/data/upload/'), 'answer' => $this->_Translation->GetTranslation('no'));
 				$ok = false;
-			}	
+			}
+			
+			// check wether the modulefolder is writeable
+			if (is_writable('../modules/'))
+				$requirements[] = array('requirement' => sprintf($this->_Translation->GetTranslation('is_the_directory_%directory%_writeable'), '/modules/'), 'answer' => $this->_Translation->GetTranslation('yes'));
+			else {
+				$requirements[] = array('requirement' => sprintf($this->_Translation->GetTranslation('is_the_directory_%directory%_writeable'), '/modules/'), 'answer' => $this->_Translation->GetTranslation('no'));
+				$ok = false;
+			}
 			
 			// check wether phpversion is uptodate
 			if(version_compare($phpversion_min, phpversion(), '<=') == 1)

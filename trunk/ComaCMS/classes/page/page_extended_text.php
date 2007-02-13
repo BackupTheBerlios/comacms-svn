@@ -90,8 +90,8 @@
 				$this->_ComaLate->SetReplacement('REVISION', $Revision);
 				$this->_ComaLate->SetReplacement('PAGE_ID', $PageID);
 				$out = '{LANG_DO_YOU_WANT_TO_REPLACE}<br />
-						<a href="admin.php?page=pagestructure&amp;action=restorePage&amp;pageID={PAGE_ID}&amp;revision={REVISION}&amp;sure=1" class="button">{LANG_YES}</a>
-		 				<a href="admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}" class="button">{LANG_NO}</a>
+						<a href="{ADMIN_LINK_URL}page=pagestructure&amp;action=restorePage&amp;pageID={PAGE_ID}&amp;revision={REVISION}&amp;sure=1" class="button">{LANG_YES}</a>
+		 				<a href="{ADMIN_LINK_URL}page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}" class="button">{LANG_NO}</a>
 						<div class="column ctwo">
 							<h3>{LANG_CURRENT}</h3>
 							<pre class="code"> {TEXT_CURRENT}&nbsp;</pre>
@@ -170,8 +170,8 @@
  			$template ='<fieldset>
  							<legend>{LANG_IMPORT_ODT}</legend>
  							<!--<h3>{LANG_USE_UPLOADED_FILE}</h3>-->
- 								<form action="admin.php" method="post">
- 									<input type="hidden" name="page" value="pagestructure" />
+ 								<form action="{ADMIN_FORM_URL}" method="post">
+ 									<input type="hidden" name="{ADMIN_FORM_PAGE}" value="pagestructure" />
 									<input type="hidden" name="action" value="editPage" />
 									<input type="hidden" name="action2" value="importFile" />
 									<input type="hidden" name="pageID" value="{PAGE_ID}" />
@@ -188,7 +188,7 @@
 									</div>
 									<div class="row">
 										<input class="button" type="submit" value="{LANG_IMPORT}"/>
-										<a href="admin.php?page=pagestructure&amp;action=editPage&amp;%pageID={PAGE_ID}" class="button">{LANG_ABORT}</a>
+										<a href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;%pageID={PAGE_ID}" class="button">{LANG_ABORT}</a>
 									</div>
  								</form>
  							<!--<h3>{UPLOAD_NEW_FILE}</h3>-->
@@ -207,7 +207,7 @@
  			$import = new OpenDocumentImport_ComaCMS();
  			$import->LoadFile($file['FILE_PATH'], $uploadPath);
 
- 			$logMessage = $this->_Translation->GetTranslation('import') . ' ' . $file['FILE_NAME'];
+ 			$logMessage = $this->_Translation->GetTranslation('import_odt') . ': ' . $file['FILE_NAME'];
  			$this->LogPage($PageID, $logMessage);
  			
  			$PageHtml = TextActions::ConvertToPreHTML($import->_Text);
@@ -286,13 +286,13 @@
 			$this->_ComaLate->SetReplacement('LANG_IMPORT', $this->_Translation->GetTranslation('import'));
 			$this->_ComaLate->SetReplacement('LANG_IMPORT_ODT', $this->_Translation->GetTranslation('import_odt'));
 			//mit der importfunkion ist es möglich Textdokumente im odt format direkt importieren zu lassen
-			$this->_ComaLate->SetReplacement('LANG_IMPORT_INFO', $this->_Translation->GetTranslation('the_odt_import_make_it_possible_to_load_documents_saved_in_the_odt_format'));
+			$this->_ComaLate->SetReplacement('LANG_IMPORT_INFO', $this->_Translation->GetTranslation('the_odt_import_makes_it_possible_to_load_documents_saved_in_the_odt_format'));
 
 			$template = '
 			<fieldset>
 				<legend>{LANG_EDIT_PAGE}</legend>
-				<form action="admin.php" method="post">
-					<input type="hidden" name="page" value="pagestructure" />
+				<form action="{ADMIN_FORM_URL}" method="post">
+					<input type="hidden" name="{ADMIN_FORM_PAGE}" value="pagestructure" />
 					<input type="hidden" name="action" value="savePage" />
 					<input type="hidden" name="pageID" value="{PAGE_ID}" />
 					<div class="row">
@@ -307,7 +307,7 @@
  							<strong>{LANG_IMPORT}:</strong>
  							<span class="info">{LANG_IMPORT_INFO}</span>
  						</label>
- 						<a class="button" href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=importOdt">{LANG_IMPORT_ODT}</a>
+ 						<a class="button" href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=importOdt">{LANG_IMPORT_ODT}</a>
  					</div>
  					<div class="row">
  						<label for="editor">
@@ -342,7 +342,7 @@
 					<div class="row">
 						<input type="submit" value="{LANG_SAVE}" class="button" />
 						<input type="submit" value="{LANG_PREVIEW}" name="pagePreview" class="button" />
-						<a href="admin.php?page=pagestructure" class="button">{LANG_ABORT}</a>
+						<a href="{ADMIN_LINK_URL}page=pagestructure" class="button">{LANG_ABORT}</a>
 					</div>
 				</form>
 			</fieldset>

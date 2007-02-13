@@ -66,7 +66,7 @@
 	$menuArray[] = array($translation->GetTranslation('pagestructure'), 'pagestructure');
 	$menuArray[] = array($translation->GetTranslation('menu-editor'), 'menueditor');
 	$menuArray[] = array($translation->GetTranslation('preferences'), 'preferences');
-	$menuArray[] = array($translation->GetTranslation('languages'), 'languages');
+	//$menuArray[] = array($translation->GetTranslation('languages'), 'languages');
 	$menuArray[] = array($translation->GetTranslation('modules'), 'modules');
 
 	

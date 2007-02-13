@@ -184,9 +184,9 @@
 						$this->_ComaLate->SetReplacement('IMAGE_SRC', generateUrl($imageUrl));
 						$template = '<fieldset> 
 							<legend>{LANG_MODIFY_IMAGE_DESCRIPTION}</legend>
-							<form action="admin.php" method="post">
+							<form action="{ADMIN_FORM_URL}" method="post">
 								<input type="hidden" name="pageID" value="{PAGE_ID}" />
-								<input type="hidden" name="page" value="pagestructure" />
+								<input type="hidden" name="{ADMIN_FORM_PAGE}" value="pagestructure" />
 								<input type="hidden" name="action" value="editPage" />
 								<input type="hidden" name="action2" value="saveImage" />
 								<input type="hidden" name="imageID" value="{IMAGE_ID}" />					
@@ -202,7 +202,7 @@
 								</div>
 								<div class="row">
 									<input class="button" type="submit" value="{LANG_APPLY}" />
-									<a class="button" href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}">{LANG_BACK}</a>
+									<a class="button" href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}">{LANG_BACK}</a>
 								</div>
 							</form>
 						</fieldset>';
@@ -258,8 +258,8 @@
 					<legend>{LANG_REMOVE_IMAGE}</legend>
 					<img src="{IMAGE_SRC}" alt="{LANG_IMAGE}: {IMAGE_TITLE}" title="{IMAGE_TITLE}" />
 				{LANG_DELETE_QUESTION}<br />
-				<a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=removeImage&amp;imageID={IMAGE_ID}&amp;sure=1" class="button">{LANG_YES}</a>
-		 		<a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}" class="button">{LANG_NO}</a></fieldset>';
+				<a href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=removeImage&amp;imageID={IMAGE_ID}&amp;sure=1" class="button">{LANG_YES}</a>
+		 		<a href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}" class="button">{LANG_NO}</a></fieldset>';
 			
 			return $template;			
  		}
@@ -316,7 +316,6 @@
 										VALUES($pageData->gallery_id, $image->file_id,'$fileName','$image->file_path', $orderid)";
 								$this->_SqlConnection->SqlQuery($sql);
 								$sizes = $imageResizer->CalcSizeByMax($outputSize);
-								print_r($sizes);
 								if($sizes[0] < $imageResizer->Size[0] && $sizes[1] < $imageResizer->Size[1])
 									$imageResizer->SaveResizedTo($sizes[0], $sizes[1], $thumbnailFolder, $sizes[0] . 'x' . $sizes[1] . '_');
 							}
@@ -387,7 +386,7 @@
 			if(!$first)
 				return $this->_EditPageOverview($PageID);
 				
-			$this->_ComaLate->SetReplacement('LANG_ADD_IMAGE', $this->_Translation->GetTranslation('add_image'));
+			$this->_ComaLate->SetReplacement('LANG_ADD_IMAGES', $this->_Translation->GetTranslation('add_images'));
 			$this->_ComaLate->SetReplacement('LANG_RESET', $this->_Translation->GetTranslation('reset'));
 			$this->_ComaLate->SetReplacement('LANG_IMAGE', $this->_Translation->GetTranslation('image'));
 			$this->_ComaLate->SetReplacement('LANG_SELECT', $this->_Translation->GetTranslation('select'));
@@ -396,9 +395,9 @@
 			$this->_ComaLate->SetReplacement('PAGE_ID', $PageID);
 			$this->_ComaLate->SetReplacement('IMAGES', $images);
 			$template = '<fieldset>
- 					<legend>{LANG_ADD_IMAGE}</legend>
- 					<form action="admin.php" method="post">
-						<input type="hidden" name="page" value="pagestructure" />
+ 					<legend>{LANG_ADD_IMAGES}</legend>
+ 					<form action="{ADMIN_FORM_URL}" method="post">
+						<input type="hidden" name="{ADMIN_FORM_PAGE}" value="pagestructure" />
 						<input type="hidden" name="action" value="editPage" />
 						<input type="hidden" name="action2" value="addNewImage" />
 						<input type="hidden" name="pageID" value="{PAGE_ID}" />
@@ -418,7 +417,7 @@
  						<div class="row">
 							<input type="reset" value="{LANG_RESET}" class="button" />
 							<input type="submit" value="{LANG_ADD}" class="button" />
-							<a class="button" href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}">{LANG_BACK}</a>
+							<a class="button" href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}">{LANG_BACK}</a>
 						</div>
 					</form>
 				</fieldset>';
@@ -573,8 +572,8 @@
 			$this->_ComaLate->SetReplacement('PAGE_TITLE', $title);
  			$template = '<fieldset>
  					<legend>{LANG_EDIT_GALLERY}</legend>
- 					<form action="admin.php" method="post">
-						<input type="hidden" name="page" value="pagestructure" />
+ 					<form action="{ADMIN_FORM_URL}" method="post">
+						<input type="hidden" name="{ADMIN_FORM_PAGE}" value="pagestructure" />
 						<input type="hidden" name="action" value="editPage" />
 						<input type="hidden" name="action2" value="saveTitle" />
 						<input type="hidden" name="pageID" value="{PAGE_ID}" />
@@ -590,9 +589,9 @@
 						</div>
 					</form>
 					<div class="row">
-						<a href="admin.php?page=pagestructure&amp;action=editPage&amp;action2=addNewImageDialog&amp;pageID={PAGE_ID}" class="button">{LANG_ADD_IMAGES}</a>
-						<a href="admin.php?page=pagestructure&amp;action=editPage&amp;action2=regenerateThumbnails&amp;pageID={PAGE_ID}" class="button">{LANG_REGENERATE_THUMBNAILS}</a>
-						<a href="admin.php?page=pagestructure" class="button">{LANG_BACK}</a>
+						<a href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;action2=addNewImageDialog&amp;pageID={PAGE_ID}" class="button">{LANG_ADD_IMAGES}</a>
+						<a href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;action2=regenerateThumbnails&amp;pageID={PAGE_ID}" class="button">{LANG_REGENERATE_THUMBNAILS}</a>
+						<a href="{ADMIN_LINK_URL}page=pagestructure" class="button">{LANG_BACK}</a>
 					</div>
 					<div class="row">
  					
@@ -602,10 +601,10 @@
 							<img style="margin-top:{IMAGE_MARGIN_TOP}px;margin-bottom:{IMAGE_MARGIN_BOTTOM}px;width:{IMAGE_WIDTH}px;height:{IMAGE_HEIGHT}px;" src="{IMAGE_SRC}" alt="{LANG_IMAGE}: {IMAGE_TITLE}" title="{IMAGE_TITLE}" />
 						</a>
 						<div class="actions">
-						<a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=moveImageUp&amp;imageID={IMAGE_FILE_ID}"><img src="./img/up.png" alt="{LANG_MOVE_UP}" title="{LANG_MOVE_UP}"/></a>
-						<a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=editImage&amp;imageID={IMAGE_FILE_ID}"><img src="./img/edit.png" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
-						<a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=removeImage&amp;imageID={IMAGE_FILE_ID}"><img src="./img/del.png" alt="{LANG_DELETE}" title="{LANG_DELETE}"/></a>
-						<a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=moveImageDown&amp;imageID={IMAGE_FILE_ID}"><img src="./img/down.png" alt="{LANG_MOVE_DOWN}" title="{LANG_MOVE_DOWN}"/></a>
+						<a href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=moveImageUp&amp;imageID={IMAGE_FILE_ID}"><img src="./img/up.png" alt="{LANG_MOVE_UP}" title="{LANG_MOVE_UP}"/></a>
+						<a href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=editImage&amp;imageID={IMAGE_FILE_ID}"><img src="./img/edit.png" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+						<a href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=removeImage&amp;imageID={IMAGE_FILE_ID}"><img src="./img/del.png" alt="{LANG_DELETE}" title="{LANG_DELETE}"/></a>
+						<a href="{ADMIN_LINK_URL}page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}&amp;action2=moveImageDown&amp;imageID={IMAGE_FILE_ID}"><img src="./img/down.png" alt="{LANG_MOVE_DOWN}" title="{LANG_MOVE_DOWN}"/></a>
 						</div>
 					</div>
 					</IMAGES>

@@ -432,5 +432,13 @@ Die Administratoren';
 	$langString['if_you_are_an_admin_you_can_access_to_the_administration_interface'] = 'Ein Administrator erh&auml;lt den Zugriff auf das gesammte System, ohne Einschr&auml;nkungen.';
 	$langString['is_admin'] = 'Administrator?';
 	$langString['is_author'] = 'Autor?';	
-	$langString['back_to_homepage'] = 'Zum Internetauftritt';
+	$langString['back_to_homepage'] = 'Zur Hauptseite';
+	$langString['edit_gallery'] = 'Galerie Bearbeiten';
+	$langString['regenerate_thumbnails'] = 'Vorschaubilder neu berechnen';
+	$langString['add_images'] = 'Bilder hinzuf&uuml;gen';
+	$langString['select'] = 'Ausw&auml;hlen';
+	$langString['import'] = 'Importieren';
+	$langString['import_odt'] = 'OpenDocument Text Importieren';
+	$langString['the_odt_import_makes_it_possible_to_load_documents_saved_in_the_odt_format'] = 'Mit der Importfunkion ist es möglich Textdokumente im OpenDocument Format direkt importieren zu lassen.';
+	$langString['the_selected_file_will_be_converted_into_a_comacms_page'] = 'Die Ausgew&auml;hlte Datei wird in eine ComaCMS-Textseite umgewandelt werden.'
 ?>

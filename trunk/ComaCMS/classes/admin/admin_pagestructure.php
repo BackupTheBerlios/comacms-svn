@@ -142,8 +142,8 @@
 		 			if ($this->_PageStructure->PageHasSubPages($pageID, true)) {
 		 				$out .= "<fieldset>
 		 						<legend>Unterseiten vorhanden</legend>
-		 						<form action=\"admin.php\" method=\"post\">
-		 							<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+		 						<form action=\"{$this->FormUrl}\" method=\"post\">
+		 							<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 		 							<input type=\"hidden\" name=\"action\" value=\"deletePage\" />
 		 							<input type=\"hidden\" name=\"pageID\" value=\"$pageID\" />
 		 							<input type=\"hidden\" name=\"confirmation\" value=\"2\" />
@@ -173,7 +173,7 @@
 		 								Mit dem Klicken auf OK wird die Aktion sofort durchgeführt und nicht noch einmal hinterfragt!
 		 							</div>
 		 							<div class=\"row\">
-		 								<a href=\"admin.php?page=pagestructure\" class=\"button\">" . $this->_Translation->GetTranslation('back') . "</a>
+		 								<a href=\"{$this->LinkUrl}page=pagestructure\" class=\"button\">" . $this->_Translation->GetTranslation('back') . "</a>
 		 								<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('ok') . "\"/>
 		 							</div>	
 		 						</form>
@@ -181,8 +181,8 @@
 		 			}
 		 			else {
 		 				$out .= sprintf($this->_Translation->GetTranslation('Do you really want to delete the page %page_title%?'), $this->_PageStructure->GetPageData($pageID, 'title')) . "<br />
-		 				<a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=$pageID&amp;confirmation=1\" class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a>
-		 					<a href=\"admin.php?page=pagestructure\" class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a>";
+		 				<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=deletePage&amp;pageID=$pageID&amp;confirmation=1\" class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a>
+		 					<a href=\"{$this->LinkUrl}page=pagestructure\" class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a>";
 		 			}
 		 			return $out;
 		 		}
@@ -214,7 +214,7 @@
 		 	$this->_getMenuPageIDs();
 		 	$out = "\t\t\t<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
 			<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=newPage\" class=\"button\">" . $this->_Translation->GetTranslation('create_new_page') . "</a>
-			<form method=\"post\" action=\"admin.php\">
+			<form method=\"post\" action=\"{$this->FormUrl}\">
 				<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"generateMenu\" />\r\n";
 		 	$out .= $this->_showStructure(0);
@@ -394,15 +394,17 @@
 					case 'gallery':
 						include('classes/page/page_extended_gallery.php');
 						$edit = new Page_Extended_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->User);
-						//include_once(__ROOT__ . '/classes/edit_gallery_page.php');
-						//$edit = new Edit_Gallery_Page();
 						break;	
 					default:
 						$out .= "Der Seitentyp <strong>$page->page_type</strong> l&auml;sst sich noch nicht bearbeiten.";
 						break;
 				}
-				if($edit !== null)
+				if($edit !== null) {
+					$this->_ComaLate->SetReplacement('ADMIN_FORM_URL', $this->FormUrl);
+					$this->_ComaLate->SetReplacement('ADMIN_FORM_PAGE', $this->FormPage);
+					$this->_ComaLate->SetReplacement('ADMIN_LINK_URL', $this->LinkUrl);			
 					$out .= $edit->GetEditPage($page->page_id);
+				}
 				return $out;
 			}
 		}
@@ -425,14 +427,20 @@
 						include_once (__ROOT__ . '/classes/page/page_extended_text.php');
 						$edit = new Page_Extended_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
 						break;
-					case 'gallery':		include_once(__ROOT__ . '/classes/edit_gallery_page.php');
-								$edit = new Edit_Gallery_Page();
-								break;				
-					default:		$out .= "Der Seitentyp <strong>$page->page_type</strong> l&auuml;sst sich noch nicht bearbeiten.";
-								break;
+					case 'gallery':
+						include_once (__ROOT__ . '/classes/page/page_extended_gallery.php');
+						$edit = new Page_Extended_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
+						break;				
+					default:
+						$out .= "Der Seitentyp <strong>$page->page_type</strong> l&auuml;sst sich noch nicht bearbeiten.";
+						break;
 				}
-				if($edit !== null)
+				if($edit !== null) {
+					$this->_ComaLate->SetReplacement('ADMIN_FORM_URL', $this->FormUrl);
+					$this->_ComaLate->SetReplacement('ADMIN_FORM_PAGE', $this->FormPage);
+					$this->_ComaLate->SetReplacement('ADMIN_LINK_URL', $this->LinkUrl);	
 					$out .= $edit->GetSavePage($page->page_id);
+				}
 				if($out == '')
 					return $this->_homePage();
 				return $out;
@@ -454,15 +462,16 @@
 						$edit = new Page_Extended_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
 						break;
 					case 'gallery':
-						//include('classes/page/page_extended_gallery.php');
-						//$edit = new Page_Extended_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate);
-						include_once(__ROOT__ . '/classes/edit_gallery_page.php');
-						$edit = new Edit_Gallery_Page();
+						include('classes/page/page_extended_gallery.php');
+						$edit = new Page_Extended_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
 						break;	
 					default:
 						return "Der Seitentyp <strong>{$pageData['type']}</strong> l&auml;sst sich noch nicht bearbeiten.";
 				}
 			$out = '';
+			$this->_ComaLate->SetReplacement('ADMIN_FORM_URL', $this->FormUrl);
+			$this->_ComaLate->SetReplacement('ADMIN_FORM_PAGE', $this->FormPage);
+			$this->_ComaLate->SetReplacement('ADMIN_LINK_URL', $this->LinkUrl);	
 			if($sure == 1)
 				$edit->RestoreRevision($pageID, $revision);
 			else
@@ -1106,10 +1115,10 @@
 						$image
 				</div>
 				<div class=\"row\">
-					<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;action2=selectImage\" class=\"button\">Bild ausw&auml;hlen/ver&auml;ndern</a>
-					" .((file_exists($thumbPath)) ?  "<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;action2=removeImage\" class=\"button\">Bild entfernen</a>" : '') . "
+					<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;action2=selectImage\" class=\"button\">Bild ausw&auml;hlen/ver&auml;ndern</a>
+					" .((file_exists($thumbPath)) ?  "<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;action2=removeImage\" class=\"button\">Bild entfernen</a>" : '') . "
 				</div>
-				<form action=\"{$this->Formurl}\" method=\"post\">
+				<form action=\"{$this->FormUrl}\" method=\"post\">
 				<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
 				<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
@@ -1346,7 +1355,7 @@
 							<th>{LANG_PATH}</th>
 							<td>
 								<pagepath_default:condition>
-								<a href="admin.php?page=pagestructure">root</a><strong>/</strong> ' . $this->_pagePath($pageID) . ' <a href="' .$this->LinkUrl . 'page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}&amp;action2=changePath"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+								<a href="' . $this->LinkUrl . 'page=pagestructure">root</a><strong>/</strong> ' . $this->_pagePath($pageID) . ' <a href="' .$this->LinkUrl . 'page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}&amp;action2=changePath"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
 								</pagepath_default>
 								<pagepath_edit:condition>
 								<input type="hidden" name="action2" value="savePath" />
@@ -1369,7 +1378,7 @@
 						</tr>
 						<tr>
 							<th>{LANG_INLINEMENU}</th>
-							<td>{INLINEMENU_ENTRIES_COUNT} {LANG_ENTRIES} <a href="admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID={PAGE_ID}"><img src="./img/inlinemenu.png" height="16" width="16" alt="{LANG_INLINEMENU}" title="{LANG_ILNINEMENU}"/></a></td>
+							<td>{INLINEMENU_ENTRIES_COUNT} {LANG_ENTRIES} <a href="' . $this->LinkUrl . 'page=pagestructure&amp;action=pageInlineMenu&amp;pageID={PAGE_ID}"><img src="./img/inlinemenu.png" height="16" width="16" alt="{LANG_INLINEMENU}" title="{LANG_ILNINEMENU}"/></a></td>
 						</tr>
 					</table>
 				</form>

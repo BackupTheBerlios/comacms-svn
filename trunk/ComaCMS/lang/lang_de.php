@@ -398,4 +398,39 @@ Die Administratoren';
 	$langString['revision'] = 'Revision';
 	$langString['do_you_want_to_replace_the_first_text_with_the_secont_one'] = 'M&ouml;chten sie den ersten Text durch den zweiten Ersetzen?';
 	
+	$langString['showname'] = 'Anzeigename';
+	$langString['nickname'] = 'Nickname';
+	$langString['admin'] = 'Administrator';
+	$langString['author'] = 'Autor';
+	$langString['create_new_user'] = 'Neuen Benutzer anlegen';
+	$langString['usermanagement'] = 'Benutzerverwaltung';
+	$langString['custom_fields'] = 'Benutzerdefinerte Felder';
+	$langString['custom_field'] = 'Benutzerdefinertes Feld';
+	$langString['create_new_custom_field'] = 'Neues Felder anlegen';
+	$langString['required'] = 'Ben&ouml;tigt';
+	$langString['show_at_registration'] = 'Bei der Registrierung anzeigen?';
+	$langString['size'] = 'Gr&ouml;&szlig;e';
+	$langString['information'] = 'Information';
+	$langString['with_this_name_shall_the_admin_identify_the_custom_field'] = '&Uuml;ber diesen Namen wird das Feld identifiziert.';
+	$langString['this_is_the_title_of_the_custom_field_that_is_shown_to_the_user'] = 'Das ist der Titel, des Feldes, der auch dem Benutzer angezeigt wird.';
+	$langString['this_is_the_type_of_text_the_user_shall_type_into_this_field'] = 'Die Eingabe in dem erstellten Feld muss von diesem Typ sein';
+	// TODO: translation string is bad 'digits' or am i wrong
+	$langString['this_is_the_maximum_number_of_digits_the_user_may_type_in_this_field_(write_"0"_for_unlimited_input)'] = 'Hier wird die maximale Anzahl an Zeichen definiert, die in dieses Feld eingegeben werden d&uuml;rfen (&quot;0&quot; = unbegrenzt)';
+	$langString['shall_this_input_be_displayed_in_the_registration_of_a_new_user?'] = 'Soll dieses Feld bei der Registrierung angezeigt werden?';
+	$langString['is_this_field_required_to_save_the_userdetails?'] = 'Muss unbedingt dieses Feld ausgef&uuml;llt werden?';
+	$langString['this_is_the_information_displayed_for_this_field_to_the_user'] = 'Dieser Text wird dem Benutzer als Information zu dem Feld angezeigt, wenn er eine Eingabe dazu macht.';
+	
+	$langString['if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**']= 'Ein Benutzer hat als Administrator zugriff auf das gesammte System.<strong>Nur ausw&auml;hlen, wenn es wirklich ben&ouml;tigt wird!</strong>';
+	// TODO: at the moment no menueditor-access
+	$langString['if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'] = 'Ein Autor erh&auml;lt Zugriff auf die Seiten-Struktur.';
+	
+	$langString['usercontrol'] = 'Benutzerseite';
+	$langString['user_profile'] = 'Benutprofil';
+	$langString['profile'] = 'Profil';
+	$langString['registered_since'] = 'Registriert seit';
+	$langString['you_are_registered_since'] = 'Seit diesem Datum bist du hier registriert.';
+	$langString['if_you_are_an_admin_you_can_access_to_the_administration_interface'] = 'Ein Administrator erh&auml;lt den Zugriff auf das gesammte System, ohne Einschr&auml;nkungen.';
+	$langString['is_admin'] = 'Administrator?';
+	$langString['is_author'] = 'Autor?';	
+	$langString['back_to_homepage'] = 'Zum Internetauftritt';
 ?>

@@ -40,6 +40,9 @@
 		 * @access private
 		 */
  		var $_PageStructure;
+ 		var $FormUrl = 'admin.php';
+ 		var $LinkUrl = 'admin.php?';
+ 		var $FormPage = 'page';
  		
 		/**
 		 * @access private
@@ -210,9 +213,9 @@
 		 function _homePage() {
 		 	$this->_getMenuPageIDs();
 		 	$out = "\t\t\t<script type=\"text/javascript\" language=\"JavaScript\" src=\"system/functions.js\"></script>
-			<a href=\"admin.php?page=pagestructure&amp;action=newPage\" class=\"button\">" . $this->_Translation->GetTranslation('create_new_page') . "</a>
+			<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=newPage\" class=\"button\">" . $this->_Translation->GetTranslation('create_new_page') . "</a>
 			<form method=\"post\" action=\"admin.php\">
-				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+				<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"generateMenu\" />\r\n";
 		 	$out .= $this->_showStructure(0);
 			$out .= "</form>
@@ -229,10 +232,10 @@
 		 function _newPage() {
 		 	$this->_PageStructure->LoadParentIDs();
 				 	
-		 	$out = "\t\t\t<form method=\"post\" action=\"admin.php\">
+		 	$out = "\t\t\t<form method=\"post\" action=\"{$this->FormUrl}\">
 				<fieldset>
 					<legend>" . $this->_Translation->GetTranslation('new_page') . "</legend>
-					<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+					<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 					<input type=\"hidden\" name=\"action\" value=\"addNewPage\" />
 					<div class=\"row\">
 						<label>
@@ -333,18 +336,18 @@
 			 		$out .= "<span class=\"page_actions\">";
 			 			// edit:
 			 			if($page['access'] != 'deleted')
-				 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=editPage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>";
+				 			$out .= " <a href=\"{$this->LinkUrl}page=pagestructure&amp;action=editPage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/edit.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('edit') . "\" title=\"" . $this->_Translation->GetTranslation('edit') . "\"/></a>";
 			 			// info:
-			 			$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=" . $page['id'] . "\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('info') . "\" title=\"" . $this->_Translation->GetTranslation('info') . "\"/></a>";
+			 			$out .= " <a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInfo&amp;pageID=" . $page['id'] . "\"><img src=\"./img/info.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . $this->_Translation->GetTranslation('info') . "\" title=\"" . $this->_Translation->GetTranslation('info') . "\"/></a>";
 				 		// view:
 			 			if($page['access'] != 'deleted')
 			 				$out .= " <a href=\"index.php?page=" . $page['name'] . "\"><img src=\"./img/view.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"Anschauen " . $page['title'] . "\" title=\"Anschauen\"/></a>";
 				 		// inlinemenu:
 			 			if($page['access'] != 'deleted')
-			 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=" . $page['id'] . "\" title=\"" . sprintf($this->_Translation->GetTranslation('edit_inlinemenu_of_%page_title%'), $page['title']) . "\"><img src=\"./img/inlinemenu.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($this->_Translation->GetTranslation('edit_inlinemenu_of_%page_title%'), $page['title']) . "\" title=\"" . sprintf($this->_Translation->GetTranslation('edit_inlinemenu_of_%page_title%'), $page['title']) . "\"/></a>";
+			 				$out .= " <a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;pageID=" . $page['id'] . "\" title=\"" . sprintf($this->_Translation->GetTranslation('edit_inlinemenu_of_%page_title%'), $page['title']) . "\"><img src=\"./img/inlinemenu.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($this->_Translation->GetTranslation('edit_inlinemenu_of_%page_title%'), $page['title']) . "\" title=\"" . sprintf($this->_Translation->GetTranslation('edit_inlinemenu_of_%page_title%'), $page['title']) . "\"/></a>";
 		 				// delete:
 			 			if($page['access'] != 'deleted')
-			 				$out .= " <a href=\"admin.php?page=pagestructure&amp;action=deletePage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($this->_Translation->GetTranslation('delete_page_%page_title%'), $page['title']) . "\" title=\"" . sprintf($this->_Translation->GetTranslation('delete_page_%page_title%'), $page['title']) . "\"/></a>";
+			 				$out .= " <a href=\"{$this->LinkUrl}page=pagestructure&amp;action=deletePage&amp;pageID=" . $page['id'] . "\"><img src=\"./img/del.png\" class=\"icon\" height=\"16\" width=\"16\" alt=\"" . sprintf($this->_Translation->GetTranslation('delete_page_%page_title%'), $page['title']) . "\" title=\"" . sprintf($this->_Translation->GetTranslation('delete_page_%page_title%'), $page['title']) . "\"/></a>";
 			 		// end blockelement for pageactions
 			 		$out .= '</span>';
 			 		// lang:
@@ -487,9 +490,9 @@
 			$lastid = $this->_PageStructure->AddNewPage($page_name, $page_title, $page_lang, $page_access, $page_type, $page_parent_id, $page_edit_comment);
 		
 			if($page_edit != '')
-				header("Location: admin.php?page=pagestructure&action=editPage&pageID=$lastid");
+				header("Location: {$this->LinkUrl}page=pagestructure&action=editPage&pageID=$lastid");
 			else
-				header("Location: admin.php?page=pagestructure");
+				header("Location: {$this->LinkUrl}page=pagestructure");
 	
 		}
 		
@@ -507,7 +510,7 @@
 				if($PageID == $page->page_id)
 					$out = " <span title=\"$page->page_title\">" . rawurldecode($page->page_name) . "</span>";
 				else
-					$out = "<a href=\"admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id\" title=\"$page->page_title\">" . rawurldecode($page->page_name) ."</a>" . $out;
+					$out = "<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInfo&amp;pageID=$page->page_id\" title=\"$page->page_title\">" . rawurldecode($page->page_name) ."</a>" . $out;
 				if($page->page_parent_id != 0)
 					$out = '<strong>/</strong>' . $out;
 				$sql = "SELECT *
@@ -540,8 +543,8 @@
 				}
 				else {
 					$out .= $this->_Translation->GetTranslation('at_the_moment_there_is_no_inlinemenu_for_this_page_created,_should_this_be_done_now') . "<br />
-					<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;action2=create&amp;pageID=$pageID\" title=\"" . $this->_Translation->GetTranslation('yes') . "\" class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a>
-					<a href=\"admin.php?page=pagestructure\" title=\"" . $this->_Translation->GetTranslation('no') . "\" class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a>";	
+					<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;action2=create&amp;pageID=$pageID\" title=\"" . $this->_Translation->GetTranslation('yes') . "\" class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a>
+					<a href=\"{$this->LinkUrl}page=pagestructure\" title=\"" . $this->_Translation->GetTranslation('no') . "\" class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a>";	
 				}
 				
 			}
@@ -587,8 +590,8 @@
 				$out = '';
 				
 				if($entryData['type'] == 'link') {
-					$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+					$out .= "<form action=\"{$this->FormUrl}\" method=\"post\">
+						<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
 						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
 						<input type=\"hidden\" name=\"entryID\" value=\"$entryID\" />
@@ -616,8 +619,8 @@
 						</form>";
 				}
 				else if($entryData['type'] == 'text') {
-					$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+					$out .= "<form action=\"{$this->FormUrl}\" method=\"post\">
+						<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
 						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
 						<input type=\"hidden\" name=\"entryID\" value=\"$entryID\" />
@@ -635,8 +638,8 @@
 						</form>";
 				}
 				else if($entryData['type'] == 'intern') {
-					$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+					$out .= "<form action=\"{$this->FormUrl}\" method=\"post\">
+						<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
 						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
 						<input type=\"hidden\" name=\"entryID\" value=\"$entryID\" />
@@ -656,8 +659,8 @@
 						</form>";
 				}
 				else if($entryData['type'] == 'download') {
-					$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+					$out .= "<form action=\"{$this->FormUrl}\" method=\"post\">
+						<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
 						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
 						<input type=\"hidden\" name=\"entryID\" value=\"$entryID\" />
@@ -719,8 +722,8 @@
  				$entryResult = $this->_SqlConnection->SqlQuery($sql);
  				if($entry = mysql_fetch_object($entryResult)) {
 					return "Sind sie sicher, dass sie das Element &quot;$entry->inlineentry_text&quot; unwiederruflich l&ouml;schen m&ouml;chten?<br />
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;entryID=$entryID&amp;action2=removeEntry&amp;confirmation=1&amp;pageID=$PageID\" class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a >
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID\"class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a >";
+						<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;entryID=$entryID&amp;action2=removeEntry&amp;confirmation=1&amp;pageID=$PageID\" class=\"button\">" . $this->_Translation->GetTranslation('yes') . "</a >
+						<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID\"class=\"button\">" . $this->_Translation->GetTranslation('no') . "</a >";
  				}
 			}
 		}
@@ -824,8 +827,8 @@
 			$out = '';
 			
 			if($type == 'link') {
-				$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+				$out .= "<form action=\"{$this->FormUrl}\" method=\"post\">
+						<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
 						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
 						<input type=\"hidden\" name=\"action2\" value=\"addNewEntry\" />
@@ -852,8 +855,8 @@
 						</form>";
 			}
 			else if($type == 'text') {
-				$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+				$out .= "<form action=\"{$this->FormUrl}\" method=\"post\">
+						<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
 						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
 						<input type=\"hidden\" name=\"action2\" value=\"addNewEntry\" />
@@ -870,8 +873,8 @@
 						</form>";
 			}
 			else if($type == 'intern') {
-				$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+				$out .= "<form action=\"{$this->FormUrl}\" method=\"post\">
+						<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
 						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
 						<input type=\"hidden\" name=\"action2\" value=\"addNewEntry\" />
@@ -890,8 +893,8 @@
 						</form>";
 			}
 			else if($type == 'download') {
-				$out .= "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+				$out .= "<form action=\"{$this->FormUrl}\" method=\"post\">
+						<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
 						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
 						<input type=\"hidden\" name=\"action2\" value=\"addNewEntry\" />
@@ -927,8 +930,8 @@
 						</form>";
 			}
 			else {
-				$out = "<form action=\"admin.php\" method=\"post\">
-						<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+				$out = "<form action=\"{$this->FormUrl}\" method=\"post\">
+						<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 						<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
 						<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
 						<input type=\"hidden\" name=\"action2\" value=\"addNewEntryDialog\" />
@@ -1025,8 +1028,8 @@
 			$imgmax = 100;
 			$imgmax2 = 200;
 			$inlinemenuFolder = 'data/thumbnails/';
-			$out = "<form action=\"admin.php\" method=\"post\">
-				<input type=\"hidden\" name=\"page\" value=\"pagestructure\"/>
+			$out = "<form action=\"{$this->FormUrl}\" method=\"post\">
+				<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\"/>
 				<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\"/>
 				<input type=\"hidden\" name=\"pageID\" value=\"$PageID\"/>
 				<input type=\"hidden\" name=\"action2\" value=\"setImage\"/>
@@ -1050,7 +1053,7 @@
 			}
 			$out .= "</div></div>
 				<div class=\"row noform\"><input type=\"submit\" value=\"" . $this->_Translation->GetTranslation('apply') . "\" class=\"button\"/>
-				<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID\" class=\"button\">" . $this->_Translation->GetTranslation('back') . "</a></div></fieldset></form>";
+				<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID\" class=\"button\">" . $this->_Translation->GetTranslation('back') . "</a></div></fieldset></form>";
 				
 			
 			return $out;
@@ -1106,8 +1109,8 @@
 					<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;action2=selectImage\" class=\"button\">Bild ausw&auml;hlen/ver&auml;ndern</a>
 					" .((file_exists($thumbPath)) ?  "<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;action2=removeImage\" class=\"button\">Bild entfernen</a>" : '') . "
 				</div>
-				<form action=\"admin.php\" method=\"post\">
-				<input type=\"hidden\" name=\"page\" value=\"pagestructure\" />
+				<form action=\"{$this->Formurl}\" method=\"post\">
+				<input type=\"hidden\" name=\"{$this->FormPage}\" value=\"pagestructure\" />
 				<input type=\"hidden\" name=\"action\" value=\"pageInlineMenu\" />
 				<input type=\"hidden\" name=\"pageID\" value=\"$PageID\" />
 				<input type=\"hidden\" name=\"action2\" value=\"setImageTitle\" />
@@ -1147,17 +1150,17 @@
 					<td>". nl2br($entry->inlineentry_text) ."</td>
 					<td>" . $typeImage . "</td>
 					<td>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entry->inlineentry_sortid&amp;action2=moveEntryUp#entries\"><img src=\"./img/up.png\" alt=\"" . $this->_Translation->GetTranslation('move_up') ."\" title=\"" . $this->_Translation->GetTranslation('move_up') ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entry->inlineentry_sortid&amp;action2=moveEntryDown#entries\"><img src=\"./img/down.png\" alt=\"" . $this->_Translation->GetTranslation('move_down') ."\" title=\"" . $this->_Translation->GetTranslation('move_down') ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entry->inlineentry_id&amp;action2=editEntry\"><img src=\"./img/edit.png\" alt=\"" . $this->_Translation->GetTranslation('edit') ."\" title=\"" . $this->_Translation->GetTranslation('edit') ."\" /></a>
-						<a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entry->inlineentry_id&amp;action2=removeEntry\"><img src=\"./img/del.png\" alt=\"" . $this->_Translation->GetTranslation('delete') ."\" title=\"" . $this->_Translation->GetTranslation('delete') ."\" /></a>
+						<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entry->inlineentry_sortid&amp;action2=moveEntryUp#entries\"><img src=\"./img/up.png\" alt=\"" . $this->_Translation->GetTranslation('move_up') ."\" title=\"" . $this->_Translation->GetTranslation('move_up') ."\" /></a>
+						<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entrySortID=$entry->inlineentry_sortid&amp;action2=moveEntryDown#entries\"><img src=\"./img/down.png\" alt=\"" . $this->_Translation->GetTranslation('move_down') ."\" title=\"" . $this->_Translation->GetTranslation('move_down') ."\" /></a>
+						<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entry->inlineentry_id&amp;action2=editEntry\"><img src=\"./img/edit.png\" alt=\"" . $this->_Translation->GetTranslation('edit') ."\" title=\"" . $this->_Translation->GetTranslation('edit') ."\" /></a>
+						<a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;entryID=$entry->inlineentry_id&amp;action2=removeEntry\"><img src=\"./img/del.png\" alt=\"" . $this->_Translation->GetTranslation('delete') ."\" title=\"" . $this->_Translation->GetTranslation('delete') ."\" /></a>
 						
 					</td>
 					</tr>";
 				}
 				$out .= "</table>
 					</div>
-					<div class=\"row\"><a href=\"admin.php?page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;action2=addNewEntryDialog\" class=\"button\">Einen Eintrag hinzuf&uuml;gen</a></div>
+					<div class=\"row\"><a href=\"{$this->LinkUrl}page=pagestructure&amp;action=pageInlineMenu&amp;pageID=$PageID&amp;action2=addNewEntryDialog\" class=\"button\">Einen Eintrag hinzuf&uuml;gen</a></div>
 					</fieldset>";
 			return $out;
 		}
@@ -1292,20 +1295,20 @@
 			$this->_ComaLate->SetReplacement('PAGE_HISTORY', $history);
 			$this->_ComaLate->SetReplacement('PAGE_COMMENT', $pageData['comment']);
 			
-			$template = '<form action="admin.php" method="post">
-						<input type="hidden" name="page" value="pagestructure" />
+			$template = '<form action="' .$this->FormUrl . '" method="post">
+						<input type="hidden" name="' .$this->FormPage . '" value="pagestructure" />
 						<input type="hidden" name="action" value="pageInfo" />
 						<input type="hidden" name="pageID" value="{PAGE_ID}" />
 						<table>
 						<tr>
 							<th>{LANG_TITLE}</th>
-							<td>{TITLE_VALUE} <a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a></td>
+							<td>{TITLE_VALUE} <a href="' .$this->LinkUrl . 'page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a></td>
 						</tr>
 						<tr>
 							<th>{LANG_NAME}</th>
 							<td>
 								<pagename_default:condition>
-								{NAME_VALUE} <a href="admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}&amp;action2=changeName"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+								{NAME_VALUE} <a href="' .$this->LinkUrl . 'page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}&amp;action2=changeName"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
 								</pagename_default>
 								<pagename_edit:condition>
 								<input type="hidden" name="action2" value="saveName" />
@@ -1321,7 +1324,7 @@
 							<th>{LANG_ACCESS}</th>
 							<td>
 								<pageaccess_default:condition>
-								{ACCESS_VALUE} <a href="admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}&amp;action2=changeAccess"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+								{ACCESS_VALUE} <a href="' .$this->LinkUrl . 'page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}&amp;action2=changeAccess"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
 								</pageaccess_default>
 								<pageaccess_edit:condition>
 								<input type="hidden" name="action2" value="saveAccess" />
@@ -1343,7 +1346,7 @@
 							<th>{LANG_PATH}</th>
 							<td>
 								<pagepath_default:condition>
-								<a href="admin.php?page=pagestructure">root</a><strong>/</strong> ' . $this->_pagePath($pageID) . ' <a href="admin.php?page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}&amp;action2=changePath"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+								<a href="admin.php?page=pagestructure">root</a><strong>/</strong> ' . $this->_pagePath($pageID) . ' <a href="' .$this->LinkUrl . 'page=pagestructure&amp;action=pageInfo&amp;pageID={PAGE_ID}&amp;action2=changePath"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
 								</pagepath_default>
 								<pagepath_edit:condition>
 								<input type="hidden" name="action2" value="savePath" />
@@ -1395,7 +1398,7 @@
 								<td>{PAGE_COMMENT}</td>
 								<td>
 									<a href="index.php?page={PAGE_ID}"><img src="./img/view.png" height="16" width="16" alt="{LANG_VIEW}" title="{LANG_VIEW}"/></a>
-									<a href="admin.php?page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+									<a href="' .$this->LinkUrl . 'page=pagestructure&amp;action=editPage&amp;pageID={PAGE_ID}"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
 								</td>
 							</tr>
 						<PAGE_HISTORY:loop>
@@ -1406,8 +1409,8 @@
 								<td>{HISTORY_PAGE_COMMENT}</td>
 								<td>
 									<a href="index.php?page={PAGE_ID}&amp;change={HISTORY_PAGE_REVISION}"><img src="./img/view.png" height="16" width="16" alt="{LANG_VIEW}" title="{LANG_VIEW}"/></a>
-									<a href="admin.php?page=pagestructure&amp;action=editOldPage&amp;pageID={PAGE_ID}&amp;revision={HISTORY_PAGE_REVISION}"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
-									<a href="admin.php?page=pagestructure&amp;action=restorePage&amp;pageID={PAGE_ID}&amp;revision={HISTORY_PAGE_REVISION}"><img src="./img/restore.png" height="16" width="16" alt="{LANG_RESTORE}" title="{LANG_RESTORE}"/></a>
+									<a href="' .$this->LinkUrl . 'page=pagestructure&amp;action=editOldPage&amp;pageID={PAGE_ID}&amp;revision={HISTORY_PAGE_REVISION}"><img src="./img/edit.png" height="16" width="16" alt="{LANG_EDIT}" title="{LANG_EDIT}"/></a>
+									<a href="' .$this->LinkUrl . 'page=pagestructure&amp;action=restorePage&amp;pageID={PAGE_ID}&amp;revision={HISTORY_PAGE_REVISION}"><img src="./img/restore.png" height="16" width="16" alt="{LANG_RESTORE}" title="{LANG_RESTORE}"/></a>
 								</td>
 							</tr>
 						</PAGE_HISTORY>

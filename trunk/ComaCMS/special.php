@@ -107,7 +107,7 @@
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "files
 					WHERE $condition
-					LIMIT 0,1";
+					LIMIT 1";
 				$imageResult = $sqlConnection->SqlQuery($sql);
 				if($imageData = mysql_fetch_object($imageResult)) {
 					$text = "<img src=\"" . generateUrl($imageData->file_path) ."\" class=\"pureimage\"/>";
@@ -150,7 +150,11 @@
 			// Generate UI menu
 			$menuArray = array();
 			$menuArray[] = array($translation->GetTranslation('usercontrol'), 'usercontrol');
-			$menuArray[] = array($translation->GetTranslation('back_to_homepage'), 'back_to_homepage');
+			$menuArray[] = array($translation->GetTranslation('back_to_homepage'), 'url:index.php');
+			if($user->IsAuthor)
+				$menuArray[] = array($translation->GetTranslation('pagestructure'), 'pagestructure');
+			if($user->IsAdmin)
+				$menuArray[] = array($translation->GetTranslation('administration'), 'url:admin.php');	
 			$menuArray[] = array($translation->GetTranslation('logout'), 'logout');
 			
 			// Switch between the subpages of the userinterface
@@ -158,9 +162,21 @@
 			$action = GetPostOrGet('action');
 			switch ($subpage) {
 				
-				case 'back_to_homepage':
-					header('Location: index.php');
-					die();
+				case 'pagestructure':
+					if($user->IsAuthor) {
+					//$title = $translation->GetTranslation('pagestructure');
+					include_once(__ROOT__ . '/classes/admin/admin_pagestructure.php');
+			
+					$title = $translation->GetTranslation('pagestructure');
+					$adminClass = new Admin_PageStructure($sqlConnection, $translation, $config, $user, $lib, $output);
+					$adminClass->FormUrl = 'special.php?page=userinterface';
+ 					$adminClass->LinkUrl = 'special.php?page=userinterface&amp;sub';
+ 					$adminClass->FormPage = 'subpage';
+					$text = $adminClass->GetPage($action);
+						//$adminClass = new User_UserControl($sqlConnection, $translation, $config, $user, $lib, $output);
+					//	$text = 'hallo';//$adminClass->GetPage($action);
+							break;
+					}
 				
 				case 'logout':
 					// call the logout and redirect to the index 
@@ -259,11 +275,14 @@
 				$menu = array();
 	
 				foreach($menuArray as $part) {
-					if($page == $part[1])
+					if($page == $part[1] || $subpage == $part[1])
 						$linkStyle = ' class="actual"';
 					else
 						$linkStyle = '';
-					$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'special.php?page=userinterface&amp;subpage=' . $part[1], 'CSS_ID' => '', 'LINK_STYLE' => $linkStyle);
+					if(strpos($part[1],'url:') === 0)
+						$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => substr($part[1], 4), 'CSS_ID' => '', 'LINK_STYLE' => $linkStyle);
+					else
+						$menu[] = array('LINK_TEXT' => $part[0], 'LINK' => 'special.php?page=userinterface&amp;subpage=' . $part[1], 'CSS_ID' => '', 'LINK_STYLE' => $linkStyle);
 				}
 				$output->SetReplacement('MENU_DEFAULT', $menu);
 			}

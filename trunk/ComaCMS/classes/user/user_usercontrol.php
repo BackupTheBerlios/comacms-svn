@@ -94,7 +94,7 @@
 			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'registerdate',
 									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('registered_since'),
 									'PROFILE_FIELD_VALUE' => date($dateFormat, $user->user_registerdate),
-									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('you_are_registred_since'));
+									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('you_are_registered_since'));
 			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'admin',
 									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('is_admin'),
 									'PROFILE_FIELD_VALUE' => (($this->_User->IsAdmin) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
@@ -102,7 +102,7 @@
 			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'author',
 									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('is_author'),
 									'PROFILE_FIELD_VALUE' => (($this->_User->IsAuthor) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
-									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('if_you_are_an_author_you_can_edit_the_content_of_the_page'));
+									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'));
 			
 			// Get custom fields
 			$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title, field.custom_fields_required

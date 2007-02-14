@@ -187,7 +187,7 @@
 									</select_entrys>
 									{select_entrys_code}
 								</select>' : (($Type == 'checkbox') ? ' {value} />' : ' value="{value}" />'))),
-							'type' => (($Type == 'password') ? 'password' : (($Type == 'checkbox') ? 'checkbox' : 'text')),
+							'type' => (($Type == 'password') ? 'password' : (($Type == 'checkbox') ? 'checkbox' : (($Type == 'radio') ? 'radio' : 'text'))),
 							'translation' => $NameTranslation,
 							'information' => $Information,
 							'errorinformation' => array(),

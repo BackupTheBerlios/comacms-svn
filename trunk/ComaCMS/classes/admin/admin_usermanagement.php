@@ -308,15 +308,15 @@
 			$formMaker->AddInput('new_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'));
 			
 			// Get custom fields
-				$sql = "SELECT custom_fields_information, custom_fields_name, custom_fields_title, custom_fields_type, custom_fields_required
+			$sql = "SELECT custom_fields_information, custom_fields_name, custom_fields_title, custom_fields_type, custom_fields_required
 					FROM " . DB_PREFIX . "custom_fields";
-				$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
+			$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
+			
+			while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
 				
-				while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
-					
-					// Add input to the formmaker class
-					$formMaker->AddInput('new_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information . (($customFieldsData->custom_fields_required == 1) ? ' ' . $this->_Translation->GetTranslation('(required)') : ''));
-				}
+				// Add input to the formmaker class
+				$formMaker->AddInput('new_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information . (($customFieldsData->custom_fields_required == 1) ? ' ' . $this->_Translation->GetTranslation('(required)') : ''));
+			}
 			
 			// Generate the template
 			$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, false);

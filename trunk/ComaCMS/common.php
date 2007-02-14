@@ -71,26 +71,37 @@
 	if(substr($page, 1,1) == ':') { 	
 		$sign = substr($page, 0, 1);
 		switch($sign) {
+			
 			// "a" => admin(interface)
 			case 'a': 
 				header('Location: admin.php?page=' . substr($page, 2));
 				die();
+			
 			// s => special(page)
 			case 's':
 				header('Location: special.php?page=' . substr($page, 2));
  				die();
- 			// s => local
+ 			
+ 			// l => local
  			case 'l':
- 				header('Location: index.php?page=' . substr($extern_page, 2));
+ 				header('Location: index.php?page=' . substr($page, 2));
+ 				die();
+ 			
+ 			// d => download
+ 			case 'd':
+ 				header('Location: download.php?file_id=' . substr($page, 2));
  				die();
 		}
 	}
  	
- 	$pagePrefix = 'l:';
 	if(substr($_SERVER['PHP_SELF'], -9) == 'admin.php')
 		$pagePrefix = 'a:';
 	else if(substr($_SERVER['PHP_SELF'], -11) == 'special.php')
 		$pagePrefix = 's:';
+	else if(substr($_SERVER['PHP_SELF'], -12) == 'download.php') {
+		$pagePrefix = 'd:';
+		$page = GetPostOrGet('file_id');
+	}
 	else
 		$pagePrefix = '';
 	

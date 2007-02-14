@@ -135,7 +135,7 @@
 								<strong>{PROFILE_FIELD_TRANSLATION}:</strong>
 								<span class="info">{PROFILE_FIELD_INFORMATION}</span>
 							</label>
-							<span class="edit">{PROFILE_FIELD_VALUE}</span>
+							<span class="edit">{PROFILE_FIELD_VALUE}&nbsp;</span>
 						</div>
 						</USER_PROFILE>
 						<div class="row">

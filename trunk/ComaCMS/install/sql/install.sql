@@ -82,7 +82,7 @@
 			menu_entries_id INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 			menu_entries_link VARCHAR( 255 ) NOT NULL DEFAULT '',
 			menu_entries_title VARCHAR( 30 ) NOT NULL DEFAULT '',
-			menu_entries_new ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'no',
+			menu_entries_type VARCHAR ( 50 ) NOT NULL DEFAULT '',
 			menu_entries_css_id VARCHAR( 50 ) NOT NULL DEFAULT '',
 			menu_entries_orderid INT( 10 ) UNSIGNED NULL,
 			menu_entries_menuid INT( 10 ) NOT NULL DEFAULT '1',
@@ -221,6 +221,7 @@
 			custom_fields_values_id int(10) NOT NULL AUTO_INCREMENT,
 			custom_fields_values_fieldid int(10) NOT NULL,
 			custom_fields_values_userid int(10) NOT NULL,
+			custom_fields_values_value text NOT NULL,
 			PRIMARY KEY (custom_fields_values_id)
 		);
 		DROP TABLE IF EXISTS {DB_PREFIX}auth;
@@ -252,5 +253,5 @@
 		VALUES ('default_page', '1');
 		INSERT INTO {DB_PREFIX}menu (menu_name, menu_title)
 		VALUES ('DEFAULT', 'DEFAULT');
-		INSERT INTO {DB_PREFIX}menu_entries (menu_entries_link, menu_entries_title, menu_entries_new, menu_entries_orderid, menu_entries_menuid, menu_entries_page_id)
-		VALUES ('l:home', 'Home', 'no', 0, 1, 1);
+		INSERT INTO {DB_PREFIX}menu_entries (menu_entries_link, menu_entries_title, menu_entries_type, menu_entries_orderid, menu_entries_menuid, menu_entries_page_id)
+		VALUES ('l:home', 'Home', 'intern_link', 0, 1, 1);

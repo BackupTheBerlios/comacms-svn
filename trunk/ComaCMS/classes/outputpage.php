@@ -126,6 +126,8 @@
 						$link = 'special.php?page=' . substr($link, 2);
 					if(substr($link, 0, 2) == 'a:')
 						$link = 'admin.php?page=' . substr($link, 2);
+					if(substr($link, 0, 2) == 'd:')
+						$link = 'download.php?file_id=' . substr($link, 2);
 						
 				$menu[] = array('LINK_TEXT' => $menuItem->menu_entries_title,
 								'LINK' => $link,

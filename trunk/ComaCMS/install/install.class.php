@@ -262,6 +262,22 @@
 				$ok = false;
 			}
 			
+			// check wether the thumbnails folder is writeable
+			if (is_writable('../data/thumbnails/'))
+				$requirements[] = array('requirement' => sprintf($this->_Translation->GetTranslation('is_the_directory_%directory%_writeable'), '/data/thumbnails/'), 'answer' => $this->_Translation->GetTranslation('yes'));
+			else {
+				$requirements[] = array('requirement' => sprintf($this->_Translation->GetTranslation('is_the_directory_%directory%_writeable'), '/data/thumbnails/'), 'answer' => $this->_Translation->GetTranslation('no'));
+				$ok = false;
+			}
+			
+			// check wether the tmp folder is writeable
+			if (is_writable('../data/tmp/'))
+				$requirements[] = array('requirement' => sprintf($this->_Translation->GetTranslation('is_the_directory_%directory%_writeable'), '/data/tmp/'), 'answer' => $this->_Translation->GetTranslation('yes'));
+			else {
+				$requirements[] = array('requirement' => sprintf($this->_Translation->GetTranslation('is_the_directory_%directory%_writeable'), '/data/tmp/'), 'answer' => $this->_Translation->GetTranslation('no'));
+				$ok = false;
+			}
+			
 			// check wether the uploadfolder is writeable
 			if(is_writable('../data/upload/'))
 				$requirements[] = array('requirement' => sprintf($this->_Translation->GetTranslation('is_the_directory_%directory%_writeable'), '/data/upload/'), 'answer' => $this->_Translation->GetTranslation('yes')); 

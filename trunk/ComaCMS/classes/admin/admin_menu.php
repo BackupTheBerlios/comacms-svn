@@ -306,15 +306,15 @@
 	 		// Get external parameters
 	 		$MenuID = GetPostOrGet('menu_id');
 	 		$MenuEntryID = GetPostOrGet('menu_entry_id');
+	 		$Checked = '';
 	 		
 	 		// Get information about the menuentry from the database
 	 		$sql = "SELECT menu_entries_type
 	 				FROM " . DB_PREFIX . "menu_entries
 	 				WHERE menu_entries_id='$MenuEntryID'";
 	 		$menuEntryResult = $this->_SqlConnection->SqlQuery($sql);
-	 		$menuEntry = mysql_fetch_object($menuEntryResult);
-	 		
-	 		$Checked = $menuEntry->menu_entries_type;
+	 		if($menuEntry = mysql_fetch_object($menuEntryResult))
+	 			$Checked = $menuEntry->menu_entries_type;
 	 		
 	 		// Check function vars
 	 		if ($Checked != 'intern_link' && $Checked != 'extern_link' && $Checked != 'download')

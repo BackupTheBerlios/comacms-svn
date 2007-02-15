@@ -447,5 +447,16 @@ Die Administratoren';
 	$langString['install_new_module'] = 'Neues Modul installieren';
 	$langString['the_module_isnt_removeable'] = 'Das Modul l&auml;sst sich nicht entfernen.';
 	$langString['select_here_a_comacms_module_setup_file_(*.zip)'] = 'Bitte hier eine ComaCMS-Modul-Setupdatei hochladen (*.zip).';
+	$langString['create_new_menu'] = 'Neues Men&uuml; erstellen';
+	$langString['intern_link'] = 'Interner Link';
+	$langString['extern_link'] = 'Externer Link';
+	$langString['choose_this_option_to_link_to_an_existing_page_in_the_system'] = 'W&auml;hlen sie diese Option um zu einer Seite im System zu linken';
+	$langString['choose_this_option_to_link_to_an_extern_url'] = 'W&auml;hlen sie diese Option um zu einer externen URL zu linken';
+	$langString['choose_this_option_to_make_it_possible_to_download_a_file_from_the_system'] = 'W&auml;hlen sie diese Option um eine Datei aus dem System laden zu können';
+	$langString['choose_type'] = 'W&auml;hlen sie einen Typ aus';
+	$langString['type_here_the_url_of_the_page_to_link_to'] = 'Geben sie hier die URL zu der externen Seite ein';
+	$langString['choose_here_the_download_you_want_to_link_to'] = 'W&auml;hlen sie hier die Datei zu der sie verlinken wollen';
+	$langString['preferred_language'] = 'Bevorzugte Sprache';
+	$langString['this_is_your_preferred_language_of_the_installed_ones'] = 'Dieses ist ihre bevorzugte Sprache von den Installierten';
+	$langString['this_is_the_preferred_language_of_the_user'] = 'Dies ist die bevorzugte Sprache des Benutzers';
 ?>
-

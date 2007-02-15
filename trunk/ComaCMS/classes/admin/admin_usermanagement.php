@@ -174,6 +174,7 @@
 									'USER_ACTIVATION_TITLE' => (($user->user_activated == 1) ? sprintf($this->_Translation->GetTranslation('deactivate_user_%user%'), $user->user_showname) : sprintf($this->_Translation->GetTranslation('activate_user_%user%'), $user->user_showname)),
 									'USER_ADMIN' => (($user->user_admin == 1) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
 									'USER_AUTHOR' => (($user->user_author == 1) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
+									'USER_PREFERRED_LANGUAGE' => $this->_Translation->GetTranslation($user->user_preferred_language),
 									'USER_ACTIONS' => array(
 										0 => array('ACTION' => 'edit_user', 'ACTION_IMG' => './img/edit.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('edit')),
 										1 => array('ACTION' => 'delete_user', 'ACTION_IMG' => './img/del.png', 'ACTION_TITLE' => $this->_Translation->GetTranslation('delete'))
@@ -220,6 +221,7 @@
 			$this->_ComaLate->SetReplacement('LANG_ADMIN', $this->_Translation->GetTranslation('admin'));
 			$this->_ComaLate->SetReplacement('LANG_AUTHOR', $this->_Translation->GetTranslation('author'));
 			$this->_ComaLate->SetReplacement('LANG_ACTIONS', $this->_Translation->GetTranslation('actions'));
+			$this->_ComaLate->SetReplacement('LANG_PREFERRED_LANGUAGE', $this->_Translation->GetTranslation('preferred_language'));
 			$this->_ComaLate->SetReplacement('LANG_CREATE_NEW_USER', $this->_Translation->GetTranslation('create_new_user'));
 			
 			$this->_ComaLate->SetReplacement('LANG_CUSTOM_FIELDS', $this->_Translation->GetTranslation('custom_fields'));
@@ -243,6 +245,7 @@
 						<th>{LANG_ACTIVATED}</th>
 						<th>{LANG_ADMIN}</th>
 						<th>{LANG_AUTHOR}</th>
+						<th>{LANG_PREFERRED_LANGUAGE}</th>
 						<th>{LANG_ACTIONS}</th>
 					</tr>
 				<USERS:loop>
@@ -253,6 +256,7 @@
 						<td><a href="admin.php?page=users&amp;action={USER_TOGGLE_ACTIVATE}&amp;user_id={USER_ID}"><img src="{USER_ACTIVATION_IMG}" height="16" width="16" alt="{USER_ACTIVATION_TITLE}" title="{USER_ACTIVATION_TITLE}" />&nbsp;</a>({USER_ACTIVATED})</td>
 						<td>{USER_ADMIN}</td>
 						<td>{USER_AUTHOR}</td>
+						<td>{USER_PREFERRED_LANGUAGE}</td>
 						<td><USER_ACTIONS:loop><a href="admin.php?page=users&amp;action={ACTION}&amp;user_id={USER_ID}"><img src="{ACTION_IMG}" height="16" width="16" alt="{ACTION_TITLE}" title="{ACTION_TITLE}" /></a>&nbsp;</USER_ACTIONS></td>
 					</tr>
 				</USERS>
@@ -306,6 +310,23 @@
 			$formMaker->AddInput('new_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'));
 			$formMaker->AddInput('new_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'));
 			$formMaker->AddInput('new_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'));
+			$formMaker->AddInput('new_user', 'user_preferred_language', 'select', $this->_Translation->GetTranslation('preferred_language'), $this->_Translation->GetTranslation('this_is_your_preferred_language_of_the_installed_ones'));
+			
+			// Get all languages installed in the system
+			$languageFolder = dir(__ROOT__ . "/lang/");
+			while($file = $languageFolder->read()) {
+				
+				// check if the found file is really a language file
+				if($file != "." && $file != ".." && (strpos($file, 'lang_') === 0) && substr($file,-4) == '.php') {
+					
+					// extract the pure language name
+					$file = str_replace('lang_', '', $file);
+					$file = str_replace('.php', '', $file);
+					
+					// Add the found language to the formmaker class
+					$formMaker->AddSelectEntry('new_user', 'user_preferred_language', false, $file, $this->_Translation->GetTranslation($file));
+				}
+			}
 			
 			// Get custom fields
 			$sql = "SELECT custom_fields_information, custom_fields_name, custom_fields_title, custom_fields_type, custom_fields_required
@@ -338,6 +359,7 @@
 			$UserPasswordRepetition = GetPostOrGet('user_password_repetition');
 			$UserAdmin = ((GetPostOrGet('user_admin') == 'on') ? 1 : 0);
 			$UserAuthor = ((GetPostOrGet('user_author') == 'on') ? 1 : 0);
+			$UserPreferredLanguage = GetPostOrGet('user_preferred_language');
 			
 			// Initialize the formmaker class
 			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
@@ -367,7 +389,29 @@
 			
 			$formMaker->AddInput('add_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'), (($UserAdmin == 1) ? true : false));
 			$formMaker->AddInput('add_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($UserAuthor == 1) ? true : false));
-			
+			$formMaker->AddInput('add_user', 'user_preferred_language', 'select', $this->_Translation->GetTranslation('preferred_language'), $this->_Translation->GetTranslation('this_is_your_preferred_language_of_the_installed_ones'));
+				
+				// Get all languages installed in the system
+				$languageFolder = dir(__ROOT__ . "/lang/");
+				while($file = $languageFolder->read()) {
+					
+					// check if the found file is really a language file
+					if($file != "." && $file != ".." && (strpos($file, 'lang_') === 0) && substr($file,-4) == '.php') {
+						
+						// extract the pure language name
+						$file = str_replace('lang_', '', $file);
+						$file = str_replace('.php', '', $file);
+						
+						// Check wether the language is the actual one of the user
+						if($UserPreferredLanguage == $file)
+							$selected = true;
+						else
+							$selected = false;
+						
+						// Add the found language to the formmaker class
+						$formMaker->AddSelectEntry('add_user', 'user_preferred_language', $selected, $file, $this->_Translation->GetTranslation($file));
+					}
+				}
 			// Get custom fields
 			$sql = "SELECT custom_fields_information, custom_fields_name, custom_fields_title, custom_fields_type, custom_fields_required
 				FROM " . DB_PREFIX . "custom_fields";
@@ -423,8 +467,8 @@
 				
 				// Add new user to the database
 				$sql = "INSERT INTO " . DB_PREFIX . "users
-						(user_showname, user_name, user_email, user_password, user_registerdate, user_admin, user_author)
-						VALUES ('$UserShowname', '$UserName', '$UserEmail', '$UserPassword', '" . mktime() . "', '$UserAdmin', '$UserAuthor')";
+						(user_showname, user_name, user_email, user_password, user_registerdate, user_admin, user_author, user_preferred_language)
+						VALUES ('$UserShowname', '$UserName', '$UserEmail', '$UserPassword', '" . mktime() . "', '$UserAdmin', '$UserAuthor', '$UserPreferredLanguage')";
 				$this->_SqlConnection->SqlQuery($sql);
 				
 				// Get the id of the new user for the custom fields
@@ -502,6 +546,29 @@
 					$formMaker->AddInput('edit_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'), (($user->user_admin == 1) ? true : false));
 					$formMaker->AddInput('edit_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($user->user_author == 1) ? true : false));
 				}
+				$formMaker->AddInput('edit_user', 'user_preferred_language', 'select', $this->_Translation->GetTranslation('preferred_language'), $this->_Translation->GetTranslation('this_is_your_preferred_language_of_the_installed_ones'));
+			
+				// Get all languages installed in the system
+				$languageFolder = dir(__ROOT__ . "/lang/");
+				while($file = $languageFolder->read()) {
+					
+					// check if the found file is really a language file
+					if($file != "." && $file != ".." && (strpos($file, 'lang_') === 0) && substr($file,-4) == '.php') {
+						
+						// extract the pure language name
+						$file = str_replace('lang_', '', $file);
+						$file = str_replace('.php', '', $file);
+						
+						// Check wether the language is the actual one of the user
+						if($user->user_preferred_language == $file)
+							$selected = true;
+						else
+							$selected = false;
+						
+						// Add the found language to the formmaker class
+						$formMaker->AddSelectEntry('edit_user', 'user_preferred_language', $selected, $file, $this->_Translation->GetTranslation($file));
+					}
+				}
 				
 				// Get custom fields
 				$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title, field.custom_fields_type, field.custom_fields_required
@@ -554,51 +621,139 @@
 				$UserPasswordRepetition = GetPostOrGet('user_password_repetition');
 				$UserAdmin = ((GetPostOrGet('user_admin') == 'on') ? 1 : 0);
 				$UserAuthor = ((GetPostOrGet('user_author') == 'on') ? 1 : 0);
+				$UserPreferredLanguage = GetPostOrGet('user_preferred_language');
 				
-				// Check wether anything was changed in the userdetailes
-				if (($UserShowname != $user->user_showname) || ($UserName != $user->user_name) || ($UserEmail != $user->user_email) || (!empty($UserPassword)) || (!empty($UserPasswordRepetition)) || ($UserAdmin != $user->user_admin) || ($UserAuthor != $user->user_author)) {
+				// Initialize the formmaker class
+				$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
+				$formMaker->AddForm('check_user', 'admin.php', $this->_Translation->GetTranslation('save'), $this->_Translation->GetTranslation('user'), 'post');
+				
+				$formMaker->AddHiddenInput('check_user', 'page', 'users');
+				$formMaker->AddHiddenInput('check_user', 'action', 'check_user');
+				$formMaker->AddHiddenInput('check_user', 'user_id', $UserID);
+				
+				$formMaker->AddInput('check_user', 'user_showname', 'text', $this->_Translation->GetTranslation('showname'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'), $UserShowname);
+				$formMaker->AddCheck('check_user', 'user_showname', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
+				if ($user->user_showname != $UserShowname)
+					$formMaker->AddCheck('check_user', 'user_showname', 'already_assigned', $this->_Translation->GetTranslation('the_name_is_already_assigned'), '', 'users', 'user_showname');
+				
+				$formMaker->AddInput('check_user', 'user_name', 'text', $this->_Translation->GetTranslation('nickname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'), $UserName);
+				$formMaker->AddCheck('check_user', 'user_name', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
+				if ($user->user_name != $UserName)
+					$formMaker->AddCheck('check_user', 'user_name', 'already_assigned', $this->_Translation->GetTranslation('the_nickname_is_already_assigned'), '', 'users', 'user_name');
+				
+				$formMaker->AddInput('check_user', 'user_email', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system'), $UserEmail);
+				$formMaker->AddCheck('check_user', 'user_email', 'empty', $this->_Translation->GetTranslation('the_email_address_must_be_indicated'));
+				$formMaker->AddCheck('check_user', 'user_email', 'not_email', $this->_Translation->GetTranslation('this_is_not_a_valid_email_address'));
+				if ($user->user_email != $UserEmail)
+					$formMaker->AddCheck('check_user', 'user_email', 'already_assigned', $this->_Translation->GetTranslation('the_email_is_already_assigned_to_another_user'), '', 'users', 'user_email');
+				
+				$formMaker->AddInput('check_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'), ((!empty($UserPassword)) ? $UserPassword : ''));
+				$formMaker->AddInput('check_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'), ((!empty($UserPasswordRepetition)) ? $UserPasswordRepetition : ''));
+				
+				if (!empty($UserPassword) || !empty($UserPasswordRepetition)) {
+					$formMaker->AddCheck('check_user', 'user_password', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
+					$formMaker->AddCheck('check_user', 'user_password', 'not_same_password_value_as', $this->_Translation->GetTranslation('the_password_and_its_repetition_are_unequal'), 'user_password_repetition');
 					
-					// Initialize the formmaker class
-					$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
-					$formMaker->AddForm('check_user', 'admin.php', $this->_Translation->GetTranslation('save'), $this->_Translation->GetTranslation('user'), 'post');
+					$formMaker->AddCheck('check_user', 'user_password_repetition', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
+				}
+				
+				if ($this->_User->ID != $UserID) {
+					$formMaker->AddInput('check_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'), (($UserAdmin == 1) ? true : false));
+					$formMaker->AddInput('check_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($UserAuthor == 1) ? true : false));
+				}
+				
+				$formMaker->AddInput('check_user', 'user_preferred_language', 'select', $this->_Translation->GetTranslation('preferred_language'), $this->_Translation->GetTranslation('this_is_your_preferred_language_of_the_installed_ones'));
+				
+				// Get all languages installed in the system
+				$languageFolder = dir(__ROOT__ . "/lang/");
+				while($file = $languageFolder->read()) {
 					
-					$formMaker->AddHiddenInput('check_user', 'page', 'users');
-					$formMaker->AddHiddenInput('check_user', 'action', 'check_user');
-					$formMaker->AddHiddenInput('check_user', 'user_id', $UserID);
-					
-					$formMaker->AddInput('check_user', 'user_showname', 'text', $this->_Translation->GetTranslation('showname'), $this->_Translation->GetTranslation('the_name_that_is_displayed_if_the_user_writes_a_news_for_example'), $UserShowname);
-					$formMaker->AddCheck('check_user', 'user_showname', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
-					if ($user->user_showname != $UserShowname)
-						$formMaker->AddCheck('check_user', 'user_showname', 'already_assigned', $this->_Translation->GetTranslation('the_name_is_already_assigned'), '', 'users', 'user_showname');
-					
-					$formMaker->AddInput('check_user', 'user_name', 'text', $this->_Translation->GetTranslation('nickname'), $this->_Translation->GetTranslation('with_this_nick_the_user_can_login_so_he_must_not_fill_in_his_long_name'), $UserName);
-					$formMaker->AddCheck('check_user', 'user_name', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));
-					if ($user->user_name != $UserName)
-						$formMaker->AddCheck('check_user', 'user_name', 'already_assigned', $this->_Translation->GetTranslation('the_nickname_is_already_assigned'), '', 'users', 'user_name');
-					
-					$formMaker->AddInput('check_user', 'user_email', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system'), $UserEmail);
-					$formMaker->AddCheck('check_user', 'user_email', 'empty', $this->_Translation->GetTranslation('the_email_address_must_be_indicated'));
-					$formMaker->AddCheck('check_user', 'user_email', 'not_email', $this->_Translation->GetTranslation('this_is_not_a_valid_email_address'));
-					if ($user->user_email != $UserEmail)
-						$formMaker->AddCheck('check_user', 'user_email', 'already_assigned', $this->_Translation->GetTranslation('the_email_is_already_assigned_to_another_user'), '', 'users', 'user_email');
-					
-					$formMaker->AddInput('check_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'), ((!empty($UserPassword)) ? $UserPassword : ''));
-					$formMaker->AddInput('check_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'), ((!empty($UserPasswordRepetition)) ? $UserPasswordRepetition : ''));
-					
-					if (!empty($UserPassword) || !empty($UserPasswordRepetition)) {
-						$formMaker->AddCheck('check_user', 'user_password', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
-						$formMaker->AddCheck('check_user', 'user_password', 'not_same_password_value_as', $this->_Translation->GetTranslation('the_password_and_its_repetition_are_unequal'), 'user_password_repetition');
+					// check if the found file is really a language file
+					if($file != "." && $file != ".." && (strpos($file, 'lang_') === 0) && substr($file,-4) == '.php') {
 						
-						$formMaker->AddCheck('check_user', 'user_password_repetition', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
+						// extract the pure language name
+						$file = str_replace('lang_', '', $file);
+						$file = str_replace('.php', '', $file);
+						
+						// Check wether the language is the actual one of the user
+						if($UserPreferredLanguage == $file)
+							$selected = true;
+						else
+							$selected = false;
+						
+						// Add the found language to the formmaker class
+						$formMaker->AddSelectEntry('check_user', 'user_preferred_language', $selected, $file, $this->_Translation->GetTranslation($file));
+					}
+				}
+				
+				// Get custom fields
+				$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title, field.custom_fields_type, field.custom_fields_required
+					FROM (" . DB_PREFIX . "custom_fields field
+					LEFT JOIN " . DB_PREFIX . "custom_fields_values value
+					ON field.custom_fields_id = value.custom_fields_values_fieldid)
+					WHERE value.custom_fields_values_userid='{$UserID}'
+					OR value.custom_fields_values_userid IS NULL";
+				$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
+				
+				while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
+					
+					// Get external value for that field
+					${$customFieldsData->custom_fields_name} = GetPostOrGet($customFieldsData->custom_fields_name);
+					
+					// Add input to the formmaker class
+					$formMaker->AddInput('check_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information . (($customFieldsData->custom_fields_required == 1) ? ' ' . $this->_Translation->GetTranslation('(required)') : ''), ${$customFieldsData->custom_fields_name});
+					
+					// Get the type of the field
+					switch ($customFieldsData->custom_fields_type) {
+							
+						case 'EMail':
+							$type = 'not_email';
+							$text =$this->_Translation->GetTranslation('this_is_not_a_valid_email_address');
+							break;
+						
+						case 'ICQ':
+							$type = 'not_icq';
+							$text = $this->_Translation->GetTranslation('this_is_not_a_valid_icq_number');
+							break;
+						
+						default:
+							$type = '';
+							$text = '';
+							break;
 					}
 					
-					if ($this->_User->ID != $UserID) {
-						$formMaker->AddInput('check_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'), (($UserAdmin == 1) ? true : false));
-						$formMaker->AddInput('check_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($UserAuthor == 1) ? true : false));
+					// Add necessary checks
+					if ($customFieldsData->custom_fields_required == 1) {
+						
+						// Check wether the field has any value
+						$formMaker->AddCheck('check_user', $customFieldsData->custom_fields_name, 'empty', sprintf($this->_Translation->GetTranslation('you_have_to_give_a_value_for_the_field_%field%!'), $customFieldsData->custom_fields_title));
+						
+						// Check wether the field has the necessary value
+						if (!empty($type) && !empty($text))
+							$formMaker->AddCheck('check_user', $customFieldsData->custom_fields_name, $type, $text);
 					}
+					else {
+						if (!empty(${$customFieldsData->custom_fields_name}))
+							$formMaker->AddCheck('check_user', $customFieldsData->custom_fields_name, $type, $text);
+					}
+				}
+				
+				if ($formMaker->CheckInputs('check_user', true)) {
+					
+					$user_password = ((!empty($UserPassword)) ? ", user_password='" . md5($UserPassword) . "'": '');
+					// Update the user in the database
+					$sql = "UPDATE " . DB_PREFIX . "users
+							SET user_showname='$UserShowname',
+								user_name='$UserName',
+								user_email='$UserEmail',
+								user_preferred_language='$UserPreferredLanguage',
+								" . (($this->_User->ID != $UserID) ? "user_admin='$UserAdmin'," : '') . "
+								user_author='$UserAuthor'$user_password
+							WHERE user_id=$UserID";
+					$this->_SqlConnection->SqlQuery($sql);
 					
 					// Get custom fields
-					$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title, field.custom_fields_type, field.custom_fields_required
+					$sql = "SELECT value.custom_fields_values_value, field.custom_fields_name, value.custom_fields_values_id, field.custom_fields_id, value.custom_fields_values_userid
 						FROM (" . DB_PREFIX . "custom_fields field
 						LEFT JOIN " . DB_PREFIX . "custom_fields_values value
 						ON field.custom_fields_id = value.custom_fields_values_fieldid)
@@ -611,100 +766,32 @@
 						// Get external value for that field
 						${$customFieldsData->custom_fields_name} = GetPostOrGet($customFieldsData->custom_fields_name);
 						
-						// Add input to the formmaker class
-						$formMaker->AddInput('check_user', $customFieldsData->custom_fields_name, 'text', $customFieldsData->custom_fields_title, $customFieldsData->custom_fields_information . (($customFieldsData->custom_fields_required == 1) ? ' ' . $this->_Translation->GetTranslation('(required)') : ''), ${$customFieldsData->custom_fields_name});
-						
-						// Get the type of the field
-						switch ($customFieldsData->custom_fields_type) {
-								
-							case 'EMail':
-								$type = 'not_email';
-								$text =$this->_Translation->GetTranslation('this_is_not_a_valid_email_address');
-								break;
+						if ($customFieldsData->custom_fields_values_userid != '') {
 							
-							case 'ICQ':
-								$type = 'not_icq';
-								$text = $this->_Translation->GetTranslation('this_is_not_a_valid_icq_number');
-								break;
-							
-							default:
-								$type = '';
-								$text = '';
-								break;
-						}
-						
-						// Add necessary checks
-						if ($customFieldsData->custom_fields_required == 1) {
-							
-							// Check wether the field has any value
-							$formMaker->AddCheck('check_user', $customFieldsData->custom_fields_name, 'empty', sprintf($this->_Translation->GetTranslation('you_have_to_give_a_value_for_the_field_%field%!'), $customFieldsData->custom_fields_title));
-							
-							// Check wether the field has the necessary value
-							if (!empty($type) && !empty($text))
-								$formMaker->AddCheck('check_user', $customFieldsData->custom_fields_name, $type, $text);
+							// Update existing entry
+							$sql = "UPDATE " . DB_PREFIX . "custom_fields_values
+									SET custom_fields_values_value='" . ${$customFieldsData->custom_fields_name} . "'
+									WHERE custom_fields_values_id='$customFieldsData->custom_fields_values_id'";
+							$this->_SqlConnection->SqlQuery($sql);
 						}
 						else {
-							if (!empty(${$customFieldsData->custom_fields_name}))
-								$formMaker->AddCheck('check_user', $customFieldsData->custom_fields_name, $type, $text);
+							
+							// Insert a new entry into the database
+							$sql = "INSERT INTO " . DB_PREFIX . "custom_fields_values
+									(custom_fields_values_userid, custom_fields_values_fieldid, custom_fields_values_value)
+									VALUES ('{$UserID}', '{$customFieldsData->custom_fields_id}', '" . ${$customFieldsData->custom_fields_name} . "')";
+							$this->_SqlConnection->SqlQuery($sql);
 						}
 					}
-					
-					if ($formMaker->CheckInputs('check_user', true)) {
-						
-						$user_password = ((!empty($UserPassword)) ? ", user_password='" . md5($UserPassword) . "'": '');
-						// Update the user in the database
-						$sql = "UPDATE " . DB_PREFIX . "users
-								SET user_showname='$UserShowname', user_name='$UserName', user_email='$UserEmail', " . (($this->_User->ID != $UserID) ? "user_admin='$UserAdmin'," : '') . "user_author='$UserAuthor'$user_password
-								WHERE user_id=$UserID";
-						$this->_SqlConnection->SqlQuery($sql);
-						
-						// Get custom fields
-						$sql = "SELECT value.custom_fields_values_value, field.custom_fields_name, value.custom_fields_values_id, field.custom_fields_id, value.custom_fields_values_userid
-							FROM (" . DB_PREFIX . "custom_fields field
-							LEFT JOIN " . DB_PREFIX . "custom_fields_values value
-							ON field.custom_fields_id = value.custom_fields_values_fieldid)
-							WHERE value.custom_fields_values_userid='{$UserID}'
-							OR value.custom_fields_values_userid IS NULL";
-						$customFieldsDataResult = $this->_SqlConnection->SqlQuery($sql);
-						
-						while ($customFieldsData = mysql_fetch_object($customFieldsDataResult)) {
-							
-							// Get external value for that field
-							${$customFieldsData->custom_fields_name} = GetPostOrGet($customFieldsData->custom_fields_name);
-							
-							if ($customFieldsData->custom_fields_values_userid != '') {
-								
-								// Update existing entry
-								$sql = "UPDATE " . DB_PREFIX . "custom_fields_values
-										SET custom_fields_values_value='" . ${$customFieldsData->custom_fields_name} . "'
-										WHERE custom_fields_values_id='$customFieldsData->custom_fields_values_id'";
-								$this->_SqlConnection->SqlQuery($sql);
-							}
-							else {
-								
-								// Insert a new entry into the database
-								$sql = "INSERT INTO " . DB_PREFIX . "custom_fields_values
-										(custom_fields_values_userid, custom_fields_values_fieldid, custom_fields_values_value)
-										VALUES ('{$UserID}', '{$customFieldsData->custom_fields_id}', '" . ${$customFieldsData->custom_fields_name} . "')";
-								$this->_SqlConnection->SqlQuery($sql);
-							}
-						}
-						
-						// Send the user the HomePage of the usermanager
-						$template = $this->_HomePage();
-						return $template;
-					}
-					else {
-						
-						// Generate the template
-						$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, true);
-						return $template;
-					}
-				}
-				else {
 					
 					// Send the user the HomePage of the usermanager
 					$template = $this->_HomePage();
+					return $template;
+				}
+				else {
+					
+					// Generate the template
+					$template = "\r\n\t\t\t\t" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, true);
 					return $template;
 				}
 			}

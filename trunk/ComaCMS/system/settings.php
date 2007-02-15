@@ -26,8 +26,9 @@
 	//Preferences::SetSetting('advanced_menueditor', 'Use advanced Menueditor', 'Do you want to use an advanced Menuedior?', 'Menueditor', 0, 'bool');
 	//Preferences::SetSetting("show_inlinemenu_entries", "Zusatzmen&uuml; anzeigen", "Sollen Zusatzmen&uuml;einträge im Menüeditor angezeigt werden?", "Menueditor", "0", "bool");
 	Preferences::SetSetting('administrator_emailaddress', 'Administrator Emailadresse', 'Die Emailadresse des Administrators wird für alle Emails des Systems als Absender benutzt.', 'Email', 'administrator@comacms');
-	Preferences::SetSetting('validate_email', 'Email &uuml;berpr&uuml;fen', 'Soll die Email eines neuen Benutzers durch eine Kontrollmail &uuml;berpr&uuml;ft werden, bevor ein neuer Account aktiviert wird?', 'Registration', '1', 'bool');
-	Preferences::SetSetting('activate_through_admin', 'Aktivierung nur durch Administrator', 'Soll ein neuer Benutzer nur durch einen Administrator aktiviert werden können?', 'Registration', '0', 'bool');
+	Preferences::SetSetting('validate_email', 'Email &uuml;berpr&uuml;fen', 'Soll die Email eines neuen Benutzers durch eine Kontrollmail &uuml;berpr&uuml;ft werden, bevor ein neuer Account aktiviert wird?', 'User', '1', 'bool');
+	Preferences::SetSetting('activate_through_admin', 'Aktivierung nur durch Administrator', 'Soll ein neuer Benutzer nur durch einen Administrator aktiviert werden können?', 'User', '0', 'bool');
+	Preferences::SetSetting('public_memberlist', '&Ouml;ffentliche Benutzerliste', 'D&uuml;rfen unregistrierte Benutzer Profile ansehen?', 'User', '1', 'bool');
 	Preferences::SetSetting('date_day_format', 'Datums-Fotmat', 'Dies ist das Format, in dem das Datum im System angezeigt wird.', 'Main', 'd.m.Y', 'string0');
 	Preferences::SetSetting('date_time_format', 'Uhrzeit-Fotmat', 'Dies ist das Format, in dem die Uhrzeit im System angezeigt wird.', 'Main', 'H:i:s', 'string0');
 ?>

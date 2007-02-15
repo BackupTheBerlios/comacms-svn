@@ -73,7 +73,7 @@
 		case 'register':
 			include_once(__ROOT__ . '/classes/registration.php');
 			$Registration = new Registration($sqlConnection, $translation, $config);
-			$title = 'Registration';
+			$title = $translation->GetTranslation('registration');
 			$text = $Registration->GetPage(GetPostOrGet('action'));
 			break;
 		
@@ -140,6 +140,18 @@
 			}
 			break;
 		
+		case 'memberlist':
+			if ($config->Get('public_memberlist', '1') == 1 || $user->IsLoggedIn) {
+				include_once(__ROOT__ . '/classes/user/user_memberlist.php');
+				$memberlist = new User_Memberlist($sqlConnection, $translation, $config, $user, $lib, $output);
+				$text = $memberlist->GetPage(GetPostOrGet('action'));
+			}
+			else {
+				$text = $translation->GetTranslation('anonymus_users_may_not_access_to_the_memberlist');
+			}
+			$title = $translation->GetTranslation('memberlist');
+			break;
+		
 		case 'userinterface':
 			
 			if (!$user->IsLoggedIn) {
@@ -150,6 +162,7 @@
 			// Generate UI menu
 			$menuArray = array();
 			$menuArray[] = array($translation->GetTranslation('usercontrol'), 'usercontrol');
+			$menuArray[] = array($translation->GetTranslation('memberlist'), 'memberlist');
 			$menuArray[] = array($translation->GetTranslation('back_to_homepage'), 'url:index.php');
 			if($user->IsAuthor)
 				$menuArray[] = array($translation->GetTranslation('pagestructure'), 'pagestructure');
@@ -183,6 +196,13 @@
 					$user->Logout();
 					header("Location: index.php");
 					die();
+				
+				case 'memberlist':
+					include_once(__ROOT__ . '/classes/user/user_memberlist.php');
+					$memberlist = new User_Memberlist($sqlConnection, $translation, $config, $user, $lib, $output);
+					$title = $translation->GetTranslation('memberlist');
+					$text = $memberlist->GetPage(GetPostOrGet('action'), 'userinterface');
+					break;
 				
 				case 'userinterface':
 				default:

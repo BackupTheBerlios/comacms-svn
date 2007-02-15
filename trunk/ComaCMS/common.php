@@ -106,4 +106,31 @@
 		$pagePrefix = '';
 	
 	$user->SetPage($pagePrefix . $page, $config);
+	
+	// Get a list of all installed languages
+	$installedLanguages = array();
+	$languageFolder = dir(__ROOT__ . "/lang/");
+	while($file = $languageFolder->read()) {
+		
+		// check if the found file is really a language file
+		if($file != "." && $file != ".." && (strpos($file, 'lang_') === 0) && substr($file,-4) == '.php') {
+			
+			// extract the pure language name
+			$file = str_replace('lang_', '', $file);
+			$file = str_replace('.php', '', $file);
+			
+			// Check wether the language is the actual one of the user
+			if($user->Language == $file)
+				$selected = true;
+			else
+				$selected = false;
+			
+			// Add the found language to the lokal array
+			$installedLanguages[] = array( 	'LANGUAGE_NAME' => $file,
+											'LANGUAGE_TRANSLATION' => $translation->GetTranslation($file),
+											'LANGUAGE_SELECTED' => $selected);
+		}
+	}
+	$output->SetReplacement('LANGUAGES_LIST', $installedLanguages);
+	$output->SetReplacement('PHP_SELF', $_SERVER['PHP_SELF']);
 ?>

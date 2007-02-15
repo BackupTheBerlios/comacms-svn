@@ -352,7 +352,7 @@
 			 		$out .= '</span>';
 			 		// lang:
 			 		$out .= "<span class=\"page_lang\">[" . $this->_Translation->GetTranslation($page['lang']) . "]</span>";
-			 		$out .= (($TopNodeID == 0) ?  "<input type=\"checkbox\" name=\"mainMenuPages[]\"" . ((in_array($page['id'], $this->MenuPageIDs)) ? ' checked="checked"'  : '') . (($page['access'] != 'public') ? ' disabled="disabled"'  : '') . " value=\"" . $page['id'] . "\" class=\"checkbox\"/>\t" : '' ) . "<strong>" . $page['title'] . "</strong> (" . rawurldecode($page['name']) . ")";
+			 		$out .= "<strong>" . $page['title'] . "</strong> (" . rawurldecode($page['name']) . ")";
 			 		$out .= '</span>' . $this->_Structure($page['id']);
 			 		$out .= "\t\t\t\t</li>\r\n";
 	 			}
@@ -392,7 +392,7 @@
 						$edit = new Page_Extended_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
 						break;
 					case 'gallery':
-						include('classes/page/page_extended_gallery.php');
+						include (__ROOT__ . '/classes/page/page_extended_gallery.php');
 						$edit = new Page_Extended_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->User);
 						break;	
 					default:

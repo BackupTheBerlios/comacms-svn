@@ -19,8 +19,8 @@
 	/**
 	 * @ignore
 	 */
-	 require_once('classes/module.php');
-	 require_once('classes/pagestructure.php');
+	 require_once __ROOT__ . '/classes/module.php';
+	 require_once __ROOT__ . '/classes/pagestructure.php';
 	 
 	/**
 	 * @package ComaCMS

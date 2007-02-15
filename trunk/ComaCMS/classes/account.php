@@ -111,6 +111,7 @@
 		 * @return void
 		 */
 		function Account(&$SqlConnection) {
+			
 			global $_COOKIE;
 			$this->_SqlConnection = &$SqlConnection;
 			$extern_login_name = GetPostOrGet('login_name');
@@ -118,36 +119,6 @@
 			$extern_lang = strtolower(GetPostOrGet('lang'));
 			$languages = array('de', 'en');
 			
-			// Check: has the user changed the language by hand?
-			if(!empty($extern_lang)) {
-				if(in_array($extern_lang, $languages))
-					$this->Language = $extern_lang;
-			}
-			// Get the language from the cookie if it' s not changed
-			elseif(isset($_COOKIE['ComaCMS_user_lang'])) {
-				if(in_array($_COOKIE['ComaCMS_user_lang'], $languages))
-					$this->Language = $_COOKIE['ComaCMS_user_lang'];
-			}
-			// if no language is set, load the language from the HTTP-header
-			if($this->Language == '') {
-				if(isset($_ENV['HTTP_ACCEPT_LANGUAGE'])) {
-					$langs = $_ENV['HTTP_ACCEPT_LANGUAGE'];
-					$langs = preg_replace("#\;q=[0-9\.]+#i", '', $langs);
-					$langs = explode(',', $langs);
-					$this->Language = $languages[0];
-					foreach($langs as $lang) {
-						if(in_array($lang, $languages)) {
-							$this->Language = $lang;
-							break;
-						}
-					}
-				}
-			}
-			if($this->Language == '')
-				$this->Language = $languages[0];
-			// Set the cookie (for the next 93(= 3x31) days)
-			setcookie('ComaCMS_user_lang', $this->Language, time() + 8035200); 
-		
 			// Tells the cookie: "the user is logged in!"?
 			if(isset($_COOKIE['ComaCMS_user'])) {
 				//$data = explode('|', $_COOKIE['ComaCMS_user']);
@@ -272,6 +243,44 @@
 			// Set the cookie (for the next 1 hour/3600 seconds) 
 			setcookie('ComaCMS_user', $this->OnlineID, time() + 3600);
 			
+			// Check: has the user changed the language by hand?
+			if(!empty($extern_lang)) {
+				if(in_array($extern_lang, $languages))
+					$this->Language = $extern_lang;
+			}
+			// Get the language from the cookie if it' s not changed
+			elseif(isset($_COOKIE['ComaCMS_user_lang'])) {
+				if(in_array($_COOKIE['ComaCMS_user_lang'], $languages))
+					$this->Language = $_COOKIE['ComaCMS_user_lang'];
+			}
+			elseif ($this->IsLoggedIn) {
+				$sql = "SELECT user_preferred_language
+						FROM " . DB_PREFIX . "users
+						WHERE user_id='$this->ID'";
+				$userResult = $this->_SqlConnection->SqlQuery($sql);
+				if ($user = mysql_fetch_object($userResult))
+					$this->Language == $user->user_preferred_language;
+			}
+			
+			// if no language is set, load the language from the HTTP-header
+			if($this->Language == '') {
+				if(isset($_ENV['HTTP_ACCEPT_LANGUAGE'])) {
+					$langs = $_ENV['HTTP_ACCEPT_LANGUAGE'];
+					$langs = preg_replace("#\;q=[0-9\.]+#i", '', $langs);
+					$langs = explode(',', $langs);
+					$this->Language = $languages[0];
+					foreach($langs as $lang) {
+						if(in_array($lang, $languages)) {
+							$this->Language = $lang;
+							break;
+						}
+					}
+				}
+			}
+			if($this->Language == '')
+				$this->Language = $languages[0];
+			// Set the cookie (for the next 93(= 3x31) days)
+			setcookie('ComaCMS_user_lang', $this->Language, time() + 8035200); 
 		}
 		
 		/**

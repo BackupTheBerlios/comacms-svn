@@ -71,7 +71,7 @@
 			$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
 			
 			// Get the data of the userinterface
-			$sql = "SELECT user_registerdate, user_email
+			$sql = "SELECT user_registerdate, user_email, user_preferred_language
 					FROM " . DB_PREFIX . "users
 					WHERE user_id='{$this->_User->ID}'";
 			$userResult = $this->_SqlConnection->SqlQuery($sql);
@@ -103,6 +103,10 @@
 									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('is_author'),
 									'PROFILE_FIELD_VALUE' => (($this->_User->IsAuthor) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
 									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'));
+			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'preferred_language',
+									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('preferred_language'),
+									'PROFILE_FIELD_VALUE' => $this->_Translation->GetTranslation($user->user_preferred_language),
+									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('this_is_your_preferred_language_of_the_installed_ones'));
 			
 			// Get custom fields
 			$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title, field.custom_fields_required
@@ -227,7 +231,7 @@
 		function _EditProfile() {
 			
 			// Get the data of the userinterface
-			$sql = "SELECT user_registerdate, user_email
+			$sql = "SELECT user_registerdate, user_email, user_preferred_language
 					FROM " . DB_PREFIX . "users
 					WHERE user_id='{$this->_User->ID}'";
 			$userResult = $this->_SqlConnection->SqlQuery($sql);
@@ -247,6 +251,29 @@
 			$formMaker->AddInput('edit_user', 'user_email', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('using_the_email_address_the_user_is_contacted_by_the_system'), $user->user_email);
 			$formMaker->AddInput('edit_user', 'user_password', 'password', $this->_Translation->GetTranslation('password'), $this->_Translation->GetTranslation('with_this_password_the_user_can_login_to_restricted_areas'));
 			$formMaker->AddInput('edit_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'));
+			$formMaker->AddInput('edit_user', 'user_preferred_language', 'select', $this->_Translation->GetTranslation('preferred_language'), $this->_Translation->GetTranslation('this_is_your_preferred_language_of_the_installed_ones'));
+			
+			// Get all languages installed in the system
+			$languageFolder = dir(__ROOT__ . "/lang/");
+			while($file = $languageFolder->read()) {
+				
+				// check if the found file is really a language file
+				if($file != "." && $file != ".." && (strpos($file, 'lang_') === 0) && substr($file,-4) == '.php') {
+					
+					// extract the pure language name
+					$file = str_replace('lang_', '', $file);
+					$file = str_replace('.php', '', $file);
+					
+					// Check wether the language is the actual one of the user
+					if($user->user_preferred_language == $file)
+						$selected = true;
+					else
+						$selected = false;
+					
+					// Add the found language to the formmaker class
+					$formMaker->AddSelectEntry('edit_user', 'user_preferred_language', $selected, $file, $this->_Translation->GetTranslation($file));
+				}
+			}
 			
 			// Get custom fields
 			$sql = "SELECT value.custom_fields_values_value, field.custom_fields_information, field.custom_fields_name, field.custom_fields_title, field.custom_fields_required
@@ -286,6 +313,7 @@
 				$UserEmail = GetPostOrGet('user_email');
 				$UserPassword = GetPostOrGet('user_password');
 				$UserPasswordRepetition = GetPostOrGet('user_password_repetition');
+				$UserPreferredLanguage = GetPostOrGet('user_preferred_language');
 				
 				// Get the missing data of the user
 				$sql = "SELECT user_email
@@ -327,6 +355,30 @@
 					$formMaker->AddCheck('edit_user', 'user_password', 'not_same_password_value_as', $this->_Translation->GetTranslation('the_password_and_its_repetition_are_unequal'), 'user_password_repetition');
 					
 					$formMaker->AddCheck('edit_user', 'user_password_repetition', 'empty', $this->_Translation->GetTranslation('the_password_field_must_not_be_empty'));
+				}
+				
+				$formMaker->AddInput('edit_user', 'user_preferred_language', 'select', $this->_Translation->GetTranslation('preferred_language'), $this->_Translation->GetTranslation('this_is_your_preferred_language_of_the_installed_ones'));
+				
+				// Get all languages installed in the system
+				$languageFolder = dir(__ROOT__ . "/lang/");
+				while($file = $languageFolder->read()) {
+					
+					// check if the found file is really a language file
+					if($file != "." && $file != ".." && (strpos($file, 'lang_') === 0) && substr($file,-4) == '.php') {
+						
+						// extract the pure language name
+						$file = str_replace('lang_', '', $file);
+						$file = str_replace('.php', '', $file);
+						
+						// Check wether the language is the actual one of the user
+						if($UserPreferredLanguage == $file)
+							$selected = true;
+						else
+							$selected = false;
+						
+						// Add the found language to the formmaker class
+						$formMaker->AddSelectEntry('edit_user', 'user_preferred_language', $selected, $file, $this->_Translation->GetTranslation($file));
+					}
 				}
 				
 				// Get custom fields
@@ -386,7 +438,10 @@
 					$user_password = ((!empty($UserPassword)) ? ", user_password='" . md5($UserPassword) . "'": '');
 					// Update the user in the database
 					$sql = "UPDATE " . DB_PREFIX . "users
-							SET user_showname='$UserShowname', user_name='$UserName', user_email='$UserEmail'$user_password
+							SET user_showname='$UserShowname',
+								user_name='$UserName',
+								user_preferred_language='$UserPreferredLanguage',
+								user_email='$UserEmail'$user_password
 							WHERE user_id=$UserID";
 					$this->_SqlConnection->SqlQuery($sql);
 					
@@ -422,10 +477,8 @@
 						}
 					}
 					
-					// $this->_User->Logout();
-					
 					// Set user back to userinterface
-					header('Location: special.php?page=userinterface');
+					header('Location: special.php?page=userinterface&lang=' . $UserPreferredLanguage);
 					die();
 				}
 				else {

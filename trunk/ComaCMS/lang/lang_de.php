@@ -425,7 +425,7 @@ Die Administratoren';
 	$langString['if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'] = 'Ein Autor erh&auml;lt Zugriff auf die Seiten-Struktur.';
 	
 	$langString['usercontrol'] = 'Benutzerseite';
-	$langString['user_profile'] = 'Benutprofil';
+	$langString['user_profile'] = 'Benutzerprofil';
 	$langString['profile'] = 'Profil';
 	$langString['registered_since'] = 'Registriert seit';
 	$langString['you_are_registered_since'] = 'Seit diesem Datum bist du hier registriert.';
@@ -439,6 +439,8 @@ Die Administratoren';
 	$langString['select'] = 'Ausw&auml;hlen';
 	$langString['import'] = 'Importieren';
 	$langString['import_odt'] = 'OpenDocument Text Importieren';
-	$langString['the_odt_import_makes_it_possible_to_load_documents_saved_in_the_odt_format'] = 'Mit der Importfunkion ist es möglich Textdokumente im OpenDocument Format direkt importieren zu lassen.';
-	$langString['the_selected_file_will_be_converted_into_a_comacms_page'] = 'Die Ausgew&auml;hlte Datei wird in eine ComaCMS-Textseite umgewandelt werden.'
+	$langString['the_odt_import_makes_it_possible_to_load_documents_saved_in_the_odt_format'] = 'Mit der Importfunkion ist es m&ouml;glich Textdokumente im OpenDocument Format direkt importieren zu lassen.';
+	$langString['the_selected_file_will_be_converted_into_a_comacms_page'] = 'Die Ausgew&auml;hlte Datei wird in eine ComaCMS-Textseite umgewandelt werden.';
+	$langString['(required)'] = '(Notwendig)';
+	$langString['memberlist'] = 'Mitgliederliste';
 ?>

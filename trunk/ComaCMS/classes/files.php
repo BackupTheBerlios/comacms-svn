@@ -56,9 +56,50 @@
 			else
 				return -1;
 		}
-		
-		function UploadFile() {
+		/**
+		 * @return string UploadedFileName
+		 */
+		function UploadFile($Name, $DestinationFolder, $RegisterFile = true, $Chmod = 0775) {
+			if(!array_key_exists($Name, $_FILES))
+				return false;
+			$file = &$_FILES[$Name];
+			// generate the new location of the file
+			$savePath = $DestinationFolder . $file['name'];
+			// if there exists a file try to rename the file that it is possible to save both
+			if(file_exists($savePath))
+				$savePath = uniqid($DestinationFolder) . $file['name'];
+			if(file_exists($savePath))
+				return false;
+			// maximum filesize: ~1.5MB
+			// TODO: make it configutable
+			if($file['size'] > 1600000)
+				$file['error'] = 2;
 			
+			if($file['error'] != 0)
+				return $file['error'];
+			
+			if($RegisterFile) {
+				// dont allow an upload if a file with the same md5 exists
+				$fileMd5 = md5_file($file['tmp_name']);
+				$sql = "SELECT file_path
+						FROM " . DB_PREFIX . "files
+						WHERE file_md5 = '$fileMd5'
+						LIMIT 1";
+				$md5ExistsResult = $this->_SqlConnection->SqlQuery($sql);
+				// is there a file with the same md5?
+				if($md5Exists = mysql_fetch_object($md5ExistsResult))
+					// return the filename of the equivalent file
+					return $md5Exists->file_path;
+			}
+			// move the file into the uploadfolder
+			if(move_uploaded_file($file['tmp_name'], $savePath)) {
+				if($RegisterFile)
+					// add the database-entry for the file
+					$this->AddFile($savePath);
+				chmod($savePath, $Chmod);
+				return $savePath;
+			}
+			return false;
 		}
 		
 		

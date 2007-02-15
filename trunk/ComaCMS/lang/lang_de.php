@@ -443,4 +443,9 @@ Die Administratoren';
 	$langString['the_selected_file_will_be_converted_into_a_comacms_page'] = 'Die Ausgew&auml;hlte Datei wird in eine ComaCMS-Textseite umgewandelt werden.';
 	$langString['(required)'] = '(Notwendig)';
 	$langString['memberlist'] = 'Mitgliederliste';
+	$langString['install'] = 'Installieren';
+	$langString['install_new_module'] = 'Neues Modul installieren';
+	$langString['the_module_isnt_removeable'] = 'Das Modul l&auml;sst sich nicht entfernen.';
+	$langString['select_here_a_comacms_module_setup_file_(*.zip)'] = 'Bitte hier eine ComaCMS-Modul-Setupdatei hochladen (*.zip).';
 ?>
+

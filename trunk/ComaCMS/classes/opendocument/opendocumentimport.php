@@ -14,6 +14,7 @@
  # the Free Software Foundation; either version 2 of the License, or
  # (at your option) any later version.
  #----------------------------------------------------------------------
+	
 	require_once __ROOT__ . '/classes/opendocument/lifo.php';
 	
 	class OpenDocumentImport {
@@ -41,7 +42,8 @@
 				
 			$this->_ImagesPath = $ImagePath;
 			$this->_Filename = $Filename;
-			$zip = zip_open($Filename);
+			// windows systems need the absolute path
+			$zip = zip_open(realpath($Filename));
 			if(!$zip)
 				return false;
 			while($zipEntry = zip_read($zip)) {
@@ -75,7 +77,7 @@
 		}
 		
 		function _LoadImages() {
-			$zip = zip_open($this->_Filename);
+			$zip = zip_open(realpath($this->_Filename));
 			if(!$zip)
 				return false;
 			while($zipEntry = zip_read($zip)) {
@@ -367,12 +369,12 @@
 			$StyleParser = xml_parser_create();
 			xml_set_object($StyleParser, $this);
 			xml_set_element_handler($StyleParser, '_OpenElement', '_CloseElement');
-			 if (!xml_parse($StyleParser, $this->_Styles)) {
-	       		die(sprintf("XML error: %s at line %d",
+			if (!xml_parse($StyleParser, $this->_Styles))
+	       	die(sprintf("XML error: %s at line %d",
 	                   xml_error_string(xml_get_error_code($StyleParser)),
 	                   xml_get_current_line_number($StyleParser)));
-						xml_parser_free($StyleParser);
-			}
+			xml_parser_free($StyleParser);
+			
 		}
 		
 		function _ReadContent() {
@@ -383,12 +385,12 @@
 			xml_set_object($StyleParser, $this);
 			xml_set_element_handler($StyleParser, '_OpenElement', '_CloseElement');
 			xml_set_character_data_handler($StyleParser, '_TextElement');
-			 if (!xml_parse($StyleParser, $this->_Content)) {
-	      		 die(sprintf('XML error: %s at line %d',
+			if (!xml_parse($StyleParser, $this->_Content))
+	      		die(sprintf('XML error: %s at line %d',
 	                   xml_error_string(xml_get_error_code($StyleParser)),
 	                   xml_get_current_line_number($StyleParser)));
-						xml_parser_free($StyleParser);
-			}
+			xml_parser_free($StyleParser);
+			
 		}
 	}
 ?>

@@ -287,7 +287,7 @@
 								if(move_uploaded_file($file['tmp_name'], $savePath)) {
 								// add the database-entry for the file
 									$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date, file_creator)
-										VALUES('{$file['name']}', '{$file['type']}', '$savePath', '" . filesize($savePath) . "', '" . md5_file($savePath) . "', " . mktime() . ", {$this->_User->ID})";
+										VALUES('{$file['name']}', '" . GetMimeContentType($savePath) ."', '$savePath', '" . filesize($savePath) . "', '" . md5_file($savePath) . "', " . mktime() . ", {$this->_User->ID})";
 									$this->_SqlConnection->SqlQuery($sql);
 									// prevent uploads, which aren't dowloadable(read-/writeable) by another user(ftp-access etc.)
 									chmod($savePath, 0755);

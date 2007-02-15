@@ -141,6 +141,7 @@
 		 * @return void
 		 */
 		function LoadPage($pagename, $user) {
+		//	die($user->Language);
 			$load_old = false;
 			$change = GetPostOrGet('change');
 			if(is_numeric($change) && $user->IsLoggedIn && $change != 0)
@@ -155,17 +156,23 @@
 					LIMIT " . ($change - 1) . ",1";
 			else
 				$sql = "SELECT *
-					FROM " . DB_PREFIX . "pages
-					WHERE page_name='$pagename'";
+						FROM " . DB_PREFIX . "pages
+						WHERE page_name='$pagename' AND page_lang='{$user->Language}'";
 			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			if(!($page_data =  mysql_fetch_object($page_result))) {
 				$sql = "SELECT *
-					FROM " . DB_PREFIX . "pages
-					WHERE page_id='$pagename'";	
+						FROM " . DB_PREFIX . "pages
+						WHERE page_name='$pagename'";
 				$page_result = $this->_SqlConnection->SqlQuery($sql);
 				if(!($page_data =  mysql_fetch_object($page_result))) {
-					header("Location: special.php?page=404&want=$pagename");
-					die();
+					$sql = "SELECT *
+							FROM " . DB_PREFIX . "pages
+							WHERE page_id='$pagename'";	
+					$page_result = $this->_SqlConnection->SqlQuery($sql);
+					if(!($page_data =  mysql_fetch_object($page_result))) {
+						header("Location: special.php?page=404&want=$pagename");
+						die();
+					}
 				}
 			}
 			if(!$load_old && $page_data->page_access == 'deleted' && !$user->AccessRghts->delete) {

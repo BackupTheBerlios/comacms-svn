@@ -536,7 +536,7 @@
 			#[Url]|[size]|[Title] = [Url]|box|[size]|[Title]
 			#[Url]|[display]|[size]|[Title]
 			
-			// TODO: get the connection throug the parameters, not as a global
+			// TODO: get the connection through the parameters, not as a global
 			global $sqlConnection;
 			
 			// Defaults
@@ -600,6 +600,7 @@
 				$result = $sqlConnection->SqlQuery($sql);
 				if($fileData = mysql_fetch_object($result))
 					$imageUrl = $fileData->file_path;
+				clearstatcache();
 				// check if the file from the database really exists
 				if(!file_exists($imageUrl))			
 					return "<strong>Bild (&quot;<em>$imageUrl</em>&quot;) nicht gefunden.</strong>";
@@ -608,7 +609,6 @@
 			
 			// Resize the image
 			$image = new ImageConverter($imageUrl);
-			
 			// convert the 'name-sizes' to 'pixel-sizes' 
 			if($imageSize == 'thumb') 
 				$imageSize = 'w180'; //width: 180px
@@ -656,14 +656,15 @@
 				$imageWidth = $image->Size[0];
 				$imageHeight = $image->Size[1];
 			}
+			$imageName = generateUrl(basename($image->_file));
 			$originalUrl = generateUrl($originalUrl);
 			$imageUrl = generateUrl($imageUrl);
-		
+			
 			if($imageDisplay == IMG_DISPLAY_BOX) {
 				$imageString = "</p>\n\n<div class=\"thumb t" . $ImageAlign . "\">
 						<div style=\"width:" . ($imageWidth + 4) . "px\">
 							<img width=\"{$imageWidth}\" height=\"{$imageHeight}\" src=\"{$imageUrl}\" title=\"$imageTitle\" alt=\"$imageTitle\" />
-							<div class=\"description\" title=\"$imageTitle\"><div class=\"magnify\"><a href=\"special.php?page=image&amp;file=$originalUrl\" title=\"vergr&ouml;&szlig;ern\"><img src=\"img/magnify.png\" title=\"vergr&ouml;&szlig;ern\" alt=\"vergr&ouml;&szlig;ern\"/></a></div>$imageTitle</div>
+							<div class=\"description\" title=\"$imageTitle\"><div class=\"magnify\"><a href=\"special.php?page=image&amp;file=$imageName\" title=\"vergr&ouml;&szlig;ern\"><img src=\"img/magnify.png\" title=\"vergr&ouml;&szlig;ern\" alt=\"vergr&ouml;&szlig;ern\"/></a></div>$imageTitle</div>
 						</div>
 					</div><p>\n";
 			}
@@ -672,7 +673,7 @@
 				$imageString = "</p>\n\n<div class=\"thumb tbox t" . $ImageAlign . "\">
 						<div style=\"width:" . ($imageWidth + 4) . "px\">
 							<img width=\"$imageWidth\" height=\"$imageHeight\" src=\"$imageUrl\" title=\"$imageTitle\" alt=\"$imageTitle\" />
-							<div class=\"magnify\"><a href=\"special.php?page=image&amp;file=$originalUrl\" title=\"vergr&ouml;&szlig;ern\"><img src=\"img/magnify.png\" title=\"vergr&ouml;&szlig;ern\" alt=\"vergr&ouml;&szlig;ern\"/></a></div>
+							<div class=\"magnify\"><a href=\"special.php?page=image&amp;file=$imageName\" title=\"vergr&ouml;&szlig;ern\"><img src=\"img/magnify.png\" title=\"vergr&ouml;&szlig;ern\" alt=\"vergr&ouml;&szlig;ern\"/></a></div>
 						</div>
 					</div>\n<p>";
 			}

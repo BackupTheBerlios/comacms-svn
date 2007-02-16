@@ -430,7 +430,7 @@
 							<td>{MODULE_ACTIVATED}</td>
 							<td>
 								<a href="admin.php?page=modules&amp;action={MODULE_ACTION}&amp;name={MODULE_DIRECTORY}" title="{MODULE_LANG_ACTION}"><img alt="{MODULE_LANG_ACTION}" src="img/{ACTION_IMAGE}.png" /></a>
-								<a href="admin.php?page=modules&amp;action=uninstall&amp;name={MODULE_DIRECTORY}" title="{LANG_UNINSTALL_MODULE}"><img alt="{LANG_UNINSTALL_MODULE}" src="img/delete.png" />
+								<a href="admin.php?page=modules&amp;action=uninstall&amp;name={MODULE_DIRECTORY}" title="{LANG_UNINSTALL_MODULE}"><img alt="{LANG_UNINSTALL_MODULE}" src="img/delete.png" /></a>
 							</td>
 						</tr>
 						</MODULES>

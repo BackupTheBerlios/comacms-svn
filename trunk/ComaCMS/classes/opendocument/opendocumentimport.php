@@ -73,7 +73,7 @@
 			$this->_Text =  str_replace('////', '', $this->_Text);
 			$this->_Text =  str_replace('&', '&amp;', $this->_Text);
 			$this->_Text = preg_replace("#<p>[\r\n\t\ ]{0,}</p>#i", '', $this->_Text);
-	
+			clearstatcache();
 		}
 		
 		function _LoadImages() {

@@ -520,13 +520,12 @@
 			// Get the data of the user that should be edited
 			$sql = "SELECT *
 					FROM " . DB_PREFIX . "users
-					WHERE user_id={$UserID}";
+					WHERE user_id={$UserID}
+					LIMIT 1";
+
 			$userResult = $this->_SqlConnection->SqlQuery($sql);
-			
-			// If there is a user found
-			if (mysql_num_rows($userResult) == 1) {
-				
-				$user = mysql_fetch_object($userResult);
+			// If there is a user found						
+			if($user = mysql_fetch_object($userResult)) {
 				mysql_free_result($userResult);
 				
 				// Initialize the formmaker class
@@ -544,7 +543,7 @@
 				$formMaker->AddInput('edit_user', 'user_password_repetition', 'password', $this->_Translation->GetTranslation('password_repetition'), $this->_Translation->GetTranslation('it_is_guaranteed_by_a_repetition_that_the_user_did_not_mistype_during_the_input'));
 				if ($this->_User->ID != $UserID) {
 					$formMaker->AddInput('edit_user', 'user_admin', 'checkbox', $this->_Translation->GetTranslation('admin'), $this->_Translation->GetTranslation('if_an_user_is_an_administrator_he_has_access_to_the_system_configuration_**choose_only_if_realy_necessary**'), (($user->user_admin == 1) ? true : false));
-					$formMaker->AddInput('edit_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($user->user_author == 1) ? true : false));
+					$formMaker->AddInput('edit_user', 'user_author', 'checkbox', $this->_Translation->GetTranslation('author'), $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'), (($user->user_author == 1 || $user->user_admin == 1) ? true : false));
 				}
 				$formMaker->AddInput('edit_user', 'user_preferred_language', 'select', $this->_Translation->GetTranslation('preferred_language'), $this->_Translation->GetTranslation('this_is_your_preferred_language_of_the_installed_ones'));
 			

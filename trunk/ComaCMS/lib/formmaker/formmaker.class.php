@@ -176,22 +176,73 @@
 	 				$Information = $this->_TodoValue;
 	 			if (empty($NameTranslation))
 	 				$NameTranslation = $this->_TodoValue;
-	 				
+	 			
+	 			
+				
+	 			$types = array('password', 'checkbox', 'text', 'radio', 'text', 'textarea');
+	 			if(in_array(strtolower($Type), $types))
+	 				$Type = strtolower($Type);
+	 			else
+	 				$Type = 'text';
+	 			
+	 			$startInput = '';
+	 			switch (strtolower($Type)) {
+					case 'select':
+						$startInput = '<select';
+						break;
+					case 'textarea':
+						$startInput = '<textarea';
+						break;
+					default:
+						$startInput = '<input type="{type}"';
+						break;
+				}
+				
+	 			$endInput = '';
+	 			switch (strtolower($Type)) {
+					case 'select':
+						$endInput = '>
+								<select_entrys:loop><option{selected} value="{select_value}">{display_value}</option>
+								</select_entrys>
+								{select_entrys_code}
+							</select>';
+						break;
+					case 'textarea':
+						$endInput = '>{value}</textarea>';
+						break;
+					case 'checkbox':
+						$endInput = ' {value} />';
+						break;
+					case 'password':
+						$endInput = '/>';
+						break;
+					default:
+						$endInput = ' value="{value}" />';
+						break;
+				}
+	 			
+	 			
+	 			switch ($Type) {
+					case 'checkbox':
+						if($Value)
+							$Value = 'checked="checked"';
+						break;
+					case 'password':
+						$Value = '';
+						break;
+				}
+	 			
 	 			// Add the input to the local array
  				$this->_Forms[$FormName]['inputs'][$Name] = array(
 							'name' => $Name,
 							'form_name' => $FormName,
-							'start_input' => (($Type == 'select') ? '<select' : '<input type="{type}"'),
-							'end_input' => (($Type == 'password') ? '/>' : (($Type == 'select') ? '>
-									<select_entrys:loop><option{selected} value="{select_value}">{display_value}</option>
-									</select_entrys>
-									{select_entrys_code}
-								</select>' : (($Type == 'checkbox') ? ' {value} />' : ' value="{value}" />'))),
-							'type' => (($Type == 'password') ? 'password' : (($Type == 'checkbox') ? 'checkbox' : (($Type == 'radio') ? 'radio' : 'text'))),
+							'start_input' => $startInput,
+							'end_input' => $endInput,
+							'type' => $Type,
 							'translation' => $NameTranslation,
 							'information' => $Information,
 							'errorinformation' => array(),
-							'value' => (($Type == 'password') ? '' : (($Type == 'checkbox') ? (($Value) ? 'checked="true"' : '') : $Value)),
+							'value' => $Value,
 							'password_value' => (($Type == 'password') ? $Value : ''),
 							'select_entrys_code' => ' ',
 							'select_entrys' => array(),
@@ -298,7 +349,7 @@
 						
 					case 'not_email':
 						// Identify wether value is an emailadress or not 
-						if (!$this->_IsEMailAddress($input['value']) && !empty($input['value'])){
+						if (!$this->_IsEMailAddress($input['value']) || empty($input['value'])){
 							$ok = false;
 							if ($GenerateErrorInformations)
 								$this->_Forms[$input['form_name']]['inputs'][$input['name']]['errorinformation'][] = array('errortext' => $check['text']);

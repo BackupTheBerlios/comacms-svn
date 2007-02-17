@@ -19,8 +19,8 @@
 	/**
 	 * @ignore
 	 */
-	require_once('classes/module.php');
-	require_once('modules/dates/dates.class.php');
+	require_once __ROOT__ . '/classes/module.php';
+	require_once __ROOT__ . '/modules/dates/dates.class.php';
 	
  	/**
 	 * @package ComaCMS

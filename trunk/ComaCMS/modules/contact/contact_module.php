@@ -20,6 +20,8 @@
 	 * @ignore
 	 */
 	require_once __ROOT__ . '/classes/module.php';
+	require_once __ROOT__ . '/lib/formmaker/formmaker.class.php';
+	
 	/**
 	 * @package ComaCMS
 	 * @subpackage News 
@@ -27,7 +29,7 @@
 	class Module_Contact extends Module {
  		
  		function UseModule($Identifer, $Parameters) {
- 			
+ 			$this->_Translation->AddSources(__ROOT__ . '/modules/contact/lang/');
  			// default parameter
  			$mailTo = $this->_Config->Get('contact_mail_to','');
  			
@@ -40,42 +42,40 @@
  			}
  			if(!isEMailAddress($mailTo))
  				return $this->_Translation->GetTranslation('no_valid_reciever_email_address');
- 			$output = '';
- 			$action = GetPostOrGet('action');
- 			// if the mail should be sended
- 			if($action == 'send')
- 				$output .= $this->_sendMail($mailTo);
- 			else
- 				$output .= $this->_mailForm();
+ 				$output = $this->_sendMail($mailTo);
  			return $output;
  		}
  		
  		/**
  		 * this function shows the email-form
  		 */
- 		function _mailForm($MailFromName = '', $MailFrom = '', $Message = '', $MailError = '', $NameError = '', $MessageError = '') {
- 			$output = "</p><form action=\"#\" method=\"post\">
- 						<input type=\"hidden\" name=\"page\" value=\"" . GetPostOrGet('page') . "\" />
- 						<input type=\"hidden\" name=\"action\" value=\"send\" />
- 					<fieldset><legend>" . $this->_Translation->GetTranslation('contact') . "</legend>";
- 			$output .= "<div class=\"row\">
- 							<label class=\"row\" for=\"contact_mail_from_name\"><strong>" . $this->_Translation->GetTranslation('name') . ":</strong>
- 									" . (($NameError != '') ? '<span class="info error">'.$NameError.'</span>' : '') . "
- 								</label>
- 								<input id=\"contact_mail_from_name\" name=\"contact_mail_from_name\" value=\"{$MailFromName}\" type=\"text\" /></div>\n";
- 			$output .= "<div class=\"row\">
- 							<label class=\"row\" for=\"contact_mail_from\"><strong>" . $this->_Translation->GetTranslation('email') . ":</strong>
- 									" . (($MailError != '') ? '<span class="info error">'.$MailError.'</span>' : '') . "
- 								</label>
- 								<input id=\"contact_mail_from\" name=\"contact_mail_from\" type=\"text\" value=\"{$MailFrom}\" /></div>\n";
- 			$output .= "<div class=\"row\">
- 							<label class=\"row\" for=\"contact_message\"><strong>" . $this->_Translation->GetTranslation('message') . ":</strong>
- 									" . (($MessageError != '') ? '<span class="info error">'.$MessageError.'</span>' : '') . "
- 								</label>
- 								<textarea id=\"contact_message\" name=\"contact_message\">{$Message}</textarea></div>\n";
- 			$output .= "<div class=\"row\"><input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('send') . "\"/></div>";
-			$output .= "</fieldset></form><p>";
-			return $output;
+ 		function _mailForm($MailFromName, $MailFrom, $Message, $Check = false) {
+ 			
+			
+			$formMaker = new FormMaker($this->_Translation->GetTranslation('todo'), $this->_SqlConnection);
+			$formMaker->AddForm('contact_formular', '#', $this->_Translation->GetTranslation('send'), $this->_Translation->GetTranslation('contact'), 'post');
+			
+			$formMaker->AddHiddenInput('contact_formular', 'page', GetPostOrGet('page'));
+			$formMaker->AddHiddenInput('contact_formular', 'action', 'send');
+			
+			$formMaker->AddInput('contact_formular', 'contact_mail_from_name', 'text', $this->_Translation->GetTranslation('name'), $this->_Translation->GetTranslation('please_enter_your_name_here') . ' '. $this->_Translation->GetTranslation('(required)'), $MailFromName);
+			if($Check)
+				$formMaker->AddCheck('contact_formular', 'contact_mail_from_name', 'empty', $this->_Translation->GetTranslation('the_name_must_be_indicated'));
+			$formMaker->AddInput('contact_formular', 'contact_mail_from', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('please_enter_your_email_here') . ' '. $this->_Translation->GetTranslation('(required)'), $MailFrom);
+			if($Check)
+				$formMaker->AddCheck('contact_formular', 'contact_mail_from', 'empty', $this->_Translation->GetTranslation('the_nickname_must_be_indicated'));			
+			if($Check && $MailFrom != '')
+				$formMaker->AddCheck('contact_formular', 'contact_mail_from', 'not_email', $this->_Translation->GetTranslation('this_is_an_invalid_email_address'));
+			$formMaker->AddInput('contact_formular', 'contact_message', 'textarea', $this->_Translation->GetTranslation('message'), $this->_Translation->GetTranslation('please_enter_here_the_message_you_want_do_send') . ' '. $this->_Translation->GetTranslation('(required)'), $Message);
+			if($Check)
+				$formMaker->AddCheck('contact_formular', 'contact_message', 'empty', $this->_Translation->GetTranslation('please_enter_your_message'));
+
+			if($formMaker->CheckInputs('contact_formular', true) && $Check)
+				return '';
+		
+			$template = "\r\n\t\t\t\t</p>" . $formMaker->GenerateMultiFormTemplate(&$this->_ComaLate, $Check) . '<p>';
+			
+			return $template;
  		}
  		/**
  		 * @param string MailTo The reciever of the mail
@@ -84,6 +84,7 @@
  			$mailFromName = GetPostOrGet('contact_mail_from_name');
  			$mailFrom = GetPostOrGet('contact_mail_from');
  			$message = GetPostOrGet('contact_message');
+ 			$action = GetPostOrGet('action');
  			$mailError = '';
  			// no email
  			if($mailFrom == '')
@@ -91,17 +92,11 @@
  			// invalid email
  			else if(!isEMailAddress($mailFrom))
  				$mailError = $this->_Translation->GetTranslation('this_is_a_invalid_email_address');
-
- 			$nameError = '';
- 			// empty name
- 			if($mailFromName == '')
- 				$nameError = $this->_Translation->GetTranslation('the_name_must_be_indicated');
- 			$messageError = '';
- 			// empty message
- 			if($message == '')
- 				$messageError = $this->_Translation->GetTranslation('please_enter_your_message');
- 			// if no errors occured
- 			if($nameError == '' && $mailError == '' && $messageError == ''){
+			$check = false;
+			if($action != '')
+				$check = true;
+ 			$template = $this->_mailForm($mailFromName, $mailFrom, $message, $check);
+ 			if($template == ''){
 				// who is the 'real' sender
  				$from = $this->_Config->Get('administrator_emailaddress', 'administrator@comacms');	
  				// the information about the sender
@@ -121,7 +116,7 @@
  				return $output;
  			}
  			else // otherwise show the mailform to make it possible to correct the input
- 				return $this->_mailForm($mailFromName, $mailFrom, $message, $mailError, $nameError, $messageError);
+ 				return $template;
  			
  				
  		}

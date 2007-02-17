@@ -61,6 +61,7 @@ input, select, textarea, fieldset {
 input, select, textarea {
 	width: 49%;
 	background-color: #fff;
+	color: black;
 	font-family:  sans-serif, arial, verdana, helvetica;
 }
 

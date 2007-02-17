@@ -150,8 +150,8 @@
  		function FillArray($MaxCount = 6, $Start = 0, $ConvertTimestamp = true, $ConvertUsername = true, $HideOlder = true, $Older = -1) {
  			
  			// get some config-values
-			$dateDayFormat = $this->_Config->Get('date_day_format', '');
-			$dateTimeFormat = $this->_Config->Get('date_time_format', '');
+			$dateDayFormat = $this->_Config->Get('dates_day_format', 'd.m.Y');
+			$dateTimeFormat = $this->_Config->Get('datex_time_format', 'H:i');
 			$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
  			
  			$datesArray = array();
@@ -177,11 +177,24 @@
  				$sqlHide
  				ORDER BY date_date ASC";
  			
+	 			
+ 			
  			$datesResult = $this->_SqlConnection->SqlQuery($sql);
  			while($dateEntry = mysql_fetch_object($datesResult)) {
+ 				
+ 				// Convert the text from the database to html
+	 			$Text = $dateEntry->date_topic;
+	 			
+	 			// convert all **text** to <strong>text</strong> => Bold
+				$Text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $Text);
+				// convert all //text// to <em>text</em> => Italic
+				$Text = preg_replace("/\/\/(.+?)\/\//s", "<em>$1</em>", $Text);
+				// convert all __text__ to <u>text</u> => Underline
+				$Text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $Text);
+ 				
  				$datesArray[] = array('EVENT_ID' => $dateEntry->date_id,
  							'EVENT_DATE' => ($ConvertTimestamp) ? date($dateFormat, $dateEntry->date_date) : $dateEntry->date_date,
- 							'EVENT_TOPIC' => nl2br($dateEntry->date_topic),
+ 							'EVENT_TOPIC' => nl2br($Text),
  							'EVENT_LOCATION' => $dateEntry->date_location,
  							'EVENT_CREATOR' =>  ($ConvertTimestamp)? $this->_ComaLib->GetUserByID($dateEntry->date_creator) :$dateEntry->date_creator, 
  						);
@@ -197,6 +210,11 @@
  		 */
  		function ExtendedFillArray($Location, $MaxCount = 6, $Start = 0, $ConvertTimestamp = true) {
  			$datesArray = array();
+ 			
+ 			// get some config-values
+			$dateDayFormat = $this->_Config->Get('dates_day_format', 'd.m.Y');
+			$dateTimeFormat = $this->_Config->Get('dates_time_format', 'H:i');
+			$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
  			
  			if(!is_numeric($MaxCount))
  				$MaxCount =  6;
@@ -214,7 +232,7 @@
  			$datesResult = $this->_SqlConnection->SqlQuery($sql);
  			while($dateEntry = mysql_fetch_object($datesResult)) {
  				$datesArray[] = array('EVENT_ID' => $dateEntry->date_id,
- 							'EVENT_DATE' => ($ConvertTimestamp) ? date('d.m.Y H:i', $dateEntry->date_date) : $dateEntry->date_date,
+ 							'EVENT_DATE' => ($ConvertTimestamp) ? date($dateFormat, $dateEntry->date_date) : $dateEntry->date_date,
  							'EVENT_TOPIC' => nl2br($dateEntry->date_topic),
  							'EVENT_LOCATION' => $dateEntry->date_location,
  							'EVENT_CREATOR' => $dateEntry->date_creator

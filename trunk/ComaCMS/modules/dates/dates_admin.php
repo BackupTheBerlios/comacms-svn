@@ -142,7 +142,15 @@
 							<span class="info">{TOPIC_INFO}</span>
 							<event_topic_error:condition><span class="error">{TOPIC_ERROR}</span></event_topic_error>
 						</label>
-						<textarea name="dateTopic" >{TOPIC_VALUE}</textarea>
+						<script type="text/javascript" language="JavaScript" src="system/functions.js"></script>
+						<script type="text/javascript" language="javascript">
+							//<![CDATA[
+							writeButton("img/button_fett.png", "Text fett formatieren", "**", "**", "fetter Text", "f");
+							writeButton("img/button_kursiv.png", "Text kursiv formatieren", "//", "//", "{LANG_ITALIC_TEXT", "k");
+							writeButton("img/button_unterstrichen.png", "Text unterstreichen", "__", "__", "unterstrichener Text", "u");
+							//]]>
+						</script><br />
+						<textarea name="dateTopic" id="editor">{TOPIC_VALUE}</textarea>
 					</div>
 					<div class="row">
 						<a href="admin.php?page=module_dates" class="button">{LANG_BACK}</a>
@@ -255,7 +263,7 @@
  			if(GetPostOrGet('showOld') == '1')
  				$showOld = true;
  			// get all dates with readable dates and usernames
- 			$eventsArray = $dates->FillArray(-1, true, true, !$showOld);
+ 			$eventsArray = $dates->FillArray(-1, 0, true, true, !$showOld);
  			
  			$this->_ComaLate->SetReplacement('EVENT_EVENTS', $eventsArray);
  			

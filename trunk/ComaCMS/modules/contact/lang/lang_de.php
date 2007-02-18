@@ -32,8 +32,9 @@ Nachricht:
 
 Bitte antworten sie nicht auf diese Email. Sie wurde automatisch verschickt.';	
 
-	$langString['cplease_enter_your_name_here'] = 'Bitte geben Sie hier ihre Namen ein.';
-	$langString['cplease_enter_your_email_here'] = 'Bitte geben Sie hier ihre Email-Adresse ein.';
-	$langString['cplease_enter_here_the_message_you_want_do_send'] = 'Bitte geben Sie hier die Nachricht ein, die Sie verschicken wollen.';
-	$langString['cthis_is_an_invalid_email_address'] = 'Das ist keine g&uuml;tige Email-Adresse!';
+	$langString['please_enter_your_name_here'] = 'Bitte geben Sie hier ihre Namen ein.';
+	$langString['please_enter_your_email_here'] = 'Bitte geben Sie hier ihre Email-Adresse ein.';
+	$langString['please_enter_here_the_message_you_want_do_send'] = 'Bitte geben Sie hier die Nachricht ein, die Sie verschicken wollen.';
+	$langString['this_is_an_invalid_email_address'] = 'Das ist keine g&uuml;tige Email-Adresse!';
+	$langString['the_email_must_be_indicated'] = 'Die Email-Adresse muss angegeben sein!';
 ?>

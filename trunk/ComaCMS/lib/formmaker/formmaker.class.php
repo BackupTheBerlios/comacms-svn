@@ -179,14 +179,14 @@
 	 			
 	 			
 				
-	 			$types = array('password', 'checkbox', 'text', 'radio', 'text', 'textarea');
+	 			$types = array('password', 'checkbox', 'select', 'radio', 'text', 'textarea');
 	 			if(in_array(strtolower($Type), $types))
 	 				$Type = strtolower($Type);
 	 			else
 	 				$Type = 'text';
 	 			
 	 			$startInput = '';
-	 			switch (strtolower($Type)) {
+	 			switch ($Type) {
 					case 'select':
 						$startInput = '<select';
 						break;
@@ -199,7 +199,7 @@
 				}
 				
 	 			$endInput = '';
-	 			switch (strtolower($Type)) {
+	 			switch ($Type) {
 					case 'select':
 						$endInput = '>
 								<select_entrys:loop><option{selected} value="{select_value}">{display_value}</option>
@@ -221,13 +221,14 @@
 						break;
 				}
 	 			
-	 			
+	 			$passwordValue = '';
 	 			switch ($Type) {
 					case 'checkbox':
 						if($Value)
 							$Value = 'checked="checked"';
 						break;
 					case 'password':
+						$passwordValue = $Value;
 						$Value = '';
 						break;
 				}
@@ -243,7 +244,7 @@
 							'information' => $Information,
 							'errorinformation' => array(),
 							'value' => $Value,
-							'password_value' => (($Type == 'password') ? $Value : ''),
+							'password_value' => $passwordValue,
 							'select_entrys_code' => ' ',
 							'select_entrys' => array(),
 							'checkings' => array());

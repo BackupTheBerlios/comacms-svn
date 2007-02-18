@@ -66,7 +66,7 @@
 				$formMaker->AddCheck('contact_formular', 'contact_mail_from', 'empty', $this->_Translation->GetTranslation('the_email_must_be_indicated'));			
 			if($Check && $MailFrom != '')
 				$formMaker->AddCheck('contact_formular', 'contact_mail_from', 'not_email', $this->_Translation->GetTranslation('this_is_an_invalid_email_address'));
-			$formMaker->AddInput('contact_formular', 'contact_message', 'textarea', $this->_Translation->GetTranslation('message'), $this->_Translation->GetTranslation('please_enter_here_the_message_you_want_do_send') . ' '. $this->_Translation->GetTranslation('(required)'), $Message);
+			$formMaker->AddInput('contact_formular', 'contact_message', 'textarea', $this->_Translation->GetTranslation('message'), $this->_Translation->GetTranslation('please_enter_here_the_message_you_want_to_send') . ' '. $this->_Translation->GetTranslation('(required)'), $Message);
 			if($Check)
 				$formMaker->AddCheck('contact_formular', 'contact_message', 'empty', $this->_Translation->GetTranslation('please_enter_your_message'));
 

@@ -16,6 +16,7 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
 
+	require_once __ROOT__ . '/classes/textactions.php';
 	/**
 	 * @package ComaCMS
  	 * @subpackage Dates
@@ -80,7 +81,7 @@
  		 */
  		function GetDate($DateID = -1) {
  			if(is_numeric($DateID)) {
- 				$sql = "SELECT date_id, date_date, date_topic, date_location, date_creator
+ 				$sql = "SELECT date_id, date_date, date_topic, date_location, date_creator, date_topic_html
 					FROM " . DB_PREFIX . "dates
 					WHERE date_id=$DateID
 					LIMIT 1";
@@ -89,6 +90,7 @@
 					$dateArray =  array('EVENT_ID' => $dateEntry->date_id,
  							'EVENT_DATE' => $dateEntry->date_date,
  							'EVENT_TOPIC' => $dateEntry->date_topic,
+ 							'EVENT_TOPIC_HTML' => $dateEntry->date_topic_html,
  							'EVENT_LOCATION' => $dateEntry->date_location,
  							'EVENT_CREATOR' => $dateEntry->date_creator
  							);
@@ -97,6 +99,35 @@
 				else
 					return array();
  			}
+ 		}
+ 		
+ 		function _makeLinks($Text) {
+ 			preg_match_all("#\[\[(.+?)\]\]#s", $Text, $links);
+			$link_list = array();
+			$linkNr = 1;
+			// replace all links with a short uniqe id to replace them later back
+			foreach($links[1] as $link) {
+				$link_list[$linkNr] = $link;
+				$Text = str_replace("[[$link]]", "[[%$linkNr%]]", $Text);
+				$linkNr++;
+			}
+			foreach($link_list as $linkNr => $link) {
+				if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))				
+					$Text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link2[1]) . "\">" . $link2[2] . "</a>", $Text);
+				else
+					$Text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link) . "\">" . $link . "</a>", $Text);
+			}
+			// convert all **text** to <strong>text</strong> => Bold
+			$Text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $Text);
+			// convert all //text// to <em>text</em> => Italic
+			$Text = preg_replace("/\/\/(.+?)\/\//s", "<em>$1</em>", $Text);
+			// convert all __text__ to <u>text</u> => Underline
+			$Text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $Text);
+			
+			$Text = nl2br($Text);
+			
+			return $Text;
+ 		
  		}
  		
  		function GetCount($HideOlder = true, $Older = -1) {
@@ -166,13 +197,13 @@
  			
  			if(!is_numeric($MaxCount))
  				$MaxCount =  6;
- 			$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
+ 			$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location, date_topic_html
  				FROM " . DB_PREFIX . "dates
  				$sqlHide
  				ORDER BY date_date ASC
  				LIMIT $Start, $MaxCount";
  			if($MaxCount < 0)
- 				$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
+ 				$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location, date_topic_html
  				FROM " . DB_PREFIX . "dates
  				$sqlHide
  				ORDER BY date_date ASC";
@@ -183,18 +214,14 @@
  			while($dateEntry = mysql_fetch_object($datesResult)) {
  				
  				// Convert the text from the database to html
-	 			$Text = $dateEntry->date_topic;
+	 		//	$Text = $dateEntry->date_topic;
 	 			
-	 			// convert all **text** to <strong>text</strong> => Bold
-				$Text = preg_replace("/\*\*(.+?)\*\*/s", "<strong>$1</strong>", $Text);
-				// convert all //text// to <em>text</em> => Italic
-				$Text = preg_replace("/\/\/(.+?)\/\//s", "<em>$1</em>", $Text);
-				// convert all __text__ to <u>text</u> => Underline
-				$Text = preg_replace("/__(.+?)__/s", "<u>$1</u>", $Text);
+	 			
  				
  				$datesArray[] = array('EVENT_ID' => $dateEntry->date_id,
  							'EVENT_DATE' => ($ConvertTimestamp) ? date($dateFormat, $dateEntry->date_date) : $dateEntry->date_date,
- 							'EVENT_TOPIC' => nl2br($Text),
+ 							'EVENT_TOPIC' => $dateEntry->date_topic,
+ 							'EVENT_TOPIC_HTML' => $dateEntry->date_topic_html,
  							'EVENT_LOCATION' => $dateEntry->date_location,
  							'EVENT_CREATOR' =>  ($ConvertTimestamp)? $this->_ComaLib->GetUserByID($dateEntry->date_creator) :$dateEntry->date_creator, 
  						);
@@ -218,13 +245,13 @@
  			
  			if(!is_numeric($MaxCount))
  				$MaxCount =  6;
- 			$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
+ 			$sql = "SELECT date_id, date_date, date_topic, date_topic_html, date_creator, date_location
  				FROM " . DB_PREFIX . "dates
  				WHERE date_location LIKE '$Location'
  				ORDER BY date_date ASC
  				LIMIT $Start, $MaxCount";
  			if($MaxCount < 0)
- 				$sql = "SELECT date_id, date_date, date_topic, date_creator, date_location
+ 				$sql = "SELECT date_id, date_date, date_topic, date_topic_html, date_creator, date_location
  				FROM " . DB_PREFIX . "dates
  				WHERE date_location LIKE '$Location'
  				ORDER BY date_date ASC";
@@ -233,7 +260,8 @@
  			while($dateEntry = mysql_fetch_object($datesResult)) {
  				$datesArray[] = array('EVENT_ID' => $dateEntry->date_id,
  							'EVENT_DATE' => ($ConvertTimestamp) ? date($dateFormat, $dateEntry->date_date) : $dateEntry->date_date,
- 							'EVENT_TOPIC' => nl2br($dateEntry->date_topic),
+ 							'EVENT_TOPIC' => $dateEntry->date_topic,
+ 							'EVENT_TOPIC_HTML' => $dateEntry->date_topic_html,
  							'EVENT_LOCATION' => $dateEntry->date_location,
  							'EVENT_CREATOR' => $dateEntry->date_creator
  						);
@@ -257,8 +285,9 @@
  			if(is_numeric($Year) && is_numeric($Month) && is_numeric($Day) && is_numeric($Hour) && is_numeric($Minute) && $Location != '' && $Topic != '') {
  				
  				$date = mktime($Hour, $Minute, 0, $Month, $Day, $Year);
- 				$sql = "INSERT INTO " . DB_PREFIX . "dates (date_topic, date_location, date_date, date_creator)
-					VALUES ('$Topic', '$Location', '$date', '{$this->_User->ID}')";
+ 				$topicHtml = $this->_makeLinks($Topic);
+ 				$sql = "INSERT INTO " . DB_PREFIX . "dates (date_topic, date_topic_html, date_location, date_date, date_creator)
+					VALUES ('$Topic', '$topicHtml', '$Location', '$date', '{$this->_User->ID}')";
 				$this->_SqlConnection->SqlQuery($sql);
  			}
  		}
@@ -279,8 +308,9 @@
  			if(is_numeric($DateID) && is_numeric($Year) && is_numeric($Month) && is_numeric($Day) && is_numeric($Hour) && is_numeric($Minute) && $Location != '' && $Topic != '') {
  				
  				$date = mktime($Hour, $Minute, 0, $Month, $Day, $Year);
+ 				$topicHtml = $this->_makeLinks($Topic);
 				$sql = "UPDATE " . DB_PREFIX . "dates
-					SET date_topic= '$Topic',
+					SET date_topic= '$Topic', date_topic_html='$topicHtml',
 					date_location= '$Location',
 					date_date='$date'
 					WHERE date_id=$DateID";

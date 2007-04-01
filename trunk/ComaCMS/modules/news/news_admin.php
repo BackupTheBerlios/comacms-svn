@@ -69,29 +69,7 @@
 			$newsID = GetPostOrGet('newsID');
 			$title = GetPostOrGet('newsTitle');
 			$text = GetPostOrGet('newsText');
-			
-			
-			
-			
-			preg_match_all("#\[\[(.+?)\]\]#s", $text, $links);
-			$link_list = array();
-			$linkNr = 1;
-			// replace all links with a short uniqe id to replace them later back
-			foreach($links[1] as $link) {
-				$link_list[$linkNr] = $link;
-				$text = str_replace("[[$link]]", "[[%$linkNr%]]", $text);
-				$linkNr++;
-			}
-			foreach($link_list as $linkNr => $link) {
-				if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))				
-					$text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link2[1]) . "\">" . $link2[2] . "</a>", $text);
-				else
-					$text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link) . "\">" . $link . "</a>", $text);
-			}
-			
-			
-			
-			
+		
 			// some content and an numeric $newsID?
 			if(is_numeric($newsID) && $title != '' && $text != '') {
 				$news = new News($this->_SqlConnection, $this->_ComaLib, $this->_User, $this->_Config);
@@ -175,24 +153,7 @@
 			$news = new News($this->_SqlConnection, $this->_ComaLib, $this->_User, $this->_Config);
 			$title = GetPostOrGet('newsTitle');
 			$text = GetPostOrGet('newsText');
-			
-			preg_match_all("#\[\[(.+?)\]\]#s", $text, $links);
-			$link_list = array();
-			$linkNr = 1;
-			// replace all links with a short uniqe id to replace them later back
-			foreach($links[1] as $link) {
-				$link_list[$linkNr] = $link;
-				$text = str_replace("[[$link]]", "[[%$linkNr%]]", $text);
-				$linkNr++;
-			}
-			
-			foreach($link_list as $linkNr => $link) {
-				if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))				
-					$text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link2[1]) . "\">" . $link2[2] . "</a>", $text);
-				else
-					$text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link) . "\">" . $link . "</a>", $text);
-			}
-			
+					
 			$news->AddMessage($title, $text);
 			return $this->_HomePage();
 		}
@@ -250,7 +211,7 @@
 					$out .= "<tr>
 							<td>" . date('d.m.Y H:i:s', $newsEntrie['NEWS_DATE']) . "</td>
 							<td>{$newsEntrie['NEWS_TITLE']}</td>
-							<td>{$newsEntrie['NEWS_TEXT']}</td>
+							<td>{$newsEntrie['NEWS_TEXT_HTML']}</td>
 							<td>{$newsEntrie['NEWS_AUTHOR']}</td>
 							<td>
 							<a href=\"admin.php?page=module_news&amp;action=edit&amp;newsID={$newsEntrie['NEWS_ID']}\" title=\"" . sprintf($this->_Translation->GetTranslation('edit_the_news_message_%news_title%_from_the_%date%'), $newsEntrie['NEWS_TITLE'], date('d.m.Y H:i:s', $newsEntrie['NEWS_DATE'])) . "\"><img alt=\"" . $this->_Translation->GetTranslation('edit') . "\" src=\"./img/edit.png\" /></a>

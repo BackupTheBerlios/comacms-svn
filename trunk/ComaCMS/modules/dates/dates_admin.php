@@ -295,7 +295,7 @@
 							<tr>
 								<td>{EVENT_DATE}</td>
 								<td>{EVENT_LOCATION}</td>
-								<td>{EVENT_TOPIC}</td>
+								<td>{EVENT_TOPIC_HTML}</td>
 								<td>{EVENT_CREATOR}</td>
 								<td>
 									<a href="admin.php?page=module_dates&amp;action=edit&amp;eventID={EVENT_ID}" title="{EVENT_LANG_EDIT}"><img src="./img/edit.png" height="16" width="16" alt="{EVENT_LANG_EDIT}" title="{EVENT_LANG_EDIT}" /></a>

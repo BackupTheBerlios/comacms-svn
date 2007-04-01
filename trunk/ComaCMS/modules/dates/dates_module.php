@@ -134,7 +134,7 @@
 							{EVENT_LOCATION}
 						</td>
 						<td>
-							{EVENT_TOPIC}
+							{EVENT_TOPIC_HTML}
 						</td>
 					</tr>
 					</' . $name . '>

@@ -57,7 +57,7 @@
 							<div class="news-title">
 							<span class="news-date">{NEWS_DATE}</span><strong>{NEWS_TITLE}</strong>
 							</div>
-							{NEWS_TEXT}
+							{NEWS_TEXT_HTML}
 							<div class="news-author">{NEWS_AUTHOR}</div>
 						</div>
  						</NEWS>

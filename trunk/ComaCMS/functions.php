@@ -278,7 +278,7 @@
 			'.otp' => 'application/vnd.oasis.opendocument.presentation-template',
 			'.otg' => 'application/vnd.oasis.opendocument.graphics-template'
 		);
-		$ext = strrchr($filename, '.');
+		$ext = strtolower(strrchr($filename, '.'));
 		if(array_key_exists($ext, $mime))
 			return $mime[$ext];
 		return 'application/unknown';

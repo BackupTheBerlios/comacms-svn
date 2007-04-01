@@ -123,7 +123,7 @@
 				$file = array(
 							'FILE_ID' => $file->file_id,
 							'FILE_CREATOR' => $file->file_creator,
-							'FILE_PATH' => utf8_encode($file->file_path),
+							'FILE_PATH' => $file->file_path,
 							'FILE_NAME' => $file->file_name,
 							'FILE_SIZE' => $file->file_size, 
 							'FILE_DATE' => $file->file_date,
@@ -137,8 +137,10 @@
 			$file = $this->GetFile($FileID);
 			if($file === null)
 				return false;
+			$fileName = $file['FILE_PATH'];
+		
 			// try to delete delete the file
-			if(unlink($file['FILE_PATH'])) {
+			if(file_exists($fileName) && unlink($fileName)) {
 				// delete the database-entry
 				$sql = "DELETE FROM " . DB_PREFIX . "files
 						WHERE file_id = $FileID
@@ -191,7 +193,7 @@
 			while($file = mysql_fetch_object($filesResult)) {
 				$files[] = array(
 							'FILE_ID' => $file->file_id,
-							'FILE_PATH' => utf8_encode($file->file_path),
+							'FILE_PATH' => $file->file_path,
 							'FILE_NAME' => $file->file_name,
 							'FILE_SIZE' => $file->file_size, 
 							'FILE_DATE' => $file->file_date,

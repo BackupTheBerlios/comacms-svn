@@ -492,3 +492,8 @@ ALTER TABLE `comacms_menu_entries` DROP `menu_entries_new` ;
 #r421
 #Added possibility to save the preferred language in the userprofile
 ALTER TABLE `comacms_users` ADD `user_preferred_language` VARCHAR( 10 ) NOT NULL AFTER `user_email` ;
+
+#r430
+# Added html-fields for dates and news
+ALTER TABLE `comacms_news` ADD `text_html` TEXT NOT NULL ;
+ALTER TABLE `comacms_dates` ADD `date_topic_html` TEXT NOT NULL AFTER `date_topic` ;

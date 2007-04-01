@@ -21,6 +21,7 @@
 	 */
 	require_once __ROOT__ . '/classes/admin/admin_module.php';
 	require_once __ROOT__ . '/modules/news/news.class.php';
+	require_once __ROOT__ . '/classes/textactions.php';
 	 	
 	/**
 	 * @package ComaCMS
@@ -68,6 +69,29 @@
 			$newsID = GetPostOrGet('newsID');
 			$title = GetPostOrGet('newsTitle');
 			$text = GetPostOrGet('newsText');
+			
+			
+			
+			
+			preg_match_all("#\[\[(.+?)\]\]#s", $text, $links);
+			$link_list = array();
+			$linkNr = 1;
+			// replace all links with a short uniqe id to replace them later back
+			foreach($links[1] as $link) {
+				$link_list[$linkNr] = $link;
+				$text = str_replace("[[$link]]", "[[%$linkNr%]]", $text);
+				$linkNr++;
+			}
+			foreach($link_list as $linkNr => $link) {
+				if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))				
+					$text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link2[1]) . "\">" . $link2[2] . "</a>", $text);
+				else
+					$text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link) . "\">" . $link . "</a>", $text);
+			}
+			
+			
+			
+			
 			// some content and an numeric $newsID?
 			if(is_numeric($newsID) && $title != '' && $text != '') {
 				$news = new News($this->_SqlConnection, $this->_ComaLib, $this->_User, $this->_Config);
@@ -151,6 +175,24 @@
 			$news = new News($this->_SqlConnection, $this->_ComaLib, $this->_User, $this->_Config);
 			$title = GetPostOrGet('newsTitle');
 			$text = GetPostOrGet('newsText');
+			
+			preg_match_all("#\[\[(.+?)\]\]#s", $text, $links);
+			$link_list = array();
+			$linkNr = 1;
+			// replace all links with a short uniqe id to replace them later back
+			foreach($links[1] as $link) {
+				$link_list[$linkNr] = $link;
+				$text = str_replace("[[$link]]", "[[%$linkNr%]]", $text);
+				$linkNr++;
+			}
+			
+			foreach($link_list as $linkNr => $link) {
+				if(preg_match("#^(.+?)\|(.+?)$#i", $link, $link2))				
+					$text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link2[1]) . "\">" . $link2[2] . "</a>", $text);
+				else
+					$text = str_replace("[[%$linkNr%]]", "<a href=\"" . TextActions::MakeLink($link) . "\">" . $link . "</a>", $text);
+			}
+			
 			$news->AddMessage($title, $text);
 			return $this->_HomePage();
 		}

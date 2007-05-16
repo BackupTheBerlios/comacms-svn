@@ -153,7 +153,7 @@
  			$count = 0;
  			
  			if($HideOlder && $Older == -1)
- 				$Older = mktime();
+ 				$Older = mktime() - 86400;//24*60*60
  				
  			$sqlHide = '';
  			if($HideOlder)
@@ -188,7 +188,7 @@
  			$datesArray = array();
  			
  			if($HideOlder && $Older == -1)
- 				$Older = mktime();
+ 				$Older = mktime() - 86400;//24*60*60
  				
  			$sqlHide = '';
  			if($HideOlder)

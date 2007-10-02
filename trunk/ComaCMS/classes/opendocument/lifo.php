@@ -34,7 +34,7 @@
 		}
 		
 		/** Get
-		 * Removes the item which was added at las
+		 * Removes the item which was added at last
 		 * @access public
 		 * @return string
 		 */

@@ -510,7 +510,22 @@
 			}
 			else if(substr($encodedLink, 0, 6) == 'http:/' || substr($encodedLink, 0, 5) == 'ftp:/' || substr($encodedLink, 0, 7) == 'https:/' )
 				return "$encodedLink\" class=\"link_extern";
+			else if(substr($encodedLink, 0, 11) == 'download%3A')
+				return TextActions::GetDownloadUrl(substr($encodedLink, 11));
 			return TextActions::GetInternUrl($encodedLink);
+		}
+		
+		function GetDownloadUrl($File)
+		{
+			$sql = "SELECT *
+					FROM " . DB_PREFIX . "files
+					WHERE file_name=\"{$File}\"
+					LIMIT 1";
+					$fileResult = $this->_SqlConnection->SqlQuery($sql);
+					if($file = mysql_fetch_object($fileResult)) {
+						return "download.php?file_id=" . $file->file_id . "\" class=\"link_intern link_download";
+					}
+			return "#\" class=\"link_intern link_intern_missing";
 		}
 		
 		function GetInternUrl($Pagename) {

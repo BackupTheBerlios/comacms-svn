@@ -292,6 +292,14 @@ li.inline_download {
 	padding: 0;
 	display: list-item;
 }
+a.link_download {
+padding-left: 17px;
+background-image: url("../../img/download.png");
+background-repeat: no-repeat;
+padding-top:1px;
+padding-bottom:1px;
+background-position: left center;
+}
 
 
 li.inline_intern{

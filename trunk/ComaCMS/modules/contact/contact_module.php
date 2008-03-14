@@ -42,7 +42,7 @@
  			}
  			if(!isEMailAddress($mailTo))
  				return $this->_Translation->GetTranslation('no_valid_reciever_email_address');
- 				$output = $this->_sendMail($mailTo);
+ 			$output = $this->_sendMail($mailTo);
  			return $output;
  		}
  		

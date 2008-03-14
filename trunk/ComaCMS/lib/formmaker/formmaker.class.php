@@ -191,7 +191,7 @@
 						$startInput = '<select';
 						break;
 					case 'textarea':
-						$startInput = '<textarea';
+						$startInput = '<textarea rows="4" cols="50"';
 						break;
 					default:
 						$startInput = '<input type="{type}"';

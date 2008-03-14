@@ -255,3 +255,16 @@
 		VALUES ('DEFAULT', 'DEFAULT');
 		INSERT INTO {DB_PREFIX}menu_entries (menu_entries_link, menu_entries_title, menu_entries_type, menu_entries_orderid, menu_entries_menuid, menu_entries_page_id)
 		VALUES ('l:home', 'Home', 'intern_link', 0, 1, 1);
+		ALTER TABLE `{DB_PREFIX}users` ADD `user_preferred_language` VARCHAR( 10 ) NOT NULL AFTER `user_email` ;
+		ALTER TABLE `{DB_PREFIX}news` ADD `text_html` TEXT NOT NULL ;
+		ALTER TABLE `{DB_PREFIX}dates` ADD `date_topic_html` TEXT NOT NULL AFTER `date_topic` ;
+		 CREATE TABLE `{DB_PREFIX}quotes` (
+`quote_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`quote_date` INT UNSIGNED NOT NULL ,
+`quote_author` INT NOT NULL ,
+`quote_author_name` VARCHAR( 120 ) NOT NULL ,
+`quote_text` TEXT NOT NULL ,
+`quote_status` INT UNSIGNED NOT NULL DEFAULT '0'
+);
+ALTER TABLE `{DB_PREFIX}quotes` ADD `quote_ip` VARCHAR( 255 ) NOT NULL ,
+ADD `quote_hostname` VARCHAR( 255 ) NOT NULL ;

@@ -54,6 +54,7 @@
 	$translation = new Language($user->Language);
 	$translation->AddSources(__ROOT__  . '/lang/');
 	$output = new ComaLate();
+	$output->SetDoctype(DOCTYPE_XHTML_TRANSITIONAL);
 	$styleName = $config->Get('style', 'default');
 	$headerStyleName = GetPostOrGet('style');
 	if(!empty($headerStyleName))

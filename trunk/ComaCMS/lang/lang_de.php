@@ -466,4 +466,7 @@ Die Administratoren';
 	$langString['move_file'] = 'Datei verschieben';
 	$langString['new_name'] = 'Neuer Name';
 	$langString['new_path'] = 'Neuer Pfad';
-	?>
+	$langString['select_directory'] = 'Ordner auswählen';
+	$langString['this_text_describes_what_you_can_see_on_the_picture'] = 'Der Text sollte beschreiben, was auf dem Bild zu sehen ist.';
+	$langString['modyfy_image_description'] = 'Bildbeschreibung ändern';
+?>

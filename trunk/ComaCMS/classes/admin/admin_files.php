@@ -292,8 +292,7 @@
 						<label>
 							<strong>" . $this->_Translation->GetTranslation('new_path') . " </strong>
 						</label>
-						<select name=\"newpath\">";
-			print "halloooooooooo-".$path .'-'. $file['FILE_NAME'];				
+						<select name=\"newpath\">";		
 			foreach($dirlist as $dir)
 			{
 				$out .= "<option ";
@@ -301,8 +300,6 @@
 					$out .= "selected=\"selected\ ";
 				$out .= "value=\"" . $dir . "\">" . $dir . "</option>\n";
 			}
-					#	<option value=\"tawi\">Poll</option>
-					#	<option value=\"tawi\">Poll</option>
 			
 			$out .= "</select>
 					</div>

@@ -336,7 +336,9 @@
 					LEFT JOIN " . DB_PREFIX . "pages_gallery gallery ON page.page_id = gallery.page_id)
 					WHERE page.page_id=$PageID AND page.page_type='gallery' 
 					LIMIT 1";
-
+			$path = GetPostOrGet('path');
+			if($path == '/')
+				$path = '';
 			$pageResult = $this->_SqlConnection->SqlQuery($sql);
 			$pageData = mysql_fetch_object($pageResult);
 			$usedIDs = array();
@@ -351,7 +353,7 @@
 			
 			$sql = "SELECT file_path, file_id, file_name
 		 			FROM " . DB_PREFIX . "files
-		 			WHERE file_type LIKE 'image/%'
+		 			WHERE file_type LIKE 'image/%' AND file_name LIKE '{$path}%'
 		 			ORDER BY file_name ASC";
 			$imagesResult = $this->_SqlConnection->SqlQuery($sql);
 	 		$imgmax = 100;
@@ -373,7 +375,7 @@
 				
 				if(!file_exists($fileName))
 					$fileName = $imageResizer->SaveResizedTo($sizes[0], $sizes[1], $thumbnailfolder, $prefix);
-				if(file_exists($fileName) && !in_array($image->file_id, $usedIDs))
+				if(file_exists($fileName) && !in_array($image->file_id, $usedIDs) && strpos($image->file_name, '/', strlen($path)+1) === false )
 					$images[] = array('IMAGE_FILE_ID' => $image->file_id ,
 									'IMAGE_FILENAME' => $image->file_name,
 									'IMAGE_SRC' => generateUrl($fileName),
@@ -383,18 +385,58 @@
 									'IMAGE_HEIGHT' => $sizes[1]);
 				 
 			}
-			if(!$first)
-				return $this->_EditPageOverview($PageID);
-				
+			#if(!$first)
+			#	return $this->_EditPageOverview($PageID);
+			$sql = "SELECT CONCAT(file_name, '/') as file_name
+					FROM " . DB_PREFIX . "files
+					WHERE file_type = 'dir'
+					ORDER BY file_name";
+			$dirsResult = $this->_SqlConnection->SqlQuery($sql);
+							// is there a file with the same md5?
+			$dirlist = Array();
+			$dirlist[] = Array('DIR' =>'/', 'SELECTED' => '');
+			while($dir = mysql_fetch_object($dirsResult)) {
+				$dirlist[] = Array('DIR' =>$dir->file_name, 'SELECTED' => ($dir->file_name == $path) ? 'selected="selected"': '');
+			}	
 			$this->_ComaLate->SetReplacement('LANG_ADD_IMAGES', $this->_Translation->GetTranslation('add_images'));
 			$this->_ComaLate->SetReplacement('LANG_RESET', $this->_Translation->GetTranslation('reset'));
 			$this->_ComaLate->SetReplacement('LANG_IMAGE', $this->_Translation->GetTranslation('image'));
 			$this->_ComaLate->SetReplacement('LANG_SELECT', $this->_Translation->GetTranslation('select'));
 			$this->_ComaLate->SetReplacement('LANG_ADD', $this->_Translation->GetTranslation('add'));
 			$this->_ComaLate->SetReplacement('LANG_BACK', $this->_Translation->GetTranslation('back'));
+			$this->_ComaLate->SetReplacement('LANG_SELECT_DIRECTORY', $this->_Translation->GetTranslation('select_directory'));
+			$this->_ComaLate->SetReplacement('LANG_DIRECTORY', $this->_Translation->GetTranslation('directory'));
+			
 			$this->_ComaLate->SetReplacement('PAGE_ID', $PageID);
 			$this->_ComaLate->SetReplacement('IMAGES', $images);
+			$this->_ComaLate->SetReplacement('DIRS', $dirlist);
+			#http://localhost/comacms/trunk/ComaCMS/admin.php?
+			#page=pagestructure&action=editPage&action2=addNewImageDialog&
+			#pageID=2
+			
 			$template = '<fieldset>
+ 					<legend>{LANG_SELECT_DIRECTORY}</legend>
+ 					<form action="{ADMIN_FORM_URL}" method="post">
+						<input type="hidden" name="{ADMIN_FORM_PAGE}" value="pagestructure" />
+						<input type="hidden" name="action" value="editPage" />
+						<input type="hidden" name="action2" value="addNewImageDialog" />
+						<input type="hidden" name="pageID" value="{PAGE_ID}" />
+						<div class="row">
+						<label>
+							<strong>{LANG_DIRECTORY}</strong>
+						</label>
+						<select name="path">
+						<DIRS:loop>
+							<option {SELECTED}value="{DIR}">{DIR}</option>
+						</DIRS>
+						</select>
+						</div>
+ 						<div class="row">
+							<input type="submit" value="{LANG_SELECT_DIRECTORY}" class="button" />
+						</div>
+						</form>
+						</fieldset>
+						<fieldset>
  					<legend>{LANG_ADD_IMAGES}</legend>
  					<form action="{ADMIN_FORM_URL}" method="post">
 						<input type="hidden" name="{ADMIN_FORM_PAGE}" value="pagestructure" />

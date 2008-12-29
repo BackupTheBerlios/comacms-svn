@@ -52,6 +52,10 @@
 		 					break;
 		 		case 'upload':		$out .= $this->_uploadPage();
 		 					break;
+		 		case 'new_dir':	$out .= $this->_newDirPage();
+		 					break;
+		 		case 'move': $out .= $this->_movePage();
+		 					break;
 		 		default:		$out .= $this->_homePage();
 		 	}
 			return $out;
@@ -172,13 +176,13 @@
 			
 	 		$out = '';
 			// get all files
-			$sql = "SELECT file_path, file_md5, file_name
+			$sql = "SELECT file_path, file_md5, file_name, file_type
 					FROM " . DB_PREFIX . "files";
 			$files_result = $this->_SqlConnection->SqlQuery($sql);
 			
 			while($file = mysql_fetch_object($files_result)) {
 				// the file still exists 
-				if(file_exists($file->file_path))
+				if(file_exists($file->file_path) || $file->file_type == 'dir')
 					$md5s[$file->file_path] = $file->file_md5;
 				// the file doesn't exist
 				else {
@@ -236,6 +240,111 @@
 			return $out;
 	 	}
 	 	
+	 	function _movePage() {
+	 		// get the fileID of the file
+	 		$fileID = GetPostOrGet('file_id');
+	 		// try to get the confirmation
+	 		$newname = GetPostOrGet('newname');
+	 		$newpath = GetPostOrGet('newpath');
+	 		
+	 		// is the fileID something numeric? if not, stop the
+	 		if(!is_numeric($fileID))
+	 			return $this->_homePage();
+	 		if(!empty($newname) && !empty($newpath))
+	 		{
+	 			if($newpath == '/')
+	 				$newpath = '';
+	 			$sql = "UPDATE " . DB_PREFIX . "files
+	 					SET file_name = '" . $newpath . $newname . "'
+						WHERE file_id =$fileID
+						LIMIT 1";
+				$this->_SqlConnection->SqlQuery($sql);
+	 			return $this->_homePage();
+	 		}
+	 		// try to get the file-information from database
+			$files = new Files($this->_SqlConnection, $this->_User);
+			$file = $files->GetFile($fileID);
+			$filename = basename($file['FILE_NAME']);
+			$path = substr($file['FILE_NAME'],0, -1 * strlen($filename));
+			$sql = "SELECT CONCAT(file_name, '/') as file_name
+					FROM " . DB_PREFIX . "files
+					WHERE file_type = 'dir'
+					ORDER BY file_name";
+			$dirsResult = $this->_SqlConnection->SqlQuery($sql);
+							// is there a file with the same md5?
+			$dirlist = Array();
+			$dirlist[] = '/';
+			while($dir = mysql_fetch_object($dirsResult)) {
+				$dirlist[] = $dir->file_name;
+			}
+			$out = "			<fieldset>
+	 			<legend>" . $this->_Translation->GetTranslation('move_file') . "</legend>
+				<form action=\"admin.php?page=files\" method=\"post\">
+					<input type=\"hidden\" name=\"action\" value=\"move\" />
+					<input type=\"hidden\" name=\"file_id\" value=\"{$fileID}\" />
+					<div class=\"row\">
+						<label>
+							<strong>" . $this->_Translation->GetTranslation('new_name') . " </strong>
+						</label>
+						<input name=\"newname\" type=\"text\" value=\"{$filename}\" />
+					</div>
+						<div class=\"row\">
+						<label>
+							<strong>" . $this->_Translation->GetTranslation('new_path') . " </strong>
+						</label>
+						<select name=\"newpath\">";
+			print "halloooooooooo-".$path .'-'. $file['FILE_NAME'];				
+			foreach($dirlist as $dir)
+			{
+				$out .= "<option ";
+				if($dir == $path)
+					$out .= "selected=\"selected\ ";
+				$out .= "value=\"" . $dir . "\">" . $dir . "</option>\n";
+			}
+					#	<option value=\"tawi\">Poll</option>
+					#	<option value=\"tawi\">Poll</option>
+			
+			$out .= "</select>
+					</div>
+					<div class=\"row\">
+						<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('move_file') . "\"/>
+					</div>
+				</form>
+			</fieldset>";
+			return $out;
+	 	}
+	 	
+	 	function _newDirPage() {
+			$path = GetPostOrGet('path');
+	 		if($path == '/')
+	 			$path = '';
+	 		if(strlen($path) > 0 && substr($path,-1,0) != '/')
+	 			$path .= '/';
+	 		if($path == '/')
+	 			$path = '';
+	 		$out = '';
+	 		$dirname = GetPostOrGet('dirname');
+	 		$new_dir = $path . $dirname;
+	 		
+	 		$sql = "SELECT file_name
+					FROM " . DB_PREFIX . "files
+					WHERE file_name = '$new_dir'
+					LIMIT 1";
+			$dirExistsResult = $this->_SqlConnection->SqlQuery($sql);
+			// does the directory exist already?
+			if($dirExists = mysql_fetch_object($dirExistsResult)) {
+				$out .= "<div class=\"error\"><strong>" . $this->_Translation->GetTranslation('error') . ":</strong> ";
+				$out .= sprintf($this->_Translation->GetTranslation('the_directory_%file%_is already_created'), $dirname);
+				$out .= "</div>\r\n";
+			}
+			else {
+				$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date, file_creator)
+										VALUES('{$new_dir}', 'dir', '', '0', '', " . mktime() . ", {$this->_User->ID})";
+									$this->_SqlConnection->SqlQuery($sql);
+			}
+	 		return $out . $this->_homePage();;
+	 	}
+	 	
 	 	/**
 	 	 * uploads files...
 	 	 * @access private
@@ -243,11 +352,14 @@
 	 	function _uploadPage() {
 	 		// TODO: make it configurable
 			$uploadPath = './data/upload/';
-			
+			$path = GetPostOrGet('path');
+	 		if($path == '/')
+	 			$path = '';
+	 		if(strlen($path) > 0 && substr($path,-1,0) != '/')
+	 			$path .= '/';
 			$out = '';
 			// foreach file that is 'posted' with this request
 			foreach($_FILES as $name => $file) {
-				$out .= print_r($file, true);
 				// has it a trusted name? and has it some content 
 				if(strpos($name, 'uploadfile') === 0 && $file['error'] != 4) {
 					// get the 'number of the upload'
@@ -288,7 +400,7 @@
 								if(move_uploaded_file($file['tmp_name'], $savePath)) {
 								// add the database-entry for the file
 									$sql = "INSERT INTO " . DB_PREFIX . "files (file_name, file_type, file_path, file_size, file_md5, file_date, file_creator)
-										VALUES('{$file['name']}', '" . GetMimeContentType($savePath) ."', '$savePath', '" . filesize($savePath) . "', '" . md5_file($savePath) . "', " . mktime() . ", {$this->_User->ID})";
+										VALUES('" . $path . $file['name'] . "', '" . GetMimeContentType($savePath) ."', '$savePath', '" . filesize($savePath) . "', '" . md5_file($savePath) . "', " . mktime() . ", {$this->_User->ID})";
 									$this->_SqlConnection->SqlQuery($sql);
 									// prevent uploads, which aren't dowloadable(read-/writeable) by another user(ftp-access etc.)
 									chmod($savePath, 0755);
@@ -332,11 +444,20 @@
 	 	 * @access private
 	 	 */
 	 	function _homePage() {
+	 		$path = GetPostOrGet('path');
+	 		if (substr($path, -1, 1) == '/')
+	 			$path = substr($path, 0, -1);
+	 		$pathPart = explode('/', $path);
+	 		array_pop($pathPart);
+	 		$uppath = implode('/', $pathPart);
+	 		$pathLen = strlen($path);
+	 		
 	 		$out = "\t\t\t<fieldset>
 	 			<legend>" . $this->_Translation->GetTranslation('upload') . "</legend>
 				<form enctype=\"multipart/form-data\" action=\"admin.php?page=files\" method=\"post\">
 					<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1600000\" />
 					<input type=\"hidden\" name=\"action\" value=\"upload\" />
+					<input type=\"hidden\" name=\"path\" value=\"" . $path . "\" />
 					<div class=\"row\">
 						<label>
 							<strong>" . $this->_Translation->GetTranslation('file') . " 1:</strong>
@@ -363,6 +484,30 @@
 					<a href=\"admin.php?page=files&amp;action=check_new_files\" class=\"button\">" . $this->_Translation->GetTranslation('check_for_changes') . "</a>
 				</div>
 			</fieldset>
+			<fieldset>
+	 			<legend>" . $this->_Translation->GetTranslation('create_directory') . "</legend>
+				<form action=\"admin.php?page=files\" method=\"post\">
+					<input type=\"hidden\" name=\"action\" value=\"new_dir\" />
+					<input type=\"hidden\" name=\"path\" value=\"" . $path . "\" />
+					<div class=\"row\">
+						<label>
+							<strong>" . $this->_Translation->GetTranslation('directory') . " </strong>
+						</label>
+						<input name=\"dirname\" type=\"text\" />
+					</div>
+					
+					<div class=\"row\">
+						<input type=\"submit\" class=\"button\" value=\"" . $this->_Translation->GetTranslation('create_directory') . "\"/>
+					</div>
+				</form>
+			</fieldset>	<h3>Pfad: /" . $path . "</h3>";
+			if($pathLen > 0)	
+	 			$out .= "
+				<div class=\"row\">
+					<a href=\"admin.php?page=files&amp;path=" . $uppath ."\" class=\"button\">" . $this->_Translation->GetTranslation('directory_up') . "</a>
+				</div>";
+			
+	 			$out .= "
 			<table id=\"files\" class=\"text_table full_width\">
 				<thead>
 					<tr>
@@ -396,7 +541,8 @@
 						</th>
 						<th class=\"actions\">" . $this->_Translation->GetTranslation('actions') . "</th>
 					</tr>
-				</thead>\r\n";
+				</thead>
+				\r\n";
 			
 						
 			$dateDayFormat = $this->_Config->Get('date_day_format', 'd.m.Y');
@@ -432,31 +578,54 @@
 				$ascending = false;
 			
 			// get all files from the database/ which are registered in the database
-			$filesArray = $files->FillArray($order, $ascending);
+			$filesArrayTmp = $files->FillArray($order, $ascending);
 			//print str_replace('  ','&nbsp;&nbsp;',nl2br(print_r($fileArray, true)));
 			//die();
-			$filesCount = count($filesArray);
-			for($i = 0; $i < $filesCount; $i++) {
-				$filesArray[$i]['FILE_SIZE'] = kbormb($filesArray[$i]['FILE_SIZE']); 
-				$filesArray[$i]['FILE_DATE'] = date($dateFormat, $filesArray[$i]['FILE_DATE']);
-				$filesArray[$i]['FILE_DOWNLOAD_FILE'] = sprintf($this->_Translation->GetTranslation('download_file_%file%'), $filesArray[$i]['FILE_NAME']);
-				$filesArray[$i]['FILE_DELETE_FILE'] = sprintf($this->_Translation->GetTranslation('delete_file_%file%'), $filesArray[$i]['FILE_NAME']);
-				$preview = '';
-				if(strpos($filesArray[$i]['FILE_TYPE'], 'image/') === 0) {
-					$image = new ImageConverter($filesArray[$i]['FILE_PATH']);
-					// max: 100px;
-					$maximum = 100;
-					$size = $image->CalcSizeByMax($maximum);
-					$imageUrl = $image->SaveResizedTo($size[0], $size[1], $thumbnailfolder, $size[0] . 'x' . $size[1] . '_');
-					if(file_exists($imageUrl))
-							$preview = "<img alt=\"{$filesArray[$i]['FILE_NAME']}\" src=\"". generateUrl($imageUrl) . "\" />";
-				}
-				$filesArray[$i]['FILE_PREVIEW'] = $preview;
-			}
+			$filesCount = count($filesArrayTmp);
+			$filesArray = Array();
 			
+			for($i = 0; $i < $filesCount; $i++) {
+				$fileArray = $filesArrayTmp[$i];
+				if(substr($fileArray['FILE_NAME'], 0, $pathLen) == $path && strlen($fileArray['FILE_NAME']) > $pathLen && !strpos($fileArray['FILE_NAME'], '/', $pathLen +1))
+				{
+					$fileArray['FILE_SIZE'] = kbormb($fileArray['FILE_SIZE']); 
+					$fileArray['FILE_DATE'] = date($dateFormat, $fileArray['FILE_DATE']);
+					$fileArray['FILE_DOWNLOAD_FILE'] = sprintf($this->_Translation->GetTranslation('download_file_%file%'), $fileArray['FILE_NAME']);
+					$fileArray['FILE_DELETE_FILE'] = sprintf($this->_Translation->GetTranslation('delete_file_%file%'), $fileArray['FILE_NAME']);
+					$fileArray['FILE_MOVE_FILE'] = sprintf($this->_Translation->GetTranslation('move_file_%file%'), $fileArray['FILE_NAME']);
+					$preview = '';
+					if(strpos($fileArray['FILE_TYPE'], 'image/') === 0) {
+						$image = new ImageConverter($fileArray['FILE_PATH']);
+						// max: 100px;
+						$maximum = 100;
+						$size = $image->CalcSizeByMax($maximum);
+						$imageUrl = $image->SaveResizedTo($size[0], $size[1], $thumbnailfolder, $size[0] . 'x' . $size[1] . '_');
+						if(file_exists($imageUrl))
+								$preview = "<img alt=\"{$fileArray['FILE_NAME']}\" src=\"". generateUrl($imageUrl) . "\" />";
+					}
+					$fileArray['FILE_PREVIEW'] = $preview;
+					if($pathLen > 0)
+						$fileArray['FILE_NAME'] = substr($fileArray['FILE_NAME'], $pathLen + 1);
+					if($fileArray['FILE_TYPE'] == 'dir')
+					{
+						$det = $pathLen > 0 ? '/' : '';
+						$fileArray['FILE_NAME'] = '<a href="admin.php?page=files&amp;path=' . $path . $det . $fileArray['FILE_NAME'] . '">' . $fileArray['FILE_NAME'] . '</a>';
+					}
+					$fileArray['FILE_ACTION'] = '';
+					if($fileArray['FILE_TYPE'] != 'dir')
+					{
+						$file_id = $fileArray['FILE_ID'];
+						$fileArray['FILE_ACTION'] .= '<a href="download.php?file_id='. $file_id . '" ><img src="img/download.png" alt="['. $fileArray['FILE_DOWNLOAD_FILE'] . ']" title="' . $fileArray['FILE_DOWNLOAD_FILE']  .'"/></a>';
+						$fileArray['FILE_ACTION'] .= '<a href="admin.php?page=files&amp;action=move&amp;file_id='. $file_id . '" ><img src="img/restore.png" alt="['. $fileArray['FILE_MOVE_FILE'] . ']" title="' . $fileArray['FILE_MOVE_FILE']  .'"/></a>';
+					}
+					$filesArray[] = $fileArray;
+			
+				}
+			}
 			$this->_ComaLate->SetReplacement('FILES', $filesArray);
 			$this->_ComaLate->SetReplacement('SIZE_COUNT', kbormb($files->SizeCount));
 			$this->_ComaLate->SetReplacement('LANG_ALTOGETHER', $this->_Translation->GetTranslation('altogether'));
+			
 			$out .= '<FILES:loop>
 					<tr>
 						<td>{FILE_PREVIEW}</td>
@@ -465,7 +634,7 @@
 						<td>{FILE_DATE}</td>
 						<td>{FILE_TYPE}</td>
 						<td>{FILE_DOWNLOADS}</td>
-						<td><a href="download.php?file_id={FILE_ID}" ><img src="img/download.png" alt="[{FILE_DOWNLOAD_FILE}]" title="{FILE_DOWNLOAD_FILE}"/></a>
+						<td>{FILE_ACTION}
 						<a href="admin.php?page=files&amp;action=delete&amp;file_id={FILE_ID}" ><img src="img/del.png" alt="[{FILE_DELETE_FILE}]" title="{FILE_DELETE_FILE}" /></a></td>
 					</tr>
 					</FILES>

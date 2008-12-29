@@ -459,4 +459,11 @@ Die Administratoren';
 	$langString['preferred_language'] = 'Bevorzugte Sprache';
 	$langString['this_is_your_preferred_language_of_the_installed_ones'] = 'Dieses ist ihre bevorzugte Sprache von den Installierten';
 	$langString['this_is_the_preferred_language_of_the_user'] = 'Dies ist die bevorzugte Sprache des Benutzers';
-?>
+	$langString['directory'] = 'Ordner';
+	$langString['create_directory'] = 'Ordner erstellen';
+	$langString['directory_up'] = 'Aufwärts';
+	$langString['move_file_%file%'] = 'Die Datei &quot;%s&quot; bewegen';
+	$langString['move_file'] = 'Datei verschieben';
+	$langString['new_name'] = 'Neuer Name';
+	$langString['new_path'] = 'Neuer Pfad';
+	?>

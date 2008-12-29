@@ -83,7 +83,11 @@
 			$text = "Die Seite mit dem Namen &quot;$want&quot; wurde leider nicht gefunden.<br />
 				Falls die Seite aber da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.";
 			break;
-		
+		case 'd404':
+			$title = 'Fehlerhafter Download.';
+			$text = "Der Download dieser Datei ist nicht zul&auml;ssig.<br />
+				Falls der Download aber da sein m&uuml;sste, melden sie sich bitte beim Seitenbetreiber.";
+			break;	
 		case '401':
 			$title = 'Zugriff verweigert!';
 			$text = 'Sie haben keine Zugriffsrechte zu dieser Seite!';

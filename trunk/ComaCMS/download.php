@@ -37,7 +37,7 @@
 			LIMIT 1";
 		$file_result = $sqlConnection->SqlQuery($sql);
 		if($file = mysql_fetch_object($file_result)) { // We have found a file in the database
-			if(!file_exists($file->file_path)) { // Check: exists the file also on the server?
+			if(!file_exists($file->file_path) || $file->file_type == 'dir') { // Check: exists the file also on the server?
 				// Show error page "download not found" 
 				header('Location: special.php?page=d404');
 				die();

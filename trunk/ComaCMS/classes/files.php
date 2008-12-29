@@ -138,9 +138,10 @@
 			if($file === null)
 				return false;
 			$fileName = $file['FILE_PATH'];
+			
 		
 			// try to delete delete the file
-			if(file_exists($fileName) && unlink($fileName)) {
+			if((file_exists($fileName) && unlink($fileName)) || $file['FILE_TYPE'] == 'dir') {
 				// delete the database-entry
 				$sql = "DELETE FROM " . DB_PREFIX . "files
 						WHERE file_id = $FileID

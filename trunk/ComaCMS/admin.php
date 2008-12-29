@@ -33,7 +33,6 @@
 	if(!isset($action))
 		$action = '';
 	
-
 		
 	// If the user isn't logged in
 	if(!$user->IsLoggedIn)  {

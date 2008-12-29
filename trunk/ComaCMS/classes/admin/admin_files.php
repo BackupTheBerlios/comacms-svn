@@ -247,6 +247,7 @@
 			$out = '';
 			// foreach file that is 'posted' with this request
 			foreach($_FILES as $name => $file) {
+				$out .= print_r($file, true);
 				// has it a trusted name? and has it some content 
 				if(strpos($name, 'uploadfile') === 0 && $file['error'] != 4) {
 					// get the 'number of the upload'

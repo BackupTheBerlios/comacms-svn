@@ -586,3 +586,7 @@ p.after_column {
   float: right;
   clear: both;
 }
+
+.how {
+  display: none;
+}

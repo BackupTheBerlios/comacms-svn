@@ -179,7 +179,7 @@
 	 			
 	 			
 				
-	 			$types = array('password', 'checkbox', 'select', 'radio', 'text', 'textarea');
+	 			$types = array('password', 'checkbox', 'select', 'radio', 'text', 'textarea', 'antispam');
 	 			if(in_array(strtolower($Type), $types))
 	 				$Type = strtolower($Type);
 	 			else
@@ -192,6 +192,9 @@
 						break;
 					case 'textarea':
 						$startInput = '<textarea rows="4" cols="50"';
+						break;
+					case 'antispam':
+						$startInput = '<input type="text"';
 						break;
 					default:
 						$startInput = '<input type="{type}"';
@@ -236,6 +239,7 @@
 	 			// Add the input to the local array
  				$this->_Forms[$FormName]['inputs'][$Name] = array(
 							'name' => $Name,
+ 							'addon' => ($Type == 'antispam') ? ' how' : '',
 							'form_name' => $FormName,
 							'start_input' => $startInput,
 							'end_input' => $endInput,
@@ -548,7 +552,7 @@
 						<hidden_inputs:loop><input type=\"hidden\" name=\"{name}\" value=\"{value}\" />\r\n\t\t\t\t\t\t</hidden_inputs>
 						{fieldset_legend}
 						<inputs:loop>
-							<div class=\"row\">
+							<div class=\"row{addon}\">
 								<label for=\"id{name}\">
 									<strong>{translation}:</strong>";
 				

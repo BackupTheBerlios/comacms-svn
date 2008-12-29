@@ -59,6 +59,8 @@
 			$formMaker->AddHiddenInput('contact_formular', 'action', 'send');
 			
 			$formMaker->AddInput('contact_formular', 'contact_mail_from_name', 'text', $this->_Translation->GetTranslation('name'), $this->_Translation->GetTranslation('please_enter_your_name_here') . ' '. $this->_Translation->GetTranslation('(required)'), $MailFromName);
+			//Anti-Spam functionality (try to catch bots with a hidden field no (human) user would be able to see it) ;-)
+			$formMaker->AddInput('contact_formular', 'contact_important_name', 'antispam', 'Important Name', 'This is a very important thing!', '');
 			if($Check)
 				$formMaker->AddCheck('contact_formular', 'contact_mail_from_name', 'empty', $this->_Translation->GetTranslation('the_name_must_be_indicated'));
 			$formMaker->AddInput('contact_formular', 'contact_mail_from', 'text', $this->_Translation->GetTranslation('email'), $this->_Translation->GetTranslation('please_enter_your_email_here') . ' '. $this->_Translation->GetTranslation('(required)'), $MailFrom);
@@ -85,7 +87,10 @@
  			$mailFrom = GetPostOrGet('contact_mail_from');
  			$message = GetPostOrGet('contact_message');
  			$action = GetPostOrGet('action');
+ 			$antispam = GetPostOrGet('contact_important_name');
  			$mailError = '';
+ 			if($antispam != '')
+ 				$mailError = $this->_Translation->GetTranslation('please_leave_the_important_name_field_empty');
  			// no email
  			if($mailFrom == '')
  				$mailError = $this->_Translation->GetTranslation('the_email_address_must_be_indicated');
@@ -108,7 +113,9 @@
 				
 				$output = "</p><fieldset><legend>" . $this->_Translation->GetTranslation('contact') . "</legend>";
 				// try to send the email
-				if(sendmail($MailTo, $from, $title, $messageContent))
+				if($mailError != '')
+					$output .= $mailError;
+				else if(sendmail($MailTo, $from, $title, $messageContent))
  					$output .= $this->_Translation->GetTranslation('your_message_was_sent_succesdfully');
  				else // TODO: try to give some hints what to do 
  					$output .= $this->_Translation->GetTranslation('an_error_occured_on_sending_this_message');

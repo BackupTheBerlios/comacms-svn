@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Docs For Class PagePreview</title>
+<title>Docs For Class Files</title>
 <link rel="stylesheet" type="text/css" href="../media/style.css">
 </head>
 <body>
@@ -290,8 +290,8 @@
     <td>
       <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
 
-<h1>Class: PagePreview</h1>
-Source Location: /classes/pagepreview.php<br /><br />
+<h1>Class: Files</h1>
+Source Location: /classes/files.php<br /><br />
 
 
 <table width="100%" border="0">
@@ -309,14 +309,27 @@ Source Location: /classes/pagepreview.php<br /><br />
         
 </td>
 
+<td valign="top">
+<h3><a href="#class_vars">Variables</a></h3>
+<ul>
+    <li><a href="../ComaCMS/Files.html#var$SizeCount">$SizeCount</a></li>
+    <li><a href="../ComaCMS/Files.html#var$_SqlConnection">$_SqlConnection</a></li>
+    <li><a href="../ComaCMS/Files.html#var$_User">$_User</a></li>
+  </ul>
+</td>
 
 
 <td valign="top">
 <h3><a href="#class_methods">Methods</a></h3>
 <ul>
-    <li><a href="../ComaCMS/PagePreview.html#methodPagePreview">PagePreview</a></li>
-    <li><a href="../ComaCMS/PagePreview.html#methodGetStyles">GetStyles</a></li>
-    <li><a href="../ComaCMS/PagePreview.html#methodSaveStyle">SaveStyle</a></li>
+    <li><a href="../ComaCMS/Files.html#methodFiles">Files</a></li>
+    <li><a href="../ComaCMS/Files.html#methodAddFile">AddFile</a></li>
+    <li><a href="../ComaCMS/Files.html#methodDeleteFile">DeleteFile</a></li>
+    <li><a href="../ComaCMS/Files.html#methodFillArray">FillArray</a></li>
+    <li><a href="../ComaCMS/Files.html#methodGetFile">GetFile</a></li>
+    <li><a href="../ComaCMS/Files.html#methodGetIDByFileName">GetIDByFileName</a></li>
+    <li><a href="../ComaCMS/Files.html#methodGetIDByPath">GetIDByPath</a></li>
+    <li><a href="../ComaCMS/Files.html#methodUploadFile">UploadFile</a></li>
   </ul>
 </td>
 
@@ -336,10 +349,60 @@ Source Location: /classes/pagepreview.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line 21]<br />
+[line 24]<br />
 </div><br /><br />
 <div class="top">[ <a href="#top">Top</a> ]</div><br />
 
+<hr />
+<a name="class_vars"></a>
+<h3>Class Variables</h3>
+<div class="tags">
+	<a name="var$SizeCount"></a>
+	<p></p>
+	<h4>$SizeCount = <span class="value">&nbsp;0</span></h4>
+	<p>[line 26]</p>
+  
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$_SqlConnection"></a>
+	<p></p>
+	<h4>$_SqlConnection = <span class="value"></span></h4>
+	<p>[line 27]</p>
+  
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$_User"></a>
+	<p></p>
+	<h4>$_User = <span class="value"></span></h4>
+	<p>[line 28]</p>
+  
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+</div><br />
 
 <hr />
 <a name="class_methods"></a>
@@ -347,101 +410,233 @@ Source Location: /classes/pagepreview.php<br /><br />
 <div class="tags">
 
   <hr />
-	<a name="methodPagePreview"></a>
-	<h3>constructor PagePreview <span class="smalllinenumber">[line 35]</span></h3>
+	<a name="methodFiles"></a>
+	<h3>constructor Files <span class="smalllinenumber">[line 29]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>class PagePreview(
-<a href="../ComaCMS/Config.html">Config</a>
-&$Config)</code>
+		<code>Files Files(
+
+&$SqlConnection, 
+&$User)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Initializes the PagePreview class<br /><br /><br /><br />
-<h4>Tags:</h4>
-<div class="tags">
-<table border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><b>return:</b>&nbsp;&nbsp;</td><td>PagePreview functions</td>
-  </tr>
-</table>
-</div>
-<br /><br />
+		<br /><br />
 
 	
         <h4>Parameters:</h4>
     <div class="tags">
     <table border="0" cellspacing="0" cellpadding="0">
           <tr>
-        <td class="type"><a href="../ComaCMS/Config.html">Config</a>&nbsp;&nbsp;</td>
-        <td><b>&$Config</b>&nbsp;&nbsp;</td>
-        <td>Config The config-class for config-requests</td>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>&$SqlConnection</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>&$User</b>&nbsp;&nbsp;</td>
+        <td></td>
       </tr>
         </table>
     </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
-	<a name="methodGetStyles"></a>
-	<h3>method GetStyles <span class="smalllinenumber">[line 63]</span></h3>
+	<a name="methodAddFile"></a>
+	<h3>method AddFile <span class="smalllinenumber">[line 106]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>array GetStyles(
-string
-$StyleFolder, string
-$Style)</code>
+		<code>void AddFile(
+
+$Path)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Gets all existing styles into an array<br /><br /><br /><br />
-<h4>Tags:</h4>
-<div class="tags">
-<table border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><b>return:</b>&nbsp;&nbsp;</td><td>All styles in that directory</td>
-  </tr>
-</table>
-</div>
-<br /><br />
+		<br /><br />
 
 	
         <h4>Parameters:</h4>
     <div class="tags">
     <table border="0" cellspacing="0" cellpadding="0">
           <tr>
-        <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$StyleFolder</b>&nbsp;&nbsp;</td>
-        <td>StyleFolder The folder to search in for styles</td>
-      </tr>
-          <tr>
-        <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$Style</b>&nbsp;&nbsp;</td>
-        <td>Style The actual style</td>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$Path</b>&nbsp;&nbsp;</td>
+        <td></td>
       </tr>
         </table>
     </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
-	<a name="methodSaveStyle"></a>
-	<h3>method SaveStyle <span class="smalllinenumber">[line 45]</span></h3>
+	<a name="methodDeleteFile"></a>
+	<h3>method DeleteFile <span class="smalllinenumber">[line 136]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void SaveStyle(
-string
-$Style)</code>
+		<code>void DeleteFile(
+
+$FileID)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Saves a choosen style to config<br /><br /><br /><br />
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$FileID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodFillArray"></a>
+	<h3>method FillArray <span class="smalllinenumber">[line 159]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void FillArray(
+[
+$Order = FILES_NAME], [
+$Ascending = true], [
+$Where = ''])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$Order</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$Ascending</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$Where</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodGetFile"></a>
+	<h3>method GetFile <span class="smalllinenumber">[line 114]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void GetFile(
+
+$FileID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$FileID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodGetIDByFileName"></a>
+	<h3>method GetIDByFileName <span class="smalllinenumber">[line 48]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void GetIDByFileName(
+
+$FileName)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$FileName</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodGetIDByPath"></a>
+	<h3>method GetIDByPath <span class="smalllinenumber">[line 36]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void GetIDByPath(
+
+$Path)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$Path</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodUploadFile"></a>
+	<h3>method UploadFile <span class="smalllinenumber">[line 62]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>string UploadFile(
+
+$Name, 
+$DestinationFolder, [
+$RegisterFile = true], [
+$Chmod = 0775])</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>UploadedFileName</td>
   </tr>
 </table>
 </div>
@@ -452,9 +647,24 @@ $Style)</code>
     <div class="tags">
     <table border="0" cellspacing="0" cellpadding="0">
           <tr>
-        <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$Style</b>&nbsp;&nbsp;</td>
-        <td>Style Name of the coosen style</td>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$Name</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$DestinationFolder</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$RegisterFile</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$Chmod</b>&nbsp;&nbsp;</td>
+        <td></td>
       </tr>
         </table>
     </div><br />
@@ -465,7 +675,7 @@ $Style)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sat, 18 Apr 2009 14:58:05 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
+		    Documentation generated on Sat, 18 Apr 2009 14:58:03 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

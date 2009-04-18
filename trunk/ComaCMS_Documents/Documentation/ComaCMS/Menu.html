@@ -12,9 +12,11 @@
   <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
   <tr>
     <td class="header_menu">
-  		  [ <a href="../classtrees_ComaCMS.html" class="menu">class tree: ComaCMS</a> ]
+        
+                                    
+                                                                      		  [ <a href="../classtrees_ComaCMS.html" class="menu">class tree: ComaCMS</a> ]
 		  [ <a href="../elementindex_ComaCMS.html" class="menu">index: ComaCMS</a> ]
-		  [ <a href="../elementindex.html" class="menu">all elements</a> ]
+		  	    [ <a href="../elementindex.html" class="menu">all elements</a> ]
     </td>
   </tr>
   <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
@@ -40,15 +42,13 @@
 		</a><br>
 			<a href="../ComaCMS/_classes---config.php.html">		config.php
 		</a><br>
+			<a href="../ComaCMS/_modules---dates---dates_settings.php.html">		dates_settings.php
+		</a><br>
 			<a href="../ComaCMS/_download.php.html">		download.php
 		</a><br>
-			<a href="../ComaCMS/_classes---edit_gallery_page.php.html">		edit_gallery_page.php
-		</a><br>
-			<a href="../ComaCMS/_classes---edit_text_page.php.html">		edit_text_page.php
+			<a href="../ComaCMS/_classes---files.php.html">		files.php
 		</a><br>
 			<a href="../ComaCMS/_functions.php.html">		functions.php
-		</a><br>
-			<a href="../ComaCMS/_system---functions.php.html">		functions.php
 		</a><br>
 			<a href="../ComaCMS/_classes---imageconverter.php.html">		imageconverter.php
 		</a><br>
@@ -88,11 +88,13 @@
 		</a><br>
 			<a href="../ComaCMS/_classes---textactions.php.html">		textactions.php
 		</a><br>
+			<a href="../ComaCMS/_classes---user---user_memberlist.php.html">		user_memberlist.php
+		</a><br>
 	  </div><br />
 	subpackage <b>AdminInterface</b><br>  <div class="package">
-			<a href="../ComaCMS/AdminInterface/_admin.php.html">		admin.php
-		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin.php.html">		admin.php
+		</a><br>
+			<a href="../ComaCMS/AdminInterface/_admin.php.html">		admin.php
 		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_admincontrol.php.html">		admin_admincontrol.php
 		</a><br>
@@ -210,8 +212,7 @@
 		    		<a href="../ComaCMS/Account.html">Account</a><br />
 	    		<a href="../ComaCMS/ComaLib.html">ComaLib</a><br />
 	    		<a href="../ComaCMS/Config.html">Config</a><br />
-	    		<a href="../ComaCMS/Edit_Gallery_Page.html">Edit_Gallery_Page</a><br />
-	    		<a href="../ComaCMS/Edit_Text_Page_.html">Edit_Text_Page_</a><br />
+	    		<a href="../ComaCMS/Files.html">Files</a><br />
 	    		<a href="../ComaCMS/ImageConverter.html">ImageConverter</a><br />
 	    		<a href="../ComaCMS/InlineMenu.html">InlineMenu</a><br />
 	    		<a href="../ComaCMS/Language.html">Language</a><br />
@@ -282,6 +283,7 @@
 	  </div>
   <div class="package">
 	UserInterface<br />	    &nbsp;&nbsp;		<a href="../ComaCMS/UserInterface/User.html">User</a><br />
+	    &nbsp;&nbsp;		<a href="../ComaCMS/UserInterface/User_Memberlist.html">User_Memberlist</a><br />
 	    &nbsp;&nbsp;		<a href="../ComaCMS/UserInterface/User_Usercontrol.html">User_Usercontrol</a><br />
 	  </div>
                 </td>
@@ -313,13 +315,9 @@ Source Location: /classes/menu.php<br /><br />
 <h3><a href="#class_methods">Methods</a></h3>
 <ul>
     <li><a href="../ComaCMS/Menu.html#methodMenu">Menu</a></li>
-    <li><a href="../ComaCMS/Menu.html#methodAddMenu">AddMenu</a></li>
     <li><a href="../ComaCMS/Menu.html#methodAddMenuEntry">AddMenuEntry</a></li>
-    <li><a href="../ComaCMS/Menu.html#methodDeleteMenu">DeleteMenu</a></li>
-    <li><a href="../ComaCMS/Menu.html#methodDeleteMenuEntry">DeleteMenuEntry</a></li>
     <li><a href="../ComaCMS/Menu.html#methodItemMoveDown">ItemMoveDown</a></li>
     <li><a href="../ComaCMS/Menu.html#methodItemMoveUp">ItemMoveUp</a></li>
-    <li><a href="../ComaCMS/Menu.html#methodUpdateMenu">UpdateMenu</a></li>
     <li><a href="../ComaCMS/Menu.html#methodUpdateMenuEntry">UpdateMenuEntry</a></li>
   </ul>
 </td>
@@ -387,48 +385,6 @@ Source Location: /classes/menu.php<br /><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
-	<a name="methodAddMenu"></a>
-	<h3>method AddMenu <span class="smalllinenumber">[line 214]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void AddMenu(
-string
-$MenuTitle, 
-$MenuName)</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		Creates a new Menu<br /><br /><br /><br />
-<h4>Tags:</h4>
-<div class="tags">
-<table border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
-  </tr>
-</table>
-</div>
-<br /><br />
-
-	
-        <h4>Parameters:</h4>
-    <div class="tags">
-    <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-        <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$MenuTitle</b>&nbsp;&nbsp;</td>
-        <td>Menu_title The title of the new Menu</td>
-      </tr>
-          <tr>
-        <td class="type">&nbsp;&nbsp;</td>
-        <td><b>$MenuName</b>&nbsp;&nbsp;</td>
-        <td></td>
-      </tr>
-        </table>
-    </div><br />
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
 	<a name="methodAddMenuEntry"></a>
 	<h3>method AddMenuEntry <span class="smalllinenumber">[line 174]</span></h3>
 	<div class="function">
@@ -477,84 +433,6 @@ $Menu_entry_css_id)</code>
         <td class="type">string&nbsp;&nbsp;</td>
         <td><b>$Menu_entry_css_id</b>&nbsp;&nbsp;</td>
         <td>Menu_entry_css_id The css id for the menuentry</td>
-      </tr>
-        </table>
-    </div><br />
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
-	<a name="methodDeleteMenu"></a>
-	<h3>method DeleteMenu <span class="smalllinenumber">[line 261]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void DeleteMenu(
-integer
-$Menu_menuid, 
-$Menu_name)</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		Deletes a Menu by it's ID<br /><br /><br /><br />
-<h4>Tags:</h4>
-<div class="tags">
-<table border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
-  </tr>
-</table>
-</div>
-<br /><br />
-
-	
-        <h4>Parameters:</h4>
-    <div class="tags">
-    <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-        <td class="type">integer&nbsp;&nbsp;</td>
-        <td><b>$Menu_menuid</b>&nbsp;&nbsp;</td>
-        <td>Menu_menuid The id of the Menu that should be deleted</td>
-      </tr>
-          <tr>
-        <td class="type">&nbsp;&nbsp;</td>
-        <td><b>$Menu_name</b>&nbsp;&nbsp;</td>
-        <td></td>
-      </tr>
-        </table>
-    </div><br />
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
-	<a name="methodDeleteMenuEntry"></a>
-	<h3>method DeleteMenuEntry <span class="smalllinenumber">[line 246]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void DeleteMenuEntry(
-integer
-$Menu_entry_id)</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		Deletes a MenuEntry by it's ID<br /><br /><br /><br />
-<h4>Tags:</h4>
-<div class="tags">
-<table border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
-  </tr>
-</table>
-</div>
-<br /><br />
-
-	
-        <h4>Parameters:</h4>
-    <div class="tags">
-    <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-        <td class="type">integer&nbsp;&nbsp;</td>
-        <td><b>$Menu_entry_id</b>&nbsp;&nbsp;</td>
-        <td>Menu_entry_id The id of the Entry that should be deleted</td>
       </tr>
         </table>
     </div><br />
@@ -636,54 +514,6 @@ $Menu_entry_id = 1])</code>
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
-	<a name="methodUpdateMenu"></a>
-	<h3>method UpdateMenu <span class="smalllinenumber">[line 231]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void UpdateMenu(
-integer
-$MenuMenuID, string
-$MenuTitle, string
-$MenuName)</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		Saves a new 'version' of a Menu by it's ID<br /><br /><br /><br />
-<h4>Tags:</h4>
-<div class="tags">
-<table border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
-  </tr>
-</table>
-</div>
-<br /><br />
-
-	
-        <h4>Parameters:</h4>
-    <div class="tags">
-    <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-        <td class="type">integer&nbsp;&nbsp;</td>
-        <td><b>$MenuMenuID</b>&nbsp;&nbsp;</td>
-        <td>Menu_menuid The id of the menu to update</td>
-      </tr>
-          <tr>
-        <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$MenuTitle</b>&nbsp;&nbsp;</td>
-        <td>MenuTitle The title of the menu</td>
-      </tr>
-          <tr>
-        <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$MenuName</b>&nbsp;&nbsp;</td>
-        <td>MenuName The name of the menu</td>
-      </tr>
-        </table>
-    </div><br />
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
 	<a name="methodUpdateMenuEntry"></a>
 	<h3>method UpdateMenuEntry <span class="smalllinenumber">[line 119]</span></h3>
 	<div class="function">
@@ -748,7 +578,7 @@ $Menu_entry_css_id)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 08 Feb 2007 22:28:38 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Sat, 18 Apr 2009 14:58:04 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

@@ -12,9 +12,11 @@
   <tr><td class="header_line"><img src="../../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
   <tr>
     <td class="header_menu">
-  		  [ <a href="../../classtrees_ComaCMS.html" class="menu">class tree: ComaCMS</a> ]
+        
+                                    
+                                                                      		  [ <a href="../../classtrees_ComaCMS.html" class="menu">class tree: ComaCMS</a> ]
 		  [ <a href="../../elementindex_ComaCMS.html" class="menu">index: ComaCMS</a> ]
-		  [ <a href="../../elementindex.html" class="menu">all elements</a> ]
+		  	    [ <a href="../../elementindex.html" class="menu">all elements</a> ]
     </td>
   </tr>
   <tr><td class="header_line"><img src="../../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
@@ -40,15 +42,13 @@
 		</a><br>
 			<a href="../../ComaCMS/_classes---config.php.html">		config.php
 		</a><br>
+			<a href="../../ComaCMS/_modules---dates---dates_settings.php.html">		dates_settings.php
+		</a><br>
 			<a href="../../ComaCMS/_download.php.html">		download.php
 		</a><br>
-			<a href="../../ComaCMS/_classes---edit_gallery_page.php.html">		edit_gallery_page.php
-		</a><br>
-			<a href="../../ComaCMS/_classes---edit_text_page.php.html">		edit_text_page.php
+			<a href="../../ComaCMS/_classes---files.php.html">		files.php
 		</a><br>
 			<a href="../../ComaCMS/_functions.php.html">		functions.php
-		</a><br>
-			<a href="../../ComaCMS/_system---functions.php.html">		functions.php
 		</a><br>
 			<a href="../../ComaCMS/_classes---imageconverter.php.html">		imageconverter.php
 		</a><br>
@@ -88,11 +88,13 @@
 		</a><br>
 			<a href="../../ComaCMS/_classes---textactions.php.html">		textactions.php
 		</a><br>
+			<a href="../../ComaCMS/_classes---user---user_memberlist.php.html">		user_memberlist.php
+		</a><br>
 	  </div><br />
 	subpackage <b>AdminInterface</b><br>  <div class="package">
-			<a href="../../ComaCMS/AdminInterface/_admin.php.html">		admin.php
-		</a><br>
 			<a href="../../ComaCMS/AdminInterface/_classes---admin---admin.php.html">		admin.php
+		</a><br>
+			<a href="../../ComaCMS/AdminInterface/_admin.php.html">		admin.php
 		</a><br>
 			<a href="../../ComaCMS/AdminInterface/_classes---admin---admin_admincontrol.php.html">		admin_admincontrol.php
 		</a><br>
@@ -210,8 +212,7 @@
 		    		<a href="../../ComaCMS/Account.html">Account</a><br />
 	    		<a href="../../ComaCMS/ComaLib.html">ComaLib</a><br />
 	    		<a href="../../ComaCMS/Config.html">Config</a><br />
-	    		<a href="../../ComaCMS/Edit_Gallery_Page.html">Edit_Gallery_Page</a><br />
-	    		<a href="../../ComaCMS/Edit_Text_Page_.html">Edit_Text_Page_</a><br />
+	    		<a href="../../ComaCMS/Files.html">Files</a><br />
 	    		<a href="../../ComaCMS/ImageConverter.html">ImageConverter</a><br />
 	    		<a href="../../ComaCMS/InlineMenu.html">InlineMenu</a><br />
 	    		<a href="../../ComaCMS/Language.html">Language</a><br />
@@ -282,6 +283,7 @@
 	  </div>
   <div class="package">
 	UserInterface<br />	    &nbsp;&nbsp;		<a href="../../ComaCMS/UserInterface/User.html">User</a><br />
+	    &nbsp;&nbsp;		<a href="../../ComaCMS/UserInterface/User_Memberlist.html">User_Memberlist</a><br />
 	    &nbsp;&nbsp;		<a href="../../ComaCMS/UserInterface/User_Usercontrol.html">User_Usercontrol</a><br />
 	  </div>
                 </td>
@@ -312,6 +314,9 @@ Source Location: /classes/admin/admin_pagestructure.php<br /><br />
 <td valign="top">
 <h3><a href="#class_vars">Variables</a></h3>
 <ul>
+    <li><a href="../../ComaCMS/AdminInterface/Admin_PageStructure.html#var$FormPage">$FormPage</a></li>
+    <li><a href="../../ComaCMS/AdminInterface/Admin_PageStructure.html#var$FormUrl">$FormUrl</a></li>
+    <li><a href="../../ComaCMS/AdminInterface/Admin_PageStructure.html#var$LinkUrl">$LinkUrl</a></li>
     <li><a href="../../ComaCMS/AdminInterface/Admin_PageStructure.html#var$MenuPageIDs">$MenuPageIDs</a></li>
   </ul>
 </td>
@@ -360,7 +365,7 @@ Source Location: /classes/admin/admin_pagestructure.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line 28]<br />
+[line 29]<br />
 </div><br /><br />
 <div class="top">[ <a href="#top">Top</a> ]</div><br />
 
@@ -368,10 +373,55 @@ Source Location: /classes/admin/admin_pagestructure.php<br /><br />
 <a name="class_vars"></a>
 <h3>Class Variables</h3>
 <div class="tags">
+	<a name="var$FormPage"></a>
+	<p></p>
+	<h4>$FormPage = <span class="value">&nbsp;'page'</span></h4>
+	<p>[line 45]</p>
+  
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$FormUrl"></a>
+	<p></p>
+	<h4>$FormUrl = <span class="value">&nbsp;'admin.php'</span></h4>
+	<p>[line 43]</p>
+  
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
+	<a name="var$LinkUrl"></a>
+	<p></p>
+	<h4>$LinkUrl = <span class="value">&nbsp;'admin.php?'</span></h4>
+	<p>[line 44]</p>
+  
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
 	<a name="var$MenuPageIDs"></a>
 	<p></p>
 	<h4>$MenuPageIDs = <span class="value"></span></h4>
-	<p>[line 34]</p>
+	<p>[line 35]</p>
   All pageIDs of the pages which are in the main-menu<br /><br />
   <br />
 	<div class="tags">
@@ -392,7 +442,7 @@ Source Location: /classes/admin/admin_pagestructure.php<br /><br />
 
   <hr />
 	<a name="methodGetPage"></a>
-	<h3>method GetPage <span class="smalllinenumber">[line 54]</span></h3>
+	<h3>method GetPage <span class="smalllinenumber">[line 58]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -422,7 +472,7 @@ $Action = ''])</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 08 Feb 2007 22:28:29 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Sat, 18 Apr 2009 14:58:00 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

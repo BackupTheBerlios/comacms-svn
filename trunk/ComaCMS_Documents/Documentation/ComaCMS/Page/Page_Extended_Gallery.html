@@ -12,9 +12,11 @@
   <tr><td class="header_line"><img src="../../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
   <tr>
     <td class="header_menu">
-  		  [ <a href="../../classtrees_ComaCMS.html" class="menu">class tree: ComaCMS</a> ]
+        
+                                    
+                                                                      		  [ <a href="../../classtrees_ComaCMS.html" class="menu">class tree: ComaCMS</a> ]
 		  [ <a href="../../elementindex_ComaCMS.html" class="menu">index: ComaCMS</a> ]
-		  [ <a href="../../elementindex.html" class="menu">all elements</a> ]
+		  	    [ <a href="../../elementindex.html" class="menu">all elements</a> ]
     </td>
   </tr>
   <tr><td class="header_line"><img src="../../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
@@ -40,15 +42,13 @@
 		</a><br>
 			<a href="../../ComaCMS/_classes---config.php.html">		config.php
 		</a><br>
+			<a href="../../ComaCMS/_modules---dates---dates_settings.php.html">		dates_settings.php
+		</a><br>
 			<a href="../../ComaCMS/_download.php.html">		download.php
 		</a><br>
-			<a href="../../ComaCMS/_classes---edit_gallery_page.php.html">		edit_gallery_page.php
-		</a><br>
-			<a href="../../ComaCMS/_classes---edit_text_page.php.html">		edit_text_page.php
+			<a href="../../ComaCMS/_classes---files.php.html">		files.php
 		</a><br>
 			<a href="../../ComaCMS/_functions.php.html">		functions.php
-		</a><br>
-			<a href="../../ComaCMS/_system---functions.php.html">		functions.php
 		</a><br>
 			<a href="../../ComaCMS/_classes---imageconverter.php.html">		imageconverter.php
 		</a><br>
@@ -88,11 +88,13 @@
 		</a><br>
 			<a href="../../ComaCMS/_classes---textactions.php.html">		textactions.php
 		</a><br>
+			<a href="../../ComaCMS/_classes---user---user_memberlist.php.html">		user_memberlist.php
+		</a><br>
 	  </div><br />
 	subpackage <b>AdminInterface</b><br>  <div class="package">
-			<a href="../../ComaCMS/AdminInterface/_admin.php.html">		admin.php
-		</a><br>
 			<a href="../../ComaCMS/AdminInterface/_classes---admin---admin.php.html">		admin.php
+		</a><br>
+			<a href="../../ComaCMS/AdminInterface/_admin.php.html">		admin.php
 		</a><br>
 			<a href="../../ComaCMS/AdminInterface/_classes---admin---admin_admincontrol.php.html">		admin_admincontrol.php
 		</a><br>
@@ -210,8 +212,7 @@
 		    		<a href="../../ComaCMS/Account.html">Account</a><br />
 	    		<a href="../../ComaCMS/ComaLib.html">ComaLib</a><br />
 	    		<a href="../../ComaCMS/Config.html">Config</a><br />
-	    		<a href="../../ComaCMS/Edit_Gallery_Page.html">Edit_Gallery_Page</a><br />
-	    		<a href="../../ComaCMS/Edit_Text_Page_.html">Edit_Text_Page_</a><br />
+	    		<a href="../../ComaCMS/Files.html">Files</a><br />
 	    		<a href="../../ComaCMS/ImageConverter.html">ImageConverter</a><br />
 	    		<a href="../../ComaCMS/InlineMenu.html">InlineMenu</a><br />
 	    		<a href="../../ComaCMS/Language.html">Language</a><br />
@@ -282,6 +283,7 @@
 	  </div>
   <div class="package">
 	UserInterface<br />	    &nbsp;&nbsp;		<a href="../../ComaCMS/UserInterface/User.html">User</a><br />
+	    &nbsp;&nbsp;		<a href="../../ComaCMS/UserInterface/User_Memberlist.html">User_Memberlist</a><br />
 	    &nbsp;&nbsp;		<a href="../../ComaCMS/UserInterface/User_Usercontrol.html">User_Usercontrol</a><br />
 	  </div>
                 </td>
@@ -313,6 +315,24 @@ Source Location: /classes/page/page_extended_gallery.php<br /><br />
 
 
 
+<td valign="top">
+<h3><a href="#class_methods">Methods</a></h3>
+<ul>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#methodGetEditPage">GetEditPage</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#methodNewPage">NewPage</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#methodUpdateTitle">UpdateTitle</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#method_EditPageAddNew">_EditPageAddNew</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#method_EditPageImage">_EditPageImage</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#method_EditPageMoveDown">_EditPageMoveDown</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#method_EditPageMoveUp">_EditPageMoveUp</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#method_EditPageNewImage">_EditPageNewImage</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#method_EditPageOverview">_EditPageOverview</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#method_EditPageRegenerateThumbnails">_EditPageRegenerateThumbnails</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#method_EditPageRemove">_EditPageRemove</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#method_EditPageSaveImage">_EditPageSaveImage</a></li>
+    <li><a href="../../ComaCMS/Page/Page_Extended_Gallery.html#method_EditPageSaveTitle">_EditPageSaveTitle</a></li>
+  </ul>
+</td>
 
 </tr></table>
 <hr />
@@ -389,16 +409,379 @@ Source Location: /classes/page/page_extended_gallery.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line 23]<br />
+[line 29]<br />
 </div><br /><br />
 <div class="top">[ <a href="#top">Top</a> ]</div><br />
 
 
+<hr />
+<a name="class_methods"></a>
+<h3>Class Methods</h3>
+<div class="tags">
+
+  <hr />
+	<a name="methodGetEditPage"></a>
+	<h3>method GetEditPage <span class="smalllinenumber">[line 49]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void GetEditPage(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	Overrides <a href="../../ComaCMS/Page/Page_Extended.html#methodGetEditPage">Page_Extended::GetEditPage()</a> (parent method not documented)<br /><br />
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodNewPage"></a>
+	<h3>method NewPage <span class="smalllinenumber">[line 31]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void NewPage(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodUpdateTitle"></a>
+	<h3>method UpdateTitle <span class="smalllinenumber">[line 39]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void UpdateTitle(
+
+$PageID, 
+$PageTitle)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageTitle</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_EditPageAddNew"></a>
+	<h3>method _EditPageAddNew <span class="smalllinenumber">[line 267]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void _EditPageAddNew(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_EditPageImage"></a>
+	<h3>method _EditPageImage <span class="smalllinenumber">[line 149]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void _EditPageImage(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_EditPageMoveDown"></a>
+	<h3>method _EditPageMoveDown <span class="smalllinenumber">[line 469]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void _EditPageMoveDown(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_EditPageMoveUp"></a>
+	<h3>method _EditPageMoveUp <span class="smalllinenumber">[line 511]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void _EditPageMoveUp(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_EditPageNewImage"></a>
+	<h3>method _EditPageNewImage <span class="smalllinenumber">[line 331]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void _EditPageNewImage(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_EditPageOverview"></a>
+	<h3>method _EditPageOverview <span class="smalllinenumber">[line 552]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void _EditPageOverview(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_EditPageRegenerateThumbnails"></a>
+	<h3>method _EditPageRegenerateThumbnails <span class="smalllinenumber">[line 88]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void _EditPageRegenerateThumbnails(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_EditPageRemove"></a>
+	<h3>method _EditPageRemove <span class="smalllinenumber">[line 221]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void _EditPageRemove(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_EditPageSaveImage"></a>
+	<h3>method _EditPageSaveImage <span class="smalllinenumber">[line 126]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void _EditPageSaveImage(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="method_EditPageSaveTitle"></a>
+	<h3>method _EditPageSaveTitle <span class="smalllinenumber">[line 215]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>void _EditPageSaveTitle(
+
+$PageID)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		<br /><br />
+
+	
+        <h4>Parameters:</h4>
+    <div class="tags">
+    <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$PageID</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
+        </table>
+    </div><br />
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+</div><br />
 
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 08 Feb 2007 22:28:41 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Sat, 18 Apr 2009 14:58:06 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

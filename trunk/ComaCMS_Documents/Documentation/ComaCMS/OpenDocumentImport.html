@@ -12,9 +12,11 @@
   <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
   <tr>
     <td class="header_menu">
-  		  [ <a href="../classtrees_ComaCMS.html" class="menu">class tree: ComaCMS</a> ]
+        
+                                    
+                                                                      		  [ <a href="../classtrees_ComaCMS.html" class="menu">class tree: ComaCMS</a> ]
 		  [ <a href="../elementindex_ComaCMS.html" class="menu">index: ComaCMS</a> ]
-		  [ <a href="../elementindex.html" class="menu">all elements</a> ]
+		  	    [ <a href="../elementindex.html" class="menu">all elements</a> ]
     </td>
   </tr>
   <tr><td class="header_line"><img src="../media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
@@ -40,15 +42,13 @@
 		</a><br>
 			<a href="../ComaCMS/_classes---config.php.html">		config.php
 		</a><br>
+			<a href="../ComaCMS/_modules---dates---dates_settings.php.html">		dates_settings.php
+		</a><br>
 			<a href="../ComaCMS/_download.php.html">		download.php
 		</a><br>
-			<a href="../ComaCMS/_classes---edit_gallery_page.php.html">		edit_gallery_page.php
-		</a><br>
-			<a href="../ComaCMS/_classes---edit_text_page.php.html">		edit_text_page.php
+			<a href="../ComaCMS/_classes---files.php.html">		files.php
 		</a><br>
 			<a href="../ComaCMS/_functions.php.html">		functions.php
-		</a><br>
-			<a href="../ComaCMS/_system---functions.php.html">		functions.php
 		</a><br>
 			<a href="../ComaCMS/_classes---imageconverter.php.html">		imageconverter.php
 		</a><br>
@@ -88,11 +88,13 @@
 		</a><br>
 			<a href="../ComaCMS/_classes---textactions.php.html">		textactions.php
 		</a><br>
+			<a href="../ComaCMS/_classes---user---user_memberlist.php.html">		user_memberlist.php
+		</a><br>
 	  </div><br />
 	subpackage <b>AdminInterface</b><br>  <div class="package">
-			<a href="../ComaCMS/AdminInterface/_admin.php.html">		admin.php
-		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin.php.html">		admin.php
+		</a><br>
+			<a href="../ComaCMS/AdminInterface/_admin.php.html">		admin.php
 		</a><br>
 			<a href="../ComaCMS/AdminInterface/_classes---admin---admin_admincontrol.php.html">		admin_admincontrol.php
 		</a><br>
@@ -210,8 +212,7 @@
 		    		<a href="../ComaCMS/Account.html">Account</a><br />
 	    		<a href="../ComaCMS/ComaLib.html">ComaLib</a><br />
 	    		<a href="../ComaCMS/Config.html">Config</a><br />
-	    		<a href="../ComaCMS/Edit_Gallery_Page.html">Edit_Gallery_Page</a><br />
-	    		<a href="../ComaCMS/Edit_Text_Page_.html">Edit_Text_Page_</a><br />
+	    		<a href="../ComaCMS/Files.html">Files</a><br />
 	    		<a href="../ComaCMS/ImageConverter.html">ImageConverter</a><br />
 	    		<a href="../ComaCMS/InlineMenu.html">InlineMenu</a><br />
 	    		<a href="../ComaCMS/Language.html">Language</a><br />
@@ -282,6 +283,7 @@
 	  </div>
   <div class="package">
 	UserInterface<br />	    &nbsp;&nbsp;		<a href="../ComaCMS/UserInterface/User.html">User</a><br />
+	    &nbsp;&nbsp;		<a href="../ComaCMS/UserInterface/User_Memberlist.html">User_Memberlist</a><br />
 	    &nbsp;&nbsp;		<a href="../ComaCMS/UserInterface/User_Usercontrol.html">User_Usercontrol</a><br />
 	  </div>
                 </td>
@@ -310,6 +312,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 <td valign="top">
 <h3><a href="#class_vars">Variables</a></h3>
 <ul>
+    <li><a href="../ComaCMS/OpenDocumentImport.html#var$Images">$Images</a></li>
     <li><a href="../ComaCMS/OpenDocumentImport.html#var$_Content">$_Content</a></li>
     <li><a href="../ComaCMS/OpenDocumentImport.html#var$_Filename">$_Filename</a></li>
     <li><a href="../ComaCMS/OpenDocumentImport.html#var$_ImageQuery">$_ImageQuery</a></li>
@@ -363,7 +366,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line 19]<br />
+[line 20]<br />
 </div><br /><br />
 <div class="top">[ <a href="#top">Top</a> ]</div><br />
 
@@ -371,10 +374,25 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 <a name="class_vars"></a>
 <h3>Class Variables</h3>
 <div class="tags">
+	<a name="var$Images"></a>
+	<p></p>
+	<h4>$Images = <span class="value">array()</span></h4>
+	<p>[line 30]</p>
+  
+  <br />
+	<div class="tags">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td><b>Type:</b>&nbsp;&nbsp;</td>
+      <td>mixed</td>
+    </tr>
+      </table>
+	</div><br /><br />
+	<div class="top">[ <a href="#top">Top</a> ]</div><br />
 	<a name="var$_Content"></a>
 	<p></p>
 	<h4>$_Content = <span class="value">&nbsp;''</span></h4>
-	<p>[line 21]</p>
+	<p>[line 22]</p>
   
   <br />
 	<div class="tags">
@@ -389,7 +407,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 	<a name="var$_Filename"></a>
 	<p></p>
 	<h4>$_Filename = <span class="value">&nbsp;''</span></h4>
-	<p>[line 26]</p>
+	<p>[line 27]</p>
   
   <br />
 	<div class="tags">
@@ -404,7 +422,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 	<a name="var$_ImageQuery"></a>
 	<p></p>
 	<h4>$_ImageQuery = <span class="value">array()</span></h4>
-	<p>[line 30]</p>
+	<p>[line 32]</p>
   
   <br />
 	<div class="tags">
@@ -419,7 +437,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 	<a name="var$_OfficeBody"></a>
 	<p></p>
 	<h4>$_OfficeBody = <span class="value">&nbsp;false</span></h4>
-	<p>[line 25]</p>
+	<p>[line 26]</p>
   
   <br />
 	<div class="tags">
@@ -434,7 +452,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 	<a name="var$_OpensName"></a>
 	<p></p>
 	<h4>$_OpensName = <span class="value">&nbsp;''</span></h4>
-	<p>[line 28]</p>
+	<p>[line 29]</p>
   
   <br />
 	<div class="tags">
@@ -449,7 +467,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 	<a name="var$_StyleData"></a>
 	<p></p>
 	<h4>$_StyleData = <span class="value">array()</span></h4>
-	<p>[line 23]</p>
+	<p>[line 24]</p>
   
   <br />
 	<div class="tags">
@@ -464,7 +482,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 	<a name="var$_StyleName"></a>
 	<p></p>
 	<h4>$_StyleName = <span class="value">&nbsp;''</span></h4>
-	<p>[line 27]</p>
+	<p>[line 28]</p>
   
   <br />
 	<div class="tags">
@@ -479,7 +497,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 	<a name="var$_StylePath"></a>
 	<p></p>
 	<h4>$_StylePath = <span class="value"></span></h4>
-	<p>[line 24]</p>
+	<p>[line 25]</p>
   
   <br />
 	<div class="tags">
@@ -494,7 +512,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 	<a name="var$_Styles"></a>
 	<p></p>
 	<h4>$_Styles = <span class="value">&nbsp;''</span></h4>
-	<p>[line 22]</p>
+	<p>[line 23]</p>
   
   <br />
 	<div class="tags">
@@ -515,7 +533,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
 
   <hr />
 	<a name="methodOpenDocumentImport"></a>
-	<h3>constructor OpenDocumentImport <span class="smalllinenumber">[line 31]</span></h3>
+	<h3>constructor OpenDocumentImport <span class="smalllinenumber">[line 33]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -531,7 +549,7 @@ Source Location: /classes/opendocument/opendocumentimport.php<br /><br />
   </div>
   <hr />
 	<a name="methodLoadFile"></a>
-	<h3>method LoadFile <span class="smalllinenumber">[line 35]</span></h3>
+	<h3>method LoadFile <span class="smalllinenumber">[line 37]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -564,7 +582,7 @@ $ImagePath)</code>
   </div>
   <hr />
 	<a name="methodQueryImage"></a>
-	<h3>method QueryImage <span class="smalllinenumber">[line 92]</span></h3>
+	<h3>method QueryImage <span class="smalllinenumber">[line 102]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -591,7 +609,7 @@ $Entry)</code>
   </div>
   <hr />
 	<a name="method_CloseElement"></a>
-	<h3>method _CloseElement <span class="smalllinenumber">[line 297]</span></h3>
+	<h3>method _CloseElement <span class="smalllinenumber">[line 305]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -624,7 +642,7 @@ $Name)</code>
   </div>
   <hr />
 	<a name="method_LoadImages"></a>
-	<h3>method _LoadImages <span class="smalllinenumber">[line 72]</span></h3>
+	<h3>method _LoadImages <span class="smalllinenumber">[line 79]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -640,7 +658,7 @@ $Name)</code>
   </div>
   <hr />
 	<a name="method_OpenElement"></a>
-	<h3>method _OpenElement <span class="smalllinenumber">[line 99]</span></h3>
+	<h3>method _OpenElement <span class="smalllinenumber">[line 109]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -679,7 +697,7 @@ $Attributes)</code>
   </div>
   <hr />
 	<a name="method_ReadContent"></a>
-	<h3>method _ReadContent <span class="smalllinenumber">[line 374]</span></h3>
+	<h3>method _ReadContent <span class="smalllinenumber">[line 380]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -695,7 +713,7 @@ $Attributes)</code>
   </div>
   <hr />
 	<a name="method_ReadStyle"></a>
-	<h3>method _ReadStyle <span class="smalllinenumber">[line 359]</span></h3>
+	<h3>method _ReadStyle <span class="smalllinenumber">[line 365]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -711,7 +729,7 @@ $Attributes)</code>
   </div>
   <hr />
 	<a name="method_TextElement"></a>
-	<h3>method _TextElement <span class="smalllinenumber">[line 353]</span></h3>
+	<h3>method _TextElement <span class="smalllinenumber">[line 359]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -747,7 +765,7 @@ $Data)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Thu, 08 Feb 2007 22:28:39 +0100 by <a href="http://www.phpdoc.org">phpDocumentor 1.3.1</a>
+		    Documentation generated on Sat, 18 Apr 2009 14:58:04 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

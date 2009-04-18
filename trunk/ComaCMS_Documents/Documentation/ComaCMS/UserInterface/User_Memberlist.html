@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Docs For Class Admin_Files</title>
+<title>Docs For Class User_Memberlist</title>
 <link rel="stylesheet" type="text/css" href="../../media/style.css">
 </head>
 <body>
@@ -290,18 +290,18 @@
     <td>
       <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
 
-<h1>Class: Admin_Files</h1>
-Source Location: /classes/admin/admin_files.php<br /><br />
+<h1>Class: User_Memberlist</h1>
+Source Location: /classes/user/user_memberlist.php<br /><br />
 
 
 <table width="100%" border="0">
 <tr><td valign="top">
 
 <h3><a href="#class_details">Class Overview</a></h3>
-<pre><a href="../../ComaCMS/AdminInterface/Admin.html">Admin</a>
+<pre><a href="../../ComaCMS/UserInterface/User.html">User</a>
    |
-   --Admin_Files</pre><br />
-<div class="description">Admin-Interface-Page to mangage Files</div><br /><br />
+   --User_Memberlist</pre><br />
+<div class="description">Provides a memberlist</div><br /><br />
 
 
 
@@ -316,9 +316,7 @@ Source Location: /classes/admin/admin_files.php<br /><br />
 <td valign="top">
 <h3><a href="#class_methods">Methods</a></h3>
 <ul>
-    <li><a href="../../ComaCMS/AdminInterface/Admin_Files.html#methodGetPage">GetPage</a></li>
-    <li><a href="../../ComaCMS/AdminInterface/Admin_Files.html#method_movePage">_movePage</a></li>
-    <li><a href="../../ComaCMS/AdminInterface/Admin_Files.html#method_newDirPage">_newDirPage</a></li>
+    <li><a href="../../ComaCMS/UserInterface/User_Memberlist.html#methodGetPage">GetPage</a></li>
   </ul>
 </td>
 
@@ -334,16 +332,16 @@ Source Location: /classes/admin/admin_files.php<br /><br />
 <td valign="top">
 <h3>Inherited Methods</h3>
 <div class="tags">
-<h4>Class: <a href="../../ComaCMS/AdminInterface/Admin.html">Admin</a></h4>
+<h4>Class: <a href="../../ComaCMS/UserInterface/User.html">User</a></h4>
 <dl>
     <dt>
-    <a href="../../ComaCMS/AdminInterface/Admin.html#methodAdmin">Admin::Admin()</a>
+    <a href="../../ComaCMS/UserInterface/User.html#methodUser">User::User()</a>
   </dt>
   <dd>
-    Initializes a subpage of the admininterface
+    Initializes a subpage of the userinterface
   </dd>
     <dt>
-    <a href="../../ComaCMS/AdminInterface/Admin.html#methodGetPage">Admin::GetPage()</a>
+    <a href="../../ComaCMS/UserInterface/User.html#methodGetPage">User::GetPage()</a>
   </dt>
   <dd>
     Returns the page which is selected by <var>$Action</var>
@@ -358,8 +356,8 @@ Source Location: /classes/admin/admin_files.php<br /><br />
 <a name="class_details"></a>
 <h3>Class Details</h3>
 <div class="tags">
-[line 30]<br />
-Admin-Interface-Page to mangage Files<br /><br /></div><br /><br />
+[line 27]<br />
+Provides a memberlist<br /><br /></div><br /><br />
 <div class="top">[ <a href="#top">Top</a> ]</div><br />
 
 
@@ -370,20 +368,24 @@ Admin-Interface-Page to mangage Files<br /><br /></div><br /><br />
 
   <hr />
 	<a name="methodGetPage"></a>
-	<h3>method GetPage <span class="smalllinenumber">[line 43]</span></h3>
+	<h3>method GetPage <span class="smalllinenumber">[line 35]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void GetPage(
-string
-$Action)</code>
+		<code>string GetPage(
+[string
+$Action = ''], [
+$Owner = ''])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Available actions (value of <var>$Action</var>):<br /><br /><p><ul><li>delete</li><li>update_database</li><li>check_new_files</li><li>upload</li></ul></p><br /><br /><br />
+		Gets the subpages of the memberlist<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>The template for the memberlist page</td>
+  </tr>
   <tr>
     <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
   </tr>
@@ -391,49 +393,22 @@ $Action)</code>
 </div>
 <br /><br />
 
-	Overrides <a href="../../ComaCMS/AdminInterface/Admin.html#methodGetPage">Admin::GetPage()</a> (Returns the page which is selected by <var>$Action</var>)<br /><br />
+	Overrides <a href="../../ComaCMS/UserInterface/User.html#methodGetPage">User::GetPage()</a> (Returns the page which is selected by <var>$Action</var>)<br /><br />
         <h4>Parameters:</h4>
     <div class="tags">
     <table border="0" cellspacing="0" cellpadding="0">
           <tr>
         <td class="type">string&nbsp;&nbsp;</td>
         <td><b>$Action</b>&nbsp;&nbsp;</td>
-        <td>Action text</td>
+        <td>The name of the subpage</td>
+      </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$Owner</b>&nbsp;&nbsp;</td>
+        <td></td>
       </tr>
         </table>
     </div><br />
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
-	<a name="method_movePage"></a>
-	<h3>method _movePage <span class="smalllinenumber">[line 243]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void _movePage(
-)</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		<br /><br />
-
-	
-        <div class="top">[ <a href="#top">Top</a> ]</div>
-  </div>
-  <hr />
-	<a name="method_newDirPage"></a>
-	<h3>method _newDirPage <span class="smalllinenumber">[line 314]</span></h3>
-	<div class="function">
-    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
-    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
-		<code>void _newDirPage(
-)</code>
-    </td></tr></table>
-    </td></tr></table><br />
-	
-		<br /><br />
-
-	
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
 </div><br />
@@ -441,7 +416,7 @@ $Action)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sat, 18 Apr 2009 14:57:59 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
+		    Documentation generated on Sat, 18 Apr 2009 14:58:07 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

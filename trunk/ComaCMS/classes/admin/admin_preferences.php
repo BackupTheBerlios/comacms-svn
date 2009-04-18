@@ -76,7 +76,7 @@
  				// Add a new form to the formmaker
  				$formMaker->AddForm("settings_group_{$settingsGroup}", '', $this->_Translation->GetTranslation('save'), $settingsGroup);
  				
- 				// Display all pereferneces of the actual group
+ 				// Display all pereferences of the actual group
  				foreach($settings as $setting) {
  					
  					// Load the current config and if it isn't available use the default

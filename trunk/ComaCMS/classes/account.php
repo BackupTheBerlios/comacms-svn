@@ -107,13 +107,20 @@
 		var $_SqlConnection;
 		
 		/**
+		 * @access private
+		 * @var Config A link to the local Configuration class to get standart settings from the page
+		 */
+		var $_Config;
+		
+		/**
 		 * @param Sql &$SqlConnection A link to the SqlConnection class
 		 * @return void
 		 */
-		function Account(&$SqlConnection) {
+		function Account(&$SqlConnection, &$Config) {
 			
 			global $_COOKIE;
 			$this->_SqlConnection = &$SqlConnection;
+			$this->_Config = &$Config;
 			$extern_login_name = GetPostOrGet('login_name');
 			$extern_login_password = GetPostOrGet('login_password');
 			$extern_lang = strtolower(GetPostOrGet('lang'));
@@ -278,7 +285,7 @@
 				}
 			}
 			if($this->Language == '')
-				$this->Language = $languages[0];
+				$this->Language = $this->_Config->Get('default_langugage', 'en');
 			// Set the cookie (for the next 93(= 3x31) days)
 			setcookie('ComaCMS_user_lang', $this->Language, time() + 8035200); 
 		}

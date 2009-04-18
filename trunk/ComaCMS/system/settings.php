@@ -20,6 +20,7 @@
 	// Preferences::SetSetting('einstellungsname', 'angezeigte Option', 'info zu der Option <span class="info">info</span>', 'Einstellungsgruppe', 'Defaultwert', 'Typ');
 	
 	Preferences::SetSetting("default_page", "Startseite", "Auf diese Seite wird jeder Besucher geleitet, der keine Seite angegeben hat.", "Main", '1', 'page_select');
+	Preferences::SetSetting('default_language', 'Standartsprache', "Dies ist die Standartsprache für das System.", "Main", "en", 'string0');
 	Preferences::SetSetting("pagename", "Seitenname", "Hier wird der Name der Seite definiert.", "Main", "ComaCMS");
 	Preferences::SetSetting('keywords', 'Keywords', 'Insert here keywords relating to the content of your page. (Separated with commas)', 'Main', 'ComaCms,Content Management System,Open Source');
 	Preferences::SetSetting("thumbnailfolder", "Verzeichnis f&uuml;r erstellte Bilder", "In dem hier angegebenen Verzeichnis werden die automatisch erstellten Bilder gespeichert. (F&uuml;r diesen Ordner sind Schreibrechte notwendig)", "Main", "data/thumbnails/");
@@ -30,5 +31,5 @@
 	Preferences::SetSetting('activate_through_admin', 'Aktivierung nur durch Administrator', 'Soll ein neuer Benutzer nur durch einen Administrator aktiviert werden können?', 'User', '0', 'bool');
 	Preferences::SetSetting('public_memberlist', '&Ouml;ffentliche Benutzerliste', 'D&uuml;rfen unregistrierte Benutzer Profile ansehen?', 'User', '1', 'bool');
 	Preferences::SetSetting('date_day_format', 'Datums-Fotmat', 'Dies ist das Format, in dem das Datum im System angezeigt wird.', 'Main', 'd.m.Y', 'string0');
-	Preferences::SetSetting('date_time_format', 'Uhrzeit-Fotmat', 'Dies ist das Format, in dem die Uhrzeit im System angezeigt wird.', 'Main', 'H:i:s', 'string0');
+	Preferences::SetSetting('date_time_format', 'Uhrzeit-Fotmat', 'Dies ist das Format, in dem die Uhrzeit im System angezeigt wird.', 'Main', 'H:i:s', 'language_select');
 ?>

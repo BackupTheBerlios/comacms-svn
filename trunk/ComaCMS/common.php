@@ -50,7 +50,7 @@
 	$sqlConnection->Connect($d_base);
 	$config = new Config(&$sqlConnection);
 	$config->LoadAll();
-	$user = new Account($sqlConnection);
+	$user = new Account($sqlConnection, $config);
 	$translation = new Language($user->Language);
 	$translation->AddSources(__ROOT__  . '/lang/');
 	$output = new ComaLate();

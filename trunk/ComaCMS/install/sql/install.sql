@@ -21,6 +21,7 @@
 			date_id int(10) unsigned NOT NULL auto_increment,
 			date_date int(20) unsigned default NULL,
 			date_topic varchar(150) NOT NULL default '',
+			date_topic_html text NOT NULL,
 			date_location varchar(60) NOT NULL default '',
 			date_creator int(10) unsigned default NULL,
 			PRIMARY KEY  (date_id)
@@ -90,12 +91,12 @@
 		);
 		DROP TABLE IF EXISTS {DB_PREFIX}news;
 		CREATE TABLE {DB_PREFIX}news (
-			id int(10) unsigned NOT NULL auto_increment,
+			id int(10) unsigned NOT NULL auto_increment primary key,
 			userid int(10) unsigned NOT NULL default '0',
 			date int(20) NOT NULL default '0',
 			title varchar(60) NOT NULL default '',
 			text text NOT NULL,
-			PRIMARY KEY  (id)
+			text_html text NOT NULL
 		);
 		DROP TABLE IF EXISTS {DB_PREFIX}online;
 		CREATE TABLE {DB_PREFIX}online (
@@ -174,6 +175,7 @@
 			user_author bool NULL default '0',
 			user_icq varchar(12) default '0',
 			user_email varchar(200) NOT NULL default '',
+			user_preferred_language varchar(10) NOT NULL,
 			user_activated bool NULL default '0',
 			user_activationcode varchar(32) NULL,
 			PRIMARY KEY  (user_id)
@@ -249,22 +251,21 @@
 			user_id INT( 20 ) NOT NULL
 		);
 		
+		DROP TABLE IF EXISTS {DB_PREFIX}quotes;
+		CREATE TABLE {DB_PREFIX}quotes (
+			quote_id int(20) NOT NULL auto_increment primary key,
+			quote_date int(20) unsigned NOT NULL,
+			quote_ip varchar(255) NOT NULL,
+			quote_hostname varchar(255) NOT NULL,
+			quote_author int(20) NOT NULL,
+			quote_author_name varchar(120) NOT NULL,
+			quote_text TEXT NOT NULL,
+			quote_status int(20) unsigned NOT NULL default '0'
+		);
+		
 		INSERT INTO {DB_PREFIX}config (config_name, config_value)
 		VALUES ('default_page', '1');
 		INSERT INTO {DB_PREFIX}menu (menu_name, menu_title)
 		VALUES ('DEFAULT', 'DEFAULT');
 		INSERT INTO {DB_PREFIX}menu_entries (menu_entries_link, menu_entries_title, menu_entries_type, menu_entries_orderid, menu_entries_menuid, menu_entries_page_id)
 		VALUES ('l:home', 'Home', 'intern_link', 0, 1, 1);
-		ALTER TABLE `{DB_PREFIX}users` ADD `user_preferred_language` VARCHAR( 10 ) NOT NULL AFTER `user_email` ;
-		ALTER TABLE `{DB_PREFIX}news` ADD `text_html` TEXT NOT NULL ;
-		ALTER TABLE `{DB_PREFIX}dates` ADD `date_topic_html` TEXT NOT NULL AFTER `date_topic` ;
-		 CREATE TABLE `{DB_PREFIX}quotes` (
-`quote_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`quote_date` INT UNSIGNED NOT NULL ,
-`quote_author` INT NOT NULL ,
-`quote_author_name` VARCHAR( 120 ) NOT NULL ,
-`quote_text` TEXT NOT NULL ,
-`quote_status` INT UNSIGNED NOT NULL DEFAULT '0'
-);
-ALTER TABLE `{DB_PREFIX}quotes` ADD `quote_ip` VARCHAR( 255 ) NOT NULL ,
-ADD `quote_hostname` VARCHAR( 255 ) NOT NULL ;

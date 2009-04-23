@@ -239,6 +239,8 @@
 					}
 				}		
 			}
+			
+			// Load authorizations for the user
 			if($this->IsLoggedIn) {
 				$this->accessRghts = new Auth_All($this->_SqlConnection, $this->ID);
 				
@@ -247,6 +249,7 @@
 			else
 				$this->accessRghts->setAdmin();
 			}
+			
 			// Set the cookie (for the next 1 hour/3600 seconds) 
 			setcookie('ComaCMS_user', $this->OnlineID, time() + 3600);
 			
@@ -255,6 +258,7 @@
 				if(in_array($extern_lang, $languages))
 					$this->Language = $extern_lang;
 			}
+			
 			// Get the language from the cookie if it' s not changed
 			elseif(isset($_COOKIE['ComaCMS_user_lang'])) {
 				if(in_array($_COOKIE['ComaCMS_user_lang'], $languages))
@@ -284,6 +288,8 @@
 					}
 				}
 			}
+			
+			// If still no language was determined get the default language of the system and if not set use english as default
 			if($this->Language == '')
 				$this->Language = $this->_Config->Get('default_langugage', 'en');
 			// Set the cookie (for the next 93(= 3x31) days)
@@ -294,7 +300,7 @@
 		 * Sets the actual page of the user to the database
 		 * @access public
 		 * @param string $page The actual page
-		 * @param Config &$config A link to the config
+		 * @param Config &$Config A link to the config
 		 * @return void 
 		 */
 		function SetPage($page, &$Config) {

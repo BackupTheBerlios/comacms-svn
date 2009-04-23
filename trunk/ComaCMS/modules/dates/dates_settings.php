@@ -1,6 +1,7 @@
 <?php
 /**
  * @package ComaCMS
+ * @subpackage Dates
  * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------

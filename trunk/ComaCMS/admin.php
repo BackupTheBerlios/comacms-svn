@@ -65,7 +65,6 @@
 	$menuArray[] = array($translation->GetTranslation('pagestructure'), 'pagestructure');
 	$menuArray[] = array($translation->GetTranslation('menu-editor'), 'menueditor');
 	$menuArray[] = array($translation->GetTranslation('preferences'), 'preferences');
-	//$menuArray[] = array($translation->GetTranslation('languages'), 'languages');
 	$menuArray[] = array($translation->GetTranslation('modules'), 'modules');
 
 	
@@ -123,15 +122,6 @@
 			$adminClass = new Admin_PagePreview($sqlConnection, $translation, $config, $user, $lib, $output);
 			if($page == 'style')
 				$action = 'style';
-			$text = $adminClass->GetPage($action);
-			break;
-		
-		case 'languages':
-			// Load the languages-class
-			include_once(__ROOT__ . '/classes/admin/admin_languages.php');
-			
-			$title = $translation->GetTranslation('languages');
-			$adminClass = new Admin_Languages($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);
 			break;
 		

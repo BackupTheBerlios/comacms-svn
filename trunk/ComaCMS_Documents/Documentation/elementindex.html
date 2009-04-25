@@ -65,7 +65,7 @@
 							<dt><b>$AccessRghts</b></dt>
 				<dd>in file account.php, variable <a href="ComaCMS/Account.html#var$AccessRghts">Account::$AccessRghts</a></dd>
 							<dt><b>Account</b></dt>
-				<dd>in file account.php, method <a href="ComaCMS/Account.html#methodAccount">Account::Account()</a></dd>
+				<dd>in file account.php, method <a href="ComaCMS/Account.html#methodAccount">Account::Account()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Create a new Useraccount for the actual page</dd>
 							<dt><b>Account</b></dt>
 				<dd>in file account.php, class <a href="ComaCMS/Account.html">Account</a></dd>
 							<dt><b>Add</b></dt>
@@ -240,6 +240,8 @@
 				<dd>in file language.php, method <a href="ComaCMS/Language.html#methodCheckOutputLanguage">Language::CheckOutputLanguage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Tests if an output language is set for the current page</dd>
 							<dt><b>comalib.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---comalib.php.html">comalib.php</a></dd>
+							<dt><b>config.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/_classes---config.php.html">config.php</a></dd>
 							<dt><b>ClearMenu</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodClearMenu">PageStructure::ClearMenu()</a></dd>
 							<dt><b>CloseBold</b></dt>
@@ -274,6 +276,10 @@
 				<dd>in file comalib.php, class <a href="ComaCMS/ComaLib.html">ComaLib</a></dd>
 							<dt><b>common.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_common.php.html">common.php</a></dd>
+							<dt><b>Config</b></dt>
+				<dd>in file config.php, method <a href="ComaCMS/Config.html#methodConfig">Config::Config()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initializes the config class</dd>
+							<dt><b>Config</b></dt>
+				<dd>in file config.php, class <a href="ComaCMS/Config.html">Config</a></dd>
 							<dt><b>Connect</b></dt>
 				<dd>in file sql.php, method <a href="ComaCMS/Sql.html#methodConnect">Sql::Connect()</a></dd>
 							<dt><b>ConvertDefinition</b></dt>
@@ -433,9 +439,9 @@
 							<dt><b>GenerateInlineMenu</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGenerateInlineMenu">PageStructure::GenerateInlineMenu()</a></dd>
 							<dt><b>GenerateMenu</b></dt>
-				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGenerateMenu">PageStructure::GenerateMenu()</a></dd>
-							<dt><b>GenerateMenu</b></dt>
 				<dd>in file outputpage.php, method <a href="ComaCMS/OutputPage.html#methodGenerateMenu">OutputPage::GenerateMenu()</a></dd>
+							<dt><b>GenerateMenu</b></dt>
+				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGenerateMenu">PageStructure::GenerateMenu()</a></dd>
 							<dt><b>GenerateMultiFormTemplate</b></dt>
 				<dd>in file formmaker.class.php, method <a href="FormMaker/FormMaker.html#methodGenerateMultiFormTemplate">FormMaker::GenerateMultiFormTemplate()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the default template and sets replacements for ComaLate</dd>
 							<dt><b>GenerateOutput</b></dt>
@@ -448,6 +454,8 @@
 				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functiongenerateUrl">generateUrl()</a></dd>
 							<dt><b>generate_password</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functiongenerate_password">generate_password()</a></dd>
+							<dt><b>Get</b></dt>
+				<dd>in file config.php, method <a href="ComaCMS/Config.html#methodGet">Config::Get()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets one specific configurationitem from local array and returns its value if it is in local array, else returns default value</dd>
 							<dt><b>Get</b></dt>
 				<dd>in file lifo.php, method <a href="ComaCMS/Opendocument/LIFO.html#methodGet">LIFO::Get()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Get</dd>
 							<dt><b>GetCount</b></dt>
@@ -485,11 +493,11 @@
 							<dt><b>GetMimeContentType</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functionGetMimeContentType">GetMimeContentType()</a></dd>
 							<dt><b>GetPage</b></dt>
-				<dd>in file admin_modules.php, method <a href="ComaCMS/AdminInterface/Admin_Modules.html#methodGetPage">Admin_Modules::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;GetPage</dd>
-							<dt><b>GetPage</b></dt>
 				<dd>in file admin_menu.php, method <a href="ComaCMS/AdminInterface/Admin_Menu.html#methodGetPage">Admin_Menu::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets HTML out from the different parts of the Menuengine</dd>
 							<dt><b>GetPage</b></dt>
-				<dd>in file admin_pagepreview.php, method <a href="ComaCMS/AdminInterface/Admin_PagePreview.html#methodGetPage">Admin_PagePreview::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the code of the page</dd>
+				<dd>in file admin_groups.php, method <a href="ComaCMS/AdminInterface/Admin_Groups.html#methodGetPage">Admin_Groups::GetPage()</a></dd>
+							<dt><b>GetPage</b></dt>
+				<dd>in file admin_modules.php, method <a href="ComaCMS/AdminInterface/Admin_Modules.html#methodGetPage">Admin_Modules::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;GetPage</dd>
 							<dt><b>GetPage</b></dt>
 				<dd>in file admin_pagestructure.php, method <a href="ComaCMS/AdminInterface/Admin_PageStructure.html#methodGetPage">Admin_PageStructure::GetPage()</a></dd>
 							<dt><b>GetPage</b></dt>
@@ -497,7 +505,7 @@
 							<dt><b>GetPage</b></dt>
 				<dd>in file admin_rights.php, method <a href="ComaCMS/AdminInterface/Admin_Rights.html#methodGetPage">Admin_Rights::GetPage()</a></dd>
 							<dt><b>GetPage</b></dt>
-				<dd>in file admin_groups.php, method <a href="ComaCMS/AdminInterface/Admin_Groups.html#methodGetPage">Admin_Groups::GetPage()</a></dd>
+				<dd>in file admin_pagepreview.php, method <a href="ComaCMS/AdminInterface/Admin_PagePreview.html#methodGetPage">Admin_PagePreview::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the code of the page</dd>
 							<dt><b>GetPage</b></dt>
 				<dd>in file registration.php, method <a href="ComaCMS/Registration.html#methodGetPage">Registration::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Available actions (value of <var>$Action</var>):</dd>
 							<dt><b>GetPage</b></dt>
@@ -673,9 +681,9 @@
 		<h2>l</h2>
 		<dl>
 							<dt><b>$Language</b></dt>
-				<dd>in file outputpage.php, variable <a href="ComaCMS/OutputPage.html#var$Language">OutputPage::$Language</a></dd>
-							<dt><b>$Language</b></dt>
 				<dd>in file comalate.class.php, variable <a href="ComaLate/ComaLate.html#var$Language">ComaLate::$Language</a></dd>
+							<dt><b>$Language</b></dt>
+				<dd>in file outputpage.php, variable <a href="ComaCMS/OutputPage.html#var$Language">OutputPage::$Language</a></dd>
 							<dt><b>$Languages</b></dt>
 				<dd>in file language.php, variable <a href="ComaCMS/Language.html#var$Languages">Language::$Languages</a></dd>
 							<dt><b>$LinkUrl</b></dt>
@@ -696,10 +704,12 @@
 				<dd>in file lifo.php, class <a href="ComaCMS/Opendocument/LIFO.html">LIFO</a><br>&nbsp;&nbsp;&nbsp;&nbsp;LIFO</dd>
 							<dt><b>LineBreak</b></dt>
 				<dd>in file opendocumentimport_comacms.php, method <a href="ComaCMS/Opendocument/OpenDocumentImport_ComaCMS.html#methodLineBreak">OpenDocumentImport_ComaCMS::LineBreak()</a></dd>
-							<dt><b>Load</b></dt>
-				<dd>in file preferences.php, method <a href="ComaCMS/Preferences.html#methodLoad">Preferences::Load()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all settings from the $SettingsFile to the local array</dd>
 							<dt><b>load</b></dt>
 				<dd>in file auth_all.php, method <a href="ComaCMS/Auth/Auth_All.html#methodload">Auth_All::load()</a></dd>
+							<dt><b>Load</b></dt>
+				<dd>in file preferences.php, method <a href="ComaCMS/Preferences.html#methodLoad">Preferences::Load()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all settings from the $SettingsFile to the local array</dd>
+							<dt><b>LoadAll</b></dt>
+				<dd>in file config.php, method <a href="ComaCMS/Config.html#methodLoadAll">Config::LoadAll()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all configurations into a local array to easily get them</dd>
 							<dt><b>LoadData</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodLoadData">PageStructure::LoadData()</a></dd>
 							<dt><b>LoadFile</b></dt>
@@ -717,9 +727,9 @@
 							<dt><b>LoadNextInlineMenuSortID</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodLoadNextInlineMenuSortID">PageStructure::LoadNextInlineMenuSortID()</a></dd>
 							<dt><b>LoadPage</b></dt>
-				<dd>in file page_gallery.php, method <a href="ComaCMS/Page/Page_Gallery.html#methodLoadPage">Page_Gallery::LoadPage()</a></dd>
-							<dt><b>LoadPage</b></dt>
 				<dd>in file page_text.php, method <a href="ComaCMS/Page/Page_Text.html#methodLoadPage">Page_Text::LoadPage()</a></dd>
+							<dt><b>LoadPage</b></dt>
+				<dd>in file page_gallery.php, method <a href="ComaCMS/Page/Page_Gallery.html#methodLoadPage">Page_Gallery::LoadPage()</a></dd>
 							<dt><b>LoadPage</b></dt>
 				<dd>in file outputpage.php, method <a href="ComaCMS/OutputPage.html#methodLoadPage">OutputPage::LoadPage()</a></dd>
 							<dt><b>LoadPage</b></dt>
@@ -994,6 +1004,8 @@
 				<dd>procedural page <a href="ComaCMS/Sitemap/_modules---sitemap---sitemap_settings.php.html">sitemap_settings.php</a></dd>
 							<dt><b>Save</b></dt>
 				<dd>in file auth_user.php, method <a href="ComaCMS/Auth/Auth_User.html#methodSave">Auth_User::Save()</a></dd>
+							<dt><b>Save</b></dt>
+				<dd>in file config.php, method <a href="ComaCMS/Config.html#methodSave">Config::Save()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Saves a new value for a configurationitem to database or adds it if it does not exist</dd>
 							<dt><b>Save</b></dt>
 				<dd>in file auth_group.php, method <a href="ComaCMS/Auth/Auth_Group.html#methodSave">Auth_Group::Save()</a></dd>
 							<dt><b>saveGroup</b></dt>
@@ -1355,7 +1367,7 @@
 	<a href="elementindex.html#top">top</a><br>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sat, 25 Apr 2009 19:59:08 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
+		    Documentation generated on Sat, 25 Apr 2009 20:15:19 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

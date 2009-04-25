@@ -36,7 +36,7 @@
  		/**
  		 * Initializes the config class
  		 * @access public
- 		 * @param class SqlConnection A link to the mysql connection class
+ 		 * @param Sql &$SqlConnection A link to the mysql connection class
  		 */
  		function Config(&$SqlConnection) {
  			$this->_SqlConnection = &$SqlConnection;

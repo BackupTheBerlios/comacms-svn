@@ -90,7 +90,7 @@
 		
 		/**
 		 * @access public
-		 * @var Auth_All
+		 * @var Auth_All A link to the authentication class to access rights of the current user
 		 */
 		var $AccessRghts;
 		
@@ -102,7 +102,7 @@
 		
 		/**
 		 * @access private
-		 * @var Translation A link to the translations class
+		 * @var Language A link to the translations class
 		 */
 		var $_Translation;
 		
@@ -113,7 +113,10 @@
 		var $_Config;
 		
 		/**
+		 * Create a new Useraccount for the actual page
 		 * @param Sql &$SqlConnection A link to the SqlConnection class
+		 * @param Language &$Translation A link to the Translation class
+		 * @param Config &$Config A link to the configuration of the system
 		 * @return void
 		 */
 		function Account(&$SqlConnection, &$Translation, &$Config) {

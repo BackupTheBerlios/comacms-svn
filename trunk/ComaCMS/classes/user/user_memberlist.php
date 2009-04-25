@@ -1,7 +1,7 @@
 <?php
 /**
  * @package ComaCMS
- * @subpackage Userinterface
+ * @subpackage UserInterface
  * @copyright (C) 2005-2007 The ComaCMS-Team
  */
  #----------------------------------------------------------------------
@@ -24,6 +24,7 @@
 	/**
 	 * Provides a memberlist
 	 * @package ComaCMS
+	 * @subpackage UserInteface
 	 */
 	class User_Memberlist extends User {
 		

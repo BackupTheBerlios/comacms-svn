@@ -15,12 +15,18 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
  	
+ 	/**
+ 	 * @ignore
+ 	 */
  	define('FILES_NAME', 0);
  	define('FILES_SIZE', 1);
  	define('FILES_DATE', 2);
  	define('FILES_TYPE', 3);
  	define('FILES_DOWNLOADS', 4);
  	
+ 	/**
+ 	 * @package ComaCMS
+ 	 */
 	class Files {
 		
 		var $SizeCount = 0;
@@ -56,6 +62,7 @@
 			else
 				return -1;
 		}
+		
 		/**
 		 * @return string UploadedFileName
 		 */

@@ -16,7 +16,11 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
 
+	/**
+	 * @ignore
+	 */
 	require_once __ROOT__ . '/classes/textactions.php';
+	
 	/**
 	 * @package ComaCMS
  	 * @subpackage Dates

@@ -29,13 +29,15 @@
 	 * Set a global to make sure that common.php is executet only in the right context
 	 */
 	define("COMACMS_RUN", true);
+	
 	// run common.php to have all ordinary things done, which every page needs
 	include('common.php');
+	
 	$outputpage = new OutputPage($sqlConnection, $config, $translation, $output, $user);
 	$page = rawurlencode($page);
 	// load the page
-	$outputpage->LoadPage($page, $user);
-		
+	$outputpage->LoadPage($page);
+
 	$sql = "SELECT menu_name, menu_id
 		FROM " . DB_PREFIX . "menu";
 	$menus = $sqlConnection->SqlQuery($sql);
@@ -50,7 +52,7 @@
 		$output->SetCondition('notathome' , true);
 	$output->Title = $config->Get('pagename') . ' - ' . $outputpage->Title;
 	$output->SetMeta('keywords', $config->Get('keywords'));
-	$output->Language = $outputpage->Language;
+	$output->Language = $translation->OutputLanguage;
 	// is the user an admin
 	if($user->IsAdmin) {
 		// allow him to paste htmlcode into the page to make it possible to see a preview of the edited page

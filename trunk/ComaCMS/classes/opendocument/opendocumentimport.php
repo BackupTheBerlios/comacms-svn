@@ -16,8 +16,15 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
 	
+	/**
+	 * @ignore
+	 */
 	require_once __ROOT__ . '/classes/opendocument/lifo.php';
 	
+	/**
+	 * @package ComaCMS
+	 * @subpackage Opendocument Importer
+	 */
 	class OpenDocumentImport {
 		
 		var $_Content = '';

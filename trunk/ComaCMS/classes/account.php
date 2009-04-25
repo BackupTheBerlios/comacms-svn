@@ -74,12 +74,6 @@
 		var $IsLoggedIn = false;
 		
 		/**
-		 * @access public
-		 * @var string The language that the user has choosen
-		 */
-		var $Language = '';
-		
-		/**
 		 * LoginError
 		 * 
 		 * - -1: no attempt to log in
@@ -108,6 +102,12 @@
 		
 		/**
 		 * @access private
+		 * @var Translation A link to the translations class
+		 */
+		var $_Translation;
+		
+		/**
+		 * @access private
 		 * @var Config A link to the local Configuration class to get standart settings from the page
 		 */
 		var $_Config;
@@ -116,10 +116,11 @@
 		 * @param Sql &$SqlConnection A link to the SqlConnection class
 		 * @return void
 		 */
-		function Account(&$SqlConnection, &$Config) {
+		function Account(&$SqlConnection, &$Translation, &$Config) {
 			
 			global $_COOKIE;
 			$this->_SqlConnection = &$SqlConnection;
+			$this->_Translation = &$Translation;
 			$this->_Config = &$Config;
 			$extern_login_name = GetPostOrGet('login_name');
 			$extern_login_password = GetPostOrGet('login_password');
@@ -128,11 +129,9 @@
 			
 			// Tells the cookie: "the user is logged in!"?
 			if(isset($_COOKIE['ComaCMS_user'])) {
-				//$data = explode('|', $_COOKIE['ComaCMS_user']);
 				$this->OnlineID = $_COOKIE['ComaCMS_user'];
-				//$this->Name = @$data[1];
-				//$this->PasswordMd5 = @$data[2];
 			}
+
 			// Tries somebody to log in?
 			if(!empty($extern_login_name) && !empty($extern_login_password)) {
 				$this->Name = $extern_login_name;
@@ -255,14 +254,12 @@
 			
 			// Check: has the user changed the language by hand?
 			if(!empty($extern_lang)) {
-				if(in_array($extern_lang, $languages))
-					$this->Language = $extern_lang;
+				$this->_Translation->SetOutputLanguage($extern_lang);
 			}
 			
 			// Get the language from the cookie if it' s not changed
 			elseif(isset($_COOKIE['ComaCMS_user_lang'])) {
-				if(in_array($_COOKIE['ComaCMS_user_lang'], $languages))
-					$this->Language = $_COOKIE['ComaCMS_user_lang'];
+				$this->_Translation->SetOutputLanguage($_COOKIE['ComaCMS_user_lang']);
 			}
 			elseif ($this->IsLoggedIn) {
 				$sql = "SELECT user_preferred_language
@@ -270,19 +267,18 @@
 						WHERE user_id='$this->ID'";
 				$userResult = $this->_SqlConnection->SqlQuery($sql);
 				if ($user = mysql_fetch_object($userResult))
-					$this->Language == $user->user_preferred_language;
+					$this->_Translation->SetOutputLanguage($user->user_preferred_language);
 			}
 			
 			// if no language is set, load the language from the HTTP-header
-			if($this->Language == '') {
+			if(!$this->_Translation->CheckOutputLanguage()) {
 				if(isset($_ENV['HTTP_ACCEPT_LANGUAGE'])) {
 					$langs = $_ENV['HTTP_ACCEPT_LANGUAGE'];
 					$langs = preg_replace("#\;q=[0-9\.]+#i", '', $langs);
 					$langs = explode(',', $langs);
-					$this->Language = $languages[0];
+
 					foreach($langs as $lang) {
-						if(in_array($lang, $languages)) {
-							$this->Language = $lang;
+						if($this->_Translation->SetOutputLanguage($lang)) {
 							break;
 						}
 					}
@@ -290,10 +286,10 @@
 			}
 			
 			// If still no language was determined get the default language of the system and if not set use english as default
-			if($this->Language == '')
-				$this->Language = $this->_Config->Get('default_langugage', 'en');
+			if(!$this->_Translation->CheckOutputLanguage())
+				$this->_Translation->SetOutputLanguage($this->_Config->Get('default_langugage', 'en'));
 			// Set the cookie (for the next 93(= 3x31) days)
-			setcookie('ComaCMS_user_lang', $this->Language, time() + 8035200); 
+			setcookie('ComaCMS_user_lang', $this->_Translation->OutputLanguage, time() + 8035200); 
 		}
 		
 		/**
@@ -329,7 +325,7 @@
 			$result_new = $this->_SqlConnection->SqlQuery($sql);
 			if($row3 = mysql_fetch_object($result_new)) {
 				$sql = "UPDATE " . DB_PREFIX . "online
-					SET online_lastaction='" . mktime() . "', online_userid=$this->ID, online_lang='$this->Language', online_page='$page', online_loggedon = '" . (($this->IsLoggedIn) ? 'yes' : 'no' ) . "'
+					SET online_lastaction='" . mktime() . "', online_userid=$this->ID, online_lang='{$this->_Translation->OutputLanguage}', online_page='$page', online_loggedon = '" . (($this->IsLoggedIn) ? 'yes' : 'no' ) . "'
 					WHERE online_id='$this->OnlineID'";
 				$this->_SqlConnection->SqlQuery($sql);
 			}
@@ -338,7 +334,7 @@
 				$ip = getenv ('REMOTE_ADDR');
 				// add the online-record for the user
 				$sql = "INSERT INTO " . DB_PREFIX . "online (online_id, online_ip, online_lastaction, online_page, online_userid, online_lang, online_host, online_loggedon)
-				VALUES ('$this->OnlineID', '$ip', '" . mktime() . "', '$page', $this->ID, '$this->Language', '" . gethostbyaddr($ip) . "', '" . (($this->IsLoggedIn) ? 'yes' : 'no' ) . "')";
+				VALUES ('$this->OnlineID', '$ip', '" . mktime() . "', '$page', $this->ID, '{$this->_Translation->OutputLanguage}', '" . gethostbyaddr($ip) . "', '" . (($this->IsLoggedIn) ? 'yes' : 'no' ) . "')";
 				$this->_SqlConnection->SqlQuery($sql);
 				$counter_all++;
 			}

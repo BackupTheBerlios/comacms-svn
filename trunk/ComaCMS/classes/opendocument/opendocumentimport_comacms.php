@@ -16,8 +16,15 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
  
+ 	/**
+ 	 * @ignore
+ 	 */
  	require_once __ROOT__ . '/classes/opendocument/opendocumentimport.php';
  	
+ 	/**
+ 	 * @package ComaCMS
+ 	 * @subpackage Opendocument Importer
+ 	 */
 	class OpenDocumentImport_ComaCMS extends OpenDocumentImport {
 		var $_Text = '';
 		var $_StatusBold = false;

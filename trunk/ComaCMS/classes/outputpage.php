@@ -63,6 +63,30 @@
 		 */
 		var $_SqlConnection;
 		
+		 		/**
+ 		 * @var Language
+ 		 * @access private
+ 		 */
+ 		var $_Translation;
+ 		
+ 		/**
+ 		 * @var Config
+ 		 * @access private
+ 		 */
+ 		var $_Config;
+ 		
+ 		/**
+ 		 * @var User
+ 		 * @access private
+ 		 */
+ 		var $_User;
+ 		
+ 		/**
+ 		 * @var ComaLate
+ 		 * @access private
+ 		 */
+ 		 var $_ComaLate;
+		
 		var $Language = 'en';
 	
 		/**
@@ -140,11 +164,10 @@
 		/**
 		 * @return void
 		 */
-		function LoadPage($pagename, $user) {
-		//	die($user->Language);
+		function LoadPage($pagename) {
 			$load_old = false;
 			$change = GetPostOrGet('change');
-			if(is_numeric($change) && $user->IsLoggedIn && $change != 0)
+			if(is_numeric($change) && $this->_User->IsLoggedIn && $change != 0)
 				$load_old = true;
 			else
 				$change = 0;
@@ -157,7 +180,7 @@
 			else
 				$sql = "SELECT *
 						FROM " . DB_PREFIX . "pages
-						WHERE page_name='$pagename' AND page_lang='{$user->Language}'";
+						WHERE page_name='$pagename' AND page_lang='{$this->_Translation->OutputLanguage}'";
 			$page_result = $this->_SqlConnection->SqlQuery($sql);
 			if(!($page_data =  mysql_fetch_object($page_result))) {
 				$sql = "SELECT *
@@ -175,7 +198,7 @@
 					}
 				}
 			}
-			if(!$load_old && $page_data->page_access == 'deleted' && !$user->AccessRghts->delete) {
+			if(!$load_old && $page_data->page_access == 'deleted' && !$this->_User->AccessRghts->delete) {
 				header("Location: special.php?page=410&want=$pagename"); //HTTP 410 Gone
 				die();
 			}
@@ -187,7 +210,7 @@
 			$this->Language = $page_data->page_lang;
 			if($page_data->page_type == 'text') {
 				include(__ROOT__ . '/classes/page/page_text.php');
-				$page = new Page_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_UserID);
+				$page = new Page_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
 				if(!is_numeric($change))
 					$change = 0;
 				$page->LoadPageFromRevision($page_data->page_id, $change);
@@ -195,7 +218,7 @@
 			}
 			elseif($page_data->page_type == 'gallery') {
 				include(__ROOT__ . '/classes/page/page_gallery.php');
-				$page = new Page_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_UserID);
+				$page = new Page_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
 				$page->LoadPage($page_data->page_id);
 				$this->Text = $page->HTML;
 			}

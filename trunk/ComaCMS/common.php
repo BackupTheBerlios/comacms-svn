@@ -65,11 +65,13 @@
 	$config = new Config(&$sqlConnection);
 	$config->LoadAll();
 	
-	// Create a new user class
-	$user = new Account($sqlConnection, $config);
-	
 	// Initialize the translation of short texts in the system
-	$translation = new Language($user->Language);
+	$translation = new Language(&$sqlConnection);
+	
+	// Create a new user class
+	$user = new Account(&$sqlConnection, &$translation, &$config);
+	
+	// Load the language file
 	$translation->AddSources(__ROOT__  . '/lang/');
 	
 	// Load the comascript interpreter for the html output, set document and style information
@@ -148,7 +150,7 @@
 			$file = str_replace('.php', '', $file);
 			
 			// Check wether the language is the actual one of the user
-			if($user->Language == $file)
+			if($translation->OutputLanguage == $file)
 				$selected = true;
 			else
 				$selected = false;

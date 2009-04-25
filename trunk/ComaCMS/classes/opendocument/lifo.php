@@ -18,6 +18,8 @@
 	 /**
 	  * LIFO
 	  * A Last In First Out String management
+	  * @package ComaCMS
+	  * @subpackage Opendocument Importer
 	  */
 	 class LIFO {
 		/**

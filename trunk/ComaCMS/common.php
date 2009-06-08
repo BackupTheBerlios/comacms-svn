@@ -135,7 +135,7 @@
 		$pagePrefix = '';
 	
 	// Set the pageinformation of the user
-	$user->SetPage($pagePrefix . $page, $config);
+	$user->SetPage($pagePrefix . $page);
 	
 	// Get a list of all installed languages
 	$installedLanguages = array();

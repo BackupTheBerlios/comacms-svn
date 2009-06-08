@@ -31,6 +31,7 @@
 		
 		/**
 		 * Gets the subpage of the usermanagement which is selected by <var>$Action</var>
+		 * 
 		 * @access public
 		 * @param string $Action The name of the subpage
 		 * @return string The template for the usermanagement
@@ -39,6 +40,8 @@
 			
 			$template = '<h2>{LANG_USERMANAGEMENT}</h2>';
 			$this->_ComaLate->SetReplacement('LANG_USERMANAGEMENT', $this->_Translation->GetTranslation('usermanagement'));
+			
+			// TODO: Bug by type of userdefined field
 			
 			// Switch between the subpages of the usermanagement
 			switch ($Action) {

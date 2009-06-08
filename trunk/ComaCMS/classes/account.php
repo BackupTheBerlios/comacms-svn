@@ -18,7 +18,7 @@
 	/**
  	 * @ignore
  	 */
- 	require_once __ROOT__ . '/classes/auth/auth_all.php';
+ 	require_once __ROOT__ . '/classes/auth/authentication.php';
  
  	/**
  	 * @package ComaCMS
@@ -90,9 +90,9 @@
 		
 		/**
 		 * @access public
-		 * @var Auth_All A link to the authentication class to access rights of the current user
+		 * @var Authentication A link to the authentication class to access rights of the current user
 		 */
-		var $AccessRghts;
+		var $AccessRights;
 		
 		/**
 		 * @access private
@@ -122,13 +122,16 @@
 		function Account(&$SqlConnection, &$Translation, &$Config) {
 			
 			global $_COOKIE;
+			
+			// Set local links to the System classes
 			$this->_SqlConnection = &$SqlConnection;
 			$this->_Translation = &$Translation;
 			$this->_Config = &$Config;
-			$extern_login_name = GetPostOrGet('login_name');
-			$extern_login_password = GetPostOrGet('login_password');
-			$extern_lang = strtolower(GetPostOrGet('lang'));
-			$languages = array('de', 'en');
+			
+			// Get external Variables
+			$LoginName = GetPostOrGet('login_name');
+			$LoginPassword = GetPostOrGet('login_password');
+			$Lang = strtolower(GetPostOrGet('lang'));
 			
 			// Tells the cookie: "the user is logged in!"?
 			if(isset($_COOKIE['ComaCMS_user'])) {
@@ -136,10 +139,11 @@
 			}
 
 			// Tries somebody to log in?
-			if(!empty($extern_login_name) && !empty($extern_login_password)) {
-				$this->Name = $extern_login_name;
-				$this->_PasswordMd5 = md5($extern_login_password);
+			if(!empty($LoginName) && !empty($LoginPassword)) {
+				$this->Name = $LoginName;
+				$this->PasswordMd5 = md5($LoginPassword);
 			}
+			
 			// Has the user no OnlineId? Generate one!
 			$newOnlineID = false;
 			if($this->OnlineID == '') {
@@ -147,14 +151,14 @@
 				$newOnlineID = true;
 			}
 				
-			if($extern_login_name === '' && $extern_login_password === '')
+			if($LoginName === '' && $LoginPassword === '')
 				$this->LoginError = 3;
-			elseif($extern_login_name === '' && $extern_login_password !== '')
+			elseif($LoginName === '' && $LoginPassword !== '')
 				$this->LoginError = 1;
-			elseif($extern_login_name !== '' && $extern_login_password === '')
+			elseif($LoginName !== '' && $LoginPassword === '')
 				$this->LoginError = 2;
 			// Check: had the user typed in the right name and password?
-			elseif($this->Name != '' && $this->_PasswordMd5 != '') {
+			elseif($this->Name != '' && $this->PasswordMd5 != '') {
 
 				$sql = "SELECT *
 					FROM " . DB_PREFIX . "users
@@ -165,7 +169,7 @@
 					// If the user was found check if it is activated
 					if ($original_user->user_activated == '1') {
 						// If the user is activated check if the typed password is right
-						if ($original_user->user_password === $this->_PasswordMd5) {
+						if ($original_user->user_password === $this->PasswordMd5) {
 							$this->IsLoggedIn = true;
 							$this->Showname = $original_user->user_showname;
 							$this->Name = $original_user->user_name;
@@ -182,7 +186,7 @@
 							$this->IsAuthor = false;
 							$this->IsLoggedIn = false;
 							$this->Name = '';
-							$this->_PasswordMd5 = '';
+							$this->PasswordMd5 = '';
 							$this->LoginError = 4;
 						}
 					}
@@ -192,7 +196,7 @@
 						$this->IsAuthor = false;
 						$this->IsLoggedIn = false;
 						$this->Name = '';
-						$this->_PasswordMd5 = '';
+						$this->PasswordMd5 = '';
 						$this->LoginError = 5;
 					}
 				}
@@ -202,7 +206,7 @@
 					$this->IsAuthor = false;
 					$this->IsLoggedIn = false;
 					$this->Name = '';
-					$this->_PasswordMd5 = '';
+					$this->PasswordMd5 = '';
 					$this->LoginError = 4;
 				}
 			}
@@ -236,7 +240,7 @@
 						$this->IsAuthor = false;
 						$this->IsLoggedIn = false;
 						$this->Name = '';
-						$this->_PasswordMd5 = '';
+						$this->PasswordMd5 = '';
 						$this->LoginError = -1;
 					}
 				}		
@@ -244,20 +248,16 @@
 			
 			// Load authorizations for the user
 			if($this->IsLoggedIn) {
-				$this->accessRghts = new Auth_All($this->_SqlConnection, $this->ID);
-				
-			if(!$this->IsAdmin) 
-				$this->accessRghts->Load();
-			else
-				$this->accessRghts->setAdmin();
+				$this->AccessRights = new Authentication(&$this->_SqlConnection, $this->ID);
+				$this->AccessRights->LoadAll();
 			}
 			
 			// Set the cookie (for the next 1 hour/3600 seconds) 
 			setcookie('ComaCMS_user', $this->OnlineID, time() + 3600);
 			
 			// Check: has the user changed the language by hand?
-			if(!empty($extern_lang)) {
-				$this->_Translation->SetOutputLanguage($extern_lang);
+			if(!empty($Lang)) {
+				$this->_Translation->SetOutputLanguage($Lang);
 			}
 			
 			// Get the language from the cookie if it' s not changed
@@ -302,22 +302,21 @@
 		 * @param Config &$Config A link to the config
 		 * @return void 
 		 */
-		function SetPage($page, &$Config) {
+		function SetPage($page) {
 			
-			$config = &$Config;
 			global $REMOTE_ADDR;
 			
-			$counter_start_date = $config->Get('counter_start_date');
-			$counter_all = $config->Get('counter_all');
+			$counter_start_date = $this->_Config->Get('counter_start_date');
+			$counter_all = $this->_Config->Get('counter_all');
 			
 			// is the counter counting the first time ever?
 			if($counter_start_date == '') {
 				$counter_start_date = mktime();
-				$config->Save('counter_start_date', $counter_start_date);
+				$this->_Config->Save('counter_start_date', $counter_start_date);
 			}
 			if($counter_all == '') {
 				$counter_all = 0;
-				$config->Save('counter_all', 1);
+				$this->_Config->Save('counter_all', 1);
 			}
 			
 			// check if the user is new on the page
@@ -343,8 +342,8 @@
 			}
 
 			// set the new counterstatus with the count of all users who visted the site since countig
-			if($counter_all != 1 && $counter_all != $config->Get('counter_all'))
-				$config->Save('counter_all', $counter_all);
+			if($counter_all != 1 && $counter_all != $this->_Config->Get('counter_all'))
+				$this->_Config->Save('counter_all', $counter_all);
 			
 			// delete all enries with a last action which is more than 20 minutes passed
 			$sql = "DELETE FROM " . DB_PREFIX . "online

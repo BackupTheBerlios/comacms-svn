@@ -198,7 +198,8 @@
 					}
 				}
 			}
-			if(!$load_old && $page_data->page_access == 'deleted' && !$this->_User->AccessRghts->delete) {
+			//TODO: access deleted pages
+			if(!$load_old && $page_data->page_access == 'deleted') {
 				header("Location: special.php?page=410&want=$pagename"); //HTTP 410 Gone
 				die();
 			}

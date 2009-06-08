@@ -98,8 +98,7 @@
 		
 	$menuArray[] = array($translation->GetTranslation('sitestyle'), 'style');
 	$menuArray[] = array($translation->GetTranslation('users'), 'users');
-	// $menuArray[] = array($translation->GetTranslation('groups'), 'groups');
-	// $menuArray[] = array($translation->GetTranslation('rights'), 'rights');
+	$menuArray[] = array($translation->GetTranslation('groups'), 'groups');
 	$menuArray[] = array($translation->GetTranslation('files'), 'files');
 	$menuArray[] = array($translation->GetTranslation('logout'), 'logout');
 	
@@ -132,6 +131,14 @@
 			$title = $translation->GetTranslation('users');
 			$usermanagementClass = new Admin_Usermanagement($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $usermanagementClass->GetPage($action);
+			break;
+		case 'groups':
+			// Load the groupcontroll-class
+			include_once(__ROOT__ . '/classes/admin/admin_groupmanagement.php');
+			
+			$title = $translation->GetTranslation('groups');
+			$groupmanagementClass = new Admin_Groupmanagement($sqlConnection, $translation, $config, $user, $lib, $output);
+			$text = $groupmanagementClass->GetPage($action);
 			break;
 		
 		case 'logout':
@@ -166,24 +173,6 @@
 			$adminClass = new Admin_PageStructure($sqlConnection, $translation, $config, $user, $lib, $output);
 			$text = $adminClass->GetPage($action);
 			break;
-		
-		/*case 'groups':
-			// Load the groups-class (groups-management)		
-			include_once(__ROOT__  . '/classes/admin/admin_groups.php');
-
-			$title = $translation->GetTranslation('groups');
-			$adminClass = new Admin_Groups($sqlConnection, $translation, $config, $user, $lib, $output);
-			$text = $adminClass->GetPage($action);
-			break;*/
-		
-		/*case 'rights':
-			// Load the rights-class (access-management)
-			include_once(__ROOT__ . '/classes/admin/admin_rights.php');
-			
-			$title = $translation->GetTranslation('rights');
-			$adminClass = new Admin_Rights($sqlConnection, $translation, $config, $user, $lib, $output);
-			$text = $adminClass->GetPage($action);
-			break;*/
 		
 		case 'menueditor':
 			// Load the menu-class (menu-management)

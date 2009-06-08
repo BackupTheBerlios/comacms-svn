@@ -462,7 +462,7 @@
 						$edit = new Page_Extended_Text($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
 						break;
 					case 'gallery':
-						include('classes/page/page_extended_gallery.php');
+						include_once (__ROOT__ . '/classes/page/page_extended_gallery.php');
 						$edit = new Page_Extended_Gallery($this->_SqlConnection, $this->_Config, $this->_Translation, $this->_ComaLate, $this->_User);
 						break;	
 					default:

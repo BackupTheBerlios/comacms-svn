@@ -31,15 +31,17 @@ h2 {
 }
 
 h3 {
-	font-size: 1.17em;
+	font-size: 1.3em;
 	padding-left: 0.4em;
 	margin-bottom: 1em;
 	margin-top: 0.5em;
 }
 
 h4 {
+	font-size: 1.1em;
 	margin-top: 0.5em;
  	margin-bottom: 1em;
+ 	border-bottom: 1px solid #000;
 }
 
 img {
@@ -124,6 +126,33 @@ span.error {
 	font-weight: bold;
 	margin-bottom: 0.4em;
 	text-indent: .5em;
+}
+
+span.full-size-info {
+	line-height: 1.3em;
+	font-size: 0.75em;
+	display: block;
+	color: #000;
+	font-style: italic;
+	text-indent: 1em;
+	text-align: justify;
+	margin-left:1.5em;
+	border: 1px dashed #000;
+	padding: 0.3em;
+}
+
+span.full-size-error {
+	line-height: 1.3em;
+	font-size: 0.75em;
+	display: block;
+	color: red;
+	font-style: normal;
+	font-weight: bold;
+	text-indent: 0.5em;
+	text-align: justify;
+	margin-left:1.5em;
+	border: 1px dashed #FF0000;
+	padding: 0.3em;
 }
 
 a.button , input.button, button {
@@ -212,7 +241,7 @@ td.table_date_width_plus, th.table_date_width_plus {
 .full_width {
 	width: 96%;
 }
-li.page_type_text, li.page_type_gallery {
+li.page_type_text, li.page_type_gallery, li.group_user_item {
 	margin-left: 1.5em;
 	clear: right;
 }
@@ -293,12 +322,12 @@ li.inline_download {
 	display: list-item;
 }
 a.link_download {
-padding-left: 17px;
-background-image: url("../../img/download.png");
-background-repeat: no-repeat;
-padding-top:1px;
-padding-bottom:1px;
-background-position: left center;
+	padding-left: 17px;
+	background-image: url("../../img/download.png");
+	background-repeat: no-repeat;
+	padding-top:1px;
+	padding-bottom:1px;
+	background-position: left center;
 }
 
 
@@ -332,7 +361,7 @@ div.row span.edit {
 	margin-right: 5px;
 }
 
-.page_actions {
+.page_actions, .group_actions {
 	float: right;
 	margin-top: 2px;
 	margin-bottom: 2px;

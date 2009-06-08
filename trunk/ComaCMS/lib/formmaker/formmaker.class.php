@@ -612,7 +612,7 @@
 								{start_input} name=\"{name}\" id=\"{name}\" {end_input}
 							</div>
 						</inputs>
-						{submitbutton}
+						{submit_button}
 					{fieldset_end}
 				</form>
 				</FORM_MAKER>"; 

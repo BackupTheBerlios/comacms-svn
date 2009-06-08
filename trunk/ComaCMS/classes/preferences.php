@@ -23,7 +23,7 @@
 		/**
 		 * Contains all Settings setted by any loaded settings file
 		 * @access public
-		 * @staticvar Settings Contains all settings loaded by the preferences system
+		 * @staticvar array Contains all settings loaded by the preferences system
 		 */
 		var $Settings;
 		
@@ -36,7 +36,7 @@
 		
 		/**
 		 * @access public
-		 * @param Translation Translation A link to the translation class
+		 * @param Language &$Translation A link to the translation class
 		 * @return void
 		 */
 		function Preferences(&$Translation) {
@@ -49,14 +49,19 @@
 		 * Loads all settings from the $SettingsFile to the local array
 		 * @access public
 		 * @param string $SettingsFile A link to a settingsfile that should be loaded
-		 * @return void Load settings file
+		 * @return bool Was the file loaded correctly?
 		 */
 		function Load($SettingsFile) {
 			$translation = &$this->_Translation;
-			include($SettingsFile);
+			
+			if (file_exists($SettingsFile)) {
+				include($SettingsFile);
+				return true;
+			}
+			return false;
 		}
 		
-		/** SetSetting
+		/** 
 		 * Adds a property to the preferences-page
 		 * 
 		 * @access public
@@ -76,8 +81,4 @@
 													'datatype' => $DataType);
 		}
 	}
-	
-	
-	
-	
 ?>

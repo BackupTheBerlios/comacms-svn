@@ -37,6 +37,7 @@
  		 * Initializes the config class
  		 * @access public
  		 * @param Sql &$SqlConnection A link to the mysql connection class
+ 		 * @return void
  		 */
  		function Config(&$SqlConnection) {
  			$this->_SqlConnection = &$SqlConnection;
@@ -71,25 +72,25 @@
 		/**
 		 * Saves a new value for a configurationitem to database or adds it if it does not exist
 		 * @access public
-		 * @param string name Name of the Configurationitem
-		 * @param string value Value of the Configurationitem
+		 * @param string $Name Name of the Configurationitem
+		 * @param string $Value Value of the Configurationitem
 		 * @return void
 		 */
-		function Save($name, $value) {
-			if(isset($this->Elements[$name])) {
-				if($value != $this->Elements[$name]) {
+		function Save($Name, $Value) {
+			if(isset($this->Elements[$Name])) {
+				if($Value != $this->Elements[$Name]) {
 				$sql = "UPDATE " . DB_PREFIX . "config
-					SET config_value = '$value'
-					WHERE config_name = '$name'";
+					SET config_value = '$Value'
+					WHERE config_name = '$Name'";
 				$this->_SqlConnection->SqlQuery($sql);
 				}
 			}
 			else {
 				$sql = "INSERT INTO " . DB_PREFIX . "config (config_name , config_value )
-					VALUES ( '$name', '$value')";
+					VALUES ( '$Name', '$Value')";
 				$this->_SqlConnection->SqlQuery($sql);
 			}
-			$this->Elements[$name] = $value;
+			$this->Elements[$Name] = $Value;
 		}
 	}
 ?>

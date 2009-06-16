@@ -19,6 +19,7 @@
 	/**
 	 * @package ComaCMS
 	 * @subpackage Page
+	 * @abstract
   	 */
  	class Page {
  		

@@ -497,3 +497,22 @@ ALTER TABLE `comacms_users` ADD `user_preferred_language` VARCHAR( 10 ) NOT NULL
 # Added html-fields for dates and news
 ALTER TABLE `comacms_news` ADD `text_html` TEXT NOT NULL ;
 ALTER TABLE `comacms_dates` ADD `date_topic_html` TEXT NOT NULL AFTER `date_topic` ;
+
+#r469??
+# Changed Auth system
+DROP TABLE `comacms_auth`;
+CREATE TABLE `comacms_auth_global`(
+	`auth_global_group_id` int(20) UNSIGNED NULL,
+	`auth_global_user_id` int(20) UNSIGNED NULL,
+	`auth_global_name` varchar(255) NOT NULL default '',
+	`auth_global_value` tinyint(1) UNSIGNED NOT NULL
+);
+CREATE TABLE `comacms_auth_dynamic`(
+	`auth_dynamic_group_id` int(20) UNSIGNED NULL,
+	`auth_dynamic_user_id` int(20) UNSIGNED NULL,
+	`auth_dynamic_name` varchar(255) NOT NULL default '',
+	`auth_dynamic_value` tinyint(1) UNSIGNED NOT NULL,
+	`auth_dynamic_mysql_table` varchar(255) NOT NULL,
+	`auth_dynamic_mysql_primary_key` varchar(255) NOT NULL
+);
+ALTER TABLE `comacms_groups` DROP `group_manager`;

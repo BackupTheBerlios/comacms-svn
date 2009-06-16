@@ -19,6 +19,7 @@
 	 * @package ComaCMS
 	 */
  	class Sql {
+ 		
  		/**
  		 * The username of the MySQL-account
  		 * @access public
@@ -53,6 +54,7 @@
  		 * @var integer 
  		 */
  		var $QueriesCount = 0;
+ 		
  		/**
  		 * @access private
  		 * @var resource
@@ -61,9 +63,9 @@
  		
  		/**
  		 * @access public
- 		 * @param string UserName
- 		 * @param string UserPassword
- 		 * @param string Server
+ 		 * @param string $UserName
+ 		 * @param string $UserPassword
+ 		 * @param string $Server
  		 */
  		function Sql($UserName, $UserPassword, $Server = 'localhost') {
  			// Set vars
@@ -74,22 +76,24 @@
  		
  		/**
  		 * @access public
- 		 * @param string Database The name of the database on the MySQL-server
+ 		 * @param string $Database The name of the database on the MySQL-server
  		 * @return void
  		 */
  		function Connect($Database) {
+ 			
+ 			// Enable error reporting and report errors with own outputs
  			error_reporting(E_ALL);
- 			$this->_Connection = mysql_pconnect($this->Server, $this->UserName, $this->UserPassword)
-			or die('Mysql-error:' . mysql_error());
-			$this->Database = $Database; 
-			mysql_select_db($Database, $this->_Connection)
-			or die('Mysql-error:' . mysql_error()); 		
+ 			$this->_Connection = mysql_pconnect($this->Server, $this->UserName, $this->UserPassword) or die('Mysql-error:' . mysql_error());
+ 			
+			// Try to set the connection to the database of the system
+			mysql_select_db($Database, $this->_Connection) or die('Mysql-error:' . mysql_error());
+			$this->Database = $Database; 		
  		}
  		
  		/**
  		 * Sends a MySQL-Query to the Server and incements a counter which counts the MySQL-queries 
  		 * @access public
- 		 * @param string Query A MySQL-Query 
+ 		 * @param string $Query A MySQL-Query 
  		 * @return resource
  		 */
  		function SqlQuery($Query) {
@@ -108,7 +112,7 @@
  		/**
  		 * Executes a Sql-File
  		 * @access public
- 		 * @param srting Filename
+ 		 * @param srting $Filename
  		 * @return boolean
  		 */
  		function SqlExecFile($Filename) {
@@ -126,7 +130,7 @@
  		/**
  		 * Executes many sql-queries at once
  		 * @access public
- 		 * @param srting Queries
+ 		 * @param srting $Queries
  		 * @return boolean
  		 */
  		function SqlExecMultiple($Queries) {

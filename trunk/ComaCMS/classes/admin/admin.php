@@ -30,6 +30,7 @@
 	/**
 	 * @package ComaCMS 
 	 * @subpackage AdminInterface
+	 * @abstract
 	 */
  	class Admin {
  	

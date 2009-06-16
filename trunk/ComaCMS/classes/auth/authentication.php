@@ -141,7 +141,7 @@
  		}
  		
  		/**
- 		 * Gets one specific right from the local array and returns the value if there is one else use default value
+ 		 * Gets one specific right from the local array and returns the value if there is one. If not use default value
  		 * @access public
  		 * @param string $Name This is the name of the right
  		 * @param bool $Default This is the default value for the right
@@ -159,7 +159,7 @@
  					return false;
  			}
  			
- 			// If we still have no value return the default value
+ 			// We still have no value so return the default value
  			return $Default;
  		}
  		

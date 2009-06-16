@@ -30,6 +30,7 @@
 	/**
 	 * @package ComaCMS 
 	 * @subpackage UserInterface
+	 * @abstract
 	 */
  	class User {
  	

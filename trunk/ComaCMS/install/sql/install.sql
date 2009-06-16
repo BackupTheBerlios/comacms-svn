@@ -226,22 +226,27 @@
 			custom_fields_values_value text NOT NULL,
 			PRIMARY KEY (custom_fields_values_id)
 		);
-		DROP TABLE IF EXISTS {DB_PREFIX}auth;
-        CREATE TABLE {DB_PREFIX}auth (
-			auth_group_id INT( 20 ) ,
-			auth_user_id INT( 20 ) ,
-			auth_page_id INT( 20 ) DEFAULT '0' NOT NULL ,
-			auth_view TINYINT( 1 ) DEFAULT '1' NOT NULL ,
-			auth_edit TINYINT( 1 ) DEFAULT '0' NOT NULL ,
-			auth_delete TINYINT( 1 ) DEFAULT '0' NOT NULL ,
-			auth_new_sub TINYINT( 1 ) DEFAULT '0' NOT NULL
+		DROP TABLE IF EXISTS {DB_PREFIX}auth_global;
+        CREATE TABLE {DB_PREFIX}auth_global (
+			auth_global_group_id int(20) ,
+			auth_global_user_id int(20) ,
+			auth_global_name varchar(255) NOT NULL default '',
+			auth_global_value tinyint(1) UNSIGNED NOT NULL default '0'
+		);
+		DROP TABLE IF EXISTS {DB_PREFIX}auth_dynamic;
+		CREATE TABLE {DB_PREFIX}auth_dynamic (
+			auth_dynamic_group_id int(20) ,
+			auth_dynamic_user_id int(20) ,
+			auth_dynamic_name varchar(255) NOT NULL default '',
+			auth_dynamic_value tinyint(1) UNSIGNED NOT NULL default '0',
+			auth_dynamic_mysql_table varchar(255) NOT NULL,
+			auth_dynamic_mysql_primary_key varchar(255) NOT NULL
 		);
 		DROP TABLE IF EXISTS {DB_PREFIX}groups;
 		CREATE TABLE {DB_PREFIX}groups (
 			group_id int(20) NOT NULL auto_increment,
 			group_name varchar(40) NOT NULL default '',
 			group_description text NOT NULL,
-			group_manager int(20) NOT NULL default '0',
 			PRIMARY KEY  (group_id),
 			UNIQUE KEY group_name (group_name)
 		);

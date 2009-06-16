@@ -24,7 +24,7 @@
 	/**
 	 * Provides a memberlist
 	 * @package ComaCMS
-	 * @subpackage UserInteface
+	 * @subpackage UserInterface
 	 */
 	class User_Memberlist extends User {
 		

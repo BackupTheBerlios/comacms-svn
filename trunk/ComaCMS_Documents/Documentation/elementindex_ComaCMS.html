@@ -54,6 +54,8 @@
 		</a><br>
 			<a href="ComaCMS/_classes---language.php.html">		language.php
 		</a><br>
+			<a href="ComaCMS/_classes---ldap.php.html">		ldap.php
+		</a><br>
 			<a href="ComaCMS/_classes---menu.php.html">		menu.php
 		</a><br>
 			<a href="ComaCMS/_classes---module.php.html">		module.php
@@ -210,6 +212,7 @@
 	    		<a href="ComaCMS/ImageConverter.html">ImageConverter</a><br />
 	    		<a href="ComaCMS/InlineMenu.html">InlineMenu</a><br />
 	    		<a href="ComaCMS/Language.html">Language</a><br />
+	    		<a href="ComaCMS/Ldap.html">Ldap</a><br />
 	    		<a href="ComaCMS/Menu.html">Menu</a><br />
 	    		<a href="ComaCMS/Module.html">Module</a><br />
 	    		<a href="ComaCMS/OutputPage.html">OutputPage</a><br />
@@ -274,10 +277,8 @@
 	  </div>
   <div class="package">
 	UserInterface<br />	    &nbsp;&nbsp;		<a href="ComaCMS/UserInterface/User.html">User</a><br />
+	    &nbsp;&nbsp;		<a href="ComaCMS/UserInterface/User_Memberlist.html">User_Memberlist</a><br />
 	    &nbsp;&nbsp;		<a href="ComaCMS/UserInterface/User_Usercontrol.html">User_Usercontrol</a><br />
-	  </div>
-  <div class="package">
-	UserInteface<br />	    &nbsp;&nbsp;		<a href="ComaCMS/UserInteface/User_Memberlist.html">User_Memberlist</a><br />
 	  </div>
                 </td>
     <td>
@@ -528,6 +529,8 @@
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodAddNewPage">PageStructure::AddNewPage()</a></dd>
 							<dt><b>AddSources</b></dt>
 				<dd>in file language.php, method <a href="ComaCMS/Language.html#methodAddSources">Language::AddSources()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all language files from a directory</dd>
+							<dt><b>AdminLogin</b></dt>
+				<dd>in file ldap.php, method <a href="ComaCMS/Ldap.html#methodAdminLogin">Ldap::AdminLogin()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Relogin to the ldapserver using an admin account</dd>
 							<dt><b>account.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---account.php.html">account.php</a></dd>
 							<dt><b>Admin</b></dt>
@@ -662,6 +665,8 @@
 				<dd>in file config.php, method <a href="ComaCMS/Config.html#methodConfig">Config::Config()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initializes the config class</dd>
 							<dt><b>Connect</b></dt>
 				<dd>in file sql.php, method <a href="ComaCMS/Sql.html#methodConnect">Sql::Connect()</a></dd>
+							<dt><b>Connect</b></dt>
+				<dd>in file ldap.php, method <a href="ComaCMS/Ldap.html#methodConnect">Ldap::Connect()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Connect to the ldap server and try to bind the user</dd>
 							<dt><b>ConvertDefinition</b></dt>
 				<dd>in file textactions.php, method <a href="ComaCMS/TextActions.html#methodConvertDefinition">TextActions::ConvertDefinition()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;ConvertDefinition</dd>
 							<dt><b>ConvertList</b></dt>
@@ -943,9 +948,9 @@
 							<dt><b>GetTitle</b></dt>
 				<dd>in file sitemap_module.php, method <a href="ComaCMS/Sitemap/Module_Sitemap.html#methodGetTitle">Module_Sitemap::GetTitle()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This function returns the title of the modul shown in the title of the browse</dd>
 							<dt><b>GetPage</b></dt>
-				<dd>in file user_memberlist.php, method <a href="ComaCMS/UserInteface/User_Memberlist.html#methodGetPage">User_Memberlist::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets the subpages of the memberlist</dd>
-							<dt><b>GetPage</b></dt>
 				<dd>in file user_usercontrol.php, method <a href="ComaCMS/UserInterface/User_Usercontrol.html#methodGetPage">User_Usercontrol::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets the subpages of the usercontrol</dd>
+							<dt><b>GetPage</b></dt>
+				<dd>in file user_memberlist.php, method <a href="ComaCMS/UserInterface/User_Memberlist.html#methodGetPage">User_Memberlist::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets the subpages of the memberlist</dd>
 							<dt><b>GetPage</b></dt>
 				<dd>in file user.php, method <a href="ComaCMS/UserInterface/User.html#methodGetPage">User::GetPage()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the page which is selected by <var>$Action</var></dd>
 					</dl>
@@ -969,6 +974,8 @@
 							<dt><b>$ID</b></dt>
 				<dd>in file account.php, variable <a href="ComaCMS/Account.html#var$ID">Account::$ID</a></dd>
 							<dt><b>$IsAdmin</b></dt>
+				<dd>in file ldap.php, variable <a href="ComaCMS/Ldap.html#var$IsAdmin">Ldap::$IsAdmin</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Is the current user an admin user?</dd>
+							<dt><b>$IsAdmin</b></dt>
 				<dd>in file account.php, variable <a href="ComaCMS/Account.html#var$IsAdmin">Account::$IsAdmin</a></dd>
 							<dt><b>$IsAuthor</b></dt>
 				<dd>in file account.php, variable <a href="ComaCMS/Account.html#var$IsAuthor">Account::$IsAuthor</a></dd>
@@ -979,9 +986,9 @@
 							<dt><b>inlinemenu.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---inlinemenu.php.html">inlinemenu.php</a></dd>
 							<dt><b>ImageConverter</b></dt>
-				<dd>in file imageconverter.php, method <a href="ComaCMS/ImageConverter.html#methodImageConverter">ImageConverter::ImageConverter()</a></dd>
-							<dt><b>ImageConverter</b></dt>
 				<dd>in file imageconverter.php, class <a href="ComaCMS/ImageConverter.html">ImageConverter</a><br>&nbsp;&nbsp;&nbsp;&nbsp;ImageConverter  This class contains functions to manipulate images</dd>
+							<dt><b>ImageConverter</b></dt>
+				<dd>in file imageconverter.php, method <a href="ComaCMS/ImageConverter.html#methodImageConverter">ImageConverter::ImageConverter()</a></dd>
 							<dt><b>IMG_ALIGN_CENTER</b></dt>
 				<dd>in file textactions.php, constant <a href="ComaCMS/_classes---textactions.php.html#defineIMG_ALIGN_CENTER">IMG_ALIGN_CENTER</a></dd>
 							<dt><b>IMG_ALIGN_LEFT</b></dt>
@@ -1050,10 +1057,18 @@
 				<dd>in file account.php, variable <a href="ComaCMS/Account.html#var$LoginError">Account::$LoginError</a><br>&nbsp;&nbsp;&nbsp;&nbsp;LoginError</dd>
 							<dt><b>language.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---language.php.html">language.php</a></dd>
-							<dt><b>Language</b></dt>
-				<dd>in file language.php, class <a href="ComaCMS/Language.html">Language</a></dd>
+							<dt><b>ldap.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/_classes---ldap.php.html">ldap.php</a></dd>
 							<dt><b>Language</b></dt>
 				<dd>in file language.php, method <a href="ComaCMS/Language.html#methodLanguage">Language::Language()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initializes the language class</dd>
+							<dt><b>Language</b></dt>
+				<dd>in file language.php, class <a href="ComaCMS/Language.html">Language</a></dd>
+							<dt><b>Ldap</b></dt>
+				<dd>in file ldap.php, class <a href="ComaCMS/Ldap.html">Ldap</a></dd>
+							<dt><b>Ldap</b></dt>
+				<dd>in file ldap.php, method <a href="ComaCMS/Ldap.html#methodLdap">Ldap::Ldap()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initializes a new ldap class</dd>
+							<dt><b>LdapSearch</b></dt>
+				<dd>in file ldap.php, method <a href="ComaCMS/Ldap.html#methodLdapSearch">Ldap::LdapSearch()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Searches the ldapserver for a specific search string</dd>
 							<dt><b>Load</b></dt>
 				<dd>in file preferences.php, method <a href="ComaCMS/Preferences.html#methodLoad">Preferences::Load()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all settings from the $SettingsFile to the local array</dd>
 							<dt><b>LoadAll</b></dt>
@@ -1238,8 +1253,14 @@
 		<dl>
 							<dt><b>$PageID</b></dt>
 				<dd>in file outputpage.php, variable <a href="ComaCMS/OutputPage.html#var$PageID">OutputPage::$PageID</a></dd>
+							<dt><b>$Password</b></dt>
+				<dd>in file ldap.php, variable <a href="ComaCMS/Ldap.html#var$Password">Ldap::$Password</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This is the password for the ldap user</dd>
+							<dt><b>$Port</b></dt>
+				<dd>in file ldap.php, variable <a href="ComaCMS/Ldap.html#var$Port">Ldap::$Port</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This is the port of the ldapserver</dd>
 							<dt><b>$Position</b></dt>
 				<dd>in file outputpage.php, variable <a href="ComaCMS/OutputPage.html#var$Position">OutputPage::$Position</a></dd>
+							<dt><b>$ProtokollVersion</b></dt>
+				<dd>in file ldap.php, variable <a href="ComaCMS/Ldap.html#var$ProtokollVersion">Ldap::$ProtokollVersion</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This is the protokoll version of the server.</dd>
 							<dt><b>pagepreview.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---pagepreview.php.html">pagepreview.php</a></dd>
 							<dt><b>pagestructure.php</b></dt>
@@ -1251,9 +1272,9 @@
 							<dt><b>PageHasSubPages</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodPageHasSubPages">PageStructure::PageHasSubPages()</a></dd>
 							<dt><b>PagePreview</b></dt>
-				<dd>in file pagepreview.php, class <a href="ComaCMS/PagePreview.html">PagePreview</a></dd>
-							<dt><b>PagePreview</b></dt>
 				<dd>in file pagepreview.php, method <a href="ComaCMS/PagePreview.html#methodPagePreview">PagePreview::PagePreview()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initializes the PagePreview class</dd>
+							<dt><b>PagePreview</b></dt>
+				<dd>in file pagepreview.php, class <a href="ComaCMS/PagePreview.html">PagePreview</a></dd>
 							<dt><b>PageStructure</b></dt>
 				<dd>in file pagestructure.php, class <a href="ComaCMS/PageStructure.html">PageStructure</a></dd>
 							<dt><b>PageStructure</b></dt>
@@ -1306,6 +1327,8 @@
 		<dl>
 							<dt><b>$QueriesCount</b></dt>
 				<dd>in file sql.php, variable <a href="ComaCMS/Sql.html#var$QueriesCount">Sql::$QueriesCount</a><br>&nbsp;&nbsp;&nbsp;&nbsp;The number of all done MySQL-queries in this session</dd>
+							<dt><b>$QueryCount</b></dt>
+				<dd>in file ldap.php, variable <a href="ComaCMS/Ldap.html#var$QueryCount">Ldap::$QueryCount</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Counts the querys to the ldap server</dd>
 							<dt><b>QueryImage</b></dt>
 				<dd>in file opendocumentimport.php, method <a href="ComaCMS/Opendocument/OpenDocumentImport.html#methodQueryImage">OpenDocumentImport::QueryImage()</a></dd>
 					</dl>
@@ -1348,6 +1371,8 @@
 	<div>
 		<h2>s</h2>
 		<dl>
+							<dt><b>$Server</b></dt>
+				<dd>in file ldap.php, variable <a href="ComaCMS/Ldap.html#var$Server">Ldap::$Server</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This is the address of the ldapserver</dd>
 							<dt><b>$Server</b></dt>
 				<dd>in file sql.php, variable <a href="ComaCMS/Sql.html#var$Server">Sql::$Server</a><br>&nbsp;&nbsp;&nbsp;&nbsp;The server-address, on which the MySQL-databases are</dd>
 							<dt><b>$Settings</b></dt>
@@ -1448,6 +1473,8 @@
 		<dl>
 							<dt><b>$UserName</b></dt>
 				<dd>in file sql.php, variable <a href="ComaCMS/Sql.html#var$UserName">Sql::$UserName</a><br>&nbsp;&nbsp;&nbsp;&nbsp;The username of the MySQL-account</dd>
+							<dt><b>$UserName</b></dt>
+				<dd>in file ldap.php, variable <a href="ComaCMS/Ldap.html#var$UserName">Ldap::$UserName</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This is a user-base-dn to search the ldap server</dd>
 							<dt><b>$UserPassword</b></dt>
 				<dd>in file sql.php, variable <a href="ComaCMS/Sql.html#var$UserPassword">Sql::$UserPassword</a><br>&nbsp;&nbsp;&nbsp;&nbsp;The passwort for the MySQL-account</dd>
 							<dt><b>UpdateMenuEntry</b></dt>
@@ -1478,8 +1505,6 @@
 				<dd>in file page_extended_gallery.php, method <a href="ComaCMS/Page/Page_Extended_Gallery.html#methodUpdateTitle">Page_Extended_Gallery::UpdateTitle()</a></dd>
 							<dt><b>UseModule</b></dt>
 				<dd>in file sitemap_module.php, method <a href="ComaCMS/Sitemap/Module_Sitemap.html#methodUseModule">Module_Sitemap::UseModule()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;This function returns the text for a template or a page</dd>
-							<dt><b>User_Memberlist</b></dt>
-				<dd>in file user_memberlist.php, class <a href="ComaCMS/UserInteface/User_Memberlist.html">User_Memberlist</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Provides a memberlist</dd>
 							<dt><b>user.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/UserInterface/_classes---user---user.php.html">user.php</a></dd>
 							<dt><b>user_memberlist.php</b></dt>
@@ -1490,6 +1515,8 @@
 				<dd>in file user.php, method <a href="ComaCMS/UserInterface/User.html#methodUser">User::User()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initializes a subpage of the userinterface</dd>
 							<dt><b>User</b></dt>
 				<dd>in file user.php, class <a href="ComaCMS/UserInterface/User.html">User</a></dd>
+							<dt><b>User_Memberlist</b></dt>
+				<dd>in file user_memberlist.php, class <a href="ComaCMS/UserInterface/User_Memberlist.html">User_Memberlist</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Provides a memberlist</dd>
 							<dt><b>User_Usercontrol</b></dt>
 				<dd>in file user_usercontrol.php, class <a href="ComaCMS/UserInterface/User_Usercontrol.html">User_Usercontrol</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns the Usercontrol</dd>
 					</dl>
@@ -1497,7 +1524,7 @@
 	<a href="elementindex_ComaCMS.html#top">top</a><br>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Mon, 08 Jun 2009 20:39:12 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
+		    Documentation generated on Sun, 14 Jun 2009 12:26:28 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

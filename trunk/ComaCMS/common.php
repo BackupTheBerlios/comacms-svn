@@ -67,12 +67,10 @@
 	
 	// Initialize the translation of short texts in the system
 	$translation = new Language(&$sqlConnection);
+	$translation->AddSources(__ROOT__  . '/lang');
 	
 	// Create a new user class
 	$user = new Account(&$sqlConnection, &$translation, &$config);
-	
-	// Load the language file
-	$translation->AddSources(__ROOT__  . '/lang/');
 	
 	// Load the comascript interpreter for the html output, set document and style information
 	$output = new ComaLate();

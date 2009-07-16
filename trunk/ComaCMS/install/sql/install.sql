@@ -238,9 +238,8 @@
 			auth_dynamic_group_id int(20) ,
 			auth_dynamic_user_id int(20) ,
 			auth_dynamic_name varchar(255) NOT NULL default '',
-			auth_dynamic_value tinyint(1) UNSIGNED NOT NULL default '0',
-			auth_dynamic_mysql_table varchar(255) NOT NULL,
-			auth_dynamic_mysql_primary_key varchar(255) NOT NULL
+			auth_dynamic_ident varchar(255) NOT NULL default '',
+			auth_dynamic_value tinyint(1) UNSIGNED NOT NULL default '0'
 		);
 		DROP TABLE IF EXISTS {DB_PREFIX}groups;
 		CREATE TABLE {DB_PREFIX}groups (

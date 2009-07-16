@@ -39,6 +39,12 @@
  		var $_LangString = array();
  		
  		/**
+ 		 * @var array Contains all directorys where lang files are loaded from to find other languages in case
+ 		 * @access private
+ 		 */
+ 		var $_SourceDirectorys = array();
+ 		
+ 		/**
  		 * @var array Contains all possible languages to set a page to
  		 * @access public
  		 */
@@ -58,7 +64,7 @@
  		/**
  		 * Sets the outputlanguage for the page
  		 * @access public
- 		 * @param string $OutputLanguage This is the short tag of the language in which the page should be put out
+ 		 * @param string $SetLanguage This is the short tag of the language in which the page should be put out
  		 * @return bool	Returns true if a legal language was set else false
  		 */
  		function SetOutputLanguage($SetLanguage) {
@@ -66,6 +72,15 @@
  				if (in_array($SetLanguage, $this->Languages)) {
  					
  					$this->OutputLanguage = $SetLanguage;
+ 					
+ 					// Load the language files from the directorys
+ 					$this->_LangString = array();
+ 					$langString = &$this->_LangString;
+ 					foreach ($this->_SourceDirectorys as $languageDirectory) {
+ 						if (file_exists($languageDirectory . '/lang_' . $this->OutputLanguage . '.php')) {
+ 							include($languageDirectory . '/lang_' . $this->OutputLanguage . '.php');
+ 						}
+ 					}
  					return true;
  				}
  			
@@ -78,17 +93,11 @@
  		 * @return bool Is the outputlanguage set?
  		 */
  		function CheckOutputLanguage() {
- 			if ($this->OutputLanguage == '') 
- 			
- 				// If no language is set return false
- 				return false;
- 			else {
- 				if (in_array($this->OutputLanguage, $this->Languages)) {
- 					
- 					// if there is something in the variable, and it is a legal language return true
- 					return true;
- 				}
- 			}
+			if (in_array($this->OutputLanguage, $this->Languages)) {
+				
+				// if there is something in the variable, and it is a legal language return true
+				return true;
+			}
  			
  			// in every other case return false
  			return false;
@@ -101,9 +110,16 @@
  		 * @return void
  		 */
  		function AddSources($LanguageDirectory) {
- 			$langString = &$this->_LangString;
- 			if(file_exists($LanguageDirectory.'/lang_' . $this->OutputLanguage . '.php'))
- 				include($LanguageDirectory.'/lang_' . $this->OutputLanguage . '.php');
+ 			
+ 			// Add the language directory to the local array
+ 			$this->_SourceDirectorys[] = $LanguageDirectory;
+ 			
+ 			// If the current language exists just include the langfile from the sources folder
+ 			if ($this->OutputLanguage != '') {
+ 				$langString = &$this->_LangString;
+ 				if(file_exists($LanguageDirectory.'/lang_' . $this->OutputLanguage . '.php'))
+ 					include($LanguageDirectory.'/lang_' . $this->OutputLanguage . '.php');
+ 			}
  		}
  		
  		/**

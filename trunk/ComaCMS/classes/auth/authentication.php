@@ -60,31 +60,37 @@
  		}
  		
  		/**
- 		 * Loads all rights of the current user from the database and stores them in the loca array
+ 		 * Loads all rights from the database to the local array
  		 * @access public
  		 * @return bool Is everything done correctly?
  		 */
  		function LoadAll() {
  			
+ 			if ($this->LoadGlobal() &&	$this->LoadDynamic()) {
+ 				return true;
+ 			}
+ 			return false;
+ 		}
+ 		
+ 		/**
+ 		 * Loads all global rights of the current user from the database and stores them in the local array
+ 		 * @access public
+ 		 * @return bool Is everything done correctly?
+ 		 */
+ 		function LoadGlobal() {
+ 			
  			if ($this->UserID != 0) {
  				
- 				// get all the groups of the user from the database
+ 				// get all the rights of the user from the database
  				$sql = "SELECT auth_global_name, auth_global_value
  						FROM " . DB_PREFIX . "auth_global
- 						WHERE auth_global_user_id='$this->UserID'";
+ 						WHERE auth_global_user_id='{$this->UserID}'";
  				$result = $this->_SqlConnection->SqlQuery($sql);
  				
- 				if ($right = mysql_fetch_object($result)) {
- 					
- 					// Save rights for further use in local array
-	 				$this->UserRights[$right->auth_name] = (($right->auth_value == 1) ? true : false);
-	 				
- 					while ($right = mysql_fetch_object($result)) {
+				while ($right = mysql_fetch_object($result)) {
 	 					
-	 					// Save rights for further use in local array
-	 					$this->UserRights[$right->auth_name] = (($right->auth_value == 1) ? true : false);
-	 				}
-	 				mysql_free_result($result);
+					// Save rights for further use in local array
+					$this->UserRights[$right->auth_global_name] = (($right->auth_global_value == 1) ? true : false);
  				}
 	 				
  				// Get the groups of the user and load existing rights for these
@@ -93,51 +99,77 @@
  						WHERE user_id='{$this->UserID}'";
  				$result = $this->_SqlConnection->SqlQuery($sql);
  				
-	 			if ($group = mysql_fetch_object($result)) {
-	 				
-	 				$sql2 = "SELECT auth_global_name, auth_global_value
-	 						 FROM " . DB_PREFIX . "auth_global
-	 						 WHERE auth_global_group_id='{$group->group_id}'";
+ 				while ($group = mysql_fetch_object($result)) {
+	 					
+ 					$sql2 = "SELECT auth_global_name, auth_global_value
+ 							 FROM " . DB_PREFIX . "auth_global
+ 							 WHERE auth_global_group_id='{$group->group_id}'";
+ 					$result2 = $this->_SqlConnection->SqlQuery($sql2);
+ 					
+ 					while ($right = mysql_fetch_object($result2)) {
+	 					
+ 						// Save the rights from the groups to the local array
+						$this->GroupRights[$right->auth_name] = (($right->auth_value == 1) ? true : false);
+ 					}
+	 			}
+	 			
+	 			return true;
+ 			}
+ 			else return false;
+ 		}
+ 		
+ 		/**
+ 		 * Loads all dynamic rights of the current user from the database and sores them in the local array
+ 		 * @access public
+ 		 * @return bool Is everything done correctly?
+ 		 */
+ 		function LoadDynamic() {
+ 			
+ 			if ($this->UserID != 0) {
+ 				
+ 				// get all the rights of the user from the database
+ 				$sql = 'SELECT auth_dynamic_name, auth_dynamic_ident, auth_dynamic_value
+ 						FROM ' . DB_PREFIX . "auth_dynamic
+ 						WHERE auth_dynamic_user_id='{$this->UserID}'";
+ 				$result = $this->_SqlConnection->SqlQuery($sql);
+ 				
+ 				while ($right = mysql_fetch_object($result)) {
+ 					
+ 					// Save rights for futher use in local array
+ 					if ($this->UserRights[$right->auth_dynamic_name] != true && $this->UserRights[$right->auth_dynamic_name] != false) {
+ 						if (!is_array($this->UserRights[$right->auth_dynamic_name]))
+	 						$this->UserRights[$right->auth_dynamic_name] = array();
+	 					$this->UserRights[$right->auth_dynamic_name][$right->auth_dynamic_ident] = (($right->auth_dynamic_value == 1) ? true : false);
+ 					}
+ 				}
+ 				
+ 				// get the groups of the user and load any dynamic rights for them
+ 				$sql = 'SELECT group_id
+ 						FROM ' . DB_PREFIX . "group_users
+ 						WHERE user_id='{$this->UserID}'";
+ 				$result = $this->_SqlConnection->SqlQuery($sql);
+ 				
+ 				while ($group = mysql_fetch_object($result)) {
+ 					// get all the rights of the user from the database
+	 				$sql2 = 'SELECT auth_dynamic_name, auth_dynamic_ident, auth_dynamic_value
+	 						FROM ' . DB_PREFIX . "auth_dynamic
+	 						WHERE auth_dynamic_user_id='{$group->group_id}'";
 	 				$result2 = $this->_SqlConnection->SqlQuery($sql2);
 	 				
-	 				if ($right = mysql_fetch_object($result2)) {
+	 				while ($right = mysql_fetch_object($result2)) {
 	 					
-	 					// Save the rights from the groups to the local array
-						$this->GroupRights[$right->auth_name] = (($right->auth_value == 1) ? true : false);
-						
-	 					while ($right = mysql_fetch_object($result2)) {
-	 					
-	 						// Save the rights from the groups to the local array
-							$this->GroupRights[$right->auth_name] = (($right->auth_value == 1) ? true : false);
+	 					if ($this->GroupRights[$right->auth_dynamic_name] != true && $this->GroupRights[$right->auth_dynamic_name] != false) {
+	 						
+	 						if (!is_array($this->GroupRights[$right->auth_dynamic_name]))
+		 						$this->GroupRights[$right->auth_dynamic_name] = array();
+		 					
+		 					$this->GroupRights[$right->auth_dynamic_name][$right->auth_dynamic_ident] = (($right->auth_dynamic_value == 1) ? true : false);
 	 					}
-	 					mysql_free_result($result2);
 	 				}
-	 				
-	 				while ($group = mysql_fetch_object($result)) {
-	 					
-	 					$sql2 = "SELECT auth_global_name, auth_global_value
-	 							 FROM " . DB_PREFIX . "auth_global
-	 							 WHERE auth_global_group_id='{$group->group_id}'";
-	 					$result2 = $this->_SqlConnection->SqlQuery($sql2);
-	 					
-	 					if ($right = mysql_fetch_object($result2)) {
-		 					
-		 					// Save the rights from the groups to the local array
-							$this->GroupRights[$right->auth_name] = (($right->auth_value == 1) ? true : false);
-							
-		 					while ($right = mysql_fetch_object($result2)) {
-		 					
-		 						// Save the rights from the groups to the local array
-								$this->GroupRights[$right->auth_name] = (($right->auth_value == 1) ? true : false);
-		 					}
-		 					mysql_free_result($result2);
-		 				}
-	 				}
-	 				mysql_free_result($result);
-	 			}
+ 				}
+ 				return true;
  			}
- 			else
- 				return false;
+ 			else return false;
  		}
  		
  		/**
@@ -147,19 +179,38 @@
  		 * @param bool $Default This is the default value for the right
  		 * @return bool The value for the requested right
  		 */
- 		function Get($Name, $Default = false) {
+ 		function Get($Name, $Default = false, $Ident = '') {
  			
- 			// Check wether we have a value for the requested right
- 			if (isset($this->UserRights[$Name]) || isset($this->GroupRights[$Name])) {
- 				
- 				// Check wether the userrights or a group allows the user to do what he wants and if not vorbid his action
- 				if ($this->UserRights[$Name] == true || $this->GroupRights[$Name] == true)
- 					return true;
- 				else
- 					return false;
- 			}
+ 			// If we got an ident the system wants a dynamic right... check wether everything is ok
+			if ($Ident != '') {
+				
+				if (isset($this->UserRights[$Name]) && is_array($this->UserRights[$Name]) && isset($this->UserRights[$Name][$Ident])) {
+					if ($this->UserRights[$Name][$Ident])
+						return true;
+					else return false;
+				}
+				if (isset($this->GroupRights[$Name]) && is_array($this->GroupRights[$Name]) && isset($this->GroupRights[$Name][$Ident])) {
+					if ($this->GroupRights[$Name][$Ident])
+						return true;
+					else return false;
+				}
+			}
+			else {
+				
+				// The systems needs a global right... check wether we got it
+				if (isset($this->UserRights[$Name]) && !is_array($this->UserRights[$Name])) {
+ 					if ($this->UserRights[$Name])
+ 						return true;
+ 					else return false;
+				}
+				if (isset($this->GroupRights[$Name]) && !is_array($this->GroupRights[$Name])) {
+					if ($this->GroupRights[$Name])
+						return true;
+					else return false;
+				}
+			}
  			
- 			// We still have no value so return the default value
+ 			// There is no rightvalue which allows the user his action... So use the default value of this right
  			return $Default;
  		}
  		
@@ -184,7 +235,7 @@
  					
  					$sql = "UPDATE " . DB_PREFIX . "auth_global
  							SET auth_global_value = '" . (($Value) ? 1 : 0) . "'
- 							WHERE auth_global_user_id='$this->UserID'";
+ 							WHERE auth_global_user_id='{$this->UserID}'";
  					$this->_SqlConnection->SqlQuery($sql);
  				}
  			}
@@ -193,7 +244,7 @@
  				// So there is no entry until now... so we have to add one to the database
  				$sql = "INSERT INTO " . DB_PREFIX . "auth_global
  						(auth_global_user_id, auth_global_name, auth_global_value)
- 						VALUES ('$this->UserID', '$Name', '$Value')";
+ 						VALUES ('{$this->UserID}', '{$Name}', '{$Value}')";
  				$this->_SqlConnection->SqlQuery($sql);
  			}
  			
@@ -223,7 +274,7 @@
  					
  					$sql = "UPDATE " . DB_PREFIX . "auth_global
  							SET auth_global_value = '" . (($Value) ? 1 : 0) . "'
- 							WHERE auth_global_goup_id='$GroupID' AND auth_global_name = '$Name'";
+ 							WHERE auth_global_goup_id='{$GroupID}' AND auth_global_name = '{$Name}'";
  					$this->_SqlConnection->SqlQuery($sql);
  				}
  			}
@@ -232,7 +283,7 @@
  				// So there is no entry until now... so we have to add one to the database
  				$sql = "INSERT INTO " . DB_PREFIX . "auth_global
  						(auth_global_group_id, auth_global_name, auth_global_value)
- 						VALUES ('$GroupID', '$Name', '$Value')";
+ 						VALUES ('{$GroupID}', '{$Name}', '{$Value}')";
  				$this->_SqlConnection->SqlQuery($sql);
  			}
  			

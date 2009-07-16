@@ -498,7 +498,7 @@ ALTER TABLE `comacms_users` ADD `user_preferred_language` VARCHAR( 10 ) NOT NULL
 ALTER TABLE `comacms_news` ADD `text_html` TEXT NOT NULL ;
 ALTER TABLE `comacms_dates` ADD `date_topic_html` TEXT NOT NULL AFTER `date_topic` ;
 
-#r469??
+#r460
 # Changed Auth system
 DROP TABLE `comacms_auth`;
 CREATE TABLE `comacms_auth_global`(
@@ -516,3 +516,10 @@ CREATE TABLE `comacms_auth_dynamic`(
 	`auth_dynamic_mysql_primary_key` varchar(255) NOT NULL
 );
 ALTER TABLE `comacms_groups` DROP `group_manager`;
+
+#r462
+# Changed Auth System
+ALTER TABLE `comacms_auth_dynamic`
+  DROP `auth_dynamic_mysql_table`,
+  DROP `auth_dynamic_mysql_primary_key`;
+ALTER TABLE  `comacms_auth_dynamic` ADD  `auth_dynamic_ident` VARCHAR( 255 ) NOT NULL AFTER  `auth_dynamic_name` ;

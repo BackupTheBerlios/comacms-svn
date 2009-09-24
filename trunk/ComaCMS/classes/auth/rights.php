@@ -71,6 +71,7 @@
 			
 			// Link the translation class for the rightsfile
 			$translation = &$this->_Translation;
+			$SqlConnection = &$this->_SqlConnection;
 			
 			// Load the rightsfile to the local array using the static function SetRight and the static array Rights
 			if (file_exists($RightsFile)) {

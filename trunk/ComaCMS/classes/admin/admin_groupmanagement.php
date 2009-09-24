@@ -21,8 +21,8 @@
 	 * @ignore
 	 */
 	require_once __ROOT__ . '/classes/admin/admin.php';
-	require_once __ROOT__ . '/classes/auth/rights.php';
 	require_once __ROOT__ . '/lib/formmaker/formmaker.class.php';
+	require_once __ROOT__ . '/functions.php';
 	
 	/**
 	 * Manages the usergroups of the system
@@ -400,58 +400,12 @@
 				// Set groupcontend to empty
 				$this->_ComaLate->SetReplacement('GROUP_CONTENT', '<span class="full-size-error">' . $this->_Translation->GetTranslation('no_users') . '</span>');
 			}
-			elseif (count(array_keys($users)) == 1) {
-				
-				// Set layout to one column 
-				$template = '<LISTS:loop>
-						<ul style="list-style: none">
-							<li>
-								<h4>{SUBTITLE}</h4>
-								<ul>
-									<USERS:loop><li class="group_user_item"><span class="structure_row"><span class="group_actions"><a href="admin.php?page=users&amp;action=edit_user&amp;user_id={USER_ID}"><img src="./img/edit.png" class="icon" height="16" width="16" alt="{USER_EDIT}" title="{USER_EDIT}" /></a><a href="admin.php?page=groups&amp;action=remove_user&amp;user_id={USER_ID}&amp;group_id={GROUP_ID}"><img src="./img/del.png" class="icon" height="16" width="16" alt="{USER_REMOVE}" title="{USER_REMOVE}"/></a></span><strong>{USER_NAME}</strong></span></li></USERS>
-								</ul>
-							</li>
-						</ul>
-						</LISTS>';
-				$this->_ComaLate->SetReplacement('GROUP_CONTENT', $template);
-				$this->_ComaLate->SetReplacement('LISTS', $users);
-			}
 			else {
 				
-				// Calculate the users per column
-				$usersA = $usersB = array();
-				$countA = $countB = 0;
-				$userKeys = array_keys($users);
-				$posA = 0;
-				$posB = count($userKeys) - 1;
-				$BDidNothing = false;
-				
-				while ($posA < $posB || ($BDidNothing && $posA == $posB)) {
-					
-					// Add next letter to the first column
-					$temp = array();
-					$temp[] = $users[$userKeys[$posA]];
-					$countA += count(array_keys($users[$userKeys[$posA]]['USERS']));
-					$posA++;
-					$usersA = array_merge($usersA, $temp);
-					
-					// Check wether the second column will be smaller than the first one after the next step
-					$BDidNothing = true;
-					while (($countB + count(array_keys($users[$userKeys[$posB]]['USERS'])) <= $countA) && ($posA <= $posB)) {
-						
-						// Add next letter to the second column
-						$temp = array();
-						$temp[] = $users[$userKeys[$posB]];
-						$countB += count(array_keys($users[$userKeys[$posB]]['USERS']));
-						$posB--;
-						$usersB = array_merge($temp, $usersB);
-						if ($posA != $posB)
-							$BDidNothing = false;
-					}
-				}
+				$users = TwoColumns($users, 'USERS');
 				
 				// Check wether we got any entries in column b and build the right template
-				if ($countB == 0) {
+				if (count(array_keys($users[2])) == 0) {
 					$template = '<LISTS:loop>
 						<ul style="list-style: none">
 							<li>
@@ -462,7 +416,7 @@
 							</li>
 						</ul>
 						</LISTS>';
-					$this->_ComaLate->SetReplacement('LISTS', $usersA);
+					$this->_ComaLate->SetReplacement('LISTS', $users[1]);
 				}
 				else {
 					// Generate a template
@@ -491,8 +445,8 @@
 						</LISTS_B>
 						</div>
 						<p class="after_column" />';
-					$this->_ComaLate->SetReplacement('LISTS_A', $usersA);
-					$this->_ComaLate->SetReplacement('LISTS_B', $usersB);
+					$this->_ComaLate->SetReplacement('LISTS_A', $users[1]);
+					$this->_ComaLate->SetReplacement('LISTS_B', $users[2]);
 				}
 				$this->_ComaLate->SetReplacement('GROUP_CONTENT', $template);
 			}
@@ -509,8 +463,8 @@
 						<a href="admin.php?page=groups&amp;action=add_user&amp;group_id={GROUP_ID}" class="button">{LANG_ADD_USER}</a>
 						<a href="admin.php?page=groups&amp;action=edit_group&amp;group_id={GROUP_ID}" class="button">{LANG_EDIT_GROUP}</a>
 						<a href="admin.php?page=groups&amp;action=remove_all_users&amp;group_id={GROUP_ID}" class="button">{LANG_REMOVE_ALL_USERS}</a>
+						<h3>{LANG_GROUP_NAME}: {GROUP_NAME}</h3>
 						<span class="full-size-info">
-							<h3>{LANG_GROUP_NAME}: {GROUP_NAME}</h3>
 							{GROUP_DESCRIPTION}
 						</span>
 						<br />

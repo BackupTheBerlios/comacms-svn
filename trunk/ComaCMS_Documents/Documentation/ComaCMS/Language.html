@@ -76,6 +76,8 @@
 		</a><br>
 			<a href="../ComaCMS/_classes---sql.php.html">		sql.php
 		</a><br>
+			<a href="../ComaCMS/_test.php.html">		test.php
+		</a><br>
 			<a href="../ComaCMS/_classes---textactions.php.html">		textactions.php
 		</a><br>
 	  </div><br />
@@ -120,9 +122,9 @@
 	subpackage <b>Authentication</b><br>  <div class="package">
 			<a href="../ComaCMS/Authentication/_classes---auth---authentication.php.html">		authentication.php
 		</a><br>
-			<a href="../ComaCMS/Authentication/_classes---auth---rights.php.html">		rights.php
-		</a><br>
 			<a href="../ComaCMS/Authentication/_system---rights.php.html">		rights.php
+		</a><br>
+			<a href="../ComaCMS/Authentication/_classes---auth---rights.php.html">		rights.php
 		</a><br>
 	  </div><br />
 	subpackage <b>Contact</b><br>  <div class="package">
@@ -349,7 +351,7 @@ Source Location: /classes/language.php<br /><br />
 	<a name="var$Languages"></a>
 	<p></p>
 	<h4>$Languages = <span class="value">array('de',&nbsp;'en')</span></h4>
-	<p>[line 45]</p>
+	<p>[line 51]</p>
   <br /><br />
 <h4>Tags:</h4>
 <div class="tags">
@@ -382,7 +384,7 @@ Source Location: /classes/language.php<br /><br />
 
   <hr />
 	<a name="methodLanguage"></a>
-	<h3>constructor Language <span class="smalllinenumber">[line 54]</span></h3>
+	<h3>constructor Language <span class="smalllinenumber">[line 60]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -427,7 +429,7 @@ $OutputLanguage)</code>
   </div>
   <hr />
 	<a name="methodAddSources"></a>
-	<h3>method AddSources <span class="smalllinenumber">[line 103]</span></h3>
+	<h3>method AddSources <span class="smalllinenumber">[line 112]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -463,7 +465,7 @@ $LanguageDirectory)</code>
   </div>
   <hr />
 	<a name="methodCheckOutputLanguage"></a>
-	<h3>method CheckOutputLanguage <span class="smalllinenumber">[line 80]</span></h3>
+	<h3>method CheckOutputLanguage <span class="smalllinenumber">[line 95]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -491,7 +493,7 @@ $LanguageDirectory)</code>
   </div>
   <hr />
 	<a name="methodGetTranslation"></a>
-	<h3>method GetTranslation <span class="smalllinenumber">[line 115]</span></h3>
+	<h3>method GetTranslation <span class="smalllinenumber">[line 131]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -530,14 +532,13 @@ $TranslationString)</code>
   </div>
   <hr />
 	<a name="methodSetOutputLanguage"></a>
-	<h3>method SetOutputLanguage <span class="smalllinenumber">[line 64]</span></h3>
+	<h3>method SetOutputLanguage <span class="smalllinenumber">[line 70]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
 		<code>bool SetOutputLanguage(
-
-$SetLanguage, string
-$OutputLanguage)</code>
+string
+$SetLanguage)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
@@ -561,13 +562,8 @@ $OutputLanguage)</code>
     <table border="0" cellspacing="0" cellpadding="0">
           <tr>
         <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$OutputLanguage</b>&nbsp;&nbsp;</td>
-        <td>This is the short tag of the language in which the page should be put out</td>
-      </tr>
-          <tr>
-        <td class="type">&nbsp;&nbsp;</td>
         <td><b>$SetLanguage</b>&nbsp;&nbsp;</td>
-        <td></td>
+        <td>This is the short tag of the language in which the page should be put out</td>
       </tr>
         </table>
     </div><br />
@@ -578,7 +574,7 @@ $OutputLanguage)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sun, 14 Jun 2009 12:26:33 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
+		    Documentation generated on Sun, 16 Aug 2009 19:37:19 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

@@ -136,11 +136,17 @@
  				while ($right = mysql_fetch_object($result)) {
  					
  					// Save rights for futher use in local array
- 					if ($this->UserRights[$right->auth_dynamic_name] != true && $this->UserRights[$right->auth_dynamic_name] != false) {
- 						if (!is_array($this->UserRights[$right->auth_dynamic_name]))
-	 						$this->UserRights[$right->auth_dynamic_name] = array();
+ 					if (!isset($this->UserRights[$right->auth_dynamic_name])) {
+
+ 						$this->UserRights[$right->auth_dynamic_name] = array();
 	 					$this->UserRights[$right->auth_dynamic_name][$right->auth_dynamic_ident] = (($right->auth_dynamic_value == 1) ? true : false);
  					}
+ 					else if (is_array($this->UserRights[$right->auth_dynamic_name])) {
+ 					
+	 					$this->UserRights[$right->auth_dynamic_name][$right->auth_dynamic_ident] = (($right->auth_dynamic_value == 1) ? true : false);
+ 					}
+ 					else return false;
+ 						
  				}
  				
  				// get the groups of the user and load any dynamic rights for them
@@ -158,13 +164,16 @@
 	 				
 	 				while ($right = mysql_fetch_object($result2)) {
 	 					
-	 					if ($this->GroupRights[$right->auth_dynamic_name] != true && $this->GroupRights[$right->auth_dynamic_name] != false) {
+	 					if (!isset($this->GroupRights[$right->auth_dynamic_name])) {
 	 						
-	 						if (!is_array($this->GroupRights[$right->auth_dynamic_name]))
-		 						$this->GroupRights[$right->auth_dynamic_name] = array();
-		 					
+	 						$this->GroupRights[$right->auth_dynamic_name] = array();
 		 					$this->GroupRights[$right->auth_dynamic_name][$right->auth_dynamic_ident] = (($right->auth_dynamic_value == 1) ? true : false);
 	 					}
+	 					else if (is_array($this->GroupRights[auth_dynamic_name])) {
+	 						
+	 						$this->GroupRights[$right->auth_dynamic_name][$right->auth_dynamic_ident] = (($right->auth_dynamic_value == 1) ? true : false);
+	 					}
+	 					else return false;
 	 				}
  				}
  				return true;
@@ -187,12 +196,10 @@
 				if (isset($this->UserRights[$Name]) && is_array($this->UserRights[$Name]) && isset($this->UserRights[$Name][$Ident])) {
 					if ($this->UserRights[$Name][$Ident])
 						return true;
-					else return false;
 				}
 				if (isset($this->GroupRights[$Name]) && is_array($this->GroupRights[$Name]) && isset($this->GroupRights[$Name][$Ident])) {
 					if ($this->GroupRights[$Name][$Ident])
 						return true;
-					else return false;
 				}
 			}
 			else {
@@ -201,12 +208,10 @@
 				if (isset($this->UserRights[$Name]) && !is_array($this->UserRights[$Name])) {
  					if ($this->UserRights[$Name])
  						return true;
- 					else return false;
 				}
 				if (isset($this->GroupRights[$Name]) && !is_array($this->GroupRights[$Name])) {
 					if ($this->GroupRights[$Name])
 						return true;
-					else return false;
 				}
 			}
  			
@@ -216,40 +221,76 @@
  		
  		/**
  		 * Sets a new value for a specific userright
+ 		 * 
  		 * @access public
  		 * @param string $Name This is the name of the right
  		 * @param bool $Value This is the value for the right
+ 		 * @param string $Ident This can be an Identifier for a dynamic right
  		 * @return bool Was everything ok?
  		 */
- 		function UserSave($Name, $Value) {
+ 		function UserSave($Name, $Value, $Ident = '') {
  			
- 			// Check wether we got a true Right and a true Value
+ 			// Csheck wether we got a true Right and a true Value
  			if ($Name == "" || $Value == "")
  				return false;
  			
- 			// Check wether we have already a value for this right
- 			if (isset($this->UserRights[$Name])) {
+ 			if ($Ident == '') {
  				
- 				// Update the database only if the value has changed
- 				if ($this->UserRights[$Name] != $Value) {
- 					
- 					$sql = "UPDATE " . DB_PREFIX . "auth_global
- 							SET auth_global_value = '" . (($Value) ? 1 : 0) . "'
- 							WHERE auth_global_user_id='{$this->UserID}'";
- 					$this->_SqlConnection->SqlQuery($sql);
- 				}
+ 				// Check wether we have already a value for this right
+	 			if (isset($this->UserRights[$Name])) {
+	 				
+	 				// Update the database only if the value has changed
+	 				if ($this->UserRights[$Name] != $Value) {
+	 					
+	 					$sql = "UPDATE " . DB_PREFIX . "auth_global
+	 							SET auth_global_value = '" . (($Value) ? 1 : 0) . "'
+	 							WHERE auth_global_user_id='{$this->UserID}' AND auth_global_name='{$Name}'";
+	 					$this->_SqlConnection->SqlQuery($sql);
+	 				}
+	 			}
+	 			else {
+	 				
+	 				// So there is no entry until now... so we have to add one to the database
+	 				$sql = "INSERT INTO " . DB_PREFIX . "auth_global
+	 						(auth_global_user_id, auth_global_name, auth_global_value)
+	 						VALUES ('{$this->UserID}', '{$Name}', '{$Value}')";
+	 				$this->_SqlConnection->SqlQuery($sql);
+	 			}
+	 			
+	 			// At least update the local array with the new value
+ 				$this->UserRights[$Name] = $Value;
  			}
- 			else {
- 				
- 				// So there is no entry until now... so we have to add one to the database
- 				$sql = "INSERT INTO " . DB_PREFIX . "auth_global
- 						(auth_global_user_id, auth_global_name, auth_global_value)
- 						VALUES ('{$this->UserID}', '{$Name}', '{$Value}')";
- 				$this->_SqlConnection->SqlQuery($sql);
- 			}
+	 		else {
+	 			
+	 			// Check wether we have already a value for this right
+	 			if (isset($this->UserRights[$Name]) && is_array($this->UserRights[$Name]) && isset($this->UserRights[$Name][$Ident])) {
+	 				
+	 				// Update the database only if the value has changed
+	 				if ($this->UserRights[$Name][$Ident] != $Value) {
+	 					
+	 					$sql = "UPDATE " . DB_PREFIX . "auth_dynamic
+	 							SET auth_dynamic_value = '" . (($Value) ? 1 : 0) . "'
+	 							WHERE auth_dynamic_user_id='{$this->UserID}' AND auth_dynamic_name='{$Name}' AND auth_dynamic_ident='{$Ident}'";
+	 					$this->_SqlConnection->SqlQuery($sql);
+	 					
+	 					$this->UserRights[$Name][$Ident] = $Value;
+	 				}
+	 			}
+	 			else {
+	 				
+	 				// So there is no entry until now... so we have to add one to the database
+	 				$sql = "INSERT INTO " . DB_PREFIX . "auth_dynamic
+	 						(auth_dynamic_user_id, auth_dynamic_name, auth_dynamic_ident, auth_dynamic_value)
+	 						VALUES ('{$this->UserID}', '{$Name}', '{$Ident}', '{$Value}')";
+	 				$this->_SqlConnection->SqlQuery($sql);
+	 				
+	 				if (isset($this->UserRights[$Name]) && !is_array($this->UserRights[$Name]))
+	 					$this->UserRights[$Name] = array();
+	 				$this->UserRights[$Name][$Ident] = $Value;
+	 			}
+	 		}
  			
- 			// At least update the local array with the new value
- 			$this->UserRights[$Name] = $Value;
+ 			
  			return true;
  		}
  		
@@ -259,36 +300,72 @@
  		 * @param string $Name This is the name of the right
  		 * @param bool $Value This is the value for the right
  		 * @param integer $GroupID This is the ID of the group to change the right
+ 		 * @param string $Ident This is the ident of a dynamic right
  		 * @return bool Was everything ok?
  		 */
- 		function GroupSave($Name, $Value, $GroupID) {
- 			// Check wether we got a true Right and a true Value
+ 		function GroupSave($Name, $Value, $GroupID, $Ident = '') {
+ 			
+ 			// Csheck wether we got a true Right and a true Value
  			if ($Name == "" || $Value == "" || !is_long($GroupID))
  				return false;
  			
- 			// Check wether we have already a value for this right
- 			if (isset($this->GroupRights[$Name])) {
+ 			if ($Ident == '') {
  				
- 				// Update the database only if the value has changed
- 				if ($this->GroupRights[$Name] != $Value) {
- 					
- 					$sql = "UPDATE " . DB_PREFIX . "auth_global
- 							SET auth_global_value = '" . (($Value) ? 1 : 0) . "'
- 							WHERE auth_global_goup_id='{$GroupID}' AND auth_global_name = '{$Name}'";
- 					$this->_SqlConnection->SqlQuery($sql);
- 				}
+ 				// Check wether we have already a value for this right
+	 			if (isset($this->GroupRights[$Name])) {
+	 				
+	 				// Update the database only if the value has changed
+	 				if ($this->GroupRights[$Name] != $Value) {
+	 					
+	 					$sql = "UPDATE " . DB_PREFIX . "auth_global
+	 							SET auth_global_value = '" . (($Value) ? 1 : 0) . "'
+	 							WHERE auth_global_group_id='{$GroupID}' AND auth_global_name='{$Name}'";
+	 					$this->_SqlConnection->SqlQuery($sql);
+	 				}
+	 			}
+	 			else {
+	 				
+	 				// So there is no entry until now... so we have to add one to the database
+	 				$sql = "INSERT INTO " . DB_PREFIX . "auth_global
+	 						(auth_global_group_id, auth_global_name, auth_global_value)
+	 						VALUES ('{$GroupID}', '{$Name}', '{$Value}')";
+	 				$this->_SqlConnection->SqlQuery($sql);
+	 			}
+	 			
+	 			// At least update the local array with the new value
+ 				$this->GroupRights[$Name] = $Value;
  			}
- 			else {
- 				
- 				// So there is no entry until now... so we have to add one to the database
- 				$sql = "INSERT INTO " . DB_PREFIX . "auth_global
- 						(auth_global_group_id, auth_global_name, auth_global_value)
- 						VALUES ('{$GroupID}', '{$Name}', '{$Value}')";
- 				$this->_SqlConnection->SqlQuery($sql);
- 			}
+	 		else {
+	 			
+	 			// Check wether we have already a value for this right
+	 			if (isset($this->GroupRights[$Name]) && is_array($this->GroupRights[$Name]) && isset($this->GroupRights[$Name][$Ident])) {
+	 				
+	 				// Update the database only if the value has changed
+	 				if ($this->GroupRights[$Name][$Ident] != $Value) {
+	 					
+	 					$sql = "UPDATE " . DB_PREFIX . "auth_dynamic
+	 							SET auth_dynamic_value = '" . (($Value) ? 1 : 0) . "'
+	 							WHERE auth_dynamic_group_id='{$GroupID}' AND auth_dynamic_name='{$Name}' AND auth_dynamic_ident='{$Ident}'";
+	 					$this->_SqlConnection->SqlQuery($sql);
+	 					
+	 					$this->GroupRights[$Name][$Ident] = $Value;
+	 				}
+	 			}
+	 			else {
+	 				
+	 				// So there is no entry until now... so we have to add one to the database
+	 				$sql = "INSERT INTO " . DB_PREFIX . "auth_dynamic
+	 						(auth_dynamic_group_id, auth_dynamic_name, auth_dynamic_ident, auth_dynamic_value)
+	 						VALUES ('{$GroupID}', '{$Name}', '{$Ident}', '{$Value}')";
+	 				$this->_SqlConnection->SqlQuery($sql);
+	 				
+	 				if (isset($this->GroupRights[$Name]) && !is_array($this->GroupRights[$Name]))
+	 					$this->GroupRights[$Name] = array();
+	 				$this->GroupRights[$Name][$Ident] = $Value;
+	 			}
+	 		}
  			
- 			// At least update the local array with the new value
- 			$this->GroupRights[$Name] = $Value;
+ 			
  			return true;
  		}
  	}

@@ -286,7 +286,9 @@
 	
 	/**
 	 * Encodes a URI that it is ready for XHTML-output
-	 * @param string Uri
+	 * 
+	 * @access public
+	 * @param string $Uri
 	 * @return string
 	 */
 	function encodeUri($Uri) {
@@ -318,14 +320,79 @@
 		return str_replace(" ", "%20", $string);
 	}
 	
-	function kbormb($bytes, $space = true) {
-		$space = ($space) ? ' ' : '&nbsp;';
-		if($bytes < 1024)
-			return $bytes . $space .'B';
-		elseif($bytes < 1048576)
-			return round($bytes/1024, 1) . $space . 'KiB';
+	/**
+	 * Returns a byte value in KiB or MiB
+	 * 
+	 * @access public
+	 * @param int $Bytes This is the size to calibrate
+	 * @param bool $Space Should a space be displayed after the calculated value?
+	 * @return string This is the value for this bytecount
+	 */
+	function kbormb($Bytes, $Space = true) {
+		
+		// Should a space be displayed?
+		$Space = ($Space) ? ' ' : '&nbsp;';
+		
+		// Calculate wether its B or KiB or MiB
+		if($Bytes < 1024)
+			return $Bytes . $Space .'B';
+		elseif($Bytes < 1048576)
+			return round($Bytes/1024, 1) . $Space . 'KiB';
 		else
-			return round($bytes/1048576, 1) . $space . 'MiB';
+			return round($Bytes/1048576, 1) . $Space . 'MiB';
 	}
 	
+	/**
+	 * Sorts a given array to two columns by the count of the subarray given by $InnerArrayKey
+	 * 
+	 * @access public
+	 * @param array $ToSort This is the array that should be sorted
+	 * @param string $InnerArrayKey This is the array key of the subarray
+	 * @return array This is the sorted array with column 1 at position [1] and column 2 at position [2]
+	 */
+	function TwoColumns($ToSort, $InnerArrayKey) {
+		
+		// Initialize the lokal array
+		$Sorted = array();
+		$Sorted[1] = array();
+		$Sorted[2] = array();
+		$countA = $countB = $posA = 0;
+		$keys = array_keys($ToSort);
+		$posB = count($keys) - 1;
+		$BDidNothing = false;
+		
+		if (count(array_keys($ToSort)) == 1) {
+			
+			$Sorted[1] = $ToSort;
+		} 
+		else {
+			
+			while ($posA < $posB || ($BDidNothing && $posA == $posB)) {
+					
+				// Add next letter to the first column
+				$temp = array();
+				$temp[] = $ToSort[$keys[$posA]];
+				$countA += count(array_keys($ToSort[$keys[$posA]][$InnerArrayKey]));
+				$posA++;
+				$Sorted[1] = array_merge($Sorted[1], $temp);
+				
+				// Check wether the second column will be smaller than the first one after the next step
+				$BDidNothing = true;
+				while (($countB + count(array_keys($ToSort[$keys[$posB]][$InnerArrayKey])) <= $countA) && ($posA <= $posB)) {
+					
+					// Add next letter to the second column
+					$temp = array();
+					$temp[] = $ToSort[$keys[$posB]];
+					$countB += count(array_keys($ToSort[$keys[$posB]]['USERS']));
+					$posB--;
+					$Sorted[2] = array_merge($temp, $Sorted[2]);
+					if ($posA != $posB)
+						$BDidNothing = false;
+				}
+			}
+		}
+		
+		// return the sorted array
+		return $Sorted;
+	}
 ?>

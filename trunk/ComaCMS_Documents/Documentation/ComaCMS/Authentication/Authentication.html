@@ -76,6 +76,8 @@
 		</a><br>
 			<a href="../../ComaCMS/_classes---sql.php.html">		sql.php
 		</a><br>
+			<a href="../../ComaCMS/_test.php.html">		test.php
+		</a><br>
 			<a href="../../ComaCMS/_classes---textactions.php.html">		textactions.php
 		</a><br>
 	  </div><br />
@@ -120,9 +122,9 @@
 	subpackage <b>Authentication</b><br>  <div class="package">
 			<a href="../../ComaCMS/Authentication/_classes---auth---authentication.php.html">		authentication.php
 		</a><br>
-			<a href="../../ComaCMS/Authentication/_classes---auth---rights.php.html">		rights.php
-		</a><br>
 			<a href="../../ComaCMS/Authentication/_system---rights.php.html">		rights.php
+		</a><br>
+			<a href="../../ComaCMS/Authentication/_classes---auth---rights.php.html">		rights.php
 		</a><br>
 	  </div><br />
 	subpackage <b>Contact</b><br>  <div class="package">
@@ -312,6 +314,8 @@ Source Location: /classes/auth/authentication.php<br /><br />
     <li><a href="../../ComaCMS/Authentication/Authentication.html#methodGet">Get</a></li>
     <li><a href="../../ComaCMS/Authentication/Authentication.html#methodGroupSave">GroupSave</a></li>
     <li><a href="../../ComaCMS/Authentication/Authentication.html#methodLoadAll">LoadAll</a></li>
+    <li><a href="../../ComaCMS/Authentication/Authentication.html#methodLoadDynamic">LoadDynamic</a></li>
+    <li><a href="../../ComaCMS/Authentication/Authentication.html#methodLoadGlobal">LoadGlobal</a></li>
     <li><a href="../../ComaCMS/Authentication/Authentication.html#methodUserSave">UserSave</a></li>
   </ul>
 </td>
@@ -386,18 +390,19 @@ $UserID)</code>
   </div>
   <hr />
 	<a name="methodGet"></a>
-	<h3>method Get <span class="smalllinenumber">[line 150]</span></h3>
+	<h3>method Get <span class="smalllinenumber">[line 191]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
 		<code>bool Get(
 string
 $Name, [bool
-$Default = false])</code>
+$Default = false], [
+$Ident = ''])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Gets one specific right from the local array and returns the value if there is one else use default value<br /><br /><br /><br />
+		Gets one specific right from the local array and returns the value if there is one. If not use default value<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
@@ -425,13 +430,18 @@ $Default = false])</code>
         <td><b>$Default</b>&nbsp;&nbsp;</td>
         <td>This is the default value for the right</td>
       </tr>
+          <tr>
+        <td class="type">&nbsp;&nbsp;</td>
+        <td><b>$Ident</b>&nbsp;&nbsp;</td>
+        <td></td>
+      </tr>
         </table>
     </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
   </div>
   <hr />
 	<a name="methodGroupSave"></a>
-	<h3>method GroupSave <span class="smalllinenumber">[line 213]</span></h3>
+	<h3>method GroupSave <span class="smalllinenumber">[line 306]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -439,7 +449,8 @@ $Default = false])</code>
 string
 $Name, bool
 $Value, integer
-$GroupID)</code>
+$GroupID, [string
+$Ident = ''])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
@@ -476,6 +487,11 @@ $GroupID)</code>
         <td><b>$GroupID</b>&nbsp;&nbsp;</td>
         <td>This is the ID of the group to change the right</td>
       </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Ident</b>&nbsp;&nbsp;</td>
+        <td>This is the ident of a dynamic right</td>
+      </tr>
         </table>
     </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
@@ -491,7 +507,63 @@ $GroupID)</code>
     </td></tr></table>
     </td></tr></table><br />
 	
-		Loads all rights of the current user from the database and stores them in the loca array<br /><br /><br /><br />
+		Loads all rights from the database to the local array<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Is everything done correctly?</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodLoadDynamic"></a>
+	<h3>method LoadDynamic <span class="smalllinenumber">[line 126]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>bool LoadDynamic(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Loads all dynamic rights of the current user from the database and sores them in the local array<br /><br /><br /><br />
+<h4>Tags:</h4>
+<div class="tags">
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><b>return:</b>&nbsp;&nbsp;</td><td>Is everything done correctly?</td>
+  </tr>
+  <tr>
+    <td><b>access:</b>&nbsp;&nbsp;</td><td>public</td>
+  </tr>
+</table>
+</div>
+<br /><br />
+
+	
+        <div class="top">[ <a href="#top">Top</a> ]</div>
+  </div>
+  <hr />
+	<a name="methodLoadGlobal"></a>
+	<h3>method LoadGlobal <span class="smalllinenumber">[line 80]</span></h3>
+	<div class="function">
+    <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
+    <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
+		<code>bool LoadGlobal(
+)</code>
+    </td></tr></table>
+    </td></tr></table><br />
+	
+		Loads all global rights of the current user from the database and stores them in the local array<br /><br /><br /><br />
 <h4>Tags:</h4>
 <div class="tags">
 <table border="0" cellspacing="0" cellpadding="0">
@@ -510,14 +582,15 @@ $GroupID)</code>
   </div>
   <hr />
 	<a name="methodUserSave"></a>
-	<h3>method UserSave <span class="smalllinenumber">[line 173]</span></h3>
+	<h3>method UserSave <span class="smalllinenumber">[line 231]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
 		<code>bool UserSave(
 string
 $Name, bool
-$Value)</code>
+$Value, [string
+$Ident = ''])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
@@ -549,6 +622,11 @@ $Value)</code>
         <td><b>$Value</b>&nbsp;&nbsp;</td>
         <td>This is the value for the right</td>
       </tr>
+          <tr>
+        <td class="type">string&nbsp;&nbsp;</td>
+        <td><b>$Ident</b>&nbsp;&nbsp;</td>
+        <td>This can be an Identifier for a dynamic right</td>
+      </tr>
         </table>
     </div><br />
         <div class="top">[ <a href="#top">Top</a> ]</div>
@@ -558,7 +636,7 @@ $Value)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sun, 14 Jun 2009 12:26:31 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
+		    Documentation generated on Sun, 16 Aug 2009 19:37:17 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

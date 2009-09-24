@@ -76,6 +76,8 @@
 		</a><br>
 			<a href="ComaCMS/_classes---sql.php.html">		sql.php
 		</a><br>
+			<a href="ComaCMS/_test.php.html">		test.php
+		</a><br>
 			<a href="ComaCMS/_classes---textactions.php.html">		textactions.php
 		</a><br>
 	  </div><br />
@@ -120,9 +122,9 @@
 	subpackage <b>Authentication</b><br>  <div class="package">
 			<a href="ComaCMS/Authentication/_classes---auth---authentication.php.html">		authentication.php
 		</a><br>
-			<a href="ComaCMS/Authentication/_classes---auth---rights.php.html">		rights.php
-		</a><br>
 			<a href="ComaCMS/Authentication/_system---rights.php.html">		rights.php
+		</a><br>
+			<a href="ComaCMS/Authentication/_classes---auth---rights.php.html">		rights.php
 		</a><br>
 	  </div><br />
 	subpackage <b>Contact</b><br>  <div class="package">
@@ -818,15 +820,17 @@
 							<dt><b>GenerateInlineMenu</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGenerateInlineMenu">PageStructure::GenerateInlineMenu()</a></dd>
 							<dt><b>GenerateMenu</b></dt>
-				<dd>in file outputpage.php, method <a href="ComaCMS/OutputPage.html#methodGenerateMenu">OutputPage::GenerateMenu()</a></dd>
-							<dt><b>GenerateMenu</b></dt>
 				<dd>in file pagestructure.php, method <a href="ComaCMS/PageStructure.html#methodGenerateMenu">PageStructure::GenerateMenu()</a></dd>
+							<dt><b>GenerateMenu</b></dt>
+				<dd>in file outputpage.php, method <a href="ComaCMS/OutputPage.html#methodGenerateMenu">OutputPage::GenerateMenu()</a></dd>
 							<dt><b>generateUrl</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functiongenerateUrl">generateUrl()</a></dd>
 							<dt><b>generate_password</b></dt>
 				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functiongenerate_password">generate_password()</a></dd>
 							<dt><b>Get</b></dt>
 				<dd>in file config.php, method <a href="ComaCMS/Config.html#methodGet">Config::Get()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets one specific configurationitem from local array and returns its value if it is in local array, else returns default value</dd>
+							<dt><b>Get</b></dt>
+				<dd>in file test.php, function <a href="ComaCMS/_test.php.html#functionGet">Get()</a></dd>
 							<dt><b>GetDownloadUrl</b></dt>
 				<dd>in file textactions.php, method <a href="ComaCMS/TextActions.html#methodGetDownloadUrl">TextActions::GetDownloadUrl()</a></dd>
 							<dt><b>GetFile</b></dt>
@@ -900,7 +904,7 @@
 							<dt><b>GetTitle</b></dt>
 				<dd>in file articles_admin.php, method <a href="ComaCMS/Articles/Admin_Module_Articles.html#methodGetTitle">Admin_Module_Articles::GetTitle()</a></dd>
 							<dt><b>Get</b></dt>
-				<dd>in file authentication.php, method <a href="ComaCMS/Authentication/Authentication.html#methodGet">Authentication::Get()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets one specific right from the local array and returns the value if there is one else use default value</dd>
+				<dd>in file authentication.php, method <a href="ComaCMS/Authentication/Authentication.html#methodGet">Authentication::Get()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Gets one specific right from the local array and returns the value if there is one. If not use default value</dd>
 							<dt><b>GroupSave</b></dt>
 				<dd>in file authentication.php, method <a href="ComaCMS/Authentication/Authentication.html#methodGroupSave">Authentication::GroupSave()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sets a new value for a specific group right</dd>
 							<dt><b>GetCount</b></dt>
@@ -1040,7 +1044,7 @@
 		<h2>k</h2>
 		<dl>
 							<dt><b>kbormb</b></dt>
-				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functionkbormb">kbormb()</a></dd>
+				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functionkbormb">kbormb()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Returns a byte value in KiB or MiB</dd>
 					</dl>
 	</div>
 	<a href="elementindex_ComaCMS.html#top">top</a><br>
@@ -1096,7 +1100,11 @@
 							<dt><b>Load</b></dt>
 				<dd>in file rights.php, method <a href="ComaCMS/Authentication/Rights.html#methodLoad">Rights::Load()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads a rights file to a static array</dd>
 							<dt><b>LoadAll</b></dt>
-				<dd>in file authentication.php, method <a href="ComaCMS/Authentication/Authentication.html#methodLoadAll">Authentication::LoadAll()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all rights of the current user from the database and stores them in the loca array</dd>
+				<dd>in file authentication.php, method <a href="ComaCMS/Authentication/Authentication.html#methodLoadAll">Authentication::LoadAll()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all rights from the database to the local array</dd>
+							<dt><b>LoadDynamic</b></dt>
+				<dd>in file authentication.php, method <a href="ComaCMS/Authentication/Authentication.html#methodLoadDynamic">Authentication::LoadDynamic()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all dynamic rights of the current user from the database and sores them in the local array</dd>
+							<dt><b>LoadGlobal</b></dt>
+				<dd>in file authentication.php, method <a href="ComaCMS/Authentication/Authentication.html#methodLoadGlobal">Authentication::LoadGlobal()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Loads all global rights of the current user from the database and stores them in the local array</dd>
 							<dt><b>lifo.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/Opendocument/_classes---opendocument---lifo.php.html">lifo.php</a></dd>
 							<dt><b>LIFO</b></dt>
@@ -1356,9 +1364,9 @@
 							<dt><b>rights.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/Authentication/_classes---auth---rights.php.html">rights.php</a></dd>
 							<dt><b>Rights</b></dt>
-				<dd>in file rights.php, method <a href="ComaCMS/Authentication/Rights.html#methodRights">Rights::Rights()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initializes a new instance of the rights class</dd>
-							<dt><b>Rights</b></dt>
 				<dd>in file rights.php, class <a href="ComaCMS/Authentication/Rights.html">Rights</a></dd>
+							<dt><b>Rights</b></dt>
+				<dd>in file rights.php, method <a href="ComaCMS/Authentication/Rights.html#methodRights">Rights::Rights()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Initializes a new instance of the rights class</dd>
 							<dt><b>rights.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/Authentication/_system---rights.php.html">rights.php</a></dd>
 							<dt><b>RestoreRevision</b></dt>
@@ -1459,8 +1467,12 @@
 				<dd>in file outputpage.php, variable <a href="ComaCMS/OutputPage.html#var$Title">OutputPage::$Title</a></dd>
 							<dt><b>textactions.php</b></dt>
 				<dd>procedural page <a href="ComaCMS/_classes---textactions.php.html">textactions.php</a></dd>
+							<dt><b>test.php</b></dt>
+				<dd>procedural page <a href="ComaCMS/_test.php.html">test.php</a></dd>
 							<dt><b>TextActions</b></dt>
 				<dd>in file textactions.php, class <a href="ComaCMS/TextActions.html">TextActions</a><br>&nbsp;&nbsp;&nbsp;&nbsp;TextActions  This class contains the functions which are used to convert plain text into a html-sourcecode</dd>
+							<dt><b>TwoColumns</b></dt>
+				<dd>in file functions.php, function <a href="ComaCMS/_functions.php.html#functionTwoColumns">TwoColumns()</a><br>&nbsp;&nbsp;&nbsp;&nbsp;Sorts a given array to two columns by the count of the subarray given by $InnerArrayKey</dd>
 							<dt><b>$Text</b></dt>
 				<dd>in file page_text.php, variable <a href="ComaCMS/Page/Page_Text.html#var$Text">Page_Text::$Text</a></dd>
 					</dl>
@@ -1524,7 +1536,7 @@
 	<a href="elementindex_ComaCMS.html#top">top</a><br>
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sun, 14 Jun 2009 12:26:28 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
+		    Documentation generated on Sun, 16 Aug 2009 19:37:14 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

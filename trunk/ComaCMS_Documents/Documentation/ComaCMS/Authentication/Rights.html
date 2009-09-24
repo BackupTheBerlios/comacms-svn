@@ -76,6 +76,8 @@
 		</a><br>
 			<a href="../../ComaCMS/_classes---sql.php.html">		sql.php
 		</a><br>
+			<a href="../../ComaCMS/_test.php.html">		test.php
+		</a><br>
 			<a href="../../ComaCMS/_classes---textactions.php.html">		textactions.php
 		</a><br>
 	  </div><br />
@@ -120,9 +122,9 @@
 	subpackage <b>Authentication</b><br>  <div class="package">
 			<a href="../../ComaCMS/Authentication/_classes---auth---authentication.php.html">		authentication.php
 		</a><br>
-			<a href="../../ComaCMS/Authentication/_classes---auth---rights.php.html">		rights.php
-		</a><br>
 			<a href="../../ComaCMS/Authentication/_system---rights.php.html">		rights.php
+		</a><br>
+			<a href="../../ComaCMS/Authentication/_classes---auth---rights.php.html">		rights.php
 		</a><br>
 	  </div><br />
 	subpackage <b>Contact</b><br>  <div class="package">
@@ -379,7 +381,7 @@ Source Location: /classes/auth/rights.php<br /><br />
 <div class="tags">
   <hr />
 	<a name="methodSetRight"></a>
-	<h3>static method SetRight <span class="smalllinenumber">[line 103]</span></h3>
+	<h3>static method SetRight <span class="smalllinenumber">[line 99]</span></h3>
 	<div class="function">
     <table width="90%" border="0" cellspacing="0" cellpadding="1"><tr><td class="code_border">
     <table width="100%" border="0" cellspacing="0" cellpadding="2"><tr><td class="code">
@@ -388,12 +390,8 @@ string
 $Name, string
 $Display, string
 $Description, string
-$Group, [bool
-$Default = true], [integer
-$Type = '0'], [string
-$Subgroup = ''], [string
-$MysqlTable = ''], [string
-$MysqlPrimaryKey = ''])</code>
+$Group, [string
+$Dynamic = false])</code>
     </td></tr></table>
     </td></tr></table><br />
 	
@@ -437,28 +435,8 @@ $MysqlPrimaryKey = ''])</code>
       </tr>
           <tr>
         <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$Subgroup</b>&nbsp;&nbsp;</td>
-        <td>This is a subgroup if there is any</td>
-      </tr>
-          <tr>
-        <td class="type">bool&nbsp;&nbsp;</td>
-        <td><b>$Default</b>&nbsp;&nbsp;</td>
-        <td>The default value for this right</td>
-      </tr>
-          <tr>
-        <td class="type">integer&nbsp;&nbsp;</td>
-        <td><b>$Type</b>&nbsp;&nbsp;</td>
-        <td>This is the type of the right</td>
-      </tr>
-          <tr>
-        <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$MysqlTable</b>&nbsp;&nbsp;</td>
-        <td>This is the mysql table containing dynamic content for the right</td>
-      </tr>
-          <tr>
-        <td class="type">string&nbsp;&nbsp;</td>
-        <td><b>$MysqlPrimaryKey</b>&nbsp;&nbsp;</td>
-        <td>This is the primary key of the dynamic content to identify a specific one</td>
+        <td><b>$Dynamic</b>&nbsp;&nbsp;</td>
+        <td>Is this right a dynamic one?</td>
       </tr>
         </table>
     </div><br />
@@ -554,7 +532,7 @@ $RightsFile)</code>
 
         <div class="credit">
 		    <hr />
-		    Documentation generated on Sun, 14 Jun 2009 12:26:36 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
+		    Documentation generated on Sun, 16 Aug 2009 19:37:21 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.1</a>
 	      </div>
       </td></tr></table>
     </td>

@@ -89,33 +89,35 @@
 		 * 
 		 * @access public
 		 * @static
+		 * @param string $Group This is the main group the right is belonging to
 		 * @param string $Name This is the name of the right to set
 		 * @param string $Display This is the string displayd to the user for the right
 		 * @param string $Description This is a description of the right displayed in <span class='info'></span> tags
-		 * @param string $Group This is the main group the right is belonging to
-		 * @param string $Subgroup This is a subgroup if there is any
-		 * @param bool $Default The default value for this right
-		 * @param integer $Type This is the type of the right
-		 * @param string $MysqlTable This is the mysql table containing dynamic content for the right
-		 * @param string $MysqlPrimaryKey This is the primary key of the dynamic content to identify a specific one
+		 * @param string $Dynamic Is this right a dynamic one?
+		 * @param array $Content This can be an array containing the dynamic rights with the defined keys 'name' for the identifier, 'display' and 'description'
 		 * @return void Sets a right or updates the existing one in the local array
 		 */
-		function SetRight($Name, $Display, $Description, $Group, $Default = true, $Type = '0', $Subgroup = '', $MysqlTable = '', $MysqlPrimaryKey = '') {
-			
-			// Check wether a subgoup is set or use the main group
-			if ($Subgroup == '') {
-				$Subgroup = 'main';
-			}
+		function SetRight($Group, $Name, $Display, $Description, $Dynamic = false, $Content = array()) {
 			
 			// Add the right to the local array
 			$this->Rights[$Group][$Name] = array(	'name' => $Name,
 													'display' => $Display,
 													'description' => $Description,
-													'default' => $Default,
-													'type' => $Type,
-													'subgroup' => $Subgroup,
-													'mysql_table' => $MysqlTable,
-													'mysql_primary_key' => $MysqlPrimaryKey);
+													'dynamic' => $Dynamic,
+													'content' => $Content);
+		}
+		
+		/**
+		 * Adds a dynamic ident to the settings
+		 * 
+		 * 
+		 */
+		function SetIdent($Group, $Name, $Ident, $Display, $Description) {
+			
+			// Add the Ident to the local array
+			$this->Rights[$Group][$Name]['content'][$Ident] = array('name' => $Name,
+																	'display' => $Display,
+																	'description' => $Description);
 		}
 	}
 ?>

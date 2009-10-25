@@ -1,7 +1,7 @@
 <?php
 /**
  * @package ComaLate
-@copyright (C) 2005-2007 The ComaCMS-Team
+ * @copyright (C) 2005-2007 The ComaCMS-Team
  * @version ComaLate 0.3
  */
  #----------------------------------------------------------------------
@@ -120,11 +120,11 @@
  		function SetDoctype($Doctype) {
  			switch ($Doctype) {
 				case DOCTYPE_XHTML_TRANSITIONAL:
-					$this->_Doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
+					$this->_Doctype = '<?xml version="1.0" encoding="ISO-8859-1" ?>' . "\r\n" . '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 					break;
 				case DOCTYPE_XHTML_STRICT:
 				default:
-					$this->_Doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';	 
+					$this->_Doctype = '<?xml version="1.0" encoding="ISO-8859-1" ?>' . "\r\n" . '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
 					break;
 			}
  		}
@@ -367,7 +367,7 @@
 				// Get the replacement name $subName and it`s value $subValue
 				foreach($repeat as $subName => $subValue) {
 					
-					// If the subvalue is an array to try to begin an inline replacement
+					// If the subvalue is an array try to begin an inline replacement
 					if (is_array($subValue)) {
 						
 						$serializedSubValue = serialize($subValue);
@@ -471,7 +471,7 @@
 		 */
  		function GenerateOutput() {
  			$document = $this->_Doctype;
- 			$document .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"$this->Language\" lang=\"$this->Language\">\r\n\t<head>\r\n\t\t<title>$this->Title</title>\r\n\t\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$this->Charset\" />\r\n";
+ 			$document .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:tal=\"http://xml.zope.org/namespaces/tal\" xml:lang=\"$this->Language\" lang=\"$this->Language\">\r\n\t<head>\r\n\t\t<title>$this->Title</title>\r\n\t\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$this->Charset\" />\r\n";
  			// Print all meta-tags if there are some
  			if (count($this->_Meta) > 0) {
  				foreach($this->_Meta as $metaName => $metaValue)

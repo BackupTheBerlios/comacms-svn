@@ -392,8 +392,6 @@
 																				'USER_EDIT' => sprintf($this->_Translation->GetTranslation('edit_%user%'), $user->user_showname));
 			}
 			
-			mysql_free_result($result);
-			
 			// Order the items for two column output
 			if (count(array_keys($users)) == 0) {
 				

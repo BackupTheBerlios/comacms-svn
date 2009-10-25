@@ -172,8 +172,6 @@
 			user_password varchar(100) NOT NULL default '',
 			user_registerdate varchar(20) default '0',
 			user_admin bool NULL default '0',
-			user_author bool NULL default '0',
-			user_icq varchar(12) default '0',
 			user_email varchar(200) NOT NULL default '',
 			user_preferred_language varchar(10) NOT NULL,
 			user_activated bool NULL default '0',

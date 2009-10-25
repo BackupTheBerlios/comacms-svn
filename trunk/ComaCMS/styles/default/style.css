@@ -608,12 +608,10 @@ p.after_column {
 }
 
 .last_change {
-  margin-top: 2em;
   margin-right: .8em;
   font-size: .96em;
   font-style: italic;
-  float: right;
-  clear: both;
+  float: right bottom;
 }
 
 .how {

@@ -63,12 +63,6 @@
 		
 		/**
 		 * @access public
-		 * @var bool Is the user an author?
-		 */
-		var $IsAuthor = false;
-		
-		/**
-		 * @access public
 		 * @var bool Is the user logged in to a valid user account?
 		 */
 		var $IsLoggedIn = false;
@@ -176,14 +170,11 @@
 							$this->ID = $original_user->user_id;
 							if($original_user->user_admin == '1')
 								$this->IsAdmin = true;
-							if($original_user->user_author == '1' || $original_user->user_admin == '1')
-								$this->IsAuthor = true;
 							$this->LoginError = 0;
 						}
 						// else set user back to login
 						else {
 							$this->IsAdmin = false;
-							$this->IsAuthor = false;
 							$this->IsLoggedIn = false;
 							$this->Name = '';
 							$this->PasswordMd5 = '';
@@ -193,7 +184,6 @@
 					else {
 						// If the user is not activated set him back to login and throw exception
 						$this->IsAdmin = false;
-						$this->IsAuthor = false;
 						$this->IsLoggedIn = false;
 						$this->Name = '';
 						$this->PasswordMd5 = '';
@@ -203,7 +193,6 @@
 				else {
 					// If the user was not found set him back to login
 					$this->IsAdmin = false;
-					$this->IsAuthor = false;
 					$this->IsLoggedIn = false;
 					$this->Name = '';
 					$this->PasswordMd5 = '';
@@ -212,7 +201,7 @@
 			}
 			// Is he logged on? check the data behind his OnlineID!
 			elseif($this->OnlineID != '' && !$newOnlineID) {
-				$sql  = "SELECT user.user_showname, user.user_admin, user.user_author, user.user_name, user.user_id, online.online_loggedon, online.online_ip
+				$sql  = "SELECT user.user_showname, user.user_admin, user.user_name, user.user_id, online.online_loggedon, online.online_ip
 					FROM (
 						". DB_PREFIX . "users user LEFT JOIN " . DB_PREFIX . "online online
 						ON online.online_userid = user.user_id
@@ -230,14 +219,11 @@
 						$this->ID = $onlineUser->user_id;
 						if($onlineUser->user_admin == '1')
 							$this->IsAdmin = true;
-						if($onlineUser->user_author == '1' || $onlineUser->user_admin == '1')
-							$this->IsAuthor = true;
 						$this->LoginError = 0;
 					}
 					else {
 						$this->ID = $onlineUser->user_id;
 						$this->IsAdmin = false;
-						$this->IsAuthor = false;
 						$this->IsLoggedIn = false;
 						$this->Name = '';
 						$this->PasswordMd5 = '';

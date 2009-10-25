@@ -16,8 +16,10 @@
  # (at your option) any later version.
  #----------------------------------------------------------------------
 
-	global $translation;
-	// Access to the translation class via $translation->GetTranslation();
+	global $rights_Translation;
+	global $rights_SqlConnection;
+	// Access to the translation class via $rights_Translation->GetTranslation($translation_string);
+	// Access to the mysql database of the system via $rights_SqlConnection->SqlQuery($sql);
 	// Rights::SetRight('this is the group of rights in wich it should be displayed', 'the name of the right', 'this is the string displayed to the user', 'this is the string shown as an explanation for the right', is this right dynamic?, here can be pasted an array containing dynamic content with the keys 'name' defined as ident, 'display' and 'description');
 	
 	Rights::SetRight($translation->GetTranslation('pages'), 'view_page_private', $translation->GetTranslation('view_privat_pages'), $translation->GetTranslation('this_right_allows_to_view_all_privat_pages'), true);

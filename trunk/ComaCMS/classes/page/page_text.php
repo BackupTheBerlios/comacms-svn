@@ -42,7 +42,7 @@
 			/*$sql = 'SELECT text_page_text, text_page_html
 					FROM ' . DB_PREFIX . 'pages_text
 					WHERE page_id = ' . $PageID;*/
-			$sql = 'SELECT page.page_date, text.text_page_text, text.text_page_html
+			$sql = 'SELECT page.page_date, page.page_title, text.text_page_text, text.text_page_html
 					FROM ( ' . DB_PREFIX. 'pages page
 					LEFT JOIN ' . DB_PREFIX . 'pages_text text ON text.page_id = page.page_id )
 					WHERE page.page_id=' . $PageID . '
@@ -56,7 +56,9 @@
 				$dateDayFormat = $this->_Config->Get('date_day_format', '');
 				$dateTimeFormat = $this->_Config->Get('date_time_format', '');
 				$dateFormat = $dateDayFormat . ' ' . $dateTimeFormat;
-				$this->HTML .= '<div class="last_change">' . $this->_Translation->GetTranslation('last_change') . ': ' . date($dateFormat, $pageData->page_date) . '</div>'; 
+				$this->HTML .= '<div class="last_change">' . $this->_Translation->GetTranslation('last_change') . ': ' . date($dateFormat, $pageData->page_date) . '</div>';
+				$this->_ComaLate->SetReplacement('LAST_CHANGE', date($dateFormat, $pageData->page_date));
+				$this->_ComaLate->SetReplacement('PAGE_NAME', $pageData->page_title);
 				
 				//yyyy-mm-ddThh:mm:ss+hh:mm
 				$this->_ComaLate->SetMeta('date', date('Y-m-d\TH:i:sO', $pageData->page_date)); 

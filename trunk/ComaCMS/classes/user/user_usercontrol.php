@@ -99,10 +99,6 @@
 									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('is_admin'),
 									'PROFILE_FIELD_VALUE' => (($this->_User->IsAdmin) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
 									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('if_you_are_an_admin_you_can_access_to_the_administration_interface'));
-			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'author',
-									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('is_author'),
-									'PROFILE_FIELD_VALUE' => (($this->_User->IsAuthor) ? $this->_Translation->GetTranslation('yes') : $this->_Translation->GetTranslation('no')),
-									'PROFILE_FIELD_INFORMATION' => $this->_Translation->GetTranslation('if_an_user_is_an_author_he_has_access_to_the_page_management_and_the_menu_editor'));
 			$userProfile[] = array( 'PROFILE_FIELD_NAME' => 'preferred_language',
 									'PROFILE_FIELD_TRANSLATION' => $this->_Translation->GetTranslation('preferred_language'),
 									'PROFILE_FIELD_VALUE' => $this->_Translation->GetTranslation($user->user_preferred_language),
@@ -148,7 +144,7 @@
 					</fieldset>
 					';
 			
-			if ($this->_User->IsAuthor) {
+			if ($this->_User->IsAdmin) {
 				
 				// Initialize pages array
 				$pages = array();
